@@ -45,6 +45,7 @@ import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnim
 import type { TypeColor, OBJ_Font } from '../tools/types';
 import type { COL_SlideNavigator } from './FigureCollections/SlideNavigator';
 import type FigureElementPrimitiveGesture from './FigurePrimitives/FigureElementPrimitiveGesture';
+import FontManager from './FontManager';
 
 const FIGURE1DEBUG = false;
 
@@ -357,6 +358,7 @@ class Figure {
   // }
 
   scene: Scene;
+  fontManager: FontManager;
 
   animations: AnimationManager;
 
@@ -710,6 +712,7 @@ class Figure {
     this.moveBuffer = [];
     this.timeKeeper = new TimeKeeper();
     this.notifications = new NotificationManager(this.fnMap);
+    this.fontManager = new FontManager(this.timeKeeper, this.fnMap, this.notifications);
     this.recorder = new Recorder(this.timeKeeper);
     // $FlowFixMe
     this.recorder.figure = this;

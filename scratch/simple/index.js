@@ -29,13 +29,13 @@ b = figure.add({
   // gl: true,
   text: 'QwertfMy 123\u03C0',
   // text: 'asdf',
-  font: { size: 0.5, style: 'italic', family: 'Times New Roman', underline: true },
+  font: { size: 0.5, style: 'italic', family: 'open sans, times new roman', underline: true, weight: '300' },
   color: [1, 0, 0, 1],
   move: { type: 'rotation' },
   yAlign: 'bottom',
   xAlign: 'center',
   adjustments: { descent: -0.03 },
-  type: '2d',
+  type: 'bmp',
 });
 figure.add({
   make: 'rectangle',
@@ -45,6 +45,11 @@ figure.add({
   height: 0.01,
   position: [0, 0],
 });
+// console.log(figure.fontManager.isFamilyAvailable('Open Sans'));
+// console.log(figure.fontManager.isFamilyAvailable('Open Sans', 'π'));
+console.log(figure.fontManager.loadFont({ family: 'open sans', test: 'alpha' }));
+console.log(figure.fontManager.loadFont({ family: 'open sans', test: 'greek' }));
+// figure.fontManager.whenAvailable('Open Sans', '300', 'normal', () => console.log('available'));
 
 a = figure.add({
   make: 'txt',

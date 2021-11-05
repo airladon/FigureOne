@@ -4,6 +4,8 @@ import getShaders from './shaders';
 import type { TypeFragmentShader, TypeVertexShader } from './shaders';
 import TargetTexture from './target';
 import { hash32 } from '../../tools/tools';
+import { FunctionMap } from '../../tools/FunctionMap';
+import { colorToInt } from '../../tools/color';
 
 const glMock = {
   TRIANGLES: 1,
@@ -194,9 +196,9 @@ class WebGLInstance {
     [name: string]: {
       glTexture: WebGLTexture;
       index: number;
-      type: 'image' | 'canvasText';
+      // type: 'image' | 'canvasText';
       state: 'loading' | 'loaded';
-      onLoad: Array<() => void>;
+      onLoad: Array<((boolean, number) => void) | string>;
       atlas: Object;
       atlasDimension: number;
     };
@@ -219,39 +221,168 @@ class WebGLInstance {
   }>;
 
   targetTexture: null | TargetTexture;
+  fnMap: FunctionMap;
 
+  /*
+    Add a texture to the texture library
+  */
   addTexture(
     id: string,
-    glTexture: WebGLTexture,
-    type: 'image' | 'canvasText',
-    atlas: Object = {},
-    atlasDimension: number = 0,
+    data: string | Image,
+    loadColor: TypeColor = [0, 0, 0, 0],
+    repeat: boolean = false,
+    onLoad: null | string | ((boolean, number) => void) = null,
+    force: boolean
+    // atlas: Object = {},
+    // atlasDimension: number = 0,
   ) {
-    if (this.textures[id] && this.textures[id].glTexture != null) {
-      return this.textures[id].index;
+    if (!force && this.textures[id] != null) {
+      if (this.textures[id].state === 'loaded') {
+        return this.textures[id].index;
+      }
+      // Otherwise loading
+      if (onLoad != null) {
+        this.textures[id].onLoad.push(onLoad);
+      }
+      return this.textures[id].index;;
     }
-    // Texture index 0 is dedicated to the target texture
-    let index = 1;
-    if (this.textures[id]) {
-      index = this.textures[id].index;
-    } else {
-      index = Object.keys(this.textures).length + 1;
-    }
+    const { gl } = this;
+    const glTexture = gl.createTexture();
     this.textures[id] = {
       glTexture,
-      index,
-      type,
-      state: 'loaded',
+      id,
+      state: 'loading',
       onLoad: [],
-      atlas,
-      atlasDimension,
+      atlas: {},
+      atlasDimension: 0,
+      index: Object.keys(this.textures).length + 1,
+      data: null,
     };
-    return index;
+    const texture = this.textures[id];
+    if (onLoad != null) {
+      texture.onLoad.push(onLoad);
+    }
+    // If the data is a url string, then load the data into an image
+    if (typeof data === 'string') {
+      this.setTextureData(id, loadColor)
+      const image = new Image();
+      texture.state = 'loading';
+
+      // When the image is loaded, set the texture to it
+      image.addEventListener('load', () => {
+        // $FlowFixMe
+        texture.data = image;
+        this.setTextureData(id, image, repeat);
+        this.onLoad(id);
+        texture.state = 'loaded';
+      });
+      image.src = data;
+    } else {
+      // Otherwise, the data is an image so set it directly
+      this.setTextureData(id, data, repeat);
+      this.onLoad(id);
+      texture.state = 'loaded';
+    }
+    return this.textures[id].index;
   }
 
-  onLoad(textureId: string) {
-    this.textures[textureId].onLoad.forEach(f => f());
-    this.textures[textureId].onLoad = [];
+  setTextureData(
+    id: string,
+    image: Object | TypeColor, // image data
+    repeat: boolean = false,
+  ) {
+    function isPowerOf2(value) { // eslint-disable-next-line no-bitwise
+      return (value & (value - 1)) === 0;
+    }
+
+    const texture = this.textures[id];
+    const { index } = texture;
+    const { gl } = this;
+
+    // If texture exists, then delete it
+    if (texture.glTexture != null) {
+      gl.activeTexture(gl.TEXTURE0 + index);
+      gl.bindTexture(gl.TEXTURE_2D, null);
+      gl.deleteTexture(texture.glTexture);
+      this.cancel(id);
+    }
+    // Create a texture
+    const glTexture = gl.createTexture();
+    texture.glTexture = glTexture;
+    gl.activeTexture(gl.TEXTURE0 + index);
+    gl.bindTexture(gl.TEXTURE_2D, glTexture);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+
+    // If image is a color, then create s ingle pixel image of that color
+    if (Array.isArray(image)) {
+      gl.texImage2D(
+        gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0,
+        gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(colorToInt(image)),
+      );
+      return;
+    }
+
+    // Load the image
+    gl.texImage2D(
+      gl.TEXTURE_2D, 0, gl.RGBA,
+      gl.RGBA, gl.UNSIGNED_BYTE, image,
+    );
+    // Check if the image is a power of 2 in both dimensions.
+    if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+      // Yes, it's a power of 2. Generate mips.
+      gl.generateMipmap(gl.TEXTURE_2D);
+      if (repeat != null && repeat === true) {
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+      } else {
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      }
+    } else {
+      // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    }
+  }
+
+  // addTexture(
+  //   id: string,
+  //   glTexture: WebGLTexture,
+  //   type: 'image' | 'canvasText',
+  //   atlas: Object = {},
+  //   atlasDimension: number = 0,
+  // ) {
+  //   if (this.textures[id] && this.textures[id].glTexture != null) {
+  //     return this.textures[id].index;
+  //   }
+  //   // Texture index 0 is dedicated to the target texture
+  //   let index = 1;
+  //   if (this.textures[id]) {
+  //     index = this.textures[id].index;
+  //   } else {
+  //     index = Object.keys(this.textures).length + 1;
+  //   }
+  //   this.textures[id] = {
+  //     glTexture,
+  //     index,
+  //     type,
+  //     state: 'loaded',
+  //     onLoad: [],
+  //     atlas,
+  //     atlasDimension,
+  //   };
+  //   return index;
+  // }
+
+  onLoad(id: string) {
+    this.textures[id].onLoad.forEach(f => this.fnMap.exec(f, true, this.textures[id].index));
+    this.textures[id].onLoad = [];
+  }
+
+  cancel(id: string) {
+    this.textures[id].onLoad.forEach(f => this.fnMap.exec(f, false, this.textures[id].index));
+    this.textures[id].onLoad = [];
   }
 
   getProgram(
@@ -325,6 +456,7 @@ class WebGLInstance {
       // premultipliedAlpha: false,
       // alpha: false
     });
+    this.fnMap = new FunctionMap();
     if (gl == null) {
       // $FlowFixMe
       gl = glMock;

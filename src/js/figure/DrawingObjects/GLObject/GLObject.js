@@ -44,11 +44,11 @@ class GLObject extends DrawingObject {
 
   texture: ?{
     id: string;
-    src?: ?string;
-    data?: ?Object;
+    src?: string;
+    // data?: ?Object;
     points: Array<number>;
     buffer?: ?WebGLBuffer;
-    type: 'canvasText' | 'image';
+    // type: 'canvasText' | 'image';
     repeat?: boolean;
     mapTo: Rect,
     mapFrom: Rect,
@@ -183,45 +183,45 @@ class GLObject extends DrawingObject {
     this.z = z;
   }
 
-  addTextureToBuffer(
-    glTexture: WebGLTexture,
-    image: Object, // image data
-    repeat?: boolean,
-  ) {
-    function isPowerOf2(value) {
-      // eslint-disable-next-line no-bitwise
-      return (value & (value - 1)) === 0;
-    }
-    const { texture, gl, webgl } = this;
-    if (texture != null) {
-      const { index } = webgl.textures[texture.id];
-      gl.activeTexture(gl.TEXTURE0 + index);
-      // console.log(glTexture)
-      gl.bindTexture(gl.TEXTURE_2D, glTexture);
-      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
-      gl.texImage2D(
-        gl.TEXTURE_2D, 0, gl.RGBA,
-        gl.RGBA, gl.UNSIGNED_BYTE, image,
-      );
-      // Check if the image is a power of 2 in both dimensions.
-      if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
-        // Yes, it's a power of 2. Generate mips.
-        gl.generateMipmap(gl.TEXTURE_2D);
-        if (repeat != null && repeat === true) {
-          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-        } else {
-          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        }
-      } else {
-        // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      }
-    }
-  }
+  // addTextureToBuffer(
+  //   glTexture: WebGLTexture,
+  //   image: Object, // image data
+  //   repeat?: boolean,
+  // ) {
+  //   function isPowerOf2(value) {
+  //     // eslint-disable-next-line no-bitwise
+  //     return (value & (value - 1)) === 0;
+  //   }
+  //   const { texture, gl, webgl } = this;
+  //   if (texture != null) {
+  //     const { index } = webgl.textures[texture.id];
+  //     gl.activeTexture(gl.TEXTURE0 + index);
+  //     // console.log(glTexture)
+  //     gl.bindTexture(gl.TEXTURE_2D, glTexture);
+  //     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+  //     gl.texImage2D(
+  //       gl.TEXTURE_2D, 0, gl.RGBA,
+  //       gl.RGBA, gl.UNSIGNED_BYTE, image,
+  //     );
+  //     // Check if the image is a power of 2 in both dimensions.
+  //     if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+  //       // Yes, it's a power of 2. Generate mips.
+  //       gl.generateMipmap(gl.TEXTURE_2D);
+  //       if (repeat != null && repeat === true) {
+  //         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+  //         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+  //       } else {
+  //         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  //         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  //       }
+  //     } else {
+  //       // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
+  //       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  //       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  //       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  //     }
+  //   }
+  // }
 
   updateTextureMap(points: Array<number> = []) {
     const { texture } = this;
@@ -302,17 +302,28 @@ class GLObject extends DrawingObject {
     this.onLoad = onLoad;
   }
 
+  updateTexture(data: Image) {
+    const { texture } = this;
+    if (texture == null) {
+      throw new Error('FigureOne GLObject Error: Cannot update an uninitialized texture');
+    }
+    texture.data = data;
+    this.initTexture(true);
+  }
 
-  initTexture() {
+  initTexture(force: boolean = false) {
     const {
-      texture, gl, webgl,
+      texture, webgl,
     } = this;
 
     if (texture == null) {
       return;
     }
 
-    const { loadColor, points } = texture;
+    const {
+      loadColor, points, id, data, repeat, src,
+    } = texture;
+
     texture.buffer = this.gl.createBuffer();
 
     // $FlowFixMe
@@ -323,59 +334,63 @@ class GLObject extends DrawingObject {
     //   new Float32Array(texture.points),
     //   gl.STATIC_DRAW,
     // );
-    if (
-      !(texture.id in webgl.textures)
-      || (
-        texture.id in webgl.textures
-        && webgl.textures[texture.id].glTexture == null
-      )
-    ) {
-      const glTexture = gl.createTexture();
-      webgl.addTexture(texture.id, glTexture, texture.type);
-      gl.activeTexture(
-        gl.TEXTURE0 + webgl.textures[texture.id].index,
-      );
-      gl.bindTexture(gl.TEXTURE_2D, glTexture);
-      const { src } = texture;
-      if (src && texture.data == null) {
-        // Fill the texture with a 1x1 blue pixel.
-        gl.texImage2D(
-          gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0,
-          gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(colorToInt(loadColor)),
-        );
-        const image = new Image();
-        image.src = src;
+    webgl.addTexture(
+      id, data || src, loadColor, repeat, this.executeOnLoad.bind(this), force,
+    );
+    this.state = webgl.textures[texture.id].state;
+    // if (
+    //   !(texture.id in webgl.textures)
+    //   || (
+    //     texture.id in webgl.textures
+    //     && webgl.textures[texture.id].glTexture == null
+    //   )
+    // ) {
+    //   const glTexture = gl.createTexture();
+    //   webgl.addTexture(texture.id, glTexture, texture.type);
+    //   gl.activeTexture(
+    //     gl.TEXTURE0 + webgl.textures[texture.id].index,
+    //   );
+    //   gl.bindTexture(gl.TEXTURE_2D, glTexture);
+    //   const { src } = texture;
+    //   if (src && texture.data == null) {
+    //     // Fill the texture with a 1x1 blue pixel.
+    //     gl.texImage2D(
+    //       gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0,
+    //       gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(colorToInt(loadColor)),
+    //     );
+    //     const image = new Image();
+    //     image.src = src;
 
-        this.state = 'loading';
-        webgl.textures[texture.id].state = 'loading';
-        webgl.textures[texture.id].onLoad.push(this.executeOnLoad.bind(this));
-        image.addEventListener('load', () => {
-          // Now that the image has loaded make copy it to the texture.
-          // $FlowFixMe
-          texture.data = image;
-          this.addTextureToBuffer(
-            glTexture, texture.data, texture.repeat,
-          );
-          // if (this.onLoad != null) {
-          webgl.onLoad(texture.id);
-          // this.onLoad();
-          // }
-          this.state = 'loaded';
-          webgl.textures[texture.id].state = 'loaded';
-        });
-      } else if (texture.data != null) {
-        this.addTextureToBuffer(
-          glTexture, texture.data, texture.repeat,
-        );
-      }
-    } else if (texture.id in webgl.textures) {
-      if (webgl.textures[texture.id].state === 'loading') {
-        this.state = 'loading';
-        webgl.textures[texture.id].onLoad.push(this.executeOnLoad.bind(this));
-      } else {
-        this.state = 'loaded';
-      }
-    }
+    //     this.state = 'loading';
+    //     webgl.textures[texture.id].state = 'loading';
+    //     webgl.textures[texture.id].onLoad.push(this.executeOnLoad.bind(this));
+    //     image.addEventListener('load', () => {
+    //       // Now that the image has loaded make copy it to the texture.
+    //       // $FlowFixMe
+    //       texture.data = image;
+    //       this.addTextureToBuffer(
+    //         glTexture, texture.data, texture.repeat,
+    //       );
+    //       // if (this.onLoad != null) {
+    //       webgl.onLoad(texture.id);
+    //       // this.onLoad();
+    //       // }
+    //       this.state = 'loaded';
+    //       webgl.textures[texture.id].state = 'loaded';
+    //     });
+    //   } else if (texture.data != null) {
+    //     this.addTextureToBuffer(
+    //       glTexture, texture.data, texture.repeat,
+    //     );
+    //   }
+    // } else if (texture.id in webgl.textures) {
+    //   if (webgl.textures[texture.id].state === 'loading') {
+    //     this.state = 'loading';
+    //     webgl.textures[texture.id].onLoad.push(this.executeOnLoad.bind(this));
+    //   } else {
+    //     this.state = 'loaded';
+    //   }
+    // }
   }
 
   // A texture map is a texture coords point that lines up with the texture
@@ -528,9 +543,9 @@ class GLObject extends DrawingObject {
     gl.bufferData(gl.ARRAY_BUFFER, processedData, usage);
   }
 
-  executeOnLoad() {
+  executeOnLoad(result: boolean, id: string) {
     if (this.onLoad != null) {
-      this.onLoad();
+      this.onLoad(result, id);
     }
   }
 

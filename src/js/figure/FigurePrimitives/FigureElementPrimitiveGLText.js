@@ -173,7 +173,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     };
   }
 
-  createAtlas() {
+  createAtlas(force: boolean = false) {
     const { gl, webgl } = this.drawingObject;
     const scene = this.getScene();
     if (scene == null) {
@@ -183,7 +183,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     this.fontSize = fontSize;
     const id = `${this.font.family}${fontSize}${this.font.style}${this.font.weight}`;
     this.drawingObject.addTexture(`${this.font.family}${fontSize}${this.font.style}${this.font.weight}`);
-    if (webgl.textures[id] != null) {
+    if (!force && webgl.textures[id] != null) {
       // this.drawingObject.texture.id = id;
       this.atlas = webgl.textures[id].atlas;
       this.dimension = webgl.textures[id].atlasDimension;
@@ -204,6 +204,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
 
     const ctx = canvas.getContext('2d');
     ctx.font = `${this.font.style} ${this.font.weight} ${fontSize}px ${this.font.family}`;
+
     let x = fontSize;
     let y = fontSize;
 
@@ -228,8 +229,9 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     }
     // Create a small square to draw color from when drawing the underline
     ctx.fillRect(0, this.dimension - 2, 2, 2);
-    this.drawingObject.texture.data = ctx.canvas;
-    this.drawingObject.initTexture();
+    // this.drawingObject.texture.data = ctx.canvas;
+    // this.drawingObject.initTexture();
+    this.drawingObject.updateTexture(ctx.canvas);
     webgl.textures[id].atlas = joinObjects({}, this.atlas);
     webgl.textures[id].atlasDimension = this.dimension;
   }
