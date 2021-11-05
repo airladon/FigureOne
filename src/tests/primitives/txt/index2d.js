@@ -92,7 +92,7 @@ const txt = (name, options, lineOptions = null) => makeShape(
   tools.misc.joinObjects({}, {
     color: [1, 0, 0, 1],
     touchBorder: 'buffer',
-    type: 'bmp',
+    type: '2d',
   }, options),
   lineOptions,
 );
