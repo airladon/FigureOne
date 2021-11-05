@@ -201,8 +201,8 @@ class CollectionsText extends Equation {
     const equationOptions = this.createEquation();
 
     this.addElements(joinObjects({}, equationOptions.elements, options.elements || {}));
+    // $FlowFixMe
     this.addForms(equationOptions.forms);
-    // this.add(equationOptions);
   }
 
   splitLines(lines: Array<Object | string>) {
@@ -349,10 +349,8 @@ class CollectionsText extends Equation {
       baselineSpace: line.baselineSpace,
       content: [],
     };
-    // console.log(line.justify)
     const elementOptions = {};
     line.text.forEach((element, index) => {
-      // const name = element.modText === '' ? `e${lineIndex}${index}` : element.modText;
       const name = `e${lineIndex}${index}`;
       if (element.eqn) {
         lineOptions.content.push(element.eqn);
@@ -375,13 +373,6 @@ class CollectionsText extends Equation {
             },
           };
         }
-        // if (element.lSpace) {
-        //   content = {
-        //     offset: {
-        //       content, offset: [element.lSpace, 0], inSize,
-        //     },
-        //   };
-        // }
         lineOptions.content.push(content);
         if (element.space) {
           lineOptions.content.push({
