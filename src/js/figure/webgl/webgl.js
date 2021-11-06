@@ -4,8 +4,11 @@ import getShaders from './shaders';
 import type { TypeFragmentShader, TypeVertexShader } from './shaders';
 import TargetTexture from './target';
 import { hash32 } from '../../tools/tools';
+import FontManager from '../FontManager';
 import { FunctionMap } from '../../tools/FunctionMap';
 import { colorToInt } from '../../tools/color';
+import Atlas from './Atlas';
+import type { TypeColor } from '../../tools/types';
 
 const glMock = {
   TRIANGLES: 1,
@@ -99,12 +102,6 @@ function createProgram(
     throw new Error(`Could not compile WebGL program. \n\n ${info || ''}`);
   }
   return program;
-  // const success = gl.getProgramParameter(program, gl.LINK_STATUS);
-  // if (success) {
-  //   return program;
-  // }
-  // gl.deleteProgram(program);
-  // return null;
 }
 
 
@@ -117,9 +114,6 @@ function createShader(gl: WebGLRenderingContext, type, source) {
     return shader;
   }
   throw new Error(`Could not compile shader: ${source}`);
-
-  // gl.deleteShader(shader);
-  // return null;
 }
 
 
@@ -187,6 +181,11 @@ function autoResize(event) {
 }
 
 
+/*
+  A webgl instance manages a webgl context.
+  
+  It loads and manages programs, shaders and textures for the context, and by extension also manages font atlases (as each atlas is a texture).
+*/
 class WebGLInstance {
   gl: WebGLRenderingContext;
   program: WebGLProgram;
@@ -199,10 +198,15 @@ class WebGLInstance {
       // type: 'image' | 'canvasText';
       state: 'loading' | 'loaded';
       onLoad: Array<((boolean, number) => void) | string>;
-      atlas: Object;
-      atlasDimension: number;
+      // atlas: Object;
+      // atlasDimension: number;
     };
   };
+
+  atlases: {
+    [atlasId: string]: Atlas,
+  };
+
   programs: Array<{
     vars: Array<string>,
     vertexShader: {
@@ -222,20 +226,34 @@ class WebGLInstance {
 
   targetTexture: null | TargetTexture;
   fnMap: FunctionMap;
+  fontManager: FontManager;
 
   /*
-    Add a texture to the texture library
+    Add, or update a texture. If the texture already exists, then do nothing.
+
+    A texture is referenced with a unique id, and defined by either a url (string), Image or html canvas element.
+
+    If the texture is a url, then it will be asynchronously loaded, and so a temporary solid color texture width color `loadColor` will be used in its place temporarily.
+
+    `repeat` can only repeat textures if the texture is a multiple of 2.
+
+    `onLoad` is a callback called once the url texture is loaded
+
+    Use `force` to force overwriting a texture that already exits
   */
   addTexture(
     id: string,
-    data: string | Image,
+    data: string | Image | HTMLCanvasElement,
     loadColor: TypeColor = [0, 0, 0, 0],
     repeat: boolean = false,
     onLoad: null | string | ((boolean, number) => void) = null,
-    force: boolean
-    // atlas: Object = {},
-    // atlasDimension: number = 0,
+    force: boolean = false,
   ) {
+    /*
+      If the texture already exits, then return its index. If the texture is
+      still loading, then add the onLoad callback to the list of callbacks to
+      be called once the texture loads.
+    */
     if (!force && this.textures[id] != null) {
       if (this.textures[id].state === 'loaded') {
         return this.textures[id].index;
@@ -246,16 +264,23 @@ class WebGLInstance {
       }
       return this.textures[id].index;;
     }
+
+    let index = 0;
+    if (this.textures[id] != null) {
+      index = this.textures[id].index;
+    } else {
+      index = Object.keys(this.textures).length + 1;
+    }
+    console.log(index)
+    // If a texture already exists, then unload it
+    this.deleteTexture(id);
     const { gl } = this;
-    const glTexture = gl.createTexture();
+
     this.textures[id] = {
-      glTexture,
       id,
       state: 'loading',
       onLoad: [],
-      atlas: {},
-      atlasDimension: 0,
-      index: Object.keys(this.textures).length + 1,
+      index,
       data: null,
     };
     const texture = this.textures[id];
@@ -285,6 +310,35 @@ class WebGLInstance {
     }
     return this.textures[id].index;
   }
+
+  getAtlas(options: OBJ_Atlas) {
+    const font = options.font;
+    const textureID = font.getTextureID();
+    if (this.atlases[textureID] != null) {
+      return this.atlases[textureID];
+    }
+    const atlas = new Atlas(this, options);
+    this.atlases[textureID] = atlas;
+    return atlas;
+  }
+
+  deleteTexture(id: string) {
+    const texture = this.textures[id];
+    if (texture == null) {
+      return;
+    }
+    const { gl } = this;
+
+    // If texture exists, then delete it
+    if (texture.glTexture != null) {
+      gl.activeTexture(gl.TEXTURE0 + index);
+      gl.bindTexture(gl.TEXTURE_2D, null);
+      gl.deleteTexture(texture.glTexture);
+    }
+    this.cancel(id);
+    delete this.textures[id];
+  }
+
 
   setTextureData(
     id: string,
@@ -457,6 +511,8 @@ class WebGLInstance {
       // alpha: false
     });
     this.fnMap = new FunctionMap();
+    this.fontManager = new FontManager();
+    this.atlases = {};
     if (gl == null) {
       // $FlowFixMe
       gl = glMock;

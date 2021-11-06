@@ -13,7 +13,7 @@ import { Rect, getPoint, getRect } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
 // import type { CPY_Step } from '../../geometries/copy/copy';
 import type { TypeColor } from '../../../tools/types';
-import { colorToInt } from '../../../tools/color';
+// import { colorToInt } from '../../../tools/color';
 import { Console } from '../../../tools/tools';
 
 /**
@@ -281,7 +281,7 @@ class GLObject extends DrawingObject {
     repeat: boolean = false,
     onLoad: null | (() => void) = null,
     loadColor: TypeColor = [0, 0, 1, 0.5],
-    isAtlas: boolean = false,
+    // isAtlas: boolean = false,
   ) {
     if (this.texture == null) {
       this.texture = {
@@ -296,7 +296,7 @@ class GLObject extends DrawingObject {
         data: null,
         mapToBuffer,
         loadColor,
-        isAtlas,
+        // isAtlas,
       };
     }
     this.onLoad = onLoad;

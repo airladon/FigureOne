@@ -1,20 +1,13 @@
 // @flow
 import TimeKeeper from './TimeKeeper';
-import { joinObjects, hash32, NotificationManager } from '../tools/tools';
+import { joinObjects, NotificationManager } from '../tools/tools';
 import { FunctionMap } from '../tools/FunctionMap';
+import { FigureFont } from './DrawingObjects/TextObject/TextObject';
 
-const greek = '\u0391\u0392\u0393\u0394\u0395\u0396\u0397\u0398\u0399\u039A\u039B\u039C\u039D\u039E\u039F\u03A0\u03A1\u03A3\u03A4\u03A5\u03A6\u03A7\u03A8\u03A9\u03B1\u03B2\u03B3\u03B4\u03B5\u03B6\u03B7\u03B8\u03B9\u03BA\u03BB\u03BC\u03BD\u03BE\u03BF\u03C0\u03C1\u03C2\u03C3\u03C4\u03C5\u03C6\u03C7\u03C8\u03c9';
-
-const alpha = `QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm,./<>?;':"[]\{}|1234567890!@#$%^&*()-=_+"`;
-
-const math = '\u00ba\u00b0\u2212\u00d7\u00f7';
-
-export type OBJ_FontOptions = {
-  family: string,
-  weight?: string,
-  style?: string,
+export type OBJ_LoadFontOptions = {
+  maxCount?: number,
   timeout?: number,
-  testString?: string,
+  callback?: string | () => void,
 };
 
 export default class FontManager {
@@ -29,6 +22,11 @@ export default class FontManager {
   fnMap: FunctionMap
   timedOut: number;
   notifications: NotificationManager;
+  // static greek = greek;
+  // static math = math;
+  // static latin = latin;
+  // static all = `${latin}${greek}${math}`;
+  // static mathSmall = mathSmall;
 
   constructor(
     timeKeeper: TimeKeeper = new TimeKeeper(),
@@ -45,6 +43,11 @@ export default class FontManager {
       //   'font-size:128px',
       //   'left:-99999px',
       // ].join(' !important;');
+      // FontManager.greek = greek;
+      // FontManager.math = math;
+      // FontManager.latin = latin;
+      // FontManager.all = `${latin}${greek}${math}`;
+      // FontManager.mathSmall = mathSmall;
       this.fonts = {};
       this.canvas = document.createElement('canvas');
       this.canvas.width = 10;
@@ -60,71 +63,90 @@ export default class FontManager {
     return FontManager.instance;
   }
 
-  measureText(name: string, backupFont: string = '') {
-    const f = this.fonts[name];
+  // eslint-disable-next-line class-methods-use-this
+  // getAlphabet(alphabet: 'greek' | 'math' | 'latin' | 'all') {
+  //   if (alphabet === 'all') {
+  //     return `${latin}${greek}${math}`;
+  //   }
+  //   if (alphabet === 'latin') {
+  //     return latin;
+  //   }
+  //   if (alphabet === 'greek') {
+  //     return greek;
+  //   }
+  //   if (alphabet === 'math') {
+  //     return math;
+  //   }
+  //   // if (alphabet === 'mathSmall') {
+  //   //   return mathSmall;
+  //   // }
+  //   return `${latin}${greek}${math}`;
+  // }
+
+  measureText(fontID: string, backupFont: string = '') {
+    const f = this.fonts[fontID].font;
     let backup = '';
     if (backupFont !== '') {
       backup = `, ${backupFont}`;
     }
     this.ctx.font = `${f.style} ${f.weight} 20px ${f.family}${backup}`;
-    return this.ctx.measureText(f.testString);
+    return this.ctx.measureText(this.fonts[fontID].testStringSymbols);
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getTestString(testStringIn: string) {
-    let testString = testStringIn;
-    let testStringName = hash32(testStringIn).toString().slice(8);
-    if (testString === 'greek') {
-      testString = greek;
-      testStringName = 'greek';
-    } else if (testString === 'alpha') {
-      testString = alpha;
-      testStringName = 'alpha';
-    } else if (testString === 'math') {
-      testString = math;
-      testStringName = 'math';
-    } else if (testString === 'all') {
-      testString = `${alpha}${greek}${math}`;
-      testStringName = 'all';
-    }
-    return [testStringName, testString];
-  }
+  // getTestString(testStringIn: string) {
+  //   let testString = testStringIn;
+  //   let testStringName = hash32(testStringIn).toString().slice(0, 8);
+  //   if (testString === 'greek') {
+  //     testString = greek;
+  //     testStringName = 'greek';
+  //   } else if (testString === 'latin') {
+  //     testString = latin;
+  //     testStringName = 'latin';
+  //   } else if (testString === 'math') {
+  //     testString = math;
+  //     testStringName = 'math';
+  //   } else if (testString === 'mathSmall') {
+  //     testString = mathSmall;
+  //     testStringName = 'mathSmall';
+  //   } else if (testString === 'all') {
+  //     testString = `${latin}${greek}${math}`;
+  //     testStringName = 'all';
+  //   }
+  //   return [testStringName, testString];
+  // }
 
-  loadFont(options: OBJ_FontOptions) {
+  loadFont(font: OBJ_Font | FigureFont, options: OBJ_LoadFontOptions) {
     const o = joinObjects({}, {
-      weight: 'normal',
-      style: 'normal',
       timeout: 5000,
-      test: 'all',
       maxCount: 1,
       callback: null,
     }, options);
 
-    const [testStringName, testString] = this.getTestString(o.test);
-
-    const name = `${o.family.toLowerCase()}-${o.weight.toLowerCase()}-${o.style.toLowerCase()}-${testStringName}`;
+    const f = new FigureFont(font);
+    const testStringID = f.getTestStringID();
+    const testStringSymbols = f.getTestStringGlyphs();
+    const fontID = f.getFontID();
 
     // If the font family-weight-style has already been created, then
     // return the result of whether it is loaded or not
-    if (this.fonts[name] != null) {
+    if (this.fonts[fontID] != null) {
       if (o.callback != null) {
-        this.fonts[name].callbacks.push(o.callback);
+        this.fonts[fontID].callbacks.push(o.callback);
       }
-      if (this.fonts[name].loaded) {
-        this.execCallbacks(name, true);
-        return true;
+      if (this.fonts[fontID].loaded) {
+        this.execCallbacks(fontID, true);
+        return [fontID, true];
       }
-      return false;
+      return [fontID, false];
     }
 
     // Create widths for mono, serif, sans-serif and the font of interest.
-    this.fonts[name] = {
+    this.fonts[fontID] = {
       timeout: this.timeKeeper.now() + o.timeout,
-      weight: o.weight,
-      family: o.family,
-      style: o.style,
-      testStringName,
-      testString,
+      font,
+      testStringID,
+      testStringSymbols,
       width: [],
       mono: 0,
       serif: 0,
@@ -135,47 +157,30 @@ export default class FontManager {
       callbacks: [],
       timedOut: false,
     };
-    const mono = this.measureText(name, 'monospace').width;
-    const sans = this.measureText(name, 'sans-serif').width;
-    const serif = this.measureText(name, 'serif').width;
-    const { width } = this.measureText(name);
-    this.fonts[name].mono = mono;
-    this.fonts[name].serif = serif;
-    this.fonts[name].sans = sans;
-    this.fonts[name].width.push(width);
-    // this.fonts[name] = {
-    //   timeout: this.timeKeeper.now() + o.timeout,
-    //   weight: o.weight,
-    //   family: o.family,
-    //   style: o.style,
-    //   testStringName,
-    //   testString,
-    //   width: [width],
-    //   mono,
-    //   serif,
-    //   sans,
-    //   loaded: false,
-    //   count: 0,
-    //   maxCount: o.maxCount,
-    //   callbacks: [],
-    //   timedOut: false,
-    // };
+    const mono = this.measureText(fontID, 'monospace').width;
+    const sans = this.measureText(fontID, 'sans-serif').width;
+    const serif = this.measureText(fontID, 'serif').width;
+    const { width } = this.measureText(fontID);
+    this.fonts[fontID].mono = mono;
+    this.fonts[fontID].serif = serif;
+    this.fonts[fontID].sans = sans;
+    this.fonts[fontID].width.push(width);
     if (width !== mono && width !== sans && width !== serif) {
-      this.fonts[name].count += 1;
+      this.fonts[fontID].count += 1;
     }
-    if (this.fonts[name].count === this.fonts[name].maxCount) {
-      this.fonts[name].loaded = true;
-      this.execCallbacks(name, false);
+    this.loading += 1;
+    if (this.fonts[fontID].count === this.fonts[fontID].maxCount) {
+      this.fonts[fontID].loaded = true;
+      this.execCallbacks(fontID, false);
       this.loaded += 1;
-    } else {
-      this.loading += 1;
+      return [fontID, true];
     }
-    return false;
+    return [fontID, false];
   }
 
-  execCallbacks(name: string, available: boolean) {
-    this.fonts[name].callbacks.forEach(c => this.fnMap.exec(c, available));
-    this.fonts[name].callbacks = [];
+  execCallbacks(fontID: string, available: boolean) {
+    this.fonts[fontID].callbacks.forEach(c => this.fnMap.exec(c, available));
+    this.fonts[fontID].callbacks = [];
   }
 
   isLoadingFinished() {
@@ -186,6 +191,7 @@ export default class FontManager {
       this._isFontAvailable(name);
     });
     if (this.loaded + this.timedOut === this.loading) {
+      this.notifications.publish('fontsLoaded');
       return true;
     }
     return false;
@@ -207,6 +213,7 @@ export default class FontManager {
     if (this.fonts[name].count === this.fonts[name].maxCount) {
       this.fonts[name].loaded = true;
       this.execCallbacks(name, true);
+      this.notifications.publish('fontLoaded', name);
       this.loaded += 1;
       return true;
     }
@@ -214,6 +221,7 @@ export default class FontManager {
       f.timedOut = true;
       this.timedOut += 1;
       this.execCallbacks(name, false);
+      this.notifications.publish('fontUnavailable', name);
     }
     return false;
   }

@@ -11,7 +11,8 @@ import type Scene from '../../../tools/geometry/scene';
 import type { Type3DMatrix } from '../../../tools/m3';
 import DrawingObject from '../DrawingObject';
 import DrawContext2D from '../../DrawContext2D';
-import { joinObjects, splitString } from '../../../tools/tools';
+import { joinObjects, splitString, hash32 } from '../../../tools/tools';
+import { round } from '../../../tools/math';
 import { colorArrayToRGBA } from '../../../tools/color';
 import type {
   OBJ_Font, TypeColor,
@@ -22,18 +23,41 @@ import type {
 import type {
   OBJ_TextDefinition,
 } from '../../FigurePrimitives/FigurePrimitiveTypes2D';
+import type { OBJ_AtlasMap } from '../../webgl/Atlas';
+
+const greek = '\u0391\u0392\u0393\u0394\u0395\u0396\u0397\u0398\u0399\u039A\u039B\u039C\u039D\u039E\u039F\u03A0\u03A1\u03A3\u03A4\u03A5\u03A6\u03A7\u03A8\u03A9\u03B1\u03B2\u03B3\u03B4\u03B5\u03B6\u03B7\u03B8\u03B9\u03BA\u03BB\u03BC\u03BD\u03BE\u03BF\u03C0\u03C1\u03C2\u03C3\u03C4\u03C5\u03C6\u03C7\u03C8\u03c9';
+
+const latin = `QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm,./<>?;':"[]\{}|1234567890!@#$%^&*()-=_+" `;
+
+// const math = '\u00ba\u00b0\u00d7\u00f7';
+
+const math = '\u00ba\u00b0\u00d7\u00f7\u2200\u2201\u2202\u2203\u2204\u2205\u2206\u2207\u2208\u2209\u220a\u220b\u220c\u220d\u220e\u220f\u2210\u2211\u2212\u2213\u2214\u2215\u2216\u2217\u2218\u2219\u221a\u221b\u221c\u221d\u221e\u221f\u2220\u2221\u2222\u2223\u2224\u2225\u2226\u2227\u2228\u2229\u222a\u222b\u222c\u222d\u222e\u222f\u2230\u2231\u2232\u2233\u2234\u2235\u2236\u2237\u2238\u2239\u223a\u223b\u223c\u223d\u223e\u223f\u2240\u2241\u2242\u2243\u2244\u2245\u2246\u2247\u2248\u2249\u224a\u224b\u224c\u224d\u224e\u224f\u2250\u2251\u2252\u2253\u2254\u2255\u2256\u2257\u2258\u2259\u225a\u225b\u225c\u225d\u225e\u225f\u2260\u2261\u2262\u2263\u2264\u2265\u2266\u2267\u2268\u2269\u226a\u226b\u226c\u226d\u226e\u226f\u2270\u2271\u2272\u2273\u2274\u2275\u2276\u2277\u2278\u2279\u227a\u227b\u227c\u227d\u227e\u227f\u2280\u2281\u2282\u2283\u2284\u2285\u2286\u2287\u2288\u2289\u228a\u228b\u228c\u228d\u228e\u228f\u2290\u2291\u2292\u2293\u2294\u2295\u2296\u2297\u2298\u2299\u229a\u229b\u229c\u229d\u229e\u229f\u22a0\u22a1\u22a2\u22a3\u22a4\u22a5\u22a6\u22a7\u22a8\u22a9\u22aa\u22ab\u22ac\u22ad\u22ae\u22af\u22b0\u22b1\u22b2\u22b3\u22b4\u22b5\u22b6\u22b7\u22b8\u22b9\u22ba\u22bb\u22bc\u22bd\u22be\u22bf\u22c0\u22c1\u22c2\u22c3\u22c4\u22c5\u22c6\u22c7\u22c8\u22c9\u22ca\u22cb\u22cc\u22cd\u22ce\u22cf\u22d0\u22d1\u22d2\u22d3\u22d4\u22d5\u22d6\u22d7\u22d8\u22d9\u22da\u22db\u22dc\u22dd\u22de\u22df\u22e0\u22e1\u22e2\u22e3\u22e4\u22e5\u22e6\u22e7\u22e8\u22e9\u22ea\u22eb\u22ec\u22ed\u22ee\u22ef\u22f0\u22f1\u22f2\u22f3\u22f4\u22f5\u22f6\u22f7\u22f8\u22f9\u22fa\u22fb\u22fc\u22fd\u22fe\u22ff';
 
 /* eslint-enable max-len */
 
 // FigureFont defines the font properties to be used in a TextObject
+/*
+  A font can either be defined with family/weight/style or with an src/map.
+*/
 class FigureFont {
-  size: number;
+  // System or web font definition
+  family: string;
   weight: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
   style: 'normal' | 'italic';
-  family: string;
+
+  // Atlas font definition
+  src: Image | string;
+  map: OBJ_AtlasMap;
+  glyphs: string | 'greek' | 'math' | 'latin' | 'all';
+  loadColor: TypeColor;
+
+  // Font properties
+  size: number;
   underline: boolean | number | [number, number];
   color: TypeColor | null;
-  opacity: number;
+  opacity: number;  // deprecated
+
+  // Font measurements
   width: number;
   descent: number;
   midDescent: number;
@@ -41,6 +65,10 @@ class FigureFont {
   midAscent: number;
   maxAscent: number;
 
+  // Font load detection parameters
+  testString: string;
+  timeout: number;
+  maxCount: number;
 
   constructor(optionsIn: OBJ_Font | FigureFont = {}) {
     if (optionsIn instanceof FigureFont) {
@@ -57,13 +85,20 @@ class FigureFont {
       this.maxDescent = optionsIn.maxDescent;
       this.midAscent = optionsIn.midAscent;
       this.maxAscent = optionsIn.maxAscent;
+      this.src = optionsIn.src;
+      this.id = optionsIn.id;
+      this.map = optionsIn.map;
+      this.glyphs = optionsIn.glyphs;
+      this.testString = optionsIn.testString;
+      this.timeout = optionsIn.timeout;
+      this.maxCount = optionsIn.maxCount;
       return;
     }
     const defaultOptions = {
       family: 'Times New Roman',
       style: 'normal',
       size: 1,
-      weight: '200',
+      weight: 'normal',
       color: null,
       opacity: 1,
       width: 1,
@@ -73,6 +108,11 @@ class FigureFont {
       midAscent: 1.1,
       maxAscent: 1.5,
       underline: false,
+      src: '',
+      map: {},
+      glyphs: 'all',
+      timeout: 5000,
+      maxCount: 1,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     this.family = options.family;
@@ -88,7 +128,117 @@ class FigureFont {
     this.midAscent = options.midAscent;
     this.maxAscent = options.maxAscent;
     this.underline = options.underline;
+    this.map = options.map;
+    this.src = options.src;
+    this.glyphs = options.glyphs;
+    this.id = options.id;
+    this.timeout = options.timeout;
+    this.maxCount = options.maxCount;
+    this.testString = options.testString;
+    if (this.testString == null) {
+      this.testString = this.glyphs;
+    }
   }
+
+  getFontID() {
+    if (this.id && this.id !== '') {
+      return this.id;
+    }
+    if (this.src != null && typeof this.src === 'string' && this.src !== '') {
+      return this.src;
+    }
+    if (this.src != null && this.src !== '') {
+      throw new Error('FigureOne Font Error: An image was used as an atlas but does not have an associated ID');
+    }
+    return `${this.family.toLowerCase()}-${this.weight.toLowerCase()}-${this.style.toLowerCase()}-${this.getTestStringID()}`;
+  }
+
+  getTextureID() {
+    if (this.id && this.id !== '') {
+      return this.id;
+    }
+    if (this.src != null && typeof this.src === 'string' && this.src !== '') {
+      return this.src;
+    }
+    if (this.src != null && this.src !== '') {
+      throw new Error('FigureOne Font Error: An image was used as an atlas but does not have an associated ID');
+    }
+    return `${this.family.toLowerCase()}-${this.weight.toLowerCase()}${this.style.toLowerCase()}-${this.getTestStringID()}-${round(this.size, 4).toString()}`;
+  }
+
+  getGlyphs() {
+    if (this.glyphs === 'all') {
+      return `${latin}${greek}${math}`;
+    }
+    if (this.glyphs === 'latin') {
+      return latin;
+    }
+    if (this.glyphs === 'greek') {
+      return greek;
+    }
+    if (this.glyphs === 'math') {
+      return math;
+    }
+    return this.glyphs;
+  }
+
+  getGlyphsID() {
+    if (
+      this.glyphs === 'all'
+      || this.glyphs === 'greek'
+      || this.glyphs === 'latin'
+      || this.glyphs === 'math'
+    ) {
+      return this.glyphs;
+    }
+    return hash32(this.glyphs).toString.slice(0, 8);
+  }
+
+  getTestStringID() {
+    if (
+      this.testString === 'all'
+      || this.testString === 'greek'
+      || this.testString === 'latin'
+      || this.testString === 'math'
+    ) {
+      return this.testString;
+    }
+    return hash32(this.testString).toString().slice(0, 8);
+  }
+
+  getTestStringGlyphs() {
+    if (
+      this.testString === 'all'
+      || this.testString === 'greek'
+      || this.testString === 'latin'
+      || this.testString === 'math'
+    ) {
+      return this.getGlyphs(this.testString);
+    }
+    return this.testString;
+  }
+
+  // getTestString() {
+  //   let testString = this.alphabetSymbols;
+  //   let testStringName = hash32(testStringIn).toString().slice(0, 8);
+  //   if (testString === 'greek') {
+  //     testString = greek;
+  //     testStringName = 'greek';
+  //   } else if (testString === 'latin') {
+  //     testString = latin;
+  //     testStringName = 'latin';
+  //   } else if (testString === 'math') {
+  //     testString = math;
+  //     testStringName = 'math';
+  //   } else if (testString === 'mathSmall') {
+  //     testString = mathSmall;
+  //     testStringName = 'mathSmall';
+  //   } else if (testString === 'all') {
+  //     testString = `${latin}${greek}${math}`;
+  //     testStringName = 'all';
+  //   }
+  //   return [testStringName, testString];
+  // }
 
   setColor(color: TypeColor | null = null) {
     if (color == null) {
@@ -132,6 +282,53 @@ class FigureFont {
       maxDescent: this.maxDescent,
       midAscent: this.midAscent,
       maxAscent: this.maxAscent,
+      src: this.src,
+      map: this.map,
+      glyphs: this.glyphs,
+      testString: this.testString,
+      timeout: this.timeout,
+      maxCount: this.maxCount,
+    };
+  }
+
+  measureText(text: string, aWidth: number = this.size / 2) {
+    // const { font } = this;
+    // const aWidth = this.fontSize / 2;
+    let ascent = aWidth * this.maxAscent;
+    let descent = aWidth * this.descent;
+    // const maxAscentRe =
+    //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
+    const midAscentRe = /[acemnorsuvwxz*gyqp: ]/g;
+    const midDecentRe = /[;,$]/g;
+    let maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
+    if (this.family === 'Times New Roman') {
+      if (this.style === 'italic') {
+        maxDescentRe = /[gjyqp@Q(){}[\]|f]/g;
+      }
+    }
+    const midAscentMatches = text.match(midAscentRe);
+    if (Array.isArray(midAscentMatches)) {
+      if (midAscentMatches.length === text.length) {
+        ascent = aWidth * this.midAscent;
+      }
+    }
+
+    const midDescentMatches = text.match(midDecentRe);
+    if (Array.isArray(midDescentMatches)) {
+      if (midDescentMatches.length > 0) {
+        descent = aWidth * this.midDescent;
+      }
+    }
+
+    const maxDescentMatches = text.match(maxDescentRe);
+    if (Array.isArray(maxDescentMatches)) {
+      if (maxDescentMatches.length > 0) {
+        descent = aWidth * this.maxDescent;
+      }
+    }
+
+    return {
+      ascent, descent,
     };
   }
 
@@ -158,15 +355,7 @@ class FigureFont {
   }
 
   _dup() {
-    return new FigureFont({
-      family: this.family,
-      style: this.style,
-      size: this.size,
-      weight: this.weight,
-      color: this.color,
-      opacity: this.opacity,
-      underline: this.underline,
-    });
+    return new FigureFont(this.definition());
   }
 }
 
