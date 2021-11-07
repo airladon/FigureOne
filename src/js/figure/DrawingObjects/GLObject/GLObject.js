@@ -291,7 +291,7 @@ class GLObject extends DrawingObject {
         repeat,
         src: location,
         points,
-        buffer: null,
+        buffer: this.gl.createBuffer(),
         type: 'image',
         data: null,
         mapToBuffer,
@@ -324,7 +324,7 @@ class GLObject extends DrawingObject {
       loadColor, points, id, data, repeat, src,
     } = texture;
 
-    texture.buffer = this.gl.createBuffer();
+    // texture.buffer = this.gl.createBuffer();
 
     // $FlowFixMe
     this.updateTextureMap(points);

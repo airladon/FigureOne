@@ -132,12 +132,14 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       scene: this.getScene(),
       font: this.font,
     });
+
     this.drawingObject.addTexture(this.atlas.font.getTextureID());
     // console.log(this.atlas)
     this.setText(this.text);
+
     this.atlas.notifications.add('updated', this.loaded.bind(this));
     // this.drawingObject.updateTexture(atlas.);
-    // this.drawingObject.texture.data = 
+    // this.drawingObject.texture.data =
     // this.setText(this.text);
     this.notifications.publish('setFigure');
   }
@@ -149,109 +151,109 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
   //   this.text = text;
   // }
 
-  measureText(text: string, fontSize: number, width: number) {
-    const aWidth = fontSize / 2;
-    let ascent = aWidth * this.font.maxAscent;
-    let descent = aWidth * this.font.descent;
-    // const maxAscentRe =
-    //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
-    const midAscentRe = /[acemnorsuvwxz*gyqp: ]/g;
-    const midDecentRe = /[;,$]/g;
-    let maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
-    if (this.font.family === 'Times New Roman') {
-      if (this.font.style === 'italic') {
-        maxDescentRe = /[gjyqp@Q(){}[\]|f]/g;
-      }
-    }
-    const midAscentMatches = text.match(midAscentRe);
-    if (Array.isArray(midAscentMatches)) {
-      if (midAscentMatches.length === text.length) {
-        ascent = aWidth * this.font.midAscent;
-      }
-    }
+  // measureText(text: string, fontSize: number, width: number) {
+  //   const aWidth = fontSize / 2;
+  //   let ascent = aWidth * this.font.maxAscent;
+  //   let descent = aWidth * this.font.descent;
+  //   // const maxAscentRe =
+  //   //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
+  //   const midAscentRe = /[acemnorsuvwxz*gyqp: ]/g;
+  //   const midDecentRe = /[;,$]/g;
+  //   let maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
+  //   if (this.font.family === 'Times New Roman') {
+  //     if (this.font.style === 'italic') {
+  //       maxDescentRe = /[gjyqp@Q(){}[\]|f]/g;
+  //     }
+  //   }
+  //   const midAscentMatches = text.match(midAscentRe);
+  //   if (Array.isArray(midAscentMatches)) {
+  //     if (midAscentMatches.length === text.length) {
+  //       ascent = aWidth * this.font.midAscent;
+  //     }
+  //   }
 
-    const midDescentMatches = text.match(midDecentRe);
-    if (Array.isArray(midDescentMatches)) {
-      if (midDescentMatches.length > 0) {
-        descent = aWidth * this.font.midDescent;
-      }
-    }
+  //   const midDescentMatches = text.match(midDecentRe);
+  //   if (Array.isArray(midDescentMatches)) {
+  //     if (midDescentMatches.length > 0) {
+  //       descent = aWidth * this.font.midDescent;
+  //     }
+  //   }
 
-    const maxDescentMatches = text.match(maxDescentRe);
-    if (Array.isArray(maxDescentMatches)) {
-      if (maxDescentMatches.length > 0) {
-        descent = aWidth * this.font.maxDescent;
-      }
-    }
+  //   const maxDescentMatches = text.match(maxDescentRe);
+  //   if (Array.isArray(maxDescentMatches)) {
+  //     if (maxDescentMatches.length > 0) {
+  //       descent = aWidth * this.font.maxDescent;
+  //     }
+  //   }
 
-    return {
-      ascent, descent, width,
-    };
-  }
+  //   return {
+  //     ascent, descent, width,
+  //   };
+  // }
 
-  createAtlas(force: boolean = false) {
-    const { gl, webgl } = this.drawingObject;
-    const scene = this.getScene();
-    if (scene == null) {
-      return;
-    }
-    const fontSize = this.font.size / scene.heightNear * gl.canvas.height;
-    this.fontSize = fontSize;
-    const id = `${this.font.family}${fontSize}${this.font.style}${this.font.weight}`;
-    this.drawingObject.addTexture(`${this.font.family}${fontSize}${this.font.style}${this.font.weight}`);
-    if (!force && webgl.textures[id] != null) {
-      // this.drawingObject.texture.id = id;
-      this.atlas = webgl.textures[id].atlas;
-      this.dimension = webgl.textures[id].atlasDimension;
-      this.drawingObject.initTexture();
-      return;
-    }
+  // createAtlas(force: boolean = false) {
+  //   const { gl, webgl } = this.drawingObject;
+  //   const scene = this.getScene();
+  //   if (scene == null) {
+  //     return;
+  //   }
+  //   const fontSize = this.font.size / scene.heightNear * gl.canvas.height;
+  //   this.fontSize = fontSize;
+  //   const id = `${this.font.family}${fontSize}${this.font.style}${this.font.weight}`;
+  //   this.drawingObject.addTexture(`${this.font.family}${fontSize}${this.font.style}${this.font.weight}`);
+  //   if (!force && webgl.textures[id] != null) {
+  //     // this.drawingObject.texture.id = id;
+  //     this.atlas = webgl.textures[id].atlas;
+  //     this.dimension = webgl.textures[id].atlasDimension;
+  //     this.drawingObject.initTexture();
+  //     return;
+  //   }
 
-    /* eslint-disable */
-    // const atlasString = `QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm,./<>?;':"[]\{}|1234567890!@#$%^&*()-=_+" \u00ba\u00b0\u2212\u00d7\u00f7\u0391\u0392\u0393\u0394\u0395\u0396\u0397\u0398\u0399\u039A\u039B\u039C\u039D\u039E\u039F\u03A0\u03A1\u03A3\u03A4\u03A5\u03A6\u03A7\u03A8\u03A9\u03B1\u03B2\u03B3\u03B4\u03B5\u03B6\u03B7\u03B8\u03B9\u03BA\u03BB\u03BC\u03BD\u03BE\u03BF\u03C0\u03C1\u03C2\u03C3\u03C4\u03C5\u03C6\u03C7\u03C8\u03c9`;
-    /* eslint-enable */
-    const atlasString = FontManager.all;
+  //   /* eslint-disable */
+  //   // const atlasString = `QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm,./<>?;':"[]\{}|1234567890!@#$%^&*()-=_+" \u00ba\u00b0\u2212\u00d7\u00f7\u0391\u0392\u0393\u0394\u0395\u0396\u0397\u0398\u0399\u039A\u039B\u039C\u039D\u039E\u039F\u03A0\u03A1\u03A3\u03A4\u03A5\u03A6\u03A7\u03A8\u03A9\u03B1\u03B2\u03B3\u03B4\u03B5\u03B6\u03B7\u03B8\u03B9\u03BA\u03BB\u03BC\u03BD\u03BE\u03BF\u03C0\u03C1\u03C2\u03C3\u03C4\u03C5\u03C6\u03C7\u03C8\u03c9`;
+  //   /* eslint-enable */
+  //   const atlasString = FontManager.all;
 
-    const dimension = Math.ceil(Math.sqrt(atlasString.length) + 2) * fontSize * 1.2;
+  //   const dimension = Math.ceil(Math.sqrt(atlasString.length) + 2) * fontSize * 1.2;
 
-    const canvas = document.createElement('canvas');
-    canvas.width = dimension;
-    canvas.height = dimension;
-    this.dimension = dimension;
+  //   const canvas = document.createElement('canvas');
+  //   canvas.width = dimension;
+  //   canvas.height = dimension;
+  //   this.dimension = dimension;
 
-    const ctx = canvas.getContext('2d');
-    ctx.font = `${this.font.style} ${this.font.weight} ${fontSize}px ${this.font.family}`;
+  //   const ctx = canvas.getContext('2d');
+  //   ctx.font = `${this.font.style} ${this.font.weight} ${fontSize}px ${this.font.family}`;
 
-    let x = fontSize;
-    let y = fontSize;
+  //   let x = fontSize;
+  //   let y = fontSize;
 
-    for (let i = 0; i < atlasString.length; i += 1) {
-      ctx.fillText(atlasString[i], x, y);
-      const {
-        width, ascent, descent,
-      } = this.measureText(
-        atlasString[i], fontSize, ctx.measureText(atlasString[i]).width,
-      );
-      const offsetX = x;
-      const offsetY = this.dimension - y;
-      // x += ctx.measureText(atlasString[i]).width;
-      this.atlas[atlasString[i]] = {
-        width, ascent, descent, offsetX, offsetY,
-      };
-      x += width * 2.5;
-      if (x >= dimension - fontSize) {
-        x = fontSize;
-        y += fontSize * 1.2;
-      }
-    }
-    // Create a small square to draw color from when drawing the underline
-    ctx.fillRect(0, this.dimension - 2, 2, 2);
-    // this.drawingObject.texture.data = ctx.canvas;
-    // this.drawingObject.initTexture();
-    this.drawingObject.updateTexture(ctx.canvas);
-    webgl.textures[id].atlas = joinObjects({}, this.atlas);
-    webgl.textures[id].atlasDimension = this.dimension;
-  }
+  //   for (let i = 0; i < atlasString.length; i += 1) {
+  //     ctx.fillText(atlasString[i], x, y);
+  //     const {
+  //       width, ascent, descent,
+  //     } = this.measureText(
+  //       atlasString[i], fontSize, ctx.measureText(atlasString[i]).width,
+  //     );
+  //     const offsetX = x;
+  //     const offsetY = this.dimension - y;
+  //     // x += ctx.measureText(atlasString[i]).width;
+  //     this.atlas[atlasString[i]] = {
+  //       width, ascent, descent, offsetX, offsetY,
+  //     };
+  //     x += width * 2.5;
+  //     if (x >= dimension - fontSize) {
+  //       x = fontSize;
+  //       y += fontSize * 1.2;
+  //     }
+  //   }
+  //   // Create a small square to draw color from when drawing the underline
+  //   ctx.fillRect(0, this.dimension - 2, 2, 2);
+  //   // this.drawingObject.texture.data = ctx.canvas;
+  //   // this.drawingObject.initTexture();
+  //   this.drawingObject.updateTexture(ctx.canvas);
+  //   webgl.textures[id].atlas = joinObjects({}, this.atlas);
+  //   webgl.textures[id].atlasDimension = this.dimension;
+  // }
 
   measureAndAlignText() {
     if (Object.keys(this.atlas).length === 0) {
@@ -261,7 +263,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     const vertices = [];
     const texCoords = [];
     let x = 0;
-    const r = this.font.size / this.fontSize;
+    const r = this.font.size / this.atlas.fontSize;
     let totalWidth = 0;
     let maxDescent = 0;
     let maxAscent = 0;
@@ -334,8 +336,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       vertices[i] += oy;
     }
     this.drawingObject.updateVertices(vertices);
-    this.drawingObject.updateTextureMap(texCoords.map(v => v / this.dimension));
-
+    this.drawingObject.updateTextureMap(texCoords.map(v => v / this.atlas.dimension));
     this.location = new Point(ox, oy);
     this.measure = {
       ascent: maxAscent,

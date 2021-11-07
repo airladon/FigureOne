@@ -138,13 +138,14 @@ export default class FontManager {
         this.execCallbacks(fontID, true);
         return [fontID, true];
       }
-      return [fontID, false];
+      return [fontID, this._isFontAvailable(fontID)];
+      // return [fontID, false];
     }
 
     // Create widths for mono, serif, sans-serif and the font of interest.
     this.fonts[fontID] = {
       timeout: this.timeKeeper.now() + o.timeout,
-      font,
+      font: f,
       testStringID,
       testStringSymbols,
       width: [],

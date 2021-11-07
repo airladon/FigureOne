@@ -24,6 +24,7 @@ import type {
   OBJ_TextDefinition,
 } from '../../FigurePrimitives/FigurePrimitiveTypes2D';
 import type { OBJ_AtlasMap } from '../../webgl/Atlas';
+import glyphMeasures from './glyphMeasures';
 
 const greek = '\u0391\u0392\u0393\u0394\u0395\u0396\u0397\u0398\u0399\u039A\u039B\u039C\u039D\u039E\u039F\u03A0\u03A1\u03A3\u03A4\u03A5\u03A6\u03A7\u03A8\u03A9\u03B1\u03B2\u03B3\u03B4\u03B5\u03B6\u03B7\u03B8\u03B9\u03BA\u03BB\u03BC\u03BD\u03BE\u03BF\u03C0\u03C1\u03C2\u03C3\u03C4\u03C5\u03C6\u03C7\u03C8\u03c9';
 
@@ -64,6 +65,9 @@ class FigureFont {
   maxDescent: number;
   midAscent: number;
   maxAscent: number;
+  modifiers: {
+    [glyph: string]: { width?: number, descent?: number, ascent?: number },
+  }
 
   // Font load detection parameters
   testString: string;
@@ -92,6 +96,7 @@ class FigureFont {
       this.testString = optionsIn.testString;
       this.timeout = optionsIn.timeout;
       this.maxCount = optionsIn.maxCount;
+      this.modifiers = optionsIn.modifiers;
       return;
     }
     const defaultOptions = {
@@ -113,6 +118,7 @@ class FigureFont {
       glyphs: 'all',
       timeout: 5000,
       maxCount: 1,
+      modifiers: {},
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     this.family = options.family;
@@ -138,6 +144,15 @@ class FigureFont {
     if (this.testString == null) {
       this.testString = this.glyphs;
     }
+    this.modifiers = glyphMeasures(
+      this.family, this.style,
+      this.maxAscent, this.midAscent, this.maxDescent, this.midDescent,
+      this.descent, options.modifiers,
+    );
+  }
+
+  getFamily() {
+    return this.family.toLowerCase().split(',')[0];
   }
 
   getFontID() {
@@ -150,7 +165,8 @@ class FigureFont {
     if (this.src != null && this.src !== '') {
       throw new Error('FigureOne Font Error: An image was used as an atlas but does not have an associated ID');
     }
-    return `${this.family.toLowerCase()}-${this.weight.toLowerCase()}-${this.style.toLowerCase()}-${this.getTestStringID()}`;
+    const family = this.family.split(',')[0].toLowerCase();
+    return `${family}-${this.weight.toLowerCase()}-${this.style.toLowerCase()}-${this.getTestStringID()}`;
   }
 
   getTextureID() {
@@ -163,7 +179,8 @@ class FigureFont {
     if (this.src != null && this.src !== '') {
       throw new Error('FigureOne Font Error: An image was used as an atlas but does not have an associated ID');
     }
-    return `${this.family.toLowerCase()}-${this.weight.toLowerCase()}${this.style.toLowerCase()}-${this.getTestStringID()}-${round(this.size, 4).toString()}`;
+    const family = this.family.split(',')[0].toLowerCase();
+    return `${family}-${this.weight.toLowerCase()}-${this.style.toLowerCase()}-${this.getTestStringID()}-${round(this.size, 4).toString()}`;
   }
 
   getGlyphs() {
@@ -288,49 +305,69 @@ class FigureFont {
       testString: this.testString,
       timeout: this.timeout,
       maxCount: this.maxCount,
+      modifiers: this.modifiers,
     };
   }
 
   measureText(text: string, aWidth: number = this.size / 2) {
-    // const { font } = this;
-    // const aWidth = this.fontSize / 2;
-    let ascent = aWidth * this.maxAscent;
-    let descent = aWidth * this.descent;
-    // const maxAscentRe =
-    //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
-    const midAscentRe = /[acemnorsuvwxz*gyqp: ]/g;
-    const midDecentRe = /[;,$]/g;
-    let maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
-    if (this.family === 'Times New Roman') {
-      if (this.style === 'italic') {
-        maxDescentRe = /[gjyqp@Q(){}[\]|f]/g;
-      }
-    }
-    const midAscentMatches = text.match(midAscentRe);
-    if (Array.isArray(midAscentMatches)) {
-      if (midAscentMatches.length === text.length) {
-        ascent = aWidth * this.midAscent;
-      }
-    }
+    // // const { font } = this;
+    // // const aWidth = this.fontSize / 2;
+    // let ascent = aWidth * this.maxAscent;
+    // let descent = aWidth * this.descent;
+    // // const maxAscentRe =
+    // //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
+    // const midAscentRe = /[acemnorsuvwxz*gyqp: ]/g;
+    // const midDecentRe = /[;,$]/g;
+    // let maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
+    // const family = this.family.toLowerCase();
+    // if (family === 'times new roman' || family === 'times' || family === 'serif') {
+    //   if (this.style === 'italic') {
+    //     maxDescentRe = /[gjyqp@Q(){}[\]|f]/g;
+    //   }
+    // }
+    // const midAscentMatches = text.match(midAscentRe);
+    // if (Array.isArray(midAscentMatches)) {
+    //   if (midAscentMatches.length === text.length) {
+    //     ascent = aWidth * this.midAscent;
+    //   }
+    // }
 
-    const midDescentMatches = text.match(midDecentRe);
-    if (Array.isArray(midDescentMatches)) {
-      if (midDescentMatches.length > 0) {
-        descent = aWidth * this.midDescent;
+    // const midDescentMatches = text.match(midDecentRe);
+    // if (Array.isArray(midDescentMatches)) {
+    //   if (midDescentMatches.length > 0) {
+    //     descent = aWidth * this.midDescent;
+    //   }
+    // }
+
+    // const maxDescentMatches = text.match(maxDescentRe);
+    // if (Array.isArray(maxDescentMatches)) {
+    //   if (maxDescentMatches.length > 0) {
+    //     descent = aWidth * this.maxDescent;
+    //   }
+    // }
+
+    let ascent = 0;
+    let descent = -this.maxAscent;
+
+    for (let i = 0; i < text.length; i += 1) {
+      const glyph = text[i];
+      if (this.modifiers[glyph] == null) {
+        ascent = Math.max(this.maxAscent, ascent);
+        descent = Math.max(this.maxDescent, descent);
+      } else {
+        const { a, d } = this.modifiers[glyph];
+        ascent = Math.max(a, ascent);
+        descent = Math.max(d, descent);
       }
     }
-
-    const maxDescentMatches = text.match(maxDescentRe);
-    if (Array.isArray(maxDescentMatches)) {
-      if (maxDescentMatches.length > 0) {
-        descent = aWidth * this.maxDescent;
-      }
-    }
-
     return {
-      ascent, descent,
+      ascent: ascent * aWidth, descent: descent * aWidth,
     };
   }
+
+  // measureGlyph(glyph: string, aWidth: number = this.size / 2) {
+  //   if (this.modifiers[glyph])
+  // }
 
   setFontInContext(ctx: CanvasRenderingContext2D, scalingFactor: number = 1) {
     ctx.font = `${this.style} ${this.weight} ${this.size * scalingFactor}px ${this.family}`;
