@@ -178,16 +178,85 @@ export default class FontManager {
     }
     console.log(result)
     if (result === false) {
+      // font, monospace
+      // font, serif
+      // font, sans-serif
+      // font, auto
+      // serif
+      // font, mono
+      // if (font, mono === serif) {
+      //   then font is serif and exists
+      // }
+      /*
+
+        // Cases:
+        // Font is a system font
+        // Font exists
+        // Font doesn't exist
+
+        measure serif
+        measure font, serif
+
+        // Test if font exsits
+        // If font exists, then it will be different to the backup font
+        // This does not work if the font IS serif (see below)
+        if (font, serif !== serif) {
+          then font exists
+        }
+
+        measure font, sans
+
+        // Test if font IS serif
+        // (implicitly from last test: font, serif === serif)
+        if (font, sans === serif) {
+          then font is serif, and exists
+        }
+
+        // Otherwise font does not exist
+
+        // Ongoing
+        if (font, serif !== serif) {
+          then font exists
+        }
+
+
+        // Test if font doesn't exist
+        // If font doesn't exist, then fallback are used. This only needs
+        // to be twice as it's possible the Font is a system font
+        if (font, sans === sans && font, serif === serif) {
+          then font doesn't exist
+        }
+
+
+
+        // Test is font is a system font
+        if (font, mono === mono && font, serif === mono) {
+          then font is mono, and exists
+        }
+        if (font, serif === serif && font, sans === serif) {
+          then font is serif, and exists
+        }
+        if (font, sans === sans && font, serif === sans) {
+          then font is sans, and exists
+        }
+        if (font, auto === auto && font, serif === auto) {
+          then font is auto, and exists
+        }
+        
+        
+      */
       // Create widths for mono, serif, sans-serif and the font of interest.
       const mono = this.measureText(fontID, 'monospace').width;
       const sans = this.measureText(fontID, 'sans-serif').width;
       const serif = this.measureText(fontID, 'serif').width;
-      const { width } = this.measureText(fontID, 'serif');
+      const auto = this.measureText(fontID, 'auto').width;
+      const { width } = this.measureText(fontID);
       this.fonts[fontID].mono = mono;
       this.fonts[fontID].serif = serif;
       this.fonts[fontID].sans = sans;
+      this.fonts[fontID].auto = auto;
       this.fonts[fontID].width.push(width);
-      if (width !== mono && width !== sans && width !== serif) {
+      if (width !== mono && width !== sans && width !== serif && width !== auto) {
         this.fonts[fontID].count += 1;
       }
       if (this.fonts[fontID].count === this.fonts[fontID].maxCount) {
@@ -260,7 +329,7 @@ export default class FontManager {
     // } else {
     const { width } = this.measureText(name);
     f.width.push(width);
-    if (width !== f.mono && width !== f.sans && width !== f.serif) {
+    if (width !== f.mono && width !== f.sans && width !== f.serif && width !== f.auto) {
       this.fonts[name].count += 1;
     }
     if (this.fonts[name].count === this.fonts[name].maxCount) {

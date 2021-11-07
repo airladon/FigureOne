@@ -220,11 +220,7 @@ export default class Atlas {
     const { font } = this;
     const fontSizePX = font.size / scene.heightNear * this.webgl.gl.canvas.height;
     this.fontSize = fontSizePX;
-    // const id = `${font.family}${fontSizePX}${font.style}${font.weight}`;
-    // this.id = id;
-    // if (this.webgl.textures[this.textureId] != null) {
-    //   return;
-    // }
+
     const glyphs = this.font.getGlyphs();
     this.map = {};
     const dimension = Math.ceil(Math.sqrt(glyphs.length) + 2) * fontSizePX * 1.5;
@@ -236,6 +232,7 @@ export default class Atlas {
     const ctx = canvas.getContext('2d');
     ctx.font = `${font.style} ${font.weight} ${fontSizePX}px ${font.family}`;
 
+    // ctx.font = `300 ${fontSizePX}px open sans`;
     let x = fontSizePX;
     let y = fontSizePX;
     const aWidth = ctx.measureText('a').width;
@@ -262,7 +259,7 @@ export default class Atlas {
     this.dimension = dimension;
     // Create a small square to draw color from when drawing the underline
     ctx.fillRect(0, dimension - 2, 2, 2);
-    console.log('created', ctx.font)
+    document.body.appendChild(canvas);
     this.webgl.addTexture(this.font.getTextureID(), ctx.canvas, [0, 0, 0, 0], false, null, true);
   }
 }
