@@ -264,7 +264,7 @@ class WebGLInstance {
       }
       return this.textures[id].index;;
     }
-
+    console.log('adding')
     let index = 0;
     if (this.textures[id] != null) {
       index = this.textures[id].index;
@@ -331,7 +331,7 @@ class WebGLInstance {
 
     // If texture exists, then delete it
     if (texture.glTexture != null) {
-      gl.activeTexture(gl.TEXTURE0 + index);
+      gl.activeTexture(gl.TEXTURE0 + texture.index);
       gl.bindTexture(gl.TEXTURE_2D, null);
       gl.deleteTexture(texture.glTexture);
     }
@@ -366,6 +366,7 @@ class WebGLInstance {
     gl.activeTexture(gl.TEXTURE0 + index);
     gl.bindTexture(gl.TEXTURE_2D, glTexture);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+    console.log('really adding')
 
     // If image is a color, then create s ingle pixel image of that color
     if (Array.isArray(image)) {
@@ -381,6 +382,7 @@ class WebGLInstance {
       gl.TEXTURE_2D, 0, gl.RGBA,
       gl.RGBA, gl.UNSIGNED_BYTE, image,
     );
+    console.log('really adding', image)
     // Check if the image is a power of 2 in both dimensions.
     if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
       // Yes, it's a power of 2. Generate mips.

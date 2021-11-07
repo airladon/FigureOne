@@ -1,7 +1,7 @@
 // @flow
 import type { OBJ_FigureForElement } from '../Figure';
 import { FigureElementPrimitive } from '../Element';
-import FontManager from '../FontManager';
+// import FontManager from '../FontManager';
 import {
   Point, Rect, getBoundingBorder, isBuffer,
 } from '../../tools/g2';

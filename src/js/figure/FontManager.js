@@ -22,6 +22,10 @@ export default class FontManager {
   fnMap: FunctionMap
   timedOut: number;
   notifications: NotificationManager;
+  checkTimer: TimerID;
+  startTime: number;
+  timeout: number;
+
   // static greek = greek;
   // static math = math;
   // static latin = latin;
@@ -32,6 +36,7 @@ export default class FontManager {
     timeKeeper: TimeKeeper = new TimeKeeper(),
     fnMap: FunctionMap = new FunctionMap(),
     notifications: NotificationManager = new NotificationManager(),
+    timeout: number = 10000,
   ) {
     if (!FontManager.instance) {
       FontManager.instance = this;
@@ -59,6 +64,9 @@ export default class FontManager {
       this.loaded = 0;
       this.fnMap = fnMap;
       this.timedOut = 0;
+      this.checkTimer = null;
+      this.timeout = timeout;
+      this.startTime = null;
     }
     return FontManager.instance;
   }
@@ -127,7 +135,6 @@ export default class FontManager {
     const testStringID = f.getTestStringID();
     const testStringSymbols = f.getTestStringGlyphs();
     const fontID = f.getFontID();
-
     // If the font family-weight-style has already been created, then
     // return the result of whether it is loaded or not
     if (this.fonts[fontID] != null) {
@@ -138,11 +145,10 @@ export default class FontManager {
         this.execCallbacks(fontID, true);
         return [fontID, true];
       }
-      return [fontID, this._isFontAvailable(fontID)];
+      const result = this._isFontAvailable(fontID);
+      return [fontID, result];
       // return [fontID, false];
     }
-
-    // Create widths for mono, serif, sans-serif and the font of interest.
     this.fonts[fontID] = {
       timeout: this.timeKeeper.now() + o.timeout,
       font: f,
@@ -158,23 +164,47 @@ export default class FontManager {
       callbacks: [],
       timedOut: false,
     };
-    const mono = this.measureText(fontID, 'monospace').width;
-    const sans = this.measureText(fontID, 'sans-serif').width;
-    const serif = this.measureText(fontID, 'serif').width;
-    const { width } = this.measureText(fontID);
-    this.fonts[fontID].mono = mono;
-    this.fonts[fontID].serif = serif;
-    this.fonts[fontID].sans = sans;
-    this.fonts[fontID].width.push(width);
-    if (width !== mono && width !== sans && width !== serif) {
-      this.fonts[fontID].count += 1;
-    }
     this.loading += 1;
-    if (this.fonts[fontID].count === this.fonts[fontID].maxCount) {
+    let result = false;
+    /*
+    This method doesn't handel subsets like checking for greek letters so only
+    do this once at the start, to confirm the font is not a system font, and
+    then move on with measurement tests. If the font is a system font (the
+    default serif or sans-serif for example), then the font will never show as
+    loaded as it is being compared against the default serif and sans-serif.
+    */
+    if (document.fonts != null && document.fonts.check != null) {
+      result = document.fonts.check(`${f.style} ${f.weight} 20px ${f.family}`, f.getTestStringGlyphs());
+    }
+    console.log(result)
+    if (result === false) {
+      // Create widths for mono, serif, sans-serif and the font of interest.
+      const mono = this.measureText(fontID, 'monospace').width;
+      const sans = this.measureText(fontID, 'sans-serif').width;
+      const serif = this.measureText(fontID, 'serif').width;
+      const { width } = this.measureText(fontID, 'serif');
+      this.fonts[fontID].mono = mono;
+      this.fonts[fontID].serif = serif;
+      this.fonts[fontID].sans = sans;
+      this.fonts[fontID].width.push(width);
+      if (width !== mono && width !== sans && width !== serif) {
+        this.fonts[fontID].count += 1;
+      }
+      if (this.fonts[fontID].count === this.fonts[fontID].maxCount) {
+        result = true;
+      }
+    }
+    console.log(result)
+    if (result) {
       this.fonts[fontID].loaded = true;
-      this.execCallbacks(fontID, false);
+      // this.execCallbacks(fontID, false);
       this.loaded += 1;
       return [fontID, true];
+    }
+    this.fonts[fontID].callbacks.push(o.callback);
+    console.log(this.fonts[fontID].callbacks)
+    if (this.checkTimer == null) {
+      this.checkTimer = this.timeKeeper.setTimeout(this.timedCheck.bind(this), 50);
     }
     return [fontID, false];
   }
@@ -182,6 +212,24 @@ export default class FontManager {
   execCallbacks(fontID: string, available: boolean) {
     this.fonts[fontID].callbacks.forEach(c => this.fnMap.exec(c, available));
     this.fonts[fontID].callbacks = [];
+  }
+
+  timedCheck() {
+    const result = this.isLoadingFinished();
+    if (result) {
+      return;
+    }
+    if (this.timeKeeper.now() - this.startTime > this.timeout) {
+      return;
+    }
+    let time = 10;
+    if (this.timeKeeper.now() - this.startTime > 1000) {
+      time = 500;
+    }
+    if (this.timeKeeper.now() - this.startTime > 5000) {
+      time = 1000;
+    }
+    this.timeKeeper.setTimeout(this.timedCheck.bind(this), time);
   }
 
   isLoadingFinished() {
@@ -206,25 +254,57 @@ export default class FontManager {
     if (f.timedOut) {
       return false;
     }
+    let result = false;
+    // if (document.fonts != null && document.fonts.check != null && false) {
+    //   result = document.fonts.check(`${f.font.style} ${f.font.weight} 20px ${f.font.family}`);
+    // } else {
     const { width } = this.measureText(name);
     f.width.push(width);
     if (width !== f.mono && width !== f.sans && width !== f.serif) {
       this.fonts[name].count += 1;
     }
     if (this.fonts[name].count === this.fonts[name].maxCount) {
+      result = true;
+    }
+    if (this.timeKeeper.now() > f.timeout) {
+      result = null;
+    }
+    // }
+
+    if (result) {
       this.fonts[name].loaded = true;
+      console.log('loaded', name)
       this.execCallbacks(name, true);
       this.notifications.publish('fontLoaded', name);
       this.loaded += 1;
       return true;
     }
-    if (this.timeKeeper.now() > f.timeout) {
+    if (result == null) {
       f.timedOut = true;
       this.timedOut += 1;
       this.execCallbacks(name, false);
       this.notifications.publish('fontUnavailable', name);
     }
     return false;
+    // const { width } = this.measureText(name);
+    // f.width.push(width);
+    // if (width !== f.mono && width !== f.sans && width !== f.serif) {
+    //   this.fonts[name].count += 1;
+    // }
+    // if (this.fonts[name].count === this.fonts[name].maxCount) {
+    //   this.fonts[name].loaded = true;
+    //   this.execCallbacks(name, true);
+    //   this.notifications.publish('fontLoaded', name);
+    //   this.loaded += 1;
+    //   return true;
+    // }
+    // if (this.timeKeeper.now() > f.timeout) {
+    //   f.timedOut = true;
+    //   this.timedOut += 1;
+    //   this.execCallbacks(name, false);
+    //   this.notifications.publish('fontUnavailable', name);
+    // }
+    // return false;
   }
 
   isFontAvailable(family: string, weight: string, style: string, testString: string) {

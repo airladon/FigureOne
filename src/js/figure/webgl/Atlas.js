@@ -4,6 +4,31 @@ import FontManager from '../FontManager';
 import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
 import { joinObjects, NotificationManager } from '../../tools/tools';
 
+// const modifiers = {
+//   'times new roman': {
+//     italic: { f: { width: 1.2 } },
+//   },
+//   'times': {
+//     italic: { f: { width: 1.2 } },
+//   },
+// };
+
+// function getModifier(family, style, weight) {
+//   if (modifers[family] == null) {
+//     return {};
+//   }
+//   if (modifiers[family][style] == null) {
+//     return {};
+//   }
+//   if (modifiers[family][style][weight] != null) {
+//     return modifiers[family][style][weight];
+//   }
+//   return modifiers[family][style];
+//   return {};
+// }
+
+
+
 /* eslint-disable max-len */
 /*
 This is probably overly complicated.
@@ -93,14 +118,16 @@ export default class Atlas {
       font: {},
       timeout: 5000,
       maxCount: 1,
-    });
+    }, options);
+
     this.font = new FigureFont(o.font);
+    // console.log(this.font.getTextureID())
     // this.src = o.src;
     // this.textureId = o.id;
     this.loaded = false;
     this.notifications = new NotificationManager();
-
     // If src is defined, then an actual image is the atlas
+    // console.log(this.font.getTextureID(), '<', this.font.src, '>')
     if (this.font.src != null && this.font.src !== '') {
       this.map = this.font.map;
       this.webgl.addTexture(
@@ -140,6 +167,7 @@ export default class Atlas {
   }
 
   fontLoaded() {
+    // console.log('loaded', this.loaded)
     if (this.loaded) {
       return;
     }
@@ -199,7 +227,7 @@ export default class Atlas {
     // }
     const glyphs = this.font.getGlyphs();
     this.map = {};
-    const dimension = Math.ceil(Math.sqrt(glyphs.length) + 2) * fontSizePX * 1.2;
+    const dimension = Math.ceil(Math.sqrt(glyphs.length) + 2) * fontSizePX * 1.5;
 
     const canvas = document.createElement('canvas');
     canvas.width = dimension;
@@ -213,7 +241,11 @@ export default class Atlas {
     const aWidth = ctx.measureText('a').width;
     for (let i = 0; i < glyphs.length; i += 1) {
       ctx.fillText(glyphs[i], x, y);
-      const { width } = ctx.measureText(glyphs[i]);
+      let w = 1;
+      if (this.font.modifiers[glyphs[i]]) {
+        w = this.font.modifiers[glyphs[i]].w;
+      }
+      const width = ctx.measureText(glyphs[i]).width * w;
       const { ascent, descent } = this.font.measureText(glyphs[i], aWidth);
       const offsetX = x;
       const offsetY = dimension - y;
@@ -230,6 +262,7 @@ export default class Atlas {
     this.dimension = dimension;
     // Create a small square to draw color from when drawing the underline
     ctx.fillRect(0, dimension - 2, 2, 2);
-    this.webgl.addTexture(this.id, ctx.canvas);
+    console.log('created', ctx.font)
+    this.webgl.addTexture(this.font.getTextureID(), ctx.canvas, [0, 0, 0, 0], false, null, true);
   }
 }
