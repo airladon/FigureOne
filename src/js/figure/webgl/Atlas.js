@@ -152,7 +152,7 @@ export default class Atlas {
     this.fontManager = new FontManager();
     this.canvas = document.createElement('canvas');
 
-    const [fontID, isAvailable] = this.fontManager.loadFont(this.font, {
+    const [fontID, isAvailable] = this.fontManager.watch(this.font, {
       timeout: o.timeout,
       maxCount: o.maxCount,
       callback: this.fontLoaded.bind(this),

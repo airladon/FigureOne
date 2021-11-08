@@ -358,7 +358,7 @@ class Figure {
   // }
 
   scene: Scene;
-  fontManager: FontManager;
+  fonts: FontManager;
 
   animations: AnimationManager;
 
@@ -712,8 +712,8 @@ class Figure {
     this.moveBuffer = [];
     this.timeKeeper = new TimeKeeper();
     this.notifications = new NotificationManager(this.fnMap);
-    this.fontManager = new FontManager(this.timeKeeper, this.fnMap, this.notifications);
-    this.fontManager.addAnimateFrameCallback(this.animateNextFrame.bind(this));
+    this.fonts = new FontManager(this.timeKeeper, this.fnMap, this.notifications);
+    this.fonts.addAnimateFrameCallback(this.animateNextFrame.bind(this));
     this.recorder = new Recorder(this.timeKeeper);
     // $FlowFixMe
     this.recorder.figure = this;

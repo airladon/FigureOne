@@ -27,8 +27,8 @@ figure.add({
 // console.log(figure.fontManager.isFamilyAvailable('Open Sans', 'π'));
 
 
-console.log(figure.fontManager.loadFont({ family: 'open sans', testString: 'latin', callback: () => console.log('latin loaded') }));
-console.log(figure.fontManager.loadFont({ family: 'open sans', testString: 'greek', callback: () => console.log('greek loaded') }));
+console.log(figure.fonts.watch({ family: 'open sans', testString: 'latin', callback: () => console.log('latin loaded') }));
+console.log(figure.fonts.watch({ family: 'open sans', testString: 'greek', callback: () => console.log('greek loaded') }));
 
 
 // figure.fontManager.whenAvailable('Open Sans', '300', 'normal', () => console.log('available'));

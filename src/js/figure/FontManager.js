@@ -31,7 +31,6 @@ export default class FontManager {
     timeKeeper: TimeKeeper = new TimeKeeper(),
     fnMap: FunctionMap = new FunctionMap(),
     notifications: NotificationManager = new NotificationManager(),
-    // timeout: number = 10000,
   ) {
     if (!FontManager.instance) {
       FontManager.instance = this;
@@ -61,21 +60,22 @@ export default class FontManager {
     this.animateNextFrameCallbacks.forEach(c => c());
   }
 
-  measureText(fontID: string, backupFont: string = '') {
+  measureTextID(fontID: string, backupFont: string = '') {
     const f = this.fonts[fontID].font;
     let backup = '';
     if (backupFont !== '') {
       backup = `, ${backupFont}`;
     }
-    this.ctx.font = `${f.style} ${f.weight} 20px ${f.family}${backup}`;
-    return this.ctx.measureText(this.fonts[fontID].glyphSymbols);
+    // this.ctx.font = `${f.style} ${f.weight} 20px ${f.family}${backup}`;
+    // console.log(this.ctx.font)
+    // return this.ctx.measureText(this.fonts[fontID].glyphSymbols);
+    return this.measureText(`${f.family}${backup}`, f.weight, f.style, this.fonts[fontID].glyphSymbols);
   }
 
-  // measureSystemFont(fontID: string, systemFont: string) {
-  //   const f = this.fonts[fontID].font;
-  //   this.ctx.font = `${f.style} ${f.weight} 20px ${systemFont}`;
-  //   return this.ctx.measureText(this.fonts[fontID].glyphSymbols);
-  // }
+  measureText(family: string, weight: string, style: string, glyphs: string) {
+    this.ctx.font = `${style} ${weight} 20px ${family}`;
+    return this.ctx.measureText(glyphs).width;
+  }
 
   showDebugAtlas(fontID: string, fontFamily: string, fontSizePX = 10) {
     const f = this.fonts[fontID].font;
@@ -104,12 +104,6 @@ export default class FontManager {
 
 
   /*
-  There are several cases to consider:
-    - Font is a system default font (and is thus available)
-    - Font is available
-    - Font is available for some glyphs only
-    - Font is not available
-
   We can then measure the width of the glyphs using just the font itself, and
   then with the font and a backup system default font. If the font or some
   glyphs of the font don't exist, the backup system font will be used.
@@ -124,12 +118,33 @@ export default class FontManager {
   */
 
   measure(
-    fontID: string, backupName: string, backupFamily: string
+    fontID: string, backupName: string, backupFamily: string,
   ) {
-    this.fonts[fontID][backupName].push(this.measureText(fontID, backupFamily).width);
+    this.fonts[fontID][backupName].push(this.measureTextID(fontID, backupFamily));
   }
 
-  isAvailable(fontID: string): boolean {
+  /**
+   * Check if a font is available.
+   */
+  isAvailable(
+    fontDefinition: { family: string, weight?: string, style?: string, glyphs?: string, },
+  ): boolean {
+    const f = new FigureFont(fontDefinition);
+    const glyphs = f.getGlyphs();
+    const fam = f.getFamily();
+    const { weight, style } = f;
+    const mono = this.measureText(`${fam},monospace`, weight, style, glyphs);
+    const serif = this.measureText(`${fam},serif`, weight, style, glyphs);
+    const sans = this.measureText(`${fam},sans-serif`, weight, style, glyphs);
+    const auto = this.measureText(`${fam},auto`, weight, style, glyphs);
+    const width = this.measureTextID(fam, weight, style, glyphs);
+    if (width === mono && width === serif && width === sans && width === auto) {
+      return true;
+    }
+    return false;
+  }
+
+  isAvailableID(fontID: string): boolean {
     this.measure(fontID, 'mono', 'monospace');
     this.measure(fontID, 'serif', 'serif');
     this.measure(fontID, 'sans', 'sans-serif');
@@ -138,7 +153,7 @@ export default class FontManager {
     const serif = this.fonts[fontID].serif.slice(-1)[0];
     const sans = this.fonts[fontID].sans.slice(-1)[0];
     const auto = this.fonts[fontID].auto.slice(-1)[0];
-    const { width } = this.measureText(fontID);
+    const width = this.measureTextID(fontID);
     this.fonts[fontID].width.push(width);
     if (width === mono && width === serif && width === sans && width === auto) {
       return true;
@@ -146,10 +161,12 @@ export default class FontManager {
     return false;
   }
 
-  loadFont(font: OBJ_Font | FigureFont, options: OBJ_LoadFontOptions) {
+  /**
+   * Watch for when a font becomes available.
+   */
+  watch(font: OBJ_Font | FigureFont, options: OBJ_LoadFontOptions) {
     const o = joinObjects({}, {
       timeout: 5000,
-      maxCount: 1,
       callback: null,
     }, options);
 
@@ -181,14 +198,12 @@ export default class FontManager {
       sans: [],
       auto: [],
       loaded: false,
-      // count: 0,
-      // maxCount: o.maxCount,
       callbacks: [],
       timedOut: false,
     };
     this.loading += 1;
 
-    const result = this.isAvailable(fontID, false);
+    const result = this.isAvailableID(fontID, false);
 
     this.fonts[fontID].callbacks.push(o.callback);
 
@@ -279,7 +294,7 @@ export default class FontManager {
       return false;
     }
 
-    const result = this.isAvailable(fontID);
+    const result = this.isAvailableID(fontID);
     if (result === false && this.timeKeeper.now() > f.timeout) {
       this.fontTimedOut(fontID);
       return false;
@@ -290,10 +305,5 @@ export default class FontManager {
       return true;
     }
     return false;
-  }
-
-  isFontAvailable(family: string, weight: string, style: string, glyphs: string) {
-    const name = `${family.toLowerCase()}-${weight.toLowerCase()}-${style.toLowerCase()}-${this.getTestString(glyphs)[0]}`;
-    return this._isFontAvailable(name);
   }
 }
