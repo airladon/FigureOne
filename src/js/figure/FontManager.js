@@ -68,16 +68,14 @@ export default class FontManager {
       backup = `, ${backupFont}`;
     }
     this.ctx.font = `${f.style} ${f.weight} 20px ${f.family}${backup}`;
-    console.log(this.ctx.font)
     return this.ctx.measureText(this.fonts[fontID].glyphSymbols);
   }
 
-  measureSystemFont(fontID: string, systemFont: string) {
-    const f = this.fonts[fontID].font;
-    this.ctx.font = `${f.style} ${f.weight} 20px ${systemFont}`;
-    console.log(this.ctx.font)
-    return this.ctx.measureText(this.fonts[fontID].glyphSymbols);
-  }
+  // measureSystemFont(fontID: string, systemFont: string) {
+  //   const f = this.fonts[fontID].font;
+  //   this.ctx.font = `${f.style} ${f.weight} 20px ${systemFont}`;
+  //   return this.ctx.measureText(this.fonts[fontID].glyphSymbols);
+  // }
 
   showDebugAtlas(fontID: string, fontFamily: string, fontSizePX = 10) {
     const f = this.fonts[fontID].font;
@@ -123,123 +121,28 @@ export default class FontManager {
 
   If the font is available, then all widths will be the same.
   If the font is not available, then some of the widths will be different.
-
-  
-
-  If font width is the same as all other widths, then we know the font is available.
-
-  If some widths are different
-
-
-
-  If the width of the glyphs of the font is the same as the width of the same
-  glyphs with that font and a backup system default font, then we know either:
-    - Font is a system font
-    - or font is not available for all glyphs
-    - or font is not available for some glyphs
-
-  If width of glyphs for font is different from the four backups, we know the
-  font is available.
-
-  To determine whether it is a system font then, we need to measure the width
-  of the glyphs with the system fonts alone:
-    - serif
-    - sans-serif
-    - monospace
-    - auto
-
-  If the width of the glyphs with the system font is equal to the width of the
-  font with a different backup system font, then we know the font is the system
-  font we are comparing it to. For example:
-    - if (mono === font, serif) then font must be system font mono
-    - if (serif === font, sans-serif) then font must be system font serif
-
-  At this point, the font is not available for at least some of the glyphs.
-
-  Going forward, availability can be checked by remeasuring the width of the
-  glyphs with font and comparing it to (font, serif), (font, sans-serif),
-  (font, mono) and (font, auto). When it is different to all, then it is
-  available.
-
-  The catch is for fonts that have different files for different characters.
-  For example a font might have a file for all latin characters, and a
-  different file for greek characters. If originally no glyphs are available,
-  then the next time availability is checked just the latin fonts are
-  available, our result will be the font is available. If we get this result,
-  we need to recompute all the backup fonts and recheck this. That way, we
-  won't accidently say a font is available when actually its only partially
-  available.
   */
 
   measure(
-    fontID: string, backupName: string, backupFamily: string, forceRemeasure: boolean,
+    fontID: string, backupName: string, backupFamily: string
   ) {
-    if (this.fonts[fontID][backupName] === 0 || forceRemeasure) {
-      this.fonts[fontID][backupName] = this.measureText(fontID, backupFamily).width;
-      console.log(backupName, this.fonts[fontID][backupName])
-      return 1;
-    }
-    return 0;
+    this.fonts[fontID][backupName].push(this.measureText(fontID, backupFamily).width);
   }
 
-  isAvailable(fontID: string, forceRemeasure = false): boolean {
-    console.log('isAvailable', forceRemeasure)
-    let remeasured = 0;
-    console.log(forceRemeasure, this.fonts[fontID].mono, this.fonts[fontID].serif, this.fonts[fontID].sans, this.fonts[fontID].auto);
-    remeasured += this.measure(fontID, 'mono', 'monospace', forceRemeasure);
-    remeasured += this.measure(fontID, 'serif', 'serif', forceRemeasure);
-    remeasured += this.measure(fontID, 'sans', 'sans-serif', forceRemeasure);
-    remeasured += this.measure(fontID, 'auto', 'auto', forceRemeasure);
-    const {
-      mono, serif, sans, auto,
-    } = this.fonts[fontID];
+  isAvailable(fontID: string): boolean {
+    this.measure(fontID, 'mono', 'monospace');
+    this.measure(fontID, 'serif', 'serif');
+    this.measure(fontID, 'sans', 'sans-serif');
+    this.measure(fontID, 'auto', 'auto');
+    const mono = this.fonts[fontID].mono.slice(-1)[0];
+    const serif = this.fonts[fontID].serif.slice(-1)[0];
+    const sans = this.fonts[fontID].sans.slice(-1)[0];
+    const auto = this.fonts[fontID].auto.slice(-1)[0];
     const { width } = this.measureText(fontID);
-    console.log(forceRemeasure, width, mono, serif, sans, auto);
     this.fonts[fontID].width.push(width);
-    if (
-      width !== mono && width !== sans && width !== serif && width !== auto
-    ) {
-      if (remeasured === 4) {
-        return true;
-      }
-      // Need to remeasure if cached backups are old as it's possible a font
-      // has been partially loaded. For example there are two font files for
-      // latin and greek, and only latin has been loaded (and the test glyphs
-      // include both latin and greek)
-      return this.isAvailable(fontID, true);
+    if (width === mono && width === serif && width === sans && width === auto) {
+      return true;
     }
-    return this.isSystemFont(fontID);
-  }
-
-  isSystemFont(fontID: string): boolean {
-    const f = this.fonts[fontID];
-    if (f.system != null) {
-      return f.system;
-    }
-
-    if (f.serif == null) {
-      f.serif = this.measureText(fontID, 'serif').width;
-    }
-    if (f.sans == null) {
-      f.sans = this.measureText(fontID, 'sans-serif').width;
-    }
-    const { sans, serif } = f;
-    const systemSerif = this.measureSystemFont(fontID, 'serif').width;
-    console.log('systemSerif', systemSerif)
-    if (systemSerif === sans) { f.system = true; return true; }
-
-    const systemSans = this.measureSystemFont(fontID, 'sans-serif').width;
-    console.log('systemSans', systemSans)
-    if (systemSans === serif) { f.system = true; return true; }
-
-    const systemAuto = this.measureSystemFont(fontID, 'auto').width;
-    console.log('systemAuto', systemAuto)
-    if (systemAuto === serif) { f.system = true; return true; }
-
-    const systemMono = this.measureSystemFont(fontID, 'monospace').width;
-    console.log('systemMono', systemMono)
-    if (systemMono === serif) { f.system = true; return true; }
-    this.fonts[fontID].system = false;
     return false;
   }
 
@@ -273,27 +176,27 @@ export default class FontManager {
       glyphID: f.getTestStringID(),
       glyphSymbols: f.getTestStringGlyphs(),
       width: [],
-      mono: 0,
-      serif: 0,
-      sans: 0,
-      auto: 0,
+      mono: [],
+      serif: [],
+      sans: [],
+      auto: [],
       loaded: false,
-      count: 0,
-      maxCount: o.maxCount,
+      // count: 0,
+      // maxCount: o.maxCount,
       callbacks: [],
       timedOut: false,
     };
     this.loading += 1;
     let result = false;
-    /*
-    This method isn't widely available, but it can short circuit some work.
-    */
-    if (document.fonts != null && document.fonts.check != null) {
-      result = document.fonts.check(`${f.style} ${f.weight} 20px ${f.family}`, f.getTestStringGlyphs());
-    }
-    if (result === false) {
-      result = this.isAvailable(fontID, false);
-    }
+    // /*
+    // This method isn't widely available, but it can short circuit some work.
+    // */
+    // if (document.fonts != null && document.fonts.check != null) {
+    //   result = document.fonts.check(`${f.style} ${f.weight} 20px ${f.family}`, f.getTestStringGlyphs());
+    // }
+    // if (result === false) {
+    result = this.isAvailable(fontID, false);
+    // }
 
     this.fonts[fontID].callbacks.push(o.callback);
 
@@ -361,6 +264,7 @@ export default class FontManager {
   }
 
   fontLoaded(fontID: string) {
+    console.log('loaded', fontID)
     this.fonts[fontID].loaded = true;
     this.execCallbacks(fontID, true);
     this.notifications.publish('fontLoaded', fontID);
