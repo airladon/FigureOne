@@ -1,4 +1,6 @@
 /* globals page figure */
+/* eslint-disable no-await-in-loop, */
+
 // eslint-disable-next-line import/no-unresolved
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
 
@@ -7,129 +9,10 @@ jest.setTimeout(120000);
 
 page.on('console', (msg) => {
   for (let i = 0; i < msg.args().length; i += 1) {
-    const result = `${msg.args()[i]}`;
-    if (result.startsWith('JSHandle@fail')) {
-      failures.push(result);
-    }
-  }
-  for (let i = 0; i < msg.args().length; i += 1) {
+    // eslint-disable-next-line no-console
     console.log(`${i}: ${msg.args()[i]}`);
   }
 });
-
-const fonts = [
-  'American Typewriter',
-  'Andale Mono',
-  'Arial',
-  'Arial Black',
-  'Arial Narrow',
-  'Arial Rounded MT Bold',
-  'Arial Unicode MS',
-  'Avenir',
-  'Avenir Next',
-  'Avenir Next Condensed',
-  'Bahnschrift',
-  'Baskerville',
-  'Big Caslon',
-  'Bodoni 72',
-  'Bodoni 72 Oldstyle',
-  'Bodoni 72 Smallcaps',
-  'Bradley Hand',
-  'Brush Script MT',
-  'Calibri',
-  'Cambria',
-  'Cambria Math',
-  'Candara',
-  'Chalkboard',
-  'Chalkboard SE',
-  'Chalkduster',
-  'Charter',
-  'Cochin',
-  'Comic Sans MS',
-  'Consolas',
-  'Constantia',
-  'Copperplate',
-  'Corbel',
-  'Courier',
-  'Courier New',
-  'DIN Alternate',
-  'DIN Condensed',
-  'Didot',
-  'Ebrima',
-  'Franklin Gothic Medium',
-  'Futura',
-  'Gabriola',
-  'Gadugi',
-  'Geneva',
-  'Georgia',
-  'Georgia',
-  'Gill Sans',
-  'Helvetica',
-  'Helvetica Neue',
-  'Herculanum',
-  'Hoefler Text',
-  'HoloLens MDL2 Assets',
-  'Impact',
-  'Impact',
-  'Ink Free',
-  'Javanese Text',
-  'Leelawadee UI',
-  'Lucida Console',
-  'Lucida Grande',
-  'Lucida Sans Unicode',
-  'Luminari',
-  'MS Gothic',
-  'MV Boli',
-  'Malgun Gothic',
-  'Marker Felt',
-  'Marlett',
-  'Menlo',
-  'Microsoft Himalaya',
-  'Microsoft JhengHei',
-  'Microsoft New Tai Lue',
-  'Microsoft PhagsPa',
-  'Microsoft Sans Serif',
-  'Microsoft Tai Le',
-  'Microsoft YaHei',
-  'Microsoft Yi Baiti',
-  'MingLiU-ExtB',
-  'Monaco',
-  'Mongolian Baiti',
-  'Myanmar Text',
-  'Nirmala UI',
-  'Noteworthy',
-  'Optima',
-  'Palatino',
-  'Palatino Linotype',
-  'Papyrus',
-  'Phosphate',
-  'Rockwell',
-  'Savoye LET',
-  'Segoe MDL2 Assets',
-  'Segoe Print',
-  'Segoe Script',
-  'Segoe UI',
-  'Segoe UI Emoji',
-  'Segoe UI Historic',
-  'Segoe UI Symbol',
-  'SignPainter',
-  'SimSun',
-  'Sitka',
-  'Skia',
-  'Snell Roundhand',
-  'Sylfaen',
-  'Symbol',
-  'Tahoma',
-  'Times',
-  'Times New Roman',
-  'Trattatello',
-  'Trebuchet MS',
-  'Verdana',
-  'Webdings',
-  'Wingdings',
-  'Yu Gothic',
-  'Zapfino',
-];
 
 async function loadPage() {
   await page.goto(`http://localhost:8080/${__dirname.replace('/home/pwuser', '')}/index.html`);
@@ -147,10 +30,29 @@ async function areWeightsAvailable(font, weights) {
     [font, weights],
   );
 }
+async function areStylesAvailable(font, styles) {
+  return page.evaluate(
+    ([f, s]) => figure.fonts.areStylesAvailable(f, s),
+    [font, styles],
+  );
+}
 async function getWeights(font) {
   return page.evaluate(
     f => figure.fonts.getWeights(f),
     font,
+  );
+}
+async function getStyles(font) {
+  return page.evaluate(
+    f => figure.fonts.getStyles(f),
+    font,
+  );
+}
+
+async function measureWidth(family, style, weight, glyphs) {
+  return page.evaluate(
+    ([f, s, w, g]) => figure.fonts.measureText(f, s, w, g),
+    [family, style, weight, glyphs],
   );
 }
 
@@ -160,7 +62,6 @@ async function loadFontSync(family, style, weight, glyphs) {
       const ff = new FontFace(f, `url(http://localhost:8080//src/tests/misc/FontManager/fonts/${f}/${f}-${s}-${w}-${g}.woff2)`, { style: s, weight: w });
       return new Promise(resolve => ff.load().then((loaded) => {
         document.fonts.add(loaded);
-        document.body.style.fontFamily = `${f}, auto`;
         resolve();
       }));
     },
@@ -168,6 +69,7 @@ async function loadFontSync(family, style, weight, glyphs) {
   );
 }
 
+// eslint-disable-next-line no-unused-vars
 async function loadFontAsync(family, style, weight, glyphs) {
   return page.evaluate(
     ([f, s, w, g]) => {
@@ -181,6 +83,7 @@ async function loadFontAsync(family, style, weight, glyphs) {
   );
 }
 
+// eslint-disable-next-line no-unused-vars
 async function loadFontStyle(family, style, weight, glyphs) {
   return page.evaluate(
     ([f, s, w, g]) => {
@@ -198,6 +101,7 @@ async function loadFontStyle(family, style, weight, glyphs) {
   );
 }
 
+// eslint-disable-next-line no-unused-vars
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -233,6 +137,16 @@ describe('Font Manager', () => {
       await loadFontSync('montserrat', 'normal', '400', 'latin');
       r = await isAvailable({ family: 'montserrat', glyphs: 'latin' });
       expect(r).toBe(true);
+    });
+    test('All fonts', async () => {
+      const fonts = ['Andale Mono', 'Arial', 'Arial Black', 'Bodoni 72', 'Bodoni 72 Oldstyle', 'Bodoni 72 Smallcaps', 'Comic Sans MS', 'Courier', 'Courier New', 'Georgia', 'Georgia', 'Helvetica', 'Impact', 'Impact', 'Times', 'Times New Roman', 'Trebuchet MS', 'Verdana',
+        'Webdings'];
+      let result = true;
+      for (let i = 0; i < fonts.length; i += 1) {
+        const f = fonts[i];
+        result = result && await isAvailable({ family: f, glyphs: 'latin' });
+      }
+      expect(result).toBe(true);
     });
   });
   describe('Test weights', () => {
@@ -299,8 +213,111 @@ describe('Font Manager', () => {
       ]);
     });
   });
+  describe('Test styles', () => {
+    test('Correct styles', async () => {
+      // Not font loaded
+      expect(await isAvailable({
+        family: 'montserrat', style: 'normal', glyphs: 'latin',
+      })).toBe(false);
+      expect(await isAvailable({
+        family: 'montserrat', style: 'italic', glyphs: 'latin',
+      })).toBe(false);
+      expect(await getStyles({
+        family: 'montserrat', glyphs: 'latin',
+      })).toEqual([]);
+      expect(await areStylesAvailable({
+        family: 'montserrat', glyphs: 'latin',
+      }, ['italic', 'normal'])).toBe(false);
+
+      // Load normal font only
+      // Event though only normal font is loaded, an italic version will still
+      // exist as the browser will automatically slant the normal text. The auto
+      // italic version should be of different width to the real italic version.
+      await loadFontSync('montserrat', 'normal', '400', 'latin');
+      const autoItalicWidth = await measureWidth('montserrat', 'italic', '400', 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM');
+      expect(await isAvailable({
+        family: 'montserrat', style: 'normal', glyphs: 'latin',
+      })).toBe(true);
+      expect(await isAvailable({
+        family: 'montserrat', style: 'italic', glyphs: 'latin',
+      })).toBe(true);
+      expect(await getStyles({
+        family: 'montserrat', glyphs: 'latin',
+      })).toEqual([['normal'], ['italic', 'oblique']]);
+      expect(await areStylesAvailable({
+        family: 'montserrat', glyphs: 'latin',
+      }, ['italic', 'normal', 'oblique'])).toBe(false);
+      expect(await areStylesAvailable({
+        family: 'montserrat', glyphs: 'latin',
+      }, ['italic', 'normal'])).toBe(true);
+
+      // Load Iatlic font
+      await loadFontSync('montserrat', 'italic', '400', 'latin');
+      expect(await getStyles({
+        family: 'montserrat', glyphs: 'latin',
+      })).toEqual([['normal'], ['italic', 'oblique']]);
+      expect(await areStylesAvailable({
+        family: 'montserrat', glyphs: 'latin',
+      }, ['italic', 'normal', 'oblique'])).toBe(false);
+      expect(await areStylesAvailable({
+        family: 'montserrat', glyphs: 'latin',
+      }, ['italic', 'normal'])).toBe(true);
+
+      const italicWidth = await measureWidth('montserrat', 'italic', '400', 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM');
+
+      expect(autoItalicWidth).not.toEqual(italicWidth);
+    });
+    test('Italic loaded only', async () => {
+      // If only the italic font is loaded, then when trying to display the
+      // normal font, only the italic font will be shown.
+      // This means that isAvailable will return true for both italic and
+      // normal, but the styles will be bucketed together as normal and italic
+      // will have identical widths.
+
+      // Not font loaded
+      expect(await isAvailable({
+        family: 'montserrat', style: 'normal', glyphs: 'latin',
+      })).toBe(false);
+      expect(await isAvailable({
+        family: 'montserrat', style: 'italic', glyphs: 'latin',
+      })).toBe(false);
+      expect(await getStyles({
+        family: 'montserrat', glyphs: 'latin',
+      })).toEqual([]);
+      expect(await areStylesAvailable({
+        family: 'montserrat', glyphs: 'latin',
+      }, ['italic', 'normal'])).toBe(false);
+
+      // Load normal font only
+      // Event though only normal font is loaded, an italic version will still
+      // exist as the browser will automatically slant the normal text. The auto
+      // italic version should be of different width to the real italic version.
+      await loadFontSync('montserrat', 'italic', '400', 'latin');
+      expect(await isAvailable({
+        family: 'montserrat', style: 'normal', glyphs: 'latin',
+      })).toBe(true);
+      expect(await isAvailable({
+        family: 'montserrat', style: 'italic', glyphs: 'latin',
+      })).toBe(true);
+      expect(await getStyles({
+        family: 'montserrat', glyphs: 'latin',
+      })).toEqual([['normal', 'italic', 'oblique']]);
+      expect(await areStylesAvailable({
+        family: 'montserrat', glyphs: 'latin',
+      }, ['italic', 'normal', 'oblique'])).toBe(false);
+      expect(await areStylesAvailable({
+        family: 'montserrat', glyphs: 'latin',
+      }, ['italic', 'normal'])).toBe(false);
+    });
+  });
 });
 
 
 // const image = await page.screenshot({ fullPage: true });
 // expect(image).toMatchImageSnapshot();
+
+// f = 'montserrat'; g = 'latin'; s = 'normal'; w = '400';
+// ff = new FontFace(f, `url(http://localhost:8080//src/tests/misc/FontManager/fonts/${f}/${f}-${s}-${w}-${g}.woff2)`, { style: s, weight: w })
+// ff.load().then(function(loaded_face) {
+// 	document.fonts.add(loaded_face);
+// });

@@ -66,10 +66,7 @@ export default class FontManager {
     if (backupFont !== '') {
       backup = `, ${backupFont}`;
     }
-    // this.ctx.font = `${f.style} ${f.weight} 20px ${f.family}${backup}`;
-    // console.log(this.ctx.font)
-    // return this.ctx.measureText(this.fonts[fontID].glyphSymbols);
-    return this.measureText(`${f.family}${backup}`, f.weight, f.style, this.fonts[fontID].glyphSymbols);
+    return this.measureText(`${f.family}${backup}`, f.style, f.weight, this.fonts[fontID].glyphSymbols);
   }
 
   measureText(family: string, weight: string, style: string, glyphs: string) {
@@ -102,8 +99,6 @@ export default class FontManager {
     document.body.appendChild(canvas);
   }
 
-
-  
   measure(
     fontID: string, backupName: string, backupFamily: string,
   ) {
@@ -168,11 +163,11 @@ export default class FontManager {
     const glyphs = f.getGlyphs();
     const fam = f.getFamily();
     const { weight, style } = f;
-    const mono = this.measureText(`${fam},monospace`, weight, style, glyphs);
-    const serif = this.measureText(`${fam},serif`, weight, style, glyphs);
-    const sans = this.measureText(`${fam},sans-serif`, weight, style, glyphs);
-    const auto = this.measureText(`${fam},auto`, weight, style, glyphs);
-    const width = this.measureText(fam, weight, style, glyphs);
+    const mono = this.measureText(`${fam},monospace`, style, weight, glyphs);
+    const serif = this.measureText(`${fam},serif`, style, weight, glyphs);
+    const sans = this.measureText(`${fam},sans-serif`, style, weight, glyphs);
+    const auto = this.measureText(`${fam},auto`, style, weight, glyphs);
+    const width = this.measureText(fam, style, weight, glyphs);
     // console.log(width, auto, sans, serif, mono)
     // if (width !== mono && width !== serif && width !== sans && width !== auto) {
     //   return true;
@@ -203,9 +198,9 @@ export default class FontManager {
     const glyphs = f.getGlyphs();
     const fam = f.getFamily();
     const { style } = f;
-    const width = this.measureText(fam, weights[0], style, glyphs);
+    const width = this.measureText(fam, style, weights[0], glyphs);
     for (let i = 1; i < weights.length; i += 1) {
-      const w = this.measureText(fam, weights[i], style, glyphs);
+      const w = this.measureText(fam, style, weights[i], glyphs);
       if (w === width) {
         return false;
       }
@@ -214,7 +209,7 @@ export default class FontManager {
   }
 
   /**
-   * Return an array of font weight defi
+   * Return arrays of weights that produce the same output.
    */
   getWeights(fontDefinition: OBJ_Font) {
     if (!this.isAvailable(fontDefinition)) {
@@ -228,7 +223,7 @@ export default class FontManager {
     const widths = [];
     const buckets = [];
     for (let i = 0; i < weights.length; i += 1) {
-      const w = this.measureText(fam, weights[i], style, glyphs);
+      const w = this.measureText(fam, style, weights[i], glyphs);
       const index = widths.indexOf(w);
       if (index > -1) {
         buckets[index].push(weights[i]);
@@ -241,7 +236,17 @@ export default class FontManager {
   }
 
   /**
-   * Return an array of font weight defi
+   * Return arrays of styles that produce the same output.
+   *
+   * This will usually return [['normal'], ['italic', 'oblique']] meaning that
+   * italic and oblique styles are the same, but different to normal. Even if
+   * only the normal font is available, often the browser will auto italicize
+   * the normal font to get an italic font.
+   *
+   * In contrast, this will show [['normal', 'italic', 'oblique']] (meaning all
+   * three are the same) if only the italic version of a font is available.
+   * This is because the browser simply uses the italic version as the normal
+   * version if it is requested.
    */
   getStyles(fontDefinition: OBJ_Font) {
     if (!this.isAvailable(fontDefinition)) {
@@ -255,7 +260,7 @@ export default class FontManager {
     const widths = [];
     const buckets = [];
     for (let i = 0; i < styles.length; i += 1) {
-      const w = this.measureText(fam, weight, styles[i], glyphs);
+      const w = this.measureText(fam, styles[i], weight, glyphs);
       const index = widths.indexOf(w);
       if (index > -1) {
         buckets[index].push(styles[i]);
@@ -275,9 +280,9 @@ export default class FontManager {
     const glyphs = f.getGlyphs();
     const fam = f.getFamily();
     const { weight } = f;
-    const width = this.measureText(fam, weight, styles[0], glyphs);
+    const width = this.measureText(fam, styles[0], weight, glyphs);
     for (let i = 1; i < styles.length; i += 1) {
-      const w = this.measureText(fam, weight, styles[0], glyphs);
+      const w = this.measureText(fam, styles[i], weight, glyphs);
       if (w === width) {
         return false;
       }
