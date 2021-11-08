@@ -147,8 +147,41 @@ async function areWeightsAvailable(font, weights) {
     [font, weights],
   );
 }
+async function getWeights(font) {
+  return page.evaluate(
+    f => figure.fonts.getWeights(f),
+    font,
+  );
+}
 
-async function loadFont(family, style, weight, glyphs) {
+async function loadFontSync(family, style, weight, glyphs) {
+  return page.evaluate(
+    ([f, s, w, g]) => {
+      const ff = new FontFace(f, `url(http://localhost:8080//src/tests/misc/FontManager/fonts/${f}/${f}-${s}-${w}-${g}.woff2)`, { style: s, weight: w });
+      return new Promise(resolve => ff.load().then((loaded) => {
+        document.fonts.add(loaded);
+        document.body.style.fontFamily = `${f}, auto`;
+        resolve();
+      }));
+    },
+    [family, style, weight, glyphs],
+  );
+}
+
+async function loadFontAsync(family, style, weight, glyphs) {
+  return page.evaluate(
+    ([f, s, w, g]) => {
+      const ff = new FontFace(f, `url(http://localhost:8080//src/tests/misc/FontManager/fonts/${f}/${f}-${s}-${w}-${g}.woff2)`, { style: s, weight: w });
+      ff.load().then((loaded) => {
+        document.fonts.add(loaded);
+        document.body.style.fontFamily = `${f}, auto`;
+      });
+    },
+    [family, style, weight, glyphs],
+  );
+}
+
+async function loadFontStyle(family, style, weight, glyphs) {
   return page.evaluate(
     ([f, s, w, g]) => {
       const fontStyle = document.createElement('style');
@@ -197,10 +230,7 @@ describe('Font Manager', () => {
     test('Montserrat with font-face load', async () => {
       let r = await isAvailable({ family: 'montserrat', glyphs: 'latin' });
       expect(r).toBe(false);
-      await loadFont('montserrat', 'normal', '400', 'latin');
-      r = await isAvailable({ family: 'montserrat', glyphs: 'latin' });
-      expect(r).toBe(false);
-      await sleep(500);
+      await loadFontSync('montserrat', 'normal', '400', 'latin');
       r = await isAvailable({ family: 'montserrat', glyphs: 'latin' });
       expect(r).toBe(true);
     });
@@ -211,23 +241,20 @@ describe('Font Manager', () => {
       expect(r).toBe(false);
 
       // Load first weight
-      await loadFont('montserrat', 'normal', '400', 'latin');
-      await sleep(500);
+      await loadFontSync('montserrat', 'normal', '400', 'latin');
       r = await isAvailable({ family: 'montserrat', glyphs: 'latin' });
       expect(r).toBe(true);
       r = await areWeightsAvailable({ family: 'montserrat', glyphs: 'latin' }, ['400', '800']);
       expect(r).toBe(false);
 
       // Load second weight
-      await loadFont('montserrat', 'normal', '800', 'latin');
-      await sleep(500);
+      await loadFontSync('montserrat', 'normal', '800', 'latin');
       r = await areWeightsAvailable({ family: 'montserrat', glyphs: 'latin' }, ['400', '800']);
       expect(r).toBe(true);
     });
     test('Incorrect weights', async () => {
-      await loadFont('montserrat', 'normal', '400', 'latin');
-      await loadFont('montserrat', 'normal', '800', 'latin');
-      await sleep(500);
+      await loadFontSync('montserrat', 'normal', '400', 'latin');
+      await loadFontSync('montserrat', 'normal', '800', 'latin');
       let r = await areWeightsAvailable({ family: 'montserrat', glyphs: 'latin' }, ['300', '900']);
       expect(r).toBe(true);
       r = await areWeightsAvailable({ family: 'montserrat', glyphs: 'latin' }, ['100', '700']);
@@ -243,35 +270,34 @@ describe('Font Manager', () => {
       r = await areWeightsAvailable({ family: 'montserrat', glyphs: 'latin' }, ['400', '800']);
       expect(r).toBe(true);
     });
-    // test('All weights', async () => {
-    //   // let r = await isAvailable({ family: 'montserrat', glyphs: 'latin' });
-    //   // expect(r).toBe(false);
-    //   // await loadFont('montserrat', 'normal', '400', 'latin');
-    //   // r = await isAvailable({ family: 'montserrat', glyphs: 'latin' });
-    //   // expect(r).toBe(false);
-    //   // await sleep(500);
-    //   // r = await isAvailable({ family: 'montserrat', glyphs: 'latin' });
-    //   // expect(r).toBe(true);
-    //   await loadFont('montserrat', 'normal', '400', 'latin');
-    //   await loadFont('montserrat', 'normal', '200', 'latin');
-    //   await loadFont('montserrat', 'normal', '300', 'latin');
-    //   await loadFont('montserrat', 'normal', '400', 'latin');
-    //   await loadFont('montserrat', 'normal', '500', 'latin');
-    //   await loadFont('montserrat', 'normal', '600', 'latin');
-    //   await loadFont('montserrat', 'normal', '700', 'latin');
-    //   await loadFont('montserrat', 'normal', '800', 'latin');
-    //   await loadFont('montserrat', 'normal', '900', 'latin');
-    //   let r = await isAvailable({ family: 'montserrat', glyphs: 'latin' });
-    //   await sleep(1000);
-    //   r = await isAvailable({ family: 'montserrat', glyphs: 'latin' });
-    //   expect(r).toBe(true);
-    //   r = await areWeightsAvailable({ family: 'montserrat', glyphs: 'latin' }, ['100', '200', '300', '400', '500', '600', '700', '800', '900']);
-    //   expect(r).toBe(false);
-    //   await sleep(5000);
-    //   r = await areWeightsAvailable({ family: 'montserrat', glyphs: 'latin' }, ['100', '200', '300', '400', '500', '600', '700', '800', '900']);
-    //   expect(r).toBe(true);
-
-    // });
+    test('All weights', async () => {
+      await loadFontSync('montserrat', 'normal', '100', 'latin');
+      await loadFontSync('montserrat', 'normal', '200', 'latin');
+      await loadFontSync('montserrat', 'normal', '300', 'latin');
+      await loadFontSync('montserrat', 'normal', '400', 'latin');
+      await loadFontSync('montserrat', 'normal', '500', 'latin');
+      await loadFontSync('montserrat', 'normal', '600', 'latin');
+      await loadFontSync('montserrat', 'normal', '700', 'latin');
+      await loadFontSync('montserrat', 'normal', '800', 'latin');
+      await loadFontSync('montserrat', 'normal', '900', 'latin');
+      let r = await isAvailable({ family: 'montserrat', glyphs: 'latin' });
+      expect(r).toBe(true);
+      r = await areWeightsAvailable({ family: 'montserrat', glyphs: 'latin' }, ['100', '200', '300', '400', '500', '600', '700', '800', '900']);
+      expect(r).toBe(true);
+    });
+    test('Get weights', async () => {
+      await loadFontSync('montserrat', 'normal', '300', 'latin');
+      await loadFontSync('montserrat', 'normal', '400', 'latin');
+      await loadFontSync('montserrat', 'normal', '700', 'latin');
+      await loadFontSync('montserrat', 'normal', '900', 'latin');
+      const w = await getWeights({ family: 'montserrat', glyphs: 'latin' });
+      expect(w).toEqual([
+        ['100', '200', '300', 'lighter'],
+        ['400', '500', 'normal'],
+        ['600', '700', 'bold', 'bolder'],
+        ['800', '900'],
+      ]);
+    });
   });
 });
 

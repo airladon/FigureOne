@@ -139,7 +139,7 @@ export default class FontManager {
     - font, sans-serif
     - font, auto
 
-  If the font is available, then all widths will be the same.
+  If the font is available for all glyphs, then all widths will be the same.
   If the font is not available, then some of the widths will be different.
 
   Note, there is a popular method that instead measures:
@@ -173,7 +173,7 @@ export default class FontManager {
     const sans = this.measureText(`${fam},sans-serif`, weight, style, glyphs);
     const auto = this.measureText(`${fam},auto`, weight, style, glyphs);
     const width = this.measureText(fam, weight, style, glyphs);
-    console.log(width, auto, sans, serif, mono)
+    // console.log(width, auto, sans, serif, mono)
     // if (width !== mono && width !== serif && width !== sans && width !== auto) {
     //   return true;
     // }
@@ -204,10 +204,8 @@ export default class FontManager {
     const fam = f.getFamily();
     const { style } = f;
     const width = this.measureText(fam, weights[0], style, glyphs);
-    console.log(width)
     for (let i = 1; i < weights.length; i += 1) {
       const w = this.measureText(fam, weights[i], style, glyphs);
-      console.log(w, weights[i])
       if (w === width) {
         return false;
       }
