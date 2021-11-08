@@ -713,6 +713,7 @@ class Figure {
     this.timeKeeper = new TimeKeeper();
     this.notifications = new NotificationManager(this.fnMap);
     this.fontManager = new FontManager(this.timeKeeper, this.fnMap, this.notifications);
+    this.fontManager.addAnimateFrameCallback(this.animateNextFrame.bind(this));
     this.recorder = new Recorder(this.timeKeeper);
     // $FlowFixMe
     this.recorder.figure = this;

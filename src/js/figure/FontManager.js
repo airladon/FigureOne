@@ -25,34 +25,16 @@ export default class FontManager {
   checkTimer: TimerID;
   startTime: number;
   timeout: number;
-
-  // static greek = greek;
-  // static math = math;
-  // static latin = latin;
-  // static all = `${latin}${greek}${math}`;
-  // static mathSmall = mathSmall;
+  animateNextFrameCallbacks: Array<() => void>;
 
   constructor(
     timeKeeper: TimeKeeper = new TimeKeeper(),
     fnMap: FunctionMap = new FunctionMap(),
     notifications: NotificationManager = new NotificationManager(),
-    timeout: number = 10000,
+    // timeout: number = 10000,
   ) {
     if (!FontManager.instance) {
       FontManager.instance = this;
-      // this.container = document.createElement('span');
-      // this.container.innerHTML = Array(100).join('wi');
-      // this.container.style.cssText = [
-      //   'position:absolute',
-      //   'width:auto',
-      //   'font-size:128px',
-      //   'left:-99999px',
-      // ].join(' !important;');
-      // FontManager.greek = greek;
-      // FontManager.math = math;
-      // FontManager.latin = latin;
-      // FontManager.all = `${latin}${greek}${math}`;
-      // FontManager.mathSmall = mathSmall;
       this.fonts = {};
       this.canvas = document.createElement('canvas');
       this.canvas.width = 10;
@@ -65,31 +47,19 @@ export default class FontManager {
       this.fnMap = fnMap;
       this.timedOut = 0;
       this.checkTimer = null;
-      this.timeout = timeout;
-      this.startTime = null;
+      this.startTime = timeKeeper.now();
+      this.animateNextFrameCallbacks = [];
     }
     return FontManager.instance;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  // getAlphabet(alphabet: 'greek' | 'math' | 'latin' | 'all') {
-  //   if (alphabet === 'all') {
-  //     return `${latin}${greek}${math}`;
-  //   }
-  //   if (alphabet === 'latin') {
-  //     return latin;
-  //   }
-  //   if (alphabet === 'greek') {
-  //     return greek;
-  //   }
-  //   if (alphabet === 'math') {
-  //     return math;
-  //   }
-  //   // if (alphabet === 'mathSmall') {
-  //   //   return mathSmall;
-  //   // }
-  //   return `${latin}${greek}${math}`;
-  // }
+  addAnimateFrameCallback(animateNextFrame: () => void) {
+    this.animateNextFrameCallbacks.push(animateNextFrame);
+  }
+
+  animateNextFrame() {
+    this.animateNextFrameCallbacks.forEach(c => c());
+  }
 
   measureText(fontID: string, backupFont: string = '') {
     const f = this.fonts[fontID].font;
@@ -98,31 +68,180 @@ export default class FontManager {
       backup = `, ${backupFont}`;
     }
     this.ctx.font = `${f.style} ${f.weight} 20px ${f.family}${backup}`;
-    return this.ctx.measureText(this.fonts[fontID].testStringSymbols);
+    console.log(this.ctx.font)
+    return this.ctx.measureText(this.fonts[fontID].glyphSymbols);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  // getTestString(testStringIn: string) {
-  //   let testString = testStringIn;
-  //   let testStringName = hash32(testStringIn).toString().slice(0, 8);
-  //   if (testString === 'greek') {
-  //     testString = greek;
-  //     testStringName = 'greek';
-  //   } else if (testString === 'latin') {
-  //     testString = latin;
-  //     testStringName = 'latin';
-  //   } else if (testString === 'math') {
-  //     testString = math;
-  //     testStringName = 'math';
-  //   } else if (testString === 'mathSmall') {
-  //     testString = mathSmall;
-  //     testStringName = 'mathSmall';
-  //   } else if (testString === 'all') {
-  //     testString = `${latin}${greek}${math}`;
-  //     testStringName = 'all';
-  //   }
-  //   return [testStringName, testString];
-  // }
+  measureSystemFont(fontID: string, systemFont: string) {
+    const f = this.fonts[fontID].font;
+    this.ctx.font = `${f.style} ${f.weight} 20px ${systemFont}`;
+    console.log(this.ctx.font)
+    return this.ctx.measureText(this.fonts[fontID].glyphSymbols);
+  }
+
+  showDebugAtlas(fontID: string, fontFamily: string, fontSizePX = 10) {
+    const f = this.fonts[fontID].font;
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const glyphs = f.getGlyphs();
+    const dimension = Math.ceil(Math.sqrt(glyphs.length) + 2) * fontSizePX * 1.5;
+    canvas.width = dimension;
+    canvas.height = dimension;
+    ctx.font = `${f.style} ${f.weight} ${fontSizePX}px ${fontFamily}`;
+    let x = fontSizePX;
+    let y = fontSizePX;
+    for (let i = 0; i < f.getGlyphs().length; i += 1) {
+      ctx.fillText(glyphs[i], x, y);
+      const { width } = ctx.measureText(glyphs[i]);
+      x += width * 2.5;
+      if (x >= dimension - fontSizePX) {
+        x = fontSizePX;
+        y += fontSizePX * 1.2;
+      }
+    }
+    ctx.rect(0, 0, dimension, dimension);
+    ctx.stroke();
+    document.body.appendChild(canvas);
+  }
+
+
+  /*
+  There are several cases to consider:
+    - Font is a system default font (and is thus available)
+    - Font is available
+    - Font is available for some glyphs only
+    - Font is not available
+
+  We can then measure the width of the glyphs using just the font itself, and
+  then with the font and a backup system default font. If the font or some
+  glyphs of the font don't exist, the backup system font will be used.
+    - font
+    - font, serif
+    - font, monospace
+    - font, sans-serif
+    - font, auto
+
+  If the font is available, then all widths will be the same.
+  If the font is not available, then some of the widths will be different.
+
+  
+
+  If font width is the same as all other widths, then we know the font is available.
+
+  If some widths are different
+
+
+
+  If the width of the glyphs of the font is the same as the width of the same
+  glyphs with that font and a backup system default font, then we know either:
+    - Font is a system font
+    - or font is not available for all glyphs
+    - or font is not available for some glyphs
+
+  If width of glyphs for font is different from the four backups, we know the
+  font is available.
+
+  To determine whether it is a system font then, we need to measure the width
+  of the glyphs with the system fonts alone:
+    - serif
+    - sans-serif
+    - monospace
+    - auto
+
+  If the width of the glyphs with the system font is equal to the width of the
+  font with a different backup system font, then we know the font is the system
+  font we are comparing it to. For example:
+    - if (mono === font, serif) then font must be system font mono
+    - if (serif === font, sans-serif) then font must be system font serif
+
+  At this point, the font is not available for at least some of the glyphs.
+
+  Going forward, availability can be checked by remeasuring the width of the
+  glyphs with font and comparing it to (font, serif), (font, sans-serif),
+  (font, mono) and (font, auto). When it is different to all, then it is
+  available.
+
+  The catch is for fonts that have different files for different characters.
+  For example a font might have a file for all latin characters, and a
+  different file for greek characters. If originally no glyphs are available,
+  then the next time availability is checked just the latin fonts are
+  available, our result will be the font is available. If we get this result,
+  we need to recompute all the backup fonts and recheck this. That way, we
+  won't accidently say a font is available when actually its only partially
+  available.
+  */
+
+  measure(
+    fontID: string, backupName: string, backupFamily: string, forceRemeasure: boolean,
+  ) {
+    if (this.fonts[fontID][backupName] === 0 || forceRemeasure) {
+      this.fonts[fontID][backupName] = this.measureText(fontID, backupFamily).width;
+      console.log(backupName, this.fonts[fontID][backupName])
+      return 1;
+    }
+    return 0;
+  }
+
+  isAvailable(fontID: string, forceRemeasure = false): boolean {
+    console.log('isAvailable', forceRemeasure)
+    let remeasured = 0;
+    console.log(forceRemeasure, this.fonts[fontID].mono, this.fonts[fontID].serif, this.fonts[fontID].sans, this.fonts[fontID].auto);
+    remeasured += this.measure(fontID, 'mono', 'monospace', forceRemeasure);
+    remeasured += this.measure(fontID, 'serif', 'serif', forceRemeasure);
+    remeasured += this.measure(fontID, 'sans', 'sans-serif', forceRemeasure);
+    remeasured += this.measure(fontID, 'auto', 'auto', forceRemeasure);
+    const {
+      mono, serif, sans, auto,
+    } = this.fonts[fontID];
+    const { width } = this.measureText(fontID);
+    console.log(forceRemeasure, width, mono, serif, sans, auto);
+    this.fonts[fontID].width.push(width);
+    if (
+      width !== mono && width !== sans && width !== serif && width !== auto
+    ) {
+      if (remeasured === 4) {
+        return true;
+      }
+      // Need to remeasure if cached backups are old as it's possible a font
+      // has been partially loaded. For example there are two font files for
+      // latin and greek, and only latin has been loaded (and the test glyphs
+      // include both latin and greek)
+      return this.isAvailable(fontID, true);
+    }
+    return this.isSystemFont(fontID);
+  }
+
+  isSystemFont(fontID: string): boolean {
+    const f = this.fonts[fontID];
+    if (f.system != null) {
+      return f.system;
+    }
+
+    if (f.serif == null) {
+      f.serif = this.measureText(fontID, 'serif').width;
+    }
+    if (f.sans == null) {
+      f.sans = this.measureText(fontID, 'sans-serif').width;
+    }
+    const { sans, serif } = f;
+    const systemSerif = this.measureSystemFont(fontID, 'serif').width;
+    console.log('systemSerif', systemSerif)
+    if (systemSerif === sans) { f.system = true; return true; }
+
+    const systemSans = this.measureSystemFont(fontID, 'sans-serif').width;
+    console.log('systemSans', systemSans)
+    if (systemSans === serif) { f.system = true; return true; }
+
+    const systemAuto = this.measureSystemFont(fontID, 'auto').width;
+    console.log('systemAuto', systemAuto)
+    if (systemAuto === serif) { f.system = true; return true; }
+
+    const systemMono = this.measureSystemFont(fontID, 'monospace').width;
+    console.log('systemMono', systemMono)
+    if (systemMono === serif) { f.system = true; return true; }
+    this.fonts[fontID].system = false;
+    return false;
+  }
 
   loadFont(font: OBJ_Font | FigureFont, options: OBJ_LoadFontOptions) {
     const o = joinObjects({}, {
@@ -132,9 +251,8 @@ export default class FontManager {
     }, options);
 
     const f = new FigureFont(font);
-    const testStringID = f.getTestStringID();
-    const testStringSymbols = f.getTestStringGlyphs();
     const fontID = f.getFontID();
+
     // If the font family-weight-style has already been created, then
     // return the result of whether it is loaded or not
     if (this.fonts[fontID] != null) {
@@ -147,17 +265,18 @@ export default class FontManager {
       }
       const result = this._isFontAvailable(fontID);
       return [fontID, result];
-      // return [fontID, false];
     }
+
     this.fonts[fontID] = {
       timeout: this.timeKeeper.now() + o.timeout,
       font: f,
-      testStringID,
-      testStringSymbols,
+      glyphID: f.getTestStringID(),
+      glyphSymbols: f.getTestStringGlyphs(),
       width: [],
       mono: 0,
       serif: 0,
       sans: 0,
+      auto: 0,
       loaded: false,
       count: 0,
       maxCount: o.maxCount,
@@ -167,131 +286,55 @@ export default class FontManager {
     this.loading += 1;
     let result = false;
     /*
-    This method doesn't handel subsets like checking for greek letters so only
-    do this once at the start, to confirm the font is not a system font, and
-    then move on with measurement tests. If the font is a system font (the
-    default serif or sans-serif for example), then the font will never show as
-    loaded as it is being compared against the default serif and sans-serif.
+    This method isn't widely available, but it can short circuit some work.
     */
     if (document.fonts != null && document.fonts.check != null) {
       result = document.fonts.check(`${f.style} ${f.weight} 20px ${f.family}`, f.getTestStringGlyphs());
     }
-    console.log(result)
     if (result === false) {
-      // font, monospace
-      // font, serif
-      // font, sans-serif
-      // font, auto
-      // serif
-      // font, mono
-      // if (font, mono === serif) {
-      //   then font is serif and exists
-      // }
-      /*
-
-        // Cases:
-        // Font is a system font
-        // Font exists
-        // Font doesn't exist
-
-        measure serif
-        measure font, serif
-
-        // Test if font exsits
-        // If font exists, then it will be different to the backup font
-        // This does not work if the font IS serif (see below)
-        if (font, serif !== serif) {
-          then font exists
-        }
-
-        measure font, sans
-
-        // Test if font IS serif
-        // (implicitly from last test: font, serif === serif)
-        if (font, sans === serif) {
-          then font is serif, and exists
-        }
-
-        // Otherwise font does not exist
-
-        // Ongoing
-        if (font, serif !== serif) {
-          then font exists
-        }
-
-
-        // Test if font doesn't exist
-        // If font doesn't exist, then fallback are used. This only needs
-        // to be twice as it's possible the Font is a system font
-        if (font, sans === sans && font, serif === serif) {
-          then font doesn't exist
-        }
-
-
-
-        // Test is font is a system font
-        if (font, mono === mono && font, serif === mono) {
-          then font is mono, and exists
-        }
-        if (font, serif === serif && font, sans === serif) {
-          then font is serif, and exists
-        }
-        if (font, sans === sans && font, serif === sans) {
-          then font is sans, and exists
-        }
-        if (font, auto === auto && font, serif === auto) {
-          then font is auto, and exists
-        }
-        
-        
-      */
-      // Create widths for mono, serif, sans-serif and the font of interest.
-      const mono = this.measureText(fontID, 'monospace').width;
-      const sans = this.measureText(fontID, 'sans-serif').width;
-      const serif = this.measureText(fontID, 'serif').width;
-      const auto = this.measureText(fontID, 'auto').width;
-      const { width } = this.measureText(fontID);
-      this.fonts[fontID].mono = mono;
-      this.fonts[fontID].serif = serif;
-      this.fonts[fontID].sans = sans;
-      this.fonts[fontID].auto = auto;
-      this.fonts[fontID].width.push(width);
-      if (width !== mono && width !== sans && width !== serif && width !== auto) {
-        this.fonts[fontID].count += 1;
-      }
-      if (this.fonts[fontID].count === this.fonts[fontID].maxCount) {
-        result = true;
-      }
+      result = this.isAvailable(fontID, false);
     }
-    console.log(result)
+
+    this.fonts[fontID].callbacks.push(o.callback);
+
+    // If the font is available, then execute all callbacks registered to the
+    // font and animate the next frame.
     if (result) {
-      this.fonts[fontID].loaded = true;
-      // this.execCallbacks(fontID, false);
-      this.loaded += 1;
+      this.fontLoaded(fontID);
       return [fontID, true];
     }
-    this.fonts[fontID].callbacks.push(o.callback);
-    console.log(this.fonts[fontID].callbacks)
+
+    // If the font is not available, and if a timer isn't already going, then
+    // initiate a timer to check all unloaded fonts
     if (this.checkTimer == null) {
+      this.startTime = this.timeKeeper.now();
       this.checkTimer = this.timeKeeper.setTimeout(this.timedCheck.bind(this), 50);
     }
     return [fontID, false];
   }
 
+  // Execute all the callbacks associated with some fontID
   execCallbacks(fontID: string, available: boolean) {
     this.fonts[fontID].callbacks.forEach(c => this.fnMap.exec(c, available));
     this.fonts[fontID].callbacks = [];
   }
 
+  // Timeout any fonts not yet loaded
+  timeoutFonts() {
+    Object.keys(this.fonts).forEach((fontID) => {
+      if (this.fonts[fontID].loaded === false) {
+        this.fontTimeout(fontID);
+      }
+    });
+  }
+
+  // Keep rechecking fonts up to some timeout. At timeout, stop rechecking.
   timedCheck() {
     const result = this.isLoadingFinished();
     if (result) {
       return;
     }
-    if (this.timeKeeper.now() - this.startTime > this.timeout) {
-      return;
-    }
-    let time = 10;
+    let time = 50;
     if (this.timeKeeper.now() - this.startTime > 1000) {
       time = 500;
     }
@@ -308,279 +351,55 @@ export default class FontManager {
     Object.keys(this.fonts).forEach((name) => {
       this._isFontAvailable(name);
     });
+
     if (this.loaded + this.timedOut === this.loading) {
       this.notifications.publish('fontsLoaded');
+      this.animateNextFrame();
       return true;
     }
     return false;
   }
 
-  _isFontAvailable(name: string) {
-    const f = this.fonts[name];
+  fontLoaded(fontID: string) {
+    this.fonts[fontID].loaded = true;
+    this.execCallbacks(fontID, true);
+    this.notifications.publish('fontLoaded', fontID);
+    this.loaded += 1;
+    this.animateNextFrame();
+  }
+
+  fontTimedOut(fontID: string) {
+    this.fonts[fontID].timedOut = true;
+    this.timedOut += 1;
+    this.execCallbacks(fontID, false);
+    this.notifications.publish('fontUnavailable', fontID);
+  }
+
+  _isFontAvailable(fontID: string) {
+    const f = this.fonts[fontID];
     if (f.loaded) {
       return true;
     }
     if (f.timedOut) {
       return false;
     }
-    let result = false;
-    // if (document.fonts != null && document.fonts.check != null && false) {
-    //   result = document.fonts.check(`${f.font.style} ${f.font.weight} 20px ${f.font.family}`);
-    // } else {
-    const { width } = this.measureText(name);
-    f.width.push(width);
-    if (width !== f.mono && width !== f.sans && width !== f.serif && width !== f.auto) {
-      this.fonts[name].count += 1;
+
+    const result = this.isAvailable(fontID);
+
+    if (result === false && this.timeKeeper.now() > f.timeout) {
+      this.fontTimedOut(fontID);
+      return false;
     }
-    if (this.fonts[name].count === this.fonts[name].maxCount) {
-      result = true;
-    }
-    if (this.timeKeeper.now() > f.timeout) {
-      result = null;
-    }
-    // }
 
     if (result) {
-      this.fonts[name].loaded = true;
-      console.log('loaded', name)
-      this.execCallbacks(name, true);
-      this.notifications.publish('fontLoaded', name);
-      this.loaded += 1;
+      this.fontLoaded(fontID);
       return true;
     }
-    if (result == null) {
-      f.timedOut = true;
-      this.timedOut += 1;
-      this.execCallbacks(name, false);
-      this.notifications.publish('fontUnavailable', name);
-    }
     return false;
-    // const { width } = this.measureText(name);
-    // f.width.push(width);
-    // if (width !== f.mono && width !== f.sans && width !== f.serif) {
-    //   this.fonts[name].count += 1;
-    // }
-    // if (this.fonts[name].count === this.fonts[name].maxCount) {
-    //   this.fonts[name].loaded = true;
-    //   this.execCallbacks(name, true);
-    //   this.notifications.publish('fontLoaded', name);
-    //   this.loaded += 1;
-    //   return true;
-    // }
-    // if (this.timeKeeper.now() > f.timeout) {
-    //   f.timedOut = true;
-    //   this.timedOut += 1;
-    //   this.execCallbacks(name, false);
-    //   this.notifications.publish('fontUnavailable', name);
-    // }
-    // return false;
   }
 
-  isFontAvailable(family: string, weight: string, style: string, testString: string) {
-    const name = `${family.toLowerCase()}-${weight.toLowerCase()}-${style.toLowerCase()}-${this.getTestString(testString)[0]}`;
+  isFontAvailable(family: string, weight: string, style: string, glyphs: string) {
+    const name = `${family.toLowerCase()}-${weight.toLowerCase()}-${style.toLowerCase()}-${this.getTestString(glyphs)[0]}`;
     return this._isFontAvailable(name);
   }
-
-  // getWidth(family: string, weight: string, style: string, testString: string = 'wi') {
-  //   this.container.innerHTML = Array(100).join(testString);
-  //   this.container.style.fontFamily = family;
-  //   this.container.style.fontWeight = weight;
-  //   this.container.style.fontStyle = style;
-  //   // $FlowFixMe
-  //   document.body.appendChild(this.container);
-  //   const width = this.container.clientWidth;
-  //   // $FlowFixMe
-  //   document.body.removeChild(this.container);
-  //   return width;
-  // }
-
-  // check(
-  //   name: string,
-  // ) {
-  //   const f = this.fonts[name];
-  //   return f.mono !== f.monoFam
-  //     || f.serif !== f.serifFam
-  //     || f.sans !== f.sansFam;
-  // }
-
-  // getFamilyWidth(name: string, family: string, weight: string, style: string, testString: string) {
-  //   this.fonts[name].monoFam = this.getWidth(`'${family}',monospace`, weight, style, testString);
-  //   this.fonts[name].sansFam = this.getWidth(`'${family}',sans-serif`, weight, style, testString);
-  //   this.fonts[name].serifFam = this.getWidth(`'${family}',serif`, weight, style, testString);
-  // }
-
-  // isFamilyAvailable(family: string, testString: string = 'wi') {
-  //   const name = `${family.toLowerCase()}-${testString}`;
-  //   if (this.fonts[name] != null) {
-  //     const f = this.fonts[name];
-  //     if (f.available) {
-  //       return true;
-  //     }
-  //     this.getFamilyWidth(name, family, 'normal', 'normal', testString);
-  //     f.available = this.check(name);
-  //     return f.available;
-  //   }
-  //   this.fonts[name] = {
-  //     mono: this.getWidth('monospace', 'normal', 'normal', testString),
-  //     serif: this.getWidth('serif', 'normal', 'normal', testString),
-  //     sans: this.getWidth('sans-serif', 'normal', 'normal', testString),
-  //     available: false,
-  //     wrapper: null,
-  //     callbacks: [],
-  //   };
-  //   this.getFamilyWidth(name, family, 'normal', 'normal', testString);
-  //   this.fonts[name].available = this.check(name);
-  //   return this.fonts[name].available;
-  // }
-
-  // isFamilyWeightAvailable(
-  //   family: string,
-  //   weight1: string,
-  //   weight2: string,
-  //   testString: string = 'wi',
-  // ) {
-  //   const name = `${family.toLowerCase()}-${weight1.toLowerCase()}-${weight2.toLowerCase()}-${testString}`;
-  //   if (this.fonts[name] != null) {
-  //     const f = this.fonts[name];
-  //     if (f.available) {
-  //       return true;
-  //     }
-  //     this.fonts[name] = {
-  //       weight1: this.getWidth(family, weight1, 'normal', testString),
-  //       weight2: this.getWidth(family, weight2, 'normal', testString),
-  //       available: false,
-  //     };
-  //     this.fonts[name].available = this.fonts[name].weight1 !== this.fonts[name].weight2;
-  //     return f.available;
-  //   }
-  //   this.fonts[name] = {
-  //     weight1: this.getWidth(family, weight1, 'normal', testString),
-  //     weight2: this.getWidth(family, weight2, 'normal', testString),
-  //     available: false,
-  //   };
-  //   this.fonts[name].available = this.fonts[name].weight1 !== this.fonts[name].weight2;
-  //   return this.fonts[name].available;
-  // }
-
-  // isAvailable(family: string, weight: string, style: string, testString: string = 'wi') {
-  //   const name = `${family.toLowerCase()}-${weight.toLowerCase()}-${style.toLowerCase()}-${testString}`;
-  //   if (this.fonts[name] != null) {
-  //     const f = this.fonts[name];
-  //     if (f.available) {
-  //       return true;
-  //     }
-  //     f.available = this.check(family, weight, style, f.mono, f.serif, f.sans);
-  //     return f.available;
-  //   }
-  //   this.fonts[name] = {
-  //     mono: this.getWidth('monospace', weight, style),
-  //     serif: this.getWidth('serif', weight, style),
-  //     sans: this.getWidth('sans-serif', weight, style),
-  //     available: false,
-  //     callbacks: [],
-  //     wrapper: null,
-  //     origSize: { width: 0, height: 0 },
-  //   };
-  //   console.log(this.fonts[name])
-  //   const f = this.fonts[name];
-  //   return this.check(family, weight, style, f.mono, f.serif, f.sans);
-  // }
-
-  // // eslint-disable-next-line class-methods-use-this
-  // whenAvailable(
-  //   family: string,
-  //   weight: string,
-  //   style: string,
-  //   callback: () => void,
-  //   testString: string = 'wi',
-  // ) {
-  //   if (this.isFamilyAvailable(family, testString)) {
-  //     console.log('already Available')
-  //     return true;
-  //   }
-  //   const name = `${family.toLowerCase()}-${testString}`;
-  //   console.log(this.fonts[name])
-  //   if (this.fonts[name].wrapper != null) {
-  //     this.fonts[name].callbacks.push(callback);
-  //     return false;
-  //   }
-  //   const wrapper = document.createElement('div');
-  //   wrapper.style.cssText = [
-  //     'position:absolute',
-  //     'overflow:hidden',
-  //     // 'left:-99999px', 
-  //   ].join(' ;');
-  //   const content = document.createElement('div');
-  //   content.style.cssText = [
-  //     'position:relative',
-  //     'white-space:nowrap',
-  //   ].join(' ;');
-  //   const innerWrapper = document.createElement('div');
-  //   innerWrapper.style.cssText = [
-  //     'position:absolute',
-  //     'width:100%',
-  //     'height:100%',
-  //     'overflow:hidden',
-  //   ].join(' ;');
-  //   const innerContent = document.createElement('div');
-  //   innerWrapper.appendChild(innerContent);
-  //   content.innerHTML = 'some text whose size may change';
-  //   content.style.fontFamily = 'serif';
-  //   content.insertBefore(innerWrapper, content.firstChild);
-  //   wrapper.appendChild(content);
-  //   this.fonts[name].wrapper = wrapper;
-  //   this.fonts[name].content = content;
-
-  //   const origSize = {
-  //     width: content.offsetWidth,
-  //     height: content.offsetHeight,
-  //   };
-  //   this.fonts[name].origSize = origSize;
-
-  //   // console.log('original content size: ' + origSize.width + 'x' + origSize.height);
-  //   if (wrapper == null || innerContent == null || innerWrapper == null) {
-  //     return false;
-  //   }
-  //   // Resize wrapper and scroll its content to the bottom right corner
-  //   wrapper.style.width = `${origSize.width - 1}px`;
-  //   wrapper.style.height = `${origSize.height - 1}px`;
-  //   wrapper.scrollLeft = wrapper.scrollWidth - wrapper.clientWidth;
-  //   wrapper.scrollTop = wrapper.scrollHeight - wrapper.clientHeight;
-
-  //   // Resize inner content and scroll inner wrapper to the bottom right corner
-  //   innerContent.style.width = `${origSize.width + 1}px`;
-  //   innerContent.style.height = `${origSize.height + 1}px`;
-  //   innerWrapper.scrollLeft = innerWrapper.scrollWidth - innerWrapper.clientWidth;
-  //   innerWrapper.scrollTop = innerWrapper.scrollHeight - innerWrapper.clientHeight;
-  //   document.body.appendChild(this.fonts[name].wrapper);
-
-  //   this.fonts[name].callbacks.push(callback);
-  //   console.log('asdfasdf')
-  //   wrapper.addEventListener('scroll', this.isLoaded.bind(this, family, weight, style), false);
-
-  //   innerWrapper.addEventListener('scroll', this.isLoaded.bind(this, family, weight, style), false);
-
-  //   content.style.fontFamily = `${family}, serif`;
-  //   content.style.fontWeight = weight;
-  //   content.style.fontStyle = style;
-
-  //   return false;
-  // }
-
-  // isLoaded(family: string, weight: string, style: string) {
-  //   const name = `${family}-${weight}-${style}`;
-  //   const f = this.fonts[name];
-  //   console.log(family, weight, style)
-  //   if (
-  //     f.content.offsetWidth !== f.origSize.width
-  //     || f.content.offsetHeight !== f.origSize.height
-  //   ) {
-  //     console.log('here')
-  //     this.isAvailable(family, weight, style);
-  //     document.body.removeChild(f.wrapper);
-  //     if (f.available) {
-  //       f.callbacks.forEach(c => c(family, weight, style));
-  //     }
-  //   }
-  // }
 }
