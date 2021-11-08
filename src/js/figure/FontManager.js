@@ -187,16 +187,8 @@ export default class FontManager {
       timedOut: false,
     };
     this.loading += 1;
-    let result = false;
-    // /*
-    // This method isn't widely available, but it can short circuit some work.
-    // */
-    // if (document.fonts != null && document.fonts.check != null) {
-    //   result = document.fonts.check(`${f.style} ${f.weight} 20px ${f.family}`, f.getTestStringGlyphs());
-    // }
-    // if (result === false) {
-    result = this.isAvailable(fontID, false);
-    // }
+
+    const result = this.isAvailable(fontID, false);
 
     this.fonts[fontID].callbacks.push(o.callback);
 
@@ -264,7 +256,6 @@ export default class FontManager {
   }
 
   fontLoaded(fontID: string) {
-    console.log('loaded', fontID)
     this.fonts[fontID].loaded = true;
     this.execCallbacks(fontID, true);
     this.notifications.publish('fontLoaded', fontID);
@@ -289,7 +280,6 @@ export default class FontManager {
     }
 
     const result = this.isAvailable(fontID);
-
     if (result === false && this.timeKeeper.now() > f.timeout) {
       this.fontTimedOut(fontID);
       return false;
