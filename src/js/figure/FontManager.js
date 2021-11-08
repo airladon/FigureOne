@@ -103,6 +103,32 @@ export default class FontManager {
   }
 
 
+  
+  measure(
+    fontID: string, backupName: string, backupFamily: string,
+  ) {
+    this.fonts[fontID][backupName].push(this.measureTextID(fontID, backupFamily));
+  }
+
+  // /**
+  //  * Check if a font is available.
+  //  */
+  // isAvailableLegacy(
+  //   fontDefinition: { family: string, weight?: string, style?: string, glyphs?: string, },
+  // ): boolean {
+  //   const f = new FigureFont(fontDefinition);
+  //   const glyphs = f.getGlyphs();
+  //   const fam = f.getFamily();
+  //   const { weight, style } = f;
+  //   const mono = this.measureText('monospace', weight, style, glyphs);
+  //   const serif = this.measureText('serif', weight, style, glyphs);
+  //   const sans = this.measureText('sans-serif', weight, style, glyphs);
+  //   const fontMono = this.measureText(`${fam},monospace`, weight, style, glyphs);
+  //   const fontSerif = this.measureText(`${fam},serif`, weight, style, glyphs);
+  //   const fontSans = this.measureText(`${fam},sans-serif`, weight, style, glyphs);
+  //   return mono !== fontMono || serif !== fontSerif || sans !== fontSans;
+  // }
+
   /*
   We can then measure the width of the glyphs using just the font itself, and
   then with the font and a backup system default font. If the font or some
@@ -115,17 +141,26 @@ export default class FontManager {
 
   If the font is available, then all widths will be the same.
   If the font is not available, then some of the widths will be different.
+
+  Note, there is a popular method that instead measures:
+    - font, serif
+    - serif,
+    - font, monospace
+    - monospace
+    - font, sans-serif
+    - sans-serf
+
+  And then compares all pairs (like monospace and font,monospace) and if any
+  are different then is shows the fallback is not being used, and thus the font
+  exists. However, this doesn't work when glyphs come from two different font
+  files. For example in "open sans", there are separate font files for latin
+  and greek characters. These may then load at slightly different times, and so
+  if the second comparison is performed between the first loading and the
+  second not loading, then SOME of the glyphs font,backup glyphs will be the
+  proper font, and others will be the backup font. As such, the width will be
+  different and the logic will say the font exists, when really it only
+  partially exists.
   */
-
-  measure(
-    fontID: string, backupName: string, backupFamily: string,
-  ) {
-    this.fonts[fontID][backupName].push(this.measureTextID(fontID, backupFamily));
-  }
-
-  /**
-   * Check if a font is available.
-   */
   isAvailable(
     fontDefinition: { family: string, weight?: string, style?: string, glyphs?: string, },
   ): boolean {
@@ -137,11 +172,119 @@ export default class FontManager {
     const serif = this.measureText(`${fam},serif`, weight, style, glyphs);
     const sans = this.measureText(`${fam},sans-serif`, weight, style, glyphs);
     const auto = this.measureText(`${fam},auto`, weight, style, glyphs);
-    const width = this.measureTextID(fam, weight, style, glyphs);
-    if (width === mono && width === serif && width === sans && width === auto) {
-      return true;
+    const width = this.measureText(fam, weight, style, glyphs);
+    console.log(width, auto, sans, serif, mono)
+    // if (width !== mono && width !== serif && width !== sans && width !== auto) {
+    //   return true;
+    // }
+    // return false;
+    return width === mono && width === serif && width === sans && width === auto;
+  }
+
+  /**
+   * Check if a font's weights are all available.
+   *
+   * The weights must all belong to the same font family and style. The glyphs
+   * defined in `fontDefinition` will be used to check the weights.
+   *
+   * This method compares the width of the glyphs for all given weights. If all
+   * widths are different, then this method returns `true`.
+   *
+   * This means only weights that should exist should be input. For example
+   * if a font only supports 'normal' and 'bold', but weights 'lighter' and
+   * 'bold' are input, then this will return true as 'lighter' will likely
+   * fallback to 'normal'.
+   */
+  areWeightsAvailable(fontDefinition: OBJ_Font, weights: Array<string>) {
+    if (!this.isAvailable(fontDefinition)) {
+      return false;
     }
-    return false;
+    const f = new FigureFont(fontDefinition);
+    const glyphs = f.getGlyphs();
+    const fam = f.getFamily();
+    const { style } = f;
+    const width = this.measureText(fam, weights[0], style, glyphs);
+    console.log(width)
+    for (let i = 1; i < weights.length; i += 1) {
+      const w = this.measureText(fam, weights[i], style, glyphs);
+      console.log(w, weights[i])
+      if (w === width) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Return an array of font weight defi
+   */
+  getWeights(fontDefinition: OBJ_Font) {
+    if (!this.isAvailable(fontDefinition)) {
+      return [];
+    }
+    const weights = ['100', '200', '300', '400', '500', '600', '700', '800', '900', 'normal', 'bold', 'bolder', 'lighter'];
+    const f = new FigureFont(fontDefinition);
+    const glyphs = f.getGlyphs();
+    const fam = f.getFamily();
+    const { style } = f;
+    const widths = [];
+    const buckets = [];
+    for (let i = 0; i < weights.length; i += 1) {
+      const w = this.measureText(fam, weights[i], style, glyphs);
+      const index = widths.indexOf(w);
+      if (index > -1) {
+        buckets[index].push(weights[i]);
+      } else {
+        buckets.push([weights[i]]);
+        widths.push(w);
+      }
+    }
+    return buckets;
+  }
+
+  /**
+   * Return an array of font weight defi
+   */
+  getStyles(fontDefinition: OBJ_Font) {
+    if (!this.isAvailable(fontDefinition)) {
+      return [];
+    }
+    const styles = ['normal', 'italic', 'oblique'];
+    const f = new FigureFont(fontDefinition);
+    const glyphs = f.getGlyphs();
+    const fam = f.getFamily();
+    const { weight } = f;
+    const widths = [];
+    const buckets = [];
+    for (let i = 0; i < styles.length; i += 1) {
+      const w = this.measureText(fam, weight, styles[i], glyphs);
+      const index = widths.indexOf(w);
+      if (index > -1) {
+        buckets[index].push(styles[i]);
+      } else {
+        buckets.push([styles[i]]);
+        widths.push(w);
+      }
+    }
+    return buckets;
+  }
+
+  areStylesAvailable(fontDefinition: OBJ_Font, styles: Array<string>) {
+    if (!this.isAvailable(fontDefinition)) {
+      return false;
+    }
+    const f = new FigureFont(fontDefinition);
+    const glyphs = f.getGlyphs();
+    const fam = f.getFamily();
+    const { weight } = f;
+    const width = this.measureText(fam, weight, styles[0], glyphs);
+    for (let i = 1; i < styles.length; i += 1) {
+      const w = this.measureText(fam, weight, styles[0], glyphs);
+      if (w === width) {
+        return false;
+      }
+    }
+    return true;
   }
 
   isAvailableID(fontID: string): boolean {
