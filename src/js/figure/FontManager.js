@@ -1,5 +1,4 @@
 // @flow
-import TimeKeeper from './TimeKeeper';
 import { joinObjects, NotificationManager } from '../tools/tools';
 import { FunctionMap } from '../tools/FunctionMap';
 import { FigureFont } from './DrawingObjects/TextObject/TextObject';
@@ -14,7 +13,6 @@ export default class FontManager {
   fonts: Object;
   container: HTMLSpanElement;
   static instance: FontManager;
-  timeKeeper: TimeKeeper;
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
   loaded: number;
@@ -28,7 +26,6 @@ export default class FontManager {
   animateNextFrameCallbacks: Array<() => void>;
 
   constructor(
-    timeKeeper: TimeKeeper = new TimeKeeper(),
     fnMap: FunctionMap = new FunctionMap(),
     notifications: NotificationManager = new NotificationManager(),
   ) {
@@ -39,14 +36,13 @@ export default class FontManager {
       this.canvas.width = 10;
       this.canvas.height = 10;
       this.ctx = this.canvas.getContext('2d');
-      this.timeKeeper = timeKeeper;
       this.notifications = notifications;
       this.loading = 0;
       this.loaded = 0;
       this.fnMap = fnMap;
       this.timedOut = 0;
       this.checkTimer = null;
-      this.startTime = timeKeeper.now();
+      this.startTime = 0;
       this.animateNextFrameCallbacks = [];
     }
     return FontManager.instance;
@@ -104,25 +100,6 @@ export default class FontManager {
   ) {
     this.fonts[fontID][backupName].push(this.measureTextID(fontID, backupFamily));
   }
-
-  // /**
-  //  * Check if a font is available.
-  //  */
-  // isAvailableLegacy(
-  //   fontDefinition: { family: string, weight?: string, style?: string, glyphs?: string, },
-  // ): boolean {
-  //   const f = new FigureFont(fontDefinition);
-  //   const glyphs = f.getGlyphs();
-  //   const fam = f.getFamily();
-  //   const { weight, style } = f;
-  //   const mono = this.measureText('monospace', weight, style, glyphs);
-  //   const serif = this.measureText('serif', weight, style, glyphs);
-  //   const sans = this.measureText('sans-serif', weight, style, glyphs);
-  //   const fontMono = this.measureText(`${fam},monospace`, weight, style, glyphs);
-  //   const fontSerif = this.measureText(`${fam},serif`, weight, style, glyphs);
-  //   const fontSans = this.measureText(`${fam},sans-serif`, weight, style, glyphs);
-  //   return mono !== fontMono || serif !== fontSerif || sans !== fontSans;
-  // }
 
   /*
   We can then measure the width of the glyphs using just the font itself, and
@@ -336,7 +313,7 @@ export default class FontManager {
     }
 
     this.fonts[fontID] = {
-      timeout: this.timeKeeper.now() + o.timeout * 1000,
+      timeout: performance.now() + o.timeout * 1000,
       font: f,
       glyphID: f.getTestStringID(),
       glyphSymbols: f.getTestStringGlyphs(),
@@ -364,8 +341,8 @@ export default class FontManager {
     // If the font is not available, and if a timer isn't already going, then
     // initiate a timer to check all unloaded fonts
     if (this.checkTimer == null) {
-      this.startTime = this.timeKeeper.now();
-      this.checkTimer = this.timeKeeper.setTimeout(this.timedCheck.bind(this), 50);
+      this.startTime = performance.now();
+      this.checkTimer = setTimeout(this.timedCheck.bind(this), 50);
     }
     return [fontID, false];
   }
@@ -392,13 +369,13 @@ export default class FontManager {
       return;
     }
     let time = 50;
-    if (this.timeKeeper.now() - this.startTime > 1000) {
+    if (performance.now() - this.startTime > 1000) {
       time = 500;
     }
-    if (this.timeKeeper.now() - this.startTime > 5000) {
+    if (performance.now() - this.startTime > 5000) {
       time = 1000;
     }
-    this.timeKeeper.setTimeout(this.timedCheck.bind(this), time);
+    setTimeout(this.timedCheck.bind(this), time);
   }
 
   isLoadingFinished() {
@@ -442,7 +419,7 @@ export default class FontManager {
     }
 
     const result = this.isAvailableID(fontID);
-    if (result === false && this.timeKeeper.now() > f.timeout) {
+    if (result === false && performance.now() > f.timeout) {
       this.fontTimedOut(fontID);
       return false;
     }

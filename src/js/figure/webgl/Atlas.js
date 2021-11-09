@@ -28,7 +28,6 @@ import { joinObjects, NotificationManager } from '../../tools/tools';
 // }
 
 
-
 /* eslint-disable max-len */
 /*
 This is probably overly complicated.
@@ -156,7 +155,7 @@ export default class Atlas {
       timeout: o.timeout,
       maxCount: o.maxCount,
       callback: this.fontLoaded.bind(this),
-    }); 
+    });
     this.fontID = fontID;
     // this.textureId = this.font.getTextureId();
     this.createAtlas(options.scene);
