@@ -147,14 +147,14 @@ export default class FontManager {
 
   And then compares all pairs (like monospace and font,monospace) and if any
   are different then is shows the fallback is not being used, and thus the font
-  exists. However, this doesn't work when glyphs come from two different font
-  files. For example in "open sans", there are separate font files for latin
-  and greek characters. These may then load at slightly different times, and so
-  if the second comparison is performed between the first loading and the
-  second not loading, then SOME of the glyphs font,backup glyphs will be the
-  proper font, and others will be the backup font. As such, the width will be
-  different and the logic will say the font exists, when really it only
-  partially exists.
+  exists.
+
+  However, this doesn't work if only some of the glyphs are available. For
+  example, let's say someone has a cached webfont that is only the latin
+  characters. If the figure requires greek characters of the same font, and
+  the greek+latin (or just greek) font file is still downloading, then the
+  second method will show the (font, font/backup) pairs to be different,
+  even though only the lating glyphs are different.
   */
   isAvailable(
     fontDefinition: { family: string, weight?: string, style?: string, glyphs?: string, },
@@ -315,7 +315,6 @@ export default class FontManager {
       timeout: 5000,
       callback: null,
     }, options);
-
     const f = new FigureFont(font);
     const fontID = f.getFontID();
 
@@ -350,7 +349,6 @@ export default class FontManager {
     this.loading += 1;
 
     const result = this.isAvailableID(fontID, false);
-
     this.fonts[fontID].callbacks.push(o.callback);
 
     // If the font is available, then execute all callbacks registered to the

@@ -168,7 +168,7 @@ class FigureFont {
       throw new Error('FigureOne Font Error: An image was used as an atlas but does not have an associated ID');
     }
     const family = this.family.split(',')[0].toLowerCase();
-    return `${family}-${this.weight.toLowerCase()}-${this.style.toLowerCase()}-${this.getTestStringID()}`;
+    return `${family}-${this.style.toLowerCase()}-${this.weight.toLowerCase()}-${this.getTestStringID()}`;
   }
 
   getTextureID() {
