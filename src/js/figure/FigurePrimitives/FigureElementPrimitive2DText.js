@@ -399,13 +399,6 @@ class TextObject extends DrawingObject {
       width: this.bounds.width * scalingFactor,
       height: this.bounds.height * scalingFactor,
     };
-    this.font.setFontInContext(ctx, scalingFactor);
-    this.font.setColorInContext(ctx, c);
-    ctx.fillText(
-      this.text,
-      (this.location.x) * scalingFactor,
-      (this.location.y) * -scalingFactor,
-    );
     // console.log(this.text, c)
     if (this.font.underline !== false) {
       const [uDescent, uWidth] = this.underline;
@@ -416,6 +409,27 @@ class TextObject extends DrawingObject {
         uWidth * scalingFactor,
       );
     }
+    this.font.draw2D(ctx, c, this.text, this.location.x, this.location.y, scalingFactor);
+    // this.font.setFontInContext(ctx, scalingFactor);
+    // this.font.setColorInContext(ctx, c);
+    // if (this.font.fill) {
+    //   ctx.fillText(
+    //     this.text,
+    //     (this.location.x) * scalingFactor,
+    //     (this.location.y) * -scalingFactor,
+    //   );
+    // }
+    // if (this.font.outline) {
+    //   if (Array.isArray(this.font.outline)) {
+    //     this.font.setColorInContext(ctx, this.font.outline);
+    //   }
+    //   ctx.lineWidth = 0.1;
+    //   ctx.strokeText(
+    //     this.text,
+    //     (this.location.x) * scalingFactor,
+    //     (this.location.y) * -scalingFactor,
+    //   );
+    // }
     // ctx.fillStyle = 'blue';
     // ctx.fill();
     ctx.restore();

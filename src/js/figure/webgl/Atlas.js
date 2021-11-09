@@ -4,28 +4,6 @@ import FontManager from '../FontManager';
 import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
 import { joinObjects, NotificationManager } from '../../tools/tools';
 
-// const modifiers = {
-//   'times new roman': {
-//     italic: { f: { width: 1.2 } },
-//   },
-//   'times': {
-//     italic: { f: { width: 1.2 } },
-//   },
-// };
-
-// function getModifier(family, style, weight) {
-//   if (modifers[family] == null) {
-//     return {};
-//   }
-//   if (modifiers[family][style] == null) {
-//     return {};
-//   }
-//   if (modifiers[family][style][weight] != null) {
-//     return modifiers[family][style][weight];
-//   }
-//   return modifiers[family][style];
-//   return {};
-// }
 
 
 /* eslint-disable max-len */
@@ -43,14 +21,14 @@ Fonts may be system fonts (available immediately), cached or synchronous web fon
 - FontManager - determines if a font is available, and if not, will send out notifications when it is
 
 - WebGLInstance - manages all atlases
-                - GLText will request an atlas for some font, and AtlasManager will create one, or return an existing one
+                - GLText will request an atlas for some font, and WebGLInstance will create one, or return an existing one
 
 - Atlas - Class that holds an atlas including. An atlas is unique by:
     - Font family
     - Font style
     - Font weight
     - Font size
-    - Alphabet
+    - Glyphs
     or is unique by a given id, custom image and map.
   If an atlas is created and the font is not yet available, then it will subscribe to FontManager and when the font is available will recreate the atlas, and send out a notification. Atlases contain the id of the texture representing the atlas loaded into webgl that GLObjects can use to draw
 
@@ -60,7 +38,7 @@ Fonts may be system fonts (available immediately), cached or synchronous web fon
 
 - OBJ_Font - defines a figure font either with family/weight/style/testString or src/map. The size, width, descent, midDescent, maxDescent, midAscent, maxAscent properties are then used to size the glyphs.
 
-            AtlasManager -----------> FontManager
+              WebGL -----------> FontManager
               A   |                    A       A
               |   | Atlas              |       |
               |   V                    |       |
@@ -174,47 +152,6 @@ export default class Atlas {
     this.notifications.publish('updated');
   }
 
-  // measureText(text: string, width: number) {
-  //   const { font } = this;
-  //   const aWidth = this.fontSize / 2;
-  //   let ascent = aWidth * font.maxAscent;
-  //   let descent = aWidth * font.descent;
-  //   // const maxAscentRe =
-  //   //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
-  //   const midAscentRe = /[acemnorsuvwxz*gyqp: ]/g;
-  //   const midDecentRe = /[;,$]/g;
-  //   let maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
-  //   if (font.family === 'Times New Roman') {
-  //     if (font.style === 'italic') {
-  //       maxDescentRe = /[gjyqp@Q(){}[\]|f]/g;
-  //     }
-  //   }
-  //   const midAscentMatches = text.match(midAscentRe);
-  //   if (Array.isArray(midAscentMatches)) {
-  //     if (midAscentMatches.length === text.length) {
-  //       ascent = aWidth * font.midAscent;
-  //     }
-  //   }
-
-  //   const midDescentMatches = text.match(midDecentRe);
-  //   if (Array.isArray(midDescentMatches)) {
-  //     if (midDescentMatches.length > 0) {
-  //       descent = aWidth * font.midDescent;
-  //     }
-  //   }
-
-  //   const maxDescentMatches = text.match(maxDescentRe);
-  //   if (Array.isArray(maxDescentMatches)) {
-  //     if (maxDescentMatches.length > 0) {
-  //       descent = aWidth * font.maxDescent;
-  //     }
-  //   }
-
-  //   return {
-  //     ascent, descent, width,
-  //   };
-  // }
-
   createAtlas(scene: Scene) {
     const { font } = this;
     const fontSizePX = font.size / scene.heightNear * this.webgl.gl.canvas.height;
@@ -234,8 +171,22 @@ export default class Atlas {
     let x = fontSizePX;
     let y = fontSizePX;
     const aWidth = ctx.measureText('a').width;
+    font.setColorInContext(ctx, font.color);
+    if (font.outline.color) {
+      font.setStrokeColorInContext(ctx, font.outline.color);
+    } else {
+      font.setStrokeColorInContext(ctx, font.color);
+    }
+    if (font.outline.width !== 0) {
+      ctx.lineWidth = font.outline.width * fontSizePX / font.size;
+    }
     for (let i = 0; i < glyphs.length; i += 1) {
-      ctx.fillText(glyphs[i], x, y);
+      if (font.outline.fill) {
+        ctx.fillText(glyphs[i], x, y);
+      }
+      if (font.outline.width !== 0) {
+        ctx.strokeText(glyphs[i], x, y);
+      }
       let w = 1;
       if (this.font.modifiers[glyphs[i]]) {
         w = this.font.modifiers[glyphs[i]].w;

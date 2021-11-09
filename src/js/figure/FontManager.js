@@ -9,6 +9,11 @@ export type OBJ_LoadFontOptions = {
   callback?: string | () => void,
 };
 
+/**
+ * Font manager can be used to query if fonts are available, and watch to see
+ * when the load.
+ *
+ */
 export default class FontManager {
   fonts: Object;
   container: HTMLSpanElement;

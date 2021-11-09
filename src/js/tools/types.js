@@ -46,62 +46,99 @@ export type OBJ_CurvedCorner = {
   sides?: number,
 };
 
+export type OBJ_Outline = {
+  width?: number,
+  fill?: boolean,
+  color?: TypeColor,
+}
 /* eslint-disable max-len */
 /**
  * Font definition object.
  *
- * Text is drawn in a [Context2D canvas](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D) and so `family`, `style` and `weight` are any valid [options](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font).
+ * A font can be defined either from a subset of the properties used to define
+ * [fonts in css](https://developer.mozilla.org/en-US/docs/Web/CSS/font), or
+ * by using a texture altas of the various glyphs to be used.
  *
- * `size` is the draw space size of the font.
+ * A font can be rendered into a [2D canvas](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
+ * or into the WebGL canvas using the texture atlas.
  *
- * Width, descent and ascent of text is estimated, and there are times,
- * especially with non-standard fonts, that these estimates need ajustment.
+ * A texture atlas can either be supplied as an image, or generated
+ * automatically by FigureOne based on the css font definitions.
  *
- * Most browsers only support a width measurement of text, and while this is
- * often good enough, there are times when it is not accurate (some fonts are
- * not accurate, sometimes the width of italics is inaccurate, width of
- * narrower letters is reported as thicker letters). Therefore, use the `width`
- * property to include a scaling factor that can reduce these errors in cases
- * where they arise.
+ * CSS font definition:
+ *   * `family` - the typeface family from which it comes (e.g. 'Helvetica',
+ *     'Times New Roman')
+ *   * `style` - its slope (e.g. 'italic')
+ *   * `weight` - its thickness (e.g. 'bold')
+ *   * `size`
  *
- * Many browsers don't yet support measurement of heights of text, and so
- * ascents and descents are calculated from measuring the width of an 'a'
- * character and then using scaling factors.
+ * Atlas font definition:
+ *   * `src` - the image or url to the image - if not supplied then atlas will
+ *      be generated automatically
+ *   * `map` - description of location and size of each glyph in the atlas
+ *   * `glyphs` - the available glyphs in the atlas
+ *   * `atlasColor` - if `true` then the rendered glyph color will be the same
+ *     as that in the texture. If `false`, then only the transparency channel of
+ *     the texture will be used and color will be defined by the FigureElement
+ *     drawing the text.
  *
- * `maxAscent` is the scaling factor for letters that rise above an 'a', like
- * capital letters, lower case letters like 'd' and 'l', and punctuation like
- * '|', brackets and apostrophes. Note, some fonts have slightly different
- * heights for these different letters, but it is generally pretty close.
+ * A font can also have a number of modifying properties:
+ *   * `color` - fill or outline color of each glyph - not used if the texture
+ *      atlas color is to be used
+ *   * `underline`
+ *   * `outline` - defines whether the font is filled, is an outline, or both
  *
- * `midAscent` is for lower case letters like 'a', 'g', 'p'.
+ * Fonts that are generated automatically rely on the client's browser to
+ * measure the font's width. From this the ascent and descent of each glyph
+ * is then estimated. Each glyph's width, ascent and descent is used to layout
+ * the glyphs in regular text and equations, as well as determine the borders
+ * and touch borders of FigureElements that draw the text.
  *
- * `descent` is for letters that generally do not go much below the baseline
- * like 'a', 'A', 't'.
+ * However, this estimate for different font families is not always perfectly
+ * accurate. If the estimate is not sufficient, then it can be modified by using
+ * the following properties (where each property is a proportion of the width
+ * of a character 'a'):
+ *   * `maxAscent`: Maximum ascent of glyphs like "A" or "$"
+ *   * `midAscent`: ascent of mid level glyphs like "a" and "g"
+ *   * `descent`: descent of glyphs that do not noticeably go below the
+ *      baseline (but often do a little) like "a" and "b"
+ *   * `midDescent`: descent of glyphs that go a little below the baseline like
+ *      "," and ";"
+ *   * `maxDescent`: maximum descent of glyphs like "g" and "|"
  *
- * `midDescent` is for punctuation that drops below the baseline a bit like
- * commas.
+ * Individual glyphs can also be modified (for atlas based fonts only) using
+ * the `modifiers` properties.
  *
- * `maxDescent` is for letters and punctuation that drops the furthest below
- * the baseline like 'g', '|', and brackets.
  *
- * @property {string} [family] The font family (`Times New Roman`)
- * @property {`normal` | `italic`} [style] (`normal`)
- * @property {number} [size] size of font in draw space (`0.2`)
+ * @property {string} [family] The font family (`'Times New Roman'`)
+ * @property {'normal' | 'italic' | 'oblique'} [style] (`'normal'`)
  * @property {'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'} [weight]
- * font weight (`200`)
+ * font weight (`'normal'`)
+ * @property {number} [size] size of font in draw space (`0.2`)
  * @property {boolean | number | [number, number]} [underline] `true` to include
  * an underline. Use `number` to define the descent of the bottom edge of the
  * underline to the baseline and [`number`, `number`] to define the descent and
  * width of the underline (`false`)
  * @property {[number, number, number, number]} [color] Font color
  * [red, green, blue, alpha] between 0 and 1 - (`[1, 0, 0, 1]`)
- * @property {number} [width] width multiplier for text when measured with
- * canvas2D.context.measureText (`1`)
+ * @property {OBJ_Outline} [outline] options to draw the text in outline
+ * instead of or in addition to a fill (`false`)
  * @property {number} [descent] (`0.8`)
  * @property {number} [maxDescent] (`0.2`)
  * @property {number} [midDescent] (`0.5`)
  * @property {number} [maxAscent] (`0.95`)
  * @property {number} [midAscent] (`1.4`)
+ * @property {Image | string} [src] source image or url for atlas
+ * @property {OBJ_AtlasMap} [map] atlas definition needed if using a source
+ * image or url
+ * @property {string | 'greek' | 'math' | 'latin' | 'all' | 'common' | 'mathExt'} [glyphs]
+ * glyphs included in the font
+ * @property {TypeColor} [loadColor] color of temporary texture while actual
+ * texture is loading
+ * @property {boolean} [atlasColor] `true` to use the color of the glyphs in
+ * the atlas. `false` will just use the opacity and color the glyphs from the
+ * FigureElement drawing them
+
  * @example
  * // Full font definition
  * const font = new FigureFont({
@@ -119,17 +156,29 @@ export type OBJ_CurvedCorner = {
  */
 export type OBJ_Font = {
   family?: string,
-  style?: 'normal' | 'italic',
-  size?: number,
   weight?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
-  color?: TypeColor | null,
+  style?: 'normal' | 'italic' | 'oblique',
+  size?: number,
+
+  // Modifying properties
   underline?: boolean | number | [number, number],
+  color?: TypeColor | null,
+  outline?: boolean | OBJ_Outline,
+
+  // Font measurements
   width?: number,
   descent?: number,
   maxDescent?: number,
   midDescent?: number,
   maxAscent?: number,
   midAscent?: number,
+
+  // Atlas definition
+  src?: Image | string,
+  map?: OBJ_AtlasMap,
+  glyphs?: string | 'greek' | 'math' | 'latin' | 'all' | 'common' | 'mathExt',
+  loadColor?: TypeColor,
+  atlasColor?: boolean,
 };
 
 export type OBJ_Font_Fixed = {

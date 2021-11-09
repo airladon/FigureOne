@@ -32,9 +32,9 @@ const latin = `QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm,./<>?;':"[]\
 
 // const math = '\u00ba\u00b0\u00d7\u00f7';
 
-const math = '\u00ba\u00b0\u00d7\u00f7\u2200\u2201\u2202\u2203\u2204\u2205\u2206\u2207\u2208\u2209\u220a\u220b\u220c\u220d\u220e\u220f\u2210\u2211\u2212\u2213\u2214\u2215\u2216\u2217\u2218\u2219\u221a\u221b\u221c\u221d\u221e\u221f\u2220\u2221\u2222\u2223\u2224\u2225\u2226\u2227\u2228\u2229\u222a\u222b\u222c\u222d\u222e\u222f\u2230\u2231\u2232\u2233\u2234\u2235\u2236\u2237\u2238\u2239\u223a\u223b\u223c\u223d\u223e\u223f\u2240\u2241\u2242\u2243\u2244\u2245\u2246\u2247\u2248\u2249\u224a\u224b\u224c\u224d\u224e\u224f\u2250\u2251\u2252\u2253\u2254\u2255\u2256\u2257\u2258\u2259\u225a\u225b\u225c\u225d\u225e\u225f\u2260\u2261\u2262\u2263\u2264\u2265\u2266\u2267\u2268\u2269\u226a\u226b\u226c\u226d\u226e\u226f\u2270\u2271\u2272\u2273\u2274\u2275\u2276\u2277\u2278\u2279\u227a\u227b\u227c\u227d\u227e\u227f\u2280\u2281\u2282\u2283\u2284\u2285\u2286\u2287\u2288\u2289\u228a\u228b\u228c\u228d\u228e\u228f\u2290\u2291\u2292\u2293\u2294\u2295\u2296\u2297\u2298\u2299\u229a\u229b\u229c\u229d\u229e\u229f\u22a0\u22a1\u22a2\u22a3\u22a4\u22a5\u22a6\u22a7\u22a8\u22a9\u22aa\u22ab\u22ac\u22ad\u22ae\u22af\u22b0\u22b1\u22b2\u22b3\u22b4\u22b5\u22b6\u22b7\u22b8\u22b9\u22ba\u22bb\u22bc\u22bd\u22be\u22bf\u22c0\u22c1\u22c2\u22c3\u22c4\u22c5\u22c6\u22c7\u22c8\u22c9\u22ca\u22cb\u22cc\u22cd\u22ce\u22cf\u22d0\u22d1\u22d2\u22d3\u22d4\u22d5\u22d6\u22d7\u22d8\u22d9\u22da\u22db\u22dc\u22dd\u22de\u22df\u22e0\u22e1\u22e2\u22e3\u22e4\u22e5\u22e6\u22e7\u22e8\u22e9\u22ea\u22eb\u22ec\u22ed\u22ee\u22ef\u22f0\u22f1\u22f2\u22f3\u22f4\u22f5\u22f6\u22f7\u22f8\u22f9\u22fa\u22fb\u22fc\u22fd\u22fe\u22ff';
+const mathExt = '\u00ba\u00b0\u00d7\u00f7\u2200\u2201\u2202\u2203\u2204\u2205\u2206\u2207\u2208\u2209\u220a\u220b\u220c\u220d\u220e\u220f\u2210\u2211\u2212\u2213\u2214\u2215\u2216\u2217\u2218\u2219\u221a\u221b\u221c\u221d\u221e\u221f\u2220\u2221\u2222\u2223\u2224\u2225\u2226\u2227\u2228\u2229\u222a\u222b\u222c\u222d\u222e\u222f\u2230\u2231\u2232\u2233\u2234\u2235\u2236\u2237\u2238\u2239\u223a\u223b\u223c\u223d\u223e\u223f\u2240\u2241\u2242\u2243\u2244\u2245\u2246\u2247\u2248\u2249\u224a\u224b\u224c\u224d\u224e\u224f\u2250\u2251\u2252\u2253\u2254\u2255\u2256\u2257\u2258\u2259\u225a\u225b\u225c\u225d\u225e\u225f\u2260\u2261\u2262\u2263\u2264\u2265\u2266\u2267\u2268\u2269\u226a\u226b\u226c\u226d\u226e\u226f\u2270\u2271\u2272\u2273\u2274\u2275\u2276\u2277\u2278\u2279\u227a\u227b\u227c\u227d\u227e\u227f\u2280\u2281\u2282\u2283\u2284\u2285\u2286\u2287\u2288\u2289\u228a\u228b\u228c\u228d\u228e\u228f\u2290\u2291\u2292\u2293\u2294\u2295\u2296\u2297\u2298\u2299\u229a\u229b\u229c\u229d\u229e\u229f\u22a0\u22a1\u22a2\u22a3\u22a4\u22a5\u22a6\u22a7\u22a8\u22a9\u22aa\u22ab\u22ac\u22ad\u22ae\u22af\u22b0\u22b1\u22b2\u22b3\u22b4\u22b5\u22b6\u22b7\u22b8\u22b9\u22ba\u22bb\u22bc\u22bd\u22be\u22bf\u22c0\u22c1\u22c2\u22c3\u22c4\u22c5\u22c6\u22c7\u22c8\u22c9\u22ca\u22cb\u22cc\u22cd\u22ce\u22cf\u22d0\u22d1\u22d2\u22d3\u22d4\u22d5\u22d6\u22d7\u22d8\u22d9\u22da\u22db\u22dc\u22dd\u22de\u22df\u22e0\u22e1\u22e2\u22e3\u22e4\u22e5\u22e6\u22e7\u22e8\u22e9\u22ea\u22eb\u22ec\u22ed\u22ee\u22ef\u22f0\u22f1\u22f2\u22f3\u22f4\u22f5\u22f6\u22f7\u22f8\u22f9\u22fa\u22fb\u22fc\u22fd\u22fe\u22ff';
 
-const mathSmall = '\u00ba\u00b0\u00d7\u00f7';
+const math = '1234567890-+=exp.%\u00ba\u00b0\u00d7\u00f7';
 
 /* eslint-enable max-len */
 
@@ -51,13 +51,14 @@ class FigureFont {
   // Atlas font definition
   src: Image | string;
   map: OBJ_AtlasMap;
-  glyphs: string | 'greek' | 'math' | 'latin' | 'all';
+  glyphs: string | 'greek' | 'math' | 'mathExt' | 'common' | 'latin' | 'all' | 'numbers';
   loadColor: TypeColor;
 
   // Font properties
   size: number;
   underline: boolean | number | [number, number];
   color: TypeColor | null;
+  outline: boolean | TypeColor;
   opacity: number;  // deprecated
 
   // Font measurements
@@ -81,11 +82,12 @@ class FigureFont {
       this.family = optionsIn.family;
       this.style = optionsIn.style;
       this.size = optionsIn.size;
+      this.outline = optionsIn.outline;
       this.weight = optionsIn.weight;
       this.opacity = optionsIn.opacity;
       this.underline = optionsIn.underline;
       this.setColor(optionsIn.color);
-      this.width = optionsIn.width;
+      // this.width = optionsIn.width;
       this.descent = optionsIn.descent;
       this.midDescent = optionsIn.midDescent;
       this.maxDescent = optionsIn.maxDescent;
@@ -121,15 +123,29 @@ class FigureFont {
       timeout: 5,
       maxCount: 1,
       modifiers: {},
+      fill: true,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     this.family = options.family;
     this.style = options.style;
     this.size = options.size;
+    if (options.outline === true) {
+      this.outline = {
+        fill: false,
+        width: this.size / 40,
+      };
+    } else if (options.outline === false) {
+      this.outline = { fill: true, width: 0 };
+    } else if (options.outline == null) {
+      this.outline = { fill: true, width: 0 };
+    } else {
+      this.outline = joinObjects({}, { width: this.size / 40, fill: false }, options.outline);
+    }
+
     this.weight = options.weight;
     this.opacity = options.opacity;
     this.setColor(options.color);
-    this.width = options.width;
+    // this.width = options.width;
     this.descent = options.descent;
     this.midDescent = options.midDescent;
     this.maxDescent = options.maxDescent;
@@ -187,10 +203,10 @@ class FigureFont {
 
   getGlyphs() {
     if (this.glyphs === 'all') {
-      return `${latin}${greek}${math}`;
+      return `${latin}${greek}${mathExt}`;
     }
     if (this.glyphs === 'common') {
-      return `${latin}${greek}${mathSmall}`;
+      return `${latin}${greek}${math}`;
     }
     if (this.glyphs === 'latin') {
       return latin;
@@ -201,6 +217,9 @@ class FigureFont {
     if (this.glyphs === 'math') {
       return math;
     }
+    if (this.glyphs === 'mathExt') {
+      return mathExt;
+    }
     return this.glyphs;
   }
 
@@ -210,6 +229,7 @@ class FigureFont {
       || this.glyphs === 'common'
       || this.glyphs === 'greek'
       || this.glyphs === 'latin'
+      || this.glyphs === 'mathExt'
       || this.glyphs === 'math'
     ) {
       return this.glyphs;
@@ -223,6 +243,7 @@ class FigureFont {
       || this.testString === 'common'
       || this.testString === 'greek'
       || this.testString === 'latin'
+      || this.testString === 'mathExt'
       || this.testString === 'math'
     ) {
       return this.testString;
@@ -236,6 +257,7 @@ class FigureFont {
       || this.testString === 'common'
       || this.testString === 'greek'
       || this.testString === 'latin'
+      || this.testString === 'mathExt'
       || this.testString === 'math'
     ) {
       return this.getGlyphs(this.testString);
@@ -286,6 +308,36 @@ class FigureFont {
     return this.underline;
   }
 
+  draw2D(
+    ctx: CanvasRenderingContext2D,
+    color: TypeColor | null,
+    text: string,
+    locationX: number,
+    locationY: number,
+    scalingFactor: number = 1,
+  ) {
+    this.setFontInContext(ctx, scalingFactor);
+    this.setColorInContext(ctx, color || this.color);
+    if (this.outline.fill) {
+      ctx.fillText(
+        text,
+        (locationX) * scalingFactor,
+        (locationY) * -scalingFactor,
+      );
+    }
+    if (this.outline.width !== 0) {
+      if (this.outline.color) {
+        this.setStrokeColorInContext(ctx, this.outline.color || color || this.color);
+      }
+      ctx.lineWidth = this.outline.width * scalingFactor;
+      ctx.strokeText(
+        text,
+        (locationX) * scalingFactor,
+        (locationY) * -scalingFactor,
+      );
+    }
+  }
+
   definition() {
     const { color } = this;
     let colorToUse;
@@ -298,10 +350,11 @@ class FigureFont {
       family: this.family,
       style: this.style,
       size: this.size,
+      outline: this.outline,
       weight: this.weight,
       color: colorToUse,
       opacity: this.opacity,
-      width: this.width,
+      // width: this.width,
       descent: this.descent,
       midDescent: this.midDescent,
       maxDescent: this.maxDescent,
@@ -361,7 +414,7 @@ class FigureFont {
       const glyph = text[i];
       if (this.modifiers[glyph] == null) {
         ascent = Math.max(this.maxAscent, ascent);
-        descent = Math.max(this.maxDescent, descent);
+        descent = Math.max(this.descent, descent);
       } else {
         const { a, d } = this.modifiers[glyph];
         ascent = Math.max(a, ascent);
@@ -382,21 +435,30 @@ class FigureFont {
   }
 
   setColorInContext(ctx: CanvasRenderingContext2D, color: TypeColor | null) {
-    const thisColor = this.color;
-    // let { opacity } = this;
-    // if (color != null) {
-    //   opacity *= color[3];
-    // }
-    if (thisColor != null) {
-      const c = [
-        ...thisColor.slice(0, 3),
-        // thisColor[3] * opacity,
-        color != null ? color[3] : 1,
-      ];
-      ctx.fillStyle = colorArrayToRGBA(c);
-    } else if (color != null) {
-      ctx.fillStyle = colorArrayToRGBA(color);
+    let colorToUse = this.color;
+    if (color != null) {
+      colorToUse = color;
     }
+    ctx.fillStyle = colorArrayToRGBA(colorToUse);
+    // const thisColor = this.color;
+    // if (thisColor != null) {
+    //   const c = [
+    //     ...thisColor.slice(0, 3),
+    //     // thisColor[3] * opacity,
+    //     color != null ? color[3] : 1,
+    //   ];
+    //   ctx.fillStyle = colorArrayToRGBA(c);
+    // } else if (color != null) {
+    //   ctx.fillStyle = colorArrayToRGBA(color);
+    // }
+  }
+
+  setStrokeColorInContext(ctx: CanvasRenderingContext2D, color: TypeColor | null) {
+    let colorToUse = this.color;
+    if (color != null) {
+      colorToUse = color;
+    }
+    ctx.strokeStyle = colorArrayToRGBA(colorToUse);
   }
 
   _dup() {
