@@ -130,14 +130,6 @@ async function loadFontStyle(family, style, weight, glyphs) {
   );
 }
 
-async function frame(delta) {
-  await page.evaluate(([d]) => new Promise((resolve) => {
-    figure.notifications.add('afterDraw', () => resolve(), 1);
-    figure.timeKeeper.frame(d);
-    figure.animateNextFrame();
-  }), [delta]);
-}
-
 // eslint-disable-next-line no-unused-vars
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -525,13 +517,11 @@ describe('Font Manager', () => {
         .toBe(true);
     });
     test('Timeout', async () => {
-      // await page.evaluate(() => figure.setManualFrames());
       await setLoaded();
       expect(await getLoaded()).toBe(0);
       await watch({ family: 'montserrat', glyphs: 'latin' }, 0.1);
       await watch({ family: 'open sans', glyphs: 'latin' }, 0.35);
       let fonts = await getFontManager();
-      // console.log(fonts)
       expect(fonts.loaded).toBe(0);
       expect(fonts.loading).toBe(2);
       expect(fonts.timedOut).toBe(0);
@@ -579,5 +569,5 @@ describe('Font Manager', () => {
 // fd = f.split(' ').join('-');
 // ff = new FontFace('open sans', `url(http://localhost:8080//src/tests/misc/FontManager/fonts/${f}/${f}-${s}-${w}-${g}.woff2)`, { style: s, weight: w })
 // ff.load().then(function(loaded_face) {
-// 	document.fonts.add(loaded_face);
+//   document.fonts.add(loaded_face);
 // });
