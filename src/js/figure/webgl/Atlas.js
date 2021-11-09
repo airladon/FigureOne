@@ -116,7 +116,7 @@ export default class Atlas {
       // alphabet: 'latin',
       loadColor: [0, 0, 0, 0],
       font: {},
-      timeout: 5000,
+      timeout: 5,
       maxCount: 1,
     }, options);
 

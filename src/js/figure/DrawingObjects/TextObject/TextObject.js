@@ -118,7 +118,7 @@ class FigureFont {
       src: '',
       map: {},
       glyphs: 'common',
-      timeout: 5000,
+      timeout: 5,
       maxCount: 1,
       modifiers: {},
     };

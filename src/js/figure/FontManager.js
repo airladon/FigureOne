@@ -308,11 +308,14 @@ export default class FontManager {
   }
 
   /**
+   * Future: include watching for multiple weights: i.e. when areWeightsAvailable becomes true
+   */
+  /**
    * Watch for when a font becomes available.
    */
   watch(font: OBJ_Font | FigureFont, options: OBJ_LoadFontOptions) {
     const o = joinObjects({}, {
-      timeout: 5000,
+      timeout: 5,
       callback: null,
     }, options);
     const f = new FigureFont(font);
@@ -333,7 +336,7 @@ export default class FontManager {
     }
 
     this.fonts[fontID] = {
-      timeout: this.timeKeeper.now() + o.timeout,
+      timeout: this.timeKeeper.now() + o.timeout * 1000,
       font: f,
       glyphID: f.getTestStringID(),
       glyphSymbols: f.getTestStringGlyphs(),

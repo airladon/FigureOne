@@ -55,12 +55,12 @@ async function setLoaded() {
   );
 }
 
-async function watch(font, options) {
+async function watch(font, timeout = 5) {
   return page.evaluate(
-    ([f]) => {
-      figure.fonts.watch(f, { callback: () => { figure.loaded += 1; } });
+    ([f, t]) => {
+      figure.fonts.watch(f, { callback: () => { figure.loaded += 1; }, timeout: t });
     },
-    [font, options],
+    [font, timeout],
   );
 }
 
@@ -128,6 +128,14 @@ async function loadFontStyle(family, style, weight, glyphs) {
     },
     [family.split(' ').join('-'), style, weight, glyphs],
   );
+}
+
+async function frame(delta) {
+  await page.evaluate(([d]) => new Promise((resolve) => {
+    figure.notifications.add('afterDraw', () => resolve(), 1);
+    figure.timeKeeper.frame(d);
+    figure.animateNextFrame();
+  }), [delta]);
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -515,6 +523,50 @@ describe('Font Manager', () => {
       ]);
       expect(await areWeightsAvailable({ family: 'montserrat', glyphs: 'latin' }, ['300', '400']))
         .toBe(true);
+    });
+    test('Timeout', async () => {
+      // await page.evaluate(() => figure.setManualFrames());
+      await setLoaded();
+      expect(await getLoaded()).toBe(0);
+      await watch({ family: 'montserrat', glyphs: 'latin' }, 0.1);
+      await watch({ family: 'open sans', glyphs: 'latin' }, 0.35);
+      let fonts = await getFontManager();
+      // console.log(fonts)
+      expect(fonts.loaded).toBe(0);
+      expect(fonts.loading).toBe(2);
+      expect(fonts.timedOut).toBe(0);
+      expect(fonts.fonts['montserrat-normal-normal-latin'].loaded).toBe(false);
+      expect(fonts.fonts['montserrat-normal-normal-latin'].timedOut).toBe(false);
+      expect(fonts.fonts['open sans-normal-normal-latin'].loaded).toBe(false);
+      expect(fonts.fonts['open sans-normal-normal-latin'].timedOut).toBe(false);
+      await sleep(200);
+      fonts = await getFontManager();
+      expect(fonts.loaded).toBe(0);
+      expect(fonts.loading).toBe(2);
+      expect(fonts.timedOut).toBe(1);
+      expect(await getLoaded()).toBe(1);
+      fonts = await getFontManager();
+      expect(fonts.fonts['montserrat-normal-normal-latin'].loaded).toBe(false);
+      expect(fonts.fonts['montserrat-normal-normal-latin'].timedOut).toBe(true);
+      expect(fonts.fonts['open sans-normal-normal-latin'].loaded).toBe(false);
+      expect(fonts.fonts['open sans-normal-normal-latin'].timedOut).toBe(false);
+      await sleep(300);
+      fonts = await getFontManager();
+      expect(fonts.loaded).toBe(0);
+      expect(fonts.loading).toBe(2);
+      expect(fonts.timedOut).toBe(2);
+      expect(await getLoaded()).toBe(2);
+      fonts = await getFontManager();
+      expect(fonts.fonts['montserrat-normal-normal-latin'].loaded).toBe(false);
+      expect(fonts.fonts['montserrat-normal-normal-latin'].timedOut).toBe(true);
+      expect(fonts.fonts['open sans-normal-normal-latin'].loaded).toBe(false);
+      expect(fonts.fonts['open sans-normal-normal-latin'].timedOut).toBe(true);
+      expect(await isAvailable({
+        family: 'montserrat', style: 'normal', weight: '300', glyphs: 'latin',
+      })).toBe(false);
+      expect(await isAvailable({
+        family: 'montserrat', style: 'normal', weight: '400', glyphs: 'latin',
+      })).toBe(false);
     });
   });
 });
