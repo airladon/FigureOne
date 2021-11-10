@@ -5,7 +5,6 @@ import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
 import { joinObjects, NotificationManager } from '../../tools/tools';
 
 
-
 /* eslint-disable max-len */
 /*
 This is probably overly complicated.
@@ -154,7 +153,8 @@ export default class Atlas {
 
   createAtlas(scene: Scene) {
     const { font } = this;
-    const fontSizePX = font.size / scene.heightNear * this.webgl.gl.canvas.height;
+    const fontSizePX = font.size / scene.heightNear * this.webgl.gl.canvas.height * 2;
+
     this.fontSize = fontSizePX;
 
     const glyphs = this.font.getGlyphs();
@@ -170,7 +170,10 @@ export default class Atlas {
 
     let x = fontSizePX;
     let y = fontSizePX;
-    const aWidth = ctx.measureText('a').width;
+
+    // const aWidth = ctx.measureText('a').width;
+    const aWidth = this.fontSize / 2;
+
     font.setColorInContext(ctx, font.color);
     if (font.outline.color) {
       font.setStrokeColorInContext(ctx, font.outline.color);
@@ -188,11 +191,12 @@ export default class Atlas {
         ctx.strokeText(glyphs[i], x, y);
       }
       let w = 1;
-      if (this.font.modifiers[glyphs[i]]) {
-        w = this.font.modifiers[glyphs[i]].w;
+      if (font.modifiers[glyphs[i]]) {
+        w = font.modifiers[glyphs[i]].w;
       }
       const width = ctx.measureText(glyphs[i]).width * w;
-      const { ascent, descent } = this.font.measureText(glyphs[i], aWidth);
+      const { ascent, descent } = font.measureText(glyphs[i], aWidth);
+
       const offsetX = x;
       const offsetY = dimension - y;
       this.map[glyphs[i]] = {
@@ -205,11 +209,19 @@ export default class Atlas {
       }
     }
     this.dimension = dimension;
+
     // Create a small square to draw color from when drawing the underline
-    ctx.fillRect(0, dimension - 2, 2, 2);
+    ctx.beginPath();
+    let underlineColor = font.color;
+    if (font.underline != null && font.underline.color != null) {
+      underlineColor = font.underline.color;
+    }
+    font.setColorInContext(ctx, underlineColor);
+    ctx.fillRect(0, dimension - 5, 5, 5);
 
     // Create a debug rectangle
     ctx.rect(0, 0, dimension, dimension);
+    ctx.beginPath();
     ctx.stroke();
 
     // Uncommnet this to debug atlas

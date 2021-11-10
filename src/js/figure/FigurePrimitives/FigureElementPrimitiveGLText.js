@@ -189,7 +189,8 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     }
 
     if (this.font.underline !== false) {
-      const [uDescent, uWidth] = this.font.getUnderline();
+      const uDescent = this.font.underline.descent;
+      const uWidth = this.font.underline.width;
       if (uDescent > maxDescent) {
         maxDescent = uDescent;
       }
@@ -236,6 +237,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       descent: maxDescent,
       width: totalWidth,
     };
+    // console.log(this.adjustments)
   }
 
   /**

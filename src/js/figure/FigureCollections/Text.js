@@ -14,7 +14,7 @@ import type {
   TypeText,
 } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type {
-  TypeColor, OBJ_Font, OBJ_Font_Fixed,
+  OBJ_Font, OBJ_Font_Fixed,
 } from '../../tools/types';
 import type FigureCollections from './FigureCollections';
 import type { EQN_EquationElements } from '../Equation/Equation';

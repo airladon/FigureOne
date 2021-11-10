@@ -51,6 +51,13 @@ export type OBJ_Outline = {
   fill?: boolean,
   color?: TypeColor,
 }
+
+export type OBJ_Underline = {
+  width?: number,
+  offset?: number,
+  color?: TypeColor,
+}
+
 /* eslint-disable max-len */
 /**
  * Font definition object.
@@ -115,10 +122,8 @@ export type OBJ_Outline = {
  * @property {'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'} [weight]
  * font weight (`'normal'`)
  * @property {number} [size] size of font in draw space (`0.2`)
- * @property {boolean | number | [number, number]} [underline] `true` to include
- * an underline. Use `number` to define the descent of the bottom edge of the
- * underline to the baseline and [`number`, `number`] to define the descent and
- * width of the underline (`false`)
+ * @property {boolean | OBJ_Underline} [underline] `true` to include
+ * an underline or use object to define its properties (`false`)
  * @property {[number, number, number, number]} [color] Font color
  * [red, green, blue, alpha] between 0 and 1 - (`[1, 0, 0, 1]`)
  * @property {OBJ_Outline} [outline] options to draw the text in outline
@@ -161,7 +166,7 @@ export type OBJ_Font = {
   size?: number,
 
   // Modifying properties
-  underline?: boolean | number | [number, number],
+  underline?: boolean | OBJ_Underline,
   color?: TypeColor | null,
   outline?: boolean | OBJ_Outline,
 

@@ -130,13 +130,14 @@ class TextObject extends DrawingObject {
     scalingFactor: number = 20 / this.font.size,
   ) {
     this.font.setFontInContext(ctx, scalingFactor);
-    const fontHeight = ctx.font.match(/[^ ]*px/);
-    let aWidth;
-    if (fontHeight != null) {
-      aWidth = parseFloat(fontHeight[0]) / 2;
-    } else {
-      aWidth = ctx.measureText('a').width;
-    }
+    // const fontHeight = ctx.font.match(/[^ ]*px/);
+    // let aWidth;
+    // if (fontHeight != null) {
+    //   aWidth = parseFloat(fontHeight[0]) / 2;
+    // } else {
+    //   aWidth = ctx.measureText('a').width;
+    // }
+    const aWidth = this.font.size * scalingFactor / 2;
     // Estimations of FONT ascent and descent for a baseline of "alphabetic"
     let ascent = aWidth * this.font.maxAscent;
     let descent = aWidth * this.font.descent;
@@ -180,9 +181,9 @@ class TextObject extends DrawingObject {
     const { width } = ctx.measureText(this.text);
     // width *= this.font.width;
     if (this.font.underline !== false) {
-      this.underline = this.font.getUnderline();
-      const uDescent = this.underline[0] * scalingFactor;
-      const uWidth = this.underline[1] * scalingFactor;
+      // this.underline = [this.font.underline.descent, this.font.underline.width];
+      const uDescent = this.font.underline.descent * scalingFactor;
+      const uWidth = this.font.underline.width * scalingFactor;
       if (uDescent > descent) {
         descent = uDescent;
       }
@@ -191,9 +192,11 @@ class TextObject extends DrawingObject {
           ascent = -uDescent + uWidth;
         }
       }
-    } else {
-      this.underline = [0, 0];
     }
+    //  else {
+    //   this.underline = [0, 0];
+    // }
+    // console.log(this.adjustments)
     this.measure = {
       ascent: ascent / scalingFactor + this.adjustments.ascent,
       descent: descent / scalingFactor + this.adjustments.descent,
@@ -401,15 +404,23 @@ class TextObject extends DrawingObject {
     };
     // console.log(this.text, c)
     if (this.font.underline !== false) {
-      const [uDescent, uWidth] = this.underline;
+      // const [uDescent, uWidth] = this.underline;
+      if (this.font.underline.color) {
+        this.font.setColorInContext(ctx, this.font.underline.color);
+        this.font.setStrokeColorInContext(ctx, this.font.underline.color);
+      } else {
+        this.font.setColorInContext(ctx, c);
+        this.font.setStrokeColorInContext(ctx, c);
+      }
       ctx.fillRect(
         (this.location.x) * scalingFactor,
-        (this.location.y - uDescent + uWidth) * -scalingFactor,
+        (this.location.y - this.font.underline.descent
+          + this.font.underline.width) * -scalingFactor,
         this.bounds.width * scalingFactor,
-        uWidth * scalingFactor,
+        this.font.underline.width * scalingFactor,
       );
     }
-    this.font.draw2D(ctx, c, this.text, this.location.x, this.location.y, scalingFactor);
+    this.font.draw2D(ctx, c[3], this.text, this.location.x, this.location.y, scalingFactor);
     // this.font.setFontInContext(ctx, scalingFactor);
     // this.font.setColorInContext(ctx, c);
     // if (this.font.fill) {

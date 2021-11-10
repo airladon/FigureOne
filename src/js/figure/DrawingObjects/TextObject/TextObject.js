@@ -141,6 +141,17 @@ class FigureFont {
     } else {
       this.outline = joinObjects({}, { width: this.size / 40, fill: false }, options.outline);
     }
+    const underlineDefaults = {
+      width: this.size / 40,
+      descent: this.size / 20 + this.size / 40,
+    };
+    if (options.underline === true) {
+      this.underline = underlineDefaults;
+    } else if (options.underline) {
+      this.underline = joinObjects({}, underlineDefaults, options.underline);
+    } else {
+      this.underline = false;
+    }
 
     this.weight = options.weight;
     this.opacity = options.opacity;
@@ -151,7 +162,6 @@ class FigureFont {
     this.maxDescent = options.maxDescent;
     this.midAscent = options.midAscent;
     this.maxAscent = options.maxAscent;
-    this.underline = options.underline;
     this.map = options.map;
     this.src = options.src;
     this.glyphs = options.glyphs;
@@ -295,29 +305,39 @@ class FigureFont {
     }
   }
 
-  getUnderline() {
-    if (this.underline === false) {
-      return [0, 0];
-    }
-    if (this.underline === true) {
-      return [this.size / 20 + this.size / 40, this.size / 40];
-    }
-    if (typeof this.underline === 'number') {
-      return [this.underline, this.size / 40];
-    }
-    return this.underline;
-  }
+  // getUnderline() {
+  //   if (this.underline === false) {
+  //     return [0, 0];
+  //   }
+  //   return [this.underLine.color
+  //   if (this.underline === true) {
+  //     return [this.size / 20 + this.size / 40, this.size / 40];
+  //   }
+  //   if (typeof this.underline === 'number') {
+  //     return [this.underline, this.size / 40];
+  //   }
+  //   return this.underline;
+  // }
 
   draw2D(
     ctx: CanvasRenderingContext2D,
-    color: TypeColor | null,
+    colorIn: TypeColor | null | number,
     text: string,
     locationX: number,
     locationY: number,
     scalingFactor: number = 1,
   ) {
+    let color;
+    if (typeof colorIn === 'number') {
+      color = this.color;
+      color[3] = colorIn;
+    } else if (colorIn === null) {
+      color = this.color;
+    } else {
+      color = colorIn;
+    }
     this.setFontInContext(ctx, scalingFactor);
-    this.setColorInContext(ctx, color || this.color);
+    this.setColorInContext(ctx, color);
     if (this.outline.fill) {
       ctx.fillText(
         text,
@@ -327,7 +347,7 @@ class FigureFont {
     }
     if (this.outline.width !== 0) {
       if (this.outline.color) {
-        this.setStrokeColorInContext(ctx, this.outline.color || color || this.color);
+        this.setStrokeColorInContext(ctx, this.outline.color || color);
       }
       ctx.lineWidth = this.outline.width * scalingFactor;
       ctx.strokeText(
@@ -367,6 +387,7 @@ class FigureFont {
       timeout: this.timeout,
       maxCount: this.maxCount,
       modifiers: this.modifiers,
+      underline: this.underline,
     };
   }
 
