@@ -169,9 +169,9 @@ const arrows = [
   txt('f5', { text: 'aBQpf', font: { family: 'Helvetica' } }),
   txt('f6', { text: 'aBQpf', font: { size: 0.2, style: 'italic' } }),
   txt('f7', { text: 'aBQpf', font: { underline: true } }),
-  txt('f8', { text: 'aBQpf', font: { underline: -0.05 } }),
-  txt('f9', { text: 'aBQpf', font: { underline: [0.1, 0.05] } }),
-  txt('f10', { text: 'aBQpf', font: { underline: [-0.15, 0.05] } }),
+  txt('f8', { text: 'aBQpf', font: { underline: { descent: -0.05 } } }),
+  txt('f9', { text: 'aBQpf', font: { underline: { descent: 0.1, width: 0.05 } } }),
+  txt('f10', { text: 'aBQpf', font: { underline: { descent: -0.15, width: 0.05 } } }),
   // to test maxAscent, maxDescent, descent, midAscent need to use new fonts as
   // the atlas is only created once, so when created previously without the mods
   // then the mods will not be there
@@ -202,6 +202,21 @@ const arrows = [
   */
   txt('u1'),
   txt('u2'),
+  /*
+  ..#######..##.....##.########.##.......####.##....##.########
+  .##.....##.##.....##....##....##........##..###...##.##......
+  .##.....##.##.....##....##....##........##..####..##.##......
+  .##.....##.##.....##....##....##........##..##.##.##.######..
+  .##.....##.##.....##....##....##........##..##..####.##......
+  .##.....##.##.....##....##....##........##..##...###.##......
+  ..#######...#######.....##....########.####.##....##.########
+  */
+  txt('o1', { font: { outline: true, size: 0.4 } }),
+  txt('o2', { font: { outline: { width: 0.015, fill: false }, size: 0.4 } }),
+  txt('o3', { font: { outline: { color: [0, 1, 0, 1] }, color: [0, 0, 1, 1], fixColor: true, size: 0.4 } }),
+  txt('o4', { font: { outline: {}, color: [0, 0, 1, 1], size: 0.4 } }),
+  txt('o5', { font: { outline: { fill: true, color: [0, 1, 0, 1] }, size: 0.4 } }),
+  txt('o6', { font: { outline: { fill: true, color: [0, 0, 1, 1] }, fixColor: true, size: 0.4 } }),
 ];
 figure.add(arrows);
 figure.getElement('u1').setText('updated');

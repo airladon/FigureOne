@@ -208,7 +208,16 @@ class FigureFont {
       throw new Error('FigureOne Font Error: An image was used as an atlas but does not have an associated ID');
     }
     const family = this.family.split(',')[0].toLowerCase();
-    return `${family}-${this.weight.toLowerCase()}-${this.style.toLowerCase()}-${this.getTestStringID()}-${round(this.size, 4).toString()}`;
+    let outline = '';
+    if (this.outline && this.outline.width > 0) {
+      outline = `-o${hash32(JSON.stringify(this.outline)).toString().slice(1, 5)}`;
+    }
+    let underline = '';
+    if (this.underline && this.underline.color) {
+      underline = `-u${hash32(JSON.stringify(this.underline.color)).toString().slice(1, 5)}`;
+    }
+
+    return `${family}-${this.weight.toLowerCase()}-${this.style.toLowerCase()}-${this.getTestStringID()}-${round(this.size, 4).toString()}${outline}${underline}`;
   }
 
   getGlyphs() {
@@ -346,9 +355,7 @@ class FigureFont {
       );
     }
     if (this.outline.width !== 0) {
-      if (this.outline.color) {
-        this.setStrokeColorInContext(ctx, this.outline.color || color);
-      }
+      this.setStrokeColorInContext(ctx, this.outline.color || color);
       ctx.lineWidth = this.outline.width * scalingFactor;
       ctx.strokeText(
         text,
