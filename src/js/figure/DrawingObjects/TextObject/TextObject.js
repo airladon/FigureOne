@@ -217,7 +217,7 @@ class FigureFont {
       underline = `-u${hash32(JSON.stringify(this.underline.color)).toString().slice(1, 5)}`;
     }
 
-    return `${family}-${this.weight.toLowerCase()}-${this.style.toLowerCase()}-${this.getTestStringID()}-${round(this.size, 4).toString()}${outline}${underline}`;
+    return `${family}-${this.style.toLowerCase()}-${this.weight.toLowerCase()}-${this.getTestStringID()}-${round(this.size, 4).toString()}${outline}${underline}`;
   }
 
   getGlyphs() {

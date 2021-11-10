@@ -144,8 +144,13 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     this.notifications.publish('setFigure');
   }
 
+  recreateAtlas() {
+    this.atlas.recreate();
+  }
+
   loaded() {
     this.setText(this.text);
+    this.animateNextFrame();
   }
 
   measureAndAlignText() {

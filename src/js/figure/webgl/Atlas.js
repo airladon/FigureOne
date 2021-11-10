@@ -147,9 +147,14 @@ export default class Atlas {
     if (this.loaded) {
       return;
     }
+    this.recreate();
+  }
+
+  recreate() {
     this.createAtlas(this.scene);
     this.notifications.publish('updated');
   }
+
 
   createAtlas(scene: Scene) {
     const { font } = this;
