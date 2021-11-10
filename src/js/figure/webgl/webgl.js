@@ -305,6 +305,7 @@ class WebGLInstance {
         texture.state = 'loaded';
       });
     } else {
+      texture.data = data;
       // Otherwise, the data is an image so set it directly
       this.setTextureData(id, data, repeat);
       this.onLoad(id);

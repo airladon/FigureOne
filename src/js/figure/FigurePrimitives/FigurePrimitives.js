@@ -2215,6 +2215,13 @@ export default class FigurePrimitives {
       defaultTextTouchBorder: 0,
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
+    for (let i = 0; i < optionsIn.length; i += 1) {
+      if (optionsIn[i].font != null) {
+        if (optionsIn[i].font.src) {
+          options.font.src = optionsIn[i].font.src;
+        }
+      }
+    }
 
     // Make default color
     if (options.color == null && options.font.color != null) {

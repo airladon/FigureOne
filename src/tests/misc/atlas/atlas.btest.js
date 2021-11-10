@@ -202,10 +202,64 @@ describe('Atlas', () => {
       await snap();
       expect(await page.evaluate(() => Object.keys(figure.webglLow.atlases).length)).toBe(1);
     });
+    test('Preloaded', async () => {
+      await page.evaluate((map) => {
+        const texture = new Image();
+        texture.src = 'http://localhost:8080/src/tests/misc/atlas/atlas.png';
+        texture.addEventListener('load', () => {
+          figure.add({
+            name: 'a',
+            make: 'txt',
+            text: 'hello',
+            font: {
+              src: texture,
+              id: 'uniqueTextureID',
+              map,
+              loadColor: [0, 0, 1, 1],
+              atlasColor: true,
+            },
+            type: 'bmp',
+          });
+        });
+      }, externalAtlasMap);
+      await sleep(1000);
+      // await page.evaluate((map) => {
+      //   figure.add({
+      //     name: 'a',
+      //     make: 'txt',
+      //     text: 'hello',
+      //     font: {
+      //       src: window.texture,
+      //       id: 'uniqueTextureID',
+      //       map,
+      //       loadColor: [0, 0, 1, 1],
+      //       atlasColor: true,
+      //     },
+      //     type: 'bmp',
+      //   });
+      // }, externalAtlasMap);
+      await frame();
+      await snap();
+      expect(await page.evaluate(() => Object.keys(figure.webglLow.atlases)[0])).toBe('uniqueTextureID');
+    });
   });
 });
 
-
+// texture = new Image();
+// texture.src = 'http://localhost:8080/src/tests/misc/atlas/atlas.png';
+// figure.add({
+//   name: 'm',
+//   make: 'txt',
+//   text: 'hello',
+//   font: {
+//     src: texture,
+//     id: 'uniqueTextureID',
+//     map,
+//     loadColor: [0, 0, 1, 1],
+//     atlasColor: true,
+//   },
+//   type: 'bmp',
+// });
 // // const image = await page.screenshot({ fullPage: true });
 // // expect(image).toMatchImageSnapshot();
 

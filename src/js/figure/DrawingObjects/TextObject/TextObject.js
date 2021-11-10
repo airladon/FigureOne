@@ -167,7 +167,7 @@ class FigureFont {
     this.midAscent = options.midAscent;
     this.maxAscent = options.maxAscent;
     this.map = options.map;
-    this.src = options.src;
+    this.src = optionsIn.src;
     this.loadColor = options.loadColor;
     this.atlasColor = options.atlasColor;
     this.glyphs = options.glyphs;
