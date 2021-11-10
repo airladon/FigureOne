@@ -106,12 +106,14 @@ export default class Atlas {
     // console.log(this.font.getTextureID(), '<', this.font.src, '>')
     if (this.font.src != null && this.font.src !== '') {
       this.map = this.font.map;
+      this.fontSize = this.font.map.fontSize;
+      this.dimension = this.font.map.dimension;
       this.webgl.addTexture(
         this.font.getTextureID(),
         this.font.src,
-        options.loadColor,
+        this.font.loadColor,
         false,
-        this.fontLoaded.bind(this),
+        this.srcLoaded.bind(this),
       );
       return;
     }
@@ -132,6 +134,7 @@ export default class Atlas {
       timeout: o.timeout,
       maxCount: o.maxCount,
       callback: this.fontLoaded.bind(this),
+      atlas: true,
     });
     this.fontID = fontID;
     // this.textureId = this.font.getTextureId();
@@ -142,9 +145,17 @@ export default class Atlas {
     }
   }
 
+  srcLoaded() {
+    this.loaded = true;
+    this.notifications.publish('updated');
+  }
+
   fontLoaded() {
     // console.log('loaded', this.loaded)
     if (this.loaded) {
+      return;
+    }
+    if (this.scene == null) {
       return;
     }
     this.recreate();
@@ -164,7 +175,7 @@ export default class Atlas {
 
     const glyphs = this.font.getGlyphs();
     this.map = {};
-    const dimension = Math.ceil(Math.sqrt(glyphs.length) + 2) * fontSizePX * 1.5;
+    const dimension = Math.floor(Math.ceil(Math.sqrt(glyphs.length) + 2) * fontSizePX * 1.5);
 
     const canvas = document.createElement('canvas');
     canvas.width = dimension;
@@ -229,8 +240,13 @@ export default class Atlas {
     ctx.beginPath();
     ctx.stroke();
 
-    // Uncommnet this to debug atlas
+    // // Uncommnet this to debug atlas
     // document.body.appendChild(canvas);
+
+    // // Uncomment this to save atlas as image file
+    // canvas.id = 'qwerty';
+    // const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    // window.location.href=image;
     this.webgl.addTexture(this.font.getTextureID(), ctx.canvas, [0, 0, 0, 0], false, null, true);
   }
 }

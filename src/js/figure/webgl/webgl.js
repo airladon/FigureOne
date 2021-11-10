@@ -256,6 +256,10 @@ class WebGLInstance {
     */
     if (!force && this.textures[id] != null) {
       if (this.textures[id].state === 'loaded') {
+        if (onLoad != null) {
+          this.textures[id].onLoad.push(onLoad);
+        }
+        this.onLoad(id);
         return this.textures[id].index;
       }
       // Otherwise loading
@@ -291,6 +295,7 @@ class WebGLInstance {
       const image = new Image();
       texture.state = 'loading';
 
+      image.src = data;
       // When the image is loaded, set the texture to it
       image.addEventListener('load', () => {
         // $FlowFixMe
@@ -299,7 +304,6 @@ class WebGLInstance {
         this.onLoad(id);
         texture.state = 'loaded';
       });
-      image.src = data;
     } else {
       // Otherwise, the data is an image so set it directly
       this.setTextureData(id, data, repeat);
@@ -356,7 +360,6 @@ class WebGLInstance {
       gl.activeTexture(gl.TEXTURE0 + index);
       gl.bindTexture(gl.TEXTURE_2D, null);
       gl.deleteTexture(texture.glTexture);
-      this.cancel(id);
     }
     // Create a texture
     const glTexture = gl.createTexture();
@@ -371,7 +374,7 @@ class WebGLInstance {
         gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0,
         gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(colorToInt(image)),
       );
-      return;
+      return false;
     }
 
     // Load the image
@@ -396,6 +399,7 @@ class WebGLInstance {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     }
+    return true;
   }
 
   // addTexture(

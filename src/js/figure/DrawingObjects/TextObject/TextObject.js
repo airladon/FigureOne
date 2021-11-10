@@ -101,6 +101,8 @@ class FigureFont {
       this.timeout = optionsIn.timeout;
       this.maxCount = optionsIn.maxCount;
       this.modifiers = optionsIn.modifiers;
+      this.loadColor = optionsIn.loadColor;
+      this.atlasColor = optionsIn.atlasColor;
       return;
     }
     const defaultOptions = {
@@ -124,6 +126,8 @@ class FigureFont {
       maxCount: 1,
       modifiers: {},
       fill: true,
+      loadColor: [0, 0, 0, 0],
+      atlasColor: false,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     this.family = options.family;
@@ -164,6 +168,8 @@ class FigureFont {
     this.maxAscent = options.maxAscent;
     this.map = options.map;
     this.src = options.src;
+    this.loadColor = options.loadColor;
+    this.atlasColor = options.atlasColor;
     this.glyphs = options.glyphs;
     this.id = options.id;
     this.timeout = options.timeout;
@@ -183,7 +189,7 @@ class FigureFont {
     return this.family.toLowerCase().split(',')[0];
   }
 
-  getFontID() {
+  getFontID(isAtlas: boolean = false) {
     if (this.id && this.id !== '') {
       return this.id;
     }
@@ -194,7 +200,7 @@ class FigureFont {
       throw new Error('FigureOne Font Error: An image was used as an atlas but does not have an associated ID');
     }
     const family = this.family.split(',')[0].toLowerCase();
-    return `${family}-${this.style.toLowerCase()}-${this.weight.toLowerCase()}-${this.getTestStringID()}`;
+    return `${family}-${this.style.toLowerCase()}-${this.weight.toLowerCase()}-${this.getTestStringID()}${isAtlas ? '-atlas' : ''}`;
   }
 
   getTextureID() {
@@ -389,12 +395,14 @@ class FigureFont {
       maxAscent: this.maxAscent,
       src: this.src,
       map: this.map,
+      loadColor: this.loadColor,
       glyphs: this.glyphs,
       testString: this.testString,
       timeout: this.timeout,
       maxCount: this.maxCount,
       modifiers: this.modifiers,
       underline: this.underline,
+      atlasColor: this.atlasColor,
     };
   }
 

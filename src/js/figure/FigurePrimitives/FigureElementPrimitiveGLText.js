@@ -172,6 +172,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       const {
         width, ascent, descent, offsetX, offsetY,
       } = this.atlas.map[this.text[i]];
+
       const s = 0.5;
       const minX = x - width * r * s;
       const maxX = x + width * r + width * r * s;
@@ -234,6 +235,8 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     for (let i = 1; i < vertices.length; i += 2) {
       vertices[i] += oy;
     }
+    // console.log(vertices)
+    // console.log(texCoords)
     this.drawingObject.updateVertices(vertices);
     this.drawingObject.updateTextureMap(texCoords.map(v => v / this.atlas.dimension));
     this.location = new Point(ox, oy);

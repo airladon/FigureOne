@@ -213,10 +213,10 @@ const arrows = [
   */
   txt('o1', { font: { outline: true, size: 0.4 } }),
   txt('o2', { font: { outline: { width: 0.015, fill: false }, size: 0.4 } }),
-  txt('o3', { font: { outline: { color: [0, 1, 0, 1] }, color: [0, 0, 1, 1], fixColor: true, size: 0.4 } }),
+  txt('o3', { font: { outline: { color: [0, 1, 0, 1] }, color: [0, 0, 1, 1], atlasColor: true, size: 0.4 } }),
   txt('o4', { font: { outline: {}, color: [0, 0, 1, 1], size: 0.4 } }),
   txt('o5', { font: { outline: { fill: true, color: [0, 1, 0, 1] }, size: 0.4 } }),
-  txt('o6', { font: { outline: { fill: true, color: [0, 0, 1, 1] }, fixColor: true, size: 0.4 } }),
+  txt('o6', { font: { outline: { fill: true, color: [0, 0, 1, 1] }, atlasColor: true, size: 0.4 } }),
 ];
 figure.add(arrows);
 figure.getElement('u1').setText('updated');

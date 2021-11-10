@@ -193,7 +193,7 @@ export default class FontManager {
   /**
    * Return arrays of weights that produce the same output.
    */
-  getWeights(fontDefinition: OBJ_Font) {
+  getWeights(fontDefinition: OBJ_Font, maxNum: number | null = null) {
     if (!this.isAvailable(fontDefinition)) {
       return [];
     }
@@ -215,6 +215,26 @@ export default class FontManager {
       }
     }
     return buckets;
+  }
+
+  isMinNumWeights(fontID: OBJ_Font, num: number) {
+    const weights = ['100', '200', '300', '400', '500', '600', '700', '800', '900', 'normal', 'bold', 'bolder', 'lighter'];
+    const f = this.fonts[fontID];
+    const glyphs = f.glyphSymbols;
+    const fam = f.font.getFamily();
+    const { style } = f.font;
+    const widths = [];
+    for (let i = 0; i < weights.length; i += 1) {
+      const w = this.measureText(fam, style, weights[i], glyphs);
+      const index = widths.indexOf(w);
+      if (index === -1) {
+        widths.push(w);
+      }
+      if (widths.length === num) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -294,14 +314,18 @@ export default class FontManager {
    */
   /**
    * Watch for when a font becomes available.
+   *
+   * Use the `weights` property to 
    */
   watch(font: OBJ_Font | FigureFont, options: OBJ_LoadFontOptions) {
     const o = joinObjects({}, {
       timeout: 5,
       callback: null,
+      weights: 1,
+      atlas: false,
     }, options);
     const f = new FigureFont(font);
-    const fontID = f.getFontID();
+    const fontID = f.getFontID(o.atlas);
 
     // If the font family-weight-style has already been created, then
     // return the result of whether it is loaded or not
@@ -330,10 +354,13 @@ export default class FontManager {
       loaded: false,
       callbacks: [],
       timedOut: false,
+      weights: o.weights,
+      atlas: o.atlas,
     };
     this.loading += 1;
 
-    const result = this.isAvailableID(fontID, false);
+    // const result = this.isAvailableID(fontID, false);
+    const result = this._isFontAvailable(fontID);
     this.fonts[fontID].callbacks.push(o.callback);
 
     // If the font is available, then execute all callbacks registered to the
@@ -423,10 +450,14 @@ export default class FontManager {
       return false;
     }
 
-    const result = this.isAvailableID(fontID);
+    let result = this.isAvailableID(fontID);
     if (result === false && performance.now() > f.timeout) {
       this.fontTimedOut(fontID);
       return false;
+    }
+
+    if (result && f.weights > 1) {
+      result = this.isMinNumWeights(fontID, f.weights);
     }
 
     if (result) {

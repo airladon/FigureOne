@@ -64,6 +64,15 @@ async function watch(font, timeout = 5) {
   );
 }
 
+async function watchWeights(font, weights) {
+  return page.evaluate(
+    ([f, w]) => {
+      figure.fonts.watch(f, { callback: () => { figure.loaded += 1; }, timeout: 5, weights: w });
+    },
+    [font, weights],
+  );
+}
+
 async function getLoaded() {
   return page.evaluate(
     () => figure.loaded,
@@ -87,7 +96,7 @@ async function loadFontSync(family, style, weight, glyphs) {
   return page.evaluate(
     ([f, s, w, g]) => {
       const fd = f.split(' ').join('-');
-      const ff = new FontFace(f, `url(http://localhost:8080//src/tests/misc/FontManager/fonts/${fd}/${fd}-${s}-${w}-${g}.woff2)`, { style: s, weight: w });
+      const ff = new FontFace(f, `url(http://localhost:8080//src/tests/misc/fonts/${fd}/${fd}-${s}-${w}-${g}.woff2)`, { style: s, weight: w });
       return new Promise(resolve => ff.load().then((loaded) => {
         document.fonts.add(loaded);
         resolve();
@@ -102,7 +111,7 @@ async function loadFontAsync(family, style, weight, glyphs) {
   return page.evaluate(
     ([f, s, w, g]) => {
       const fd = f.split(' ').join('-');
-      const ff = new FontFace(f, `url(http://localhost:8080//src/tests/misc/FontManager/fonts/${fd}/${fd}-${s}-${w}-${g}.woff2)`, { style: s, weight: w });
+      const ff = new FontFace(f, `url(http://localhost:8080//src/tests/misc/fonts/${fd}/${fd}-${s}-${w}-${g}.woff2)`, { style: s, weight: w });
       ff.load().then((loaded) => {
         document.fonts.add(loaded);
         document.body.style.fontFamily = `${f}, auto`;
@@ -121,7 +130,7 @@ async function loadFontStyle(family, style, weight, glyphs) {
         font-family: '${f}';
         font-style: ${s};
         font-weight: ${w};
-        src: url('http://localhost:8080//src/tests/misc/FontManager/fonts/${f}/${f}-${s}-${w}-${g}.woff2') format('woff2');
+        src: url('http://localhost:8080//src/tests/misc/fonts/${f}/${f}-${s}-${w}-${g}.woff2') format('woff2');
       }`));
       // document.head.insertBefore(fontStyle, document.head.children[0]);
       document.head.appendChild(fontStyle);
@@ -129,6 +138,21 @@ async function loadFontStyle(family, style, weight, glyphs) {
     [family.split(' ').join('-'), style, weight, glyphs],
   );
 }
+
+// async function snap(id, threshold = 0) {
+//   const image = await page.screenshot({ timeout: 300000 });
+//   return expect(image).toMatchImageSnapshot({
+//     // customSnapshotIdentifier: `${id}`,
+//     failureThreshold: threshold,
+//   });
+// }
+
+// async function frame() {
+//   await page.evaluate(() => new Promise((resolve) => {
+//     figure.notifications.add('afterDraw', () => resolve(), 1);
+//     figure.animateNextFrame();
+//   }), []);
+// }
 
 // eslint-disable-next-line no-unused-vars
 function sleep(ms) {
@@ -516,6 +540,51 @@ describe('Font Manager', () => {
       expect(await areWeightsAvailable({ family: 'montserrat', glyphs: 'latin' }, ['300', '400']))
         .toBe(true);
     });
+    test('Two weights defined', async () => {
+      expect(await isAvailable({
+        family: 'montserrat', style: 'normal', weight: '300', glyphs: 'latin',
+      })).toBe(false);
+      expect(await isAvailable({
+        family: 'montserrat', style: 'normal', weight: '400', glyphs: 'latin',
+      })).toBe(false);
+      expect(await getWeights({ family: 'montserrat', glyphs: 'latin' })).toEqual([]);
+      await setLoaded();
+      expect(await getLoaded()).toBe(0);
+      await watchWeights({ family: 'montserrat', glyphs: 'latin' }, 2);
+      let fonts = await getFontManager();
+      expect(fonts.loaded).toBe(0);
+      expect(fonts.loading).toBe(1);
+      expect(fonts.timedOut).toBe(0);
+      expect(fonts.fonts['montserrat-normal-normal-latin'].loaded).toBe(false);
+      expect(fonts.fonts['montserrat-normal-normal-latin'].timedOut).toBe(false);
+      expect(await getWeights({ family: 'montserrat', glyphs: 'latin' })).toEqual([]);
+
+      await loadFontSync('montserrat', 'normal', '400', 'latin');
+      await sleep(100);
+      fonts = await getFontManager();
+      expect(fonts.loaded).toBe(0);
+      expect(fonts.loading).toBe(1);
+      expect(fonts.timedOut).toBe(0);
+
+      expect(await getWeights({ family: 'montserrat', glyphs: 'latin' })).toEqual([
+        ['100', '200', '300', '400', '500', '600', '700', '800', '900', 'normal', 'bold', 'bolder', 'lighter'],
+      ]);
+      expect(await areWeightsAvailable({ family: 'montserrat', glyphs: 'latin' }, ['300', '400']))
+        .toBe(false);
+
+
+      await loadFontSync('montserrat', 'normal', '300', 'latin');
+      await sleep(100);
+      fonts = await getFontManager();
+      expect(fonts.loaded).toBe(1);
+      expect(fonts.loading).toBe(1);
+      expect(fonts.timedOut).toBe(0);
+      expect(await getWeights({ family: 'montserrat', glyphs: 'latin' })).toEqual([
+        ['100', '200', '300', 'lighter'], ['400', '500', '600', '700', '800', '900', 'normal', 'bold', 'bolder'],
+      ]);
+      expect(await areWeightsAvailable({ family: 'montserrat', glyphs: 'latin' }, ['300', '400']))
+        .toBe(true);
+    });
     test('Timeout', async () => {
       await setLoaded();
       expect(await getLoaded()).toBe(0);
@@ -559,6 +628,24 @@ describe('Font Manager', () => {
       })).toBe(false);
     });
   });
+  // describe('2D text load', () => {
+  //   test('without watch', async () => {
+  //     await page.evaluate(() => {
+  //       figure.add({
+  //         name: 'a',
+  //         make: 'txt',
+  //         text: 'hello',
+  //         font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
+  //         type: 'bmp',
+  //       });
+  //     });
+  //     await frame();
+  //     await snap();
+  //     await loadFontSync('montserrat', 'normal', '400', 'latin');
+  //     await frame();
+  //     await snap();
+  //   });
+  // });
 });
 
 

@@ -1465,7 +1465,7 @@ export default class FigurePrimitives {
     const o = this.parseTextOptions(defaultOptions, ...options);
     let element;
     if (o.type === 'bmp') {
-      if (o.font.fixColor) {
+      if (o.font.atlasColor) {
         o.fragmentShader = { color: 'texture' };
       }
       element = this.glText(o);
