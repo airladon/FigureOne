@@ -223,7 +223,12 @@ class FigureFont {
       underline = `-u${hash32(JSON.stringify(this.underline.color)).toString().slice(1, 5)}`;
     }
 
-    return `${family}-${this.style.toLowerCase()}-${this.weight.toLowerCase()}-${this.getTestStringID()}-${round(this.size, 4).toString()}${outline}${underline}`;
+    let modifiers = '';
+    if (Object.keys(this.modifiers).length > 0) {
+      modifiers = `-u${hash32(JSON.stringify(this.modifiers)).toString().slice(1, 5)}`;
+    }
+
+    return `${family}-${this.style.toLowerCase()}-${this.weight.toLowerCase()}-${this.getTestStringID()}-${round(this.size, 4).toString()}${outline}${underline}${modifiers}`;
   }
 
   getGlyphs() {

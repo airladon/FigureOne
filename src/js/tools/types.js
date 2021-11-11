@@ -46,22 +46,57 @@ export type OBJ_CurvedCorner = {
   sides?: number,
 };
 
+/**
+ * Outline options.
+ *
+ * By default the glyphs will not be filled, with the outline the same color
+ * as the font.
+ *
+ * Glyphs can be filled with the `fill` property, but both fill and outline
+ * will be the same color unless the `color` property is used to override the
+ * outline's color.
+ *
+ * @property {number} [width] line width
+ * @property {boolean} [fill] include fill (`false`)
+ * @property {TypeColor} [color] outline color that overrides the font color -
+ * use if including a fill
+ */
 export type OBJ_Outline = {
   width?: number,
   fill?: boolean,
   color?: TypeColor,
 };
 
+/**
+ * Underline options.
+ *
+ * An underline is defined as a horizontal line with some `width` with a bottom
+ * edge `descent` below the text baseline.
+ *
+ * If `descent` is negative, the line can be moved into a strike through
+ * position, or placed above the text.
+ *
+ * @property {number} [width]
+ * @property {number} [descent]
+ * @property {TypeColor} [color]
+ */
 export type OBJ_Underline = {
   width?: number,
-  offset?: number,
+  descent?: number,
   color?: TypeColor,
 };
 
+/**
+ * Texture atlas font individual glyph ascent, descent and width modifiers.
+ *
+ * @property {w} [number] width
+ * @property {d} [number] descent
+ * @property {a} [number] ascent
+ */
 export type OBJ_GlyphModifiers = {
-  width?: number,
-  descent?: number,
-  ascent?: number,
+  w?: number,
+  d?: number,
+  a?: number,
 };
 
 /* eslint-disable max-len */
@@ -139,7 +174,8 @@ export type OBJ_GlyphModifiers = {
  * @property {number} [midDescent] (`0.5`)
  * @property {number} [maxAscent] (`0.95`)
  * @property {number} [midAscent] (`1.4`)
- * @property {OBJ_GlyphModifiers} [modifiers] individual glyph adjustments
+ * @property {OBJ_GlyphModifiers} [modifiers] individual glyph adjustments for
+ * texture atlas fonts
  * @property {Image | string} [src] source image or url for atlas
  * @property {OBJ_AtlasMap} [map] atlas definition needed if using a source
  * image or url

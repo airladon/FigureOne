@@ -218,6 +218,17 @@ const arrows = [
   txt('o4', { font: { outline: {}, color: [0, 0, 1, 1], size: 0.4 } }),
   txt('o5', { font: { outline: { fill: true, color: [0, 1, 0, 1] }, size: 0.4 } }),
   txt('o6', { font: { outline: { fill: true, color: [0, 0, 1, 1] }, atlasColor: true, size: 0.4 } }),
+
+  /*
+  .##.....##..#######..########...######.
+  .###...###.##.....##.##.....##.##....##
+  .####.####.##.....##.##.....##.##......
+  .##.###.##.##.....##.##.....##..######.
+  .##.....##.##.....##.##.....##.......##
+  .##.....##.##.....##.##.....##.##....##
+  .##.....##..#######..########...######.
+  */
+  txt('m1', { text: 'a', font: { family: 'times', modifiers: { a: { a: 2, d: 1 } } } }),
 ];
 figure.add(arrows);
 figure.getElement('u1').setText('updated');

@@ -17,6 +17,11 @@ function familyStyleMeasures(family: string, style: string, a, ma, d, md, d0) {
         f: { a, d, w: 1.3 },
       },
     },
+    'open sans': {
+      italic: {
+        f: { a: 1.6, d, w: 1.3 },
+      },
+    },
   };
   if (measures[f] != null) {
     if (measures[f][style] != null) {
@@ -72,7 +77,15 @@ function glyphMeasures(
     ']': { a, d, w },
     '|': { a, d, w },
   };
-  return joinObjects({}, defaults, familyStyleMeasures(family, style, a, ma, d, md, d0), modifiers);
+  const mods = {};
+  Object.keys(modifiers).forEach((key) => {
+    mods[key] = joinObjects({}, { a, d: d0, w }, defaults[key], modifiers[key]);
+  });
+  const m = joinObjects(
+    {}, defaults, familyStyleMeasures(family, style, a, ma, d, md, d0), mods,
+  );
+
+  return m;
 }
 
 export default glyphMeasures;
