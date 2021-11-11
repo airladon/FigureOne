@@ -57,9 +57,6 @@ export type OBJ_AtlasMap = {
 
 export type OBJ_Atlas = {
   font?: FigureFont,
-  // alphabet?: string,
-  // src?: Image | string,
-  // id?: string,
   loadColor?: TypeColor,
   scene?: Scene,
   maxCount?: number,
@@ -73,10 +70,7 @@ export default class Atlas {
   fontSize: number;             // calculated pixel size
   src: Image | string;          // external image of atlas
   fontID: string;               // FontManager font id
-  // textureId: string;            // webgl texture atlas id
   dimension: number;            // side length of atlas in pixels
-  // alphabet: string;             // alphabet name
-  // alphabetSymbols: string;      // alphabet symbols
   loaded: boolean;              // true once FontManager says font is loaded
   scene: Scene;
   canvas: HTMLCanvasElement;

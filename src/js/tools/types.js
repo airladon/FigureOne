@@ -50,13 +50,19 @@ export type OBJ_Outline = {
   width?: number,
   fill?: boolean,
   color?: TypeColor,
-}
+};
 
 export type OBJ_Underline = {
   width?: number,
   offset?: number,
   color?: TypeColor,
-}
+};
+
+export type OBJ_GlyphModifiers = {
+  width?: number,
+  descent?: number,
+  ascent?: number,
+};
 
 /* eslint-disable max-len */
 /**
@@ -114,7 +120,7 @@ export type OBJ_Underline = {
  *   * `maxDescent`: maximum descent of glyphs like "g" and "|"
  *
  * Individual glyphs can also be modified (for atlas based fonts only) using
- * the `modifiers` properties.
+ * the `modifiers` property.
  *
  *
  * @property {string} [family] The font family (`'Times New Roman'`)
@@ -133,6 +139,7 @@ export type OBJ_Underline = {
  * @property {number} [midDescent] (`0.5`)
  * @property {number} [maxAscent] (`0.95`)
  * @property {number} [midAscent] (`1.4`)
+ * @property {OBJ_GlyphModifiers} [modifiers] individual glyph adjustments
  * @property {Image | string} [src] source image or url for atlas
  * @property {OBJ_AtlasMap} [map] atlas definition needed if using a source
  * image or url
@@ -171,12 +178,12 @@ export type OBJ_Font = {
   outline?: boolean | OBJ_Outline,
 
   // Font measurements
-  width?: number,
   descent?: number,
   maxDescent?: number,
   midDescent?: number,
   maxAscent?: number,
   midAscent?: number,
+  modifiers?: OBJ_GlyphModifiers,
 
   // Atlas definition
   src?: Image | string,
@@ -184,6 +191,9 @@ export type OBJ_Font = {
   glyphs?: string | 'greek' | 'math' | 'latin' | 'all' | 'common' | 'mathExt',
   loadColor?: TypeColor,
   atlasColor?: boolean,
+
+  timeout?: number,
+  modifiers?: OBJ_GlyphModifiers,
 };
 
 export type OBJ_Font_Fixed = {
