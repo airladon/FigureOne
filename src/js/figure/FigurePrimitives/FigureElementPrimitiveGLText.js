@@ -14,13 +14,68 @@ import type GLObject from '../DrawingObjects/GLObject/GLObject';
 import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
 import type { OBJ_Font, TypeColor } from '../../tools/types';
 
+/**
+ * Define the width, descent or ascent of a text element. This can be used if
+ * the estimated width, descent or ascent is not what is desired.
+ * @property {number} [width]
+ * @property {number} [descent]
+ * @property {number} [ascent]
+ */
 export type OBJ_TextAdjustments = {
-  width: number,
-  descent: number,
-  ascent: number,
+  width?: number,
+  descent?: number,
+  ascent?: number,
 };
 
-export type OBJ_GLText = {
+/* eslint-disable max-len */
+/**
+ * Text options object that extends {@link OBJ_FigurePrimitive}.
+ *
+ * Text can be rendered into a [2D canvas](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
+ * or into the WebGL canvas using the texture atlas.
+ *
+ * A texture atlas can either be supplied as an image, or generated
+ * automatically by FigureOne based on css font definitions.
+ *
+ * Choosing how to render text depends on the application.
+ *
+ * If text size is to be animated through a large scale range, then rendering
+ * on the 2D canvas is advantageous as it can scale text to any size without a
+ * loss of sharpness. The main disadvantage of the 2D canvas is the fact that
+ * it's a different HTML canvas element to the WebGL canvas. Thus all text on
+ * the 2D canvas will always be above (default) or below the WebGl canvas
+ * independent of when it is drawn. This means text will always be above or
+ * below shapes.
+ *
+ * Conversely, drawing text on the WebGL canvas provides control on which
+ * shapes can hide text and vise versa. The disadvantage is that text is drawn
+ * from a texture atlas of bitmapped fonts. This means as text is progressively
+ * scaled up or down, the the text will look more pixelated or blurry. For many
+ * scalings (like common scalings in an equation), this will likely not be a
+ * problem. But for large changes in animated scale, it will be better to use
+ * the 2D canvas.
+ *
+ * By default, text is drawn on the WebGL canvas, and text atlases are
+ * automatically generated from the font selected. Use the `type` property to
+ * choose where to render the text.
+ *
+ * Rendering text on the 2D canvas is advantages if the text needs to be scaled a lot in animation.
+ *
+ * Note, the choice of where to render text can be made for each text element.
+ * Therefore it is possible to have some text rendered to the 2D canvas, and
+ * other text rendered to the WebGL canvas in the same figure.
+ *
+ * @property {string} [text]
+ * @property {OBJ_Font} [font]
+ * @property {'left' | 'center' | 'right'} [xAlign]
+ * @property {'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline'} [yAlign]
+ * @property {OBJ_TextAdjustments} [adjustments]
+ * @property {TypeParsableBuffer | TypeParsableBorder | 'buffer' | 'draw' | 'rect'} [border]
+ * @property {TypeParsableBuffer | TypeParsableBorder | 'rect' | 'border' | 'buffer' | 'draw'} [touchBorder]
+ * @property {'bmp' | '2d'} [type]
+ */
+/* eslint-enable max-len */
+export type OBJ_Text = {
   text?: string,
   font?: OBJ_Font,
   xAlign?: 'left' | 'center' | 'right';
@@ -31,7 +86,7 @@ export type OBJ_GLText = {
   type: 'bmp' | '2d'
 } & OBJ_FigurePrimitive;
 
-export type OBJ_GLText_Fixed = {
+export type OBJ_Text_Fixed = {
   text: string,
   font: OBJ_Font,
   xAlign: 'left' | 'center' | 'right';
@@ -39,6 +94,19 @@ export type OBJ_GLText_Fixed = {
   adjustments: OBJ_TextAdjustments;
 };
 
+/**
+ * Options object for setting new text in a {@link FigureElementPrimitiveGLText}.
+ *
+ * @property {string} [text] new text to use
+ * @property {OBJ_Font} [font] define if font needs to be changed
+ * @property {'left' | 'center' | 'right'} [xAlign] xAlignment of text
+ * @property {'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline'} [yAlign]
+ * y alignment of text
+ * @property {OBJ_TextAdjustments} [adjustments] adjustments to the calculated
+ * borders of the text
+ * @property {TypeColor} [color] text color (will be overriden by a font color
+ * if it is specified)
+ */
 export type OBJ_SetText = {
   text?: string,
   font?: OBJ_Font,
@@ -48,6 +116,14 @@ export type OBJ_SetText = {
   color?: TypeColor;
 }
 
+
+/**
+ * FigureElementPrimitive that handles drawing text in WebGL.
+ *
+ * WebGL text is rendered using a texture atlas of fonts - an image
+ * with all the glyphs, and a map of the locations, ascent, descent and width
+ * of each glyph.
+ */
 // $FlowFixMe
 export default class FigureElementPrimitiveGLText extends FigureElementPrimitive {
   text: string;
@@ -67,19 +143,17 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
   };
 
   location: Point;
-  bounds: Rect;
 
   fontSize: number;
   xAlign: 'left' | 'center' | 'right';
   yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
-  dimension: number;
 
   // $FlowFixMe
   drawingObject: GLObject;
   textBorder: Array<Point>;
   textBorderBuffer: Array<Point>;
 
-  setup(options: OBJ_GLText_Fixed) {
+  setup(options: OBJ_Text_Fixed) {
     this.font = new FigureFont(options.font);
     this.atlas = {};
     if (typeof options.text[0] === 'string') {
@@ -103,6 +177,12 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     };
   }
 
+  /**
+   * Debug method - will replace the drawn text with the texture atlas so it
+   * can be reviewed.
+   *
+   * @param {number} dimension size of the texture atlas to draw (`1`)
+   */
   showMap(dimension: number = 1) {
     const d = dimension;
     this.drawingObject.updateVertices([0, 0, d, 0, d, d, 0, 0, d, d, 0, d]);
@@ -144,6 +224,13 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     this.notifications.publish('setFigure');
   }
 
+  /**
+   * Recreate texture atlas.
+   *
+   * This is useful if a font has changed after an atlas has been
+   * auto-generated. Recreating the atlas will use the new version of the
+   * font.
+   */
   recreateAtlas() {
     this.atlas.recreate();
   }
@@ -283,7 +370,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
   /**
    * Get the text shown by the primitive.
    *
-   * @return string
+   * @return {string}
    */
   getText() {
     return this.text;
@@ -337,13 +424,16 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     }
   }
 
-  // _getStateProperties(options: { ignoreShown?: boolean }) {
-  //   // eslint-disable-line class-methods-use-this
-  //   return [...super._getStateProperties(options),
-  //     'xAlign',
-  //     'pan',
-  //     'onlyWhenTouched',
-  //     'originalPosition',
-  //   ];
-  // }
+  _getStateProperties(options: { ignoreShown?: boolean }) {
+    // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(options),
+      'text',
+      'font',
+      'adjustments',
+      'location',
+      'fontSize',
+      'xAlign',
+      'yAlign',
+    ];
+  }
 }

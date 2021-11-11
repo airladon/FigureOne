@@ -62,7 +62,6 @@ class TextObject extends DrawingObject {
     width: number,
   }
 
-  underline: [number, number];
 
   constructor(
     drawContext2D: DrawContext2D,
@@ -80,7 +79,6 @@ class TextObject extends DrawingObject {
     this.xAlign = options.xAlign;
     this.yAlign = options.yAlign;
     this.adjustments = options.adjustments;
-    this.underline = [0, 0];
     this.setText(this.text);
   }
 
@@ -421,28 +419,6 @@ class TextObject extends DrawingObject {
       );
     }
     this.font.draw2D(ctx, c[3], this.text, this.location.x, this.location.y, scalingFactor);
-    // this.font.setFontInContext(ctx, scalingFactor);
-    // this.font.setColorInContext(ctx, c);
-    // if (this.font.fill) {
-    //   ctx.fillText(
-    //     this.text,
-    //     (this.location.x) * scalingFactor,
-    //     (this.location.y) * -scalingFactor,
-    //   );
-    // }
-    // if (this.font.outline) {
-    //   if (Array.isArray(this.font.outline)) {
-    //     this.font.setColorInContext(ctx, this.font.outline);
-    //   }
-    //   ctx.lineWidth = 0.1;
-    //   ctx.strokeText(
-    //     this.text,
-    //     (this.location.x) * scalingFactor,
-    //     (this.location.y) * -scalingFactor,
-    //   );
-    // }
-    // ctx.fillStyle = 'blue';
-    // ctx.fill();
     ctx.restore();
   }
 
@@ -467,6 +443,13 @@ class TextObject extends DrawingObject {
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [
       ...super._getStateProperties(),
+      'scalingFactor',
+      'text',
+      'location',
+      'font',
+      'xAlign',
+      'yAlign',
+      'adjustments',
     ];
   }
 
@@ -479,6 +462,9 @@ class TextObject extends DrawingObject {
   // }
 }
 
+/**
+ * FigureElementPrimitive that handles drawing text on a 2D canvas.
+ */
 // $FlowFixMe
 export default class FigureElementPrimitive2DText extends FigureElementPrimitive {
   // $FlowFixMe
@@ -543,7 +529,7 @@ export default class FigureElementPrimitive2DText extends FigureElementPrimitive
   /**
    * Get the text shown by the primitive.
    *
-   * @return string
+   * @return {string}
    */
   getText() {
     return this.drawingObject.text;
@@ -565,13 +551,11 @@ export default class FigureElementPrimitive2DText extends FigureElementPrimitive
     this.drawingObject.alignText();
     this.drawingObject.calcBorder();
   }
-  // _getStateProperties(options: { ignoreShown?: boolean }) {
-  //   // eslint-disable-line class-methods-use-this
-  //   return [...super._getStateProperties(options),
-  //     'xAlign',
-  //     'pan',
-  //     'onlyWhenTouched',
-  //     'originalPosition',
-  //   ];
-  // }
+
+  _getStateProperties(options: { ignoreShown?: boolean }) {
+    // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(options),
+      'drawingObject',
+    ];
+  }
 }

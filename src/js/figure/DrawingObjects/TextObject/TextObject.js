@@ -505,6 +505,34 @@ class FigureFont {
   _dup() {
     return new FigureFont(this.definition());
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  _getStateProperties() {
+    return [
+      'family',
+      'weight',
+      'style',
+      'src',
+      'id',
+      'map',
+      'glyphs',
+      'loadColor',
+      'size',
+      'underline',
+      'color',
+      'outline',
+      'opacity',
+      'descent',
+      'midDescent',
+      'maxDescent',
+      'midAscent',
+      'maxAscent',
+      'modifiers',
+      'testString',
+      'timeout',
+      'maxCount',
+    ];
+  }
 }
 
 // FigureText is a single text element of the figure that is drawn at

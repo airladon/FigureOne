@@ -1,10 +1,7 @@
 // @flow
 import { joinObjects } from '../../../tools/tools';
-/*
 
-*/
-
-function familyStyleMeasures(family: string, style: string, a, ma, d, md, d0) {
+function familyStyleMeasures(family: string, style: string, a, ma, d) {
   const f = family.toLowerCase().split(',')[0];
   const measures = {
     times: {
