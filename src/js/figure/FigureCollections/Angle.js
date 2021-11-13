@@ -1668,6 +1668,12 @@ class CollectionsAngle extends FigureElementCollection {
     this.updateLabel();
   }
 
+  // setFigure(figure: OBJ_FigureForElement) {
+  //   super.setFigure(figure, false);
+  //   this.updateLabel();
+  //   this.notifications.publish('setFigure');
+  // }
+
   /**
    * Manually update the label orientations with a custom rotation offset.
    *
@@ -1997,6 +2003,9 @@ class CollectionsAngle extends FigureElementCollection {
         });
       } else {
         rotPad.move.element = this;
+        this.notifications.add('setTransform', () => {
+          this.updateLabel();
+        });
       }
     }
   }
