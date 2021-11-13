@@ -1093,7 +1093,7 @@ class FigureElement {
   //   return fn(...args);
   // }
 
-  setFigure(figure: OBJ_FigureForElement) {
+  setFigure(figure: OBJ_FigureForElement, notify: boolean = true) {
     this.figure = figure;
     if (figure != null) {
       this.recorder = figure.recorder;
@@ -1108,7 +1108,9 @@ class FigureElement {
     if (this.isMovable) {
       this.setMovable();
     }
-    this.notifications.publish('setFigure');
+    if (notify) {
+      this.notifications.publish('setFigure');
+    }
   }
 
   setTimeDelta(delta: number) {
@@ -5015,8 +5017,8 @@ class FigureElementCollection extends FigureElement {
     return methodToUse;
   }
 
-  setFigure(figure: OBJ_FigureForElement) {
-    super.setFigure(figure);
+  setFigure(figure: OBJ_FigureForElement, notify: boolean = true) {
+    super.setFigure(figure, false);
     if (this.onAdd != null) {
       this.fnMap.exec(this.onAdd);
     }
@@ -5026,6 +5028,9 @@ class FigureElementCollection extends FigureElement {
       if (element.onAdd != null) {
         this.fnMap.exec(element.onAdd);
       }
+    }
+    if (notify) {
+      this.notifications.publish('setFigure');
     }
   }
 
