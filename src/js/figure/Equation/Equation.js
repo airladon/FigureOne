@@ -1328,10 +1328,14 @@ export class Equation extends FigureElementCollection {
     });
   }
 
-  setFigure(figure: OBJ_FigureForElement) {
-    super.setFigure(figure);
+  setFigure(figure: OBJ_FigureForElement, notify: boolean = true) {
+    super.setFigure(figure, false);
+    // this.layoutForms();
     if (this.initialForm != null) {
       this.showForm(this.initialForm);
+    }
+    if (notify) {
+      this.notifications.publish('setFigure');
     }
   }
 
@@ -1395,7 +1399,7 @@ export class Equation extends FigureElementCollection {
    *
    * @param {'none' | 'current' | 'all'} forms
    */
-  layoutForms(forms: 'none' | 'current' | 'all') {
+  layoutForms(forms: 'none' | 'current' | 'all' = 'all') {
     if (forms === 'none') {
       return;
     }
