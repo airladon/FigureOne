@@ -1463,6 +1463,9 @@ export default class FigurePrimitives {
       type: 'bmp',
     };
     const o = this.parseTextOptions(defaultOptions, ...options);
+    if (o.scene == null) {
+      o.scene = this.scene;
+    }
     let element;
     if (o.type === 'bmp') {
       if (o.font.atlasColor) {

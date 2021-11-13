@@ -175,6 +175,16 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       descent: 0,
       ascent: 1,
     };
+    this.atlas = this.drawingObject.webgl.getAtlas({
+      scene: options.scene,
+      font: this.font,
+    });
+
+    this.drawingObject.addTexture(this.atlas.font.getTextureID());
+    // console.log(this.atlas)
+    this.setText(this.text);
+
+    this.atlas.notifications.add('updated', this.loaded.bind(this));
   }
 
   /**
@@ -191,38 +201,39 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     this.animateNextFrame();
   }
 
-  setFigure(figure: OBJ_FigureForElement) {
-    this.figure = figure;
-    if (figure != null) {
-      this.recorder = figure.recorder;
-      this.animationFinishedCallback = figure.animationFinished;
-      this.timeKeeper = figure.timeKeeper;
-      this.animations.timeKeeper = figure.timeKeeper;
-      this.animations.recorder = figure.recorder;
-    }
-    if (this.isTouchable) {
-      this.setTouchable();
-    }
-    if (this.isMovable) {
-      this.setMovable();
-    }
-    // this.createAtlas();
-    // console.log('creating atlas')
-    this.atlas = this.drawingObject.webgl.getAtlas({
-      scene: this.getScene(),
-      font: this.font,
-    });
+  // setFigure(figure: OBJ_FigureForElement) {
+  //   // this.figure = figure;
+  //   // if (figure != null) {
+  //   //   this.recorder = figure.recorder;
+  //   //   this.animationFinishedCallback = figure.animationFinished;
+  //   //   this.timeKeeper = figure.timeKeeper;
+  //   //   this.animations.timeKeeper = figure.timeKeeper;
+  //   //   this.animations.recorder = figure.recorder;
+  //   // }
+  //   // if (this.isTouchable) {
+  //   //   this.setTouchable();
+  //   // }
+  //   // if (this.isMovable) {
+  //   //   this.setMovable();
+  //   // }
+  //   super.setFigure(figure, false);
+  //   // this.createAtlas();
+  //   // console.log('creating atlas')
+  //   this.atlas = this.drawingObject.webgl.getAtlas({
+  //     scene: this.getScene(),
+  //     font: this.font,
+  //   });
 
-    this.drawingObject.addTexture(this.atlas.font.getTextureID());
-    // console.log(this.atlas)
-    this.setText(this.text);
+  //   this.drawingObject.addTexture(this.atlas.font.getTextureID());
+  //   // console.log(this.atlas)
+  //   this.setText(this.text);
 
-    this.atlas.notifications.add('updated', this.loaded.bind(this));
-    // this.drawingObject.updateTexture(atlas.);
-    // this.drawingObject.texture.data =
-    // this.setText(this.text);
-    this.notifications.publish('setFigure');
-  }
+  //   this.atlas.notifications.add('updated', this.loaded.bind(this));
+  //   // this.drawingObject.updateTexture(atlas.);
+  //   // this.drawingObject.texture.data =
+  //   // this.setText(this.text);
+  //   this.notifications.publish('setFigure');
+  // }
 
   /**
    * Recreate texture atlas.
