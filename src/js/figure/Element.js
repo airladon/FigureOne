@@ -1125,6 +1125,16 @@ class FigureElement {
     }
   }
 
+  getIsShown() {
+    if (this.isShown === false) {
+      return false;
+    }
+    if (this.parent != null) {
+      return this.parent.getIsShown();
+    }
+    return true;
+  }
+
   getRootElement() {
     if (this.parent != null) {
       return this.parent.getRootElement();
@@ -4487,6 +4497,10 @@ class FigureElementCollection extends FigureElement {
 
   childrenCanAnimate: boolean;
   drawNumberOrder: Array<number | null>
+  textureAtlases: { [textureID: string]: {
+    atlas: Atlas,
+    notif: string,
+  } };
 
   /**
    * @param {OBJ_FigureElementCollection} options
@@ -4507,6 +4521,7 @@ class FigureElementCollection extends FigureElement {
     if (o.position != null) {
       this.transform.updateTranslation(getPoint(o.position));
     }
+    this.textureAtlases = {};
     this.drawNumberOrder = [null];
     this.elements = {};
     this.drawOrder = [];
@@ -6049,6 +6064,25 @@ class FigureElementCollection extends FigureElement {
       }
     }
     return elements;
+  }
+
+  getAtlases(callback: () => {}) {
+    Object.keys(this.textureAtlases).forEach((id) => {
+      this.textureAtlases[id].atlas.notifications.remove('updated2', this.textureAtlases[id].notif);
+    });
+    this.textureAtlases = {};
+    const primitives = this.getAllPrimitives();
+    primitives.forEach((e) => {
+      if (e.atlas != null) {
+        const id = e.atlas.font.getTextureID();
+        if (this.textureAtlases[id] == null) {
+          this.textureAtlases[id] = {
+            atlas: e.atlas,
+            notif: e.atlas.notifications.add('updated2', callback),
+          };
+        }
+      }
+    });
   }
 
   /**

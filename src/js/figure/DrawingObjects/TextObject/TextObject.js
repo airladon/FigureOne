@@ -54,6 +54,7 @@ class FigureFont {
   id: string;
   map: OBJ_AtlasMap;
   glyphs: string | 'greek' | 'math' | 'mathExt' | 'common' | 'latin' | 'all' | 'numbers';
+  atlasSize: null | number;
   loadColor: TypeColor;
 
   // Font properties
@@ -103,6 +104,7 @@ class FigureFont {
       this.modifiers = optionsIn.modifiers;
       this.loadColor = optionsIn.loadColor;
       this.atlasColor = optionsIn.atlasColor;
+      this.atlasSize = optionsIn.atlasSize;
       return;
     }
     const defaultOptions = {
@@ -128,6 +130,7 @@ class FigureFont {
       fill: true,
       loadColor: [0, 0, 0, 0],
       atlasColor: false,
+      atlasSize: null,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     this.family = options.family;
@@ -168,6 +171,7 @@ class FigureFont {
     this.maxAscent = options.maxAscent;
     this.map = options.map;
     this.src = optionsIn.src;
+    this.atlasSize = optionsIn.atlasSize;
     this.loadColor = options.loadColor;
     this.atlasColor = options.atlasColor;
     this.glyphs = options.glyphs;
@@ -228,7 +232,12 @@ class FigureFont {
       modifiers = `-u${hash32(JSON.stringify(this.modifiers)).toString().slice(1, 5)}`;
     }
 
-    return `${family}-${this.style.toLowerCase()}-${this.weight.toLowerCase()}-${this.getTestStringID()}-${round(this.size, 4).toString()}${outline}${underline}${modifiers}`;
+    let size = `${round(this.size, 4).toString()}`;
+    if (this.atlasSize) {
+      size = `as${round(this.atlasSize, 4).toString()}`
+    }
+
+    return `${family}-${this.style.toLowerCase()}-${this.weight.toLowerCase()}-${this.getTestStringID()}-${size}${outline}${underline}${modifiers}`;
   }
 
   getGlyphs() {
@@ -408,6 +417,7 @@ class FigureFont {
       modifiers: this.modifiers,
       underline: this.underline,
       atlasColor: this.atlasColor,
+      atlasSize: this.atlasSize,
     };
   }
 

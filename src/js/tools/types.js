@@ -129,6 +129,11 @@ export type OBJ_GlyphModifiers = {
  *     as that in the texture. If `false`, then only the transparency channel of
  *     the texture will be used and color will be defined by the FigureElement
  *     drawing the text.
+ *   * `atlasSize` - if defined, and if the glyphs are generated automatically
+ *     then the glyphs will be created with a pixel size that is `atlasSize`
+ *     portion of the canvas height. If undefined, then the glyphs will be
+ *     created with a pixel size that is the ratio of the font size to the
+ *     scene height portion of the canvas height.
  *
  * A font can also have a number of modifying properties:
  *   * `color` - fill or outline color of each glyph - not used if the texture
@@ -181,6 +186,10 @@ export type OBJ_GlyphModifiers = {
  * image or url
  * @property {string | 'greek' | 'math' | 'latin' | 'all' | 'common' | 'mathExt'} [glyphs]
  * glyphs included in the font
+ * @property {null |number} [atlasSize] font size of atlas as a proportion of
+ * the WebGL canvas height. If this is null, then the atlas font size is
+ * calculated from the font size, scene height and number of pixels in the
+ * canvas height. (`null`)
  * @property {TypeColor} [loadColor] color of temporary texture while actual
  * texture is loading
  * @property {boolean} [atlasColor] `true` to use the color of the glyphs in
@@ -227,6 +236,7 @@ export type OBJ_Font = {
   glyphs?: string | 'greek' | 'math' | 'latin' | 'all' | 'common' | 'mathExt',
   loadColor?: TypeColor,
   atlasColor?: boolean,
+  atlasSize?: number,
 
   timeout?: number,
   modifiers?: OBJ_GlyphModifiers,

@@ -45,7 +45,7 @@ export type OBJ_TextAdjustments = {
  * it's a different HTML canvas element to the WebGL canvas. Thus all text on
  * the 2D canvas will always be above (default) or below the WebGl canvas
  * independent of when it is drawn. This means text will always be above or
- * below shapes.
+ * below shapes. regenerated each time the size changes by some threshold.
  *
  * Conversely, drawing text on the WebGL canvas provides control on which
  * shapes can hide text and vise versa. The disadvantage is that text is drawn
@@ -53,7 +53,10 @@ export type OBJ_TextAdjustments = {
  * scaled up or down, the the text will look more pixelated or blurry. For many
  * scalings (like common scalings in an equation), this will likely not be a
  * problem. But for large changes in animated scale, it will be better to use
- * the 2D canvas.
+ * the 2D canvas. Scaling also needs to be considered if the WebGL canvas is
+ * expected to be resized. On a desktop browser, a canvas element can be
+ * resized a lot, and so if using the WebGL atlas, it may need to be
+ *
  *
  * By default, text is drawn on the WebGL canvas, and text atlases are
  * automatically generated from the font selected. Use the `type` property to
@@ -152,6 +155,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
   drawingObject: GLObject;
   textBorder: Array<Point>;
   textBorderBuffer: Array<Point>;
+  atlasNotificationsID: number;
 
   setup(options: OBJ_Text_Fixed) {
     this.font = new FigureFont(options.font);
@@ -175,16 +179,42 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       descent: 0,
       ascent: 1,
     };
+    this.createAtlas(options.scene);
+    // this.atlas = this.drawingObject.webgl.getAtlas({
+    //   scene: options.scene,
+    //   font: this.font,
+    // });
+
+    // if (this.drawingObject.texture == null) {
+    //   this.drawingObject.addTexture(this.atlas.font.getTextureID());
+    // } else {
+    //   this.drawingObject.texture.id = this.atlas.font.getTextureID());
+    // }
+    // // console.log(this.atlas)
+    // this.setText(this.text);
+
+    // this.atlasNotificationsID = this.atlas.notifications.add('updated', this.loaded.bind(this));
+  }
+
+  createAtlas(scene: Scene = this.getScene()) {
+    if (this.atlas != null && this.atlasNotificationsID != null) {
+      this.atlas.notifications.remove('updated', this.atlasNotificationsID);
+    }
+
     this.atlas = this.drawingObject.webgl.getAtlas({
-      scene: options.scene,
+      scene,
       font: this.font,
     });
 
-    this.drawingObject.addTexture(this.atlas.font.getTextureID());
+    if (this.drawingObject.texture == null) {
+      this.drawingObject.addTexture(this.atlas.font.getTextureID());
+    } else {
+      this.drawingObject.texture.id = this.atlas.font.getTextureID();
+    }
     // console.log(this.atlas)
     this.setText(this.text);
 
-    this.atlas.notifications.add('updated', this.loaded.bind(this));
+    this.atlasNotificationsID = this.atlas.notifications.add('updated', this.loaded.bind(this));
   }
 
   /**
@@ -395,6 +425,8 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
   setFont(font: OBJ_Font) {
     const newFont = joinObjects({}, this.font.definition(), font);
     this.font = new FigureFont(newFont);
+    // this.recreateAtlas();
+    this.createAtlas();
     this.measureAndAlignText();
     this.calcBorderAndBounds();
     if (this.font.color != null) {

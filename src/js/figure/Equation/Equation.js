@@ -1127,6 +1127,7 @@ export class Equation extends FigureElementCollection {
     this.setColor(optionsToUse.color);
     this.dimColor = optionsToUse.dimColor;
     this.defaultTextType = optionsToUse.type;
+    this.textureAtlases = {};
     // this.touchBorder = 'rect';
     // this.border = 'children';
     // this.isTouchDevice = isTouchDevice;
@@ -1299,6 +1300,7 @@ export class Equation extends FigureElementCollection {
     });
   }
 
+
   // _state(
   //   options: {
   //     precision?: number,
@@ -1326,6 +1328,7 @@ export class Equation extends FigureElementCollection {
         this.eqn.forms[form].positionsSet = false;
       }
     });
+    this.getAtlases(this.layoutForms.bind(this, 'reset', true));
   }
 
   setFigure(figure: OBJ_FigureForElement, notify: boolean = true) {
@@ -1394,30 +1397,45 @@ export class Equation extends FigureElementCollection {
    * is fully loaded, then use this method to re-layout the equation when the
    * font is available.
    *
-   * Either the current form only, or all forms of the equation can be
-   * re-laid-out.
+   * Either the current form only, all forms already laid out (set), or all
+   * forms of the equation can be re-laid-out.
    *
-   * @param {'none' | 'current' | 'all'} forms
+   * @param {'none' | 'current' | 'all' | 'set' | 'reset'} forms
+   * @param {boolean} show true will re-show current form
    */
-  layoutForms(forms: 'none' | 'current' | 'all' = 'all') {
+  layoutForms(
+    forms: 'none' | 'current' | 'all' | 'set' | 'reset' = 'all',
+    show: boolean = true,
+  ) {
     if (forms === 'none') {
       return;
     }
-    const arrange = (formName) => {
+    const arrange = (formName, setOnly, resetOnly) => {
       const form = this.eqn.forms[formName];
-      const {
-        scale, xAlign, yAlign, fixTo,
-      } = form.arranged;
-      form.arrange(scale, xAlign, yAlign, fixTo);
+      if (resetOnly) {
+        form.positionsSet = false;
+        return;
+      }
+      if (setOnly === false || form.positionSet) {
+        const {
+          scale, xAlign, yAlign, fixTo,
+        } = form.arranged;
+        form.arrange(scale, xAlign, yAlign, fixTo);
+      }
     };
     if (forms === 'current') {
-      arrange(this.eqn.currentForm);
+      arrange(this.eqn.currentForm, false, false);
       return;
     }
     Object.keys(this.eqn.forms).forEach((formName) => {
-      arrange(formName);
+      arrange(formName, forms === 'set', forms === 'reset');
     });
-    this.showForm(this.eqn.currentForm);
+
+    if (show && this.getIsShown() && this.isAnimating() === false) {
+      this.showForm(this.eqn.currentForm);
+    } else if (show && this.isAnimating() === false) {
+      this.eqn.forms[this.eqn.currentForm].rearrange();
+    }
   }
 
   /**
@@ -1808,6 +1826,7 @@ export class Equation extends FigureElementCollection {
       // eslint-disable-next-line prefer-destructuring
       this.initialForm = Object.keys(this.eqn.forms)[0];
     }
+    this.getAtlases(this.layoutForms.bind(this, 'reset', true));
   }
 
   checkFixTo(

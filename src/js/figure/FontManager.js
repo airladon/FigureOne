@@ -317,13 +317,25 @@ export default class FontManager {
    *
    * Use the `weights` property to 
    */
-  watch(font: OBJ_Font | FigureFont, options: OBJ_LoadFontOptions) {
-    const o = joinObjects({}, {
+  watch(font: OBJ_Font | FigureFont, options: OBJ_LoadFontOptions | () => void) {
+    let o;
+    const defaultOptions = {
       timeout: 5,
       callback: null,
       weights: 1,
       atlas: false,
-    }, options);
+    };
+    if (typeof options === 'string' || typeof options === 'function') {
+      o = defaultOptions;
+      o.callback = options;
+    } else {
+      o = joinObjects({}, {
+        timeout: 5,
+        callback: null,
+        weights: 1,
+        atlas: false,
+      }, options);
+    }
     const f = new FigureFont(font);
     const fontID = f.getFontID(o.atlas);
 

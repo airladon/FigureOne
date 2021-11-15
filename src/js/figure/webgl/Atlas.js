@@ -7,6 +7,32 @@ import { joinObjects, NotificationManager } from '../../tools/tools';
 
 /* eslint-disable max-len */
 /*
+ GLText asks for atlas from webgl
+
+ Atlas monitors font if font doesn't exist, and recreates itself when loaded
+
+ When atlas is recreated, GLText get's notification and will recreate its borders and alignment
+
+ Collections that hold GLText should get notification when atlas changes so they can relayout text
+    - Collections have a dictionary of child id <> textureID
+    - When they get a notification a textureID changes, then they relayout themselves (the GLText should get the notifiation before hand and relayout itself)
+    - For built in collections, a change in font results in GLText getting a new textureID which then gets updated in the collection dictionary
+
+    OR
+    - Collections have a list of textures their primitives use
+    - Collections subscribe to WebGL Atlas change notifcations
+    - When an atlas changes, if the TextureID is in the list, then the colleciton will relayout itself
+
+  If the window resizes beyond a certain threshold, then automatically generated textures are recreated.
+
+  IF GLText changes font, then it requests a new atlas from webgl
+    - removes it's notification request from the current atlas
+    - requests new atlas
+    - adds notification request to new atlas
+
+  Old atlases are not garbage collected
+*/
+/*
 This is probably overly complicated.
 
 An atlas is an image of glyphs with a corresponding map defining the location and size of each glyph.
@@ -136,12 +162,14 @@ export default class Atlas {
     if (isAvailable) {
       this.loaded = true;
       this.notifications.publish('updated');
+      this.notifications.publish('updated2');
     }
   }
 
   srcLoaded() {
     this.loaded = true;
     this.notifications.publish('updated');
+    this.notifications.publish('updated2');
   }
 
   fontLoaded() {
@@ -158,12 +186,18 @@ export default class Atlas {
   recreate() {
     this.createAtlas(this.scene);
     this.notifications.publish('updated');
+    this.notifications.publish('updated2');
   }
 
 
-  createAtlas(scene: Scene) {
+  createAtlas(scene: Scene = this.scene) {
     const { font } = this;
-    const fontSizePX = font.size / scene.heightNear * this.webgl.gl.canvas.height * 2;
+    let fontSizePX;
+    if (font.atlasSize != null) {
+      fontSizePX = this.webgl.gl.canvas.height * font.atlasSize;
+    } else {
+      fontSizePX = font.size / scene.heightNear * this.webgl.gl.canvas.height * 2;
+    }
 
     this.fontSize = fontSizePX;
 
