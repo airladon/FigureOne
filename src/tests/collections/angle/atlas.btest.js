@@ -155,6 +155,43 @@ describe('Angle Atlas', () => {
           sides: true,
         });
       });
+      await peval(() => {
+        figure.fonts.watch(
+          figure.get('angle')._label._a,
+          {
+            weights: 2,
+            timeout: 10,
+            callback: () => {
+              figure.get('angle').recreateAtlases();
+            },
+          },
+        );
+      });
+      await snap();
+      await loadFontSync('montserrat', 'normal', '800', 'latin');
+      await sleep(100);
+      await snap();
+      await loadFontSync('montserrat', 'normal', '200', 'latin');
+      await sleep(1000);
+      await snap();
+    });
+    test('Two weights - late watch', async () => {
+      await page.evaluate(() => {
+        figure.add({
+          name: 'angle',
+          make: 'collections.angle',
+          label: {
+            text: {
+              type: 'bmp',
+              forms: { base: ['a', 'b', 'c'] },
+              textFont: { family: 'montserrat', weight: '200', glyphs: 'latin' },
+            },
+          },
+          angle: Math.PI / 4,
+          curve: { width: 0.01 },
+          sides: true,
+        });
+      });
       await snap();
       await loadFontSync('montserrat', 'normal', '800', 'latin');
       await sleep(100);
