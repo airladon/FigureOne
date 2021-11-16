@@ -310,14 +310,27 @@ export default class FontManager {
   }
 
   /**
-   * Future: include watching for multiple weights: i.e. when areWeightsAvailable becomes true
-   */
-  /**
-   * Watch for when a font becomes available.
+   * Watch for when a font becomes available, or a timeout is reached.
    *
-   * Use the `weights` property to 
+   * Either a font definition, a {@link FigureFont} object or a
+   * {@link FigureElement} can be used to define which font(s) to watch.
+   *
+   * When a {@link FigureElement} is used, then all the unique fonts associated
+   * with that element will be watched, and any callback defined will be
+   * executed when each font is loaded or times out.
+   *
+   * If `weights` is specified, then the font will not be considered loaded
+   * until `weights` number of different weights are available.
+   *
+   * @param {OBJ_Font | FigureFont | FigureElement} fontOrElement
+   * @param {OBJ_LoadFontOptions | (() => void) | string} optionsOrCallback
+   * options or callback function to be used when font is loaded or times out.
    */
-  watch(font: OBJ_Font | FigureFont, options: OBJ_LoadFontOptions | () => void) {
+  watch(
+    fontOrElement: OBJ_Font | FigureFont | FigureElement,
+    optionsOrCallback: OBJ_LoadFontOptions | (() => void) | string,
+  ) {
+    const options = optionsOrCallback;
     let o;
     const defaultOptions = {
       timeout: 5,
@@ -335,6 +348,22 @@ export default class FontManager {
         weights: 1,
         atlas: false,
       }, options);
+    }
+
+    const font = fontOrElement;
+    if (font.getFonts != null) {
+      const fonts = font.getFonts();
+      // Need to convert FontID to font here - maybe return both from colleciton?
+      const result = [];
+      fonts.forEach((f) => {
+        const [, fnt, atlas] = f;
+        result.push(this.watch(fnt, joinObjects({}, { atlas }, o)));
+      });
+      // Object.keys(fonts).forEach((fontID) => {
+      //   const [fnt, atlas] = fonts[fontID];
+      //   result.push(this.watch(fnt, joinObjects({}, { atlas }, o)));
+      // });
+      return result;
     }
     const f = new FigureFont(font);
     const fontID = f.getFontID(o.atlas);

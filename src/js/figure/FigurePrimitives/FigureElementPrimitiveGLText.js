@@ -479,4 +479,8 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       'yAlign',
     ];
   }
+
+  getFonts() {
+    return [[this.font.getFontID(true), this.font, true]];
+  }
 }

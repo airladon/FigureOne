@@ -1349,6 +1349,11 @@ class FigureElement {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  getFonts() {
+    return [];
+  }
+
   animateToState(
     state: Object,
     options: Object,
@@ -6535,6 +6540,20 @@ class FigureElementCollection extends FigureElement {
       const p = element.transform.t();
       element.transform.updateTranslation(p.add(offset));
     }
+  }
+
+  getFonts() {
+    const primitives = this.getAllPrimitives();
+    const fonts = {};
+    const output = [];
+    primitives.forEach((e) => {
+      const [[fontID, font, atlas]] = e.getFonts();
+      if (fonts[fontID] == null) {
+        fonts[fontID] = true;
+        output.push([fontID, font, atlas]);
+      }
+    });
+    return output;
   }
 }
 

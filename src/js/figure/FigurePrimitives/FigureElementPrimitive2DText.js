@@ -4,6 +4,7 @@ import * as m3 from '../../tools/m3';
 // import type { OBJ_FigureForElement } from '../Figure';
 import { FigureElementPrimitive } from '../Element';
 import type { FigureElement } from '../Element';
+import FontManager from '../FontManager';
 // import { isPointInPolygon } from '../../tools/geometry/polygon';
 // import type {
 //   FunctionMap,
@@ -80,6 +81,11 @@ class TextObject extends DrawingObject {
     this.yAlign = options.yAlign;
     this.adjustments = options.adjustments;
     this.setText(this.text);
+  }
+
+  watch(callback: string | (() => void)) {
+    const fonts = new FontManager();
+    fonts.watch(this.font, callback);
   }
 
   getCanvas() {
@@ -481,6 +487,7 @@ export default class FigureElementPrimitive2DText extends FigureElementPrimitive
     // to.loadText(options);
     super(to, options.transform, options.color, options.parent, options.name);
     this.calcBorderAndBounds();
+    this.drawingObject.watch(this.setText.bind(this, {}));
   }
 
   /**
@@ -557,5 +564,9 @@ export default class FigureElementPrimitive2DText extends FigureElementPrimitive
     return [...super._getStateProperties(options),
       'drawingObject',
     ];
+  }
+
+  getFonts() {
+    return [[this.drawingObject.font.getFontID(), this.drawingObject.font, false]];
   }
 }
