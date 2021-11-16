@@ -193,16 +193,6 @@ export default class EquationLabel {
     const form = this.eqn.getCurrentForm();
     if (form != null) {
       const key = Object.keys(form.elements)[0];
-      // This is ok to fix for flow because all the elements of the
-      // simple equation created by Equationlabel will be Primitives
-      // $FlowFixMe
-      // const textObject = form.elements[key].drawingObject;
-      // if (textObject != null) {
-      //   textObject.setText(text); // $FlowFixMe
-      //   form.elements[key].drawBorder = form.elements[key].drawingObject.textBorder; // $FlowFixMe
-      //   form.elements[key].drawBorderBuffer = form.elements[key].drawingObject.textBorderBuffer;
-      // }
-      // console.log(form.elements[key])
       form.elements[key].setText(text);
       form.arrange(
         this.eqn.eqn.scale,

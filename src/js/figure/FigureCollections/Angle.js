@@ -1224,6 +1224,7 @@ class CollectionsAngle extends FigureElementCollection {
     }
     this.setAutoUpdate(optionsToUse.update);
     this.updateLabel();
+    this.getAtlases(() => this.updateLabelUnshow());
   }
 
   addCurve(curveOptions: {
@@ -1645,6 +1646,7 @@ class CollectionsAngle extends FigureElementCollection {
       label.showRealAngle = false;
     }
     this.updateLabel();
+    this.getAtlases(() => this.updateLabelUnshow());
   }
 
   /**
@@ -1666,6 +1668,7 @@ class CollectionsAngle extends FigureElementCollection {
       label.showRealAngle = true;
     }
     this.updateLabel();
+    this.getAtlases(() => this.updateLabelUnshow());
   }
 
   // setFigure(figure: OBJ_FigureForElement) {
@@ -1674,6 +1677,10 @@ class CollectionsAngle extends FigureElementCollection {
   //   this.notifications.publish('setFigure');
   // }
 
+  updateLabelUnshow() {
+    this.updateLabel(this.getRotation(), false);
+  }
+
   /**
    * Manually update the label orientations with a custom rotation offset.
    *
@@ -1681,11 +1688,13 @@ class CollectionsAngle extends FigureElementCollection {
    * <a href="collectionsangle#setautoupdate">setAutoUpdate</a>
    * @param {number | null} rotationOffset
    */
-  updateLabel(rotationOffset: ?number = this.getRotation()) {
+  updateLabel(rotationOffset: ?number = this.getRotation(), forceShow: boolean = true) {
     if (rotationOffset != null) {
       this.lastLabelRotationOffset = rotationOffset;
     }
     const { _label, label } = this;
+    // const labelWasHidden = !_label.isShown;
+    // const angleWasHidden = !this.getIsShown();
     if (_label && label) {
       if (
         (label.autoHide != null && label.autoHide > Math.abs(this.angle)) // $FlowFixMe
@@ -1693,7 +1702,9 @@ class CollectionsAngle extends FigureElementCollection {
       ) {
         _label.hide();
       } else {
-        _label.show();
+        if (forceShow) {
+          _label.show();
+        }
         if (label.showRealAngle) {
           let { angle } = this;
           if (angle >= 0 && this.direction === -1) {
@@ -1762,6 +1773,12 @@ class CollectionsAngle extends FigureElementCollection {
         );
       }
     }
+    // if (labelWasHidden) {
+    //   _label.hide();
+    // }
+    // if (angleWasHidden) {
+    //   this.hide();
+    // }
   }
 
   /**

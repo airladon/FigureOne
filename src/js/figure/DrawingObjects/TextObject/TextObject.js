@@ -229,7 +229,7 @@ class FigureFont {
 
     let modifiers = '';
     if (Object.keys(this.modifiers).length > 0) {
-      modifiers = `-u${hash32(JSON.stringify(this.modifiers)).toString().slice(1, 5)}`;
+      modifiers = `-mods-${hash32(JSON.stringify(this.modifiers)).toString().slice(1, 6)}`;
     }
 
     let size = `${round(this.size, 4).toString()}`;

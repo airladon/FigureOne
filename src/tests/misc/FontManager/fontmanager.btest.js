@@ -139,6 +139,10 @@ async function loadFontStyle(family, style, weight, glyphs) {
   );
 }
 
+async function peval(callback, params) {
+  return page.evaluate(callback, params);
+}
+
 // async function snap(id, threshold = 0) {
 //   const image = await page.screenshot({ timeout: 300000 });
 //   return expect(image).toMatchImageSnapshot({
@@ -628,24 +632,168 @@ describe('Font Manager', () => {
       })).toBe(false);
     });
   });
-  // describe('2D text load', () => {
-  //   test('without watch', async () => {
-  //     await page.evaluate(() => {
-  //       figure.add({
-  //         name: 'a',
-  //         make: 'txt',
-  //         text: 'hello',
-  //         font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
-  //         type: 'bmp',
-  //       });
-  //     });
-  //     await frame();
-  //     await snap();
-  //     await loadFontSync('montserrat', 'normal', '400', 'latin');
-  //     await frame();
-  //     await snap();
-  //   });
-  // });
+  describe('FigureElement', () => {
+    test('GL', async () => {
+      let fonts = await getFontManager();
+      expect(Object.keys(fonts.fonts).length).toBe(0);
+      await page.evaluate(() => {
+        figure.add({
+          name: 'a',
+          make: 'txt',
+          text: 'abc',
+          type: 'bmp',
+          font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
+        });
+      });
+      fonts = await getFontManager();
+      expect(Object.keys(fonts.fonts).length).toBe(1);
+      expect(fonts.fonts['montserrat-normal-400-latin-atlas']).not.toBe(null);
+      expect(fonts.fonts['montserrat-normal-400-latin-atlas'].callbacks.length).toBe(1);
+      expect(await isAvailable({
+        family: 'montserrat', style: 'normal', weight: '400', glyphs: 'latin',
+      })).toBe(false);
+
+      await page.evaluate(() => {
+        window.loaded = 0;
+        figure.fonts.watch(figure.get('a'), () => { window.loaded += 1; });
+      });
+      fonts = await getFontManager();
+      expect(Object.keys(fonts.fonts).length).toBe(2);
+      expect(fonts.fonts['montserrat-normal-400-latin'].callbacks.length).toBe(1);
+
+      await loadFontSync('montserrat', 'normal', '300', 'latin');
+      await sleep(100);
+      const loaded = await page.evaluate(() => window.loaded);
+      expect(loaded).toBe(1);
+    });
+    test('2D', async () => {
+      let fonts = await getFontManager();
+      expect(Object.keys(fonts.fonts).length).toBe(0);
+      // On 2d text creation, a font is watched to update the 2d size
+      // when the font loads
+      await page.evaluate(() => {
+        figure.add({
+          name: 'a',
+          make: 'txt',
+          text: 'abc',
+          type: '2d',
+          font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
+        });
+      });
+      fonts = await getFontManager();
+      expect(Object.keys(fonts.fonts).length).toBe(1);
+      expect(fonts.fonts['montserrat-normal-400-latin']).not.toBe(null);
+      expect(fonts.fonts['montserrat-normal-400-latin'].callbacks.length).toBe(1);
+      expect(await isAvailable({
+        family: 'montserrat', style: 'normal', weight: '400', glyphs: 'latin',
+      })).toBe(false);
+      const w = await peval(() => figure.get('a').getBoundingRect().width);
+
+      // Create a second watch event by using just the figureelement
+      await page.evaluate(() => {
+        window.loaded = 0;
+        figure.fonts.watch(figure.get('a'), () => { window.loaded += 1; });
+      });
+      fonts = await getFontManager();
+      expect(Object.keys(fonts.fonts).length).toBe(1);
+      expect(fonts.fonts['montserrat-normal-400-latin'].callbacks.length).toBe(2);
+
+      // Load the font
+      await loadFontSync('montserrat', 'normal', '400', 'latin');
+      await sleep(100);
+
+      // Test the width of the text has increased, and the second watch event
+      // callback executed
+      const loaded = await page.evaluate(() => window.loaded);
+      expect(loaded).toBe(1);
+      const w1 = await peval(() => figure.get('a').getBoundingRect().width);
+      expect(w1).toBeGreaterThan(w);
+    });
+    test('Collection', async () => {
+      let fonts = await getFontManager();
+      expect(Object.keys(fonts.fonts).length).toBe(0);
+      // Create a collection with 4 primitives that have text, two of which
+      // should share the same font
+      await page.evaluate(() => {
+        figure.add({
+          name: 'c',
+          make: 'collection',
+          elements: [
+            {
+              name: 'a',
+              make: 'txt',
+              text: 'abc',
+              type: '2d',
+              font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
+            },
+            {
+              name: 'b',
+              make: 'txt',
+              text: 'abc',
+              type: 'bmp',
+              font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
+            },
+            {
+              name: 'c',
+              make: 'txt',
+              text: 'abc',
+              type: 'bmp',
+              font: { family: 'open sans', weight: '300', glyphs: 'latin' },
+            },
+            {
+              name: 'd',
+              make: 'collection',
+              elements: [
+                {
+                  name: 'e',
+                  make: 'txt',
+                  text: 'abc',
+                  type: 'bmp',
+                  font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
+                },
+                {
+                  name: 'f',
+                  make: 'txt',
+                  text: 'abc',
+                  type: '2d',
+                  font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
+                },
+              ],
+            },
+          ],
+        });
+      });
+      fonts = await getFontManager();
+
+      // Expect font manager to be tracking 3 different font IDs
+      expect(Object.keys(fonts.fonts).length).toBe(3);
+      expect(fonts.fonts['montserrat-normal-400-latin-atlas'].callbacks.length).toBe(1);
+      expect(fonts.fonts['open sans-normal-300-latin-atlas'].callbacks.length).toBe(1);
+      expect(fonts.fonts['montserrat-normal-400-latin'].callbacks.length).toBe(2);
+
+      // Expect the atlas associated with c.b to be associated with c.b and
+      // c.d.e
+      expect(await peval(() => Object.keys(figure.get('c.b').atlas.notifications.notifications.updated.subscribers).length)).toBe(2);
+
+      // Create a watch event by using just the collection
+      // This should add a callback to all three FontIDs being tracked
+      await page.evaluate(() => {
+        window.loaded = 0;
+        figure.fonts.watch(figure.get('c'), () => { window.loaded += 1; });
+      });
+
+
+      // // Load the font
+      await loadFontSync('montserrat', 'normal', '400', 'latin');
+      await sleep(100);
+
+      expect(await page.evaluate(() => window.loaded)).toBe(2);
+
+      await loadFontSync('open sans', 'normal', '300', 'latin');
+      await sleep(100);
+      expect(await page.evaluate(() => window.loaded)).toBe(3);
+    });
+  });
 });
 
 

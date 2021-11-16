@@ -6091,6 +6091,16 @@ class FigureElementCollection extends FigureElement {
   }
 
   /**
+   * Recreate all atlases associated with children of this collection.
+   */
+  recreateAtlases() {
+    this.getAtlases();
+    Object.keys(this.textureAtlases).forEach(
+      id => this.textureAtlases[id].atlas.recreate(),
+    );
+  }
+
+  /**
    * Get array of all children elements.
    *
    * @return {Array<FigureElement>}
@@ -6547,7 +6557,11 @@ class FigureElementCollection extends FigureElement {
     const fonts = {};
     const output = [];
     primitives.forEach((e) => {
-      const [[fontID, font, atlas]] = e.getFonts();
+      const fnts = e.getFonts();
+      if (fnts.length === 0) {
+        return;
+      }
+      const [[fontID, font, atlas]] = fnts;
       if (fonts[fontID] == null) {
         fonts[fontID] = true;
         output.push([fontID, font, atlas]);

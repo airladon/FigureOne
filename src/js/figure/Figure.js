@@ -1467,6 +1467,23 @@ class Figure {
   }
 
   /**
+   * Recreate all automatically generated atlases.
+   *
+   * This would be typically used after loading custom fonts.
+   */
+  recreateAtlases() {
+    this.webglLow.recreateAtlases();
+  }
+
+  recreateAtlas(atlasID: string) {
+    this.webglLow.atlases[atlasID].recreate();
+  }
+
+  getAtlases() {
+    return this.webglLow.atlases;
+  }
+
+  /**
    * Return matrix that can convert between 'pixel', 'figure' and 'gl' spaces.
    *
    * These matrices would be generally used to transform points between spaces.

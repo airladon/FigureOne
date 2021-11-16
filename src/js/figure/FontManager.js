@@ -353,21 +353,15 @@ export default class FontManager {
     const font = fontOrElement;
     if (font.getFonts != null) {
       const fonts = font.getFonts();
-      // Need to convert FontID to font here - maybe return both from colleciton?
       const result = [];
       fonts.forEach((f) => {
         const [, fnt, atlas] = f;
         result.push(this.watch(fnt, joinObjects({}, { atlas }, o)));
       });
-      // Object.keys(fonts).forEach((fontID) => {
-      //   const [fnt, atlas] = fonts[fontID];
-      //   result.push(this.watch(fnt, joinObjects({}, { atlas }, o)));
-      // });
       return result;
     }
     const f = new FigureFont(font);
     const fontID = f.getFontID(o.atlas);
-
     // If the font family-weight-style has already been created, then
     // return the result of whether it is loaded or not
     if (this.fonts[fontID] != null) {
@@ -439,6 +433,7 @@ export default class FontManager {
   timedCheck() {
     const result = this.isLoadingFinished();
     if (result) {
+      this.checkTimer = null;
       return;
     }
     let time = 50;
@@ -448,7 +443,7 @@ export default class FontManager {
     if (performance.now() - this.startTime > 5000) {
       time = 1000;
     }
-    setTimeout(this.timedCheck.bind(this), time);
+    this.checkTimer = setTimeout(this.timedCheck.bind(this), time);
   }
 
   isLoadingFinished() {

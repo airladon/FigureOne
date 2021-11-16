@@ -322,7 +322,17 @@ class WebGLInstance {
     }
     const atlas = new Atlas(this, options);
     this.atlases[textureID] = atlas;
+    // atlas.notifications.add('updated', () => {
+    //   // Notification for primitives
+    //   this.notifications.publish('atlasUpdated', textureID);
+    //   // Notificaiton for collections
+    //   this.notifications.publish('atlasUpdated2', textureID);
+    // });
     return atlas;
+  }
+
+  recreateAtlases() {
+    Object.keys(this.atlases).forEach(textureID => this.atlases[textureID].recreate());
   }
 
   deleteTexture(id: string) {
