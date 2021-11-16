@@ -73,10 +73,7 @@ const makeShape = (name, make, options, lineOptions = null) => {
       position: [x, y],
       line,
       touchBorder: 'buffer',
-      text: [
-        { text: 'a', onClick: click('a') },
-        { text: 'b', onClick: click('b'), location: [0.2, 0.1] },
-      ],
+      text: 'a',
       // defaultTextTouchBorder: 0.1,
     }, options),
     mods: tools.misc.joinObjects({}, {
@@ -229,10 +226,28 @@ const arrows = [
   .##.....##..#######..########...######.
   */
   txt('m1', { text: 'a', font: { family: 'times', modifiers: { a: { a: 2, d: 1 } } } }),
+
+  /*
+  .##.....##.##.....##.##.......########.####
+  .###...###.##.....##.##..........##.....##.
+  .####.####.##.....##.##..........##.....##.
+  .##.###.##.##.....##.##..........##.....##.
+  .##.....##.##.....##.##..........##.....##.
+  .##.....##.##.....##.##..........##.....##.
+  .##.....##..#######..########....##....####
+  */
+  txt('n1', { text: ['a', 'b'], location: [[0, 0], [0.1, -0.1]] }),
+  txt('n2', { text: ['abc', 'def'], location: [[-0.1, -0.1], [0.1, 0.2]], xAlign: 'center', yAlign: 'middle' }),
+  txt('n3', { text: ['abc', 'def'], location: [[-0.1, -0.1], [0.1, 0.2]], xAlign: 'center', yAlign: 'middle' }),
+  txt('n4', { text: ['abc', 'def'], location: [[-0.1, -0.1], [0.1, 0.2]], xAlign: 'center', yAlign: 'middle' }),
+  txt('n5', { text: ['abc', 'def'], location: [[-0.1, -0.1], [0.1, 0.2]], xAlign: 'center', yAlign: 'middle' }),
 ];
 figure.add(arrows);
 figure.getElement('u1').setText('updated');
 figure.getElement('u2').setText({ text: 'update', xAlign: 'center', yAlign: 'top', font: { size: 0.2, color: [0, 0, 1, 1] } });
+figure.getElement('n3').setText({ text: ['ghi', 'klm'], xAlign: 'right', yAlign: 'top', font: { size: 0.2, color: [0, 0, 1, 1] } });
+figure.getElement('n4').setText({ text: ['gb'], xAlign: 'left', yAlign: 'bottom' });
+figure.getElement('n5').setText({ text: ['123', 'uio', 'pl'], location: [[-0.1, 0.1], [0, 0], [0.2, -0.2]] });
 // figure.getElement('u2').custom.setText({
 //   text: 'updated',
 //   touchBorder: 0.1,

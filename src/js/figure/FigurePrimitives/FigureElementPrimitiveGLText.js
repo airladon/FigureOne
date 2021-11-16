@@ -3,7 +3,7 @@ import type { OBJ_FigureForElement } from '../Figure';
 import { FigureElementPrimitive } from '../Element';
 // import FontManager from '../FontManager';
 import {
-  Point, Rect, getBoundingBorder, isBuffer,
+  Point, Rect, getBoundingBorder, isBuffer, getPoints,
 } from '../../tools/g2';
 import type {
   TypeParsableBuffer, TypeParsableBorder,
@@ -79,7 +79,8 @@ export type OBJ_TextAdjustments = {
  */
 /* eslint-enable max-len */
 export type OBJ_Text = {
-  text?: string,
+  text?: string | Array<string>,
+  location?: TypeParsablePoint | Array<TypeParsablePoint>,
   font?: OBJ_Font,
   xAlign?: 'left' | 'center' | 'right';
   yAlign?: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
@@ -90,7 +91,8 @@ export type OBJ_Text = {
 } & OBJ_FigurePrimitive;
 
 export type OBJ_Text_Fixed = {
-  text: string,
+  text: Array<string>,
+  location: Array<Point>,
   font: OBJ_Font,
   xAlign: 'left' | 'center' | 'right';
   yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
@@ -111,7 +113,8 @@ export type OBJ_Text_Fixed = {
  * if it is specified)
  */
 export type OBJ_SetText = {
-  text?: string,
+  text?: string | Array<string>,
+  location?: TypeParsablePoint | Array<TypeParsablePoint>,
   font?: OBJ_Font,
   xAlign?: 'left' | 'center' | 'right';
   yAlign?: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
@@ -129,7 +132,7 @@ export type OBJ_SetText = {
  */
 // $FlowFixMe
 export default class FigureElementPrimitiveGLText extends FigureElementPrimitive {
-  text: string;
+  text: Array<string>;
   font: FigureFont;
   atlas: Object;
 
@@ -145,7 +148,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     width: number,
   };
 
-  location: Point;
+  location: Array<Point>;
 
   fontSize: number;
   xAlign: 'left' | 'center' | 'right';
@@ -160,12 +163,17 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
   setup(options: OBJ_Text_Fixed) {
     this.font = new FigureFont(options.font);
     this.atlas = {};
-    if (typeof options.text[0] === 'string') {
-      // eslint-disable-next-line
-      this.text = options.text[0];
+    if (typeof options.text[0] === 'object') {
+      this.text = [options.text[0].text];
     } else {
-      this.text = options.text[0].text;
+      this.text = options.text;
     }
+    // if (typeof options.text[0] === 'string') {
+    //   // eslint-disable-next-line
+    //   this.text = options.text[0];
+    // } else {
+    //   this.text = options.text[0].text;
+    // }
     this.xAlign = options.xAlign;
     this.yAlign = options.yAlign;
     // this.verticals = options.verticals;
@@ -173,7 +181,12 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     this.drawBorder = [[new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(0, 1)]];
     this.drawBorderBuffer = this.drawBorder;
     this.color = this.font.color;
-    this.location = new Point(0, 0);
+    if (options.location != null) {
+      this.location = getPoints(options.location);
+    } else {
+      this.location = this.text.map(() => new Point(0, 0));
+    }
+    // this.location = new Point(0, 0);
     this.measure = {
       width: 1,
       descent: 0,
@@ -285,93 +298,130 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     if (Object.keys(this.atlas).length === 0) {
       return;
     }
-    const { text } = this;
+    // const { text } = this;
     const vertices = [];
     const texCoords = [];
-    let x = 0;
     const r = this.font.size / this.atlas.fontSize;
-    let totalWidth = 0;
-    let maxDescent = 0;
-    let maxAscent = 0;
-    for (let i = 0; i < text.length; i += 1) {
-      if (this.atlas.map[this.text[i]] == null) {
-        throw new Error(`Atlas Error: Character '${this.text[i]} (0x${this.text.charCodeAt(i).toString(16)})' is missing in atlas`);
-      }
-      const {
-        width, ascent, descent, offsetX, offsetY,
-      } = this.atlas.map[this.text[i]];
-
-      const s = 0.5;
-      const minX = x - width * r * s;
-      const maxX = x + width * r + width * r * s;
-      vertices.push(minX, -descent * r, maxX, -descent * r, maxX, ascent * r);
-      vertices.push(minX, -descent * r, maxX, ascent * r, minX, ascent * r);
-      texCoords.push(
-        offsetX - width * s, offsetY - descent,
-        offsetX + width + width * s, offsetY - descent,
-        offsetX + width + width * s, offsetY + ascent,
-      );
-      texCoords.push(
-        offsetX - width * s, offsetY - descent,
-        offsetX + width + width * s, offsetY + ascent,
-        offsetX - width * s, offsetY + ascent,
-      );
-      x += width * r;
-      totalWidth += width * r;
-      maxDescent = Math.max(descent * r, maxDescent);
-      maxAscent = Math.max(ascent * r, maxAscent);
-    }
-
-    if (this.font.underline !== false) {
-      const uDescent = this.font.underline.descent;
-      const uWidth = this.font.underline.width;
-      if (uDescent > maxDescent) {
-        maxDescent = uDescent;
-      }
-      if (uDescent < 0) {
-        if (-uDescent + uWidth > maxAscent) {
-          maxAscent = -uDescent + uWidth;
+    let overallMaxAscent = 0;
+    let overallMaxDescent = 0;
+    let overallWidth = 0;
+    let left = null;
+    let bottom = null;
+    let top = null;
+    let right = null;
+    for (let t = 0; t < this.text.length; t += 1) {
+      let x = 0;
+      const numVertices = vertices.length;
+      const text = this.text[t];
+      let totalWidth = 0;
+      let maxDescent = 0;
+      let maxAscent = 0;
+      for (let i = 0; i < text.length; i += 1) {
+        if (this.atlas.map[text[i]] == null) {
+          throw new Error(`Atlas Error: Character '${text[i]} (0x${text.charCodeAt(i).toString(16)})' is missing in atlas`);
         }
+        const {
+          width, ascent, descent, offsetX, offsetY,
+        } = this.atlas.map[text[i]];
+
+        const s = 0.5;
+        const minX = x - width * r * s;
+        const maxX = x + width * r + width * r * s;
+        vertices.push(minX, -descent * r, maxX, -descent * r, maxX, ascent * r);
+        vertices.push(minX, -descent * r, maxX, ascent * r, minX, ascent * r);
+        texCoords.push(
+          offsetX - width * s, offsetY - descent,
+          offsetX + width + width * s, offsetY - descent,
+          offsetX + width + width * s, offsetY + ascent,
+        );
+        texCoords.push(
+          offsetX - width * s, offsetY - descent,
+          offsetX + width + width * s, offsetY + ascent,
+          offsetX - width * s, offsetY + ascent,
+        );
+        x += width * r;
+        totalWidth += width * r;
+        maxDescent = Math.max(descent * r, maxDescent);
+        maxAscent = Math.max(ascent * r, maxAscent);
       }
-      vertices.push(
-        0, -uDescent, totalWidth, -uDescent, totalWidth, uWidth - uDescent,
-        0, -uDescent, totalWidth, uWidth - uDescent, 0, uWidth - uDescent,
-      );
-      texCoords.push(0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1);
+
+      if (this.font.underline !== false) {
+        const uDescent = this.font.underline.descent;
+        const uWidth = this.font.underline.width;
+        if (uDescent > maxDescent) {
+          maxDescent = uDescent;
+        }
+        if (uDescent < 0) {
+          if (-uDescent + uWidth > maxAscent) {
+            maxAscent = -uDescent + uWidth;
+          }
+        }
+        vertices.push(
+          0, -uDescent, totalWidth, -uDescent, totalWidth, uWidth - uDescent,
+          0, -uDescent, totalWidth, uWidth - uDescent, 0, uWidth - uDescent,
+        );
+        texCoords.push(0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1);
+      }
+
+      maxAscent += this.adjustments.ascent;
+      maxDescent += this.adjustments.descent;
+      totalWidth += this.adjustments.width;
+      let ox = 0;
+      let oy = 0;
+      if (this.xAlign === 'center') {
+        ox = -totalWidth / 2;
+      } else if (this.xAlign === 'right') {
+        ox = -totalWidth;
+      }
+      if (this.yAlign === 'bottom') {
+        oy = maxDescent;
+      } else if (this.yAlign === 'top') {
+        oy = -maxAscent;
+      } else if (this.yAlign === 'middle') {
+        oy = maxDescent - (maxAscent + maxDescent) / 2;
+      }
+      for (let i = numVertices; i < vertices.length; i += 2) {
+        vertices[i] += ox + this.location[t].x;
+      }
+      for (let i = numVertices + 1; i < vertices.length; i += 2) {
+        vertices[i] += oy + this.location[t].y;
+      }
+      if (left == null || ox + this.location[t].x < left) {
+        left = ox + this.location[t].x;
+      }
+      if (right == null || ox + this.location[t].x + totalWidth > right) {
+        right = ox + this.location[t].x + totalWidth;
+      }
+      if (bottom == null || oy + this.location[t].y < bottom) {
+        bottom = oy + this.location[t].y - maxDescent;
+      }
+      if (top == null || oy + this.location[t].y + maxAscent > top) {
+        top = oy + this.location[t].y + maxAscent;
+      }
+      // console.log(vertices)
+      // console.log(texCoords)
+      if (maxAscent > overallMaxAscent) {
+        overallMaxAscent = maxAscent;
+      }
+      if (maxDescent > overallMaxDescent) {
+        overallMaxDescent = maxDescent;
+      }
+      if (totalWidth > overallWidth) {
+        overallWidth = totalWidth;
+      }
     }
 
-    maxAscent += this.adjustments.ascent;
-    maxDescent += this.adjustments.descent;
-    totalWidth += this.adjustments.width;
-    let ox = 0;
-    let oy = 0;
-    if (this.xAlign === 'center') {
-      ox = -totalWidth / 2;
-    } else if (this.xAlign === 'right') {
-      ox = -totalWidth;
-    }
-    if (this.yAlign === 'bottom') {
-      oy = maxDescent;
-    } else if (this.yAlign === 'top') {
-      oy = -maxAscent;
-    } else if (this.yAlign === 'middle') {
-      oy = maxDescent - (maxAscent + maxDescent) / 2;
-    }
-    for (let i = 0; i < vertices.length; i += 2) {
-      vertices[i] += ox;
-    }
-    for (let i = 1; i < vertices.length; i += 2) {
-      vertices[i] += oy;
-    }
-    // console.log(vertices)
-    // console.log(texCoords)
     this.drawingObject.updateVertices(vertices);
     this.drawingObject.updateTextureMap(texCoords.map(v => v / this.atlas.dimension));
-    this.location = new Point(ox, oy);
+    // this.location = new Point(ox, oy);
     this.measure = {
-      ascent: maxAscent,
-      descent: maxDescent,
-      width: totalWidth,
+      ascent: overallMaxAscent,
+      descent: overallMaxDescent,
+      width: right - left,
+      left,
+      bottom,
+      top,
+      right,
     };
     // console.log(this.adjustments)
   }
@@ -383,10 +433,11 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
    */
   setText(text: string | OBJ_SetText) {
     if (typeof text === 'string') {
-      this.text = text;
+      this.text = [text];
     } else {
       if (text.font != null) {
         this.font = new FigureFont(joinObjects({}, this.font.definition(), text.font));
+        this.createAtlas();
       }
       if (text.xAlign != null) {
         this.xAlign = text.xAlign;
@@ -398,7 +449,14 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
         this.adjustments = joinObjects({}, this.adjustments, text.adjustments);
       }
       if (text.text != null) {
-        this.text = text.text;
+        if (typeof text.text === 'string') {
+          this.text = [text.text];
+        } else {
+          this.text = text.text;
+        }
+      }
+      if (text.location != null) {
+        this.location = getPoints(text.location);
       }
     }
     this.measureAndAlignText();
@@ -445,17 +503,27 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
   }
 
   calcBorder() {
-    const bounds = new Rect(
-      this.location.x,
-      this.location.y - this.measure.descent,
-      this.measure.width,
-      this.measure.ascent + this.measure.descent,
-    );
+    // const bounds = new Rect(
+    //   // this.location.x,
+    //   // this.location.y - this.measure.descent,
+    //   this.measure.left,
+    //   this.measure.bottom,
+    //   // this.measure.width,
+    //   this.measure.right - this.measure.left,
+    //   this.measure.top - this.measure.bottom,
+    //   // this.measure.ascent + this.measure.descent,
+    // );
+    // this.drawBorder = [[
+    //   new Point(bounds.left, bounds.bottom),
+    //   new Point(bounds.right, bounds.bottom),
+    //   new Point(bounds.right, bounds.top),
+    //   new Point(bounds.left, bounds.top),
+    // ]];
     this.drawBorder = [[
-      new Point(bounds.left, bounds.bottom),
-      new Point(bounds.right, bounds.bottom),
-      new Point(bounds.right, bounds.top),
-      new Point(bounds.left, bounds.top),
+      new Point(this.measure.left, this.measure.bottom),
+      new Point(this.measure.right, this.measure.bottom),
+      new Point(this.measure.right, this.measure.top),
+      new Point(this.measure.left, this.measure.top),
     ]];
   }
 
