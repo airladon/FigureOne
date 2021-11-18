@@ -836,6 +836,7 @@ export default class CollectionsLine extends FigureElementCollection {
     // }
     this.fnMap.add('transformToLine', this.transformToLine.bind(this));
     this.notifications.add('setTransform', 'transformToLine');
+    this.getAtlases(() => this.updateLabel());
   }
 
   /** A line has:
@@ -1241,6 +1242,7 @@ export default class CollectionsLine extends FigureElementCollection {
     }
     this.updateLabel();
     this.updateMovePads();
+    this.getAtlases(() => this.updateLabel());
   }
 
   /**
@@ -1260,6 +1262,7 @@ export default class CollectionsLine extends FigureElementCollection {
     this.showRealLength = true;
     this.updateLabel();
     this.updateMovePads();
+    this.getAtlases(() => this.updateLabel());
   }
 
   /**
