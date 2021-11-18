@@ -107,7 +107,7 @@ describe('Axis Atlas', () => {
       await sleep(100);
       await snap();
       await loadFontSync('montserrat', 'normal', '100', 'latin');
-      await sleep(100);
+      await sleep(500);
       await snap();
     });
     test('Hidden', async () => {
