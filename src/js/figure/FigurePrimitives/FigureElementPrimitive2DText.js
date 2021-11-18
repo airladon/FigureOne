@@ -688,7 +688,7 @@ export default class FigureElementPrimitive2DText extends FigureElementPrimitive
 
   measureAndAlignText() {
     this.drawingObject.measureText();
-    this.drawingObject.alignText();
+    // this.drawingObject.alignText();
     this.drawingObject.calcBorder();
   }
 
