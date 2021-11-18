@@ -4504,7 +4504,7 @@ class FigureElementCollection extends FigureElement {
   drawNumberOrder: Array<number | null>
   textureAtlases: { [textureID: string]: {
     atlas: Atlas,
-    notif: string,
+    notif: string | null,
   } };
 
   /**
@@ -6071,9 +6071,11 @@ class FigureElementCollection extends FigureElement {
     return elements;
   }
 
-  getAtlases(callback: () => {}) {
+  getAtlases(callback: () => void | null) {
     Object.keys(this.textureAtlases).forEach((id) => {
-      this.textureAtlases[id].atlas.notifications.remove('updated2', this.textureAtlases[id].notif);
+      if (this.textureAtlases[id].notif != null) {
+        this.textureAtlases[id].atlas.notifications.remove('updated2', this.textureAtlases[id].notif);
+      }
     });
     this.textureAtlases = {};
     const primitives = this.getAllPrimitives();
@@ -6083,7 +6085,7 @@ class FigureElementCollection extends FigureElement {
         if (this.textureAtlases[id] == null) {
           this.textureAtlases[id] = {
             atlas: e.atlas,
-            notif: e.atlas.notifications.add('updated2', callback),
+            notif: callback ? e.atlas.notifications.add('updated2', callback) : null,
           };
         }
       }
