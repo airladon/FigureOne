@@ -629,7 +629,9 @@ export default class FigureElementPrimitive2DText extends FigureElementPrimitive
     // to.loadText(options);
     super(to, options.transform, options.color, options.parent, options.name);
     this.calcBorderAndBounds();
-    this.drawingObject.watch(this.setText.bind(this, {}));
+    this.drawingObject.watch(() => {
+      this.setText({});
+    });
   }
 
   /**

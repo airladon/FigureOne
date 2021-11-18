@@ -203,6 +203,12 @@ class CollectionsText extends Equation {
     this.addElements(joinObjects({}, equationOptions.elements, options.elements || {}));
     // $FlowFixMe
     this.addForms(equationOptions.forms);
+    this.layoutForms('reset');
+  }
+
+  fontUpdated() {
+    this.clear();
+    this.layoutForms('reset');
   }
 
   splitLines(linesIn: Array<Object | string> | string) {

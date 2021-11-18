@@ -768,9 +768,16 @@ class CollectionsAxis extends FigureElementCollection {
     }
     this.update(this.startValue, this.stopValue);
     if (this.showAxis && options.title != null) {
-      this.addTitle(options.title);
+      if (typeof options.title === 'string' || options.title.text != null) {
+        this.addTitle(options.title);
+      }
     }
     this.getAtlases(() => this.update());
+  }
+
+  fontUpdated() {
+    super.fontUpdated();
+    this.update();
   }
 
   addTicks(

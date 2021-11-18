@@ -1649,6 +1649,11 @@ class CollectionsAngle extends FigureElementCollection {
     this.getAtlases(() => this.updateLabelUnshow());
   }
 
+  fontUpdated() {
+    super.fontUpdated();
+    this.updateLabelUnshow();
+  }
+
   /**
    * Get the label text
    */

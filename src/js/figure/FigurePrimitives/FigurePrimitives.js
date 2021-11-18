@@ -1466,6 +1466,10 @@ export default class FigurePrimitives {
     if (o.scene == null) {
       o.scene = this.scene;
     }
+    if (o.font.type != null) {
+      o.type = o.font.type;
+    }
+
     let element;
     if (o.type === 'bmp') {
       if (o.font.atlasColor) {

@@ -1355,6 +1355,9 @@ class FigureElement {
     return [];
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  fontUpdated() {}
+
   animateToState(
     state: Object,
     options: Object,
@@ -6070,6 +6073,12 @@ class FigureElementCollection extends FigureElement {
       }
     }
     return elements;
+  }
+
+  fontUpdated() {
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      this.elements[this.drawOrder[i]].fontUpdated();
+    }
   }
 
   getAtlases(callback: () => void | null = null) {

@@ -713,6 +713,9 @@ class Figure {
     this.timeKeeper = new TimeKeeper();
     this.notifications = new NotificationManager(this.fnMap);
     this.fonts = new FontManager(this.fnMap, this.notifications);
+    this.fonts.notifications.add('fontsLoaded', () => {
+      this.fontsLoaded();
+    });
     this.fonts.addAnimateFrameCallback(this.animateNextFrame.bind(this));
     this.recorder = new Recorder(this.timeKeeper);
     // $FlowFixMe
@@ -758,6 +761,10 @@ class Figure {
     this.drawAnimationFrames = 0;
     this.cursorShown = false;
     this.originalScalePoint = null;
+  }
+
+  fontsLoaded() {
+    this.elements.fontUpdated();
   }
 
   /**

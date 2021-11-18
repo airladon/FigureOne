@@ -839,6 +839,11 @@ export default class CollectionsLine extends FigureElementCollection {
     this.getAtlases(() => this.updateLabel());
   }
 
+  fontUpdated() {
+    super.fontUpdated();
+    this.updateLabel();
+  }
+
   /** A line has:
    *    - length
    *    - p1, p2
