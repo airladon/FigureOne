@@ -77,8 +77,8 @@ export type OBJ_TextModifiersDefinition = {
 
 /* eslint-disable max-len */
 /**
- * @property {Array<string | OBJ_TextLinesDefinition>} [text] array of line
- * strings
+ * @property {Array<string | OBJ_TextLinesDefinition> | string} [text] array of
+ * line strings - single string is single line only.
  * @property {OBJ_TextModifiersDefinition} [modifiers] modifier definitions
  * @property {OBJ_Font} [font] Default font to use in lines
  * @property {TypeParsableBuffer} [defaultTextTouchBorder] default buffer for
@@ -106,7 +106,7 @@ export type OBJ_TextModifiersDefinition = {
  */
 /* eslint-enable max-len */
 export type OBJ_CollectionsText = {
-  text: Array<string | OBJ_TextLinesDefinition>,
+  text: Array<string | OBJ_TextLinesDefinition> | string,
   modifiers: OBJ_TextModifiersDefinition | { eqn?: TypeEquationPhrase },
   elements: EQN_EquationElements,
   font?: OBJ_Font,
@@ -205,7 +205,13 @@ class CollectionsText extends Equation {
     this.addForms(equationOptions.forms);
   }
 
-  splitLines(lines: Array<Object | string>) {
+  splitLines(linesIn: Array<Object | string> | string) {
+    let lines;
+    if (Array.isArray(linesIn)) {
+      lines = linesIn;
+    } else {
+      lines = [linesIn];
+    }
     lines.forEach((lineDefinition, lineIndex) => {
       // const lineIndex = i;
       // const lineDefinition = lines[i];
