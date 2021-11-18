@@ -116,7 +116,8 @@ class Element implements ElementInterface {
     if (content instanceof FigureElementCollection
         || content instanceof FigureElementPrimitive) {
       // Update translation and scale
-      if (content.drawingObject != null && content.drawingObject.text != null && Array.isArray(content.drawingObject.text)) { // $FlowFixMe
+      // if (content.drawingObject != null && content.drawingObject.text != null && Array.isArray(content.drawingObject.text)) { // $FlowFixMe
+      if (content.drawingObject != null && content.drawingObject.measureAndAlignText != null) { // $FlowFixMe
         content.drawingObject.text[0].measureAndAlignText(); // $FlowFixMe
         content.drawingObject.text[0].calcBorderAndBounds(); // $FlowFixMe
         content.drawingObject.setBorder(); // $FlowFixMe
