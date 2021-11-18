@@ -22,6 +22,8 @@ import type {
 import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections';
 import type { TypeArrowHead, OBJ_LineArrows } from '../geometries/arrow';
+import type FigureElementPrimitive2DText from '../FigurePrimitives/FigureElementPrimitive2DText';
+import type FigureElementPrimitiveGLText from '../FigurePrimitives/FigureElementPrimitiveGLText';
 
 function calcAuto(auto: [number, number]) {
   const [min, max] = auto;
@@ -489,7 +491,7 @@ export type COL_Axis = {
 class CollectionsAxis extends FigureElementCollection {
   // Figure elements
   _line: ?FigureElementPrimitive;
-  _labels: ?FigureElementPrimitive;
+  _labels: ?(FigureElementPrimitive2DText | FigureElementPrimitiveGLText);
   _grid: ?FigureElementPrimitive;
   _ticks0: ?FigureElementPrimitive;
   _grid0: ?FigureElementPrimitive;
@@ -1139,7 +1141,7 @@ class CollectionsAxis extends FigureElementCollection {
     //   xAlign: this.labels.xAlign, // $FlowFixMe
     //   yAlign: this.labels.yAlign,
     // });
-    this._labels.setText({
+    this._labels.setText({  // $FlowFixMe
       text, location: locations, xAlign: this.labels.xAlign, yAlign: this.labels.yAlign,
     });
     // $FlowFixMe
