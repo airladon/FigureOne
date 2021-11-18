@@ -146,6 +146,10 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     ascent: number,
     descent: number,
     width: number,
+    left: number,
+    right: number,
+    top: number,
+    bottom: number,
   };
 
   location: Array<Point>;
@@ -191,6 +195,10 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       width: 1,
       descent: 0,
       ascent: 1,
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
     };
     this.createAtlas(options.scene);
     // this.atlas = this.drawingObject.webgl.getAtlas({
@@ -304,7 +312,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     const r = this.font.size / this.atlas.fontSize;
     let overallMaxAscent = 0;
     let overallMaxDescent = 0;
-    let overallWidth = 0;
+    // let overallWidth = 0;
     let left = null;
     let bottom = null;
     let top = null;
@@ -406,9 +414,9 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       if (maxDescent > overallMaxDescent) {
         overallMaxDescent = maxDescent;
       }
-      if (totalWidth > overallWidth) {
-        overallWidth = totalWidth;
-      }
+      // if (totalWidth > overallWidth) {
+      //   overallWidth = totalWidth;
+      // }
     }
 
     this.drawingObject.updateVertices(vertices);
@@ -431,9 +439,11 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
    *
    * @param {string | OBJ_SetText} text
    */
-  setText(text: string | OBJ_SetText) {
+  setText(text: string | Array<string> | OBJ_SetText) {
     if (typeof text === 'string') {
       this.text = [text];
+    } else if (Array.isArray(text)) {
+      this.text = text;
     } else {
       if (text.font != null) {
         this.font = new FigureFont(joinObjects({}, this.font.definition(), text.font));

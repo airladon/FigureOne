@@ -10,7 +10,7 @@ import FontManager from '../FontManager';
 //   FunctionMap,
 // } from '../../tools/FunctionMap';
 import {
-  Point, Rect, getBoundingBorder, isBuffer,
+  Point, Rect, getBoundingBorder, isBuffer, getPoints,
 } from '../../tools/g2';
 import type {
   Transform,
@@ -38,8 +38,11 @@ class TextObject extends DrawingObject {
   textBorder: Array<Point>;
   // textBorderBuffer: Array<Array<Point>>;
 
-  text: string;
-  location: Point;
+  text: Array<string>;
+
+  // $FlowFixMe
+  location: Array<Point>;
+  alignedLocation: Array<Point>;
   font: FigureFont;
   xAlign: 'left' | 'center' | 'right';
   yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
@@ -48,14 +51,25 @@ class TextObject extends DrawingObject {
     ascent: number,
     descent: number,
     width: number,
+    top: number,
+    left: number,
+    bottom: number,
+    right: number,
   };
 
-  lastDraw: {
+  measurements: Array<{
+    left: number,
+    right: number,
+    bottom: number,
+    top: number,
+  }>;
+
+  lastDraw: Array<{
     x: number,
     y: number,
     width: number,
     height: number,
-  } | null;
+  }>;
 
   adjustments: {
     ascent: number,
@@ -72,14 +86,19 @@ class TextObject extends DrawingObject {
     this.drawContext2D = drawContext2D;
     this.lastDrawTransform = [1, 0, 0, 0, 1, 0, 0, 0, 1];
     this.font = new FigureFont(options.font);
-    if (typeof options.text[0] === 'string') {  // eslint-disable-next-line
-      this.text = options.text[0];
+    if (typeof options.text[0] === 'object') {
+      this.text = [options.text[0].text];
     } else {
-      this.text = options.text[0].text;
+      this.text = options.text;
     }
     this.xAlign = options.xAlign;
     this.yAlign = options.yAlign;
     this.adjustments = options.adjustments;
+    this.lastDraw = [];
+    this.location = [];
+    if (options.location != null) {
+      this.location = getPoints(options.location);
+    }
     this.setText(this.text);
   }
 
@@ -97,9 +116,11 @@ class TextObject extends DrawingObject {
   }
 
   // $FlowFixMe
-  setText(text: string | OBJ_SetText) {
+  setText(text: Array<string> | string | OBJ_SetText) {
     this.clear();
     if (typeof text === 'string') {
+      this.text = [text];
+    } else if (Array.isArray(text)) {
       this.text = text;
     } else {
       if (text.font != null) {
@@ -115,12 +136,22 @@ class TextObject extends DrawingObject {
         this.adjustments = joinObjects({}, this.adjustments, text.adjustments);
       }
       if (text.text != null) {
-        this.text = text.text;
+        if (typeof text.text === 'string') {
+          this.text = [text.text];
+        } else {
+          this.text = text.text;
+        }
       }
+      if (text.location != null) {
+        this.location = getPoints(text.location);
+      }
+    }
+    if (this.location.length === 0) {
+      this.location = this.text.map(() => new Point(0, 0));
     }
     this.calcScalingFactor();
     this.measureText();
-    this.alignText();
+    // this.alignText();
     this.calcBorder();
     // this.calcBorderAndBounds();
   }
@@ -131,7 +162,7 @@ class TextObject extends DrawingObject {
 
   measureText(
     ctx: CanvasRenderingContext2D = this.drawContext2D.ctx,
-    scalingFactor: number = 20 / this.font.size,
+    scalingFactor: number = this.scalingFactor,
   ) {
     this.font.setFontInContext(ctx, scalingFactor);
     // const fontHeight = ctx.font.match(/[^ ]*px/);
@@ -142,9 +173,6 @@ class TextObject extends DrawingObject {
     //   aWidth = ctx.measureText('a').width;
     // }
     const aWidth = this.font.size * scalingFactor / 2;
-    // Estimations of FONT ascent and descent for a baseline of "alphabetic"
-    let ascent = aWidth * this.font.maxAscent;
-    let descent = aWidth * this.font.descent;
 
     // Uncomment below and change above consts to lets if more resolution on
     // actual text boundaries is needed
@@ -160,86 +188,172 @@ class TextObject extends DrawingObject {
       }
     }
 
-    const midAscentMatches = this.text.match(midAscentRe);
-    if (Array.isArray(midAscentMatches)) {
-      if (midAscentMatches.length === this.text.length) {
-        ascent = aWidth * this.font.midAscent;
-      }
-    }
-
-    const midDescentMatches = this.text.match(midDecentRe);
-    if (Array.isArray(midDescentMatches)) {
-      if (midDescentMatches.length > 0) {
-        descent = aWidth * this.font.midDescent;
-      }
-    }
-
-    const maxDescentMatches = this.text.match(maxDescentRe);
-    if (Array.isArray(maxDescentMatches)) {
-      if (maxDescentMatches.length > 0) {
-        descent = aWidth * this.font.maxDescent;
-      }
-    }
-    // const height = ascent + descent;
-
-    const { width } = ctx.measureText(this.text);
-    // width *= this.font.width;
-    if (this.font.underline !== false) {
-      // this.underline = [this.font.underline.descent, this.font.underline.width];
-      const uDescent = this.font.underline.descent * scalingFactor;
-      const uWidth = this.font.underline.width * scalingFactor;
-      if (uDescent > descent) {
-        descent = uDescent;
-      }
-      if (uDescent < 0) {
-        if (-uDescent + uWidth > ascent) {
-          ascent = -uDescent + uWidth;
+    let overallMaxDescent = 0;
+    let overallMaxAscent = 0;
+    let left = null;
+    let right = null;
+    let bottom = null;
+    let top = null;
+    this.measurements = [];
+    this.lastDraw = [];
+    this.alignedLocation = [];
+    for (let i = 0; i < this.text.length; i += 1) {
+      const text = this.text[i];
+      let ascent = aWidth * this.font.maxAscent;
+      let descent = aWidth * this.font.descent;
+      // Estimations of FONT ascent and descent for a baseline of "alphabetic"
+      const midAscentMatches = text.match(midAscentRe);
+      if (Array.isArray(midAscentMatches)) {
+        if (midAscentMatches.length === text.length) {
+          ascent = aWidth * this.font.midAscent;
         }
       }
+
+      const midDescentMatches = text.match(midDecentRe);
+      if (Array.isArray(midDescentMatches)) {
+        if (midDescentMatches.length > 0) {
+          descent = aWidth * this.font.midDescent;
+        }
+      }
+
+      const maxDescentMatches = text.match(maxDescentRe);
+      if (Array.isArray(maxDescentMatches)) {
+        if (maxDescentMatches.length > 0) {
+          descent = aWidth * this.font.maxDescent;
+        }
+      }
+      // const height = ascent + descent;
+
+      const { width } = ctx.measureText(text);
+      // width *= this.font.width;
+      if (this.font.underline !== false) {
+        // this.underline = [this.font.underline.descent, this.font.underline.width];
+        const uDescent = this.font.underline.descent * scalingFactor;
+        const uWidth = this.font.underline.width * scalingFactor;
+        if (uDescent > descent) {
+          descent = uDescent;
+        }
+        if (uDescent < 0) {
+          if (-uDescent + uWidth > ascent) {
+            ascent = -uDescent + uWidth;
+          }
+        }
+      }
+      const w = width / scalingFactor + this.adjustments.width;
+      const d = descent / scalingFactor + this.adjustments.descent;
+      const a = ascent / scalingFactor + this.adjustments.ascent;
+      const alignedLocation = this.location[i]._dup();
+      if (this.xAlign === 'center') {
+        alignedLocation.x -= w / 2;
+      } else if (this.xAlign === 'right') {
+        alignedLocation.x -= w;
+      }
+      if (this.yAlign === 'bottom') {
+        alignedLocation.y += d;
+      } else if (this.yAlign === 'middle') {
+        alignedLocation.y += d - (a + d) / 2;
+      } else if (this.yAlign === 'top') {
+        alignedLocation.y -= a;
+      }
+      if (left == null || alignedLocation.x < left) {
+        left = alignedLocation.x;
+      }
+      if (right == null || alignedLocation.x + w > right) {
+        right = alignedLocation.x + w;
+      }
+      if (bottom == null || alignedLocation.y < bottom) {
+        bottom = alignedLocation.y - d;
+      }
+      if (top == null || alignedLocation.y + a > top) {
+        top = alignedLocation.y + a;
+      }
+      overallMaxDescent = Math.max(descent, overallMaxDescent);
+      overallMaxAscent = Math.max(ascent, overallMaxAscent);
+      this.measurements.push({
+        left: alignedLocation.x,
+        right: alignedLocation.x + w,
+        bottom: alignedLocation.y - d,
+        top: alignedLocation.y + a,
+      });
+      this.alignedLocation.push(alignedLocation);
+      // console.log(location, this.location[i])
+      // this.lastDraw.push({});
     }
     //  else {
     //   this.underline = [0, 0];
     // }
     // console.log(this.adjustments)
     this.measure = {
-      ascent: ascent / scalingFactor + this.adjustments.ascent,
-      descent: descent / scalingFactor + this.adjustments.descent,
-      width: width / scalingFactor + this.adjustments.width,
+      // ascent: ascent / scalingFactor + this.adjustments.ascent,
+      // descent: descent / scalingFactor + this.adjustments.descent,
+      // width: width / scalingFactor + this.adjustments.width,
+      ascent: overallMaxAscent / scalingFactor + this.adjustments.ascent,
+      descent: overallMaxDescent / scalingFactor + this.adjustments.descent, // $FlowFixMe
+      width: right - left, // $FlowFixMe
+      top, // $FlowFixMe
+      left, // $FlowFixMe
+      bottom, // $FlowFixMe
+      right,
     };
     return this.measure;
   }
 
-  alignText() {
-    const location = new Point(0, 0);
-    if (this.xAlign === 'center') {
-      location.x -= this.measure.width / 2;
-    } else if (this.xAlign === 'right') {
-      location.x -= this.measure.width;
-    }
-    if (this.yAlign === 'bottom') {
-      location.y += this.measure.descent;
-    } else if (this.yAlign === 'middle') {
-      location.y += this.measure.descent - (this.measure.ascent + this.measure.descent) / 2;
-    } else if (this.yAlign === 'top') {
-      location.y -= this.measure.ascent;
-    }
-    this.location = location;
-  }
+  // alignText() {
+  //   for (let i = 0; i < this.text.length; i += 1) {
+  //     const location = this.location[i];
+  //     if (this.xAlign === 'center') {
+  //       location.x -= this.measure.width / 2;
+  //     } else if (this.xAlign === 'right') {
+  //       location.x -= this.measure.width;
+  //     }
+  //     if (this.yAlign === 'bottom') {
+  //       location.y += this.measure.descent;
+  //     } else if (this.yAlign === 'middle') {
+  //       location.y += this.measure.descent - (this.measure.ascent + this.measure.descent) / 2;
+  //     } else if (this.yAlign === 'top') {
+  //       location.y -= this.measure.ascent;
+  //     }
+  //   }
+  //   const location = new Point(0, 0);
+  //   if (this.xAlign === 'center') {
+  //     location.x -= this.measure.width / 2;
+  //   } else if (this.xAlign === 'right') {
+  //     location.x -= this.measure.width;
+  //   }
+  //   if (this.yAlign === 'bottom') {
+  //     location.y += this.measure.descent;
+  //   } else if (this.yAlign === 'middle') {
+  //     location.y += this.measure.descent - (this.measure.ascent + this.measure.descent) / 2;
+  //   } else if (this.yAlign === 'top') {
+  //     location.y -= this.measure.ascent;
+  //   }
+  //   this.location = location;
+  // }
 
   calcBorder() {
-    const bounds = new Rect(
-      this.location.x,
-      this.location.y - this.measure.descent,
-      this.measure.width,
-      this.measure.ascent + this.measure.descent,
-    );
-    this.bounds = bounds;
+    // const bounds = new Rect(
+    //   this.location.x,
+    //   this.location.y - this.measure.descent,
+    //   this.measure.width,
+    //   this.measure.ascent + this.measure.descent,
+    // );
+    // this.bounds = bounds;
 
+    // this.textBorder = [
+    //   new Point(bounds.left, bounds.bottom),
+    //   new Point(bounds.right, bounds.bottom),
+    //   new Point(bounds.right, bounds.top),
+    //   new Point(bounds.left, bounds.top),
+    // ];
+    const {
+      left, bottom, top, right,
+    } = this.measure;
+    this.bounds = new Rect(left, bottom, right - left, top - bottom);
     this.textBorder = [
-      new Point(bounds.left, bounds.bottom),
-      new Point(bounds.right, bounds.bottom),
-      new Point(bounds.right, bounds.top),
-      new Point(bounds.left, bounds.top),
+      new Point(left, bottom),
+      new Point(right, bottom),
+      new Point(right, top),
+      new Point(left, top),
     ];
   }
 
@@ -400,31 +514,41 @@ class TextObject extends DrawingObject {
     //   width: this.bounds.width * scalingFactor,
     //   height: this.bounds.height * scalingFactor,
     // };
-    this.lastDraw = {
-      x: (this.location.x) * scalingFactor,
-      y: (this.bounds.bottom) * -scalingFactor,
-      width: this.bounds.width * scalingFactor,
-      height: this.bounds.height * scalingFactor,
-    };
-    // console.log(this.text, c)
-    if (this.font.underline !== false) {
-      // const [uDescent, uWidth] = this.underline;
-      if (this.font.underline.color) {
-        this.font.setColorInContext(ctx, this.font.underline.color);
-        this.font.setStrokeColorInContext(ctx, this.font.underline.color);
-      } else {
-        this.font.setColorInContext(ctx, c);
-        this.font.setStrokeColorInContext(ctx, c);
+    this.lastDraw = [];
+    this.text.forEach((text, i) => {
+      const location = this.alignedLocation[i];
+      this.lastDraw.push({
+        x: this.measurements[i].left * scalingFactor,
+        y: this.measurements[i].bottom * -scalingFactor,
+        width: (this.measurements[i].right - this.measurements[i].left) * scalingFactor,
+        height: (this.measurements[i].top - this.measurements[i].bottom) * scalingFactor,
+      });
+      // this.lastDraw = {
+      //   x: (this.location.x) * scalingFactor,
+      //   y: (this.bounds.bottom) * -scalingFactor,
+      //   width: this.bounds.width * scalingFactor,
+      //   height: this.bounds.height * scalingFactor,
+      // };
+      // console.log(this.text, c)
+      if (this.font.underline !== false) {
+        // const [uDescent, uWidth] = this.underline;
+        if (this.font.underline.color) {
+          this.font.setColorInContext(ctx, this.font.underline.color);
+          this.font.setStrokeColorInContext(ctx, this.font.underline.color);
+        } else {
+          this.font.setColorInContext(ctx, c);
+          this.font.setStrokeColorInContext(ctx, c);
+        }
+        ctx.fillRect(
+          (location.x) * scalingFactor,
+          (location.y - this.font.underline.descent
+            + this.font.underline.width) * -scalingFactor,
+          this.bounds.width * scalingFactor,
+          this.font.underline.width * scalingFactor,
+        );
       }
-      ctx.fillRect(
-        (this.location.x) * scalingFactor,
-        (this.location.y - this.font.underline.descent
-          + this.font.underline.width) * -scalingFactor,
-        this.bounds.width * scalingFactor,
-        this.font.underline.width * scalingFactor,
-      );
-    }
-    this.font.draw2D(ctx, c[3], this.text, this.location.x, this.location.y, scalingFactor);
+      this.font.draw2D(ctx, c[3], text, location.x, location.y, scalingFactor);
+    });
     ctx.restore();
   }
 
@@ -433,16 +557,25 @@ class TextObject extends DrawingObject {
     const t = this.lastDrawTransform;
     ctx.save();
     ctx.transform(t[0], t[3], t[1], t[4], t[2], t[5]);
-    if (this.lastDraw != null) {
+    this.lastDraw.forEach((m) => {
       const {
         x, y, width, height,
-      } = this.lastDraw;
+      } = m;
       ctx.clearRect(
         x - width * 1, y + height * 0.5, width * 3, -height * 2,
       );
-      // eslint-disable-next-line no-param-reassign
-      this.lastDraw = null;
-    }
+    });
+    this.lastDraw = [];
+    // if (this.lastDraw != null) {
+    //   const {
+    //     x, y, width, height,
+    //   } = this.lastDraw;
+    //   ctx.clearRect(
+    //     x - width * 1, y + height * 0.5, width * 3, -height * 2,
+    //   );
+    //   // eslint-disable-next-line no-param-reassign
+    //   this.lastDraw = null;
+    // }
     ctx.restore();
   }
 
