@@ -19,6 +19,7 @@ import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type { OBJ_TextLines } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 import type { OBJ_PlotFrame } from './Plot';
 import type FigureCollections from './FigureCollections';
+import type CollectionsRectangle from './Rectangle';
 
 /**
  * Legend customization for a single trace sample in the legend.
@@ -263,7 +264,7 @@ export type COL_PlotLegend = {
 // $FlowFixMe
 class CollectionsPlotLegend extends FigureElementCollection {
   // Figure elements
-  _frame: ?FigureElementPrimitive;
+  _frame: ?CollectionsRectangle;
   // _axis: ?CollectionsAxis;
   // _majorTicks: ?FigureElementPrimitive;
   // _minorTicks: ?FigureElementPrimitive;
@@ -277,6 +278,7 @@ class CollectionsPlotLegend extends FigureElementCollection {
   offset: Array<Point>;
 
   toShow: Array<number>;
+  frameSpace: number;
 
   /**
    * @hideconstructor
@@ -308,6 +310,7 @@ class CollectionsPlotLegend extends FigureElementCollection {
 
     this.toShow = this.getTracesToShow(options);
     this.offset = this.getOffset(options);
+    this.frameSpace = 0;
     this.addTraces(options);
     if (options.frame != null && options.frame !== false) {
       this.addFrame(options.frame);
@@ -448,8 +451,8 @@ class CollectionsPlotLegend extends FigureElementCollection {
       }
       const oText = joinObjects({}, textOptions, colorOverride, textOptionsToUse, custom.text);
       // o.offset = getPoint(o.offset);
-      const traceName = this.collections.primitives.textLines(oText);
-      this.add(`trace${traceIndex}`, traceName);
+      const traceName = this.collections.text(oText);
+      const t = this.add(`trace${traceIndex}`, traceName);
     });
   }
 
@@ -476,7 +479,23 @@ class CollectionsPlotLegend extends FigureElementCollection {
     }
     const frame = this.collections.rectangle(oFrame);
     frame.surround(this, oFrame.space, true);
+    this.frameSpace = oFrame.space;
     this.add('frame', frame);
+    this.getAtlases(() => this.update());
+    // this.update();
+  }
+
+  fontUpdated() {
+    super.fontUpdated();
+    this.update();
+  }
+
+  update() {
+    let elements = this.getAllPrimitives();
+    elements = elements.filter(e => e.parent.name !== 'frame');
+    if (this._frame != null) {
+      this._frame.surround(elements, this.frameSpace, false);
+    }
   }
 
   // _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this

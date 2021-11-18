@@ -1048,6 +1048,20 @@ class CollectionsPlot extends FigureElementCollection {
       // $FlowFixMe
       this.__frame.surround(this, this.frameSpace);
     });
+    this.getAtlases(() => this.update());
+  }
+
+  fontUpdated() {
+    super.fontUpdated();
+    this.update();
+  }
+
+  update() {
+    let elements = this.getChildren();
+    elements = elements.filter(e => e.name !== '_frame');
+    if (this.__frame != null) { // $FlowFixMe
+      this.__frame.surround(elements, this.frameSpace, false);
+    }
   }
 
   getTraceIndex(name: string | number) {
@@ -1436,7 +1450,7 @@ class CollectionsPlot extends FigureElementCollection {
         bounds.top + o.font.size * 0.5 + o.offset.y,
       );
     }
-    const title = this.collections.primitives.textLines(o);
+    const title = this.collections.text(o);
     this.add('title', title);
   }
 
