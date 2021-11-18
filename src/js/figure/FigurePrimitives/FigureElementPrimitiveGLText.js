@@ -160,8 +160,8 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
 
   // $FlowFixMe
   drawingObject: GLObject;
-  textBorder: Array<Point>;
-  textBorderBuffer: Array<Point>;
+  // textBorder: Array<Point>;
+  // textBorderBuffer: Array<Point>;
   atlasNotificationsID: number;
 
   setup(options: OBJ_Text_Fixed) {
@@ -317,6 +317,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     let bottom = null;
     let top = null;
     let right = null;
+    const border = [];
     for (let t = 0; t < this.text.length; t += 1) {
       let x = 0;
       const numVertices = vertices.length;
@@ -400,12 +401,18 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       if (right == null || ox + this.location[t].x + totalWidth > right) {
         right = ox + this.location[t].x + totalWidth;
       }
-      if (bottom == null || oy + this.location[t].y < bottom) {
+      if (bottom == null || oy + this.location[t].y - maxDescent < bottom) {
         bottom = oy + this.location[t].y - maxDescent;
       }
       if (top == null || oy + this.location[t].y + maxAscent > top) {
         top = oy + this.location[t].y + maxAscent;
       }
+      border.push([
+        new Point(ox + this.location[t].x, oy + this.location[t].y - maxDescent),
+        new Point(ox + this.location[t].x + totalWidth, oy + this.location[t].y - maxDescent),
+        new Point(ox + this.location[t].x + totalWidth, oy + this.location[t].y + maxAscent),
+        new Point(ox + this.location[t].x, oy + this.location[t].y + maxAscent),
+      ]);
       // console.log(vertices)
       // console.log(texCoords)
       if (maxAscent > overallMaxAscent) {
@@ -430,6 +437,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       bottom,
       top,
       right,
+      border,
     };
     // console.log(this.adjustments)
   }
@@ -529,12 +537,13 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     //   new Point(bounds.right, bounds.top),
     //   new Point(bounds.left, bounds.top),
     // ]];
-    this.drawBorder = [[
-      new Point(this.measure.left, this.measure.bottom),
-      new Point(this.measure.right, this.measure.bottom),
-      new Point(this.measure.right, this.measure.top),
-      new Point(this.measure.left, this.measure.top),
-    ]];
+    this.drawBorder = this.measure.border;
+    // this.drawBorder = [[
+    //   new Point(this.measure.left, this.measure.bottom),
+    //   new Point(this.measure.right, this.measure.bottom),
+    //   new Point(this.measure.right, this.measure.top),
+    //   new Point(this.measure.left, this.measure.top),
+    // ]];
   }
 
   calcTouchBorder() {

@@ -35,7 +35,7 @@ class TextObject extends DrawingObject {
 
   bounds: Rect;
   // $FlowFixMe
-  textBorder: Array<Point>;
+  textBorder: Array<Array<Point>>;
   // textBorderBuffer: Array<Array<Point>>;
 
   text: Array<string>;
@@ -197,6 +197,7 @@ class TextObject extends DrawingObject {
     this.measurements = [];
     this.lastDraw = [];
     this.alignedLocation = [];
+    const border = [];
     for (let i = 0; i < this.text.length; i += 1) {
       const text = this.text[i];
       let ascent = aWidth * this.font.maxAscent;
@@ -278,6 +279,12 @@ class TextObject extends DrawingObject {
       this.alignedLocation.push(alignedLocation);
       // console.log(location, this.location[i])
       // this.lastDraw.push({});
+      border.push([
+        new Point(alignedLocation.x, alignedLocation.y - d),
+        new Point(alignedLocation.x + w, alignedLocation.y - d),
+        new Point(alignedLocation.x + w, alignedLocation.y + a),
+        new Point(alignedLocation.x, alignedLocation.y + a),
+      ]);
     }
     //  else {
     //   this.underline = [0, 0];
@@ -294,6 +301,7 @@ class TextObject extends DrawingObject {
       left, // $FlowFixMe
       bottom, // $FlowFixMe
       right,
+      border,
     };
     return this.measure;
   }
@@ -346,15 +354,16 @@ class TextObject extends DrawingObject {
     //   new Point(bounds.left, bounds.top),
     // ];
     const {
-      left, bottom, top, right,
+      left, bottom, top, right, border,
     } = this.measure;
     this.bounds = new Rect(left, bottom, right - left, top - bottom);
-    this.textBorder = [
-      new Point(left, bottom),
-      new Point(right, bottom),
-      new Point(right, top),
-      new Point(left, top),
-    ];
+    this.textBorder = border;
+    // this.textBorder = [
+    //   new Point(left, bottom),
+    //   new Point(right, bottom),
+    //   new Point(right, top),
+    //   new Point(left, top),
+    // ];
   }
 
   // Text is drawn in pixel space which is 0, 0 in the left hand top corner on
@@ -643,7 +652,7 @@ export default class FigureElementPrimitive2DText extends FigureElementPrimitive
 
   calcBorder() {
     this.drawingObject.calcBorder();
-    this.drawBorder = [this.drawingObject.textBorder];
+    this.drawBorder = this.drawingObject.textBorder;
   }
 
   calcTouchBorder() {
