@@ -44,6 +44,7 @@ import type {
 } from '../tools/types';
 import type { OBJ_Touch } from './FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections/FigureCollections';
+import Atlas from './webgl/Atlas';
 
 const FIGURE1DEBUG = false;
 
@@ -6071,7 +6072,7 @@ class FigureElementCollection extends FigureElement {
     return elements;
   }
 
-  getAtlases(callback: () => void | null) {
+  getAtlases(callback: () => void | null = null) {
     Object.keys(this.textureAtlases).forEach((id) => {
       if (this.textureAtlases[id].notif != null) {
         this.textureAtlases[id].atlas.notifications.remove('updated2', this.textureAtlases[id].notif);
