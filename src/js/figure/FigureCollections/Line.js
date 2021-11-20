@@ -30,7 +30,7 @@ import type { OBJ_Pulse, FigureElement } from '../Element';
 import type { EQN_Equation } from '../Equation/Equation';
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Animation/Animation';
-import type { TypeColor, TypeDash } from '../../tools/types';
+import type { TypeColor, TypeDash, OBJ_Font } from '../../tools/types';
 import type FigurePrimitives from '../FigurePrimitives/FigurePrimitives';
 import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections';
@@ -114,6 +114,7 @@ export type OBJ_PulseWidth = {
  * @property {boolean} [update] (`false`)
  * @property {number} [scale] size of the label
  * @property {TypeColor} [color]
+ * @property {OBJ_Font} [font] default font for label
  */
 export type OBJ_LineLabel = {
   text: null | string | Array<string> | Equation | EQN_Equation,
@@ -126,6 +127,7 @@ export type OBJ_LineLabel = {
   update?: boolean,
   scale?: number,
   color?: TypeColor,
+  font?: OBJ_Font,
 };
 
 
@@ -275,8 +277,11 @@ class LineLabel extends EquationLabel {
     linePosition: number = 0.5,     // number where 0 is end1, and 1 is end2
     scale: number = 0.7,
     precision: number = 1,
+    font: OBJ_Font,
   ) {
-    super(collections, { label: labelText, color, scale });
+    super(collections, {
+      label: labelText, color, scale, font,
+    });
     this.offset = offset;
     this.location = location;
     this.subLocation = subLocation;
@@ -702,7 +707,11 @@ export default class CollectionsLine extends FigureElementCollection {
       color: optionsToUse.color,
       precision: 1,
       update: false,
+      font: joinObjects({}, collections.primitives.defaultFont),
     };
+    delete defaultLabelOptions.font.style;
+    delete defaultLabelOptions.font.color;
+    delete defaultLabelOptions.font.type;
     if (optionsToUse.label !== undefined) {
       let labelOptions;
       if (typeof optionsToUse.label === 'string' || optionsToUse.label === null) {
@@ -725,6 +734,7 @@ export default class CollectionsLine extends FigureElementCollection {
         labelOptions.color,
         labelOptions.precision,
         labelOptions.update,
+        labelOptions.font,
         labelOptions,
       );
     }
@@ -1165,6 +1175,7 @@ export default class CollectionsLine extends FigureElementCollection {
     color: TypeColor = this.color,
     precision: number = 1,
     update: boolean = false,
+    font: OBJ_Font,
     otherOptions: {
       isTouchable?: boolean,
       touchBorder?: TypeParsableBuffer | TypeBorder,
@@ -1174,7 +1185,7 @@ export default class CollectionsLine extends FigureElementCollection {
     this.label = new LineLabel(
       this.collections, labelText, color,
       offset, location, subLocation, orientation, linePosition, scale,
-      precision,
+      precision, font,
     );
     this.label.eqn.initialForm = null;
     if (otherOptions.isTouchable != null) {

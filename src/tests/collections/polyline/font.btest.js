@@ -51,39 +51,35 @@ async function peval(callback, params) {
   return page.evaluate(callback, params);
 }
 
-async function makePlot(t) {
+async function makeShape(t) {
   return page.evaluate((type) => {
-    const pow = (p = 2, start = 0, stop = 10, step = 0.05) => {
-      const xValues = Fig.range(start, stop, step);
-      return xValues.map(x => new Fig.Point(x, x ** p));
-    };
     figure.add({
-      name: 'plot',
-      make: 'collections.plot',
-      width: 1,
-      height: 1,
-      position: [-0.6, -0.5],
-      y: { title: 'y Axis' },
-      x: { title: 'x Axis' },
-      font: { family: 'montserrat', glyphs: 'latin', type },
-      trace: [
-        { points: pow(1.5), name: 'Power 1.5' },
-        {
-          points: pow(2, 0, 10, 0.5),
-          name: 'Power 2',
-          markers: { sides: 4, radius: 0.03 },
+      name: 'shape',
+      make: 'collections.polyline',
+      points: [[-0.8, 0.5], [0.8, 0.5], [0, -0.5]],
+      close: true,
+      makeValid: {
+        shape: 'triangle',
+        hide: {
+          minAngle: Math.PI / 8,
         },
-        {
-          points: pow(3, 0, 10, 0.5),
-          name: 'Power 3',
-          markers: { radius: 0.03, sides: 10, line: { width: 0.005 } },
-          line: { dash: [0.04, 0.01] },
-        },
-      ],
-      legend: {
-        frame: { line: { width: 0.01 }, space: 0.05 },
       },
-      frame: true,
+      font: { family: 'montserrat', glyphs: 'math', type },
+      side: {
+        showLine: true,
+        offset: 0.2,
+        arrow: 'barb',
+        width: 0.01,
+        label: {
+          text: null,
+        },
+      },
+      angle: {
+        label: null,
+        curve: {
+          radius: 0.2,
+        },
+      },
     });
   }, t);
 }
@@ -109,56 +105,56 @@ describe('Axis Font', () => {
   });
   describe('Create', () => {
     test('Simple BMP', async () => {
-      await makePlot('bmp');
+      await makeShape('bmp');
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
       await sleep(100);
       await snap();
-      const gl = await numGL('plot');
-      const d2 = await num2D('plot');
-      expect(gl).toBe(7);
+      const gl = await numGL('shape');
+      const d2 = await num2D('shape');
+      expect(gl).toBe(6);
       expect(d2).toBe(0);
     });
     test('Simple 2D', async () => {
-      await makePlot('2d');
+      await makeShape('2d');
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
       await sleep(100);
       await snap();
-      const gl = await numGL('plot');
-      const d2 = await num2D('plot');
+      const gl = await numGL('shape');
+      const d2 = await num2D('shape');
       expect(gl).toBe(0);
-      expect(d2).toBe(7);
+      expect(d2).toBe(6);
     });
     test('Hide BMP', async () => {
-      await makePlot('bmp');
+      await makeShape('bmp');
       await snap();
-      await page.evaluate(() => figure.get('plot').hide());
+      await page.evaluate(() => figure.get('shape').hide());
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
       await sleep(100);
       await snap();
-      await page.evaluate(() => figure.get('plot').show());
+      await page.evaluate(() => figure.get('shape').show());
       await snap();
-      const gl = await numGL('plot');
-      const d2 = await num2D('plot');
-      expect(gl).toBe(7);
+      const gl = await numGL('shape');
+      const d2 = await num2D('shape');
+      expect(gl).toBe(6);
       expect(d2).toBe(0);
     });
     test('Hide 2D', async () => {
-      await makePlot('2d');
+      await makeShape('2d');
       await snap();
-      await page.evaluate(() => figure.get('plot').hide());
+      await page.evaluate(() => figure.get('shape').hide());
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
       await sleep(100);
       await snap();
-      await page.evaluate(() => figure.get('plot').show());
+      await page.evaluate(() => figure.get('shape').show());
       await snap();
-      const gl = await numGL('plot');
-      const d2 = await num2D('plot');
+      const gl = await numGL('shape');
+      const d2 = await num2D('shape');
       expect(gl).toBe(0);
-      expect(d2).toBe(7);
+      expect(d2).toBe(6);
     });
   });
 });

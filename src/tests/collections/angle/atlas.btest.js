@@ -213,45 +213,6 @@ describe('Angle Atlas', () => {
       await sleep(1000);
       await snap();
     });
-    // test('Two forms, one not set', async () => {
-    //   await page.evaluate(() => {
-    //     figure.add({
-    //       name: 'eqn',
-    //       make: 'equation',
-    //       textFont: { family: 'montserrat', weight: '400', glyphs: 'latin' },
-    //       forms: {
-    //         0: ['a', 'b', 'c'],
-    //         1: ['b', 'd', 'e'],
-    //       },
-    //     });
-    //   });
-    //   await page.evaluate(() => {
-    //     figure.fonts.watch(figure.elements._eqn._a.font, () => figure.elements._eqn.showForm('0'));
-    //   });
-    //   const w01 = await page.evaluate(() => figure.elements._eqn.eqn.forms['0'].width);
-    //   const w11 = await page.evaluate(() => figure.elements._eqn.eqn.forms['1'].width);
-    //   expect(w11).toEqual(0);
-    //   // await frame();
-    //   await snap();
-    //   await loadFontSync('montserrat', 'normal', '400', 'latin');
-    //   await sleep(100);
-    //   await page.evaluate(() => {
-    //     figure.elements._eqn.showForm('0');
-    //   });
-    //   const w02 = await page.evaluate(() => figure.elements._eqn.eqn.forms['0'].width);
-
-    //   // Form one is not set, so it is not rearranged when font is loaded
-    //   const w12 = await page.evaluate(() => figure.elements._eqn.eqn.forms['1'].width);
-    //   expect(w02).toBeGreaterThan(w01);
-    //   expect(w12).toBe(0);
-    //   await snap();
-    //   await page.evaluate(() => {
-    //     figure.elements._eqn.showForm('1');
-    //   });
-    //   const w13 = await page.evaluate(() => figure.elements._eqn.eqn.forms['1'].width);
-    //   expect(w13).toBeGreaterThan(0);
-    //   await snap();
-    // });
   });
 });
 

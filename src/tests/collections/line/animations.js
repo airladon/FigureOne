@@ -95,6 +95,8 @@ if (typeof process === 'object') {
     updates,
   };
 } else {
+  figure.primitives.defaultFont.size = 0.2;
+  figure.primitives.defaultFont.family = 'Times New Roman';
   figure.add(getShapes(index => getPosition(index)));
   startUpdates = () => {
     Object.keys(updates).forEach((name) => {

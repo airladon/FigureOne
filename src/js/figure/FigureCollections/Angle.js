@@ -436,8 +436,11 @@ class AngleLabel extends EquationLabel {
     location: 'left' | 'right' | 'top' | 'bottom' | 'outside' | 'inside' | 'positive' | 'negative',
     subLocation: 'left' | 'right' | 'top' | 'bottom',
     scale: number = 0.7,
+    font: OBJ_Font,
   ) {
-    super(equation, { label: labelText, color, scale });
+    super(equation, {
+      label: labelText, color, scale, font,
+    });
     this.radius = radius;
     this.curvePosition = curvePosition;
     this.offset = offset;
@@ -1179,7 +1182,11 @@ class CollectionsAngle extends FigureElementCollection {
       color: this.color,
       location: 'outside',
       update: false,
+      font: joinObjects({}, this.collections.primitives.defaultFont),
     };
+    delete defaultLabelOptions.font.style;
+    delete defaultLabelOptions.font.color;
+    delete defaultLabelOptions.font.type;
     if (this.curve) {
       defaultLabelOptions.radius = Math.max(
         this.curve.radius,
@@ -1208,6 +1215,7 @@ class CollectionsAngle extends FigureElementCollection {
       optionsToUse.location,
       optionsToUse.subLocation,
       optionsToUse.scale,
+      optionsToUse.font,
     );
     this.label.eqn.initialForm = null;
     if (optionsToUse.isTouchable != null) {
