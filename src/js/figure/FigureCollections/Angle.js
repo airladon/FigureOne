@@ -25,7 +25,7 @@ import type {
 } from './EquationLabel';
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Animation/Animation';
-import type { TypeColor } from '../../tools/types';
+import type { TypeColor, OBJ_Font } from '../../tools/types';
 import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections';
 
