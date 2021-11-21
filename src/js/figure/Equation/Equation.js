@@ -1342,6 +1342,11 @@ export class Equation extends FigureElementCollection {
     }
   }
 
+  fontUpdated() {
+    super.fontUpdated();
+    this.layoutForms('reset');
+  }
+
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(options),
       'eqn.currentForm',
