@@ -163,6 +163,11 @@ const webgl = {
       '}': { width: 40, ascent: 56, descent: 20, offsetX: 40, offsetY: 40 },
       _: { width: 40, ascent: 56, descent: 3.2, offsetX: 40, offsetY: 40 },
       '\u2212': { width: 40, ascent: 38, descent: 3.2, offsetX: 40, offsetY: 40 },
+      '\u00b0': { width: 40, ascent: 56, descent: 3.2, offsetX: 40, offsetY: 40 },
+      \u00ba: { width: 40, ascent: 56, descent: 3.2, offsetX: 40, offsetY: 40 },
+      '\u00d7': { width: 40, ascent: 38, descent: 3.2, offsetX: 40, offsetY: 40 },
+      '\u00f7': { width: 40, ascent: 38, descent: 3.2, offsetX: 40, offsetY: 40 },
+      '\u2192': { width: 40, ascent: 38, descent: 3.2, offsetX: 40, offsetY: 40 },
     },
   }),
   /* eslint-enable object-curly-newline */

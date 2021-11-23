@@ -490,7 +490,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
    * @return {string}
    */
   getText() {
-    return this.text;
+    return this.text[0];
   }
 
   /**

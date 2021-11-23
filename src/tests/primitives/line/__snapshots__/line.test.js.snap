@@ -304,6 +304,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -357,7 +358,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -1177,6 +1182,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -1230,7 +1236,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -2158,6 +2168,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -2211,7 +2222,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -4099,6 +4114,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -4152,7 +4168,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -5152,6 +5172,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -5205,7 +5226,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -7093,6 +7118,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -7146,7 +7172,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -8038,6 +8068,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -8091,7 +8122,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -8875,6 +8910,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -8928,7 +8964,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -9575,6 +9615,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -9628,7 +9669,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -10315,6 +10360,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -10368,7 +10414,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -11070,6 +11120,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -11123,7 +11174,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -11743,6 +11798,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -11796,7 +11852,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -12416,6 +12476,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -12469,7 +12530,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -13089,6 +13154,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -13142,7 +13208,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -13861,6 +13931,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -13914,7 +13985,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -14633,6 +14708,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -14686,7 +14762,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -15406,6 +15486,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -15459,7 +15540,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -16178,6 +16263,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -16231,7 +16317,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -16950,6 +17040,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -17003,7 +17094,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -17623,6 +17718,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -17676,7 +17772,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -18296,6 +18396,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -18349,7 +18450,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -18969,6 +19074,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -19022,7 +19128,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -19659,6 +19769,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -19712,7 +19823,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -20332,6 +20447,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -20385,7 +20501,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -21022,6 +21142,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -21075,7 +21196,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -21695,6 +21820,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -21748,7 +21874,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -22528,6 +22658,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -22581,7 +22712,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -23217,6 +23352,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -23270,7 +23406,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -23890,6 +24030,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -23943,7 +24084,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -24563,6 +24708,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -24616,7 +24762,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -25255,6 +25405,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -25308,7 +25459,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -25990,6 +26145,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -26043,7 +26199,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -26704,6 +26864,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -26757,7 +26918,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -27404,6 +27569,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -27457,7 +27623,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -28104,6 +28274,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -28157,7 +28328,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -28777,6 +28952,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -28830,7 +29006,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -29450,6 +29630,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -29503,7 +29684,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -30123,6 +30308,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -30176,7 +30362,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,
@@ -30796,6 +30986,7 @@ FigureElementPrimitive {
     },
     "webgl": Object {
       "addTexture": [Function],
+      "getAtlas": [Function],
       "getProgram": [Function],
       "gl": Object {
         "TRIANGLES": 1,
@@ -30849,7 +31040,11 @@ FigureElementPrimitive {
       "targetTexture": Object {
         "fb": null,
       },
-      "textures": Object {},
+      "textures": Object {
+        "1": Object {
+          "index": 1,
+        },
+      },
       "useProgram": [Function],
     },
     "z": 0,

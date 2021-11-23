@@ -683,7 +683,7 @@ export default class FigureElementPrimitive2DText extends FigureElementPrimitive
    * @return {string}
    */
   getText() {
-    return this.drawingObject.text;
+    return this.drawingObject.text[0];
   }
 
   setColor(color: TypeColor, setDefault: boolean = true) {
