@@ -1053,7 +1053,7 @@ export class Equation extends FigureElementCollection {
       color,
       dimColor,
       position: new Point(0, 0),
-      scale: 0.7,
+      scale: shapes.equationScale,
       formDefaults: {
         alignment: {
           fixTo: new Point(0, 0),
@@ -1072,7 +1072,7 @@ export class Equation extends FigureElementCollection {
       touchBorder: 'rect',
       transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       timeKeeper: shapes.timeKeeper,
-      type: 'bmp',
+      type: shapes.defaultFont.type,
     };
 
     const optionsToUse = joinObjectsWithOptions({ except: ['font'] }, {}, defaultOptions, options);

@@ -199,6 +199,7 @@ export default class FigurePrimitives {
   timeKeeper: TimeKeeper;
   recorder: Recorder;
   scene: Scene;
+  equationScale: number;
 
   /**
     * @hideconstructor
@@ -218,6 +219,7 @@ export default class FigurePrimitives {
     defaultLength: number,
     timeKeeper: TimeKeeper,
     recorder: Recorder,
+    equationScale: number,
   ) {
     if (Array.isArray(webgl)) {
       this.webgl = webgl;
@@ -244,6 +246,7 @@ export default class FigurePrimitives {
     this.defaultLength = defaultLength;
     this.timeKeeper = timeKeeper;
     this.recorder = recorder;
+    this.equationScale = equationScale;
     // this.draw2DFigures = draw2DFigures;
   }
 
@@ -1460,7 +1463,7 @@ export default class FigurePrimitives {
         descent: 0,
       },
       text: 'TEXT NOT DEFINED',
-      type: 'bmp',
+      type: this.defaultFont.type,
     };
     const o = this.parseTextOptions(defaultOptions, ...options);
     if (o.scene == null) {

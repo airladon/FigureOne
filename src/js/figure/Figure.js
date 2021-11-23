@@ -382,6 +382,7 @@ class Figure {
         weight: '100',
         opacity: 1,
         glyphs: 'mathlatin',
+        type: 'bmp',
       },
       backgroundColor: [1, 1, 1, 1],
       // scene: {
@@ -1392,6 +1393,7 @@ class Figure {
       this.defaultLength,
       this.timeKeeper,
       this.recorder,
+      0.7,
     );
   }
 
