@@ -141,63 +141,63 @@ describe('Figure Equations From Object', () => {
     eqn.addElements(addElements.simple);
     expect(eqn._a).not.toBe(null);
     expect(Object.keys(eqn.elements).length).toBe(3);
-    expect(eqn._a.drawingObject.text[0].text).toBe('a');
-    expect(eqn._a.drawingObject.text[0].font.style).toBe('italic');
+    expect(eqn._a.text[0]).toBe('a');
+    expect(eqn._a.font.style).toBe('italic');
   });
   test('Multi add steps', () => {
     eqn.addElements(addElements.add1);
     eqn.addElements(addElements.add2);
-    expect(eqn._a.drawingObject.text[0].text).toBe('a');
-    expect(eqn._b.drawingObject.text[0].text).toBe('b');
-    expect(eqn._c.drawingObject.text[0].text).toBe('c');
+    expect(eqn._a.text[0]).toBe('a');
+    expect(eqn._b.text[0]).toBe('b');
+    expect(eqn._c.text[0]).toBe('c');
   });
   test('Italics for text, normal for numbers', () => {
     eqn.addElements(addElements.autoFontSelection);
-    expect(eqn._a.drawingObject.text[0].font.style).toBe('italic');
-    expect(eqn.__1.drawingObject.text[0].font.style).toBe('normal');
+    expect(eqn._a.font.style).toBe('italic');
+    expect(eqn.__1.font.style).toBe('normal');
   });
   test('Simple object definition', () => {
     eqn.addElements(addElements.simpleObject);
-    expect(eqn._a.drawingObject.text[0].text).toBe('a');
-    expect(eqn._b.drawingObject.text[0].text).toBe('b');
+    expect(eqn._a.text[0]).toBe('a');
+    expect(eqn._b.text[0]).toBe('b');
   });
   test('Text Overrides', () => {
     eqn.addElements(addElements.textOverrides);
-    expect(eqn._a.drawingObject.text[0].text).toBe('a');
-    expect(eqn._b.drawingObject.text[0].text).toBe('b');
-    expect(eqn._c.drawingObject.text[0].text).toBe('c');
-    expect(eqn._d.drawingObject.text[0].text).toBe('d');
+    expect(eqn._a.text[0]).toBe('a');
+    expect(eqn._b.text[0]).toBe('b');
+    expect(eqn._c.text[0]).toBe('c');
+    expect(eqn._d.text[0]).toBe('d');
 
-    expect(eqn._a.drawingObject.text[0].font.style).toBe('italic');
-    expect(eqn._b.drawingObject.text[0].font.style).toBe('normal');
-    expect(eqn._c.drawingObject.text[0].font.style).toBe('normal');
-    expect(eqn._d.drawingObject.text[0].font.style).toBe('italic');
+    expect(eqn._a.font.style).toBe('italic');
+    expect(eqn._b.font.style).toBe('normal');
+    expect(eqn._c.font.style).toBe('normal');
+    expect(eqn._d.font.style).toBe('italic');
 
-    expect(eqn._a.drawingObject.text[0].font.family).toBe('Times New Roman');
-    expect(eqn._b.drawingObject.text[0].font.family).toBe('Times New Roman');
-    expect(eqn._c.drawingObject.text[0].font.family).toBe('Helvetica');
-    expect(eqn._d.drawingObject.text[0].font.family).toBe('Helvetica');
+    expect(eqn._a.font.family).toBe('Times New Roman');
+    expect(eqn._b.font.family).toBe('Times New Roman');
+    expect(eqn._c.font.family).toBe('Helvetica');
+    expect(eqn._d.font.family).toBe('Helvetica');
 
-    expect(eqn._a.drawingObject.text[0].font.color)
+    expect(eqn._a.font.color)
       .toEqual(defaultColor);
-    expect(eqn._b.drawingObject.text[0].font.color)
+    expect(eqn._b.font.color)
       .toEqual(defaultColor);
-    expect(eqn._c.drawingObject.text[0].font.color)
+    expect(eqn._c.font.color)
       .toEqual(color1);
-    expect(eqn._d.drawingObject.text[0].font.color)
+    expect(eqn._d.font.color)
       .toEqual(color2);
   });
   test('Symbol', () => {
     eqn.addElements(addElements.symbols);
-    expect(eqn._a.drawingObject.text[0].text).toBe('a');
+    expect(eqn._a.text[0]).toBe('a');
     expect(eqn._v.drawingObject).toBeInstanceOf(VertexGeneric);
     expect(eqn._v1.drawingObject).toBeInstanceOf(VertexGeneric);
     // expect(eqn._v2.drawingObject).toBeInstanceOf(VertexHorizontalLine);
   });
   test('ElementOptions', () => {
     eqn.addElements(addElements.elementOptions);
-    expect(eqn._a.drawingObject.text[0].text).toBe('a');
-    expect(eqn._b.drawingObject.text[0].text).toBe('b');
+    expect(eqn._a.text[0]).toBe('a');
+    expect(eqn._b.text[0]).toBe('b');
     expect(eqn._v.drawingObject).toBeInstanceOf(VertexGeneric);
 
     expect(eqn._a.isTouchable).toBe(false);
@@ -213,9 +213,9 @@ describe('Figure Equations From Object', () => {
       elements: addElements.simple,
     };
     const eqn1 = new Equation(figure.shapes, equationOptions);
-    expect(eqn1._a.drawingObject.text[0].text).toBe('a');
-    expect(eqn1._b.drawingObject.text[0].text).toBe('b');
-    expect(eqn1._c.drawingObject.text[0].text).toBe('c');
+    expect(eqn1._a.text[0]).toBe('a');
+    expect(eqn1._b.text[0]).toBe('b');
+    expect(eqn1._c.text[0]).toBe('c');
   });
   test('Symbol: Vinculum', () => {
     eqn.addElements(addElements.vinculum);

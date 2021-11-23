@@ -1,6 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Equation Symbols - Box Box Dynamic 1`] = `undefined`;
+exports[`Equation Symbols - Box Box Dynamic 1`] = `
+Array [
+  -0.05,
+  -0.008,
+  0.15,
+  -0.008,
+  0.15,
+  0.095,
+  -0.05,
+  -0.008,
+  0.15,
+  0.095,
+  -0.05,
+  0.095,
+]
+`;
 
 exports[`Equation Symbols - Box Box Dynamic 2`] = `
 Array [

@@ -48,6 +48,24 @@ export default function makeFigure(
     // scene: [-1, -1, 1, 1],
   };
 
+  const create = document.createElement;
+  document.createElement = (name) => {
+    if (name === 'canvas') {
+      const d = new DrawContext2D(100, 100);
+      d.getContext = (type) => {
+        if (type === '2d') {
+          return d.ctx;
+        }
+        return webgl;
+      };
+      return d;
+      // return {
+      //   getContext() => d.ctx;
+    }
+    // return create(name);
+    return document.createElementNS('http://www.w3.org/1999/xhtml', name);
+  };
+
   const canvasMock = {
     width: definition.width,
     clientWidth: definition.width,

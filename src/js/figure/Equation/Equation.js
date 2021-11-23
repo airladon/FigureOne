@@ -1047,6 +1047,7 @@ export class Equation extends FigureElementCollection {
       size: 0.2,
       weight: '200',
       color,
+      glyphs: 'mathlatin',
     };
     const defaultOptions = {
       color,
@@ -1484,7 +1485,7 @@ export class Equation extends FigureElementCollection {
       type?: TypeText,
     },
     defaultText: string = '',
-  ) {
+  ) { 
     let textToUse = defaultText;
     if (options.text != null) {
       textToUse = options.text;

@@ -87,6 +87,7 @@ describe('Different ways to make an equation', () => {
             family: 'Times New Roman',
             weight: '200',      // Use CSS weight definition strings
             size: 0.2,          // element space font height
+            glyphs: 'mathlatin',
           },
           // Scale of the equation - scale scales the sizes of the text as well
           // as the spaces between them in the layout. In comparison,
@@ -686,8 +687,8 @@ describe('Different ways to make an equation', () => {
       const w = a.width + _2_1.width + _2_2.width;
       expect(round(_2_1.left, 4)).toBe(round(-w / 2, 4));
       expect(round(_2_2.right, 4)).toBe(round(w / 2, 4));
-      expect(eqn.__2_1.drawingObject.text[0].text).toBe('2');
-      expect(eqn.__2_2.drawingObject.text[0].text).toBe('2');
+      expect(eqn.__2_1.text[0]).toBe('2');
+      expect(eqn.__2_2.text[0]).toBe('2');
     });
     test('inlineEqualsElement', () => {
       eqn.showForm('inlineEqualsElement');
@@ -702,7 +703,7 @@ describe('Different ways to make an equation', () => {
       expect(round(b.right, 4)).toBe(round(equals.left, 4));
       expect(round(equals.right, 4)).toBe(round(c.left, 4));
       expect(round(c.right, 4)).toBe(round(w / 2, 4));
-      expect(eqn['_='].drawingObject.text[0].text).toBe('=');
+      expect(eqn['_='].text[0]).toBe('=');
     });
     test('inlineFullDefinition', () => {
       eqn.showForm('inlineFullDefinition');
@@ -713,7 +714,7 @@ describe('Different ways to make an equation', () => {
       expect(round(a.left, 4)).toBe(round(-w / 2, 4));
       expect(round(a.right, 4)).toBe(round(m.left, 4));
       expect(round(m.right, 4)).toBe(round(w / 2, 4));
-      expect(eqn._m.drawingObject.text[0].font.style).toBe('normal');
+      expect(eqn._m.font.style).toBe('normal');
     });
     test('inlineSymbol', () => {
       eqn.showForm('inlineSymbol');
@@ -865,12 +866,12 @@ describe('Different ways to make an equation', () => {
     expect(eqn).toHaveProperty('_v');
 
     // Check color
-    expect(eqn._a.drawingObject.text[0].font.color)
+    expect(eqn._a.font.color)
       .toEqual(color1);
 
     // Check math vs number style
-    expect(eqn._a.drawingObject.text[0].font.style).toBe('italic');
-    expect(eqn.__2.drawingObject.text[0].font.style).toBe('normal');
+    expect(eqn._a.font.style).toBe('italic');
+    expect(eqn.__2.font.style).toBe('normal');
   });
   test('All Text in constructor with all options', () => {
     ways.allTextInConstructorAllOptions();
@@ -883,7 +884,7 @@ describe('Different ways to make an equation', () => {
     expect(eqn).toHaveProperty('_v');
 
     // Check color
-    expect(eqn._a.drawingObject.text[0].font.color)
+    expect(eqn._a.font.color)
       .toEqual(color1);
 
     // Check position
@@ -907,7 +908,7 @@ describe('Different ways to make an equation', () => {
     expect(eqn).toHaveProperty('_v');
 
     // Check color
-    expect(eqn._a.drawingObject.text[0].font.color)
+    expect(eqn._a.font.color)
       .toEqual(color1);
 
     // Test locations of all elements
@@ -961,31 +962,31 @@ describe('Different ways to make an equation', () => {
   test('Auto Add Elements', () => {
     ways.autoAddElements();
     expect(eqn._a).not.toBe(undefined);
-    expect(eqn._a.drawingObject.text[0].text).toBe('a');
+    expect(eqn._a.text[0]).toBe('a');
     expect(eqn._a.color).toEqual(color1);
 
     expect(eqn._b_1).not.toBe(undefined);
-    expect(eqn._b_1.drawingObject.text[0].text).toBe('b');
+    expect(eqn._b_1.text[0]).toBe('b');
     expect(eqn._b_1.color).toEqual(color1);
 
     expect(eqn.__c_2).not.toBe(undefined);
-    expect(eqn.__c_2.drawingObject.text[0].text).toBe('c');
+    expect(eqn.__c_2.text[0]).toBe('c');
     expect(eqn.__c_2.color).toEqual(color1);
 
     expect(eqn._d).not.toBe(undefined);
-    expect(eqn._d.drawingObject.text[0].text).toBe('d');
+    expect(eqn._d.text[0]).toBe('d');
     expect(eqn._d.color).toEqual(color2);
 
     expect(eqn.__e).not.toBe(undefined);
-    expect(eqn.__e.drawingObject.text[0].text).toBe('e');
+    expect(eqn.__e.text[0]).toBe('e');
     expect(eqn.__e.color).toEqual(color2);
 
     expect(eqn.__f_).not.toBe(undefined);
-    expect(eqn.__f_.drawingObject.text[0].text).toBe('f');
+    expect(eqn.__f_.text[0]).toBe('f');
     expect(eqn.__f_.color).toEqual(color2);
 
     expect(eqn.__g_1).not.toBe(undefined);
-    expect(eqn.__g_1.drawingObject.text[0].text).toBe('g');
+    expect(eqn.__g_1.text[0]).toBe('g');
     expect(eqn.__g_1.color).toEqual(color2);
   });
   test('Auto Symbols Name', () => {
@@ -993,8 +994,8 @@ describe('Different ways to make an equation', () => {
     eqn.layoutForms('all');
     expect(eqn._a).not.toBe(undefined);
     expect(eqn._b).not.toBe(undefined);
-    expect(eqn._a.drawingObject.text[0].text).toBe('a');
-    expect(eqn._b.drawingObject.text[0].text).toBe('b');
+    expect(eqn._a.text[0]).toBe('a');
+    expect(eqn._b.text[0]).toBe('b');
     expect(round(eqn._vinculum.drawingObject.points, 3)).toEqual([
       0, 0, 0, 0.01, 0.19, 0, 0.19, 0.01,
     ]);

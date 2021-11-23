@@ -381,6 +381,7 @@ class Figure {
         style: 'normal',
         weight: '100',
         opacity: 1,
+        glyphs: 'mathlatin',
       },
       backgroundColor: [1, 1, 1, 1],
       // scene: {
