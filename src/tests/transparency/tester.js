@@ -12,8 +12,10 @@ expect.extend({ toMatchImageSnapshot });
 page.on('console', async (msg) => {
   const msgType = msg.type();
   const args = await Promise.all(msg.args().map(jsHandle => jsHandle.jsonValue()));
-  // eslint-disable-next-line no-console
-  console[msgType](...args);
+  if (msgType !== 'warning') {
+    // eslint-disable-next-line no-console
+    console[msgType](...args);
+  }
 });
 
 
