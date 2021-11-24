@@ -276,5 +276,6 @@ export default class Atlas {
     // const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
     // window.location.href=image;
     this.webgl.addTexture(this.font.getTextureID(), ctx.canvas, [0, 0, 0, 0], false, null, true);
+    // canvas.remove();
   }
 }

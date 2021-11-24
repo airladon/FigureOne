@@ -1444,6 +1444,11 @@ export class Equation extends FigureElementCollection {
     }
   }
 
+  contextLost() {
+    super.contextLost();
+    this.eqn.functions.fullLineHeight.getAllElements().forEach(e => e.contextLost());
+  }
+
   /**
    * Update text of equation element or elements
    *

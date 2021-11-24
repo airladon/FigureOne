@@ -222,6 +222,18 @@ class GLObject extends DrawingObject {
   //     }
   //   }
   // }
+  contextLost() {
+    Object.keys(this.attributes).forEach((attributeName) => {
+      this.attributes[attributeName].buffer = null;
+    });
+    const { texture } = this;
+    if (texture == null) {
+      return;
+    }
+    if (texture.buffer != null) {
+      texture.buffer = null;
+    }
+  }
 
   updateTextureMap(points: Array<number> = []) {
     const { texture } = this;
@@ -230,8 +242,8 @@ class GLObject extends DrawingObject {
     }
     if (texture.buffer != null) {
       this.gl.deleteBuffer(texture.buffer);
-      texture.buffer = this.gl.createBuffer();
     }
+    texture.buffer = this.gl.createBuffer();
     if (points.length === 0) {
       this.createTextureMap(
         texture.mapTo.left, texture.mapTo.right,
@@ -570,7 +582,9 @@ class GLObject extends DrawingObject {
   resetBuffers() {
     const { gl } = this;
     Object.keys(this.attributes).forEach((attributeName) => {
-      gl.deleteBuffer(this.attributes[attributeName].buffer);
+      if (this.attributes[attributeName].buffer != null) {
+        gl.deleteBuffer(this.attributes[attributeName].buffer);
+      }
       this.attributes[attributeName].buffer = null;
     });
     this.attributes = {};
@@ -589,7 +603,9 @@ class GLObject extends DrawingObject {
   }
 
   updateAttribute(name: string, data: Array<number>) {
-    this.gl.deleteBuffer(this.attributes[name].buffer);
+    if (this.attributes[name].buffer != null) {
+      this.gl.deleteBuffer(this.attributes[name].buffer);
+    }
     this.attributes[name].buffer = null;
     this.fillBuffer(name, data);
     this.attributes[name].data = data;

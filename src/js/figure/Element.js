@@ -1458,6 +1458,9 @@ class FigureElement {
     return duration;
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  contextLost() {}
+
   isStateSame(
     state: Object,
     mergePulseTransforms: boolean = false,
@@ -4038,6 +4041,12 @@ class FigureElementPrimitive extends FigureElement {
     this.angleToDraw = angle;
   }
 
+  contextLost() {
+    if (this.drawingObject.contextLost != null) {
+      this.drawingObject.contextLost();
+    }
+  }
+
 
   // click(glPoint: Point = new Point(0, 0)) {
   //   super.click(glPoint);
@@ -6499,6 +6508,13 @@ class FigureElementCollection extends FigureElement {
     super.stateSet();
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       this.elements[this.drawOrder[i]].stateSet();
+    }
+  }
+
+  contextLost() {
+    super.contextLost();
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      this.elements[this.drawOrder[i]].contextLost();
     }
   }
 

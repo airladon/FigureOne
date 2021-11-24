@@ -296,6 +296,7 @@ class WebGLInstance {
       texture.state = 'loading';
 
       image.src = data;
+      console.log('loading', data)
       // When the image is loaded, set the texture to it
       image.addEventListener('load', () => {
         // $FlowFixMe
@@ -350,6 +351,12 @@ class WebGLInstance {
     }
     this.cancel(id);
     delete this.textures[id];
+  }
+
+  contextLost() {
+    Object.keys(this.textures).forEach((id) => {
+      this.textures[id].glTexture = null;
+    });
   }
 
 

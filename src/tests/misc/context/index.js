@@ -11,14 +11,16 @@ const figure = new Fig.Figure({
 });
 
 const count = figure.add({
-  make: 'text',
+  make: 'txt',
+  font: { type: 'bmp' },
   text: '0',
+  yAlign: 'middle',
   position: [0, 1],
 });
 
 function onClick(p, e) {
   e.custom.count += 1;
-  count.custom.setText({ text: `${e.custom.count}` });
+  count.setText({ text: `${e.custom.count}` });
   figure.animateNextFrame();
 }
 

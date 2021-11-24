@@ -959,6 +959,7 @@ class Figure {
   }
 
   init(webgl: WebGLInstance) {
+    // this.webglLow.recreateAtlases();
     this.elements.init(webgl);
     this.animateNextFrame();
   }
@@ -1451,12 +1452,15 @@ class Figure {
     event.preventDefault();
     this.lostContextMessage.innerHTML = '<div class="figureone__lostcontext_message"><p>Browser removed WebGL context from FigureOne and has yet to return it.</p> <p>Reload page to restore.</p></div>';
     this.lostContextMessage.style.display = 'table';
+    this.elements.contextLost();
+    this.webglLow.contextLost();
   }
 
   contextRestored() {
     this.lostContextMessage.innerHTML = '<div class="figureone__lostcontext_message"><p>Browser removed WebGL context from FigureOne and just returned it.</p> <p>FigureOne is reinitializing...</p></div>';
     // this.webglLow.init(this.canvasLow.getContext('webgl', { antialias: true }));
     this.webglLow.init(this.webglLow.gl);
+    this.webglLow.recreateAtlases();
     this.init(this.webglLow);
     this.lostContextMessage.style.display = 'none';
     Console('FigureOne context restored!');
