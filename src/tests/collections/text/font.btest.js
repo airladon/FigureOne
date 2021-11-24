@@ -56,7 +56,7 @@ async function makeShape(t) {
     figure.add({
       name: 'shape',
       make: 'collections.text',
-      font: { family: 'montserrat', glyphs: 'latin' },
+      font: { family: 'montserrat', glyphs: 'latin', type },
       type,
       text: ['This |is| a', 'test of', 'multi-lines'],
     });

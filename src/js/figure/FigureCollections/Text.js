@@ -101,8 +101,6 @@ export type OBJ_TextModifiersDefinition = {
  * the the points in `'buffer'` to calculate the bounding rects (`'buffer'`).
  * @property {OBJ_Font} [accent] default modifier for accented text without a
  * specific modification. By default accented text will be italic.
- * @property {TypeText} [type] choose to render text either in webgl canvas or
- * a separate 2d canvas.
  */
 /* eslint-enable max-len */
 export type OBJ_CollectionsText = {
@@ -119,7 +117,6 @@ export type OBJ_CollectionsText = {
   border?: TypeParsableBuffer | TypeParsableBorder | 'children' | 'rect' | number;
   touchBorder?: TypeParsableBuffer | TypeParsableBorder | 'border' | 'children' | 'rect' | number;
   accent?: OBJ_Font,
-  type: TypeText,
 }
 
 // $FlowFixMe

@@ -33,6 +33,7 @@ async function loadFontSync(family, style, weight, glyphs) {
   );
 }
 
+
 async function snap(id, threshold = 0) {
   const image = await page.screenshot({ timeout: 300000 });
   return expect(image).toMatchImageSnapshot({
@@ -74,7 +75,7 @@ describe('Button Atlas', () => {
       });
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(200);
+      await sleep(500);
       await snap();
     });
     test('Hidden', async () => {

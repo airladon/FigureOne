@@ -150,7 +150,6 @@ export default class FontManager {
     const sans = this.measureText(`${fam},sans-serif`, style, weight, glyphs);
     const auto = this.measureText(`${fam},auto`, style, weight, glyphs);
     const width = this.measureText(fam, style, weight, glyphs);
-    // console.log(width, auto, sans, serif, mono)
     // if (width !== mono && width !== serif && width !== sans && width !== auto) {
     //   return true;
     // }
@@ -302,6 +301,8 @@ export default class FontManager {
     const sans = this.fonts[fontID].sans.slice(-1)[0];
     const auto = this.fonts[fontID].auto.slice(-1)[0];
     const width = this.measureTextID(fontID);
+    // console.log(`${width}, ${mono}, ${serif}, ${auto}, ${sans}`)
+    // console.log(this.fonts)
     this.fonts[fontID].width.push(width);
     if (width === mono && width === serif && width === sans && width === auto) {
       return true;
@@ -432,6 +433,7 @@ export default class FontManager {
   // Keep rechecking fonts up to some timeout. At timeout, stop rechecking.
   timedCheck() {
     const result = this.isLoadingFinished();
+    // console.log(`${performance.now()}, ${this.loading}, ${this.loaded}`)
     if (result) {
       this.checkTimer = null;
       return;

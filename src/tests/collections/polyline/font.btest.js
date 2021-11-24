@@ -64,7 +64,7 @@ async function makeShape(t) {
           minAngle: Math.PI / 8,
         },
       },
-      font: { family: 'montserrat', glyphs: 'math', type },
+      font: { family: 'montserrat', glyphs: '1234567890.\u00b0gh', type },
       side: {
         showLine: true,
         offset: 0.2,
