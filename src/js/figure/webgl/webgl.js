@@ -296,7 +296,6 @@ class WebGLInstance {
       texture.state = 'loading';
 
       image.src = data;
-      console.log('loading', data)
       // When the image is loaded, set the texture to it
       image.addEventListener('load', () => {
         // $FlowFixMe
