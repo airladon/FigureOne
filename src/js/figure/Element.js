@@ -25,7 +25,7 @@ import HTMLObject from './DrawingObjects/HTMLObject/HTMLObject';
 import DrawingObject from './DrawingObjects/DrawingObject';
 import VertexGeneric from './DrawingObjects/VertexObject/VertexGeneric';
 import GLObject from './DrawingObjects/GLObject/GLObject';
-import { TextObjectBase } from './DrawingObjects/TextObject/TextObject';
+// import { TextObjectBase } from './DrawingObjects/TextObject/TextObject';
 import {
   duplicateFromTo, joinObjects, joinObjectsWithOptions, NotificationManager,
   generateUniqueId, PerformanceTimer, generateUniqueColor,
@@ -1774,6 +1774,13 @@ class FigureElement {
   // Used only to clear 2D context
   // eslint-disable-next-line class-methods-use-this
   clear() {
+  }
+
+  cleanup() {
+    this.stop();
+    this.figure = {};
+    this.parent = null;
+    this.textureAtlases = {};
   }
 
   willStartAnimating() {
@@ -4010,6 +4017,11 @@ class FigureElementPrimitive extends FigureElement {
     this.drawingObject.init(webgl);
   }
 
+  cleanup() {
+    super.cleanup();
+    this.drawingObject.cleanup(false);
+  }
+
   _getStateProperties(options: { ignoreShown?: boolean }) {
     let { ignoreShown } = options;
     if (ignoreShown == null) {
@@ -4063,19 +4075,19 @@ class FigureElementPrimitive extends FigureElement {
 
   click(glPoint: Point = new Point(0, 0)) {
     super.click(glPoint);
-    if (this.drawingObject instanceof TextObjectBase) {
-      let p = glPoint;
-      if (this.getScene().style !== 'perspective') {
-        p = glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw'));
-      } // $FlowFixMe
-      this.drawingObject.click(
-        p,
-        this.fnMap,
-      );
-      if (this.recorder.state === 'recording') {
-        this.recorder.recordEvent('elementTextClick', [this.getPath(), glPoint.x, glPoint.y]);
-      }
-    }
+    // if (this.drawingObject instanceof TextObjectBase) {
+    //   let p = glPoint;
+    //   if (this.getScene().style !== 'perspective') {
+    //     p = glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw'));
+    //   } // $FlowFixMe
+    //   this.drawingObject.click(
+    //     p,
+    //     this.fnMap,
+    //   );
+    //   if (this.recorder.state === 'recording') {
+    //     this.recorder.recordEvent('elementTextClick', [this.getPath(), glPoint.x, glPoint.y]);
+    //   }
+    // }
   }
 
 
@@ -4125,24 +4137,24 @@ class FigureElementPrimitive extends FigureElement {
       this.defaultColor = this.color.slice();
     }
     this.notifications.publish('color');
-    if (this instanceof FigureElementPrimitive) {
-      if (this.drawingObject instanceof TextObjectBase) {
-        this.drawingObject.setColor(this.color);
-      }
-      if (this.drawingObject instanceof HTMLObject) {
-        // $FlowFixMe
-        this.drawingObject.element.style.color = colorArrayToRGBA(this.color);
-      }
-    }
+    // if (this instanceof FigureElementPrimitive) {
+    //   if (this.drawingObject instanceof TextObjectBase) {
+    //     this.drawingObject.setColor(this.color);
+    //   }
+    //   if (this.drawingObject instanceof HTMLObject) {
+    //     // $FlowFixMe
+    //     this.drawingObject.element.style.color = colorArrayToRGBA(this.color);
+    //   }
+    // }
   }
 
   setOpacity(opacity: number) {
     // this.color[3] = opacity;
     this.opacity = opacity;
     if (this instanceof FigureElementPrimitive) {
-      if (this.drawingObject instanceof TextObjectBase) {
-        this.drawingObject.setOpacity(opacity);
-      }
+      // if (this.drawingObject instanceof TextObjectBase) {
+      //   this.drawingObject.setOpacity(opacity);
+      // }
       if (this.drawingObject instanceof HTMLObject) {
         this.drawingObject.element.style.opacity = `${opacity}`;
       }
@@ -4178,11 +4190,11 @@ class FigureElementPrimitive extends FigureElement {
   }
 
 
-  setFont(font: OBJ_Font, index: number = 0) {
-    if (this.drawingObject instanceof TextObjectBase) {
-      this.drawingObject.setFont(font, index);
-    }
-  }
+  // setFont(font: OBJ_Font, index: number = 0) {
+  //   if (this.drawingObject instanceof TextObjectBase) {
+  //     this.drawingObject.setFont(font, index);
+  //   }
+  // }
 
   resizeHtmlObject() {
     if (this.drawingObject instanceof HTMLObject) {
@@ -4591,6 +4603,20 @@ class FigureElementCollection extends FigureElement {
     }
   }
 
+  cleanup() {
+    super.cleanup();
+    this.cleanupChildren();
+  }
+
+  cleanupChildren() {
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      this.elements[this.drawOrder[i]].cleanup();
+      delete this.elements[this.drawOrder[i]];
+      this.elements = {};
+      this.drawOrder = [];
+    }
+  }
+
   init(webgl: WebGLInstance) {
     this.getChildren().map(e => e.init(webgl));
   }
@@ -4993,7 +5019,8 @@ class FigureElementCollection extends FigureElement {
       gl: shapes.gl.bind(shapes),
       morph: shapes.morph.bind(shapes),
       glText: shapes.glText.bind(shapes),
-      txt: shapes.txt.bind(shapes),
+      // txt: shapes.txt.bind(shapes),
+      text: shapes.text.bind(shapes),
       text2d: shapes.text2d.bind(shapes),
       arc: shapes.arc.bind(shapes),
       triangle: shapes.triangle.bind(shapes),
@@ -5014,11 +5041,11 @@ class FigureElementCollection extends FigureElement {
       line: shapes.line.bind(shapes),
       star: shapes.star.bind(shapes),
       //
-      text: shapes.text.bind(shapes),
-      textLine: shapes.textLine.bind(shapes),
-      textLines: shapes.textLines.bind(shapes),
-      'text.line': shapes.textLine.bind(shapes),
-      'text.lines': shapes.textLines.bind(shapes),
+      // text: shapes.text.bind(shapes),
+      // textLine: shapes.textLine.bind(shapes),
+      // textLines: shapes.textLines.bind(shapes),
+      // 'text.line': shapes.textLine.bind(shapes),
+      // 'text.lines': shapes.textLines.bind(shapes),
       //
       textGL: shapes.textGL.bind(shapes),
       textHTML: shapes.htmlText.bind(shapes),

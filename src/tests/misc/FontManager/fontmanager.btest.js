@@ -639,7 +639,7 @@ describe('Font Manager', () => {
       await page.evaluate(() => {
         figure.add({
           name: 'a',
-          make: 'txt',
+          make: 'text',
           text: 'abc',
           type: 'bmp',
           font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
@@ -674,7 +674,7 @@ describe('Font Manager', () => {
       await page.evaluate(() => {
         figure.add({
           name: 'a',
-          make: 'txt',
+          make: 'text',
           text: 'abc',
           type: '2d',
           font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
@@ -721,21 +721,21 @@ describe('Font Manager', () => {
           elements: [
             {
               name: 'a',
-              make: 'txt',
+              make: 'text',
               text: 'abc',
               type: '2d',
               font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
             },
             {
               name: 'b',
-              make: 'txt',
+              make: 'text',
               text: 'abc',
               type: 'bmp',
               font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
             },
             {
               name: 'c',
-              make: 'txt',
+              make: 'text',
               text: 'abc',
               type: 'bmp',
               font: { family: 'open sans', weight: '300', glyphs: 'latin' },
@@ -746,14 +746,14 @@ describe('Font Manager', () => {
               elements: [
                 {
                   name: 'e',
-                  make: 'txt',
+                  make: 'text',
                   text: 'abc',
                   type: 'bmp',
                   font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
                 },
                 {
                   name: 'f',
-                  make: 'txt',
+                  make: 'text',
                   text: 'abc',
                   type: '2d',
                   font: { family: 'montserrat', weight: '400', glyphs: 'latin' },

@@ -761,7 +761,7 @@ class CollectionsAxis extends FigureElementCollection {
           if (o.location === 'right') { o.xAlign = 'left'; }
         }
       }
-      const labels = this.collections.primitives.txt(joinObjects({}, o, { text: '0', location: [0, 0] }));
+      const labels = this.collections.primitives.text(joinObjects({}, o, { text: '0', location: [0, 0] }));
       labels.transform.updateRotation(o.rotation);
       labels._custom.location = o.location;
       this.add('labels', labels);

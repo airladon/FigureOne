@@ -95,7 +95,7 @@ describe('Atlas', () => {
       await page.evaluate(() => {
         figure.add({
           name: 'a',
-          make: 'txt',
+          make: 'text',
           text: 'hello',
           font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
           type: 'bmp',
@@ -150,7 +150,7 @@ describe('Atlas', () => {
       page.evaluate((map) => {
         figure.add({
           name: 'a',
-          make: 'txt',
+          make: 'text',
           text: 'hello',
           font: {
             src: 'http://localhost:8080/src/tests/misc/atlas/atlas.png',
@@ -171,7 +171,7 @@ describe('Atlas', () => {
       await page.evaluate((map) => {
         figure.add({
           name: 'a',
-          make: 'txt',
+          make: 'text',
           text: 'hello',
           font: {
             src: 'http://localhost:8080/src/tests/misc/atlas/atlas.png',
@@ -185,7 +185,7 @@ describe('Atlas', () => {
       await page.evaluate((map) => {
         figure.add({
           name: 'b',
-          make: 'txt',
+          make: 'text',
           text: 'world',
           font: {
             src: 'http://localhost:8080/src/tests/misc/atlas/atlas.png',
@@ -209,7 +209,7 @@ describe('Atlas', () => {
         texture.addEventListener('load', () => {
           figure.add({
             name: 'a',
-            make: 'txt',
+            make: 'text',
             text: 'hello',
             font: {
               src: texture,
@@ -226,7 +226,7 @@ describe('Atlas', () => {
       // await page.evaluate((map) => {
       //   figure.add({
       //     name: 'a',
-      //     make: 'txt',
+      //     make: 'text',
       //     text: 'hello',
       //     font: {
       //       src: window.texture,
@@ -249,7 +249,7 @@ describe('Atlas', () => {
 // texture.src = 'http://localhost:8080/src/tests/misc/atlas/atlas.png';
 // figure.add({
 //   name: 'm',
-//   make: 'txt',
+//   make: 'text',
 //   text: 'hello',
 //   font: {
 //     src: texture,

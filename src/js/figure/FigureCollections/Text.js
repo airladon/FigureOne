@@ -193,6 +193,8 @@ class CollectionsText extends Equation {
     this.modifiers = options.modifiers || {};
     this.lines = [];
     this.defaultTextTouchBorder = options.defaultTextTouchBorder;
+    this.xAlign = options.xAlign;
+    this.yAlign = options.yAlign;
 
     this.splitLines(options.text);
     const equationOptions = this.createEquation();
@@ -205,6 +207,64 @@ class CollectionsText extends Equation {
 
   fontUpdated() {
     this.clear();
+    this.layoutForms('reset');
+  }
+
+  setText(optionsIn) {
+    const defaultOptions = {
+      color: this.color.slice(),
+      font: this.font,
+      justify: this.justify,
+      lineSpace: this.lineSpace,
+      scale: this.eqn.scale,
+      formDefaults: {
+        alignment: {
+          fixTo: new Point(0, 0),
+          xAlign: this.xAlign,
+          yAlign: this.yAlign,
+        },
+        elementMods: {},
+        layout: 'always',
+      },
+      accent: this.accent,
+      baselineSpace: this.baselineSpace,
+      defaultTextTouchBorder: this.defaultTextTouchBorder,
+    };
+    this.cleanupChildren();
+    this.cleanupForms();
+    const options = joinObjects({}, defaultOptions, optionsIn);
+    options.textFont = options.font;
+    if (options.xAlign != null) {
+      options.formDefaults.alignment.xAlign = options.xAlign;
+    }
+    if (options.yAlign != null) {
+      options.formDefaults.alignment.yAlign = options.yAlign;
+    }
+
+    if (optionsIn.color != null) {
+      options.color = optionsIn.color;
+    }
+    if (optionsIn.font != null && optionsIn.font.color != null) {
+      options.color = optionsIn.font.color;
+    }
+
+    this.font = options.font;
+    this.font.color = this.color;
+    this.lineSpace = options.lineSpace;
+    this.baselineSpace = options.baselineSpace;
+    this.justify = options.justify;
+    this.accent = options.accent;
+    this.modifiers = options.modifiers || {};
+    this.lines = [];
+    this.defaultTextTouchBorder = options.defaultTextTouchBorder;
+    this.xAlign = options.xAlign;
+    this.yAlign = options.yAlign;
+    this.splitLines(options.text);
+    const equationOptions = this.createEquation();
+    console.log(equationOptions)
+    this.addElements(joinObjects({}, equationOptions.elements, options.elements || {}));
+    // $FlowFixMe
+    this.addForms(equationOptions.forms);
     this.layoutForms('reset');
   }
 

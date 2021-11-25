@@ -11,7 +11,7 @@ import type Scene from '../../tools/geometry/scene';
 import { getState } from '../Recorder/state';
 import type { TypeColor } from '../../tools/types';
 import type { CPY_Step } from '../geometries/copy/copy';
-import type { OBJ_TextDefinition } from '../FigurePrimitives/FigurePrimitiveTypes2D';
+// import type { OBJ_TextDefinition } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 import type WebGLInstance from '../webgl/webgl';
 
 // A Drawing object can be:
@@ -104,7 +104,7 @@ class DrawingObject {
   // }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  setText(textOrOptions: string | OBJ_TextDefinition, index: number = 1) {
+  setText(textOrOptions: string | Object, index: number = 1) {
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
@@ -199,6 +199,9 @@ class DrawingObject {
   //   );
   //   return relativeBoundaries;
   // }
+
+  /* eslint-disable class-methods-use-this */
+  cleanup() {}
 
   /* eslint-disable no-unused-vars, class-methods-use-this */
   change(

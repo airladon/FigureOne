@@ -32,6 +32,7 @@ export interface ElementInterface {
   setPositions(): void;
   offsetLocation(offset: Point): void;
   getBounds(useFullSize?: boolean): Bounds;
+  cleanup(): void;
 }
 
 // Equation is a class that takes a set of drawing objects (TextObjects,
@@ -92,6 +93,9 @@ class Element implements ElementInterface {
     this.showContent = true;
   }
 
+  cleanup() {
+    delete this.content;
+  }
   // execFn(fn: string | Function | null, ...args: Array<any>) {
   //   // if (fn == null) {
   //   //   return null;
@@ -271,6 +275,11 @@ class Elements implements ElementInterface {
     this.height = 0;
     this.fnMap = new FunctionMap();
     this.showContent = true;
+  }
+
+  cleanup() {
+    this.content.forEach(c => c.cleanup());
+    this.content = [];
   }
 
   // execFn(fn: string | Function | null, ...args: Array<any>) {

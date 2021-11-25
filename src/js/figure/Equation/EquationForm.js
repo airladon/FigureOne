@@ -166,6 +166,11 @@ export default class EquationForm extends Elements {
     // this.subForm = '';
   }
 
+  cleanup() {
+    this.elements = {};
+    super.cleanup();
+  }
+
   getNamedElements() {
     const namedElements = {};
     this.collectionMethods.getAllElements().forEach((element) => {

@@ -561,10 +561,10 @@ class GLObject extends DrawingObject {
     }
   }
 
-  resetTextureBuffer() {
+  resetTextureBuffer(deleteTexture: boolean = true) {
     const { texture, webgl, gl } = this;
     if (texture) {
-      if (webgl.textures[texture.id].glTexture != null) {
+      if (deleteTexture && webgl.textures[texture.id].glTexture != null) {
         gl.activeTexture(gl.TEXTURE0 + webgl.textures[texture.id].index);
         gl.bindTexture(gl.TEXTURE_2D, null);
         // gl.deleteTexture(webgl.textures[texture.id].glTexture);
@@ -579,7 +579,11 @@ class GLObject extends DrawingObject {
     }
   }
 
-  resetBuffers() {
+  cleanup(deleteTexture: boolean = true) {
+    this.resetBuffers(deleteTexture);
+  }
+
+  resetBuffers(deleteTexture: boolean = true) {
     const { gl } = this;
     Object.keys(this.attributes).forEach((attributeName) => {
       if (this.attributes[attributeName].buffer != null) {
@@ -588,7 +592,7 @@ class GLObject extends DrawingObject {
       this.attributes[attributeName].buffer = null;
     });
     this.attributes = {};
-    this.resetTextureBuffer();
+    this.resetTextureBuffer(deleteTexture);
   }
 
   updateVertices(vertices: Array<number>) {

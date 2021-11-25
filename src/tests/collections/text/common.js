@@ -24,7 +24,7 @@ function makeShape(name, options, mods, getPos) {
       },
       {
         name: 'count',
-        make: 'txt',
+        make: 'text',
         position: [0, 0.3],
         text: '0',
         // border: [[0, 0], [0, 0], [0, 0], [0, 0]],

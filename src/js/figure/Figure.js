@@ -3109,7 +3109,7 @@ class Figure {
     // $FlowFixMe
     if (this.elements.__frameRate_ != null && this.frameRate.information != null) {
       // $FlowFixMe
-      this.elements.__frameRate_.custom.updateText({ text: this.frameRate.information });
+      this.elements.__frameRate_.setText({ text: this.frameRate.information });
     }
     this.elements.setupDraw(
       now,
@@ -3437,7 +3437,7 @@ class Figure {
       {},
       {
         name: '_frameRate_',
-        make: 'primitives.textLines',
+        make: 'collections.text',
         // mods: { isShown: true },
         text: ['Ave:', 'Max:'],
         position: [

@@ -1531,7 +1531,7 @@ export class Equation extends FigureElementCollection {
     if (fontDefinition.color == null) {
       fontDefinition.color = this.color;
     }
-    const p = this.shapes.txt(
+    const p = this.shapes.text(
       {
         text: {
           text: textToUse,
@@ -2197,6 +2197,17 @@ export class Equation extends FigureElementCollection {
     this.showForm();
   }
 
+  cleanup() {
+    this.cleanupForms();
+    super.cleanup();
+  }
+
+  cleanupForms() {
+    Object.keys(this.eqn.forms).forEach((form) => {
+      this.eqn.forms[form].cleanup();
+      delete this.eqn.forms[form];
+    });
+  }
 
   /**
    * Get an equation form object from a form name

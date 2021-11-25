@@ -11,7 +11,7 @@ const figure = new Fig.Figure({
 });
 
 const count = figure.add({
-  make: 'txt',
+  make: 'text',
   font: { type: 'bmp' },
   text: '0',
   yAlign: 'middle',
