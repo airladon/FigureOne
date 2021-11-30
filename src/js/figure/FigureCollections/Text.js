@@ -131,6 +131,8 @@ class CollectionsText extends Equation {
   modifiers: Object;
   baselineSpace: number | null;
   defaultTextTouchBorder: TypeParsableBuffer;
+  xAlign: 'left' | 'right' | 'center';
+  yAlign: 'bottom' | 'top' | 'middle' | 'baseline';
 
   /**
    * @hideconstructor
@@ -161,48 +163,62 @@ class CollectionsText extends Equation {
     };
 
     const options = joinObjects({}, defaultOptions, optionsIn);
-    options.textFont = options.font;
-    if (options.xAlign != null) {
-      options.formDefaults.alignment.xAlign = options.xAlign;
-    }
-    if (options.yAlign != null) {
-      options.formDefaults.alignment.yAlign = options.yAlign;
-    }
-
-    if (optionsIn.color != null) {
-      options.color = optionsIn.color;
-    }
-    if (optionsIn.font != null && optionsIn.font.color != null) {
-      options.color = optionsIn.font.color;
-    }
 
     super(collections.primitives, joinObjects({}, options));
-    if (options.lineSpace == null) {
-      options.lineSpace = options.font.size * 0.5;
-    }
-    if (Object.keys(options.accent).length === 0) {
-      options.accent = { style: 'italic' };
-    }
-    this.collections = collections;
-    this.font = options.font;
-    this.font.color = this.color;
-    this.lineSpace = options.lineSpace;
-    this.baselineSpace = options.baselineSpace;
-    this.justify = options.justify;
-    this.accent = options.accent;
-    this.modifiers = options.modifiers || {};
+    this.xAlign = 'left';
+    this.yAlign = 'baseline';
+    this.font = joinObjects({}, collections.primitives.defaultFont);
+    this.justify = 'left';
+    this.modifiers = {};
+    this.accent = { style: 'italic' };
+    this.baselineSpace = null;
+    this.lineSpace = 0;
     this.lines = [];
-    this.defaultTextTouchBorder = options.defaultTextTouchBorder;
-    this.xAlign = options.xAlign;
-    this.yAlign = options.yAlign;
+    this.defaultTextTouchBorder = 0;
+    this.collections = collections;
+    this.setText(options);
 
-    this.splitLines(options.text);
-    const equationOptions = this.createEquation();
+    // options.textFont = options.font;
+    // if (options.xAlign != null) {
+    //   options.formDefaults.alignment.xAlign = options.xAlign;
+    // }
+    // if (options.yAlign != null) {
+    //   options.formDefaults.alignment.yAlign = options.yAlign;
+    // }
 
-    this.addElements(joinObjects({}, equationOptions.elements, options.elements || {}));
-    // $FlowFixMe
-    this.addForms(equationOptions.forms);
-    this.layoutForms('reset');
+    // if (optionsIn.color != null) {
+    //   options.color = optionsIn.color;
+    // }
+    // if (optionsIn.font != null && optionsIn.font.color != null) {
+    //   options.color = optionsIn.font.color;
+    // }
+
+    // if (options.lineSpace == null) {
+    //   options.lineSpace = options.font.size * 0.5;
+    // }
+    // if (Object.keys(options.accent).length === 0) {
+    //   options.accent = { style: 'italic' };
+    // }
+    // this.collections = collections;
+    // this.font = options.font;
+    // this.font.color = this.color;
+    // this.lineSpace = options.lineSpace;
+    // this.baselineSpace = options.baselineSpace;
+    // this.justify = options.justify;
+    // this.accent = options.accent;
+    // this.modifiers = options.modifiers || {};
+    // this.lines = [];
+    // this.defaultTextTouchBorder = options.defaultTextTouchBorder;
+    // this.xAlign = options.xAlign;
+    // this.yAlign = options.yAlign;
+
+    // this.splitLines(options.text);
+    // const equationOptions = this.createEquation();
+
+    // this.addElements(joinObjects({}, equationOptions.elements, options.elements || {}));
+    // // $FlowFixMe
+    // this.addForms(equationOptions.forms);
+    // this.layoutForms('reset');
   }
 
   fontUpdated() {
@@ -234,12 +250,12 @@ class CollectionsText extends Equation {
     this.cleanupForms();
     const options = joinObjects({}, defaultOptions, optionsIn);
     options.textFont = options.font;
-    if (options.xAlign != null) {
-      options.formDefaults.alignment.xAlign = options.xAlign;
-    }
-    if (options.yAlign != null) {
-      options.formDefaults.alignment.yAlign = options.yAlign;
-    }
+    // if (options.xAlign != null) {
+    //   options.formDefaults.alignment.xAlign = options.xAlign;
+    // }
+    // if (options.yAlign != null) {
+    //   options.formDefaults.alignment.yAlign = options.yAlign;
+    // }
 
     if (optionsIn.color != null) {
       options.color = optionsIn.color;
@@ -261,7 +277,7 @@ class CollectionsText extends Equation {
     this.yAlign = options.yAlign;
     this.splitLines(options.text);
     const equationOptions = this.createEquation();
-    console.log(equationOptions)
+    // console.log(equationOptions)
     this.addElements(joinObjects({}, equationOptions.elements, options.elements || {}));
     // $FlowFixMe
     this.addForms(equationOptions.forms);
