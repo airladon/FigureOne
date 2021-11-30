@@ -1778,6 +1778,8 @@ class FigureElement {
 
   cleanup() {
     this.stop();
+    this.notifications.cleanup();
+    this.animations.notifications.cleanup();
     this.figure = {};
     this.parent = null;
     this.textureAtlases = {};
