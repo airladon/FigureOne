@@ -3446,7 +3446,7 @@ class Figure {
         ],
         xAlign: 'left',
         yAlign: 'bottom',
-        font: { size: (this.scene.right - this.scene.left) / 30 },
+        font: { size: (this.scene.right - this.scene.left) / 30, type: 'bmp' },
       },
       options,
     ));
