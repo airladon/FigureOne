@@ -546,6 +546,13 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     // ]];
   }
 
+  cleanup() {
+    super.cleanup();
+    if (this.atlas != null && this.atlasNotificationsID != null) {
+      this.atlas.notifications.remove('updated', this.atlasNotificationsID);
+    }
+  }
+
   calcTouchBorder() {
     if (isBuffer(this.touchBorder)) { // $FlowFixMe
       this.drawBorderBuffer = [getBoundingBorder(this.drawBorder, this.touchBorder)];
