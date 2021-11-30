@@ -1691,8 +1691,29 @@ export class Equation extends FigureElementCollection {
           this.add(key, this.makeTextElem({ text: elem }));
         }
       } else if (elem instanceof FigureElementPrimitive) {
+        // This is rough and will need to be refactored
+        // Maybe to build the elements into the equation or leave the elements
+        // outside of the equation
+        // $FlowFixMe
+        const { parent } = elem;
+        if (parent != null) {// $FlowFixMe
+          delete parent.elements[elem.name]; // $FlowFixMe
+          parent.drawOrder.splice(parent.drawOrder.indexOf(elem.name), 1);
+          // $FlowFixMe
+          delete parent[`_${elem.name}`];
+          elem.parent = null;
+        }
         this.add(key, elem);
       } else if (elem instanceof FigureElementCollection) {
+        const { parent } = elem;
+        if (parent != null) {
+          // $FlowFixMe
+          delete parent.elements[elem.name]; // $FlowFixMe
+          parent.drawOrder.splice(parent.drawOrder.indexOf(elem.name), 1);
+          // $FlowFixMe
+          delete parent[`_${elem.name}`];
+          elem.parent = null;
+        }
         this.add(key, elem);
       } else {
         let figureElem; // $FlowFixMe
