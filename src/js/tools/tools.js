@@ -1186,6 +1186,14 @@ class Notification {
     this.order = [];
   }
 
+  cleanup() {
+    Object.keys(this.subscribers).forEach((s) => {
+      // $FlowFixMe
+      delete s.callback;
+    });
+    this.subscribers = {};
+  }
+
   /**
    * Add a subscriber to an event.
    * @param {string} subscriptionName event name
@@ -1321,6 +1329,13 @@ class NotificationManager {
   constructor(fnMap: FunctionMap = new FunctionMap()) {
     this.notifications = {};
     this.fnMap = fnMap;
+  }
+
+  cleanup() {
+    Object.keys(this.notifications).forEach((name) => {
+      this.notifications[name].cleanup();
+    });
+    this.notifications = {};
   }
 
   /**
