@@ -227,9 +227,9 @@ class CollectionsText extends Equation {
   }
 
   fontUpdated() {
+    super.fontUpdated();
     this.clear();
     this.layoutForms('all');
-    console.log('asdf')
   }
 
   setText(optionsIn) {
