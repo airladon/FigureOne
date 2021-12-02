@@ -17,10 +17,11 @@ import type {
   OBJ_Font, OBJ_Font_Fixed, TypeDash, TypeColor,
 } from '../../tools/types';
 import type {
-  OBJ_Line, OBJ_TextLines,
+  OBJ_Line,
 } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections';
+import type { OBJ_CollectionsText } from './Text';
 import type { TypeArrowHead, OBJ_LineArrows } from '../geometries/arrow';
 import type FigureElementPrimitive2DText from '../FigurePrimitives/FigureElementPrimitive2DText';
 import type FigureElementPrimitiveGLText from '../FigurePrimitives/FigureElementPrimitiveGLText';
@@ -266,7 +267,7 @@ export type OBJ_AxisLabels_Fixed = {
 
  * @extends {@link OBJ_TextLines}
  */
-export type OBJ_AxisTitle = OBJ_TextLines & {
+export type OBJ_AxisTitle = OBJ_CollectionsText & {
   rotation?: number,
   offset?: TypeParsablePoint,
   location?: 'bottom' | 'top' | 'left' | 'right',
@@ -1190,7 +1191,7 @@ class CollectionsAxis extends FigureElementCollection {
     }
   }
 
-  addTitle(optionsIn: OBJ_TextLines & OBJ_AxisTitle | string) {
+  addTitle(optionsIn: OBJ_CollectionsText & OBJ_AxisTitle | string) {
     let optionsToUse = optionsIn;
     if (typeof optionsIn === 'string') {
       optionsToUse = { text: [optionsIn] };
