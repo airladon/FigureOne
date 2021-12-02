@@ -402,7 +402,7 @@ export default class FontManager {
     // If the font is available, then execute all callbacks registered to the
     // font and animate the next frame.
     if (result) {
-      this.fontLoaded(fontID);
+      // this.fontLoaded(fontID);
       return [fontID, true];
     }
 
