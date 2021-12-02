@@ -66,6 +66,7 @@ export type OBJ_TextLinesDefinition = {
  * or a buffer to enable touch and define the touchBorder (`false`)
  * buffer (`TypeParsableBuffer`) around the rectangle (default: `'0'`)
  * @property {number} [space] additional space to right of text
+ * @property {TypeEquationForm} [eqn] an equation form definition
  */
 export type OBJ_TextModifiersDefinition = {
   text?: string,
@@ -75,10 +76,12 @@ export type OBJ_TextModifiersDefinition = {
   touch?: boolean | TypeParsableBuffer,
   onClick?: string | () => void,
   space?: number,
+  eqn?: TypeEquationForm,
 };
 
 /* eslint-disable max-len */
 /**
+ * This 
  * @property {Array<string | OBJ_TextLinesDefinition> | string} [text] array of
  * line strings - single string is single line only.
  * @property {OBJ_TextModifiersDefinition} [modifiers] modifier definitions
@@ -182,48 +185,6 @@ class CollectionsText extends Equation {
     this.defaultTextTouchBorder = 0;
     this.collections = collections;
     this.setText(options);
-
-    // options.textFont = options.font;
-    // if (options.xAlign != null) {
-    //   options.formDefaults.alignment.xAlign = options.xAlign;
-    // }
-    // if (options.yAlign != null) {
-    //   options.formDefaults.alignment.yAlign = options.yAlign;
-    // }
-
-    // if (optionsIn.color != null) {
-    //   options.color = optionsIn.color;
-    // }
-    // if (optionsIn.font != null && optionsIn.font.color != null) {
-    //   options.color = optionsIn.font.color;
-    // }
-
-    // if (options.lineSpace == null) {
-    //   options.lineSpace = options.font.size * 0.5;
-    // }
-    // if (Object.keys(options.accent).length === 0) {
-    //   options.accent = { style: 'italic' };
-    // }
-    // this.collections = collections;
-    // this.font = options.font;
-    // this.font.color = this.color;
-    // this.lineSpace = options.lineSpace;
-    // this.baselineSpace = options.baselineSpace;
-    // this.justify = options.justify;
-    // this.accent = options.accent;
-    // this.modifiers = options.modifiers || {};
-    // this.lines = [];
-    // this.defaultTextTouchBorder = options.defaultTextTouchBorder;
-    // this.xAlign = options.xAlign;
-    // this.yAlign = options.yAlign;
-
-    // this.splitLines(options.text);
-    // const equationOptions = this.createEquation();
-
-    // this.addElements(joinObjects({}, equationOptions.elements, options.elements || {}));
-    // // $FlowFixMe
-    // this.addForms(equationOptions.forms);
-    // this.layoutForms('reset');
   }
 
   fontUpdated() {

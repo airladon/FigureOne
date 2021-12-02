@@ -15,9 +15,9 @@ import {
 } from '../Element';
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep } from '../Animation/Animation';
-import type {
-  OBJ_TextLines,
-} from '../FigurePrimitives/FigurePrimitiveTypes2D';
+// import type {
+//   OBJ_TextLines,
+// } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 import type {
   OBJ_LineStyleSimple, OBJ_Texture, OBJ_Collection,
 } from '../FigurePrimitives/FigurePrimitiveTypes';
@@ -26,6 +26,7 @@ import type {
 } from '../../tools/types';
 import type { FigureElement } from '../Element';
 import type FigureCollections from './FigureCollections';
+import type CollectionsText from './Text';
 
 /**
  * Surround animation step.
@@ -220,7 +221,7 @@ export type COL_Rectangle = {
 class CollectionsRectangle extends FigureElementCollection {
   _line: FigureElementPrimitive | null;
   _fill: FigureElementPrimitive | null;
-  _label: FigureElementPrimitive | null;
+  _label: CollectionsText | null;
 
   width: number;
   height: number;
@@ -499,7 +500,7 @@ class CollectionsRectangle extends FigureElementCollection {
     //   o.position = new Point(0, -o.font.size / 2.5);
     // }
     // o.position = o.position.add(this.getAlignmentPosition());
-    const label = this.collections.primitives.textLines(o);
+    const label = this.collections.text(o);
     this.add('label', label);
   }
 
@@ -600,7 +601,7 @@ class CollectionsRectangle extends FigureElementCollection {
       } else {
         textToUse = text;
       }
-      this._label.custom.updateText(textToUse);
+      this._label.setText(textToUse);
     }
     this.animateNextFrame();
   }
