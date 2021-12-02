@@ -11,9 +11,9 @@ import { areColorsWithinDelta } from '../../tools/color';
 // import {
 //   FigureElementCollection, FigureElementPrimitive,
 // } from '../Element';
-import type {
-  TypeText,
-} from '../FigurePrimitives/FigurePrimitiveTypes';
+// import type {
+//   TypeText,
+// } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type {
   OBJ_Font, OBJ_Font_Fixed,
 } from '../../tools/types';
@@ -21,8 +21,11 @@ import type FigureCollections from './FigureCollections';
 import type { EQN_EquationElements, EQN_Forms } from '../Equation/Equation';
 import type { TypeEquationPhrase } from '../Equation/EquationFunctions';
 import { Equation } from '../Equation/Equation';
+import type { TypeEquationForm } from '../Equation/EquationForm';
 import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
-
+import type {
+  OBJ_Collection,
+} from '../FigurePrimitives/FigurePrimitiveTypes';
 /**
  * Lines Text Definition object.
  *
@@ -122,7 +125,7 @@ export type OBJ_CollectionsText = {
   border?: TypeParsableBuffer | TypeParsableBorder | 'children' | 'rect' | number;
   touchBorder?: TypeParsableBuffer | TypeParsableBorder | 'border' | 'children' | 'rect' | number;
   accent?: OBJ_Font,
-}
+} & OBJ_Collection;
 
 // $FlowFixMe
 class CollectionsText extends Equation {
@@ -193,7 +196,7 @@ class CollectionsText extends Equation {
     this.layoutForms('all');
   }
 
-  setText(optionsIn) {
+  setText(optionsIn: OBJ_CollectionsText) {
     const defaultOptions = {
       color: this.color.slice(),
       font: this.font,

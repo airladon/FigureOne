@@ -30,7 +30,7 @@ import {
   duplicateFromTo, joinObjects, joinObjectsWithOptions, NotificationManager,
   generateUniqueId, PerformanceTimer, generateUniqueColor,
 } from '../tools/tools';
-import { colorArrayToRGBA, areColorsWithinDelta } from '../tools/color';
+import { areColorsWithinDelta } from '../tools/color';
 import TimeKeeper from './TimeKeeper';
 import type { TypeWhen } from './TimeKeeper';
 
