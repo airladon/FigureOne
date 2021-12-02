@@ -1189,7 +1189,7 @@ class Notification {
   cleanup() {
     Object.keys(this.subscribers).forEach((s) => {
       // $FlowFixMe
-      delete s.callback;
+      delete s.callback;  // eslint-disable-line
     });
     this.subscribers = {};
   }
