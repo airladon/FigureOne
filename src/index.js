@@ -23,7 +23,7 @@ import WebGLInstance from './js/figure/webgl/webgl';
 import DrawingObject from './js/figure/DrawingObjects/DrawingObject';
 import VertexGeneric from './js/figure/DrawingObjects/VertexObject/VertexGeneric';
 import {
-  TextObject, FigureText, FigureFont,
+  FigureFont,
 } from './js/figure/DrawingObjects/TextObject/TextObject';
 import HTMLObject from './js/figure/DrawingObjects/HTMLObject/HTMLObject';
 import HTMLEquation from './js/figure/Equation/HTMLEquation';
@@ -113,8 +113,6 @@ const Fig = {
   //
   DrawingObject,
   VertexGeneric,
-  TextObject,
-  FigureText,
   FigureFont,
   HTMLObject,
   //
