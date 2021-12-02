@@ -494,6 +494,15 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
   }
 
   /**
+   * Get the font of the text.
+   *
+   * @return {FigureFont}
+   */
+  getFont() {
+    return this.font;
+  }
+
+  /**
    * Change only the font of the text.
    *
    * @param {OBJ_Font} font

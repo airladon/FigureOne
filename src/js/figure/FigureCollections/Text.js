@@ -7,6 +7,7 @@ import {
 } from '../../tools/g2';
 import type { TypeParsablePoint, TypeParsableBuffer, TypeParsableBorder } from '../../tools/g2';
 import { joinObjects, splitString } from '../../tools/tools';
+import { areColorsWithinDelta } from '../../tools/color';
 // import {
 //   FigureElementCollection, FigureElementPrimitive,
 // } from '../Element';
@@ -17,9 +18,10 @@ import type {
   OBJ_Font, OBJ_Font_Fixed,
 } from '../../tools/types';
 import type FigureCollections from './FigureCollections';
-import type { EQN_EquationElements } from '../Equation/Equation';
+import type { EQN_EquationElements, EQN_Forms } from '../Equation/Equation';
 import type { TypeEquationPhrase } from '../Equation/EquationFunctions';
 import { Equation } from '../Equation/Equation';
+import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
 
 /**
  * Lines Text Definition object.
@@ -126,7 +128,7 @@ class CollectionsText extends Equation {
   font: OBJ_Font_Fixed;
   accent: OBJ_Font;
   justify: 'left' | 'right' | 'center';
-  lineSpace: number;
+  lineSpace: number | null;
   lines: Array<Object>;
   modifiers: Object;
   baselineSpace: number | null;
@@ -161,10 +163,13 @@ class CollectionsText extends Equation {
       baselineSpace: null,
       defaultTextTouchBorder: 0,
     };
+    delete defaultOptions.font.color;
 
     const options = joinObjects({}, defaultOptions, optionsIn);
-
+    const elementsBackup = options.elements;
+    delete options.elements;
     super(collections.primitives, joinObjects({}, options));
+    options.elements = elementsBackup;
     this.xAlign = 'left';
     this.yAlign = 'baseline';
     this.font = joinObjects({}, collections.primitives.defaultFont);
@@ -172,7 +177,7 @@ class CollectionsText extends Equation {
     this.modifiers = {};
     this.accent = { style: 'italic' };
     this.baselineSpace = null;
-    this.lineSpace = 0;
+    this.lineSpace = null;
     this.lines = [];
     this.defaultTextTouchBorder = 0;
     this.collections = collections;
@@ -223,7 +228,8 @@ class CollectionsText extends Equation {
 
   fontUpdated() {
     this.clear();
-    this.layoutForms('reset');
+    this.layoutForms('all');
+    console.log('asdf')
   }
 
   setText(optionsIn) {
@@ -245,27 +251,46 @@ class CollectionsText extends Equation {
       accent: this.accent,
       baselineSpace: this.baselineSpace,
       defaultTextTouchBorder: this.defaultTextTouchBorder,
+      reform: true,
     };
-    this.cleanupChildren();
-    this.cleanupForms();
+
+    // Careful, I think memory is not being fully garbage collected here...
+    // use sparingly
     const options = joinObjects({}, defaultOptions, optionsIn);
     options.textFont = options.font;
-    // if (options.xAlign != null) {
-    //   options.formDefaults.alignment.xAlign = options.xAlign;
-    // }
-    // if (options.yAlign != null) {
-    //   options.formDefaults.alignment.yAlign = options.yAlign;
-    // }
+    if (options.reform) {
+      this.cleanupForms();
+    }
+    if (options.xAlign != null) {
+      this.eqn.formDefaults.alignment.xAlign = options.xAlign;
+      this.xAlign = options.xAlign;
+    }
+    if (options.yAlign != null) {
+      this.eqn.formDefaults.alignment.yAlign = options.yAlign;
+      this.yAlign = options.yAlign;
+    }
 
-    if (optionsIn.color != null) {
-      options.color = optionsIn.color;
-    }
-    if (optionsIn.font != null && optionsIn.font.color != null) {
-      options.color = optionsIn.font.color;
-    }
+    // if (optionsIn.color != null) {
+    //   options.color = optionsIn.color;
+    // }
+    // if (optionsIn.font != null && optionsIn.font.color != null) {
+    //   options.color = optionsIn.font.color;
+    // }
 
     this.font = options.font;
-    this.font.color = this.color;
+    if (optionsIn.font != null && optionsIn.font.color != null) {
+      this.font.color = optionsIn.font.color;
+      this.color = this.font.color.slice();
+    } else if (optionsIn.color != null) {
+      this.font.color = optionsIn.color;
+      this.color = this.font.color.slice();
+    } else {
+      this.font.color = this.color;
+    }
+    if (options.lineSpace == null) {
+      options.lineSpace = options.font.size * 0.5;
+    }
+    // this.eqn.textFont = new FigureFont(joinObjects({}, this.font));
     this.lineSpace = options.lineSpace;
     this.baselineSpace = options.baselineSpace;
     this.justify = options.justify;
@@ -277,11 +302,83 @@ class CollectionsText extends Equation {
     this.yAlign = options.yAlign;
     this.splitLines(options.text);
     const equationOptions = this.createEquation();
+    // console.log(equationOptions);
+    this.eqn.textFont = new FigureFont(equationOptions.textFont);
     // console.log(equationOptions)
-    this.addElements(joinObjects({}, equationOptions.elements, options.elements || {}));
+    // this.addElements(joinObjects({}, equationOptions.elements, options.elements || {}));
+    let relayout = false;
+    // console.log(equationOptions.elements)
+    // console.log(options.elements)
+    // console.log(optionsIn)
+    relayout = this.updateElements(
+      joinObjects({}, equationOptions.elements, options.elements || {}),
+    );
+
     // $FlowFixMe
-    this.addForms(equationOptions.forms);
-    this.layoutForms('reset');
+    if (this.updateForms(equationOptions.forms, options.reform)) {
+      relayout = true;
+    }
+
+    if (relayout) {
+      this.layoutForms('reset');
+    }
+  }
+
+  updateElements(
+    elems: {
+      [elementName: string]: {
+        text: string,
+        font: {
+          size: number,
+          family: string,
+          weight: string,
+          style: string,
+        },
+      },
+    },
+  ) {
+    const toAdd = {};
+    let relayout = false;
+    Object.keys(elems).forEach((name) => {
+      const element = elems[name];
+      if (this.elements[name] == null) {
+        toAdd[name] = element;
+      } else if (this.elements[name].getText != null) {
+        const e = this.elements[name];
+        const text = e.getText();
+        const font = e.getFont();
+        if (
+          element.text !== text
+          || element.font.size !== font.size
+          || element.font.style !== font.style
+          || element.font.family !== font.family
+          || element.font.weight !== font.weight
+        ) {
+          relayout = true;
+          e.setText({ text: element.text, font: element.font });
+        }
+        if (!areColorsWithinDelta(font.color, e.color, 0.001)) {
+          e.setColor(font.color);
+        }
+      }
+    });
+    if (Object.keys(toAdd).length > 0) {
+      // $FlowFixMe
+      this.addElements(toAdd);
+      relayout = true;
+    }
+    return relayout;
+  }
+
+  updateForms(
+    forms: EQN_Forms,
+    reform: boolean,
+  ) {
+    if (reform || this.eqn.forms.base == null) {
+      this.addForms(forms);
+      return true;
+    }
+    return false;
   }
 
   splitLines(linesIn: Array<Object | string> | string) {
@@ -403,6 +500,8 @@ class CollectionsText extends Equation {
       joinObjects(elements, elementOptions);
       content.push(lineOptions);
     });
+    // console.log(elements)
+    // console.log(content)
     const o = {
       name: 'lines',
       make: 'equation',

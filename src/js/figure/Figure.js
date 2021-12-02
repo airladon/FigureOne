@@ -3109,7 +3109,7 @@ class Figure {
     // $FlowFixMe
     if (this.elements.__frameRate_ != null && this.frameRate.information != null) {
       // $FlowFixMe
-      this.elements.__frameRate_.setText({ text: this.frameRate.information });
+      this.elements.__frameRate_.setText({ text: this.frameRate.information, reform: false });
     }
     this.elements.setupDraw(
       now,

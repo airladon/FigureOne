@@ -216,7 +216,7 @@ function getShapes(getPos) {
     .##.....##..######...######..########.##....##....##...
     */
     shape('ac1'),
-    shape('ac2', { accent: { color: [0, 0, 1, 1] } }),
+    shape('ac2', { accent: { color: [0, 0, 1, 1], style: 'normal' } }),
     shape('ac3', { accent: { weight: 'bold' } }),
 
     /*
@@ -244,6 +244,20 @@ function getShapes(getPos) {
     ..######.....##....##.....##.####.##....##..######..
     */
     shape('st1', { text: 'single string' }),
+
+    /*
+    .##.....##.########..########.....###....########.########
+    .##.....##.##.....##.##.....##...##.##......##....##......
+    .##.....##.##.....##.##.....##..##...##.....##....##......
+    .##.....##.########..##.....##.##.....##....##....######..
+    .##.....##.##........##.....##.#########....##....##......
+    .##.....##.##........##.....##.##.....##....##....##......
+    ..#######..##........########..##.....##....##....########
+    */
+    shape('u1', { text: ['hello', 'world'] }),
+    shape('u2', { text: ['hello', 'world'] }),
+    shape('u3', { text: ['hello |e|', 'world'], modifiers: { e: { eqn: { frac: ['1', 'vinculum', '2'] } } } }),
+    shape('u4', { text: ['hello', 'world'] }),
   ];
 }
 
@@ -266,6 +280,26 @@ const updates = {
   type2: (e) => {
     const elements = e._text.getChildren().filter(el => el.text == null);
     e._count.setText(elements.length.toString());
+  },
+  u1: (e) => {
+    const elements = e._text.setText({ text: ['hello', 'there'] });
+  },
+  u2: (e) => {
+    const elements = e._text.setText({
+      text: ['hello fun', 'world', 'you are great'], reform: true,
+    });
+  },
+  u3: (e) => {
+    const elements = e._text.setText({
+      text: ['hello fun', 'world', 'you are great'], reform: true,
+    });
+  },
+  u4: (e) => {
+    const elements = e._text.setText({
+      text: ['hello |e|', 'world'],
+      modifiers: { e: { eqn: { frac: ['1', 'vinculum', '2'] } } },
+      reform: true,
+    });
   },
 };
 

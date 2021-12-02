@@ -73,6 +73,7 @@ function glyphMeasures(
     '[': { a, d, w },
     ']': { a, d, w },
     '|': { a, d, w },
+    '-': { a: ma, d: d0, w },
   };
   const mods = {};
   Object.keys(modifiers).forEach((key) => {

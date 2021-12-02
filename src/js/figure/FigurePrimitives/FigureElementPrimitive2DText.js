@@ -686,6 +686,15 @@ export default class FigureElementPrimitive2DText extends FigureElementPrimitive
     return this.drawingObject.text[0];
   }
 
+  /**
+   * Get the font of the text.
+   *
+   * @return {FigureFont}
+   */
+  getFont() {
+    return this.drawingObject.font;
+  }
+
   setColor(color: TypeColor, setDefault: boolean = true) {
     super.setColor(color, setDefault);
     this.drawingObject.font.color = color.slice();

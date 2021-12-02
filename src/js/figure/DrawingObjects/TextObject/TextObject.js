@@ -72,6 +72,7 @@ class FigureFont {
   midAscent: number;
   maxAscent: number;
   modifiers: OBJ_GlyphModifiers;
+  mods: OBJ_GlyphModifiers;
 
   // Font load detection parameters
   testString: string;
@@ -105,6 +106,11 @@ class FigureFont {
       this.loadColor = optionsIn.loadColor;
       this.atlasColor = optionsIn.atlasColor;
       this.atlasSize = optionsIn.atlasSize;
+      this.mods = glyphMeasures(
+        this.family, this.style,
+        this.maxAscent, this.midAscent, this.maxDescent, this.midDescent,
+        this.descent, this.modifiers,
+      );
       return;
     }
     const defaultOptions = {
@@ -182,10 +188,11 @@ class FigureFont {
     if (this.testString == null) {
       this.testString = this.glyphs;
     }
-    this.modifiers = glyphMeasures(
+    this.modifiers = options.modifiers;
+    this.mods = glyphMeasures(
       this.family, this.style,
       this.maxAscent, this.midAscent, this.maxDescent, this.midDescent,
-      this.descent, options.modifiers,
+      this.descent, this.modifiers,
     );
   }
 
@@ -469,11 +476,11 @@ class FigureFont {
 
     for (let i = 0; i < text.length; i += 1) {
       const glyph = text[i];
-      if (this.modifiers[glyph] == null) {
+      if (this.mods[glyph] == null) {
         ascent = Math.max(this.maxAscent, ascent);
         descent = Math.max(this.descent, descent);
       } else {
-        const { a, d } = this.modifiers[glyph];
+        const { a, d } = this.mods[glyph];
         ascent = Math.max(a, ascent);
         descent = Math.max(d, descent);
       }
