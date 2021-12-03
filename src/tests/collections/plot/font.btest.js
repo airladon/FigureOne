@@ -112,7 +112,7 @@ describe('Axis Font', () => {
       await makePlot('bmp');
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(200);
+      await sleep(500);
       await snap();
       const gl = await numGL('plot');
       const d2 = await num2D('plot');
