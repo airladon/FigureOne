@@ -1,52 +1,42 @@
 // // const { polygon } = Fig.tools.g2;
-const figure = new Fig.Figure({
-color: Fig.tools.color.HexToArray('#212529'),
-backgroundColor: Fig.tools.color.HexToArray('#f6f7f7'),
-});
+// const figure = new Fig.Figure({
+// color: Fig.tools.color.HexToArray('#212529'),
+// backgroundColor: Fig.tools.color.HexToArray('#f6f7f7'),
+// });
+const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.4 } });
 // const next = figure.add({make: 'collections.button', label: 'Next', position: [0.7, -0.8],});
 
 // next.notifications.add('touch', () => eqn.animations.new().nextForm(1).start());
 
-// const figure = new Fig.Figure({ scene: [-3, -3, 5, 5], backgroundColor: [1, 1, 1, 1], font: { size: 0.2 } });
 const t = figure.add({
-  make: 'collections.text',
-  // text: ['Hello |eqn| there', 'test of', 'some lines'],
-  xAlign: 'right',
-  // color: [0, 0, 1, 1],
-  // font: { size: 0.1 },
-  // modifiers: { eqn: { eqn: { frac: ['1', 'vinculum', 'abc'] } } }
-  text: ['hello |eqn| now', 'there is'],
-  modifiers: { eqn: { eqn: { frac: ['1', 'v', 'b'] } } },
-  elements: {
-    v: { symbol: 'vinculum' },
-    b: { text: 'abc', color: [0, 1, 0, 1], font: { size: 0.3 } },
-  },
-  font: { style: 'normal', family: 'montserrat', glyphs: 'latin' },
+  make: 'ftext',
+  text: ['hello', 'world'],
+  font: { family: 'times', modifiers: { a: { a: 2, d: 1, w: 2 } }, render: 'gl' },
 });
 
-figure.add({
+const e = figure.add({
   make: 'equation',
-  forms: { 0: ['a', 'b', 'cd'] },
-  formDefaults: { alignment: { xAlign: 'right' } },
-  position: [0, 0.5],
-});
+  forms: { 0: ['a', 'b', '1'] },
+  font: { render: 'gl' },
+  scale: 3,
+  position: [0, 0.4],
+})
+// figure.showBorders();
 
-figure.add({
-  make: 'polygon',
-  radius: 0.02,
-});
+
+// console.log('asdf');
 
 // t.setText({ text: ['a', 'b', 'c', 'd'] });
 
 // figure.showBorders();
 
 
-// // figure.add({
-// //   make: 'grid',
-// //   step: 0.1,
-// //   line: { width: 0.003 },
-// //   color: [0.8, 0.8, 0.8, 1],
-// // });
+// figure.add({
+//   make: 'grid',
+//   step: 0.1,
+//   line: { width: 0.003 },
+//   color: [0.8, 0.8, 0.8, 1],
+// });
 // // figure.add({
 // //   make: 'grid',
 // //   step: 0.5,
