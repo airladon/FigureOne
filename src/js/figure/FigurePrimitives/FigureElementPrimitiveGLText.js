@@ -76,7 +76,6 @@ export type OBJ_TextAdjustments = {
  * @property {OBJ_TextAdjustments} [adjustments]
  * @property {TypeParsableBuffer | TypeParsableBorder | 'buffer' | 'draw' | 'rect'} [border]
  * @property {TypeParsableBuffer | TypeParsableBorder | 'rect' | 'border' | 'buffer' | 'draw'} [touchBorder]
- * @property {'bmp' | '2d'} [type]
  */
 /* eslint-enable max-len */
 export type OBJ_Text = {
@@ -88,7 +87,7 @@ export type OBJ_Text = {
   adjustments?: OBJ_TextAdjustments;
   border?: TypeParsableBuffer | TypeParsableBorder | 'buffer' | 'draw' | 'rect';
   touchBorder?: TypeParsableBuffer | TypeParsableBorder | 'rect' | 'border' | 'buffer' | 'draw';
-  type: 'bmp' | '2d'
+  // type: 'bmp' | '2d'
 } & OBJ_FigurePrimitive;
 
 export type OBJ_Text_Fixed = {

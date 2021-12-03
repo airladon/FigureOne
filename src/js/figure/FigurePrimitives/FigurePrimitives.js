@@ -3,7 +3,7 @@
 import {
   Rect, Point, Transform, getPoint, getRect, getTransform,
   getBorder, getPoints,
-  getBoundingBorder, isBuffer, toNumbers,
+  toNumbers,
   sphere, cube, cylinder, cone, revolve, surface, prism, line3,
   getScale,
 } from '../../tools/g2';
@@ -23,7 +23,6 @@ import DrawContext2D from '../DrawContext2D';
 import * as tools from '../../tools/math';
 import { generateUniqueId, joinObjects, joinObjectsWithOptions } from '../../tools/tools';
 // eslint-disable-next-line import/no-cycle
-import DrawingObject from '../DrawingObjects/DrawingObject';
 // eslint-disable-next-line import/no-cycle
 import GLObject from '../DrawingObjects/GLObject/GLObject';
 // eslint-disable-next-line import/no-cycle
@@ -85,10 +84,6 @@ import type {
   OBJ_Line,
   OBJ_Grid,
   OBJ_Arrow,
-  OBJ_TextDefinition,
-  OBJ_Text,
-  OBJ_TextLine,
-  OBJ_TextLines,
 } from './FigurePrimitiveTypes2D';
 import type {
   OBJ_Generic3,
@@ -1463,18 +1458,18 @@ export default class FigurePrimitives {
         descent: 0,
       },
       text: 'TEXT NOT DEFINED',
-      type: this.defaultFont.type,
+      // type: this.defaultFont.type,
     };
     const o = this.parseTextOptions(defaultOptions, ...options);
     if (o.scene == null) {
       o.scene = this.scene;
     }
-    if (o.font.type != null) {
-      o.type = o.font.type;
-    }
+    // if (o.font.type != null) {
+    //   o.type = o.font.type;
+    // }
 
     let element;
-    if (o.type === 'bmp') {
+    if (o.font.render === 'gl') {
       if (o.font.atlasColor) {
         o.fragmentShader = { color: 'texture' };
       }

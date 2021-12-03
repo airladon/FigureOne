@@ -12,7 +12,7 @@ const figure = new Fig.Figure({
 
 const count = figure.add({
   make: 'text',
-  font: { type: 'bmp' },
+  font: { render: 'gl' },
   text: '0',
   yAlign: 'middle',
   position: [0, 1],

@@ -5059,7 +5059,7 @@ class FigureElementCollection extends FigureElement {
       //
       addEquation: collections.addEquation.bind(collections),
       equation: collections.equation.bind(collections),
-      richText: collections.text.bind(collections),
+      ftext: collections.text.bind(collections),
       // eqnText: collections.text.bind(collections),
       // addNavigator: collections.addNavigator.bind(collections),
     };

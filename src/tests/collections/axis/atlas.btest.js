@@ -64,7 +64,7 @@ describe('Axis Atlas', () => {
           start: 0,
           stop: 10,
           font: {
-            type: 'bmp', family: 'montserrat', glyphs: 'latin', size: 0.1,
+            render: 'gl', family: 'montserrat', glyphs: 'latin', size: 0.1,
           },
           title: { text: ['time', '(s)'] },
         });
@@ -82,7 +82,7 @@ describe('Axis Atlas', () => {
           start: 0,
           stop: 10,
           font: {
-            type: 'bmp', family: 'montserrat', glyphs: 'latin', size: 0.1, weight: '100',
+            render: 'gl', family: 'montserrat', glyphs: 'latin', size: 0.1, weight: '100',
           },
           labels: {
             font: { weight: '400' },
@@ -118,7 +118,7 @@ describe('Axis Atlas', () => {
           start: 0,
           stop: 10,
           font: {
-            type: 'bmp', family: 'montserrat', glyphs: 'latin', size: 0.1,
+            render: 'gl', family: 'montserrat', glyphs: 'latin', size: 0.1,
           },
           title: { text: ['time', '(s)'] },
         });

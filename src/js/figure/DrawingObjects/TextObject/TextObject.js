@@ -80,6 +80,8 @@ class FigureFont {
   maxCount: number;
   atlasColor: boolean;
 
+  render: 'gl' | '2d' | 'html';
+
   constructor(optionsIn: OBJ_Font | FigureFont = {}) {
     if (optionsIn instanceof FigureFont) {
       this.family = optionsIn.family;
@@ -107,6 +109,7 @@ class FigureFont {
       this.loadColor = optionsIn.loadColor;
       this.atlasColor = optionsIn.atlasColor;
       this.atlasSize = optionsIn.atlasSize;
+      this.render = optionsIn.render;
       this.mods = glyphMeasures(
         this.family, this.style,
         this.maxAscent, this.midAscent, this.maxDescent, this.midDescent,
@@ -138,6 +141,7 @@ class FigureFont {
       loadColor: [0, 0, 0, 0],
       atlasColor: false,
       atlasSize: null,
+      render: '2d',
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     this.family = options.family;
@@ -185,6 +189,7 @@ class FigureFont {
     this.id = options.id;
     this.timeout = options.timeout;
     this.maxCount = options.maxCount;
+    this.render = options.render;
     this.testString = options.testString;
     if (this.testString == null) {
       this.testString = this.glyphs;
@@ -435,6 +440,7 @@ class FigureFont {
       underline: this.underline,
       atlasColor: this.atlasColor,
       atlasSize: this.atlasSize,
+      render: this.render,
     };
   }
 
@@ -558,6 +564,7 @@ class FigureFont {
       'testString',
       'timeout',
       'maxCount',
+      'render',
     ];
   }
 }

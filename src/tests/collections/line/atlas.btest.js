@@ -71,7 +71,7 @@ describe('Line Atlas', () => {
           width: 0.01,
           label: {
             text: {
-              type: 'bmp',
+              render: 'gl',
               forms: { base: ['a', 'b', 'c'] },
               textFont: {
                 family: 'montserrat', weight: '200', glyphs: 'latin', size: 0.3,
@@ -94,7 +94,7 @@ describe('Line Atlas', () => {
           width: 0.01,
           label: {
             text: {
-              type: 'bmp',
+              render: 'gl',
               forms: { base: ['a', 'b', 'c'] },
               textFont: {
                 family: 'montserrat', weight: '200', glyphs: 'latin', size: 0.3,

@@ -203,8 +203,8 @@ function getShapes(getPos) {
     ....##.......##....##........##......
     ....##.......##....##........########
     */
-    shape('type1', { type: '2d' }),
-    shape('type2', { type: 'bmp' }),
+    shape('type1', { font: { render: '2d' } }),
+    shape('type2', { font: { render: 'gl' } }),
 
     /*
     ....###.....######...######..########.##....##.########

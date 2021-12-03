@@ -62,9 +62,8 @@ describe('Angle Atlas', () => {
           make: 'collections.angle',
           label: {
             text: {
-              type: 'bmp',
               forms: { base: ['a', 'b', 'c'] },
-              textFont: { family: 'montserrat', glyphs: 'latin' },
+              textFont: { family: 'montserrat', glyphs: 'latin', render: 'gl' },
             },
           },
           angle: Math.PI / 4,
@@ -84,9 +83,8 @@ describe('Angle Atlas', () => {
           make: 'collections.angle',
           label: {
             text: {
-              type: 'bmp',
               forms: { base: ['a', 'b', 'c'], 1: ['b', 'd', 'c'] },
-              textFont: { family: 'montserrat', glyphs: 'latin' },
+              textFont: { family: 'montserrat', glyphs: 'latin', render: 'gl' },
             },
           },
           angle: Math.PI / 4,
@@ -108,9 +106,8 @@ describe('Angle Atlas', () => {
           make: 'collections.angle',
           label: {
             text: {
-              type: 'bmp',
               forms: { base: ['a', 'b', 'c'] },
-              textFont: { family: 'montserrat', glyphs: 'latin' },
+              textFont: { family: 'montserrat', glyphs: 'latin', render: 'gl' },
             },
           },
           angle: Math.PI / 4,
@@ -138,9 +135,10 @@ describe('Angle Atlas', () => {
           make: 'collections.angle',
           label: {
             text: {
-              type: 'bmp',
               forms: { base: ['a', 'b', 'c'] },
-              textFont: { family: 'montserrat', weight: '200', glyphs: 'latin' },
+              textFont: {
+                family: 'montserrat', weight: '200', glyphs: 'latin', render: 'gl',
+              },
             },
           },
           angle: Math.PI / 4,
@@ -175,9 +173,10 @@ describe('Angle Atlas', () => {
           make: 'collections.angle',
           label: {
             text: {
-              type: 'bmp',
               forms: { base: ['a', 'b', 'c'] },
-              textFont: { family: 'montserrat', weight: '200', glyphs: 'latin' },
+              textFont: {
+                family: 'montserrat', weight: '200', glyphs: 'latin', render: 'gl',
+              },
             },
           },
           angle: Math.PI / 4,

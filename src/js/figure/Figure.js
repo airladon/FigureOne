@@ -382,7 +382,7 @@ class Figure {
         weight: '100',
         opacity: 1,
         glyphs: 'mathlatin',
-        type: 'bmp',
+        render: '2d',
       },
       backgroundColor: [1, 1, 1, 1],
       // scene: {
@@ -3446,7 +3446,7 @@ class Figure {
         ],
         xAlign: 'left',
         yAlign: 'bottom',
-        font: { size: (this.scene.right - this.scene.left) / 30, type: 'bmp' },
+        font: { size: (this.scene.right - this.scene.left) / 30, type: '2d' },
       },
       options,
     ));

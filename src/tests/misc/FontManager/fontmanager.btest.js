@@ -641,8 +641,9 @@ describe('Font Manager', () => {
           name: 'a',
           make: 'text',
           text: 'abc',
-          type: 'bmp',
-          font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
+          font: {
+            family: 'montserrat', weight: '400', glyphs: 'latin', render: 'gl',
+          },
         });
       });
       fonts = await getFontManager();
@@ -676,8 +677,9 @@ describe('Font Manager', () => {
           name: 'a',
           make: 'text',
           text: 'abc',
-          type: '2d',
-          font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
+          font: {
+            family: 'montserrat', weight: '400', glyphs: 'latin', render: '2d',
+          },
         });
       });
       fonts = await getFontManager();
@@ -723,22 +725,25 @@ describe('Font Manager', () => {
               name: 'a',
               make: 'text',
               text: 'abc',
-              type: '2d',
-              font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
+              font: {
+                family: 'montserrat', weight: '400', glyphs: 'latin', render: '2d',
+              },
             },
             {
               name: 'b',
               make: 'text',
               text: 'abc',
-              type: 'bmp',
-              font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
+              font: {
+                family: 'montserrat', weight: '400', glyphs: 'latin', render: 'gl',
+              },
             },
             {
               name: 'c',
               make: 'text',
               text: 'abc',
-              type: 'bmp',
-              font: { family: 'open sans', weight: '300', glyphs: 'latin' },
+              font: {
+                family: 'open sans', weight: '300', glyphs: 'latin', render: 'gl',
+              },
             },
             {
               name: 'd',
@@ -748,15 +753,17 @@ describe('Font Manager', () => {
                   name: 'e',
                   make: 'text',
                   text: 'abc',
-                  type: 'bmp',
-                  font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
+                  font: {
+                    family: 'montserrat', weight: '400', glyphs: 'latin', render: 'gl',
+                  },
                 },
                 {
                   name: 'f',
                   make: 'text',
                   text: 'abc',
-                  type: '2d',
-                  font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
+                  font: {
+                    family: 'montserrat', weight: '400', glyphs: 'latin', render: '2d',
+                  },
                 },
               ],
             },

@@ -67,7 +67,7 @@ describe('Button Atlas', () => {
           label: {
             text: 'gbutton',
             font: {
-              family: 'montserrat', glyphs: 'latin', size: 0.5, type: 'bmp',
+              family: 'montserrat', glyphs: 'latin', size: 0.5, render: 'gl',
             },
           },
           line: { width: 0.03 },
@@ -88,7 +88,7 @@ describe('Button Atlas', () => {
           label: {
             text: 'gbutton',
             font: {
-              family: 'montserrat', glyphs: 'latin', size: 0.5, type: 'bmp',
+              family: 'montserrat', glyphs: 'latin', size: 0.5, render: 'gl',
             },
           },
           line: { width: 0.03 },

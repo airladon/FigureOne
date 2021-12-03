@@ -125,7 +125,7 @@ export default class EquationLabel {
           base: ['base'],
         },
         position,
-        type: font.type,
+        // render: font.render,
       });
       eqn.showForm('base');
     } else if (labelTextOrEquation instanceof Equation) {

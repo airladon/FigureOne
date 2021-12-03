@@ -1048,6 +1048,7 @@ export class Equation extends FigureElementCollection {
       weight: '200',
       color,
       glyphs: 'mathlatin',
+      type: shapes.defaultFont.render,
     };
     const defaultOptions = {
       color,
@@ -1072,7 +1073,7 @@ export class Equation extends FigureElementCollection {
       touchBorder: 'rect',
       transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       timeKeeper: shapes.timeKeeper,
-      type: shapes.defaultFont.type,
+      type: shapes.defaultFont.render,
     };
 
     const optionsToUse = joinObjectsWithOptions({ except: ['font'] }, {}, defaultOptions, options);
@@ -1089,11 +1090,11 @@ export class Equation extends FigureElementCollection {
       optionsToUse.textFont = options.textFont;
     } else if (options.textFont != null) {
       optionsToUse.textFont = new FigureFont(
-        joinObjects({}, defaultFont, { style: 'italic' }, options.textFont),
+        joinObjects({}, optionsToUse.font, { style: 'italic' }, options.textFont),
       );
     } else {
       optionsToUse.textFont = new FigureFont(
-        joinObjects({}, defaultFont, { style: 'italic' }),
+        joinObjects({}, optionsToUse.font, { style: 'italic' }),
       );
     }
     if (optionsToUse.transform != null) {
@@ -1127,7 +1128,7 @@ export class Equation extends FigureElementCollection {
     this.shapes = shapes;
     this.setColor(optionsToUse.color);
     this.dimColor = optionsToUse.dimColor;
-    this.defaultTextType = optionsToUse.type;
+    // this.defaultTextType = optionsToUse.type;
     this.textureAtlases = {};
     // this.touchBorder = 'rect';
     // this.border = 'children';
@@ -1487,10 +1488,10 @@ export class Equation extends FigureElementCollection {
       onClick?: () => void | 'string' | null,
       isTouchable?: boolean,
       mods?: Object,
-      type?: TypeText,
+      // type?: TypeText,
     },
     defaultText: string = '',
-  ) { 
+  ) {
     let textToUse = defaultText;
     if (options.text != null) {
       textToUse = options.text;
@@ -1531,6 +1532,7 @@ export class Equation extends FigureElementCollection {
     if (fontDefinition.color == null) {
       fontDefinition.color = this.color;
     }
+
     const p = this.shapes.text(
       {
         text: {
@@ -1545,7 +1547,7 @@ export class Equation extends FigureElementCollection {
         mods: {
           dimColor: this.dimColor.slice(),
         },
-        type: options.type || this.defaultTextType,
+        // type: options.type || this.defaultTextType,
       },
     );
     if (options.touchBorder != null) {

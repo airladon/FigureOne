@@ -195,6 +195,8 @@ export type OBJ_GlyphModifiers = {
  * @property {boolean} [atlasColor] `true` to use the color of the glyphs in
  * the atlas. `false` will just use the opacity and color the glyphs from the
  * FigureElement drawing them
+ * @property {'gl' | '2d' | 'html'} [render] render the associated text to
+ * either the WebGL canvas, the 2D canvas, or the HTML canvas.
 
  * @example
  * // Full font definition
@@ -240,6 +242,8 @@ export type OBJ_Font = {
 
   timeout?: number,
   modifiers?: OBJ_GlyphModifiers,
+
+  render?: 'gl' | '2d' | 'html',
 };
 
 export type OBJ_Font_Fixed = {

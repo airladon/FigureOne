@@ -97,8 +97,9 @@ describe('Atlas', () => {
           name: 'a',
           make: 'text',
           text: 'hello',
-          font: { family: 'montserrat', weight: '400', glyphs: 'latin' },
-          type: 'bmp',
+          font: {
+            family: 'montserrat', weight: '400', glyphs: 'latin', render: 'gl'
+          },
         });
       });
       await frame();
@@ -157,8 +158,8 @@ describe('Atlas', () => {
             map,
             loadColor: [0, 0, 1, 1],
             atlasColor: true,
+            render: 'gl',
           },
-          type: 'bmp',
         });
       }, externalAtlasMap);
       await snap();
@@ -178,8 +179,8 @@ describe('Atlas', () => {
             map,
             loadColor: [0, 0, 1, 1],
             atlasColor: true,
+            render: 'gl',
           },
-          type: 'bmp',
         });
       }, externalAtlasMap);
       await page.evaluate((map) => {
@@ -192,8 +193,8 @@ describe('Atlas', () => {
             map,
             loadColor: [0, 0, 1, 1],
             atlasColor: true,
+            render: 'gl',
           },
-          type: 'bmp',
           position: [0, -0.5],
         });
       }, externalAtlasMap);
@@ -217,8 +218,8 @@ describe('Atlas', () => {
               map,
               loadColor: [0, 0, 1, 1],
               atlasColor: true,
+              render: 'gl',
             },
-            type: 'bmp',
           });
         });
       }, externalAtlasMap);
@@ -235,7 +236,6 @@ describe('Atlas', () => {
       //       loadColor: [0, 0, 1, 1],
       //       atlasColor: true,
       //     },
-      //     type: 'bmp',
       //   });
       // }, externalAtlasMap);
       await frame();
@@ -258,7 +258,6 @@ describe('Atlas', () => {
 //     loadColor: [0, 0, 1, 1],
 //     atlasColor: true,
 //   },
-//   type: 'bmp',
 // });
 // // const image = await page.screenshot({ fullPage: true });
 // // expect(image).toMatchImageSnapshot();

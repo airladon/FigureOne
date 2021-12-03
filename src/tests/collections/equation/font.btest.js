@@ -57,7 +57,7 @@ async function makeShape(t) {
       name: 'shape',
       make: 'equation',
       forms: { 0: ['aa', 'bb', 'cc'] },
-      textFont: { family: 'montserrat', glyphs: 'latin', type: '2d' },
+      textFont: { family: 'montserrat', glyphs: 'latin', render: '2d' },
       position: [0, 0.5],
       type,
     });
