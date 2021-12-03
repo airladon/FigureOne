@@ -41,13 +41,6 @@ async function snap(id, threshold = 0) {
   });
 }
 
-async function frame() {
-  await page.evaluate(() => new Promise((resolve) => {
-    figure.notifications.add('afterDraw', () => resolve(), 1);
-    figure.animateNextFrame();
-  }), []);
-}
-
 // eslint-disable-next-line no-unused-vars
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -81,7 +74,7 @@ describe('Angle Atlas', () => {
       });
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(100);
+      await sleep(200);
       await snap();
     });
     test('Two forms', async () => {
@@ -103,7 +96,7 @@ describe('Angle Atlas', () => {
       });
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(100);
+      await sleep(200);
       await snap();
       await peval(() => figure.get('angle').label.showForm('base'));
       await snap();
@@ -131,7 +124,7 @@ describe('Angle Atlas', () => {
       // hidden
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(100);
+      await sleep(200);
       // still hidden
       await snap();
       await peval(() => figure.get('angle').show());
@@ -169,7 +162,7 @@ describe('Angle Atlas', () => {
       });
       await snap();
       await loadFontSync('montserrat', 'normal', '800', 'latin');
-      await sleep(100);
+      await sleep(200);
       await snap();
       await loadFontSync('montserrat', 'normal', '200', 'latin');
       await sleep(1000);
@@ -194,7 +187,7 @@ describe('Angle Atlas', () => {
       });
       await snap();
       await loadFontSync('montserrat', 'normal', '800', 'latin');
-      await sleep(100);
+      await sleep(200);
       await snap();
       await peval(() => {
         figure.fonts.watch(

@@ -69,7 +69,7 @@ describe('Equation Atlas', () => {
       });
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(100);
+      await sleep(200);
       await snap();
     });
     test('Stays hidden', async () => {
@@ -86,7 +86,7 @@ describe('Equation Atlas', () => {
         figure.get('eqn').hide();
       });
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(100);
+      await sleep(200);
       await snap();
     });
     test('Two forms, one not set', async () => {
@@ -114,7 +114,7 @@ describe('Equation Atlas', () => {
 
       // On loading the font, form 0 should be re-laid out getting a new width
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(100);
+      await sleep(200);
       const w02 = await page.evaluate(() => figure.elements._eqn.eqn.forms['0'].width);
       expect(w02).toBeGreaterThan(w01);
 
@@ -160,7 +160,7 @@ describe('Equation Atlas', () => {
       // On loading the font, form 0 should be re-laid out getting a new width
       // Form 1 should simply have its positionsSet to be false
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(100);
+      await sleep(200);
       const w02 = await page.evaluate(() => figure.elements._eqn.eqn.forms['0'].width);
       expect(w02).toBeGreaterThan(w01);
 

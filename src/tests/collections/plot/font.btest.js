@@ -112,7 +112,7 @@ describe('Axis Font', () => {
       await makePlot('bmp');
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(100);
+      await sleep(200);
       await snap();
       const gl = await numGL('plot');
       const d2 = await num2D('plot');
@@ -123,7 +123,7 @@ describe('Axis Font', () => {
       await makePlot('2d');
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(100);
+      await sleep(200);
       await snap();
       const gl = await numGL('plot');
       const d2 = await num2D('plot');
@@ -136,7 +136,7 @@ describe('Axis Font', () => {
       await page.evaluate(() => figure.get('plot').hide());
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(100);
+      await sleep(200);
       await snap();
       await page.evaluate(() => figure.get('plot').show());
       await snap();
@@ -151,7 +151,7 @@ describe('Axis Font', () => {
       await page.evaluate(() => figure.get('plot').hide());
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(100);
+      await sleep(200);
       await snap();
       await page.evaluate(() => figure.get('plot').show());
       await snap();

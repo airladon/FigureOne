@@ -100,7 +100,7 @@ describe('Button Atlas', () => {
       // hidden
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(100);
+      await sleep(200);
       // still hidden
       await snap();
       await peval(() => figure.get('button').show());

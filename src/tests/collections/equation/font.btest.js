@@ -88,7 +88,7 @@ describe('Text Font', () => {
       await makeShape('bmp');
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(100);
+      await sleep(200);
       await snap();
       const gl = await numGL('shape');
       const d2 = await num2D('shape');
@@ -99,7 +99,7 @@ describe('Text Font', () => {
       await makeShape('2d');
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(100);
+      await sleep(200);
       await snap();
       const gl = await numGL('shape');
       const d2 = await num2D('shape');
@@ -112,7 +112,7 @@ describe('Text Font', () => {
       await page.evaluate(() => figure.get('shape').hide());
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(100);
+      await sleep(200);
       await snap();
       await page.evaluate(() => figure.get('shape').show());
       await snap();
@@ -127,7 +127,7 @@ describe('Text Font', () => {
       await page.evaluate(() => figure.get('shape').hide());
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(100);
+      await sleep(200);
       await snap();
       await page.evaluate(() => figure.get('shape').show());
       await snap();

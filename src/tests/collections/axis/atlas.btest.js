@@ -71,7 +71,7 @@ describe('Axis Atlas', () => {
       });
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(100);
+      await sleep(200);
       await snap();
     });
     test('Labels title diff', async () => {
@@ -104,7 +104,7 @@ describe('Axis Atlas', () => {
       });
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(100);
+      await sleep(200);
       await snap();
       await loadFontSync('montserrat', 'normal', '100', 'latin');
       await sleep(500);
@@ -129,7 +129,7 @@ describe('Axis Atlas', () => {
       // hidden
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
-      await sleep(100);
+      await sleep(200);
       // still hidden
       await snap();
       await peval(() => figure.get('axis').show());
