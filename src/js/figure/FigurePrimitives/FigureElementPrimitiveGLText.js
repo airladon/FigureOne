@@ -13,6 +13,7 @@ import type { OBJ_FigurePrimitive } from './FigurePrimitiveTypes';
 import type GLObject from '../DrawingObjects/GLObject/GLObject';
 import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
 import type { OBJ_Font, TypeColor } from '../../tools/types';
+import Scene from '../../tools/geometry/scene';
 
 /**
  * Define the width, descent or ascent of a text element. This can be used if
@@ -217,7 +218,13 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     // this.atlasNotificationsID = this.atlas.notifications.add('updated', this.loaded.bind(this));
   }
 
-  createAtlas(scene: Scene = this.getScene()) {
+  createAtlas(sceneIn: Scene = this.getScene()) {
+    let scene;
+    if (sceneIn instanceof Scene) {
+      scene = sceneIn;
+    } else {
+      scene = new Scene(sceneIn);
+    }
     if (this.atlas != null && this.atlasNotificationsID != null) {
       this.atlas.notifications.remove('updated', this.atlasNotificationsID);
     }
