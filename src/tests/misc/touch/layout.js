@@ -80,7 +80,7 @@ let index = 0;
 function onClick(p, e) {
   misc.Console(`${e.custom.indexName}: ${e.name}`);
   e.custom.count += 1;
-  figure.get(`${e.name}count`).custom.setText({ text: `${e.custom.count}` });
+  figure.get(`${e.name}count`).setText({ text: `${e.custom.count}` });
   figure.animateNextFrame();
 }
 
