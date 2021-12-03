@@ -1,7 +1,8 @@
 // @flow
 import { joinObjects } from '../../../tools/tools';
 
-function familyStyleMeasures(family: string, style: string, a, ma, d) {
+// eslint-disable-next-line no-unused-vars
+function familyStyleMeasures(family: string, style: string, a, ma, d, md, d0) {
   const f = family.toLowerCase().split(',')[0];
   const measures = {
     times: {
