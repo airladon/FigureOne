@@ -84,7 +84,7 @@ export type OBJ_TextModifiersDefinition = {
 
 /* eslint-disable max-len */
 /**
- * This 
+ * This
  * @property {Array<string | OBJ_TextLinesDefinition> | string} [text] array of
  * line strings - single string is single line only.
  * @property {OBJ_TextModifiersDefinition} [modifiers] modifier definitions
