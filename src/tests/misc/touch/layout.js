@@ -123,7 +123,7 @@ function makePrimitive(name, options, touch = true, offset = [0, 0]) {
       name: `${name}count`,
       text: '0',
       position: [x, y + 0.3],
-      type: '2d',
+      type: 'bmp',
       scene: {
         style: '2D',
         left: -4.5,
@@ -169,6 +169,14 @@ function makeCollection(name, options = {}) {
     name: `${name}count`,
     text: '0',
     position: [x, y + 0.3],
+    type: 'bmp',
+    scene: {
+      style: '2D',
+      left: -4.5,
+      bottom: -4.5,
+      right: 4.5,
+      top: 4.5,
+    },
   });
   return o;
 }
