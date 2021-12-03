@@ -3626,7 +3626,8 @@ FigureElementPrimitiveGLText {
     "maxDescent": 0.5,
     "midAscent": 1.1,
     "midDescent": 0.2,
-    "modifiers": Object {
+    "modifiers": Object {},
+    "mods": Object {
       " ": Object {
         "a": 1.1,
         "d": 0.08,
@@ -3655,6 +3656,11 @@ FigureElementPrimitiveGLText {
       ",": Object {
         "a": 1.1,
         "d": 0.2,
+        "w": 1,
+      },
+      "-": Object {
+        "a": 1.1,
+        "d": 0.08,
         "w": 1,
       },
       ":": Object {
