@@ -235,8 +235,8 @@ export default class Atlas {
         ctx.strokeText(glyphs[i], x, y);
       }
       let w = 1;
-      if (font.modifiers[glyphs[i]]) {
-        w = font.modifiers[glyphs[i]].w;
+      if (font.mods[glyphs[i]]) {
+        w = font.mods[glyphs[i]].w;
       }
       const width = ctx.measureText(glyphs[i]).width * w;
       const { ascent, descent } = font.measureText(glyphs[i], aWidth);

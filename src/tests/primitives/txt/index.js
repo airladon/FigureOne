@@ -85,7 +85,7 @@ const makeShape = (name, make, options, lineOptions = null) => {
 
 const txt = (name, options, lineOptions = null) => makeShape(
   name,
-  'primitives.txt',
+  'primitives.text',
   tools.misc.joinObjects({}, {
     color: [1, 0, 0, 1],
     touchBorder: 'buffer',

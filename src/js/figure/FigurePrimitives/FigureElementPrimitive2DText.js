@@ -200,32 +200,37 @@ class TextObject extends DrawingObject {
     const border = [];
     for (let i = 0; i < this.text.length; i += 1) {
       const text = this.text[i];
-      let ascent = aWidth * this.font.maxAscent;
-      let descent = aWidth * this.font.descent;
-      // Estimations of FONT ascent and descent for a baseline of "alphabetic"
-      const midAscentMatches = text.match(midAscentRe);
-      if (Array.isArray(midAscentMatches)) {
-        if (midAscentMatches.length === text.length) {
-          ascent = aWidth * this.font.midAscent;
-        }
-      }
+      let { ascent, descent } = this.font.measureText(text, aWidth);
 
-      const midDescentMatches = text.match(midDecentRe);
-      if (Array.isArray(midDescentMatches)) {
-        if (midDescentMatches.length > 0) {
-          descent = aWidth * this.font.midDescent;
-        }
-      }
+      // let ascent = aWidth * this.font.maxAscent;
+      // let descent = aWidth * this.font.descent;
+      // // Estimations of FONT ascent and descent for a baseline of "alphabetic"
+      // const midAscentMatches = text.match(midAscentRe);
+      // if (Array.isArray(midAscentMatches)) {
+      //   if (midAscentMatches.length === text.length) {
+      //     ascent = aWidth * this.font.midAscent;
+      //   }
+      // }
 
-      const maxDescentMatches = text.match(maxDescentRe);
-      if (Array.isArray(maxDescentMatches)) {
-        if (maxDescentMatches.length > 0) {
-          descent = aWidth * this.font.maxDescent;
-        }
-      }
+      // const midDescentMatches = text.match(midDecentRe);
+      // if (Array.isArray(midDescentMatches)) {
+      //   if (midDescentMatches.length > 0) {
+      //     descent = aWidth * this.font.midDescent;
+      //   }
+      // }
+
+      // const maxDescentMatches = text.match(maxDescentRe);
+      // if (Array.isArray(maxDescentMatches)) {
+      //   if (maxDescentMatches.length > 0) {
+      //     descent = aWidth * this.font.maxDescent;
+      //   }
+      // }
       // const height = ascent + descent;
-
-      const { width } = ctx.measureText(text);
+      let wMod = 1;
+      if (this.font.mods[text] != null && this.font.mods[text].w != null) {
+        wMod = this.font.mods[text].w;
+      }
+      const width = ctx.measureText(text).width * wMod;
       // width *= this.font.width;
       if (this.font.underline !== false) {
         // this.underline = [this.font.underline.descent, this.font.underline.width];

@@ -82,7 +82,6 @@ function glyphMeasures(
   const m = joinObjects(
     {}, defaults, familyStyleMeasures(family, style, a, ma, d, md, d0), mods,
   );
-
   return m;
 }
 
