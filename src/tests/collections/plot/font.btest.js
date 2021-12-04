@@ -52,7 +52,7 @@ async function peval(callback, params) {
 }
 
 async function makePlot(t) {
-  return page.evaluate((type) => {
+  return page.evaluate((render) => {
     const pow = (p = 2, start = 0, stop = 10, step = 0.05) => {
       const xValues = Fig.range(start, stop, step);
       return xValues.map(x => new Fig.Point(x, x ** p));
@@ -65,7 +65,7 @@ async function makePlot(t) {
       position: [-0.6, -0.5],
       y: { title: 'y Axis' },
       x: { title: 'x Axis' },
-      font: { family: 'montserrat', glyphs: 'latin', type },
+      font: { family: 'montserrat', glyphs: 'latin', render },
       trace: [
         { points: pow(1.5), name: 'Power 1.5' },
         {
@@ -109,7 +109,7 @@ describe('Axis Font', () => {
   });
   describe('Create', () => {
     test('Simple BMP', async () => {
-      await makePlot('bmp');
+      await makePlot('gl');
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
       await sleep(500);
@@ -131,7 +131,7 @@ describe('Axis Font', () => {
       expect(d2).toBe(7);
     });
     test('Hide BMP', async () => {
-      await makePlot('bmp');
+      await makePlot('gl');
       await snap();
       await page.evaluate(() => figure.get('plot').hide());
       await snap();

@@ -52,7 +52,7 @@ async function peval(callback, params) {
 }
 
 async function makeShape(t) {
-  return page.evaluate((type) => {
+  return page.evaluate((render) => {
     figure.add({
       name: 'shape',
       make: 'collections.polyline',
@@ -64,7 +64,7 @@ async function makeShape(t) {
           minAngle: Math.PI / 8,
         },
       },
-      font: { family: 'montserrat', glyphs: '1234567890.\u00b0gh', type },
+      font: { family: 'montserrat', glyphs: '1234567890.\u00b0gh', render },
       side: {
         showLine: true,
         offset: 0.2,
@@ -105,7 +105,7 @@ describe('Axis Font', () => {
   });
   describe('Create', () => {
     test('Simple BMP', async () => {
-      await makeShape('bmp');
+      await makeShape('gl');
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
       await sleep(200);
@@ -127,7 +127,7 @@ describe('Axis Font', () => {
       expect(d2).toBe(6);
     });
     test('Hide BMP', async () => {
-      await makeShape('bmp');
+      await makeShape('gl');
       await snap();
       await page.evaluate(() => figure.get('shape').hide());
       await snap();

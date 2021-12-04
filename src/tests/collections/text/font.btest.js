@@ -52,12 +52,11 @@ function sleep(ms) {
 // }
 
 async function makeShape(t) {
-  return page.evaluate((type) => {
+  return page.evaluate((render) => {
     figure.add({
       name: 'shape',
       make: 'collections.text',
-      font: { family: 'montserrat', glyphs: 'latin', type },
-      type,
+      font: { family: 'montserrat', glyphs: 'latin', render },
       text: ['This |is| a', 'test of', 'multi-lines'],
     });
   }, t);
@@ -84,7 +83,7 @@ describe('Text Font', () => {
   });
   describe('Create', () => {
     test('Simple BMP', async () => {
-      await makeShape('bmp');
+      await makeShape('gl');
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
       await sleep(200);
@@ -106,7 +105,7 @@ describe('Text Font', () => {
       expect(d2).toBe(5);
     });
     test('Hide BMP', async () => {
-      await makeShape('bmp');
+      await makeShape('gl');
       await snap();
       await page.evaluate(() => figure.get('shape').hide());
       await snap();
