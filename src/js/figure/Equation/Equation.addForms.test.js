@@ -36,6 +36,7 @@ describe('Figure Equations From Object', () => {
         v1: { symbol: 'vinculum' },
         v2: { symbol: 'vinculum' },
       },
+      font: { render: 'gl' },
     });
     color1 = [0.95, 0, 0, 1];
 
@@ -305,16 +306,16 @@ describe('Figure Equations From Object', () => {
   test('Text only', () => {
     eqn.addForms(addForms.textOnly);
     const { content } = forms['0'].content[0];
-    expect(content[0].content.text[0]).toBe('a');
+    expect(content[0].content.getText()).toBe('a');
   });
   test('Array Single Form', () => {
     eqn.addForms(addForms.arraySingleForm);
     expect(forms).toHaveProperty('0');
     // expect(forms['0']).toHaveProperty('base');
     const { content } = forms['0'].content[0];
-    expect(content[0].content.text[0]).toBe('a');
-    expect(content[1].content.text[0]).toBe('b');
-    expect(content[2].content.text[0]).toBe('c');
+    expect(content[0].content.getText()).toBe('a');
+    expect(content[1].content.getText()).toBe('b');
+    expect(content[2].content.getText()).toBe('c');
   });
   test('Array Two Forms', () => {
     eqn.addForms(addForms.arrayTwoForms);
@@ -378,9 +379,9 @@ describe('Figure Equations From Object', () => {
   test('Full Object', () => {
     eqn.addForms(addForms.fullObject);
     const { content } = forms['0'].content[0];
-    expect(content[0].content.text[0]).toBe('b');
-    expect(content[1].content.text[0]).toBe('a');
-    expect(content[2].content.text[0]).toBe('c');
+    expect(content[0].content.getText()).toBe('b');
+    expect(content[1].content.getText()).toBe('a');
+    expect(content[2].content.getText()).toBe('c');
     expect(forms['0'].elementMods.b.mods.color).toEqual(color1);
     expect(eqn._b.color).toEqual([1, 0, 0, 1]);
     eqn.showForm('0');

@@ -192,7 +192,7 @@ describe('Angle', () => {
     test('Horiztonal, outside, Positive angle, negative direction', () => {
       create('horizontalOutsidePN');
       expect(a.getLabel()).toBe('270\u00b0');
-      expect(a._label.getPosition('figure').round(2)).toEqual(new Point(0, -1.18));
+      expect(a._label.getPosition('figure').round(2)).toEqual(new Point(0, -1.19));
       expect(round(a._label.getRotation(), 3)).toBe(round(-Math.PI / 4, 3));
     });
   });

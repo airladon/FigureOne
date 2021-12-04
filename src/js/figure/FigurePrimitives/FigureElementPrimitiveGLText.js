@@ -1,12 +1,12 @@
 // @flow
-import type { OBJ_FigureForElement } from '../Figure';
+// import type { OBJ_FigureForElement } from '../Figure';
 import { FigureElementPrimitive } from '../Element';
 // import FontManager from '../FontManager';
 import {
-  Point, Rect, getBoundingBorder, isBuffer, getPoints,
+  Point, getBoundingBorder, isBuffer, getPoints,
 } from '../../tools/g2';
 import type {
-  TypeParsableBuffer, TypeParsableBorder,
+  TypeParsableBuffer, TypeParsableBorder, TypeParsablePoint,
 } from '../../tools/g2';
 import { joinObjects } from '../../tools/tools';
 import type { OBJ_FigurePrimitive } from './FigurePrimitiveTypes';
@@ -87,7 +87,6 @@ export type OBJ_Text = {
   adjustments?: OBJ_TextAdjustments;
   border?: TypeParsableBuffer | TypeParsableBorder | 'buffer' | 'draw' | 'rect';
   touchBorder?: TypeParsableBuffer | TypeParsableBorder | 'rect' | 'border' | 'buffer' | 'draw';
-  // type: 'bmp' | '2d'
 } & OBJ_FigurePrimitive;
 
 export type OBJ_Text_Fixed = {

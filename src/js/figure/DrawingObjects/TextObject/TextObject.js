@@ -495,6 +495,7 @@ class FigureFont {
         descent = Math.max(d, descent);
       }
     }
+    // console.log(ascent, ascent * aWidth);
     return {
       ascent: ascent * aWidth, descent: descent * aWidth,
     };

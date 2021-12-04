@@ -256,45 +256,45 @@ describe('Figure Objects PolyLine', () => {
       const base01 = poly.elements.side01.label.eqn._base;
       const base12 = poly.elements.side12.label.eqn._base;
       const base20 = poly.elements.side20.label.eqn._base;
-      expect(base01.text[0]).toBe('a');
-      expect(base12.text[0]).toBe('b');
-      expect(base20.text[0]).toBe('1.4');
+      expect(base01.getText()).toBe('a');
+      expect(base12.getText()).toBe('b');
+      expect(base20.getText()).toBe('1.4');
     });
     test('Under Define', () => {
       const poly = ways.SideLabelsUnderDefine();
       const base01 = poly.elements.side01.label.eqn._base;
       const base12 = poly.elements.side12.label.eqn._base;
       const base20 = poly.elements.side20.label.eqn._base;
-      expect(base01.text[0]).toBe('a');
-      expect(base12.text[0]).toBe('b');
-      expect(base20.text[0]).toBe('a');
+      expect(base01.getText()).toBe('a');
+      expect(base12.getText()).toBe('b');
+      expect(base20.getText()).toBe('a');
     });
     test('Over Define', () => {
       const poly = ways.SideLabelsOverDefine();
       const base01 = poly.elements.side01.label.eqn._base;
       const base12 = poly.elements.side12.label.eqn._base;
       const base20 = poly.elements.side20.label.eqn._base;
-      expect(base01.text[0]).toBe('a');
-      expect(base12.text[0]).toBe('b');
-      expect(base20.text[0]).toBe('c');
+      expect(base01.getText()).toBe('a');
+      expect(base12.getText()).toBe('b');
+      expect(base20.getText()).toBe('c');
     });
     test('Single Define', () => {
       const poly = ways.SideLabelsSingleDefine();
       const base01 = poly.elements.side01.label.eqn._base;
       const base12 = poly.elements.side12.label.eqn._base;
       const base20 = poly.elements.side20.label.eqn._base;
-      expect(base01.text[0]).toBe('a');
-      expect(base12.text[0]).toBe('a');
-      expect(base20.text[0]).toBe('a');
+      expect(base01.getText()).toBe('a');
+      expect(base12.getText()).toBe('a');
+      expect(base20.getText()).toBe('a');
     });
     test('Actual Length', () => {
       const poly = ways.SideLabelsActualLength();
       const base01 = poly.elements.side01.label.eqn._base;
       const base12 = poly.elements.side12.label.eqn._base;
       const base20 = poly.elements.side20.label.eqn._base;
-      expect(base01.text[0]).toBe('1.0');
-      expect(base12.text[0]).toBe('1.0');
-      expect(base20.text[0]).toBe('1.4');
+      expect(base01.getText()).toBe('1.0');
+      expect(base12.getText()).toBe('1.0');
+      expect(base20.getText()).toBe('1.4');
     });
   });
   describe('Angle Labels', () => {
@@ -327,9 +327,9 @@ describe('Figure Objects PolyLine', () => {
       const base01 = poly.elements.angle0.label.eqn._base;
       const base12 = poly.elements.angle1.label.eqn._base;
       const base20 = poly.elements.angle2.label.eqn._base;
-      expect(base01.text[0]).toBe('a');
-      expect(base12.text[0]).toBe('b');
-      expect(base20.text[0]).toBe('315\u00b0');
+      expect(base01.getText()).toBe('a');
+      expect(base12.getText()).toBe('b');
+      expect(base20.getText()).toBe('315\u00b0');
     });
   });
   describe('Figure Level', () => {

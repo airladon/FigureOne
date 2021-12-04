@@ -201,7 +201,6 @@ class TextObject extends DrawingObject {
     for (let i = 0; i < this.text.length; i += 1) {
       const text = this.text[i];
       let { ascent, descent } = this.font.measureText(text, aWidth);
-
       // let ascent = aWidth * this.font.maxAscent;
       // let descent = aWidth * this.font.descent;
       // // Estimations of FONT ascent and descent for a baseline of "alphabetic"
@@ -231,6 +230,7 @@ class TextObject extends DrawingObject {
         wMod = this.font.mods[text].w;
       }
       const width = ctx.measureText(text).width * wMod;
+
       // width *= this.font.width;
       if (this.font.underline !== false) {
         // this.underline = [this.font.underline.descent, this.font.underline.width];
@@ -295,6 +295,7 @@ class TextObject extends DrawingObject {
     //   this.underline = [0, 0];
     // }
     // console.log(this.adjustments)
+    // console.log(overallMaxDescent / scalingFactor + this.adjustments.descent, overallMaxAscent / scalingFactor + this.adjustments.ascent)
     this.measure = {
       // ascent: ascent / scalingFactor + this.adjustments.ascent,
       // descent: descent / scalingFactor + this.adjustments.descent,

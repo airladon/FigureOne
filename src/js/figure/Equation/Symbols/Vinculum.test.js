@@ -48,9 +48,9 @@ describe('Equation Symbols - Vinculum', () => {
     const v = eqn._v.getBoundingRect('local').round(3);
     const e = eqn.getBoundingRect('local').round(3);
 
-    expect(a).toEqual(new Rect(0.035, 0.094, 0.07, 0.072).round(3));
-    expect(b).toEqual(new Rect(0.035, -0.09, 0.07, 0.104).round(3));
+    expect(a).toEqual(new Rect(0.035, 0.094, 0.07, 0.083).round(3));
+    expect(b).toEqual(new Rect(0.035, -0.097, 0.07, 0.111).round(3));
     expect(v).toEqual(new Rect(0, 0.049, 0.14, 0.01).round(3));
-    expect(e).toEqual(new Rect(0, -0.09, 0.14, 0.256).round(3));
+    expect(e).toEqual(new Rect(0, -0.097, 0.14, 0.273).round(3));
   });
 });

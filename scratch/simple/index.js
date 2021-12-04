@@ -9,18 +9,20 @@ const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], line
 // next.notifications.add('touch', () => eqn.animations.new().nextForm(1).start());
 
 const t = figure.add({
-  make: 'ftext',
-  text: ['hello', 'world'],
-  font: { family: 'times', modifiers: { a: { a: 2, d: 1, w: 2 } }, render: 'gl' },
+  make: 'text',
+  text: 'a',
+  // font: { render: 'gl' },
+  // text: ['hello', 'world'],
+  // font: { family: 'times', modifiers: { a: { a: 2, d: 1, w: 2 } }, render: 'gl' },
 });
 
-const e = figure.add({
-  make: 'equation',
-  forms: { 0: ['a', 'b', '1'] },
-  font: { render: 'gl' },
-  scale: 3,
-  position: [0, 0.4],
-})
+// const e = figure.add({
+//   make: 'equation',
+//   forms: { 0: ['a', 'b', '1'] },
+//   font: { render: 'gl' },
+//   scale: 3,
+//   position: [0, 0.4],
+// })
 // figure.showBorders();
 
 
