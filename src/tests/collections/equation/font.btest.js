@@ -84,7 +84,7 @@ describe('Text Font', () => {
   });
   describe('Create', () => {
     test('Simple BMP', async () => {
-      await makeShape('render');
+      await makeShape('gl');
       await snap();
       await loadFontSync('montserrat', 'normal', '400', 'latin');
       await sleep(200);
@@ -106,7 +106,7 @@ describe('Text Font', () => {
       expect(d2).toBe(3);
     });
     test('Hide BMP', async () => {
-      await makeShape('render');
+      await makeShape('gl');
       await snap();
       await page.evaluate(() => figure.get('shape').hide());
       await snap();
