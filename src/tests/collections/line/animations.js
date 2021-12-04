@@ -10,7 +10,6 @@ if (typeof process === 'object') {
   var { tools } = require('../../../index').default;
 }
 
-
 function getShapes(getPos) {
   let index = 0;
   const line = (name, options, mods) => {

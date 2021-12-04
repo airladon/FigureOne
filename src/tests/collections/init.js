@@ -19,7 +19,6 @@ try {
 } catch {
   _render = '2d';
 }
-console.log(_render)
 
 const figure = new Figure({
   scene: {

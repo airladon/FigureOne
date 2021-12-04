@@ -15,9 +15,17 @@ function testBrowserAnimation(title, file, duration, step) {
   //   });
   // }
 
+  // page.on('console', (msg) => {
+  //   for (let i = 0; i < msg.args().length; i += 1) {
+  //     Fig.tools.misc.Console(`${i}: ${msg.args()[i]}`);
+  //   }
+  // });
   page.on('console', (msg) => {
     for (let i = 0; i < msg.args().length; i += 1) {
-      Fig.tools.misc.Console(`${i}: ${msg.args()[i]}`);
+      const result = `${msg.args()[i]}`;
+      if (result.startsWith('JSHandle@fail')) {
+        failures.push(result);
+      }
     }
   });
 
