@@ -220,7 +220,22 @@ let startGetValues;
 let startMove;
 
 const updates = {
-  // pan: e => e.panDeltaValue(0.5),
+  default: () => {
+    const gls = figure.elements.getAllPrimitives().filter(e => e.text != null);
+    const d2s = figure.elements.getAllPrimitives().filter(e => e.drawingObject.text != null);
+    figure.add({
+      make: 'text',
+      text: `gl: ${gls.length.toString()}`,
+      position: [-5, 4.8],
+      font: { size: 0.15 },
+    });
+    figure.add({
+      make: 'text',
+      text: `2d: ${d2s.length.toString()}`,
+      position: [-4, 4.8],
+      font: { size: 0.15 },
+    });
+  },
 };
 
 const getValues = {
