@@ -1443,6 +1443,7 @@ export default class FigurePrimitives {
         size: this.defaultFont.size,
         weight: this.defaultFont.weight,
         underline: this.defaultFont.underline,
+        render: this.defaultFont.render,
       },
       xAlign: 'left',
       yAlign: 'baseline',

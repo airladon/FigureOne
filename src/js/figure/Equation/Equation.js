@@ -683,7 +683,6 @@ export type EQN_FormDefaults = {
  * @property {string} [defaultFormSeries] If more than one form series is
  * defined, then a default must be chosen to be the first current one. Default:
  * first form defined
- * @property {TypeText} [type] default text type for equation (`'bmp'`)
  * @property {?EQN_FormRestart} [formRestart] behavior when form transitions
  * from last in form series back to first
  * @property {TypeParsablePoint} [position] position will override first
@@ -703,7 +702,6 @@ export type EQN_Equation = {
   formSeries?: Array<string> | {};
   defaultFormSeries?: string;
   formRestart?: EQN_FormRestart;
-  type?: TypeText;
   position?: TypeParsablePoint;
   transform?: Transform;
 };
@@ -1048,7 +1046,7 @@ export class Equation extends FigureElementCollection {
       weight: '200',
       color,
       glyphs: 'mathlatin',
-      type: shapes.defaultFont.render,
+      render: shapes.defaultFont.render,
     };
     const defaultOptions = {
       color,
@@ -1073,7 +1071,7 @@ export class Equation extends FigureElementCollection {
       touchBorder: 'rect',
       transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       timeKeeper: shapes.timeKeeper,
-      type: shapes.defaultFont.render,
+      // type: shapes.defaultFont.render,
     };
 
     const optionsToUse = joinObjectsWithOptions({ except: ['font'] }, {}, defaultOptions, options);
