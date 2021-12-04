@@ -11,6 +11,16 @@ const pixelsPerUnit = 200;
 const figureWidth = width / pixelsPerUnit;
 const figureHeight = height / pixelsPerUnit;
 
+let _render;
+try {
+  if (__render != null) {
+    _render = __render;
+  }
+} catch {
+  _render = '2d';
+}
+console.log(_render)
+
 const figure = new Figure({
   scene: {
     left: -figureWidth / 2,
@@ -20,7 +30,7 @@ const figure = new Figure({
   },
   color: [1, 0, 0, 1],
   lineWidth: 0.01,
-  font: { size: 0.1 },
+  font: { size: 0.1, render: _render },
 });
 
 figure.add([
