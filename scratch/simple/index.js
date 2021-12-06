@@ -3,23 +3,62 @@
 // color: Fig.tools.color.HexToArray('#212529'),
 // backgroundColor: Fig.tools.color.HexToArray('#f6f7f7'),
 // });
-const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.4 } });
+const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.4, render: '2d' } });
 // const next = figure.add({make: 'collections.button', label: 'Next', position: [0.7, -0.8],});
 
 // next.notifications.add('touch', () => eqn.animations.new().nextForm(1).start());
 
-const t = figure.add({
-  make: 'text',
-  text: 'a',
-  // font: { render: 'gl' },
-  // text: ['hello', 'world'],
-  // font: { family: 'times', modifiers: { a: { a: 2, d: 1, w: 2 } }, render: 'gl' },
+// const t = figure.add({
+//   make: 'text',
+//   text: 'a',
+//   // font: { render: 'gl' },
+//   // text: ['hello', 'world'],
+//   // font: { family: 'times', modifiers: { a: { a: 2, d: 1, w: 2 } }, render: 'gl' },
+// });
+
+const description = figure.add({
+  name: 'description',
+  make: 'ftext',
+  text: 'adsf asdf',
 });
+
+console.log(description._e00.getFont().color.slice())
+description.animations.new()
+  .delay(1)
+  .dissolveOut(1)
+  .trigger({
+    callback: () => {
+      console.log(description.color.slice())
+      console.log(description._e00.color.slice())
+      console.log(description._e00.getFont().color.slice())
+      description.setText({
+        text: 'Subtract |b| from both sides',
+      });
+      console.log(description._e00.color.slice())
+      console.log(description._e01.color.slice())
+      console.log(description._e02.color.slice())
+    },
+  })
+  .dissolveIn(1)
+  .start();
+
+// const t = figure.add({
+//   name: 'text',
+//   make: 'collections.text',
+//   font: { family: 'Times New Roman' },
+//   text: ['line1', { text: 'line2 |accent|', font: { family: 'Arial' } }],
+//   modifiers: { accent: { font: { family: 'Courier' } } },
+//   // text: ['This |is| a', 'test of', 'multi-lines'],
+//   // modifiers: {
+//   //   is: { font: { color: [0, 1, 0, 1], render: '2d' } },
+//   // },
+//   // { font: { color: [0, 0, 1, 1] }, text: ['line1', { text: 'line2 |accent|', font: { color: [1, 0, 1, 1] } }], modifiers: { accent: { font: { color: [0, 1, 0, 1] } } } }
+// });
 
 // const e = figure.add({
 //   make: 'equation',
 //   forms: { 0: ['a', 'b', '1'] },
-//   font: { render: 'gl' },
+//   // font: { render: '2d' },
 //   scale: 3,
 //   position: [0, 0.4],
 // })

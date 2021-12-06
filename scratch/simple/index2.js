@@ -13,7 +13,6 @@ b = figure.add({
   yAlign: 'bottom',
   xAlign: 'center',
   // adjustments: { descent: -0.03 },
-  type: 'bmp',
 });
 // figure.add({
 //   make: 'rectangle',
