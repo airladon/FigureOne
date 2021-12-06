@@ -11,10 +11,20 @@ const Path = require('path');
 expect.extend({ toMatchImageSnapshot });
 
 // page.on('console', m => console.log(m.text(), JSON.stringify(m.args())));
+// page.on('console', async (msg) => {
+//   const msgType = msg.type();
+//   const args = await Promise.all(msg.args().map(jsHandle => jsHandle.jsonValue()));
+//   console[msgType](...args);
+// });
 page.on('console', async (msg) => {
-  const msgType = msg.type();
+  let msgType = msg.type();
+  if (msgType === 'warning') {
+    msgType = 'warn';
+  }
   const args = await Promise.all(msg.args().map(jsHandle => jsHandle.jsonValue()));
-  console[msgType](...args);
+  if (args != null && args[0] != null) {
+    console[msgType](...args);
+  }
 });
 
 function zeroPad(num, places) {
