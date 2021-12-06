@@ -216,6 +216,7 @@ class CollectionsText extends Equation {
       baselineSpace: this.baselineSpace,
       defaultTextTouchBorder: this.defaultTextTouchBorder,
       reform: true,
+      text: '',
     };
 
     // Careful, I think memory is not being fully garbage collected here...

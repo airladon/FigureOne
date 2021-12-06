@@ -2207,6 +2207,7 @@ export class Equation extends FigureElementCollection {
       form = this.getForm(formOrName);
     }
     if (form) {
+      this.clear();
       this.setCurrentForm(form);
       this.render(animationStop);         // $FlowFixMe
       this.fnMap.exec(form.onTransition); // $FlowFixMe

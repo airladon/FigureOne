@@ -40,7 +40,7 @@ import * as animations from './Animation/Animation';
 import WebGLInstance from './webgl/webgl';
 import { FunctionMap } from '../tools/FunctionMap';
 import type {
-  OBJ_Font, TypeColor, TypeCoordinateSpace,
+  TypeColor, TypeCoordinateSpace,
 } from '../tools/types';
 import type { OBJ_Touch } from './FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections/FigureCollections';

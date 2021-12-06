@@ -377,10 +377,10 @@ class FigureFont {
   ) {
     let color;
     if (typeof colorIn === 'number') {
-      color = this.color;
+      color = this.color.slice();
       color[3] = colorIn;
     } else if (colorIn === null) {
-      color = this.color;
+      color = this.color.slice();
     } else {
       color = colorIn;
     }
