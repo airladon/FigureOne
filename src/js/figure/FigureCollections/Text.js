@@ -260,7 +260,7 @@ class CollectionsText extends Equation {
     this.baselineSpace = options.baselineSpace;
     this.justify = options.justify;
     this.accent = options.accent;
-    this.modifiers = options.modifiers || {};
+    joinObjects(this.modifiers, options.modifiers);
     this.lines = [];
     this.defaultTextTouchBorder = options.defaultTextTouchBorder;
     // this.xAlign = options.xAlign;
@@ -288,7 +288,6 @@ class CollectionsText extends Equation {
     if (relayout) {
       this.layoutForms('reset');
     }
-    window.asdf = false;
   }
 
   updateElements(
@@ -337,9 +336,12 @@ class CollectionsText extends Equation {
         if (element.touchBorder) {
           e.setTouchable();
           e.touchBorder = element.touchBorder;
+          this.setHasTouchableElements();
         }
         if (element.onClick != null) {
           e.onClick = element.onClick;
+          e.setTouchable();
+          this.setHasTouchableElements();
         }
       }
     });
@@ -518,7 +520,7 @@ class CollectionsText extends Equation {
     };
     const elementOptions = {};
     line.text.forEach((element, index) => {
-      const name = `e${lineIndex}${index}`;
+      const name = `e${lineIndex}_${index}`;
       if (element.eqn) {
         lineOptions.content.push(element.eqn);
       } else {

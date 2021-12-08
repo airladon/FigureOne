@@ -4785,6 +4785,9 @@ class FigureElementCollection extends FigureElement {
     }
     // element.setFirstTransform(this.lastDrawTransform);
     this.animateNextFrame();
+    if (element.isTouchable || element.hasTouchableElements) {
+      this.setHasTouchableElements();
+    }
     return element;
   }
 

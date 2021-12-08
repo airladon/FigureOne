@@ -1559,6 +1559,7 @@ export class Equation extends FigureElementCollection {
     }
     if (options.onClick != null) {
       p.onClick = options.onClick;
+      p.isTouchable = true;
     }
     if (options.mods != null) {
       p.setProperties(options.mods);
@@ -1638,6 +1639,9 @@ export class Equation extends FigureElementCollection {
     const text = cleanKey.replace(/_.*/, '');
     element = this.makeTextElem(joinObjects({ text }, options));
     this.add(key, element);
+    // if (element.isTouchable || element.hasTouchableElements) {
+    //   this.hasTouchableElements = true;
+    // }
     return element;
   }
 
@@ -1688,7 +1692,11 @@ export class Equation extends FigureElementCollection {
       const elem = elems[key];
       if (typeof elem === 'string') {
         if (!(key.startsWith('space') && key.startsWith(' ') && key.length > 0)) {
-          this.add(key, this.makeTextElem({ text: elem }));
+          const e = this.makeTextElem({ text: elem });
+          this.add(key, e);
+          // if (e.isTouchable || e.hasTouchableElements) {
+          //   this.hasTouchableElements = true;
+          // }
         }
       } else if (elem instanceof FigureElementPrimitive) {
         // This is rough and will need to be refactored
@@ -1696,7 +1704,7 @@ export class Equation extends FigureElementCollection {
         // outside of the equation
         // $FlowFixMe
         const { parent } = elem;
-        if (parent != null) {// $FlowFixMe
+        if (parent != null) { // $FlowFixMe
           delete parent.elements[elem.name]; // $FlowFixMe
           parent.drawOrder.splice(parent.drawOrder.indexOf(elem.name), 1);
           // $FlowFixMe
@@ -1729,6 +1737,9 @@ export class Equation extends FigureElementCollection {
             figureElem.setProperties(elem.mods);
           }
           this.add(key, figureElem);
+          if (figureElem.isTouchable || figureElem.hasTouchableElements) {
+            this.hasTouchableElements = true;
+          }
         }
       }
     });
