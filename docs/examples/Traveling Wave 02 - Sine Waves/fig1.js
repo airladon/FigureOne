@@ -271,7 +271,7 @@ function fig1() {
       start = 0.001;
     }
     line.animations.new()
-      .rotation({ start, target: Math.PI * 1.999, velocity: 1, direction: 1 })
+      .rotation({ start, target: Math.PI * 1.999, direction: 1, duration: 2 })
       .start();
   };
   return { pulse, drawFull, fig };
