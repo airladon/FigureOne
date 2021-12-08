@@ -2972,6 +2972,8 @@ class Figure {
           const el = this.get(name);
           if (el != null) { // $FlowFixMe
             el.custom.updatePoints({ points: borderPoints[j] });
+            // $FlowFixMe
+            el.showAll();
           } else {
             this.add({
               name: `__${border}${i}${j}`,
