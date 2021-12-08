@@ -1425,6 +1425,7 @@ export class Equation extends FigureElementCollection {
         const {
           scale, xAlign, yAlign, fixTo,
         } = form.arranged;
+        if (window.asdf) { console.log(xAlign) }
         form.arrange(scale, xAlign, yAlign, fixTo);
       }
     };
@@ -1435,10 +1436,10 @@ export class Equation extends FigureElementCollection {
     Object.keys(this.eqn.forms).forEach((formName) => {
       arrange(formName, forms === 'set', forms === 'reset');
     });
-
     if (show && this.getIsShown() && this.isAnimating() === false) {
+      this.clear();
       this.showForm(this.eqn.currentForm);
-    } else if (show && this.isAnimating() === false) {
+    } else if (show) {
       this.eqn.forms[this.eqn.currentForm].rearrange();
     }
   }

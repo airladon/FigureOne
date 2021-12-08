@@ -263,8 +263,8 @@ class CollectionsText extends Equation {
     this.modifiers = options.modifiers || {};
     this.lines = [];
     this.defaultTextTouchBorder = options.defaultTextTouchBorder;
-    this.xAlign = options.xAlign;
-    this.yAlign = options.yAlign;
+    // this.xAlign = options.xAlign;
+    // this.yAlign = options.yAlign;
     this.splitLines(options.text);
     const equationOptions = this.createEquation();
     // console.log(equationOptions);
@@ -284,9 +284,11 @@ class CollectionsText extends Equation {
       relayout = true;
     }
 
+
     if (relayout) {
       this.layoutForms('reset');
     }
+    window.asdf = false;
   }
 
   updateElements(
@@ -298,7 +300,10 @@ class CollectionsText extends Equation {
           family: string,
           weight: string,
           style: string,
+          color: TypeColor,
         },
+        touchBorder?: TypeParsableBuffer,
+        onClick?: string | () => void,
       },
     },
   ) {
@@ -322,14 +327,28 @@ class CollectionsText extends Equation {
           relayout = true;
           e.setText({ text: element.text, font: element.font });
         }
-        if (!areColorsWithinDelta(font.color, e.color, 0.001)) {
-          e.setColor(font.color);
+        if (!areColorsWithinDelta(font.color, element.font.color, 0.001)) {
+          e.setColor(element.font.color);
+        }
+        // if (!areColorsWithinDelta(font.color, e.color, 0.001)) {
+        //   e.setColor(font.color);
+        // }
+        e.isTouchable = false;
+        if (element.touchBorder) {
+          e.setTouchable();
+          e.touchBorder = element.touchBorder;
+        }
+        if (element.onClick != null) {
+          e.onClick = element.onClick;
         }
       }
     });
     if (Object.keys(toAdd).length > 0) {
       // $FlowFixMe
       this.addElements(toAdd);
+      relayout = true;
+    }
+    if (this.xAlign !== 'left' || this.yAlign !== 'baseline') {
       relayout = true;
     }
     return relayout;
@@ -445,6 +464,7 @@ class CollectionsText extends Equation {
           space,
         });
       });
+
       this.lines.push({
         justify: lineJustification,
         lineSpace: lineLineSpace,
@@ -465,8 +485,6 @@ class CollectionsText extends Equation {
       joinObjects(elements, elementOptions);
       content.push(lineOptions);
     });
-    // console.log(elements)
-    // console.log(content)
     const o = {
       name: 'lines',
       make: 'equation',
