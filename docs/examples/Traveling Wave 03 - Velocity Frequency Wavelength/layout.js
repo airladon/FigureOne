@@ -35,14 +35,14 @@ function setupFigure() {
   // Title text on the first slide
   figure.add({
     name: 'title',
-    make: 'primitives.textLines',
+    make: 'ftext',
     options: {
       text: [
         'Traveling Sine Waves',
         {
           text: 'Velocity, wavelength and frequency',
           font: { size: 0.12 },
-          lineSpace: 0.25,
+          lineSpace: 0.05,
         },
       ],
       font: { size: 0.25, color: colorText },
@@ -64,7 +64,7 @@ function setupFigure() {
   // Text on the last slide summarizing the learnings
   figure.add({
     name: 'summary',
-    make: 'primitives.textLines',
+    make: 'ftext',
     options: {
       text: [
         { text: 'Summary', font: { size: 0.25 }, justify: 'center' },
@@ -94,7 +94,7 @@ function setupFigure() {
       yAlign: 'middle',
       justify: 'left',
       position: [0, 1.75],
-      lineSpace: 0.2,
+      lineSpace: 0.05,
     },
   });
 
@@ -167,9 +167,9 @@ function setupFigure() {
   .##.......##.....##.##.....##.##.......##.......##....##
   .########.##.....##.########..########.########..######.
   */
-  const axisLabel = (name, position, col, text) => ({
+  const axisLabel = (name, position, col, text, modifiers) => ({
     name,
-    make: 'primitives.textLine',
+    make: 'ftext',
     options: {
       text,
       position,
@@ -177,12 +177,13 @@ function setupFigure() {
         size: 0.13, color: col, family: 'Times New Roman', style: 'italic',
       },
       xAlign: 'center',
+      modifiers,
     },
   });
 
   const label = (name, position, col, text) => ({
     name,
-    make: 'primitives.textLines',
+    make: 'ftext',
     options: {
       text,
       position,
@@ -198,14 +199,11 @@ function setupFigure() {
     label('disturbance', [0.45, 0.15], colorText, ['Disturbance:']),
     label('velocity', [2, 2.1], colorText, 'Velocity'),
     label('frequency', [-0.7, 2.1], colorText, 'Sine Frequency'),
-    axisLabel('x0', [-2.1, 0.77], color0, [
-      'x',
-      { text: '0', font: { size: 0.1 }, offset: [0, -0.04] },
-    ]),
-    axisLabel('x1', [-0.38, 0.77], color1, [
-      'x',
-      { text: '1', font: { size: 0.1 }, offset: [0, -0.04] },
-    ]),
+    axisLabel('x0', [-2.1, 0.77], color0, '|x0|', { x0: { eqn: { sub: ['x', '0'] } } }),
+    // 'x',
+    // { text: '0', font: { size: 0.1 }, offset: [0, -0.04] },
+    // ),
+    axisLabel('x1', [-0.38, 0.77], color1, '|x1|', { x1: { eqn: { sub: ['x', '0'] } } }),
     axisLabel('vFast', [2.1, 1.77], color1, [
       'fast',
     ]),
@@ -352,6 +350,8 @@ function setupFigure() {
             arrow: 'barb',
             label: {
               text: '\u03bb',
+              scale: 1.5,
+              font: { family: 'Times New Roman' },
               offset: 0.04,
               location: 'bottom',
             },
@@ -549,6 +549,9 @@ function setupFigure() {
         trace.custom.updatePoints({ points });
       }
     };
+    timePlot.custom.reset = () => {
+      trace.custom.updatePoints({ points: [[0, 0]] });
+    };
     return timePlot;
   };
 
@@ -598,6 +601,10 @@ function setupFigure() {
     medium1.custom.reset();
     medium2.custom.reset();
     time.reset();
+    // medium1.custom.recording.reset(0);
+    // medium2.custom.recording.reset(0);
+    timePlot1.custom.reset();
+    timePlot2.custom.reset();
     pause();
   };
   const setTimeSpeed = (timeSpeed, buttonLabel) => {
