@@ -1425,7 +1425,6 @@ export class Equation extends FigureElementCollection {
         const {
           scale, xAlign, yAlign, fixTo,
         } = form.arranged;
-        if (window.asdf) { console.log(xAlign) }
         form.arrange(scale, xAlign, yAlign, fixTo);
       }
     };
