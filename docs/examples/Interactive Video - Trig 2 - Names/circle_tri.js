@@ -79,6 +79,8 @@ function layoutCirc() {
           linePosition,
           orientation: 'horizontal',
           update: true,
+          font: { family: 'Times New Roman' },
+          scale: 1,
         },
       },
     };
@@ -118,6 +120,7 @@ function layoutCirc() {
     startAngle = 0,
     angleSize = 0,
     color = colTheta,
+    scale = 0.8,
   ) {
     return {
       name,
@@ -135,6 +138,8 @@ function layoutCirc() {
           text,
           offset: 0.01,
           curvePosition,
+          font: { family: 'Times New Roman' },
+          scale,
         },
         position,
       },
@@ -173,7 +178,7 @@ function layoutCirc() {
         },
       },
       // Angles
-      angle('theta', '\u03b8', 0.2, 0.5, [0, 0], 0, dAng),
+      angle('theta', '\u03b8', 0.2, 0.5, [0, 0], 0, dAng, colTheta, 1.7),
       angle('thetaCompSin', {
         forms: { 0: ['_90', '_\u00b0\u2212\u03b8'] },
       }, 0.45, 0.7, [dCos, dSin], dAng + Math.PI, Math.PI / 2 - dAng, colThetaComp),
