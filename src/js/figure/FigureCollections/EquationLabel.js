@@ -328,6 +328,9 @@ export default class EquationLabel {
     let h = 0;
     let w = 0;
     const currentForm = this.eqn.getCurrentForm();
+    if (currentForm.width === 0 || currentForm.height === 0) {
+      this.eqn.layoutForms('current', false);
+    }
     let change = false;
     if (currentForm != null) {
       if (this.height !== currentForm.height) {
@@ -362,6 +365,7 @@ export default class EquationLabel {
       p = position.add(positionOffset).rotate(lineAngle, position);
       r = labelAngle - parentAngle + lineAngle;
     }
+
     this.eqn.setPosition(p);
     this.eqn.transform.updateRotation(r);
 

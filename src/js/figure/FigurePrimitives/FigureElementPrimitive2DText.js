@@ -421,7 +421,6 @@ class TextObject extends DrawingObject {
     const { drawContext2D } = this;
     const { ctx } = drawContext2D;
     ctx.save();
-
     // Scaling factor used to ensure font size is >> 1 pixel
     const { scalingFactor } = this;
 
@@ -600,10 +599,15 @@ class TextObject extends DrawingObject {
       'scalingFactor',
       'text',
       'location',
+      // 'alignedLocation',
       'font',
       'xAlign',
       'yAlign',
       'adjustments',
+      // 'measurements',
+      // 'measure',
+      // 'textBorder',
+      // 'bounds',
     ];
   }
 
@@ -706,6 +710,11 @@ export default class FigureElementPrimitive2DText extends FigureElementPrimitive
     this.drawingObject.font.color = color.slice();
   }
 
+  stateSet() {
+    super.stateSet();
+    this.measureAndAlignText();
+  }
+
   // // eslint-disable-next-line class-methods-use-this
   // setTextBorder() {}
 
@@ -715,7 +724,8 @@ export default class FigureElementPrimitive2DText extends FigureElementPrimitive
   measureAndAlignText() {
     this.drawingObject.measureText();
     // this.drawingObject.alignText();
-    this.drawingObject.calcBorder();
+    // this.drawingObject.calcBorder();
+    this.calcBorder();
   }
 
   _getStateProperties(options: { ignoreShown?: boolean }) {

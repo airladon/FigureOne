@@ -1096,6 +1096,7 @@ class Figure {
       options.how === 'instant' // $FlowFixMe
       || this.elements.isStateSame(state.elements, true, ['cursor'])
     ) {
+      this.elements.clear();
       finished();
     } else if (options.how === 'animate') {
       this.elements.stop('freeze');  // This is cancelling the pulse
