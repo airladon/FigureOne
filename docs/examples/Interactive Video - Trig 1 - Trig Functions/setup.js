@@ -7,7 +7,7 @@
 figure = new Fig.Figure({
   scene: [-3, -1.5, 3, 1.5],
   color: [0.3, 0.3, 0.3, 1],
-  font: { size: 0.1, family: 'helvetica' },
+  font: { size: 0.1, family: 'arial' },
   dimColor: [0.5, 0.5, 0.5, 1],
 });
 
