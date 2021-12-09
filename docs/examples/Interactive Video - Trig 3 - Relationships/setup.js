@@ -8,7 +8,7 @@
 figure = new Fig.Figure({
   scene: [-3, -1.5, 3, 1.5],
   color: [0.3, 0.3, 0.3, 1],
-  font: { size: 0.1 },
+  font: { size: 0.1, family: 'arial' },
   dimColor: [0.5, 0.5, 0.5, 1],
 });
 
@@ -46,7 +46,7 @@ colHyp = color3;
 
 summary = (name, position, text, modifiers = {}) => ({
   name,
-  make: 'primitives.textLines',
+  make: 'ftext',
   options: {
     text,
     modifiers,
@@ -62,7 +62,7 @@ summary = (name, position, text, modifiers = {}) => ({
 
 centerText = (name, text, modifiers = {}, position = [0, 0], size = 0.2) => ({
   name,
-  make: 'textLines',
+  make: 'ftext',
   options: {
     text,
     modifiers,
@@ -85,7 +85,7 @@ centerText = (name, text, modifiers = {}, position = [0, 0], size = 0.2) => ({
 
 leftText = (name, text, modifiers = {}, position, size = 0.2, scenarios = {}) => ({
   name,
-  make: 'textLines',
+  make: 'ftext',
   options: {
     text,
     modifiers,
