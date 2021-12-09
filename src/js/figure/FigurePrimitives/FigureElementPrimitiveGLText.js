@@ -560,6 +560,12 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     // ]];
   }
 
+  stateSet() {
+    super.stateSet();
+    this.measureAndAlignText();
+    this.calcBorderAndBounds();
+  }
+
   cleanup() {
     super.cleanup();
     if (this.atlas != null && this.atlasNotificationsID != null) {
@@ -585,6 +591,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       'fontSize',
       'xAlign',
       'yAlign',
+      // 'measure',
     ];
   }
 
