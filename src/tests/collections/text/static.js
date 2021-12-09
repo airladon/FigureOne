@@ -321,12 +321,12 @@ const updates = {
 
 const getValues = {
   itb1: {
-    element: 'itb1.text.e01',
+    element: 'itb1.text.e0_1',
     expect: 1,
     when: e => e.count,
   },
   itb2: {
-    element: 'itb2.text.e01',
+    element: 'itb2.text.e0_1',
     expect: 1,
     when: e => e.count,
   },
