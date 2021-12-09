@@ -31,12 +31,28 @@ function layoutRight() {
           name2: 'n2',
         },
       },
+      font: { family: 'times new roman' },
     },
   });
   const sides = (text1, text2, text3) => [
-    { label: { text: text1, offset: 0.05, scale: 1.1 }, color: colHyp },
-    { label: { text: text2, offset: 0.05, scale: 1.1 }, color: colOpp },
-    { label: { text: text3, offset: 0.05, scale: 1.1 }, color: colAdj },
+    {
+      label: {
+        text: text1, font: { family: 'times new roman' }, offset: 0.05, scale: 1.6,
+      },
+      color: colHyp,
+    },
+    {
+      label: {
+        text: text2, font: { family: 'times new roman' }, offset: 0.05, scale: 1.6,
+      },
+      color: colOpp,
+    },
+    {
+      label: {
+        text: text3, font: { family: 'times new roman' }, offset: 0.05, scale: 1.6,
+      },
+      color: colAdj,
+    },
   ];
   const theta = () => ({
     curve: {
@@ -44,8 +60,9 @@ function layoutRight() {
     },
     label: {
       text: '\u03b8',
-      scale: 0.8,
+      scale: 1.6,
       offset: 0.02,
+      font: { family: 'times new roman' },
     },
     color: colTheta,
   });
@@ -64,6 +81,7 @@ function layoutRight() {
           name: 'n',
         },
       },
+      font: { family: 'times new roman' },
       scale: 0.8,
       offset: 0.02,
     },
@@ -94,7 +112,7 @@ function layoutRight() {
                 name: ['90', 'deg', 'min', 'theta'],
               },
             },
-            scale: 0.8,
+            font: { family: 'times new roman' },
             offset: 0.02,
             curvePosition: 0.65,
           },
