@@ -14,6 +14,7 @@
 import { joinObjects, hash32 } from '../../../tools/tools';
 import { round } from '../../../tools/math';
 import { colorArrayToRGBA } from '../../../tools/color';
+import { getState } from '../../Recorder/state';
 import type {
   OBJ_Font, TypeColor, OBJ_GlyphModifiers,
 } from '../../../tools/types';
@@ -201,6 +202,21 @@ class FigureFont {
       this.descent, this.modifiers,
     );
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  _state() {
+    return getState(this, [
+      'family',
+      'style',
+      'size',
+      'outline',
+      'weight',
+      'opacity',
+      'underline',
+      'color',
+    ], { precision: 5 });
+  }
+
 
   getFamily() {
     return this.family.toLowerCase().split(',')[0];
@@ -541,33 +557,33 @@ class FigureFont {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _getStateProperties() {
-    return [
-      'family',
-      'weight',
-      'style',
-      'src',
-      'id',
-      'map',
-      'glyphs',
-      'loadColor',
-      'size',
-      'underline',
-      'color',
-      'outline',
-      'opacity',
-      'descent',
-      'midDescent',
-      'maxDescent',
-      'midAscent',
-      'maxAscent',
-      'modifiers',
-      'testString',
-      'timeout',
-      'maxCount',
-      'render',
-    ];
-  }
+//   _getStateProperties() {
+//     return [
+//       'family',
+//       'weight',
+//       'style',
+//       'src',
+//       'id',
+//       'map',
+//       'glyphs',
+//       'loadColor',
+//       'size',
+//       'underline',
+//       'color',
+//       'outline',
+//       'opacity',
+//       'descent',
+//       'midDescent',
+//       'maxDescent',
+//       'midAscent',
+//       'maxAscent',
+//       'modifiers',
+//       'testString',
+//       'timeout',
+//       'maxCount',
+//       'render',
+//     ];
+//   }
 }
 
 // // FigureText is a single text element of the figure that is drawn at

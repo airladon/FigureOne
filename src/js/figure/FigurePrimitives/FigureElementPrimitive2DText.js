@@ -25,6 +25,7 @@ import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
 import type { OBJ_Font, TypeColor } from '../../tools/types';
 import type { OBJ_GLText_Fixed, OBJ_SetText } from './FigureElementPrimitiveGLText';
 import type DrawContext2D from '../DrawContext2D';
+import { getState } from '../Recorder/state';
 
 
 class TextObject extends DrawingObject {
@@ -593,23 +594,35 @@ class TextObject extends DrawingObject {
     ctx.restore();
   }
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
-    return [
-      ...super._getStateProperties(),
+  _state() {
+    return getState(this, [
       'scalingFactor',
       'text',
       'location',
-      // 'alignedLocation',
       'font',
       'xAlign',
       'yAlign',
       'adjustments',
-      // 'measurements',
-      // 'measure',
-      // 'textBorder',
-      // 'bounds',
-    ];
+    ], { precision: 5 });
   }
+
+  // _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  //   return [
+  //     ...super._getStateProperties(),
+  //     'scalingFactor',
+  //     'text',
+  //     'location',
+  //     // 'alignedLocation',
+  //     'font',
+  //     'xAlign',
+  //     'yAlign',
+  //     'adjustments',
+  //     // 'measurements',
+  //     // 'measure',
+  //     // 'textBorder',
+  //     // 'bounds',
+  //   ];
+  // }
 
   // _dup() {
   //   const c = new TextObject(this.drawContext2D); // $FlowFixMe
