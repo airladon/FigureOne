@@ -6,7 +6,7 @@ import type {
 import type { FigureElement, OBJ_Scenarios, OBJ_ElementMove } from '../Element';
 import type { TypeGLUniform, TypeGLBufferType, TypeGLBufferUsage } from '../DrawingObjects/GLObject/GLObject';
 import type {
-  TypeColor, TypeDash,
+  TypeColor, TypeDash, OBJ_Font,
 } from '../../tools/types';
 import type Scene, { OBJ_Scene } from '../../tools/geometry/scene';
 import type { TypeVertexShader, TypeFragmentShader } from '../webgl/shaders';
@@ -620,3 +620,167 @@ export type OBJ_Morph = {
   names: Array<string>,
   glPrimitive: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
 };
+
+
+/**
+ * Define the width, descent or ascent of a text element. This can be used if
+ * the estimated width, descent or ascent is not what is desired.
+ * @property {number} [width]
+ * @property {number} [descent]
+ * @property {number} [ascent]
+ */
+export type OBJ_TextAdjustments = {
+  width?: number,
+  descent?: number,
+  ascent?: number,
+};
+
+/* eslint-disable max-len */
+/**
+ * Text options object that extends {@link OBJ_FigurePrimitive}.
+ *
+ * ![](./apiassets/text1.png)
+ *
+ * ![](./apiassets/text2.png)
+ *
+ * ![](./apiassets/text3.png)
+ *
+ * ![](./apiassets/text4.png)
+ *
+ * ![](./apiassets/text5.png)
+ *
+ * ![](./apiassets/text6.png)
+ *
+ * A text element can either be defined as a single string, or an array of
+ * strings combined with an array of locations.
+ *
+ * The `adjustments` property allows customization of the borders around the
+ * text. This may be needed when the browser or FigureOne does not accurately
+ * calculate the size of the text (usually for non-standard fonts, and
+ * sometimes italized fonts).
+ *
+ * Atlernately `border` and `touchBorder` can also be used for complete
+ * customization.
+ *
+ * All text in this element will use the same font, x and y alignment, and
+ * adjustments.
+ *
+ * Note - Text can be rendered to either the WebGL canvas or the 2D canvas
+ * using the `render` property in `font`. For more information, see
+ * {@link OBJ_Font}.
+ *
+ * @property {string | Array<string>} [text] string or array of strings to
+ * render
+ * @property {TypeParsablePoint | Array<TypeParsablePoint>} [location] draw
+ * space location of each string (`[0, 0]`)
+ * @property {OBJ_Font} [font] defaults to default Figure font
+ * @property {'left' | 'center' | 'right'} [xAlign] (`'left'`)
+ * @property {'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline'} [yAlign]
+ * (`'baseline'`)
+ * @property {OBJ_TextAdjustments} [adjustments]
+ * @property {TypeParsableBuffer | TypeParsableBorder | 'buffer' | 'draw' | 'rect'} [border]
+ * @property {TypeParsableBuffer | TypeParsableBorder | 'rect' | 'border' | 'buffer' | 'draw'} [touchBorder]
+ *
+ * @extends OBJ_FigurePrimitive
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Simple text
+ * figure.add({
+ *   make: 'text',
+ *   text: 'Hello World',
+ * });
+ *
+ * @example
+ * // Custom Font
+ * figure.add({
+ *   make: 'text',
+ *   text: 'Hello World',
+ *   font: { family: 'Times New Roman', style: 'italic', underline: true },
+ * });
+ *
+ * @example
+ * // Aligned text
+ * figure.add({
+ *   make: 'text',
+ *   text: 'Aligned Text',
+ *   xAlign: 'center',
+ *   yAlign: 'top',
+ *   color: [0, 0, 1, 1],
+ * });
+ *
+ * @example
+ * // Multi Text
+ * figure.add({
+ *   make: 'text',
+ *   text: ['0', '1', '2'],
+ *   location: [[-0.5, -0.5], [0, 0.5], [0.5, -0.5]],
+ * });
+ *
+ * @example
+ * // Change Text
+ * t = figure.add({
+ *   make: 'text',
+ *   text: 'Hello World',
+ * });
+ * t.setText('Changed Text')
+ *
+ * @example
+ * // Change text and options
+ * t = figure.add({
+ *   make: 'text',
+ *   text: 'Hello World',
+ * });
+ * t.setText({
+ *   text: 'Changed Text',
+ *   xAlign: 'center',
+ *   font: { family: 'Times New Roman' },
+ * });
+ */
+/* eslint-enable max-len */
+export type OBJ_Text = {
+  text?: string | Array<string>,
+  location?: TypeParsablePoint | Array<TypeParsablePoint>,
+  font?: OBJ_Font,
+  xAlign?: 'left' | 'center' | 'right';
+  yAlign?: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
+  adjustments?: OBJ_TextAdjustments;
+  border?: TypeParsableBuffer | TypeParsableBorder | 'buffer' | 'draw' | 'rect';
+  touchBorder?: TypeParsableBuffer | TypeParsableBorder | 'rect' | 'border' | 'buffer' | 'draw';
+} & OBJ_FigurePrimitive;
+
+export type OBJ_Text_Fixed = {
+  text: Array<string>,
+  location: Array<Point>,
+  font: OBJ_Font,
+  xAlign: 'left' | 'center' | 'right';
+  yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
+  adjustments: OBJ_TextAdjustments;
+};
+
+/**
+ * Options object for setting new text in
+ * {@link FigureElementPrimitiveGLText} and
+ * {@link FigureElementPrimitive2DText} elements.
+ *
+ * @property {string} [text] new text to use
+ * @property {OBJ_Font} [font] define if font needs to be changed
+ * @property {'left' | 'center' | 'right'} [xAlign] xAlignment of text
+ * @property {'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline'} [yAlign]
+ * y alignment of text
+ * @property {OBJ_TextAdjustments} [adjustments] adjustments to the calculated
+ * borders of the text
+ * @property {TypeColor} [color] text color (will be overriden by a font color
+ * if it is specified)
+ */
+export type OBJ_SetText = {
+  text?: string | Array<string>,
+  location?: TypeParsablePoint | Array<TypeParsablePoint>,
+  font?: OBJ_Font,
+  xAlign?: 'left' | 'center' | 'right';
+  yAlign?: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
+  adjustments?: OBJ_TextAdjustments;
+  color?: TypeColor;
+}

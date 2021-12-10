@@ -102,6 +102,14 @@ export type OBJ_GlyphModifiers = {
 
 /* eslint-disable max-len */
 /**
+ * Font weight definition.
+ * `'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'`
+ */
+export type TypeFontWeight = 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
+/* eslint-enable max-len */
+
+/* eslint-disable max-len */
+/**
  * Font definition object.
  *
  * A font can be defined either from a subset of the properties used to define
@@ -193,7 +201,7 @@ export type OBJ_GlyphModifiers = {
  *
  * @property {string} [family] The font family (`'Times New Roman'`)
  * @property {'normal' | 'italic' | 'oblique'} [style] (`'normal'`)
- * @property {'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'} [weight]
+ * @property {TypeFontWeight} [weight]
  * font weight (`'normal'`)
  * @property {number} [size] size of font in draw space (`0.2`)
  * @property {boolean | OBJ_Underline} [underline] `true` to include
@@ -243,7 +251,7 @@ export type OBJ_GlyphModifiers = {
  */
 export type OBJ_Font = {
   family?: string,
-  weight?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
+  weight?: TypeFontWeight,
   style?: 'normal' | 'italic' | 'oblique',
   size?: number,
 
