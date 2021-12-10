@@ -47,6 +47,7 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+// eslint-disable-next-line no-unused-vars
 async function peval(callback, params) {
   return page.evaluate(callback, params);
 }

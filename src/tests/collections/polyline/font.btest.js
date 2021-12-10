@@ -47,9 +47,9 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function peval(callback, params) {
-  return page.evaluate(callback, params);
-}
+// async function peval(callback, params) {
+//   return page.evaluate(callback, params);
+// }
 
 async function makeShape(t) {
   return page.evaluate((render) => {

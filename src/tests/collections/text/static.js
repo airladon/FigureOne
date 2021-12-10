@@ -14,11 +14,13 @@ if (typeof process === 'object') {
 const click = (point, element) => {
   tools.misc.Console(element.name);
   if (element.count == null) {
+    // eslint-disable-next-line no-param-reassign
     element.count = 1;
   } else {
+    // eslint-disable-next-line no-param-reassign
     element.count += 1;
   }
-  element.parent.parent._count.setText(element.count.toString())
+  element.parent.parent._count.setText(element.count.toString());
   figure.animateNextFrame();
 };
 

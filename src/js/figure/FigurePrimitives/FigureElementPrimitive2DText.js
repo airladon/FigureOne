@@ -180,14 +180,14 @@ class TextObject extends DrawingObject {
 
     // const maxAscentRe =
     //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
-    const midAscentRe = /[acemnorsuvwxz*gyqp: ]/g;
-    const midDecentRe = /[;,$]/g;
-    let maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
-    if (this.font.family === 'Times New Roman') {
-      if (this.font.style === 'italic') {
-        maxDescentRe = /[gjyqp@Q(){}[\]|f]/g;
-      }
-    }
+    // const midAscentRe = /[acemnorsuvwxz*gyqp: ]/g;
+    // const midDecentRe = /[;,$]/g;
+    // let maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
+    // if (this.font.family === 'Times New Roman') {
+    //   if (this.font.style === 'italic') {
+    //     maxDescentRe = /[gjyqp@Q(){}[\]|f]/g;
+    //   }
+    // }
 
     let overallMaxDescent = 0;
     let overallMaxAscent = 0;
@@ -296,7 +296,6 @@ class TextObject extends DrawingObject {
     //   this.underline = [0, 0];
     // }
     // console.log(this.adjustments)
-    // console.log(overallMaxDescent / scalingFactor + this.adjustments.descent, overallMaxAscent / scalingFactor + this.adjustments.ascent)
     this.measure = {
       // ascent: ascent / scalingFactor + this.adjustments.ascent,
       // descent: descent / scalingFactor + this.adjustments.descent,

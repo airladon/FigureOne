@@ -1859,7 +1859,7 @@ class FigureFont {
 //   }
 // }
 
-export {
+export { // eslint-disable-next-line import/prefer-default-export
   FigureFont,
   // FigureText, TextObject, TextLineObject,
   // TextLinesObject, TextObjectBase,

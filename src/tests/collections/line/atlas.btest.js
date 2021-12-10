@@ -41,12 +41,12 @@ async function snap(id, threshold = 0) {
   });
 }
 
-async function frame() {
-  await page.evaluate(() => new Promise((resolve) => {
-    figure.notifications.add('afterDraw', () => resolve(), 1);
-    figure.animateNextFrame();
-  }), []);
-}
+// async function frame() {
+//   await page.evaluate(() => new Promise((resolve) => {
+//     figure.notifications.add('afterDraw', () => resolve(), 1);
+//     figure.animateNextFrame();
+//   }), []);
+// }
 
 // eslint-disable-next-line no-unused-vars
 function sleep(ms) {

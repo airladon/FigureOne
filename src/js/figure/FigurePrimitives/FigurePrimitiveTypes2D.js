@@ -6,13 +6,13 @@ import type {
 } from './FigurePrimitiveTypes';
 // @flow
 import type {
-  TypeParsablePoint, TypeParsableTransform,
+  TypeParsablePoint,
   TypeParsableBorder, Point, TypeParsableRect,
   TypeParsableBuffer,
 } from '../../tools/g2';
 // import type { OBJ_Scenarios, OBJ_ElementMove } from '../Element';
 import type {
-  TypeColor, TypeDash, OBJ_CurvedCorner, OBJ_Font,
+  TypeDash, OBJ_CurvedCorner, OBJ_Font,
 } from '../../tools/types';
 import type { OBJ_LineArrows, TypeArrowHead } from '../geometries/arrow';
 

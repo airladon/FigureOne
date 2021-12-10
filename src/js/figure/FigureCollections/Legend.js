@@ -11,7 +11,7 @@ import type { TypeParsablePoint } from '../../tools/g2';
 // } from '../../tools/math';
 import { joinObjects } from '../../tools/tools';
 import {
-  FigureElementCollection, FigureElementPrimitive,
+  FigureElementCollection,
 } from '../Element';
 import type CollectionsTrace, { COL_Trace } from './Trace';
 import type { OBJ_Font, OBJ_Font_Fixed } from '../../tools/types';
@@ -452,7 +452,7 @@ class CollectionsPlotLegend extends FigureElementCollection {
       const oText = joinObjects({}, textOptions, colorOverride, textOptionsToUse, custom.text);
       // o.offset = getPoint(o.offset);
       const traceName = this.collections.text(oText);
-      const t = this.add(`trace${traceIndex}`, traceName);
+      this.add(`trace${traceIndex}`, traceName);
     });
   }
 

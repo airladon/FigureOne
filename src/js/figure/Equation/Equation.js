@@ -1421,7 +1421,7 @@ export class Equation extends FigureElementCollection {
         form.positionsSet = false;
         return;
       }
-      if (setOnly === false || form.positionSet) {
+      if (setOnly === false || form.positionsSet) {
         const {
           scale, xAlign, yAlign, fixTo,
         } = form.arranged;
@@ -1445,7 +1445,9 @@ export class Equation extends FigureElementCollection {
 
   contextLost() {
     super.contextLost();
-    this.eqn.functions.fullLineHeight.getAllElements().forEach(e => e.contextLost());
+    if (this.eqn.function.fullLineHeight != null) {
+      this.eqn.functions.fullLineHeight.getAllElements().forEach(e => e.contextLost());
+    }
   }
 
   /**
@@ -1551,6 +1553,7 @@ export class Equation extends FigureElementCollection {
     if (options.touchBorder != null) {
       p.touchBorder = options.touchBorder;
       if (options.isTouchable == null) {
+        // eslint-disable-next-line no-param-reassign
         options.isTouchable = true;
       }
     }

@@ -192,7 +192,7 @@ export default class FontManager {
   /**
    * Return arrays of weights that produce the same output.
    */
-  getWeights(fontDefinition: OBJ_Font, maxNum: number | null = null) {
+  getWeights(fontDefinition: OBJ_Font) {
     if (!this.isAvailable(fontDefinition)) {
       return [];
     }

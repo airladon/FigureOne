@@ -16,31 +16,37 @@ const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], line
 //   // font: { family: 'times', modifiers: { a: { a: 2, d: 1, w: 2 } }, render: 'gl' },
 // });
 
-const description = figure.add({
-  name: 'description',
-  make: 'ftext',
-  text: 'adsf asdf',
+const eqn = figure.add({
+  make: 'equation',
+  formDefaults: {
+    elementMods: {
+      a: { color: [1, 0, 0, 1] },
+    },
+  },
+  forms: {
+    0: ['a', 'b', 'c'],
+    1: {
+      content: ['a', 'b', 'c'],
+      elementMods: {
+        a: { color: [0, 1, 0, 1] },
+      },
+    },
+    2: ['a', 'b', 'c'],
+  },
 });
 
-console.log(description._e00.getFont().color.slice())
-description.animations.new()
-  .delay(1)
-  .dissolveOut(1)
-  .trigger({
-    callback: () => {
-      console.log(description.color.slice())
-      console.log(description._e00.color.slice())
-      console.log(description._e00.getFont().color.slice())
-      description.setText({
-        text: 'Subtract |b| from both sides',
-      });
-      console.log(description._e00.color.slice())
-      console.log(description._e01.color.slice())
-      console.log(description._e02.color.slice())
-    },
-  })
-  .dissolveIn(1)
-  .start();
+const next = figure.add({
+make: 'collections.button',
+label: 'Next >',
+position: [0.75, -0.8],
+height: 0.34,
+width: 1,
+colorFill: Fig.tools.color.HexToArray('#0020b0'),
+colorLabel: Fig.tools.color.HexToArray('#fff'),
+colorLine: [0,0,0,0],
+corner: {radius: 10, sides: 4},
+});
+next.notifications.add('touch', () => eqn.animations.new().nextForm(1).start());
 
 // const t = figure.add({
 //   name: 'text',

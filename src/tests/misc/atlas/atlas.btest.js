@@ -98,7 +98,7 @@ describe('Atlas', () => {
           make: 'text',
           text: 'hello',
           font: {
-            family: 'montserrat', weight: '400', glyphs: 'latin', render: 'gl'
+            family: 'montserrat', weight: '400', glyphs: 'latin', render: 'gl',
           },
         });
       });

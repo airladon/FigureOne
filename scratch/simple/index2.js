@@ -1,118 +1,61 @@
 // const { polygon } = Fig.tools.g2;
 
-const figure = new Fig.Figure({ scene: [-3, -3, 6, 6], backgroundColor: [1, 1, 1, 1], font: { size: 0.5 } });
-
-b = figure.add({
-  make: 'txt',
-  // gl: true,
-  text: 'QwertfMy 123\u03C0',
-  // text: 'asdf',
-  font: { size: 0.5, style: 'italic', family: 'open sans', underline: { color: [0.5, 0, 0.5, 1] }, weight: '300', glyphs: 'common', outline: { color: [0, 0, 1, 1], width: 0.01, fill: false }, fixColor: true },
-  color: [1, 0, 0, 1],
-  move: { type: 'rotation' },
-  yAlign: 'bottom',
-  xAlign: 'center',
-  // adjustments: { descent: -0.03 },
+const figure = new Fig.Figure({
+color: Fig.tools.color.HexToArray('#212529'),
+backgroundColor: Fig.tools.color.HexToArray('#f6f7f7')
 });
-// figure.add({
-//   make: 'rectangle',
-//   xAlign: 'left',
-//   yAlign: 'bottom',
-//   width: 2,
-//   height: 0.01,
-//   position: [0, 0],
-// });
-// console.log(figure.fontManager.isFamilyAvailable('Open Sans'));
-// console.log(figure.fontManager.isFamilyAvailable('Open Sans', 'π'));
-figure.showBorders();
 
-// console.log(figure.fonts.watch({ family: 'open sans', testString: 'latin', callback: () => console.log('latin loaded') }));
-// console.log(figure.fonts.watch({ family: 'open sans', testString: 'greek', callback: () => console.log('greek loaded') }));
+const eqn = figure.add(
+{
+make: 'collections.equation',
+elements: {
+left_T1: { symbol: 'bracket', side: 'left' },
+right_T5: { symbol: 'bracket', side: 'right' },
+brace_0: { symbol: 'brace', side: 'top', color: [0.4, 0.4, 0.4, 1] },
+brace_1: { symbol: 'brace', side: 'top', color: [0.4, 0.4, 0.4, 1] },
+brace_2: { symbol: 'brace', side: 'top', color: [0.4, 0.4, 0.4, 1] },
+},
+scale: 2,
+formDefaults: { alignment: { xAlign: 'center' } },
+forms: {
+0: [{ brac: ['left_T1', ['3_T2', '_ + _T3', '5_T4'], 'right_T5',] }, '_ \u00D7 _T6', '7_T7', '_ \u2212 _T8', '15_T9'],
+1: [{ topComment: [[{ brac: ['left_T1', ['3_T2', '_ + _T3', '5_T4'], 'right_T5',] }], '', 'brace_0'] }, '_ \u00D7 _T6', '7_T7', '_ \u2212 _T8', '15_T9'],
+2: [{ topComment: [[{ brac: ['left_T1', ['3_T2', '_ + _T3', '5_T4'], 'right_T5',] }], '8_T10', 'brace_0'] }, '_ \u00D7 _T6', '7_T7', '_ \u2212 _T8', '15_T9'],
+3: ['8_T10', '_ \u00D7 _T6', '7_T7', '_ \u2212 _T8', '15_T9'],
+4: [{ topComment: [['8_T10', '_ \u00D7 _T6', '7_T7'], '', 'brace_1'] }, '_ \u2212 _T8', '15_T9'],
+5: [{ topComment: [['8_T10', '_ \u00D7 _T6', '7_T7'], '56_T11', 'brace_1'] }, '_ \u2212 _T8', '15_T9'],
+6: ['56_T11', '_ \u2212 _T8', '15_T9'],
+7: [{ topComment: [['56_T11', '_ \u2212 _T8', '15_T9'], '', 'brace_2'] }],
+8: [{ topComment: [['56_T11', '_ \u2212 _T8', '15_T9'], '41_T12', 'brace_2'] }],
+9: ['41_T12'],
+},
+position: [0.1, -0.1],
+},
+);
 
 
-// // figure.fontManager.whenAvailable('Open Sans', '300', 'normal', () => console.log('available'));
+const prev = figure.add({
+make: 'collections.button',
+label: '< Previous',
+position: [-0.5, -0.8],
+height: 0.34,
+width: 1.3,
+colorFill: Fig.tools.color.HexToArray('#dddedf'),
+colorLabel: Fig.tools.color.HexToArray('#0020b0'),
+colorLine: [0,0,0,0],
+corner: {radius: 10, sides: 4},
+});
+prev.notifications.add('touch', () => eqn.prevForm({ animate: 'move' }));
 
-// a = figure.add({
-//   make: 'txt',
-//   // gl: true,
-//   text: 'Qwerty 123\u03C03',
-//   font: { size: 1, underline: true },
-//   // font: { size: 0.5, style: 'italic', family: 'Times New Roman', underline: true },
-//   // move: { type: 'translate' },
-//   move: true,
-//   position: [0, 2],
-// });
-
-// eqn = figure.add({
-//   make: 'equation',
-//   elements: { a: { color: [1, 0, 0, 1], onClick: () => console.log('a'), touchBorder: 0.2 } },
-//   forms: { 0: [{ frac: ['a', 'vinculum', 'b'] }, '_ = ', '2', 'c'] },
-//   position: [1, 1],
-//   textFont: { size: 0.5 },
-//   font: { size: 0.5 },
-// });
-
-// // eqn._a.setFont({ color: [0, 1, 0, 1]});
-// eqn._a.setColor([0, 0, 1, 1]);
-
-// const test = figure.add({
-//   make: 'txt',
-//   text: 'a',
-//   font: { size: 2, color: [1, 0, 1, 1], weight: '700', family: 'open sans', glyphs: 'a', },
-//   type: 'bmp',
-// });
-
-// const t = figure.add({
-//   name: 'eqn',
-//   make: 'collections.text',
-//   position: [-1, 5],
-//   justify: 'right',
-//   xAlign: 'left',
-//   yAlign: 'baseline',
-//   type: 'bmp',
-//   text: [
-//     'Lines justified |to| |the| left',
-//     { text: 'A |line| with a |modifiedPhrase|', lineSpace: 1 },
-//     {
-//       text: 'A |line| |with| cu|st|om defaults',
-//       font: {
-//         style: 'italic',
-//         color: [0, 0.5, 1, 1],
-//       },
-//     },
-//   ],
-//   elements: {
-//     abc: { text: 'hello world', color: [1, 0, 1, 1], font: { size: 0.2 } },
-//     v: { symbol: 'vinculum' },
-//   },
-//   modifiers: {
-//     to: {
-//       eqn: { frac: { numerator: 'abc', symbol: 'v', denominator: '2', scale: 0.6, offsetY: 0.2 } },
-//     },
-//     st: {
-//       // lSpace: 0.1,
-//       // rSpace: 0.1,
-//       offset: [0.1, 0],
-//       space: 0.1,
-//     },
-//     modifiedPhrase: {
-//       text: 'modified phrase',
-//       font: {
-//         style: 'italic',
-//         color: [0, 0.5, 1, 1],
-//         size: 0.4,
-//       },
-//     },
-//     with: {
-//       offset: [0.1, 0.3],
-//       font: { size: 0.2 },
-//     },
-//     line: {
-//       font: {
-//         family: 'Times New Roman',
-//         color: [0, 0.6, 0, 1],
-//         style: 'italic',
-//       },
-//     },
-//   },
-// });
+const next = figure.add({
+make: 'collections.button',
+label: 'Next >',
+position: [0.75, -0.8],
+height: 0.34,
+width: 1,
+colorFill: Fig.tools.color.HexToArray('#0020b0'),
+colorLabel: Fig.tools.color.HexToArray('#fff'),
+colorLine: [0,0,0,0],
+corner: {radius: 10, sides: 4},
+});
+next.notifications.add('touch', () => eqn.animations.new().nextForm(1).start());

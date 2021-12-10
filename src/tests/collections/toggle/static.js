@@ -60,7 +60,7 @@ const getValues = {
   checkText: {
     element: 'default',
     expect: true,
-    when: e => {
+    when: () => {
       const gls = figure.elements.getAllPrimitives().filter(e => e.text != null);
       const d2s = figure.elements.getAllPrimitives().filter(e => e.drawingObject.text != null);
       figure.add({

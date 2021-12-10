@@ -48,7 +48,6 @@ export default function makeFigure(
     // scene: [-1, -1, 1, 1],
   };
 
-  const create = document.createElement;
   document.createElement = (name) => {
     if (name === 'canvas') {
       const d = new DrawContext2D(100, 100);

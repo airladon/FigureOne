@@ -1,4 +1,4 @@
-/* global page figure timeoutId startUpdates Fig */
+/* global page figure timeoutId startUpdates */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable jest/no-export */
 // eslint-disable-next-line import/no-unresolved
@@ -23,9 +23,11 @@ function testBrowserAnimation(title, file, duration, step) {
   page.on('console', (msg) => {
     for (let i = 0; i < msg.args().length; i += 1) {
       const result = `${msg.args()[i]}`;
-      if (result.startsWith('JSHandle@fail')) {
-        failures.push(result);
-      }
+      // if (result.startsWith('JSHandle@fail')) {
+      //   failures.push(result);
+      // }
+      // eslint-disable-next-line no-console
+      console.log(result);
     }
   });
 

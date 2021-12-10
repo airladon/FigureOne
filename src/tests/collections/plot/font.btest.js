@@ -1,4 +1,4 @@
-/* globals page figure */
+/* globals page figure Fig */
 /* eslint-disable no-await-in-loop, */
 
 // eslint-disable-next-line import/no-unresolved
@@ -47,9 +47,9 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function peval(callback, params) {
-  return page.evaluate(callback, params);
-}
+// async function peval(callback, params) {
+//   return page.evaluate(callback, params);
+// }
 
 async function makePlot(t) {
   return page.evaluate((render) => {
