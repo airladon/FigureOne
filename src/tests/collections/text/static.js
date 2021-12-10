@@ -157,18 +157,6 @@ function getShapes(getPos) {
     shape('t4', { touchBorder: 'children', modifiers: { is: { touch: [0.05, 0.1, 0.15, 0.2] } } }),
 
     /*
-    .########..#######..##....##
-    .##.......##.....##.###...##
-    .##.......##.....##.####..##
-    .######...##.....##.##.##.##
-    .##.......##..##.##.##..####
-    .##.......##....##..##...###
-    .########..#####.##.##....##
-    */
-    shape('e1', { text: ['hello |eqn| now', 'there is'], modifiers: { eqn: { eqn: { frac: ['1', 'vinculum', '2'] } } } }),
-    shape('e2', { text: ['hello |eqn| now', 'there is'], modifiers: { eqn: { eqn: { frac: ['1', 'v', 'b'] } } }, elements: { v: { symbol: 'vinculum' }, b: { text: 'abc', color: [0, 1, 0, 1], font: { size: 0.3 } } } }),
-
-    /*
     .########..#######..##....##.########
     .##.......##.....##.###...##....##...
     .##.......##.....##.####..##....##...
@@ -260,6 +248,66 @@ function getShapes(getPos) {
     shape('u2', { text: ['hello', 'world'] }),
     shape('u3', { text: ['hello |e|', 'world'], modifiers: { e: { eqn: { frac: ['1', 'vinculum', '2'] } } } }),
     shape('u4', { text: ['hello', 'world'] }),
+
+    /*
+    .########..#######..##....##
+    .##.......##.....##.###...##
+    .##.......##.....##.####..##
+    .######...##.....##.##.##.##
+    .##.......##..##.##.##..####
+    .##.......##....##..##...###
+    .########..#####.##.##....##
+    */
+    shape('e1', { text: ['hello |eqn| now', 'there is'], modifiers: { eqn: { eqn: { frac: ['1', 'vinculum', '2'] } } } }),
+    shape('e2', { text: ['hello |eqn| now', 'there is'], modifiers: { eqn: { eqn: { frac: ['1', 'v', 'b'] } } }, elements: { v: { symbol: 'vinculum' }, b: { text: 'abc', color: [0, 1, 0, 1], font: { size: 0.3 } } } }),
+    shape('e3', {
+      text: ['hello |e| now', 'there is'],
+      modifiers: {
+        e: {
+          eqn: { frac: ['1', 'vinculum', '2'] },
+          offset: [0, 0.1],
+        },
+      },
+    }),
+    shape('e4', {
+      text: ['hello |e| now', 'there is'],
+      modifiers: {
+        e: {
+          eqn: { frac: ['1', 'vinculum', '2'] },
+          offset: [0, 0.2],
+          inLine: false,
+        },
+      },
+    }),
+    shape('e5', {
+      text: ['hello |e| now', 'there is'],
+      modifiers: {
+        e: {
+          eqn: { frac: ['1', 'vinculum', '2'] },
+          space: 0.1,
+        },
+      },
+    }),
+    shape('e6', {
+      text: ['hello |e| now', 'there is'],
+      modifiers: {
+        e: {
+          eqn: { frac: ['1', 'vinculum', '2'] },
+          touch: 0.1,
+          onClick: (p, e) => click(p, e),
+        },
+      },
+    }),
+    shape('e7', {
+      text: ['hello |e| now', 'there is'],
+      modifiers: {
+        e: {
+          eqn: { frac: ['1', 'vinculum', '2'] },
+          touch: [0.2, 0.1, 0.05, 0],
+          onClick: (p, e) => click(p, e),
+        },
+      },
+    }),
   ];
 }
 
@@ -352,6 +400,13 @@ const move = {
   },
   t1: {
     element: 't1',
+    events: [
+      ['touchDown', [0.25, 0.05]],
+      ['touchUp'],
+    ],
+  },
+  e6: {
+    element: 'e6',
     events: [
       ['touchDown', [0.25, 0.05]],
       ['touchUp'],
