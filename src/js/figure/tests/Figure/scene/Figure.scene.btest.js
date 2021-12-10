@@ -9,7 +9,7 @@ function processTests(o, path) {
       if (testCase !== 'beforeEach') {
         browserScreenShot(
           title,
-          `http://localhost:8080/${__dirname}/index.html`,
+          `http://localhost:8080/${__dirname.replace('/home/pwuser', '')}/index.html`,
           [...path, testCase],
           0,
           0.5,
