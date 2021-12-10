@@ -186,7 +186,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     this.drawBorder = [[new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(0, 1)]];
     this.drawBorderBuffer = this.drawBorder;
     this.color = this.font.color;
-    if (options.location != null) {// $FlowFixMe
+    if (options.location != null) { // $FlowFixMe
       this.location = getPoints(options.location);
     } else {
       this.location = this.text.map(() => new Point(0, 0));
