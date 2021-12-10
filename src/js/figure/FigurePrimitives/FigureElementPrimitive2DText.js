@@ -671,6 +671,7 @@ export default class FigureElementPrimitive2DText extends FigureElementPrimitive
     if (this.drawingObject.font.color != null) {
       this.setColor(this.drawingObject.font.color, true);
     }
+    this.animateNextFrame();
   }
 
   calcBorderAndBounds() {
@@ -701,6 +702,7 @@ export default class FigureElementPrimitive2DText extends FigureElementPrimitive
     if (this.drawingObject.font.color != null) {
       this.setColor(this.drawingObject.font.color, true);
     }
+    this.animateNextFrame();
   }
 
   /**

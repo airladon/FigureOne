@@ -38,8 +38,7 @@ toc:
   - name: Text
     file: ./docs/api/tutorials/text/text.md
   - OBJ_Text
-  - OBJ_TextLine
-  - OBJ_TextLines
+  - OBJ_FormattedText
   - name: 3D Shape Primitives
     file: ./docs/api/tutorials/shapes3D/shapes3d.md
   - OBJ_Generic3All

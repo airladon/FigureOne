@@ -1,10 +1,213 @@
+FigureOne has several different ways to typeset and render text.
+
+## Text Typesetting
+
+Text can either be type-set as:
+* Plain text - single font, simple text - {@link OBJ_Text}
+* Formatted text - multi-font, multi-line text - {@link OBJ_FormattedText}
+* Equation text - {@link Equation}
+
+This guide will cover plain and formatted text. <a href="#equations"> Thissection</a> is then dedicated to equations.
+
+### Plain Text
+
+The most simple way to create text is with the `'text'` primitive (with options {@link OBJ_Text}).
+
+<p style="text-align: center"><img src="./tutorials/text/text.png"></p>
+
+```javascript
+figure.add(
+  {
+    make: 'text',
+    text: 'Hello World',
+    xAlign: 'center',
+    yAlign: 'middle',
+  },
+);
+```
+
+The text primitive can be used to create text with a number of horizontal alignment, vertical alignment, and font options.
+
+```javascript
+figure.add(
+  {
+    make: 'text',
+    text: 'Hello World',
+    xAlign: 'right',
+    yAlign: 'top',
+    font: { family: 'Times New Roman', style: 'italic' },
+    color: [0, 0, 1, 1],
+  },
+);
+```
+
+<p style="text-align: center"><img src="./tutorials/text/textoptions.png"></p>
+
+
+The text primitive can also be used to create many different strings of text at different locations. All strings will share the same alignment and font options.
+
+
+```javascript
+figure.add(
+  {
+    make: 'text',
+    text: ['North', 'West', 'South', 'East'],
+    location: [[0, 0.5], [-1, 0], [0, -0.5], [1, 0]],
+    xAlign: 'center',
+    yAlign: 'middle',
+    color: [0, 0, 1, 1],
+  },
+);
+```
+
+<p style="text-align: center"><img src="./tutorials/text/textmulti.png"></p>
+
+To update text, use the `setText` method on the created element. The below example updates the text everytime the text is touched.
+
+```javascript
+let counter = 1;
+figure.add({
+  make: 'text',
+  text: '0',
+  touch: {
+    onClick: (e) => {
+      e.setText(`${counter}`);
+      counter += 1;
+    },
+  },
+});
+```
+
+<p style="text-align: center"><img src="./tutorials/text/texttouch.gif"></p>
+
+### Formatted Text
+
+Formatted text is created with the `ftext` make definition and supports:
+* Multiple lines
+* Multiple fonts
+* Multiple touch definitions
+* Embedded equations
+
+Multiple lines of text can be created by defining an array of strings as the text. Each element in the array is a new line.
+
+```js
+figure.add({
+  make: 'ftext',
+  text: ['First line', 'This is line two', 'Third line'],
+});
+```
+<p style="text-align: center"><img src="./tutorials/text/ftextlines.png"></p>
+
+Each line can have individual formatting by using a line definition object instead of a string.
+
+```js
+figure.add({
+  make: 'ftext',
+  text: [
+    'First line',
+    'This is line two',
+    { text: 'Third line', font: { style: 'italic', color: [0, 0, 1, 1] } },
+  ],
+});
+```
+<p style="text-align: center"><img src="./tutorials/text/ftextlinesdef.png"></p>
+
+Strings withing lines can be formatted by surrounding the string with `'|'` characters and then defining the modification with the `modifiers` property. Any string within `'|'` characters will become a unique identifier that is referenced in the `modifiers` property. If more than one strings share the same unique identifier, then the will all be modified the same.
+
+```js
+figure.add({
+  make: 'ftext',
+  text: [
+    'First |line|',
+    'This is |line| two',
+    'Third |line2|',
+  ],
+  modifiers: {
+    line: { font: { color: [0, 0, 1, 1] } },
+    line2: { text: 'line', font: { color: [0, 0.8, 0, 1] } },
+  },
+});
+```
+<p style="text-align: center"><img src="./tutorials/text/ftextmods.png"></p>
+
+
+Modifiers can also be used to define specific portions of text that are interactive.
+
+```js
+igure.add({
+  make: 'ftext',
+  text: [
+    'First |line|',
+    'This is |line2| two',
+    'Third |line3|',
+  ],
+  modifiers: {
+    line: {
+      font: { color: [0, 0, 1, 1] },
+      onClick: () => console.log('line 1'),
+    },
+    line2: {
+      text: 'line',
+      font: { color: [0, 0.8, 0, 1] },
+      onClick: () => console.log('line 2'),
+    },
+    line3: {
+      text: 'line',
+      font: { color: [0, 0.8, 0.8, 1] },
+      onClick: () => console.log('line 3'),
+    },
+  },
+});
+```
+<p style="text-align: center"><img src="./tutorials/text/ftexttouch.gif"></p>
+
+
+Modifiers can also be used to embed equations into the text. An equation phrase ({@link TypeEquationPhrase}) is used to define the equation, and if necessary, the `elements` property can be used to customize elements within the equation.
+
+```js
+figure.add({
+  make: 'ftext',
+  text: [
+    'Equation |e| in text',
+  ],
+  xAlign: 'center',
+  modifiers: {
+    e: {
+      eqn: { frac: ['1', 'vinculum', { root: ['rad', '2'] }] },
+      offset: [0, 0.1],
+    },
+  },
+  elements: {
+    rad: { symbol: 'radical', color: [0, 0, 1, 1] },
+  },
+});
+```
+
+<p style="text-align: center"><img src="./tutorials/text/ftexteqn.png"></p>
+
+If formatted text is not sufficent, then use {@link Equation} for full typesetting customization.
+
+## Text Rendering
+
+
+
+There are three main ways to create text in FigureOne:
+
+* {@link OBJ_Text} plain text
+* {@link OBJ_FormattedText} formatted, multi line text
+* {@link Equation} equation text
+
+Creating text within an equation is a 
+
+
+
 FigureOne provides text layout for both simple text, and lines of text with rich formatting.
 
 ### Quick Start - `text`
 
 Let's start by creating a {@link FigureElementPrimitive} element that writes 'hello world' to the figure.
 
-<p style="text-align: center"><img src="./tutorials/text/text.png"></p>
+
 
 ```javascript
 figure.add(

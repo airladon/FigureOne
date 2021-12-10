@@ -1802,6 +1802,16 @@
               
                 
                 <li><a
+                  href='#obj_formattedtext'
+                  class="">
+                  OBJ_FormattedText
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#3d-shape-primitives'
                   class="h5 bold black caps">
                   3D Shape Primitives
@@ -8101,16 +8111,6 @@
                   href='#obj_animationdefinition'
                   class="">
                   OBJ_AnimationDefinition
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_collectionstext'
-                  class="">
-                  OBJ_FormattedText
                   
                 </a>
                 
@@ -20700,7 +20700,7 @@ then the frame rate will be 0.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_collectionstext">OBJ_FormattedText</a>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_formattedtext">OBJ_FormattedText</a>
             = <code>{}</code>)</code>
 	    
           </div>
@@ -27511,10 +27511,137 @@ figure.add({
   </h2>
 
   
-    <p>FigureOne provides text layout for both simple text, and lines of text with rich formatting.</p>
+    <p>FigureOne has several different ways to typeset and render text.</p>
+<h2>Text Typesetting</h2>
+<p>Text can either be type-set as:</p>
+<ul>
+<li>Plain text - single font, simple text - <a href="#obj_text">OBJ_Text</a></li>
+<li>Formatted text - multi-font, multi-line text - <a href="#obj_formattedtext">OBJ_FormattedText</a></li>
+<li>Equation text - <a href="#equation">Equation</a></li>
+</ul>
+<p>This guide will cover plain and formatted text. <a href="#equations"> Thissection</a> is then dedicated to equations.</p>
+<h3>Plain Text</h3>
+<p>The most simple way to create text is with the <code>'text'</code> primitive (with options <a href="#obj_text">OBJ_Text</a>).</p>
+<p style="text-align: center"><img src="./tutorials/text/text.png"></p>
+<pre class='hljs'>figure.add(
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">'text'</span>,
+    <span class="hljs-attr">text</span>: <span class="hljs-string">'Hello World'</span>,
+    <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+    <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'middle'</span>,
+  },
+);</pre>
+<p>The text primitive can be used to create text with a number of horizontal alignment, vertical alignment, and font options.</p>
+<pre class='hljs'>figure.add(
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">'text'</span>,
+    <span class="hljs-attr">text</span>: <span class="hljs-string">'Hello World'</span>,
+    <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'right'</span>,
+    <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'top'</span>,
+    <span class="hljs-attr">font</span>: { <span class="hljs-attr">family</span>: <span class="hljs-string">'Times New Roman'</span>, <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span> },
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+  },
+);</pre>
+<p style="text-align: center"><img src="./tutorials/text/textoptions.png"></p>
+<p>The text primitive can also be used to create many different strings of text at different locations. All strings will share the same alignment and font options.</p>
+<pre class='hljs'>figure.add(
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">'text'</span>,
+    <span class="hljs-attr">text</span>: [<span class="hljs-string">'North'</span>, <span class="hljs-string">'West'</span>, <span class="hljs-string">'South'</span>, <span class="hljs-string">'East'</span>],
+    <span class="hljs-attr">location</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">-1</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">-0.5</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
+    <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+    <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'middle'</span>,
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+  },
+);</pre>
+<p style="text-align: center"><img src="./tutorials/text/textmulti.png"></p>
+<p>To update text, use the <code>setText</code> method on the created element. The below example updates the text everytime the text is touched.</p>
+<pre class='hljs'><span class="hljs-keyword">let</span> counter = <span class="hljs-number">1</span>;
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">'text'</span>,
+  <span class="hljs-attr">text</span>: <span class="hljs-string">'0'</span>,
+  <span class="hljs-attr">touch</span>: {
+    <span class="hljs-attr">onClick</span>: <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
+      e.setText(<span class="hljs-string">`<span class="hljs-subst">${counter}</span>`</span>);
+      counter += <span class="hljs-number">1</span>;
+    },
+  },
+});</pre>
+<p style="text-align: center"><img src="./tutorials/text/texttouch.gif"></p>
+<h3>Formatted Text</h3>
+<p>Formatted text is created with the <code>ftext</code> make definition and supports:</p>
+<ul>
+<li>Multiple lines</li>
+<li>Multiple fonts</li>
+<li>Multiple touch definitions</li>
+<li>Embedded equations</li>
+</ul>
+<p>Multiple lines of text can be created by defining an array of strings as the text. Each element in the array is a new line.</p>
+<pre class='hljs'>figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">'ftext'</span>,
+  <span class="hljs-attr">text</span>: [<span class="hljs-string">'First line'</span>, <span class="hljs-string">'This is line two'</span>, <span class="hljs-string">'Third line'</span>],
+});</pre>
+<p style="text-align: center"><img src="./tutorials/text/ftextlines.png"></p>
+<p>Each line can have individual formatting by using a line definition object instead of a string.</p>
+<pre class='hljs'>figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">'ftext'</span>,
+  <span class="hljs-attr">text</span>: [
+    <span class="hljs-string">'First line'</span>,
+    <span class="hljs-string">'This is line two'</span>,
+    { <span class="hljs-attr">text</span>: <span class="hljs-string">'Third line'</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span>, <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] } },
+  ],
+});</pre>
+<p style="text-align: center"><img src="./tutorials/text/ftextlinesdef.png"></p>
+<p>Strings withing lines can be formatted by surrounding the string with <code>'|'</code> characters and then defining the modification with the <code>modifiers</code> property. Any string within <code>'|'</code> characters will become a unique identifier that is referenced in the <code>modifiers</code> property. If more than one strings share the same unique identifier, then the will all be modified the same.</p>
+<pre class='hljs'>figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">'ftext'</span>,
+  <span class="hljs-attr">text</span>: [
+    <span class="hljs-string">'First |line|'</span>,
+    <span class="hljs-string">'This is |line| two'</span>,
+    <span class="hljs-string">'Third |line2|'</span>,
+  ],
+  <span class="hljs-attr">modifiers</span>: {
+    <span class="hljs-attr">line</span>: { <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] } },
+    <span class="hljs-attr">line2</span>: { <span class="hljs-attr">text</span>: <span class="hljs-string">'line'</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] } },
+  },
+});</pre>
+<p style="text-align: center"><img src="./tutorials/text/ftextmods.png"></p>
+<p>Modifiers can also be used to define specific portions of text that are interactive.</p>
+<pre class='hljs'>igure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">'ftext'</span>,
+  <span class="hljs-attr">text</span>: [
+    <span class="hljs-string">'First |line|'</span>,
+    <span class="hljs-string">'This is |line2| two'</span>,
+    <span class="hljs-string">'Third |line3|'</span>,
+  ],
+  <span class="hljs-attr">modifiers</span>: {
+    <span class="hljs-attr">line</span>: {
+      <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] },
+      <span class="hljs-attr">onClick</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'line 1'</span>),
+    },
+    <span class="hljs-attr">line2</span>: {
+      <span class="hljs-attr">text</span>: <span class="hljs-string">'line'</span>,
+      <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] },
+      <span class="hljs-attr">onClick</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'line 2'</span>),
+    },
+    <span class="hljs-attr">line3</span>: {
+      <span class="hljs-attr">text</span>: <span class="hljs-string">'line'</span>,
+      <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">1</span>] },
+      <span class="hljs-attr">onClick</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'line 3'</span>),
+    },
+  },
+});</pre>
+<p style="text-align: center"><img src="./tutorials/text/ftexttouch.gif"></p>
+<p>There are three main ways to create text in FigureOne:</p>
+<ul>
+<li><a href="#obj_text">OBJ_Text</a> plain text</li>
+<li><a href="#obj_formattedtext">OBJ_FormattedText</a> formatted, multi line text</li>
+<li><a href="#equation">Equation</a> equation text</li>
+</ul>
+<p>Creating text within an equation is a </p>
+<p>FigureOne provides text layout for both simple text, and lines of text with rich formatting.</p>
 <h3>Quick Start - <code>text</code></h3>
 <p>Let's start by creating a <a href="#figureelementprimitive">FigureElementPrimitive</a> element that writes 'hello world' to the figure.</p>
-<p style="text-align: center"><img src="./tutorials/text/text.png"></p>
 <pre class='hljs'>figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'simpleText'</span>,
@@ -27843,6 +27970,322 @@ t.setText({
   <span class="hljs-attr">text</span>: <span class="hljs-string">'Changed Text'</span>,
   <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
   <span class="hljs-attr">font</span>: { <span class="hljs-attr">family</span>: <span class="hljs-string">'Times New Roman'</span> },
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_formattedtext'>
+      OBJ_FormattedText
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="FormattedText">FormattedText</a> options object that extends <a href="#obj_collection">OBJ_Collection</a>
+options object (without <code>parent</code>).</p>
+<p><img src="./apiassets/ftext1.png"></p>
+<p><img src="./apiassets/ftext2.png"></p>
+<p><img src="./apiassets/ftext3.png"></p>
+<p><img src="./apiassets/ftext4.gif"></p>
+<p><img src="./apiassets/ftext5.png"></p>
+<p><img src="./apiassets/ftext6.gif"></p>
+<p>Formatted text allows:</p>
+<ul>
+<li>Use of more than one font</li>
+<li>Multi-line text</li>
+<li>Embedded equations</li>
+<li>Interactivity on select strings</li>
+</ul>
+<p>If <code>text</code> is defined as an array of strings of line definition objects, then
+each element of the array will be a new line of text.</p>
+<p>All text will be laid out with the default font (or default line font if a
+line definition object is used).</p>
+<p>To modify the font of portions of text within a line, surround the text to
+modify with '|' characters. The string surrounded by the '|' characters will
+then be a unique identifier that can be referenced in the <code>modifiers</code>
+property which will then allow for replacing that text with some other text,
+changing the font of the text, changing the touchability of the text and/or
+replacing the text with an embedded equation.</p>
+<p>If a string is surrounded by '|' characters but not defined in <code>modifiers</code>
+then that string will have the formmating of the <code>accent</code> property applied
+to it.</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_collection">OBJ_Collection</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>text</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_textlinedefinition">OBJ_TextLineDefinition</a>)> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
+          : array of
+line strings - single string is single line only.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>modifiers</span> <code class='quiet'>(<a href="#obj_textmodifiersdefinition">OBJ_TextModifiersDefinition</a>?)</code>
+          : modifier definitions
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          : Default font to use in lines
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>defaultTextTouchBorder</span> <code class='quiet'>(<a href="#typeparsablebuffer">TypeParsableBuffer</a>?)</code>
+          : default buffer for
+
+<code>touch</code>
+ property in 
+<a href="#obj_textmodifiersdefinition">OBJ_TextModifiersDefinition</a>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>elements</span> <code class='quiet'>(<a href="#eqn_equationelements">EQN_EquationElements</a>?)</code>
+          : equation elements to use within
+the equation phrases defined in 
+<code>modifiers</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : Space between ascent of each line with
+descent of previous line (
+<code>font.size * 0.5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>baselineSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : Space between baselines of lines. This
+will override 
+<code>lineSpace</code>
+ for all lines including individual line settings
+(
+<code>undefined</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>)?)</code>
+          : horizontal alignment of
+lines with 
+<code>position</code>
+ (
+<code>left</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code>)?)</code>
+          : vertical
+alignment of lines with 
+<code>position</code>
+ (
+<code>baseline</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>border</span> <code class='quiet'>((<a href="#typeparsablebuffer">TypeParsableBuffer</a> | <a href="#typeparsableborder">TypeParsableBorder</a> | <code>"children"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : border used for keeping shape within limits (
+<code>'draw'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="#typeparsablebuffer">TypeParsableBuffer</a> | <a href="#typeparsableborder">TypeParsableBorder</a> | <code>"border"</code> | <code>"children"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : border used for determining shape was touched. 
+<code>number</code>
+ and 
+<code>'rect'</code>
+ use
+the the points in 
+<code>'buffer'</code>
+ to calculate the bounding rects (
+<code>'buffer'</code>
+).
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>accent</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          : default modifier for accented text without a
+specific modification. By default accented text will be italic.
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#drawing-boilerplate">
+boilerplate
+</a>
+<p>// Accent a word
+figure.add({
+make: 'ftext',
+text: 'Hello |World|',
+});</p>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Multi-line center justified</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">'ftext'</span>,
+  <span class="hljs-attr">text</span>: [<span class="hljs-string">'First line'</span>, <span class="hljs-string">'Second line'</span>],
+  <span class="hljs-attr">justify</span>: <span class="hljs-string">'center'</span>,
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Modifiers</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">'ftext'</span>,
+  <span class="hljs-attr">text</span>: [<span class="hljs-string">'|First| |line|'</span>, <span class="hljs-string">'Second |line2|'</span>],
+  <span class="hljs-attr">modifiers</span>: {
+    <span class="hljs-attr">First</span>: { <span class="hljs-attr">font</span>: { <span class="hljs-attr">underline</span>: <span class="hljs-string">'true'</span>, <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>] } },
+    <span class="hljs-attr">line</span>: { <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] } },
+    <span class="hljs-attr">line2</span>: { <span class="hljs-attr">text</span>: <span class="hljs-string">'line'</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span> } },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Interactive words in formatted text</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">'ftext'</span>,
+  <span class="hljs-attr">text</span>: <span class="hljs-string">'Touch |here| or |here2|'</span>,
+  <span class="hljs-attr">modifiers</span>: {
+    <span class="hljs-attr">here</span>: {
+      <span class="hljs-attr">font</span>: { <span class="hljs-attr">underline</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] },
+      <span class="hljs-attr">touch</span>: <span class="hljs-number">0.1</span>,
+      <span class="hljs-attr">onClick</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'here 1'</span>),
+    },
+    <span class="hljs-attr">here2</span>: {
+      <span class="hljs-attr">text</span>: <span class="hljs-string">'here'</span>,
+      <span class="hljs-attr">font</span>: { <span class="hljs-attr">underline</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] },
+      <span class="hljs-attr">touch</span>: <span class="hljs-number">0.1</span>,
+      <span class="hljs-attr">onClick</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'here 2'</span>),
+    },
+  },
+  <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Embedded equation (inline form definition)</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">'ftext'</span>,
+  <span class="hljs-attr">text</span>: <span class="hljs-string">'|root2| is irrational'</span>,
+  <span class="hljs-attr">modifiers</span>: {
+    <span class="hljs-attr">root2</span>: { <span class="hljs-attr">eqn</span>: { <span class="hljs-attr">root</span>: [<span class="hljs-string">'radical'</span>, <span class="hljs-string">'2'</span>] } },
+  },
+  <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Embedded equation with defined, touchable elements</span>
+figure.add({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'t'</span>,
+  <span class="hljs-attr">make</span>: <span class="hljs-string">'ftext'</span>,
+  <span class="hljs-attr">text</span>: [<span class="hljs-string">'A fraction is |fraction|'</span>, <span class="hljs-string">'Touch it!'</span>],
+  <span class="hljs-attr">modifiers</span>: {
+    <span class="hljs-attr">fraction</span>: {
+      <span class="hljs-attr">eqn</span>: {
+        <span class="hljs-attr">scale</span>: [{ <span class="hljs-attr">frac</span>: [<span class="hljs-string">'num'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'den'</span>] }, <span class="hljs-number">0.7</span>],
+      },
+      <span class="hljs-attr">offset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.2</span>],
+      <span class="hljs-attr">touch</span>: <span class="hljs-number">0.1</span>,
+      <span class="hljs-attr">onClick</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> figure.get(<span class="hljs-string">'t'</span>).pulse({
+        <span class="hljs-attr">elements</span>: [<span class="hljs-string">'num'</span>, <span class="hljs-string">'den'</span>, <span class="hljs-string">'v'</span>],
+        <span class="hljs-attr">centerOn</span>: <span class="hljs-string">'v'</span>,
+        <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'left'</span>,
+        <span class="hljs-attr">scale</span>: <span class="hljs-number">1.3</span>,
+      }),
+      <span class="hljs-attr">space</span>: <span class="hljs-number">0.3</span>,
+    },
+  },
+  <span class="hljs-attr">elements</span>: {
+    <span class="hljs-attr">num</span>: <span class="hljs-string">'numerator'</span>,
+    <span class="hljs-attr">den</span>: { <span class="hljs-attr">text</span>: <span class="hljs-string">'denominator'</span>, <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span> },
+    <span class="hljs-attr">v</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> },
+  },
+  <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
 });</pre>
     
   
@@ -33802,7 +34245,7 @@ figure.add([
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>text</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_collectionstext">OBJ_FormattedText</a>))</code>
+            <span class='code bold'>text</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_formattedtext">OBJ_FormattedText</a>))</code>
 	    
           </div>
           
@@ -60266,7 +60709,7 @@ in an auto transition</li>
 
   
     <p style="display: none;">      Type:
-      {text: <a href="#obj_collectionstext">OBJ_FormattedText</a>?, modifiersCommon: <a href="#obj_textmodifiersdefinition">OBJ_TextModifiersDefinition</a>?, modifiers: <a href="#obj_textmodifiersdefinition">OBJ_TextModifiersDefinition</a>?, showCommon: <a href="#typeelementpath">TypeElementPath</a>?, show: <a href="#typeelementpath">TypeElementPath</a>?, hideCommon: <a href="#typeelementpath">TypeElementPath</a>?, hide: <a href="#typeelementpath">TypeElementPath</a>?, enterStateCommon: <a href="#typeslidestatecallback">TypeSlideStateCallback</a>?, enterState: <a href="#typeslidestatecallback">TypeSlideStateCallback</a>?, transition: <a href="#typetransitiondefinition">TypeTransitionDefinition</a>?, steadyStateCommon: <a href="#typeslidestatecallback">TypeSlideStateCallback</a>?, steadyState: <a href="#typeslidestatecallback">TypeSlideStateCallback</a>?, leaveStateCommon: <a href="#typeslideleavestatecallback">TypeSlideLeaveStateCallback</a>?, leaveState: <a href="#typeslideleavestatecallback">TypeSlideLeaveStateCallback</a>?, fromForm: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | null)> | null)?, form: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | null)> | null)?, scenarioCommon: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)?, scenario: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)?, clear: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, time: <a href="#typerecordertime">TypeRecorderTime</a>?, delta: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, exec: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;[<a href="#typerecordertime">TypeRecorderTime</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]> | [<a href="#typerecordertime">TypeRecorderTime</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>])?, execDelta: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]> | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>])?, addReference: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}
+      {text: <a href="#obj_formattedtext">OBJ_FormattedText</a>?, modifiersCommon: <a href="#obj_textmodifiersdefinition">OBJ_TextModifiersDefinition</a>?, modifiers: <a href="#obj_textmodifiersdefinition">OBJ_TextModifiersDefinition</a>?, showCommon: <a href="#typeelementpath">TypeElementPath</a>?, show: <a href="#typeelementpath">TypeElementPath</a>?, hideCommon: <a href="#typeelementpath">TypeElementPath</a>?, hide: <a href="#typeelementpath">TypeElementPath</a>?, enterStateCommon: <a href="#typeslidestatecallback">TypeSlideStateCallback</a>?, enterState: <a href="#typeslidestatecallback">TypeSlideStateCallback</a>?, transition: <a href="#typetransitiondefinition">TypeTransitionDefinition</a>?, steadyStateCommon: <a href="#typeslidestatecallback">TypeSlideStateCallback</a>?, steadyState: <a href="#typeslidestatecallback">TypeSlideStateCallback</a>?, leaveStateCommon: <a href="#typeslideleavestatecallback">TypeSlideLeaveStateCallback</a>?, leaveState: <a href="#typeslideleavestatecallback">TypeSlideLeaveStateCallback</a>?, fromForm: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | null)> | null)?, form: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | null)> | null)?, scenarioCommon: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)?, scenario: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)?, clear: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, time: <a href="#typerecordertime">TypeRecorderTime</a>?, delta: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, exec: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;[<a href="#typerecordertime">TypeRecorderTime</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]> | [<a href="#typerecordertime">TypeRecorderTime</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>])?, execDelta: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]> | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>])?, addReference: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}
     </p>
   
   
@@ -61026,7 +61469,7 @@ options - use
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>text</span> <code class='quiet'>((<a href="#obj_collectionstext">OBJ_FormattedText</a> | null)?)</code>
+          <span class='code bold'>text</span> <code class='quiet'>((<a href="#obj_formattedtext">OBJ_FormattedText</a> | null)?)</code>
           : text options - use 
 <code>null</code>
  to hide
@@ -73722,8 +74165,8 @@ either the WebGL canvas, the 2D canvas, or the HTML canvas.
   </div>
   
 
-  <p>Lines Text Definition object.</p>
-<p>Used to define a string within a text lines primitive <a href="OBJ_TextLines">OBJ_TextLines</a>.</p>
+  <p>Formatted Text line definition object.</p>
+<p>Used to define a line of text in <a href="#obj_formattedtext">OBJ_FormattedText</a>.</p>
 
   
     <p style="display: none;">      Type:
@@ -73755,9 +74198,6 @@ either the WebGL canvas, the 2D canvas, or the HTML canvas.
         <div class='space-bottom0'>
           <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
           : line specific default font
-//  * @property {'left' | 'right' | 'center'} 
-[justify]
- line specific justification
 
           
         </div>
@@ -73765,7 +74205,7 @@ either the WebGL canvas, the 2D canvas, or the HTML canvas.
         <div class='space-bottom0'>
           <span class='code bold'>lineSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : line specific separation from top of
-this line to baseline of previous line
+previous line to baseline of this line
 
           
         </div>
@@ -73773,20 +74213,7 @@ this line to baseline of previous line
         <div class='space-bottom0'>
           <span class='code bold'>baselineSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : line specific separation from baseline of
-this line to baseline of previous line
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fixColor</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : If 
-<code>true</code>
-, 
-<a href="#figureelement">FigureElement</a>
-<code>.setColor</code>
-
-method will not change the color of text
+this previous line to baseline of this line
 
           
         </div>
@@ -74029,13 +74456,13 @@ key
   </div>
   
 
-  <p>Modifier Text Definition object.</p>
-<p>Used to define the modifiers of a string within a text lines primitive
-<a href="OBJ_TextLines">OBJ_TextLines</a>.</p>
+  <p>Text modifier definition object.</p>
+<p>Used to define the modifiers of a string within a formatted text element
+<a href="#obj_formattedtext">OBJ_FormattedText</a>.</p>
 
   
     <p style="display: none;">      Type:
-      {text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, offset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, inLine: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, font: <a href="#obj_font">OBJ_Font</a>?, touch: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="#typeparsablebuffer">TypeParsableBuffer</a>)?, onClick: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, eqn: <a href="#typeequationform">TypeEquationForm</a>?}
+      {text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, offset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, inLine: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, font: <a href="#obj_font">OBJ_Font</a>?, touch: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="#typeparsablebuffer">TypeParsableBuffer</a>)?, onClick: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, eqn: <a href="#typeequationphrase">TypeEquationPhrase</a>?}
     </p>
   
   
@@ -74070,17 +74497,6 @@ then
         <div class='space-bottom0'>
           <span class='code bold'>offset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
           : text offset
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>followOffsetY</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>true</code>
- will make any subsequent text
-have the same y offset as a starting point (
-<code>false</code>
-)
 
           
         </div>
@@ -74138,8 +74554,12 @@ buffer (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>eqn</span> <code class='quiet'>(<a href="#typeequationform">TypeEquationForm</a>?)</code>
-          : an equation form definition
+          <span class='code bold'>eqn</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>?)</code>
+          : use this to replace the text with an
+equation defined by an equation phrase - when using eqn the 
+<code>font</code>
+ property
+will be ignored
 
           
         </div>
@@ -77431,14 +77851,18 @@ upright than upside down.</li>
   </div>
   
 
-  <p>Tick location type:</p>
-<p><code>'bottom' | 'left' | 'right' | 'left'</code></p>
-<p><code>'bottom'</code> and <code>'top'</code> are only for x axes.</p>
-<p><code>'left'</code> and <code>'right'</code> are only for y axes.</p>
+  <p>Label location relative to the line.</p>
+<p><code>'top' | 'left' | 'bottom' | 'right' | 'start' | 'end' | 'positive' | 'negative'</code></p>
+<p>'<code>top</code>' is in the positive y direction and <code>'right'</code> is in the positive
+x direction. '<code>bottom</code>' and '<code>left</code>' are the opposite sides respectively.</p>
+<p><code>'positive'</code> is on the side of the line that the line rotates toward when
+rotating in the positive direction. <code>'negative'</code> is the opposite side.</p>
+<p><code>'start'</code> is the start end of the line, while <code>'end'</code> is the opposide end
+of the line.</p>
 
   
     <p style="display: none;">      Type:
-      (<code>"bottom"</code> | <code>"left"</code> | <code>"right"</code> | <code>"left"</code>)
+      (<code>"top"</code> | <code>"left"</code> | <code>"bottom"</code> | <code>"right"</code> | <code>"start"</code> | <code>"end"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)
     </p>
   
   
@@ -77487,18 +77911,14 @@ upright than upside down.</li>
   </div>
   
 
-  <p>Label location relative to the line.</p>
-<p><code>'top' | 'left' | 'bottom' | 'right' | 'start' | 'end' | 'positive' | 'negative'</code></p>
-<p>'<code>top</code>' is in the positive y direction and <code>'right'</code> is in the positive
-x direction. '<code>bottom</code>' and '<code>left</code>' are the opposite sides respectively.</p>
-<p><code>'positive'</code> is on the side of the line that the line rotates toward when
-rotating in the positive direction. <code>'negative'</code> is the opposite side.</p>
-<p><code>'start'</code> is the start end of the line, while <code>'end'</code> is the opposide end
-of the line.</p>
+  <p>Tick location type:</p>
+<p><code>'bottom' | 'left' | 'right' | 'left'</code></p>
+<p><code>'bottom'</code> and <code>'top'</code> are only for x axes.</p>
+<p><code>'left'</code> and <code>'right'</code> are only for y axes.</p>
 
   
     <p style="display: none;">      Type:
-      (<code>"top"</code> | <code>"left"</code> | <code>"bottom"</code> | <code>"right"</code> | <code>"start"</code> | <code>"end"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)
+      (<code>"bottom"</code> | <code>"left"</code> | <code>"right"</code> | <code>"left"</code>)
     </p>
   
   
@@ -79802,7 +80222,7 @@ relative to axis
 
   
     <p style="display: none;">      Type:
-      {font: <a href="#obj_font">OBJ_Font</a>?, length: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, offset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fontColorIsLineColor: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, text: (<a href="#obj_collectionstext">OBJ_FormattedText</a> | <code>"string"</code>)?, position: <a href="#typeparsablepoint">TypeParsablePoint</a>?}
+      {font: <a href="#obj_font">OBJ_Font</a>?, length: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, offset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fontColorIsLineColor: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, text: (<a href="#obj_formattedtext">OBJ_FormattedText</a> | <code>"string"</code>)?, position: <a href="#typeparsablepoint">TypeParsablePoint</a>?}
     </p>
   
   
@@ -96591,177 +97011,6 @@ use <code>show: false</code> in the animation step definition, and for <code>in<
 
   
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_collectionstext'>
-      OBJ_FormattedText
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>This</p>
-
-  
-    <p style="display: none;">      Type:
-      any
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>text</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_textlinedefinition">OBJ_TextLineDefinition</a>)> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
-          : array of
-line strings - single string is single line only.
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>modifiers</span> <code class='quiet'>(<a href="#obj_textmodifiersdefinition">OBJ_TextModifiersDefinition</a>?)</code>
-          : modifier definitions
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
-          : Default font to use in lines
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>defaultTextTouchBorder</span> <code class='quiet'>(<a href="#typeparsablebuffer">TypeParsableBuffer</a>?)</code>
-          : default buffer for
-
-<code>touchBorder</code>
- property in 
-<code>text</code>
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>lineSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : Space between ascent of each line with
-descent of previous line (
-<code>font.size * 0.5</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>baselineSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : Space between baselines of lines. This
-will override 
-<code>lineSpace</code>
- for all lines including individual line settings
-(
-<code>undefined</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>)?)</code>
-          : horizontal alignment of
-lines with 
-<code>position</code>
- (
-<code>left</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code>)?)</code>
-          : vertical
-alignment of lines with 
-<code>position</code>
- (
-<code>baseline</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<a href="#typeparsablebuffer">TypeParsableBuffer</a> | <a href="#typeparsableborder">TypeParsableBorder</a> | <code>"children"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : border used for keeping shape within limits (
-<code>'draw'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="#typeparsablebuffer">TypeParsableBuffer</a> | <a href="#typeparsableborder">TypeParsableBorder</a> | <code>"border"</code> | <code>"children"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : border used for determining shape was touched. 
-<code>number</code>
- and 
-<code>'rect'</code>
- use
-the the points in 
-<code>'buffer'</code>
- to calculate the bounding rects (
-<code>'buffer'</code>
-).
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>accent</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
-          : default modifier for accented text without a
-specific modification. By default accented text will be italic.
-
-          
-        </div>
-      
-    </div>
   
 
   
