@@ -160,7 +160,9 @@ export type TypeFontWeight = 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | 
  *   * `src` - the image or url to the image - if not supplied then atlas will
  *      be generated automatically
  *   * `map` - description of location and size of each glyph in the atlas
- *   * `glyphs` - the available glyphs in the atlas
+ *   * `glyphs` - the available glyphs in the atlas. To reduce the size of the
+ *      atlas, include only the glyphs that are being used, or use a preset
+ *      alphabet (like 'latin', or 'math')
  *   * `atlasColor` - if `true` then the rendered glyph color will be the same
  *     as that in the texture. If `false`, then only the transparency channel of
  *     the texture will be used and color will be defined by the FigureElement
