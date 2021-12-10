@@ -83,10 +83,23 @@ export type OBJ_TextModifiersDefinition = {
  * {@link FormattedText} options object that extends {@link OBJ_Collection}
  * options object (without `parent`).
  *
+ * ![](./apiassets/ftext1.png)
+ *
+ * ![](./apiassets/ftext2.png)
+ *
+ * ![](./apiassets/ftext3.png)
+ *
+ * ![](./apiassets/ftext4.gif)
+ *
+ * ![](./apiassets/ftext5.png)
+ *
+ * ![](./apiassets/ftext6.gif)
+ *
  * Formatted text allows:
  *   - Use of more than one font
  *   - Multi-line text
  *   - Embedded equations
+ *   - Interactivity on select strings
  *
  * If `text` is defined as an array of strings of line definition objects, then
  * each element of the array will be a new line of text.
@@ -131,6 +144,99 @@ export type OBJ_TextModifiersDefinition = {
  * the the points in `'buffer'` to calculate the bounding rects (`'buffer'`).
  * @property {OBJ_Font} [accent] default modifier for accented text without a
  * specific modification. By default accented text will be italic.
+ *
+ * @extends OBJ_Collection
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
+ * // Accent a word
+ * figure.add({
+ *   make: 'ftext',
+ *   text: 'Hello |World|',
+ * });
+ *
+ * @example
+ * // Multi-line center justified
+ * figure.add({
+ *   make: 'ftext',
+ *   text: ['First line', 'Second line'],
+ *   justify: 'center',
+ * });
+ *
+ * @example
+ * // Modifiers
+ * figure.add({
+ *   make: 'ftext',
+ *   text: ['|First| |line|', 'Second |line2|'],
+ *   modifiers: {
+ *     First: { font: { underline: 'true', color: [0, 0.7, 0.7, 1] } },
+ *     line: { font: { color: [0, 0, 1, 1] } },
+ *     line2: { text: 'line', font: { color: [0, 0.7, 0, 1], style: 'italic' } },
+ *   },
+ * });
+ *
+ * @example
+ * // Interactive words in formatted text
+ * figure.add({
+ *   make: 'ftext',
+ *   text: 'Touch |here| or |here2|',
+ *   modifiers: {
+ *     here: {
+ *       font: { underline: true, color: [0, 0, 1, 1] },
+ *       touch: 0.1,
+ *       onClick: () => console.log('here 1'),
+ *     },
+ *     here2: {
+ *       text: 'here',
+ *       font: { underline: true, color: [0, 0.8, 0, 1] },
+ *       touch: 0.1,
+ *       onClick: () => console.log('here 2'),
+ *     },
+ *   },
+ *   xAlign: 'center',
+ * });
+ *
+ * @example
+ * // Embedded equation (inline form definition)
+ * figure.add({
+ *   make: 'ftext',
+ *   text: '|root2| is irrational',
+ *   modifiers: {
+ *     root2: { eqn: { root: ['radical', '2'] } },
+ *   },
+ *   xAlign: 'center',
+ * });
+ *
+ * @example
+ * // Embedded equation with defined, touchable elements
+ * figure.add({
+ *   name: 't',
+ *   make: 'ftext',
+ *   text: ['A fraction is |fraction|', 'Touch it!'],
+ *   modifiers: {
+ *     fraction: {
+ *       eqn: {
+ *         scale: [{ frac: ['num', 'v', 'den'] }, 0.7],
+ *       },
+ *       offset: [0, 0.2],
+ *       touch: 0.1,
+ *       onClick: () => figure.get('t').pulse({
+ *         elements: ['num', 'den', 'v'],
+ *         centerOn: 'v',
+ *         xAlign: 'left',
+ *         scale: 1.3,
+ *       }),
+ *       space: 0.3,
+ *     },
+ *   },
+ *   elements: {
+ *     num: 'numerator',
+ *     den: { text: 'denominator', color: [0, 0, 1, 1], style: 'italic' },
+ *     v: { symbol: 'vinculum' },
+ *   },
+ *   xAlign: 'center',
+ * });
  */
 /* eslint-enable max-len */
 export type OBJ_FormattedText = {
