@@ -112,6 +112,33 @@ export type OBJ_GlyphModifiers = {
  * or into the WebGL canvas using the texture atlas.
  *
  * A texture atlas can either be supplied as an image, or generated
+ * automatically by FigureOne based on css font definitions.
+ *
+ * Choosing how to render text depends on the application.
+ *
+ * If text size is to be animated through a large scale range, then rendering
+ * on the 2D canvas is advantageous as it can scale text to any size without a
+ * loss of sharpness. The main disadvantage of the 2D canvas is the fact that
+ * it's a different HTML canvas element to the WebGL canvas. Thus all text on
+ * the 2D canvas will always be above (default) or below the WebGl canvas
+ * independent of when it is drawn. This means text will always be above or
+ * below shapes. regenerated each time the size changes by some threshold.
+ *
+ * Conversely, drawing text on the WebGL canvas provides control on which
+ * shapes can hide text and vise versa. The disadvantage is that text is drawn
+ * from a texture atlas of bitmapped fonts. This means as text is progressively
+ * scaled up or down, the the text will look more pixelated or blurry. For many
+ * scalings (like common scalings in an equation), this will likely not be a
+ * problem. But for large changes in animated scale, it will be better to use
+ * the 2D canvas. Scaling also needs to be considered if the WebGL canvas is
+ * expected to be resized. On a desktop browser, a canvas element can be
+ * resized a lot, and so if using the WebGL atlas, it may need to be
+ *
+ * Note, the choice of where to render text can be made for each text element.
+ * Therefore it is possible to have some text rendered to the 2D canvas, and
+ * other text rendered to the WebGL canvas in the same figure.
+ *
+ * A texture atlas can either be supplied as an image, or generated
  * automatically by FigureOne based on the css font definitions.
  *
  * CSS font definition:

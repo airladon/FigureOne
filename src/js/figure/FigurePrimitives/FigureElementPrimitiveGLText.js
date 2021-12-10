@@ -32,50 +32,105 @@ export type OBJ_TextAdjustments = {
 /**
  * Text options object that extends {@link OBJ_FigurePrimitive}.
  *
- * Text can be rendered into a [2D canvas](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
- * or into the WebGL canvas using the texture atlas.
+ * ![](./apiassets/text1.png)
  *
- * A texture atlas can either be supplied as an image, or generated
- * automatically by FigureOne based on css font definitions.
+ * ![](./apiassets/text2.png)
  *
- * Choosing how to render text depends on the application.
+ * ![](./apiassets/text3.png)
  *
- * If text size is to be animated through a large scale range, then rendering
- * on the 2D canvas is advantageous as it can scale text to any size without a
- * loss of sharpness. The main disadvantage of the 2D canvas is the fact that
- * it's a different HTML canvas element to the WebGL canvas. Thus all text on
- * the 2D canvas will always be above (default) or below the WebGl canvas
- * independent of when it is drawn. This means text will always be above or
- * below shapes. regenerated each time the size changes by some threshold.
+ * ![](./apiassets/text4.png)
  *
- * Conversely, drawing text on the WebGL canvas provides control on which
- * shapes can hide text and vise versa. The disadvantage is that text is drawn
- * from a texture atlas of bitmapped fonts. This means as text is progressively
- * scaled up or down, the the text will look more pixelated or blurry. For many
- * scalings (like common scalings in an equation), this will likely not be a
- * problem. But for large changes in animated scale, it will be better to use
- * the 2D canvas. Scaling also needs to be considered if the WebGL canvas is
- * expected to be resized. On a desktop browser, a canvas element can be
- * resized a lot, and so if using the WebGL atlas, it may need to be
+ * ![](./apiassets/text5.png)
  *
+ * ![](./apiassets/text6.png)
  *
- * By default, text is drawn on the WebGL canvas, and text atlases are
- * automatically generated from the font selected. Use the `type` property to
- * choose where to render the text.
+ * A text element can either be defined as a single string, or an array of
+ * strings combined with an array of locations.
  *
- * Rendering text on the 2D canvas is advantages if the text needs to be scaled a lot in animation.
+ * The `adjustments` property allows customization of the borders around the
+ * text. This may be needed when the browser or FigureOne does not accurately
+ * calculate the size of the text (usually for non-standard fonts, and
+ * sometimes italized fonts).
  *
- * Note, the choice of where to render text can be made for each text element.
- * Therefore it is possible to have some text rendered to the 2D canvas, and
- * other text rendered to the WebGL canvas in the same figure.
+ * Atlernately `border` and `touchBorder` can also be used for complete
+ * customization.
  *
- * @property {string} [text]
- * @property {OBJ_Font} [font]
- * @property {'left' | 'center' | 'right'} [xAlign]
+ * All text in this element will use the same font, x and y alignment, and
+ * adjustments.
+ *
+ * Note - Text can be rendered to either the WebGL canvas or the 2D canvas
+ * using the `render` property in `font`. For more information, see
+ * {@link OBJ_Font}.
+ *
+ * @property {string | Array<string>} [text] string or array of strings to
+ * render
+ * @property {TypeParsablePoint | Array<TypeParsablePoint>} [location] draw
+ * space location of each string (`[0, 0]`)
+ * @property {OBJ_Font} [font] defaults to default Figure font
+ * @property {'left' | 'center' | 'right'} [xAlign] (`'left'`)
  * @property {'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline'} [yAlign]
+ * (`'baseline'`)
  * @property {OBJ_TextAdjustments} [adjustments]
  * @property {TypeParsableBuffer | TypeParsableBorder | 'buffer' | 'draw' | 'rect'} [border]
  * @property {TypeParsableBuffer | TypeParsableBorder | 'rect' | 'border' | 'buffer' | 'draw'} [touchBorder]
+ *
+ * @extends OBJ_FigurePrimitive
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Simple text
+ * figure.add({
+ *   make: 'text',
+ *   text: 'Hello World',
+ * });
+ *
+ * @example
+ * // Custom Font
+ * figure.add({
+ *   make: 'text',
+ *   text: 'Hello World',
+ *   font: { family: 'Times New Roman', style: 'italic', underline: true },
+ * });
+ *
+ * @example
+ * // Aligned text
+ * figure.add({
+ *   make: 'text',
+ *   text: 'Aligned Text',
+ *   xAlign: 'center',
+ *   yAlign: 'top',
+ *   color: [0, 0, 1, 1],
+ * });
+ *
+ * @example
+ * // Multi Text
+ * figure.add({
+ *   make: 'text',
+ *   text: ['0', '1', '2'],
+ *   location: [[-0.5, -0.5], [0, 0.5], [0.5, -0.5]],
+ * });
+ *
+ * @example
+ * // Change Text
+ * t = figure.add({
+ *   make: 'text',
+ *   text: 'Hello World',
+ * });
+ * t.setText('Changed Text')
+ *
+ * @example
+ * // Change text and options
+ * t = figure.add({
+ *   make: 'text',
+ *   text: 'Hello World',
+ * });
+ * t.setText({
+ *   text: 'Changed Text',
+ *   xAlign: 'center',
+ *   font: { family: 'Times New Roman' },
+ * });
  */
 /* eslint-enable max-len */
 export type OBJ_Text = {
