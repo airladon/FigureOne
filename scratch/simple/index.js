@@ -3,82 +3,53 @@
 // color: Fig.tools.color.HexToArray('#212529'),
 // backgroundColor: Fig.tools.color.HexToArray('#f6f7f7'),
 // });
-const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.4, render: '2d' } });
+// const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.4, render: '2d' } });
+
+const figure = new Fig.Figure({
+  scene: [-3, -3, 3, 3],
+  font: { size: 0.4 }
+});
+
+// figure.add({
+//   make: 'grid',
+//   step: 0.5,
+//   color: [0.8, 0.8, 0.8, 1],
+// });
+
+// figure.add({
+//   make: 'polygon',
+//   sides: 20,
+//   radius: 0.03,
+//   color: [0.8, 0.8, 0.8, 1],
+// });
 
 figure.add({
-  make: 'grid',
-  step: 0.5,
-  color: [0.8, 0.8, 0.8, 1],
+  make: 'text',
+  text: 'Engage!',
+  font: { color: [0, 0, 1, 1], style: 'italic' },
+  xAlign: 'center',
+  position: [0, 0.5],
 });
 
 figure.add({
-  make: 'polygon',
-  sides: 20,
-  radius: 0.03,
-  color: [0.8, 0.8, 0.8, 1],
+  make: 'text',
+  text: 'Make it so!',
+  font: {
+    family: 'monospace',
+    color: [1, 1, 0, 1],
+    outline: { fill: true, color: [1, 0, 0, 1], width: 0.02 },
+    size: 0.6,
+    underline: { color: [0, 0, 1, 1] },
+  },
+  xAlign: 'center',
+  position: [0, -0.5],
 });
 
-// Accent a word
-// figure.add({
-//   make: 'ftext',
-//   text: 'Hello |World|',
-// });
 
-// // Multi-line center justified
-// figure.add({
-//   make: 'ftext',
-//   text: ['First line', 'Second line'],
-//   justify: 'center',
-// });
 
-// // Modifiers
-// figure.add({
-//   make: 'ftext',
-//   text: ['|First| |line|', 'Second |line2|'],
-//   modifiers: {
-//     First: { font: { underline: 'true', color: [0, 0.7, 0.7, 1] } },
-//     line: { font: { color: [0, 0, 1, 1] } },
-//     line2: { text: 'line', font: { color: [0, 0.7, 0, 1], style: 'italic' } },
-//   },
-// });
-
-// // Embedded equation (inline form definition)
-// figure.add({
-//   make: 'ftext',
-//   text: '|root2| is irrational',
-//   modifiers: {
-//     root2: { eqn: { root: ['radical', '2'] } },
-//   },
-//   xAlign: 'center',
-// });
-
-// // Embedded equation with defined, touchable elements
-// figure.add({
-//   name: 't',
-//   make: 'ftext',
-//   text: ['A fraction is |fraction|', 'Touch it!'],
-//   modifiers: {
-//     fraction: {
-//       eqn: {
-//         scale: [{ frac: ['num', 'v', 'den'] }, 0.7],
-//       },
-//       offset: [0, 0.2],
-//       touch: 0.1,
-//       onClick: () => figure.get('t').pulse({
-//         elements: ['num', 'den', 'v'],
-//         centerOn: 'v',
-//         xAlign: 'left',
-//         scale: 1.3,
-//       }),
-//       space: 0.3,
-//     },
-//   },
-//   elements: {
-//     num: 'numerator',
-//     den: { text: 'denominator', color: [0, 0, 1, 1], style: 'italic' },
-//     v: { symbol: 'vinculum' },
-//   },
-//   xAlign: 'center',
+// t.notifications.add('onClick', () => {
+//   // t.setText(`${counter}`);
+//   counter += 1;
 // });
 
 // const next = figure.add({make: 'collections.button', label: 'Next', position: [0.7, -0.8],});
@@ -434,17 +405,17 @@ figure.add({
 // });
 // b.hide();
 
-ff = new FontFace('montserrat', 'url(http://localhost:8080//src/tests/misc/fonts/montserrat/montserrat-italic-400-latin.woff2)', { weight: '400', style: 'italic' });
-ff.load().then(function(loaded_face) {
-  document.fonts.add(loaded_face);
-  console.log('italic')
-});
+// ff = new FontFace('montserrat', 'url(http://localhost:8080//src/tests/misc/fonts/montserrat/montserrat-italic-400-latin.woff2)', { weight: '400', style: 'italic' });
+// ff.load().then(function(loaded_face) {
+//   document.fonts.add(loaded_face);
+//   console.log('italic')
+// });
 
-ff1 = new FontFace('montserrat', 'url(http://localhost:8080//src/tests/misc/fonts/montserrat/montserrat-normal-400-latin.woff2)', { weight: '400', style: 'normal' });
-ff1.load().then(function(loaded_face) {
-  document.fonts.add(loaded_face);
-  console.log('400')
-});
+// ff1 = new FontFace('montserrat', 'url(http://localhost:8080//src/tests/misc/fonts/montserrat/montserrat-normal-400-latin.woff2)', { weight: '400', style: 'normal' });
+// ff1.load().then(function(loaded_face) {
+//   document.fonts.add(loaded_face);
+//   console.log('400')
+// });
 
 // ff2 = new FontFace('montserrat', 'url(http://localhost:8080//src/tests/misc/fonts/montserrat/montserrat-italic-800-latin.woff2)', { weight: '800', style: 'italic'});
 // ff2.load().then(function(loaded_face) {
