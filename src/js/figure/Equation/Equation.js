@@ -1445,7 +1445,7 @@ export class Equation extends FigureElementCollection {
 
   contextLost() {
     super.contextLost();
-    if (this.eqn.function.fullLineHeight != null) {
+    if (this.eqn.functions.fullLineHeight != null) {
       this.eqn.functions.fullLineHeight.getAllElements().forEach(e => e.contextLost());
     }
   }
@@ -1468,6 +1468,7 @@ export class Equation extends FigureElementCollection {
         return;
       }
       const col = e.color.slice();
+      // $FlowFixMe
       e.setText({ text: elements[elementName] });
       e.setColor(col, false);
     });

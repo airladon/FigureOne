@@ -288,6 +288,10 @@ export default class BaseAnnotationFunction implements ElementInterface {
     return copy;
   }
 
+  cleanup() {
+    this.content.cleanup();
+  }
+
   getAllElements(includeHidden: boolean = true) {
     if (!includeHidden && !this.showContent) {
       return [];

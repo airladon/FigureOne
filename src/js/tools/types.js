@@ -1,4 +1,5 @@
 // @flow
+import type { OBJ_AtlasMap } from '../figure/webgl/Atlas';
 
 /**
  * Defines whether a line is solid or dashed.
@@ -238,7 +239,7 @@ export type OBJ_Font = {
   glyphs?: string | 'greek' | 'math' | 'latin' | 'all' | 'common' | 'mathExt',
   loadColor?: TypeColor,
   atlasColor?: boolean,
-  atlasSize?: number,
+  atlasSize?: number | null,
 
   timeout?: number,
   modifiers?: OBJ_GlyphModifiers,

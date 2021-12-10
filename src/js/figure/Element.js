@@ -1782,7 +1782,7 @@ class FigureElement {
     this.animations.notifications.cleanup();
     this.figure = {};
     this.parent = null;
-    this.textureAtlases = {};
+    // this.textureAtlases = {};
   }
 
   willStartAnimating() {
@@ -4021,7 +4021,7 @@ class FigureElementPrimitive extends FigureElement {
 
   cleanup() {
     super.cleanup();
-    this.drawingObject.cleanup(false);
+    this.drawingObject.cleanup();
   }
 
   _getStateProperties(options: { ignoreShown?: boolean }) {
@@ -4055,8 +4055,8 @@ class FigureElementPrimitive extends FigureElement {
     this.angleToDraw = angle;
   }
 
-  contextLost() {
-    if (this.drawingObject.contextLost != null) {
+  contextLost() { // $FlowFixMe
+    if (this.drawingObject.contextLost != null) { // $FlowFixMe
       this.drawingObject.contextLost();
     }
   }
@@ -4607,6 +4607,7 @@ class FigureElementCollection extends FigureElement {
 
   cleanup() {
     super.cleanup();
+    this.textureAtlases = {};
     this.cleanupChildren();
   }
 
@@ -4785,6 +4786,7 @@ class FigureElementCollection extends FigureElement {
     }
     // element.setFirstTransform(this.lastDrawTransform);
     this.animateNextFrame();
+    // $FlowFixMe
     if (element.isTouchable || element.hasTouchableElements) {
       this.setHasTouchableElements();
     }
@@ -6123,7 +6125,7 @@ class FigureElementCollection extends FigureElement {
     }
   }
 
-  getAtlases(callback: () => void | null = null) {
+  getAtlases(callback: (() => void) | null = null) {
     Object.keys(this.textureAtlases).forEach((id) => {
       if (this.textureAtlases[id].notif != null) {
         this.textureAtlases[id].atlas.notifications.remove('updated2', this.textureAtlases[id].notif);

@@ -92,7 +92,7 @@ class FigureFont {
       this.weight = optionsIn.weight;
       this.opacity = optionsIn.opacity;
       this.underline = optionsIn.underline;
-      this.setColor(optionsIn.color);
+      this.color = optionsIn.color;
       // this.width = optionsIn.width;
       this.descent = optionsIn.descent;
       this.midDescent = optionsIn.midDescent;
@@ -123,7 +123,7 @@ class FigureFont {
       style: 'normal',
       size: 1,
       weight: 'normal',
-      color: null,
+      color: [0, 0, 0, 1],
       opacity: 1,
       width: 1,
       descent: 0.08,
@@ -174,7 +174,7 @@ class FigureFont {
 
     this.weight = options.weight;
     this.opacity = options.opacity;
-    this.setColor(options.color);
+    this.color = options.color.slice();
     // this.width = options.width;
     this.descent = options.descent;
     this.midDescent = options.midDescent;
@@ -182,8 +182,8 @@ class FigureFont {
     this.midAscent = options.midAscent;
     this.maxAscent = options.maxAscent;
     this.map = options.map;
-    this.src = optionsIn.src;
-    this.atlasSize = optionsIn.atlasSize;
+    this.src = optionsIn.src || '';
+    this.atlasSize = optionsIn.atlasSize || null;
     this.loadColor = options.loadColor;
     this.atlasColor = options.atlasColor;
     this.glyphs = options.glyphs;
@@ -334,7 +334,7 @@ class FigureFont {
       || this.testString === 'mathExt'
       || this.testString === 'math'
     ) {
-      return this.getGlyphs(this.testString);
+      return this.getGlyphs();
     }
     return this.testString;
   }
@@ -361,27 +361,14 @@ class FigureFont {
   //   return [testStringName, testString];
   // }
 
-  setColor(color: TypeColor | null = null) {
-    if (color == null) {
-      this.color = color;
-    } else {
-      this.color = color.slice();
-    }
-  }
-
-  // getUnderline() {
-  //   if (this.underline === false) {
-  //     return [0, 0];
+  // setColor(color: TypeColor | null = null) {
+  //   if (color == null) {
+  //     this.color = color;
+  //   } else {
+  //     this.color = color.slice();
   //   }
-  //   return [this.underLine.color
-  //   if (this.underline === true) {
-  //     return [this.size / 20 + this.size / 40, this.size / 40];
-  //   }
-  //   if (typeof this.underline === 'number') {
-  //     return [this.underline, this.size / 40];
-  //   }
-  //   return this.underline;
   // }
+
 
   draw2D(
     ctx: CanvasRenderingContext2D,
@@ -461,42 +448,6 @@ class FigureFont {
   }
 
   measureText(text: string, aWidth: number = this.size / 2) {
-    // // const { font } = this;
-    // // const aWidth = this.fontSize / 2;
-    // let ascent = aWidth * this.maxAscent;
-    // let descent = aWidth * this.descent;
-    // // const maxAscentRe =
-    // //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
-    // const midAscentRe = /[acemnorsuvwxz*gyqp: ]/g;
-    // const midDecentRe = /[;,$]/g;
-    // let maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
-    // const family = this.family.toLowerCase();
-    // if (family === 'times new roman' || family === 'times' || family === 'serif') {
-    //   if (this.style === 'italic') {
-    //     maxDescentRe = /[gjyqp@Q(){}[\]|f]/g;
-    //   }
-    // }
-    // const midAscentMatches = text.match(midAscentRe);
-    // if (Array.isArray(midAscentMatches)) {
-    //   if (midAscentMatches.length === text.length) {
-    //     ascent = aWidth * this.midAscent;
-    //   }
-    // }
-
-    // const midDescentMatches = text.match(midDecentRe);
-    // if (Array.isArray(midDescentMatches)) {
-    //   if (midDescentMatches.length > 0) {
-    //     descent = aWidth * this.midDescent;
-    //   }
-    // }
-
-    // const maxDescentMatches = text.match(maxDescentRe);
-    // if (Array.isArray(maxDescentMatches)) {
-    //   if (maxDescentMatches.length > 0) {
-    //     descent = aWidth * this.maxDescent;
-    //   }
-    // }
-
     let ascent = 0;
     let descent = -this.maxAscent;
 
@@ -552,7 +503,7 @@ class FigureFont {
     ctx.strokeStyle = colorArrayToRGBA(colorToUse);
   }
 
-  _dup() {
+  _dup() {  // $FlowFixMe
     return new FigureFont(this.definition());
   }
 

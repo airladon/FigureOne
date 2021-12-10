@@ -85,7 +85,7 @@ class GLObject extends DrawingObject {
 
   programIndex: number;
   selectorProgramIndex: number;
-  onLoad: ?(() => void);
+  onLoad: ?((boolean, string) => void);
 
   vertexShader: TypeVertexShader;
   fragmentShader: TypeFragmentShader;
@@ -338,7 +338,6 @@ class GLObject extends DrawingObject {
 
     // texture.buffer = this.gl.createBuffer();
 
-    // $FlowFixMe
     this.updateTextureMap(points);
     // gl.bindBuffer(gl.ARRAY_BUFFER, texture.buffer);
     // gl.bufferData(
@@ -346,7 +345,7 @@ class GLObject extends DrawingObject {
     //   new Float32Array(texture.points),
     //   gl.STATIC_DRAW,
     // );
-    webgl.addTexture(
+    webgl.addTexture( // $FlowFixMe
       id, data || src, loadColor, repeat, this.executeOnLoad.bind(this), force,
     );
     this.state = webgl.textures[texture.id].state;

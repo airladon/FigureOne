@@ -93,7 +93,7 @@ class Element implements ElementInterface {
     this.showContent = true;
   }
 
-  cleanup() {
+  cleanup() { // $FlowFixMe
     delete this.content;
   }
   // execFn(fn: string | Function | null, ...args: Array<any>) {
@@ -130,7 +130,8 @@ class Element implements ElementInterface {
         content.drawingObject.setTouchBorder(); // $FlowFixMe
         content.custom.updateBorders({});
       }
-      if (content.measureAndAlignText != null) {
+      // $FlowFixMe
+      if (content.measureAndAlignText != null) { // $FlowFixMe
         content.measureAndAlignText();
       }
       content.transform.updateTranslation([location.x, location.y]);
@@ -142,6 +143,7 @@ class Element implements ElementInterface {
 
       // Get the boundaries of element
       // const r = content.getRelativeVertexSpaceBoundingRect();
+      // $FlowFixMe
       const r = content.getRelativeBoundingRect('draw', 'border', null, false);
       this.location = location._dup();
       this.scale = scale;
