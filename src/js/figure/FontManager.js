@@ -2,6 +2,8 @@
 import { joinObjects, NotificationManager } from '../tools/tools';
 import { FunctionMap } from '../tools/FunctionMap';
 import { FigureFont } from './DrawingObjects/TextObject/TextObject';
+import type { OBJ_Font } from '../tools/types';
+import type { FigureElement } from './Element';
 
 export type OBJ_LoadFontOptions = {
   maxCount?: number,
@@ -25,7 +27,7 @@ export default class FontManager {
   fnMap: FunctionMap
   timedOut: number;
   notifications: NotificationManager;
-  checkTimer: TimerID;
+  checkTimer: TimeoutID | null;
   startTime: number;
   timeout: number;
   animateNextFrameCallbacks: Array<() => void>;
@@ -75,7 +77,7 @@ export default class FontManager {
     return this.ctx.measureText(glyphs).width;
   }
 
-  showDebugAtlas(fontID: string, fontFamily: string, fontSizePX = 10) {
+  showDebugAtlas(fontID: string, fontFamily: string, fontSizePX: number = 10) {
     const f = this.fonts[fontID].font;
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -97,6 +99,7 @@ export default class FontManager {
     }
     ctx.rect(0, 0, dimension, dimension);
     ctx.stroke();
+    // $FlowFixMe
     document.body.appendChild(canvas);
   }
 
@@ -140,7 +143,7 @@ export default class FontManager {
   */
   isAvailable(
     fontDefinition: { family: string, weight?: string, style?: string, glyphs?: string, },
-  ): boolean {
+  ): boolean { // $FlowFixMe
     const f = new FigureFont(fontDefinition);
     const glyphs = f.getGlyphs();
     const fam = f.getFamily();
@@ -172,6 +175,7 @@ export default class FontManager {
    * fallback to 'normal'.
    */
   areWeightsAvailable(fontDefinition: OBJ_Font, weights: Array<string>) {
+    // $FlowFixMe
     if (!this.isAvailable(fontDefinition)) {
       return false;
     }
@@ -193,6 +197,7 @@ export default class FontManager {
    * Return arrays of weights that produce the same output.
    */
   getWeights(fontDefinition: OBJ_Font) {
+    // $FlowFixMe
     if (!this.isAvailable(fontDefinition)) {
       return [];
     }
@@ -216,7 +221,7 @@ export default class FontManager {
     return buckets;
   }
 
-  isMinNumWeights(fontID: OBJ_Font, num: number) {
+  isMinNumWeights(fontID: string, num: number) {
     const weights = ['100', '200', '300', '400', '500', '600', '700', '800', '900', 'normal', 'bold', 'bolder', 'lighter'];
     const f = this.fonts[fontID];
     const glyphs = f.glyphSymbols;
@@ -250,6 +255,7 @@ export default class FontManager {
    * version if it is requested.
    */
   getStyles(fontDefinition: OBJ_Font) {
+    // $FlowFixMe
     if (!this.isAvailable(fontDefinition)) {
       return [];
     }
@@ -274,6 +280,7 @@ export default class FontManager {
   }
 
   areStylesAvailable(fontDefinition: OBJ_Font, styles: Array<string>) {
+    // $FlowFixMe
     if (!this.isAvailable(fontDefinition)) {
       return false;
     }
@@ -340,7 +347,7 @@ export default class FontManager {
       atlas: false,
     };
     if (typeof options === 'string' || typeof options === 'function') {
-      o = defaultOptions;
+      o = defaultOptions; // $FlowFixMe
       o.callback = options;
     } else {
       o = joinObjects({}, {
@@ -352,7 +359,7 @@ export default class FontManager {
     }
 
     const font = fontOrElement;
-    if (font.getFonts != null) {
+    if (font.getFonts != null) {  // $FlowFixMe
       const fonts = font.getFonts();
       const result = [];
       fonts.forEach((f) => {
@@ -361,6 +368,7 @@ export default class FontManager {
       });
       return result;
     }
+    // $FlowFixMe
     const f = new FigureFont(font);
     const fontID = f.getFontID(o.atlas);
     // If the font family-weight-style has already been created, then
@@ -425,7 +433,7 @@ export default class FontManager {
   timeoutFonts() {
     Object.keys(this.fonts).forEach((fontID) => {
       if (this.fonts[fontID].loaded === false) {
-        this.fontTimeout(fontID);
+        this.fontTimedOut(fontID);
       }
     });
   }

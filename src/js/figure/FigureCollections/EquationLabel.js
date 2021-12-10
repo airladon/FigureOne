@@ -193,7 +193,7 @@ export default class EquationLabel {
   setText(text: string) {
     const form = this.eqn.getCurrentForm();
     if (form != null) {
-      const key = Object.keys(form.elements)[0];
+      const key = Object.keys(form.elements)[0]; // $FlowFixMe
       form.elements[key].setText(text);
       form.arrange(
         this.eqn.eqn.scale,
@@ -220,6 +220,7 @@ export default class EquationLabel {
       //   // $FlowFixMe
       //   textToReturn = textObject.text[0].text;
       // }
+      // $FlowFixMe
       textToReturn = form.elements[key].getText();
     }
     return textToReturn;
@@ -328,7 +329,10 @@ export default class EquationLabel {
     let h = 0;
     let w = 0;
     const currentForm = this.eqn.getCurrentForm();
-    if (currentForm.width === 0 || currentForm.height === 0) {
+    if (
+      currentForm != null
+      && (currentForm.width === 0 || currentForm.height === 0)
+    ) {
       this.eqn.layoutForms('current', false);
     }
     let change = false;

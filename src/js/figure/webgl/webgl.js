@@ -9,6 +9,7 @@ import { FunctionMap } from '../../tools/FunctionMap';
 import { colorToInt } from '../../tools/color';
 import Atlas from './Atlas';
 import type { TypeColor } from '../../tools/types';
+import type { OBJ_Atlas } from './Atlas';
 
 const glMock = {
   TRIANGLES: 1,
@@ -278,6 +279,7 @@ class WebGLInstance {
     this.deleteTexture(id);
     const { gl } = this;
 
+    // $FlowFixMe
     this.textures[id] = {
       id,
       state: 'loading',
@@ -305,6 +307,7 @@ class WebGLInstance {
         texture.state = 'loaded';
       });
     } else {
+      // $FlowFixMe
       texture.data = data;
       // Otherwise, the data is an image so set it directly
       this.setTextureData(id, data, repeat);
@@ -315,7 +318,7 @@ class WebGLInstance {
   }
 
   getAtlas(options: OBJ_Atlas) {
-    const font = options.font;
+    const font = options.font; // $FlowFixMe
     const textureID = font.getTextureID();
     if (this.atlases[textureID] != null) {
       return this.atlases[textureID];
@@ -555,7 +558,7 @@ class WebGLInstance {
     this.gl.disable(this.gl.DEPTH_TEST);
     // $FlowFixMe
     this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
-    this.gl.enable(this.gl.BLEND);
+    this.gl.enable(this.gl.BLEND); // $FlowFixMe
     this.targetTexture = new TargetTexture(this);
   }
 

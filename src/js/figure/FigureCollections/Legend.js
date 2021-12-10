@@ -16,10 +16,10 @@ import {
 import type CollectionsTrace, { COL_Trace } from './Trace';
 import type { OBJ_Font, OBJ_Font_Fixed } from '../../tools/types';
 import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
-import type { OBJ_TextLines } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 import type { OBJ_PlotFrame } from './Plot';
 import type FigureCollections from './FigureCollections';
 import type CollectionsRectangle from './Rectangle';
+import type { OBJ_CollectionsText } from './Text';
 
 /**
  * Legend customization for a single trace sample in the legend.
@@ -39,7 +39,7 @@ export type OBJ_PlotLegendCustomTrace = {
   offset?: TypeParsablePoint,
   space?: number,
   fontColorIsLineColor?: boolean,
-  text?: OBJ_TextLines | 'string',
+  text?: OBJ_CollectionsText | 'string',
   position?: TypeParsablePoint,
 };
 

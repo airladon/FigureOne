@@ -36,7 +36,7 @@ import type { TypeParsablePlane } from '../tools/geometry/Plane';
 import DrawContext2D from './DrawContext2D';
 // eslint-disable-next-line import/no-cycle
 import FigurePrimitives from './FigurePrimitives/FigurePrimitives';
-import type { OBJ_Polyline, OBJ_TextLinesDefinition, OBJ_TextLines } from './FigurePrimitives/FigurePrimitiveTypes2D';
+import type { OBJ_Polyline } from './FigurePrimitives/FigurePrimitiveTypes2D';
 // eslint-disable-next-line import/no-cycle
 import FigureCollections from './FigureCollections/FigureCollections';
 // eslint-disable-next-line import/no-cycle
@@ -46,6 +46,7 @@ import type { TypeColor, OBJ_Font } from '../tools/types';
 import type { COL_SlideNavigator } from './FigureCollections/SlideNavigator';
 import type FigureElementPrimitiveGesture from './FigurePrimitives/FigureElementPrimitiveGesture';
 import FontManager from './FontManager';
+import type { OBJ_CollectionsText } from './FigureCollections/Text';
 
 const FIGURE1DEBUG = false;
 
@@ -322,7 +323,7 @@ class Figure {
   nextDrawTimerDuration: number;
   focused: boolean;
   frameRate: {
-    information: null | Array<string | OBJ_TextLinesDefinition>,
+    information: null | Array<string | OBJ_CollectionsText>,
     history: Array<Array<number>>,
     num: number,
   };
@@ -3437,7 +3438,7 @@ class Figure {
    * browser when an element is animating or moving. If everything is still,
    * then the frame rate will be 0.
    */
-  addFrameRate(numFrames: number = 10, options: OBJ_TextLines = {}) {
+  addFrameRate(numFrames: number = 10, options: OBJ_CollectionsText = {}) {
     this.frameRate.num = numFrames;
     const frame = this.add(joinObjects(
       {},

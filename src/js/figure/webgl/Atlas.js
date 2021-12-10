@@ -3,6 +3,9 @@
 import FontManager from '../FontManager';
 import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
 import { joinObjects, NotificationManager } from '../../tools/tools';
+import type { TypeColor } from '../../tools/types';
+import type Scene from '../../tools/geometry/scene';
+import type WebGLInstance from './webgl';
 
 
 /* eslint-disable max-len */
@@ -219,12 +222,12 @@ export default class Atlas {
     const aWidth = this.fontSize / 2;
 
     font.setColorInContext(ctx, font.color);
-    if (font.outline.color) {
+    if (font.outline.color) { // $FlowFixMe
       font.setStrokeColorInContext(ctx, font.outline.color);
     } else {
       font.setStrokeColorInContext(ctx, font.color);
     }
-    if (font.outline.width !== 0) {
+    if (font.outline.width !== 0) { // $FlowFixMe
       ctx.lineWidth = font.outline.width * fontSizePX / font.size;
     }
     for (let i = 0; i < glyphs.length; i += 1) {
@@ -260,6 +263,7 @@ export default class Atlas {
     if (font.underline != null && font.underline.color != null) {
       underlineColor = font.underline.color;
     }
+    // $FlowFixMe
     font.setColorInContext(ctx, underlineColor);
     ctx.fillRect(0, dimension - 5, 5, 5);
 

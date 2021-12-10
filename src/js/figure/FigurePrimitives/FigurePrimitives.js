@@ -31,7 +31,7 @@ import { CustomAnimationStep } from '../Animation/Animation';
 import FigureElementPrimitiveMorph from './FigureElementPrimitiveMorph';
 import FigureElementPrimitive2DText from './FigureElementPrimitive2DText';
 import FigureElementPrimitiveGLText from './FigureElementPrimitiveGLText';
-import type { OBJ_GLText } from './FigureElementPrimitiveGLText';
+import type { OBJ_Text } from './FigureElementPrimitiveGLText';
 // eslint-disable-next-line import/no-cycle
 // import Generic from './Generic';
 import Text from './Text';
@@ -1435,7 +1435,7 @@ export default class FigurePrimitives {
     return element;
   }
 
-  text(...options: Array<OBJ_GLText>) {
+  text(...options: Array<OBJ_Text>) {
     const defaultOptions = {
       font: {
         family: this.defaultFont.family,
@@ -1494,7 +1494,7 @@ export default class FigurePrimitives {
     // return element;
   }
 
-  glText(...options: Array<OBJ_GLText>) {
+  glText(...options: Array<OBJ_Text>) {
     const defaultOptions = {
       font: {
         family: this.defaultFont.family,
@@ -1563,7 +1563,7 @@ export default class FigurePrimitives {
     return element;
   }
 
-  text2d(...options: Array<OBJ_GLText>) {
+  text2d(...options: Array<OBJ_Text>) {
     const defaultOptions = {
       font: {
         family: this.defaultFont.family,

@@ -23,7 +23,7 @@ import { joinObjects } from '../../tools/tools';
 import DrawingObject from '../DrawingObjects/DrawingObject';
 import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
 import type { OBJ_Font, TypeColor } from '../../tools/types';
-import type { OBJ_GLText_Fixed, OBJ_SetText } from './FigureElementPrimitiveGLText';
+import type { OBJ_Text, OBJ_SetText } from './FigureElementPrimitiveGLText';
 import type DrawContext2D from '../DrawContext2D';
 import { getState } from '../Recorder/state';
 
@@ -56,6 +56,7 @@ class TextObject extends DrawingObject {
     left: number,
     bottom: number,
     right: number,
+    border: Array<Array<Point>>,
   };
 
   measurements: Array<{
@@ -81,25 +82,26 @@ class TextObject extends DrawingObject {
 
   constructor(
     drawContext2D: DrawContext2D,
-    options: OBJ_GLText_Fixed,
+    options: OBJ_Text,
   ) {
     super();
     this.drawContext2D = drawContext2D;
     this.lastDrawTransform = [1, 0, 0, 0, 1, 0, 0, 0, 1];
     this.font = new FigureFont(options.font);
+    // $FlowFixMe
     if (typeof options.text[0] === 'object') {
       this.text = [options.text[0].text];
-    } else {
+    } else { // $FlowFixMe
       this.text = options.text;
-    }
-    this.xAlign = options.xAlign;
-    this.yAlign = options.yAlign;
+    } // $FlowFixMe
+    this.xAlign = options.xAlign; // $FlowFixMe
+    this.yAlign = options.yAlign; // $FlowFixMe
     this.adjustments = options.adjustments;
     this.lastDraw = [];
     this.location = [];
     if (options.location != null) {
       this.location = getPoints(options.location);
-    }
+    } // $FlowFixMe
     this.setText(this.text);
   }
 
@@ -548,6 +550,7 @@ class TextObject extends DrawingObject {
         // const [uDescent, uWidth] = this.underline;
         if (this.font.underline.color) {
           this.font.setColorInContext(ctx, this.font.underline.color);
+          // $FlowFixMe
           this.font.setStrokeColorInContext(ctx, this.font.underline.color);
         } else {
           this.font.setColorInContext(ctx, c);
@@ -642,13 +645,14 @@ export default class FigureElementPrimitive2DText extends FigureElementPrimitive
 
   constructor(
     drawContext2D: DrawContext2D,
-    options: OBJ_GLText_Fixed & {
+    options: OBJ_Text & {
       parent: null | FigureElement, transform: Transform, color: TypeColor,
       name: string,
     },
   ) {
     const to = new TextObject(drawContext2D, options);
     // to.loadText(options);
+    // $FlowFixMe
     super(to, options.transform, options.color, options.parent, options.name);
     this.calcBorderAndBounds();
     this.drawingObject.watch(() => {

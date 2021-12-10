@@ -20,7 +20,7 @@ import type CollectionsTrace, { COL_Trace } from './Trace';
 import type { COL_PlotLegend } from './Legend';
 import type CollectionsRectangle, { COL_Rectangle } from './Rectangle';
 import type { OBJ_Collection, OBJ_LineStyleSimple, OBJ_Texture } from '../FigurePrimitives/FigurePrimitiveTypes';
-import type { OBJ_TextLines } from '../FigurePrimitives/FigurePrimitiveTypes2D';
+import type { OBJ_CollectionsText } from './Text';
 import type {
   OBJ_Font, TypeColor, OBJ_Font_Fixed, OBJ_CurvedCorner,
 } from '../../tools/types';
@@ -141,7 +141,7 @@ export type OBJ_PlotAreaLabelBufferFixed = {
  *
  * Use `offset` to adjust the location of the title.
  */
-export type OBJ_PlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
+export type OBJ_PlotTitle = OBJ_CollectionsText & { offset: TypeParsablePoint };
 
 /**
  * {@link CollectionsPlot} options object that extends {@link OBJ_Collection}
@@ -1428,7 +1428,7 @@ class CollectionsPlot extends FigureElementCollection {
   //   return theme;
   // }
 
-  addTitle(optionsIn: OBJ_TextLines & { offset: TypeParsablePoint } | string) {
+  addTitle(optionsIn: OBJ_CollectionsText & { offset: TypeParsablePoint } | string) {
     const defaultOptions = {
       font: joinObjects({}, this.defaultFont, { size: this.defaultFont.size * 1.5 }),
       justify: 'center',

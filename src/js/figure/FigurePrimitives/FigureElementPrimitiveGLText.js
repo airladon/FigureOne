@@ -149,6 +149,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     right: number,
     top: number,
     bottom: number,
+    border: Array<Array<Point>>,
   };
 
   location: Array<Point>;
@@ -180,11 +181,12 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     this.xAlign = options.xAlign;
     this.yAlign = options.yAlign;
     // this.verticals = options.verticals;
+    // $FlowFixMe
     this.adjustments = options.adjustments;
     this.drawBorder = [[new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(0, 1)]];
     this.drawBorderBuffer = this.drawBorder;
     this.color = this.font.color;
-    if (options.location != null) {
+    if (options.location != null) {// $FlowFixMe
       this.location = getPoints(options.location);
     } else {
       this.location = this.text.map(() => new Point(0, 0));
@@ -198,7 +200,8 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       right: 0,
       top: 0,
       bottom: 0,
-    };
+      border: [[new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(0, 1)]],
+    }; // $FlowFixMe
     this.createAtlas(options.scene);
     // this.atlas = this.drawingObject.webgl.getAtlas({
     //   scene: options.scene,
@@ -234,7 +237,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
 
     if (this.drawingObject.texture == null) {
       this.drawingObject.addTexture(this.atlas.font.getTextureID());
-    } else {
+    } else { // $FlowFixMe
       this.drawingObject.texture.id = this.atlas.font.getTextureID();
     }
     // console.log(this.atlas)
@@ -436,11 +439,11 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     // this.location = new Point(ox, oy);
     this.measure = {
       ascent: overallMaxAscent,
-      descent: overallMaxDescent,
-      width: right - left,
-      left,
-      bottom,
-      top,
+      descent: overallMaxDescent, // $FlowFixMe
+      width: right - left, // $FlowFixMe
+      left, // $FlowFixMe
+      bottom, // $FlowFixMe
+      top, // $FlowFixMe
       right,
       border,
     };

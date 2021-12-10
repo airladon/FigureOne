@@ -15,7 +15,7 @@ import { areColorsWithinDelta } from '../../tools/color';
 //   TypeText,
 // } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type {
-  OBJ_Font, OBJ_Font_Fixed,
+  OBJ_Font, OBJ_Font_Fixed, TypeColor,
 } from '../../tools/types';
 import type FigureCollections from './FigureCollections';
 import type { EQN_EquationElements, EQN_Forms } from '../Equation/Equation';
@@ -26,6 +26,7 @@ import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
 import type {
   OBJ_Collection,
 } from '../FigurePrimitives/FigurePrimitiveTypes';
+
 /**
  * Lines Text Definition object.
  *
@@ -41,7 +42,7 @@ import type {
  * @property {boolean} [fixColor] If `true`, {@link FigureElement}`.setColor`
  * method will not change the color of text
  */
-export type OBJ_TextLinesDefinition = {
+export type OBJ_TextLineDefinition = {
   text: string,
   font?: OBJ_Font,
   // justify?: 'left' | 'right' | 'center',
@@ -85,7 +86,7 @@ export type OBJ_TextModifiersDefinition = {
 /* eslint-disable max-len */
 /**
  * This
- * @property {Array<string | OBJ_TextLinesDefinition> | string} [text] array of
+ * @property {Array<string | OBJ_TextLineDefinition> | string} [text] array of
  * line strings - single string is single line only.
  * @property {OBJ_TextModifiersDefinition} [modifiers] modifier definitions
  * @property {OBJ_Font} [font] Default font to use in lines
@@ -112,16 +113,16 @@ export type OBJ_TextModifiersDefinition = {
  */
 /* eslint-enable max-len */
 export type OBJ_CollectionsText = {
-  text: Array<string | OBJ_TextLinesDefinition> | string,
-  modifiers: OBJ_TextModifiersDefinition | { eqn?: TypeEquationPhrase },
-  elements: EQN_EquationElements,
+  text?: Array<string | OBJ_TextLineDefinition> | string,
+  modifiers?: OBJ_TextModifiersDefinition | { eqn?: TypeEquationPhrase },
+  elements?: EQN_EquationElements,
   font?: OBJ_Font,
   defaultTextTouchBorder?: TypeParsableBuffer,
   justify?: 'left' | 'center' | 'right',
   lineSpace?: number,
   baselineSpace?: number,
-  xAlign: 'left' | 'right' | 'center',
-  yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
+  xAlign?: 'left' | 'right' | 'center',
+  yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
   border?: TypeParsableBuffer | TypeParsableBorder | 'children' | 'rect' | number;
   touchBorder?: TypeParsableBuffer | TypeParsableBorder | 'border' | 'children' | 'rect' | number;
   accent?: OBJ_Font,
@@ -268,6 +269,7 @@ class CollectionsText extends Equation {
     this.splitLines(options.text);
     const equationOptions = this.createEquation();
     // console.log(equationOptions);
+    // $FlowFixMe
     this.eqn.textFont = new FigureFont(equationOptions.textFont);
     // console.log(equationOptions)
     // this.addElements(joinObjects({}, equationOptions.elements, options.elements || {}));
