@@ -77,7 +77,7 @@ const xValues = range(-4, 4, 1);
 const yValues = range(4, -4, -1);
 let index = 0;
 
-function onClick(p, e) {
+function onClick(e) {
   misc.Console(`${e.custom.indexName}: ${e.name}`);
   e.custom.count += 1;
   figure.get(`${e.name}count`).setText({ text: `${e.custom.count}` });

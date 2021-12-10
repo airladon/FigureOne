@@ -395,7 +395,7 @@ class CollectionsSlider extends FigureElementCollection {
       this._custom.lastSeek = this.getValue();
     });
     this.notifications.add('onClick', (params) => { // $FlowFixMe
-      const [glPoint] = params;
+      const [, glPoint] = params;
       const localPoint = glPoint.transformBy(this.spaceTransformMatrix('gl', 'local'));
       const p = (localPoint.x - this._custom.lastPosition.x + this.width / 2 - this.markerWidth / 2)
         / (this.width - this.markerWidth);

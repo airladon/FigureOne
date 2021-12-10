@@ -11,7 +11,7 @@ if (typeof process === 'object') {
   var { makeShape } = require('./common');
 }
 
-const click = (point, element) => {
+const click = (element, point) => {
   tools.misc.Console(element.name);
   if (element.count == null) {
     // eslint-disable-next-line no-param-reassign
@@ -89,7 +89,7 @@ function getShapes(getPos) {
       modifiers: {
         is: {
           touch: [0.1, 0.2],
-          onClick: (p, e) => click(p, e),
+          onClick: (e, p) => click(e, p),
         },
       },
       touchBorder: 'children',
@@ -98,7 +98,7 @@ function getShapes(getPos) {
       modifiers: {
         is: {
           touch: [0.1, 0.2],
-          onClick: (p, e) => click(p, e),
+          onClick: (e, p) => click(e, p),
         },
       },
     }),
@@ -151,7 +151,7 @@ function getShapes(getPos) {
     ....##....##.....##.##.....##.##....##.##.....##
     ....##.....#######...#######...######..##.....##
     */
-    shape('t1', { touchBorder: 'children', modifiers: { is: { touch: true, onClick: (p, e) => click(p, e) } } }),
+    shape('t1', { touchBorder: 'children', modifiers: { is: { touch: true, onClick: (e, p) => click(e, p) } } }),
     shape('t2', { touchBorder: 'children', modifiers: { is: { touch: 0.1 } } }),
     shape('t3', { touchBorder: 'children', modifiers: { is: { touch: [0.1, 0.2] } } }),
     shape('t4', { touchBorder: 'children', modifiers: { is: { touch: [0.05, 0.1, 0.15, 0.2] } } }),
@@ -294,7 +294,7 @@ function getShapes(getPos) {
         e: {
           eqn: { frac: ['1', 'vinculum', '2'] },
           touch: 0.1,
-          onClick: (p, e) => click(p, e),
+          onClick: (e, p) => click(e, p),
         },
       },
     }),
@@ -304,7 +304,7 @@ function getShapes(getPos) {
         e: {
           eqn: { frac: ['1', 'vinculum', '2'] },
           touch: [0.2, 0.1, 0.05, 0],
-          onClick: (p, e) => click(p, e),
+          onClick: (e, p) => click(e, p),
         },
       },
     }),

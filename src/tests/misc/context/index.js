@@ -18,7 +18,7 @@ const count = figure.add({
   position: [0, 1],
 });
 
-function onClick(p, e) {
+function onClick(e, p) {
   e.custom.count += 1;
   count.setText({ text: `${e.custom.count}` });
   figure.animateNextFrame();

@@ -3787,9 +3787,9 @@ class FigureElement {
       if (this.recorder.state === 'recording') {
         this.recorder.recordEvent('elementClick', [this.getPath(), glPoint.x, glPoint.y]);
       }
-      this.fnMap.exec(this.onClick, glPoint, this);
+      this.fnMap.exec(this.onClick, this, glPoint);
     }
-    this.notifications.publish('onClick', [glPoint, this]);
+    this.notifications.publish('onClick', [this, glPoint]);
   }
 
 
