@@ -160,11 +160,12 @@ export type OBJ_Figure = {
 /**
  * Primary Figure class.
  *
- * A figure will attach a WebGL canvas and Context2D
- * canvas to the html `div` element with id `"figureOneContainer"`.
+ * A figure will attach a WebGL canvas and 2D canvas
+ * to the html `div` element with id `"figureOneContainer"`.
  *
- * The figure manages all drawing elements, renders the drawing elements
- * on a browser's animation frames and listens for guestures from the user.
+ * The figure creates and manages all drawing elements, renders the drawing
+ * elements on a browser's animation frames and listens for guestures from the
+ * user.
  *
  * The figure also has a recorder, allowing it to record and playback states,
  * and gestures.
@@ -193,6 +194,7 @@ export type OBJ_Figure = {
  * as advanced lines, shapes, equations and plots
  * @property {NotificationManager} notifications notification manager for
  * element
+ * @property {FontManager} fonts watches and reports on font availability
  *
  * @example
  * // Simple html and javascript example to create a figure, and add a

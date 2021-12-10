@@ -23,7 +23,7 @@ import { joinObjects } from '../../tools/tools';
 import DrawingObject from '../DrawingObjects/DrawingObject';
 import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
 import type { OBJ_Font, TypeColor } from '../../tools/types';
-import type { OBJ_Text, OBJ_SetText } from './FigureElementPrimitiveGLText';
+import type { OBJ_Text, OBJ_SetText } from './FigurePrimitiveTypes';
 import type DrawContext2D from '../DrawContext2D';
 import { getState } from '../Recorder/state';
 

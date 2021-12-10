@@ -6156,6 +6156,7 @@ class FigureElementCollection extends FigureElement {
     );
   }
 
+
   /**
    * Get array of all children elements.
    *

@@ -2,7 +2,7 @@
 import { joinObjects, NotificationManager } from '../tools/tools';
 import { FunctionMap } from '../tools/FunctionMap';
 import { FigureFont } from './DrawingObjects/TextObject/TextObject';
-import type { OBJ_Font } from '../tools/types';
+import type { OBJ_Font, TypeFontWeight } from '../tools/types';
 import type { FigureElement } from './Element';
 
 export type OBJ_LoadFontOptions = {
@@ -13,8 +13,13 @@ export type OBJ_LoadFontOptions = {
 
 /**
  * Font manager can be used to query if fonts are available, and watch to see
- * when the load.
+ * when they load or time out.
  *
+ * Notifications - The notification manager property `notifications` will
+ * publish the following events:
+ * - `fontsLoaded`: published when all fonts have been loaded or timed out
+ * - `fontLoaded`: published after each font is loaded
+ * - `fontUnavailable`: published when loading a font has timed out
  */
 export default class FontManager {
   fonts: Object;
@@ -141,9 +146,12 @@ export default class FontManager {
   second method will show the (font, font/backup) pairs to be different,
   even though only the lating glyphs are different.
   */
-  isAvailable(
-    fontDefinition: { family: string, weight?: string, style?: string, glyphs?: string, },
-  ): boolean { // $FlowFixMe
+  /**
+   * Returns `true` if font is available.
+   * @param {OBJ_Font} fontDefinition
+   * @return {boolean} `true` if available
+   */
+  isAvailable(fontDefinition: OBJ_Font): boolean { // $FlowFixMe
     const f = new FigureFont(fontDefinition);
     const glyphs = f.getGlyphs();
     const fam = f.getFamily();
@@ -173,8 +181,10 @@ export default class FontManager {
    * if a font only supports 'normal' and 'bold', but weights 'lighter' and
    * 'bold' are input, then this will return true as 'lighter' will likely
    * fallback to 'normal'.
+   * @param {OBJ_Font} fontDefinition
+   * @param {Array<TypeFontWeight>} weights
    */
-  areWeightsAvailable(fontDefinition: OBJ_Font, weights: Array<string>) {
+  areWeightsAvailable(fontDefinition: OBJ_Font, weights: Array<TypeFontWeight>) {
     // $FlowFixMe
     if (!this.isAvailable(fontDefinition)) {
       return false;
