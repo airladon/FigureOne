@@ -214,7 +214,7 @@ FigureElementPrimitive2DText {
     },
     "font": FigureFont {
       "atlasColor": false,
-      "atlasSize": undefined,
+      "atlasSize": null,
       "color": Array [
         0.95,
         0,
@@ -422,7 +422,7 @@ FigureElementPrimitive2DText {
       },
       "render": "2d",
       "size": 0.2,
-      "src": undefined,
+      "src": "",
       "style": "italic",
       "testString": "mathlatin",
       "timeout": 5,
