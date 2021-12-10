@@ -46,7 +46,7 @@ import type { TypeColor, OBJ_Font } from '../tools/types';
 import type { COL_SlideNavigator } from './FigureCollections/SlideNavigator';
 import type FigureElementPrimitiveGesture from './FigurePrimitives/FigureElementPrimitiveGesture';
 import FontManager from './FontManager';
-import type { OBJ_CollectionsText } from './FigureCollections/Text';
+import type { OBJ_FormattedText } from './FigureCollections/Text';
 
 const FIGURE1DEBUG = false;
 
@@ -323,7 +323,7 @@ class Figure {
   nextDrawTimerDuration: number;
   focused: boolean;
   frameRate: {
-    information: null | Array<string | OBJ_CollectionsText>,
+    information: null | Array<string | OBJ_FormattedText>,
     history: Array<Array<number>>,
     num: number,
   };
@@ -3438,7 +3438,7 @@ class Figure {
    * browser when an element is animating or moving. If everything is still,
    * then the frame rate will be 0.
    */
-  addFrameRate(numFrames: number = 10, options: OBJ_CollectionsText = {}) {
+  addFrameRate(numFrames: number = 10, options: OBJ_FormattedText = {}) {
     this.frameRate.num = numFrames;
     const frame = this.add(joinObjects(
       {},

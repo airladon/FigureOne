@@ -710,4 +710,5 @@ export {
   angleFromVectors,
   directionToAxisAngle,
   surfaceGrid,
+  getBuffer,
 };

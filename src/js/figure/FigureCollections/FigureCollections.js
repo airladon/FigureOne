@@ -60,7 +60,7 @@ import {
 } from '../Element';
 import type { TypeColor } from '../../tools/types';
 import CollectionsText from './Text';
-import type { OBJ_CollectionsText } from './Text';
+import type { OBJ_FormattedText } from './Text';
 
 /**
  * Built in figure collections.
@@ -162,7 +162,7 @@ export default class FigureCollections {
     );
   }
 
-  text(...options: Array<OBJ_CollectionsText>) {
+  text(...options: Array<OBJ_FormattedText>) {
     const optionsToUse = joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options);
 
     return new CollectionsText(

@@ -26,7 +26,7 @@ import type {
 } from '../../tools/types';
 import type { FigureElement } from '../Element';
 import type FigureCollections from './FigureCollections';
-import type CollectionsText, { OBJ_CollectionsText } from './Text';
+import type CollectionsText, { OBJ_FormattedText } from './Text';
 
 /**
  * Surround animation step.
@@ -83,7 +83,7 @@ export type COL_Rectangle = {
   line?: OBJ_LineStyleSimple,
   fill?: TypeColor | OBJ_Texture,
   corner?: OBJ_CurvedCorner,
-  label?: OBJ_CollectionsText,
+  label?: OBJ_FormattedText,
   button?: boolean | TypeColor | OBJ_ButtonColor,
 } & OBJ_Collection;
 
@@ -477,7 +477,7 @@ class CollectionsRectangle extends FigureElementCollection {
     // return position;
   }
 
-  addlabel(textOptions: OBJ_CollectionsText | string) {
+  addlabel(textOptions: OBJ_FormattedText | string) {
     const defaultOptions = {
       font: joinObjects({}, this.collections.primitives.defaultFont),
       xAlign: 'center',
@@ -593,7 +593,7 @@ class CollectionsRectangle extends FigureElementCollection {
   /**
    * Set button label.
    */
-  setLabel(text: string | OBJ_CollectionsText) {
+  setLabel(text: string | OBJ_FormattedText) {
     if (this._label != null) {
       let textToUse;
       if (typeof text === 'string') {

@@ -11,7 +11,7 @@ import type {
 import type Figure from './Figure';
 import { Equation } from './Equation/Equation';
 import type AnimationStep from './Animation/AnimationStep';
-import type CollectionsText, { OBJ_CollectionsText } from './FigureCollections/Text';
+import type CollectionsText, { OBJ_FormattedText } from './FigureCollections/Text';
 // enterStateCommon
 // enterState
 // showCommon
@@ -435,7 +435,7 @@ export type TypeRecorderTime = string | number;
  * reference state based on the current state
  */
 export type OBJ_SlideNavigatorSlide = {
-  text?: OBJ_CollectionsText,
+  text?: OBJ_FormattedText,
   modifiersCommon?: OBJ_TextModifiersDefinition;
   modifiers?: OBJ_TextModifiersDefinition;
   showCommon?: TypeElementPath;

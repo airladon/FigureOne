@@ -2,7 +2,7 @@
 
 // import Figure from '../Figure';
 import {
-  Transform, Point, isBuffer, getBorder,
+  Transform, Point, isBuffer, getBorder, getBuffer,
   // getPoint, getTransform,
 } from '../../tools/g2';
 import type { TypeParsablePoint, TypeParsableBuffer, TypeParsableBorder } from '../../tools/g2';
@@ -21,46 +21,39 @@ import type FigureCollections from './FigureCollections';
 import type { EQN_EquationElements, EQN_Forms } from '../Equation/Equation';
 import type { TypeEquationPhrase } from '../Equation/EquationFunctions';
 import { Equation } from '../Equation/Equation';
-import type { TypeEquationForm } from '../Equation/EquationForm';
 import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
 import type {
   OBJ_Collection,
 } from '../FigurePrimitives/FigurePrimitiveTypes';
 
 /**
- * Lines Text Definition object.
+ * Formatted Text line definition object.
  *
- * Used to define a string within a text lines primitive {@link OBJ_TextLines}.
+ * Used to define a line of text in {@link OBJ_FormattedText}.
  *
  * @property {string} [text] string representing a line of text
  * @property {OBJ_Font} [font] line specific default font
-//  * @property {'left' | 'right' | 'center'} [justify] line specific justification
  * @property {number} [lineSpace] line specific separation from top of
- * this line to baseline of previous line
+ * previous line to baseline of this line
  * @property {number} [baselineSpace] line specific separation from baseline of
- * this line to baseline of previous line
- * @property {boolean} [fixColor] If `true`, {@link FigureElement}`.setColor`
- * method will not change the color of text
+ * this previous line to baseline of this line
  */
 export type OBJ_TextLineDefinition = {
   text: string,
   font?: OBJ_Font,
-  // justify?: 'left' | 'right' | 'center',
   lineSpace?: number,
   baselineSpace?: number,
 };
 
 /**
- * Modifier Text Definition object.
+ * Text modifier definition object.
  *
- * Used to define the modifiers of a string within a text lines primitive
- * {@link OBJ_TextLines}.
+ * Used to define the modifiers of a string within a formatted text element
+ * {@link OBJ_FormattedText}.
  *
  * @property {string} [text] text to replace `modifierId` with - if `undefined`
  * then `modifierId` is used
  * @property {TypeParsablePoint} [offset] text offset
- * @property {boolean} [followOffsetY] `true` will make any subsequent text
- * have the same y offset as a starting point (`false`)
  * @property {OBJ_Font} [font] font changes for modified text
  * @property {boolean} [inLine] `false` if modified text should not contribute
  * to line layout (default: `true`)
@@ -70,7 +63,9 @@ export type OBJ_TextLineDefinition = {
  * or a buffer to enable touch and define the touchBorder (`false`)
  * buffer (`TypeParsableBuffer`) around the rectangle (default: `'0'`)
  * @property {number} [space] additional space to right of text
- * @property {TypeEquationForm} [eqn] an equation form definition
+ * @property {TypeEquationPhrase} [eqn] use this to replace the text with an
+ * equation defined by an equation phrase - when using eqn the `font` property
+ * will be ignored
  */
 export type OBJ_TextModifiersDefinition = {
   text?: string,
@@ -80,18 +75,44 @@ export type OBJ_TextModifiersDefinition = {
   touch?: boolean | TypeParsableBuffer,
   onClick?: string | () => void,
   space?: number,
-  eqn?: TypeEquationForm,
+  eqn?: TypeEquationPhrase,
 };
 
 /* eslint-disable max-len */
 /**
- * This
+ * {@link FormattedText} options object that extends {@link OBJ_Collection}
+ * options object (without `parent`).
+ *
+ * Formatted text allows:
+ *   - Use of more than one font
+ *   - Multi-line text
+ *   - Embedded equations
+ *
+ * If `text` is defined as an array of strings of line definition objects, then
+ * each element of the array will be a new line of text.
+ *
+ * All text will be laid out with the default font (or default line font if a
+ * line definition object is used).
+ *
+ * To modify the font of portions of text within a line, surround the text to
+ * modify with '|' characters. The string surrounded by the '|' characters will
+ * then be a unique identifier that can be referenced in the `modifiers`
+ * property which will then allow for replacing that text with some other text,
+ * changing the font of the text, changing the touchability of the text and/or
+ * replacing the text with an embedded equation.
+ *
+ * If a string is surrounded by '|' characters but not defined in `modifiers`
+ * then that string will have the formmating of the `accent` property applied
+ * to it.
+ *
  * @property {Array<string | OBJ_TextLineDefinition> | string} [text] array of
  * line strings - single string is single line only.
  * @property {OBJ_TextModifiersDefinition} [modifiers] modifier definitions
  * @property {OBJ_Font} [font] Default font to use in lines
  * @property {TypeParsableBuffer} [defaultTextTouchBorder] default buffer for
- * `touchBorder` property in `text`
+ * `touch` property in {@link OBJ_TextModifiersDefinition}
+ * @property {EQN_EquationElements} [elements] equation elements to use within
+ * the equation phrases defined in `modifiers`
  * @property {'left' | 'right' | 'center} [justify] justification of lines
  * (`left`)
  * @property {number} [lineSpace] Space between ascent of each line with
@@ -112,7 +133,7 @@ export type OBJ_TextModifiersDefinition = {
  * specific modification. By default accented text will be italic.
  */
 /* eslint-enable max-len */
-export type OBJ_CollectionsText = {
+export type OBJ_FormattedText = {
   text?: Array<string | OBJ_TextLineDefinition> | string,
   modifiers?: OBJ_TextModifiersDefinition | { eqn?: TypeEquationPhrase },
   elements?: EQN_EquationElements,
@@ -142,6 +163,7 @@ class CollectionsText extends Equation {
   defaultTextTouchBorder: TypeParsableBuffer;
   xAlign: 'left' | 'right' | 'center';
   yAlign: 'bottom' | 'top' | 'middle' | 'baseline';
+  touchCounter: number;
 
   /**
    * @hideconstructor
@@ -188,6 +210,7 @@ class CollectionsText extends Equation {
     this.lines = [];
     this.defaultTextTouchBorder = 0;
     this.collections = collections;
+    this.touchCounter = 0;
     this.setText(options);
   }
 
@@ -197,7 +220,7 @@ class CollectionsText extends Equation {
     this.layoutForms('all');
   }
 
-  setText(optionsIn: OBJ_CollectionsText) {
+  setText(optionsIn: OBJ_FormattedText) {
     const defaultOptions = {
       color: this.color.slice(),
       font: this.font,
@@ -524,7 +547,33 @@ class CollectionsText extends Equation {
     line.text.forEach((element, index) => {
       const name = `e${lineIndex}_${index}`;
       if (element.eqn) {
-        lineOptions.content.push(element.eqn);
+        let c = element.eqn;
+        if (element.touchBorder != null && element.touchBorder !== false) {
+          const t = getBuffer(element.touchBorder);
+          const symbol = {};
+          symbol[`__t${this.touchCounter}`] = { symbol: 'tBox', onClick: element.onClick };
+          c = {
+            tBox: {
+              content: c,
+              symbol,
+              leftSpace: t.left,
+              topSpace: t.top,
+              bottomSpace: t.bottom,
+              rightSpace: t.right,
+            },
+          };
+          this.touchCounter += 1;
+        }
+        if (element.offset != null) {
+          c = { offset: [c, element.offset, true] };
+        }
+        if (element.space != null) {
+          c = { pad: { content: c, right: element.space } };
+        }
+        if (element.inLine != null && element.inLine === false) {
+          c = { container: { content: c, inSize: false } };
+        }
+        lineOptions.content.push(c);
       } else {
         elementOptions[name] = {
           text: element.text,

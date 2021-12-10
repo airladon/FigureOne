@@ -19,7 +19,7 @@ import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type { OBJ_PlotFrame } from './Plot';
 import type FigureCollections from './FigureCollections';
 import type CollectionsRectangle from './Rectangle';
-import type { OBJ_CollectionsText } from './Text';
+import type { OBJ_FormattedText } from './Text';
 
 /**
  * Legend customization for a single trace sample in the legend.
@@ -39,7 +39,7 @@ export type OBJ_PlotLegendCustomTrace = {
   offset?: TypeParsablePoint,
   space?: number,
   fontColorIsLineColor?: boolean,
-  text?: OBJ_CollectionsText | 'string',
+  text?: OBJ_FormattedText | 'string',
   position?: TypeParsablePoint,
 };
 

@@ -4,6 +4,83 @@
 // backgroundColor: Fig.tools.color.HexToArray('#f6f7f7'),
 // });
 const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.4, render: '2d' } });
+
+figure.add({
+  make: 'grid',
+  step: 0.5,
+  color: [0.8, 0.8, 0.8, 1],
+});
+
+figure.add({
+  make: 'polygon',
+  sides: 20,
+  radius: 0.03,
+  color: [0.8, 0.8, 0.8, 1],
+});
+
+// Accent a word
+// figure.add({
+//   make: 'ftext',
+//   text: 'Hello |World|',
+// });
+
+// // Multi-line center justified
+// figure.add({
+//   make: 'ftext',
+//   text: ['First line', 'Second line'],
+//   justify: 'center',
+// });
+
+// // Modifiers
+// figure.add({
+//   make: 'ftext',
+//   text: ['|First| |line|', 'Second |line2|'],
+//   modifiers: {
+//     First: { font: { underline: 'true', color: [0, 0.7, 0.7, 1] } },
+//     line: { font: { color: [0, 0, 1, 1] } },
+//     line2: { text: 'line', font: { color: [0, 0.7, 0, 1], style: 'italic' } },
+//   },
+// });
+
+// // Embedded equation (inline form definition)
+// figure.add({
+//   make: 'ftext',
+//   text: '|root2| is irrational',
+//   modifiers: {
+//     root2: { eqn: { root: ['radical', '2'] } },
+//   },
+//   xAlign: 'center',
+// });
+
+// // Embedded equation with defined, touchable elements
+// figure.add({
+//   name: 't',
+//   make: 'ftext',
+//   text: ['A fraction is |fraction|', 'Touch it!'],
+//   modifiers: {
+//     fraction: {
+//       eqn: {
+//         scale: [{ frac: ['num', 'v', 'den'] }, 0.7],
+//       },
+//       offset: [0, 0.2],
+//       touch: 0.1,
+//       onClick: () => figure.get('t').pulse({
+//         elements: ['num', 'den', 'v'],
+//         centerOn: 'v',
+//         xAlign: 'left',
+//         scale: 1.3,
+//       }),
+//       space: 0.3,
+//     },
+//   },
+//   elements: {
+//     num: 'numerator',
+//     den: { text: 'denominator', color: [0, 0, 1, 1], style: 'italic' },
+//     v: { symbol: 'vinculum' },
+//   },
+//   xAlign: 'center',
+// });
+
 // const next = figure.add({make: 'collections.button', label: 'Next', position: [0.7, -0.8],});
 
 // next.notifications.add('touch', () => eqn.animations.new().nextForm(1).start());
@@ -16,37 +93,37 @@ const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], line
 //   // font: { family: 'times', modifiers: { a: { a: 2, d: 1, w: 2 } }, render: 'gl' },
 // });
 
-const eqn = figure.add({
-  make: 'equation',
-  formDefaults: {
-    elementMods: {
-      a: { color: [1, 0, 0, 1] },
-    },
-  },
-  forms: {
-    0: ['a', 'b', 'c'],
-    1: {
-      content: ['a', 'b', 'c'],
-      elementMods: {
-        a: { color: [0, 1, 0, 1] },
-      },
-    },
-    2: ['a', 'b', 'c'],
-  },
-});
+// const eqn = figure.add({
+//   make: 'equation',
+//   formDefaults: {
+//     elementMods: {
+//       a: { color: [1, 0, 0, 1] },
+//     },
+//   },
+//   forms: {
+//     0: ['a', 'b', 'c'],
+//     1: {
+//       content: ['a', 'b', 'c'],
+//       elementMods: {
+//         a: { color: [0, 1, 0, 1] },
+//       },
+//     },
+//     2: ['a', 'b', 'c'],
+//   },
+// });
 
-const next = figure.add({
-make: 'collections.button',
-label: 'Next >',
-position: [0.75, -0.8],
-height: 0.34,
-width: 1,
-colorFill: Fig.tools.color.HexToArray('#0020b0'),
-colorLabel: Fig.tools.color.HexToArray('#fff'),
-colorLine: [0,0,0,0],
-corner: {radius: 10, sides: 4},
-});
-next.notifications.add('touch', () => eqn.animations.new().nextForm(1).start());
+// const next = figure.add({
+// make: 'collections.button',
+// label: 'Next >',
+// position: [0.75, -0.8],
+// height: 0.34,
+// width: 1,
+// colorFill: Fig.tools.color.HexToArray('#0020b0'),
+// colorLabel: Fig.tools.color.HexToArray('#fff'),
+// colorLine: [0,0,0,0],
+// corner: {radius: 10, sides: 4},
+// });
+// next.notifications.add('touch', () => eqn.animations.new().nextForm(1).start());
 
 // const t = figure.add({
 //   name: 'text',

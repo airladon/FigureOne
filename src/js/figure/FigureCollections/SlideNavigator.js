@@ -25,7 +25,7 @@ import type { OBJ_SlideNavigatorSlide } from '../SlideNavigator';
 import type { COL_Rectangle } from './Rectangle';
 import type Figure from '../Figure';
 import type { Equation } from '../Equation/Equation';
-import type { OBJ_CollectionsText } from './Text';
+import type { OBJ_FormattedText } from './Text';
 
 
 /**
@@ -62,7 +62,7 @@ export type COL_SlideNavigatorEqnDefaults = {
  * options - use `null` to hide
  * @property {COL_SlideNavigatorButton | null} [nextButton] next button options
  * - use `null` to hide
- * @property {OBJ_CollectionsText | null} [text] text options - use `null` to hide
+ * @property {OBJ_FormattedText | null} [text] text options - use `null` to hide
  * @property {Equation | string | Array<string | Equation>} [equation] equation
  * to tie to SlideNavigator
  * @property {COL_SlideNavigatorEqnDefaults} [equationDefaults] default
@@ -74,7 +74,7 @@ export type COL_SlideNavigator = {
   slides?: Array<OBJ_SlideNavigatorSlide>,
   prevButton?: COL_SlideNavigatorButton | null,
   nextButton?: COL_SlideNavigatorButton | null,
-  text?: OBJ_CollectionsText | null,
+  text?: OBJ_FormattedText | null,
   equation?: Equation | string | Array<string | Equation>,
   equationDefaults?: COL_SlideNavigatorEqnDefaults,
   disableOpacity?: number,
@@ -355,7 +355,7 @@ class CollectionsSlideNavigator extends FigureElementCollection {
   }
 
 
-  addText(textOptions: OBJ_CollectionsText | string) {
+  addText(textOptions: OBJ_FormattedText | string) {
     const defaultOptions = {
       font: joinObjects({}, this.collections.primitives.defaultFont),
       text: '',
