@@ -1,11 +1,31 @@
 In no particular order.
 
-* Fix equation spacings to be independent of font size
-* Recreate atlases on significant resize
-* Animate color between equation forms
-* Implicity define color for all forms from color definition in equation elements
+* Equation:
+  - Allow form animation to be any order of dissolve in/out and move
+  - Fix equation spacings to be independent of font size
+  - Animate color between equation forms
+  - Forms with color mods only impact that form - all other forms use the default color
+
+* Fonts:
+  - Recreate atlases on significant resize
+  - Remove atlas canvases once used
+
 * Add a text input collection
-* Add auto linebreaks to ftext
+  - Can be filled from keypresses or custom keyboard
+  - Limit characters that can be displayed (e.g. number only)
+
+* Add a custom keyboard input collection
+  - allow keys and layout to be defined so can be just a calculator, or a full keyboard
+
+* Add a multiple choice collection allowing customization of:
+  - Number of choices
+  - Vertical, horizontal or grid layout
+  - Location of text relative to selector
+  - Selector style (circles, checks, custom, buttons with text inside)
+
+* Text:
+  - Add auto linebreaks to ftext
+
 * Make `TypeParsableRect` accept object definition (left, bottom, top, right, width, height, position, xAlign, yAlign)
 * Add elements tied to some plot value to a `Collections.plot` - they would be updated similar to traces
 * Add a colorMap to a surface plot for z dependant color
