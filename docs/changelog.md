@@ -192,6 +192,13 @@ API cleanup
 * Add `Collections.plot.setElementTo` and `Collections.plot.getPointAtElement`
 
 ## 0.14.0
+* Text can be rendered on either 2D canvas or WebGL canvas
+* OBJ_TextLine ('collections.textLine') and OBJ_TextLines ('collections.textLines) merged into OBJ_FormatedText ('ftext') which supports multi font, multi line, selected interactivity and embedded equations 
+* Expansion of OBJ_Font to include options for underline, strikethrough (modified underline), outline, WebGL fonts, glyph defintions, and glyph modifications
+* Add support for font atlases (for WebGL fonts) - both user defined and auto-generated
+* Arbitrary FigureElements can be used as elements in Equations
+* Add FontManager to watch font loading and query when fonts are available
+* Add `'textureAlpha'` predefined shader - a shader that uses just the alpha channel of a texture
 * Fix: `randInt` was not returning the max value
 * Fix: `collections.angle` was not correctly rotating label when angle was part of a collection
-* Add: `randBool` to retrieve a random boolean
+* Add `randBool` to retrieve a random boolean

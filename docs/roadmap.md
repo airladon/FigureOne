@@ -5,6 +5,7 @@ In no particular order.
 * Animate color between equation forms
 * Implicity define color for all forms from color definition in equation elements
 * Add a text input collection
+* Add auto linebreaks to ftext
 * Make `TypeParsableRect` accept object definition (left, bottom, top, right, width, height, position, xAlign, yAlign)
 * Add elements tied to some plot value to a `Collections.plot` - they would be updated similar to traces
 * Add a colorMap to a surface plot for z dependant color
