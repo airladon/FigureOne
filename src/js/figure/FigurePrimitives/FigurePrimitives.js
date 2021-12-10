@@ -31,7 +31,6 @@ import { CustomAnimationStep } from '../Animation/Animation';
 import FigureElementPrimitiveMorph from './FigureElementPrimitiveMorph';
 import FigureElementPrimitive2DText from './FigureElementPrimitive2DText';
 import FigureElementPrimitiveGLText from './FigureElementPrimitiveGLText';
-import type { OBJ_Text } from './FigureElementPrimitiveGLText';
 // eslint-disable-next-line import/no-cycle
 // import Generic from './Generic';
 import Text from './Text';
@@ -68,7 +67,7 @@ import Scene from '../../tools/geometry/scene';
 import FigureElementPrimitiveGesture from './FigureElementPrimitiveGesture';
 import type { OBJ_Gesture } from './FigureElementPrimitiveGesture';
 import type {
-  OBJ_LineStyleSimple, OBJ_GenericGL, OBJ_Morph, TypeGLPrimitive,
+  OBJ_LineStyleSimple, OBJ_GenericGL, OBJ_Morph, TypeGLPrimitive, OBJ_Text,
 } from './FigurePrimitiveTypes';
 import type {
   OBJ_Generic,
