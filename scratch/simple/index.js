@@ -33,10 +33,10 @@ const t = figure.add({
   forms: {
     0: ['a', 'b', 'c'],
     1: {
-      content: ['a', 'b', 'c', 'd'],
-      elementMods: {
-        b: { color: [0, 1, 0, 1] },
-      },
+      content: [{ color: ['a', [1, 0, 0, 1]] }, 'b', 'c', 'd'],
+      // elementMods: {
+      //   b: { color: [0, 1, 0, 1] },
+      // },
     },
     2: ['a', 'b', 'c', 'd', 'e'],
   },
