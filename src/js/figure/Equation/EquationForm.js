@@ -4,6 +4,7 @@ import {
 } from '../../tools/g2';
 // import { roundNum } from '../../../tools/math';
 import { duplicateFromTo, joinObjects } from '../../tools/tools';
+import type { TypeColor } from '../../tools/types';
 import { areColorsSame } from '../../tools/color';
 import {
   FigureElementPrimitive, FigureElementCollection,
@@ -74,7 +75,7 @@ export type TypeCollectionMethods = {
   showOnly: (Array<FigureElementPrimitive | FigureElementCollection>) => void,
   stop(cancelled?: boolean, forceSetToEndOfPlan?: boolean): void;
   getElementTransforms: () => { [string: string]: Transform },
-  getElementColors: () => { [string: string]: TypeColor },
+  getElementColors: (boolean) => { [string: string]: TypeColor },
   setElementTransforms: ({ [string: string]: Transform }) => void,
   setElementColors: ({ [string: string]: TypeColor }) => void,
   animateToTransforms(
@@ -82,6 +83,13 @@ export type TypeCollectionMethods = {
     time?: number,
     delay?: number,
     rotDirection?: number,
+    callback?: ?(string | ((?mixed) => void)),
+    name?: string,
+    easeFunction?: string | ((number) => number)): number,
+  animateToColors(
+    elementColors: Object,
+    time?: number,
+    delay?: number,
     callback?: ?(string | ((?mixed) => void)),
     name?: string,
     easeFunction?: string | ((number) => number)): number,
@@ -627,10 +635,10 @@ export default class EquationForm extends Elements {
       elementsShownTarget.filter(e => elementsShown.indexOf(e) === -1);
 
     const currentTransforms = this.collectionMethods.getElementTransforms();
-    const currentColors = this.collectionMethods.getElementColors();
+    const currentColors = this.collectionMethods.getElementColors(true);
     this.setPositions();
     const animateToTransforms = this.collectionMethods.getElementTransforms();
-    const animateToColors = this.collectionMethods.getElementColors();
+    const animateToColors = this.collectionMethods.getElementColors(true);
 
     const elementsToMove = [];
     const toMoveStartTransforms = [];
@@ -652,7 +660,7 @@ export default class EquationForm extends Elements {
       const currentC = currentColors[key];
       const nextC = animateToColors[key];
       if (!areColorsSame(currentC, nextC)) {
-        elementsToMove.push(key);
+        elementsToChangeColor.push(key);
         toColorStart.push(currentC);
         toColorStop.push(nextC);
       }
@@ -690,6 +698,7 @@ export default class EquationForm extends Elements {
     let moveCallback = null;
     let dissolveInCallback = null;
     let dissolveOutCallback = null;
+    let colorCallback = null;
 
     if (dissolveInBeforeMove) {
       if (elementsToMove.length === 0 && elementsToShow.length === 0) {
@@ -706,10 +715,29 @@ export default class EquationForm extends Elements {
     } else {
       dissolveInCallback = callback;
     }
+    if (
+      elementsToChangeColor.length > 0
+      && elementsToMove.length === 0
+      && elementsToShow.length === 0
+      && elementsToHide.length === 0
+    ) {
+      colorCallback = callback;
+    }
+    let colorAnimationsStarted = false;
 
     if (elementsToHide.length > 0) {
       this.dissolveElements(elementsToHide, 'out', delay, dissolveOutTime, dissolveOutCallback);
       cumTime += dissolveOutTime;
+      if (
+        elementsToChangeColor.length > 0
+        && elementsToShow.length === 0
+        && elementsToMove.length === 0
+      ) {
+        this.collectionMethods.animateToColors(
+          animateToColors, dissolveOutTime, delay, null, '_EquationAnimateColor',
+        );
+        colorAnimationsStarted = true;
+      }
     } else if (dissolveOutCallback != null) {
       this.fnMap.exec(dissolveOutCallback);
     }
@@ -755,9 +783,26 @@ export default class EquationForm extends Elements {
 
     if (dissolveInBeforeMove) {
       if (elementsToShow.length > 0) {
+        if (elementsToChangeColor.length > 0) {
+          this.collectionMethods.animateToColors(
+            animateToColors, dissolveOutTime, cumTime, null, '_EquationAnimateColor',
+          );
+          colorAnimationsStarted = true;
+        }
         this.dissolveElements(elementsToShow, 'in', cumTime, dissolveInTime, dissolveInCallback);
         cumTime += dissolveInTime + 0.001;
       }
+    }
+    if (
+      elementsToChangeColor.length > 0
+      && elementsToShow.length === 0
+      && elementsToMove.length > 0
+      && !colorAnimationsStarted
+    ) {
+      this.collectionMethods.animateToColors(
+        animateToColors, dissolveOutTime, moveTimeToUse, null, '_EquationAnimateColor',
+      );
+      colorAnimationsStarted = true;
     }
     const t = this.collectionMethods.animateToTransforms(
       animateToTransforms,
@@ -777,16 +822,34 @@ export default class EquationForm extends Elements {
     // }
     if (!dissolveInBeforeMove) {
       if (elementsToShow.length > 0) {
-        const t = this.collectionMethods.animateToColors(
-          animateToColors,
-          dissolveInTime,
-          cumTime,
-          null,
-          '_EquationAnimateColor',
-        );
+        if (elementsToChangeColor.length > 0) {
+          this.collectionMethods.animateToColors(
+            animateToColors, dissolveInTime, cumTime, null, '_EquationAnimateColor',
+          );
+          colorAnimationsStarted = true;
+        }
+        // const t = this.collectionMethods.animateToColors(
+        //   animateToColors,
+        //   dissolveInTime,
+        //   cumTime,
+        //   null,
+        //   '_EquationAnimateColor',
+        // );
         this.dissolveElements(elementsToShow, 'in', cumTime, dissolveInTime, dissolveInCallback);
         cumTime += dissolveInTime + 0.001;
       }
+    }
+    if (
+      elementsToChangeColor.length > 0
+      && elementsToShow.length === 0
+      && elementsToMove.length === 0
+      && elementsToHide.length === 0
+      && !colorAnimationsStarted
+    ) {
+      cumTime += this.collectionMethods.animateToColors(
+        animateToColors, dissolveInTime, cumTime, colorCallback, '_EquationAnimateColor',
+      );
+      colorAnimationsStarted = true;
     }
     return cumTime;
   }

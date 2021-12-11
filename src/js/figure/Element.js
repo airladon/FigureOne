@@ -6007,11 +6007,13 @@ class FigureElementCollection extends FigureElement {
     return out;
   }
 
-  getElementColors() {
+  getElementColors(onlyShown: boolean = false) {
     const out = {};
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      out[element.name] = element.color.slice();
+      if ((onlyShown && element.isShown) || onlyShown === false) {
+        out[element.name] = element.color.slice();
+      }
     }
     return out;
   }

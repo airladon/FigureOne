@@ -142,6 +142,25 @@ export default class BaseEquationFunction extends Elements {
     });
   }
 
+  setColor(colorIn: TypeColor | null = null) {
+    let color = null;
+    if (this.color != null) {
+      color = this.color;
+    } else if (colorIn != null) {
+      color = colorIn;
+    }
+    this.glyphs.forEach((glyph) => {
+      if (glyph != null && color != null) {
+        glyph.setColor(color);
+      }
+    });
+    this.contents.forEach((content) => {
+      if (content != null) {
+        content.setColor(color);
+      }
+    });
+  }
+
   offsetLocation(offset: Point = new Point(0, 0)) {
     this.location = this.location.add(offset);
     this.glyphLocations.forEach((glyphLocation, index) => {

@@ -1218,7 +1218,7 @@ export class Equation extends FigureElementCollection {
         callback: null,
         // delay: 0,
       }));
-      return this.getRemainingAnimationTime(['_Equation', '_EquationColor']);
+      return this.getRemainingAnimationTime(['_Equation', '_EquationColor', '_EquationAnimateColor']);
     });
     this.fnMap.add('_showForm', (percentage, customProperties) => {
       this.showForm(customProperties.target);
@@ -1263,7 +1263,7 @@ export class Equation extends FigureElementCollection {
       this.nextForm(joinObjects({ ifAnimating: { cancelGoTo: false } }, customProperties, {
         callback: null,
       }));
-      return this.getRemainingAnimationTime(['_Equation', '_EquationColor']);
+      return this.getRemainingAnimationTime(['_Equation', '_EquationColor', '_EquationAnimateColor']);
     });
     this.animations.nextForm = (...opt) => {
       const o = joinObjects({}, {
@@ -2002,6 +2002,7 @@ export class Equation extends FigureElementCollection {
   stopEquationAnimating(how: 'complete' | 'cancel' = 'cancel') {
     this.stopAnimating(how, '_Equation', true);
     this.stopAnimating(how, '_EquationColor', true);
+    this.stopAnimating(how, '_EquationAnimateColor', true);
     this.stopPulsing(how);
   }
 

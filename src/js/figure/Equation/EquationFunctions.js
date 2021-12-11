@@ -23,6 +23,8 @@ import BaseAnnotationFunction from './Elements/BaseAnnotationFunction';
 import EquationLine from './Symbols/Line';
 import Offset from './Elements/Offset';
 import Color from './Elements/Color';
+import type { TypeColor } from '../../tools/types';
+
 // eslint-disable-next-line import/no-cycle
 // import type {
 //   EQN_Annotation, EQN_EncompassGlyph, EQN_LeftRightGlyph, EQN_TopBottomGlyph,
@@ -478,14 +480,69 @@ export type EQN_Fraction = {
  * eqn.setTouchable();
  * eqn.showForm('1');
  */
-export type EQN_Scale = {
+
+/**
+ * Equation color
+ *
+ * ![](./apiassets/eqn_color.gif)
+ *
+ * Color an equation phrase
+ *
+ * Options can be an object, or an array in the property order below
+ *
+ * @property {TypeEquationPhrase} content
+ * @property {number} [color]
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Simple
+ * figure.add({
+ *   name: 'eqn',
+ *   make: 'equation',
+ *   forms: {
+ *     2: ['a', { color: ['b', [0, 0, 1, 1]] }, 'c'],
+ *   },
+ * });
+ * figure.elements._eqn.showForm('1');
+ *
+ * // Some different bracket examples
+ * figure.add({
+ *   name: 'eqn',
+ *   make: 'equation',
+ *   forms: {
+ *     // Default
+ *     1: ['a', 'b', 'c'],
+ *     // Array definition magnify
+ *     2: ['a', { scale: ['b', 2] }, 'c'],
+ *     // Object definition shrink
+ *     3: [
+ *       'a',
+ *       {
+ *         scale: {
+ *           content: ['b', 1],
+ *           scale: 0.5,
+ *         },
+ *       },
+ *       'c',
+ *     ],
+ *     // Back to start
+ *     4: ['a', { scale: ['b', 1] }, 'c'],
+ *   },
+ *   formSeries: ['1', '2', '3']
+ * });
+ * const eqn = figure.elements._eqn;
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchable();
+ * eqn.showForm('1');
+ */
+export type EQN_Color = {
   content: TypeEquationPhrase,
-  scale?: number,
-  fullContentBounds?: boolean,
+  color: TypeColor,
 } | [
   TypeEquationPhrase,
-  ?number,
-  ?boolean,
+  TypeColor,
 ];
 
 /**
@@ -3891,7 +3948,7 @@ export class EquationFunctions {
         o,
       );
     } catch (e) {
-      throw new Error(`FigureOne Equation Scale Error: ${e.message}`);
+      throw new Error(`FigureOne Equation Color Error: ${e.message}`);
     }
   }
 

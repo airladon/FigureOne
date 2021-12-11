@@ -18,6 +18,7 @@ import type { ElementInterface } from './Element';
 // import Symbol from '../Symbols/Symbol';
 import SymbolNew from '../Symbols/SymbolNew';
 import { FunctionMap } from '../../../tools/FunctionMap';
+import type { TypeColor } from '../../../tools/types';
 // eslint-disable-next-line import/no-cycle
 // import type { TypeEquationPhrase } from '../EquationFunctions';
 
