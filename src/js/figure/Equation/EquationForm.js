@@ -192,6 +192,7 @@ export default class EquationForm extends Elements {
       );
     }
     super.setPositions();
+    super.setColor();
   }
 
   _dup(

@@ -22,6 +22,7 @@ import Container from './Elements/Container';
 import BaseAnnotationFunction from './Elements/BaseAnnotationFunction';
 import EquationLine from './Symbols/Line';
 import Offset from './Elements/Offset';
+import Color from './Elements/Color';
 // eslint-disable-next-line import/no-cycle
 // import type {
 //   EQN_Annotation, EQN_EncompassGlyph, EQN_LeftRightGlyph, EQN_TopBottomGlyph,
@@ -3298,6 +3299,7 @@ export class EquationFunctions {
     if (name === 'scale') { return this.scale(params); }   // $FlowFixMe
     if (name === 'container') { return this.container(params); }   // $FlowFixMe
     if (name === 'offset') { return this.offset(params); }
+    if (name === 'color') { return this.color(params); }
     return null;
   }
 
@@ -3845,6 +3847,45 @@ export class EquationFunctions {
       };
       const o = joinObjects(defaultOptions, optionsIn);
       return new Scale(
+        [this.contentToElement(content)],
+        [],
+        o,
+      );
+    } catch (e) {
+      throw new Error(`FigureOne Equation Scale Error: ${e.message}`);
+    }
+  }
+
+  /**
+   * Equation annotate function
+   * @see {@link EQN_Color} for description and examples
+   */
+  color(
+    options: EQN_Color,
+  ) {
+    try {
+      let content;
+      let color;
+      // let fullContentBounds;
+      const defaultOptions = {
+        color: null,
+        // fullContentBounds: false,
+      };
+      if (Array.isArray(options)) {
+        [
+          content, color, // fullContentBounds,
+        ] = options;
+      } else {
+        ({
+          content, color, // fullContentBounds,
+        } = options);
+      }
+      const optionsIn = {
+        color,
+        // fullContentBounds,
+      };
+      const o = joinObjects(defaultOptions, optionsIn);
+      return new Color(
         [this.contentToElement(content)],
         [],
         o,
