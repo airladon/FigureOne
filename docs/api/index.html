@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset='utf-8'>
-  <title>figureone 0.13.0 | Documentation</title>
+  <title>figureone 0.14.0 | Documentation</title>
   <meta name='description' content='Draw, animate and interact with shapes, text, plots and equations in Javascript. Create interactive slide shows, and interactive videos.'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>figureone</h3>
-          <div class='mb1'><code>0.13.0</code></div>
+          <div class='mb1'><code>0.14.0</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -28364,7 +28364,9 @@ automatically by FigureOne based on the css font definitions.</p>
 <li><code>src</code> - the image or url to the image - if not supplied then atlas will
 be generated automatically</li>
 <li><code>map</code> - description of location and size of each glyph in the atlas</li>
-<li><code>glyphs</code> - the available glyphs in the atlas</li>
+<li><code>glyphs</code> - the available glyphs in the atlas. To reduce the size of the
+atlas, include only the glyphs that are being used, or use a preset
+alphabet (like 'latin', or 'math')</li>
 <li><code>atlasColor</code> - if <code>true</code> then the rendered glyph color will be the same
 as that in the texture. If <code>false</code>, then only the transparency channel of
 the texture will be used and color will be defined by the FigureElement
@@ -78296,14 +78298,18 @@ upright than upside down.</li>
   </div>
   
 
-  <p>Tick location type:</p>
-<p><code>'bottom' | 'left' | 'right' | 'left'</code></p>
-<p><code>'bottom'</code> and <code>'top'</code> are only for x axes.</p>
-<p><code>'left'</code> and <code>'right'</code> are only for y axes.</p>
+  <p>Label location relative to the line.</p>
+<p><code>'top' | 'left' | 'bottom' | 'right' | 'start' | 'end' | 'positive' | 'negative'</code></p>
+<p>'<code>top</code>' is in the positive y direction and <code>'right'</code> is in the positive
+x direction. '<code>bottom</code>' and '<code>left</code>' are the opposite sides respectively.</p>
+<p><code>'positive'</code> is on the side of the line that the line rotates toward when
+rotating in the positive direction. <code>'negative'</code> is the opposite side.</p>
+<p><code>'start'</code> is the start end of the line, while <code>'end'</code> is the opposide end
+of the line.</p>
 
   
     <p style="display: none;">      Type:
-      (<code>"bottom"</code> | <code>"left"</code> | <code>"right"</code> | <code>"left"</code>)
+      (<code>"top"</code> | <code>"left"</code> | <code>"bottom"</code> | <code>"right"</code> | <code>"start"</code> | <code>"end"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)
     </p>
   
   
@@ -78352,18 +78358,14 @@ upright than upside down.</li>
   </div>
   
 
-  <p>Label location relative to the line.</p>
-<p><code>'top' | 'left' | 'bottom' | 'right' | 'start' | 'end' | 'positive' | 'negative'</code></p>
-<p>'<code>top</code>' is in the positive y direction and <code>'right'</code> is in the positive
-x direction. '<code>bottom</code>' and '<code>left</code>' are the opposite sides respectively.</p>
-<p><code>'positive'</code> is on the side of the line that the line rotates toward when
-rotating in the positive direction. <code>'negative'</code> is the opposite side.</p>
-<p><code>'start'</code> is the start end of the line, while <code>'end'</code> is the opposide end
-of the line.</p>
+  <p>Tick location type:</p>
+<p><code>'bottom' | 'left' | 'right' | 'left'</code></p>
+<p><code>'bottom'</code> and <code>'top'</code> are only for x axes.</p>
+<p><code>'left'</code> and <code>'right'</code> are only for y axes.</p>
 
   
     <p style="display: none;">      Type:
-      (<code>"top"</code> | <code>"left"</code> | <code>"bottom"</code> | <code>"right"</code> | <code>"start"</code> | <code>"end"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)
+      (<code>"bottom"</code> | <code>"left"</code> | <code>"right"</code> | <code>"left"</code>)
     </p>
   
   
