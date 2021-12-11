@@ -1914,9 +1914,12 @@ export class Equation extends FigureElementCollection {
         show: this.show.bind(this),
         showOnly: this.showOnly.bind(this),
         stop: this.stopEquationAnimating.bind(this),
+        getElementColors: this.getElementColors.bind(this),
+        setElementColors: this.setElementColors.bind(this),
         getElementTransforms: this.getElementTransforms.bind(this),
         setElementTransforms: this.setElementTransforms.bind(this),
         animateToTransforms: this.animateToTransforms.bind(this),
+        animateToColors: this.animateToColors.bind(this),
       },
     );
   }

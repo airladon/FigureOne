@@ -4,6 +4,7 @@ import {
 } from '../../tools/g2';
 // import { roundNum } from '../../../tools/math';
 import { duplicateFromTo, joinObjects } from '../../tools/tools';
+import { areColorsSame } from '../../tools/color';
 import {
   FigureElementPrimitive, FigureElementCollection,
 } from '../Element';
@@ -73,7 +74,9 @@ export type TypeCollectionMethods = {
   showOnly: (Array<FigureElementPrimitive | FigureElementCollection>) => void,
   stop(cancelled?: boolean, forceSetToEndOfPlan?: boolean): void;
   getElementTransforms: () => { [string: string]: Transform },
+  getElementColors: () => { [string: string]: TypeColor },
   setElementTransforms: ({ [string: string]: Transform }) => void,
+  setElementColors: ({ [string: string]: TypeColor }) => void,
   animateToTransforms(
     elementTransforms: Object,
     time?: number,
@@ -624,8 +627,10 @@ export default class EquationForm extends Elements {
       elementsShownTarget.filter(e => elementsShown.indexOf(e) === -1);
 
     const currentTransforms = this.collectionMethods.getElementTransforms();
+    const currentColors = this.collectionMethods.getElementColors();
     this.setPositions();
     const animateToTransforms = this.collectionMethods.getElementTransforms();
+    const animateToColors = this.collectionMethods.getElementColors();
 
     const elementsToMove = [];
     const toMoveStartTransforms = [];
@@ -640,9 +645,27 @@ export default class EquationForm extends Elements {
       }
     });
 
+    const elementsToChangeColor = [];
+    const toColorStart = [];
+    const toColorStop = [];
+    Object.keys(animateToColors).forEach((key) => {
+      const currentC = currentColors[key];
+      const nextC = animateToColors[key];
+      if (!areColorsSame(currentC, nextC)) {
+        elementsToMove.push(key);
+        toColorStart.push(currentC);
+        toColorStop.push(nextC);
+      }
+    });
+
     const toShowTransforms = {};
     elementsToShow.forEach((element) => {
       toShowTransforms[element.name] = element.transform._dup();
+    });
+
+    const toShowColors = {};
+    elementsToShow.forEach((element) => {
+      toShowColors[element.name] = element.color.slice();
     });
 
     // Find move time to use. If moveTime is null, then a velocity is used.
@@ -659,6 +682,9 @@ export default class EquationForm extends Elements {
     }
     this.collectionMethods.setElementTransforms(currentTransforms);
     this.collectionMethods.setElementTransforms(toShowTransforms);
+    this.collectionMethods.setElementColors(currentColors);
+    this.collectionMethods.setElementColors(toShowColors);
+
     let cumTime = delay;
 
     let moveCallback = null;
@@ -751,6 +777,13 @@ export default class EquationForm extends Elements {
     // }
     if (!dissolveInBeforeMove) {
       if (elementsToShow.length > 0) {
+        const t = this.collectionMethods.animateToColors(
+          animateToColors,
+          dissolveInTime,
+          cumTime,
+          null,
+          '_EquationAnimateColor',
+        );
         this.dissolveElements(elementsToShow, 'in', cumTime, dissolveInTime, dissolveInCallback);
         cumTime += dissolveInTime + 0.001;
       }

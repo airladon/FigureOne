@@ -30,7 +30,7 @@ import {
   duplicateFromTo, joinObjects, joinObjectsWithOptions, NotificationManager,
   generateUniqueId, PerformanceTimer, generateUniqueColor,
 } from '../tools/tools';
-import { areColorsWithinDelta } from '../tools/color';
+import { areColorsWithinDelta, areColorsSame } from '../tools/color';
 import TimeKeeper from './TimeKeeper';
 import type { TypeWhen } from './TimeKeeper';
 
@@ -6007,6 +6007,15 @@ class FigureElementCollection extends FigureElement {
     return out;
   }
 
+  getElementColors() {
+    const out = {};
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      out[element.name] = element.color.slice();
+    }
+    return out;
+  }
+
   setElementTransforms(elementTransforms: Object) {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
@@ -6015,6 +6024,15 @@ class FigureElementCollection extends FigureElement {
         if (element.internalSetTransformCallback) {
           this.fnMap.exec(element.internalSetTransformCallback, element.transform);
         }
+      }
+    }
+  }
+
+  setElementColors(elementColors: Object) {
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (element.name in elementColors) {
+        element.setColor(elementColors[element.name]);
       }
     }
   }
@@ -6069,6 +6087,46 @@ class FigureElementCollection extends FigureElement {
           if (element.internalSetTransformCallback) {
             this.fnMap.exec(element.internalSetTransformCallback, element.transform);
           }
+        }
+      }
+    }
+    if (timeToAnimate === 0 && callbackMethod != null) {
+      this.fnMap.exec(callbackMethod, true);
+      // callbackMethod(true);
+    }
+    return timeToAnimate;
+  }
+
+  animateToColors(
+    elementColors: Object,
+    time: number = 1,
+    delay: number = 0,
+    callback: ?(string | ((?mixed) => void)) = null,
+    name: string = '',
+    easeFunction: string | ((number) => number) = 'tools.math.linear',
+  ) {
+    let callbackMethod = callback;
+    let timeToAnimate = 0;
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (element.name in elementColors) {
+        if (element.isShown) {
+          if (!areColorsSame(elementColors[element.name], element.color)) {
+            element.animations.new(name)
+              .delay(delay)
+              .color({
+                target: elementColors[element.name],
+                duration: time,
+                progression: easeFunction,
+                onFinish: callbackMethod,
+              })
+              .start();
+            // only want to send callback once
+            callbackMethod = null;
+            timeToAnimate = time + delay;
+          }
+        } else {
+          element.setColor(elementColors[element.name]);
         }
       }
     }
