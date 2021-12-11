@@ -4,6 +4,12 @@ In no particular order.
   - Allow form animation to be any order of dissolve in/out and move
   - Fix equation spacings to be independent of font size
   - Animate color between equation forms
+    - Remove color from `applyElementMods`
+    - add Element.animateToColors()
+    - store default element color in element._custom._equationElementDefaultColor when creating the element
+    - in form.animatePositionsTo(), animateToColors on either the dissolveIn, dissolveOut or Move - whatever comes first
+  - Create an equation function that modifies the color of the content: { color: [content, TypeColor] },
+    - in form.animationPositionsTo treat color like transforms (first capture the current colors, then set the form colors, then reset the current colors and animate to the new colors)
   - Forms with color mods only impact that form - all other forms use the default color
 
 * Fonts:
