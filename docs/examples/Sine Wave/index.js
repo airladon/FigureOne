@@ -89,10 +89,10 @@ const signal = new DynamicSignal(0, 10);
 // Helper method to create text buttons
 const button = (name, label, position) => ({
   name,
-  make: 'collections.rectangle',
+  make: 'collections.button',
   label: {
     text: label,
-    font: { size: 0.1, weight: 100 },
+    font: { size: 0.1, weight: '100' },
   },
   touchBorder: 0.1,
   position,
@@ -100,7 +100,6 @@ const button = (name, label, position) => ({
   width: 0.7,
   height: 0.25,
   corner: { radius: 0.05, sides: 10 },
-  button: true,
   line: { width: 0.005 },
   touch: true,
 });

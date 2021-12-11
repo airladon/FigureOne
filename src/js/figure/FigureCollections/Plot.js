@@ -20,7 +20,7 @@ import type CollectionsTrace, { COL_Trace } from './Trace';
 import type { COL_PlotLegend } from './Legend';
 import type CollectionsRectangle, { COL_Rectangle } from './Rectangle';
 import type { OBJ_Collection, OBJ_LineStyleSimple, OBJ_Texture } from '../FigurePrimitives/FigurePrimitiveTypes';
-import type { OBJ_TextLines } from '../FigurePrimitives/FigurePrimitiveTypes2D';
+import type { OBJ_FormattedText } from './Text';
 import type {
   OBJ_Font, TypeColor, OBJ_Font_Fixed, OBJ_CurvedCorner,
 } from '../../tools/types';
@@ -141,7 +141,7 @@ export type OBJ_PlotAreaLabelBufferFixed = {
  *
  * Use `offset` to adjust the location of the title.
  */
-export type OBJ_PlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
+export type OBJ_PlotTitle = OBJ_FormattedText & { offset: TypeParsablePoint };
 
 /**
  * {@link CollectionsPlot} options object that extends {@link OBJ_Collection}
@@ -1048,6 +1048,20 @@ class CollectionsPlot extends FigureElementCollection {
       // $FlowFixMe
       this.__frame.surround(this, this.frameSpace);
     });
+    this.getAtlases(() => this.update());
+  }
+
+  fontUpdated() {
+    super.fontUpdated();
+    this.update();
+  }
+
+  update() {
+    let elements = this.getChildren();
+    elements = elements.filter(e => e.name !== '_frame');
+    if (this.__frame != null) { // $FlowFixMe
+      this.__frame.surround(elements, this.frameSpace, false);
+    }
   }
 
   getTraceIndex(name: string | number) {
@@ -1414,7 +1428,7 @@ class CollectionsPlot extends FigureElementCollection {
   //   return theme;
   // }
 
-  addTitle(optionsIn: OBJ_TextLines & { offset: TypeParsablePoint } | string) {
+  addTitle(optionsIn: OBJ_FormattedText & { offset: TypeParsablePoint } | string) {
     const defaultOptions = {
       font: joinObjects({}, this.defaultFont, { size: this.defaultFont.size * 1.5 }),
       justify: 'center',
@@ -1436,7 +1450,7 @@ class CollectionsPlot extends FigureElementCollection {
         bounds.top + o.font.size * 0.5 + o.offset.y,
       );
     }
-    const title = this.collections.primitives.textLines(o);
+    const title = this.collections.text(o);
     this.add('title', title);
   }
 

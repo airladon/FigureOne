@@ -32,6 +32,7 @@ export interface ElementInterface {
   setPositions(): void;
   offsetLocation(offset: Point): void;
   getBounds(useFullSize?: boolean): Bounds;
+  cleanup(): void;
 }
 
 // Equation is a class that takes a set of drawing objects (TextObjects,
@@ -92,6 +93,9 @@ class Element implements ElementInterface {
     this.showContent = true;
   }
 
+  cleanup() { // $FlowFixMe
+    delete this.content;
+  }
   // execFn(fn: string | Function | null, ...args: Array<any>) {
   //   // if (fn == null) {
   //   //   return null;
@@ -116,12 +120,19 @@ class Element implements ElementInterface {
     if (content instanceof FigureElementCollection
         || content instanceof FigureElementPrimitive) {
       // Update translation and scale
-      if (content.drawingObject != null && content.drawingObject.text != null) { // $FlowFixMe
+      if (
+        content.drawingObject != null
+        && content.drawingObject.measureAndAlignText != null
+      ) { // $FlowFixMe
         content.drawingObject.text[0].measureAndAlignText(); // $FlowFixMe
         content.drawingObject.text[0].calcBorderAndBounds(); // $FlowFixMe
         content.drawingObject.setBorder(); // $FlowFixMe
         content.drawingObject.setTouchBorder(); // $FlowFixMe
         content.custom.updateBorders({});
+      }
+      // $FlowFixMe
+      if (content.measureAndAlignText != null) { // $FlowFixMe
+        content.measureAndAlignText();
       }
       content.transform.updateTranslation([location.x, location.y]);
       content.transform.updateScale([scale, scale]);
@@ -132,7 +143,8 @@ class Element implements ElementInterface {
 
       // Get the boundaries of element
       // const r = content.getRelativeVertexSpaceBoundingRect();
-      const r = content.getRelativeBoundingRect('draw');
+      // $FlowFixMe
+      const r = content.getRelativeBoundingRect('draw', 'border', null, false);
       this.location = location._dup();
       this.scale = scale;
       this.ascent = r.top * scale;
@@ -267,6 +279,11 @@ class Elements implements ElementInterface {
     this.height = 0;
     this.fnMap = new FunctionMap();
     this.showContent = true;
+  }
+
+  cleanup() {
+    this.content.forEach(c => c.cleanup());
+    this.content = [];
   }
 
   // execFn(fn: string | Function | null, ...args: Array<any>) {

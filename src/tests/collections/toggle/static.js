@@ -57,11 +57,30 @@ const updates = {
 };
 
 const getValues = {
-  // getAngle: {
-  //   element: 'border-children',
-  //   expect: 1,
-  //   when: e => tools.math.round(e.getAngle(), 3),
-  // },
+  checkText: {
+    element: 'default',
+    expect: true,
+    when: () => {
+      const gls = figure.elements.getAllPrimitives().filter(e => e.text != null);
+      const d2s = figure.elements.getAllPrimitives().filter(e => e.drawingObject.text != null);
+      figure.add({
+        make: 'text',
+        text: `gl: ${gls.length.toString()}`,
+        position: [-4.5, 4.8],
+        font: { size: 0.2 },
+      });
+      figure.add({
+        make: 'text',
+        text: `2d: ${d2s.length.toString()}`,
+        position: [-3.5, 4.8],
+        font: { size: 0.2 },
+      });
+      if (d2s.length > 0 && gls.length === 0) {
+        return true;
+      }
+      return false;
+    },
+  },
 };
 
 

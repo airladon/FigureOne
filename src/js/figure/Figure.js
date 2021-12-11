@@ -36,7 +36,7 @@ import type { TypeParsablePlane } from '../tools/geometry/Plane';
 import DrawContext2D from './DrawContext2D';
 // eslint-disable-next-line import/no-cycle
 import FigurePrimitives from './FigurePrimitives/FigurePrimitives';
-import type { OBJ_Polyline, OBJ_TextLinesDefinition, OBJ_TextLines } from './FigurePrimitives/FigurePrimitiveTypes2D';
+import type { OBJ_Polyline } from './FigurePrimitives/FigurePrimitiveTypes2D';
 // eslint-disable-next-line import/no-cycle
 import FigureCollections from './FigureCollections/FigureCollections';
 // eslint-disable-next-line import/no-cycle
@@ -45,6 +45,8 @@ import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnim
 import type { TypeColor, OBJ_Font } from '../tools/types';
 import type { COL_SlideNavigator } from './FigureCollections/SlideNavigator';
 import type FigureElementPrimitiveGesture from './FigurePrimitives/FigureElementPrimitiveGesture';
+import FontManager from './FontManager';
+import type { OBJ_FormattedText } from './FigureCollections/Text';
 
 const FIGURE1DEBUG = false;
 
@@ -158,11 +160,12 @@ export type OBJ_Figure = {
 /**
  * Primary Figure class.
  *
- * A figure will attach a WebGL canvas and Context2D
- * canvas to the html `div` element with id `"figureOneContainer"`.
+ * A figure will attach a WebGL canvas and 2D canvas
+ * to the html `div` element with id `"figureOneContainer"`.
  *
- * The figure manages all drawing elements, renders the drawing elements
- * on a browser's animation frames and listens for guestures from the user.
+ * The figure creates and manages all drawing elements, renders the drawing
+ * elements on a browser's animation frames and listens for guestures from the
+ * user.
  *
  * The figure also has a recorder, allowing it to record and playback states,
  * and gestures.
@@ -191,6 +194,7 @@ export type OBJ_Figure = {
  * as advanced lines, shapes, equations and plots
  * @property {NotificationManager} notifications notification manager for
  * element
+ * @property {FontManager} fonts watches and reports on font availability
  *
  * @example
  * // Simple html and javascript example to create a figure, and add a
@@ -206,7 +210,7 @@ export type OBJ_Figure = {
  * <body>
  *     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
  *     </div>
- *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.13.0/figureone.min.js'></script>
+ *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.14.0/figureone.min.js'></script>
  *     <script type="text/javascript" src='./index.js'></script>
  * </body>
  * </html>
@@ -321,7 +325,7 @@ class Figure {
   nextDrawTimerDuration: number;
   focused: boolean;
   frameRate: {
-    information: null | Array<string | OBJ_TextLinesDefinition>,
+    information: null | Array<string | OBJ_FormattedText>,
     history: Array<Array<number>>,
     num: number,
   };
@@ -357,6 +361,7 @@ class Figure {
   // }
 
   scene: Scene;
+  fonts: FontManager;
 
   animations: AnimationManager;
 
@@ -379,6 +384,8 @@ class Figure {
         style: 'normal',
         weight: '100',
         opacity: 1,
+        glyphs: 'mathlatin',
+        render: '2d',
       },
       backgroundColor: [1, 1, 1, 1],
       // scene: {
@@ -710,6 +717,11 @@ class Figure {
     this.moveBuffer = [];
     this.timeKeeper = new TimeKeeper();
     this.notifications = new NotificationManager(this.fnMap);
+    this.fonts = new FontManager(this.fnMap, this.notifications);
+    this.fonts.notifications.add('fontsLoaded', () => {
+      this.fontsLoaded();
+    });
+    this.fonts.addAnimateFrameCallback(this.animateNextFrame.bind(this));
     this.recorder = new Recorder(this.timeKeeper);
     // $FlowFixMe
     this.recorder.figure = this;
@@ -754,6 +766,10 @@ class Figure {
     this.drawAnimationFrames = 0;
     this.cursorShown = false;
     this.originalScalePoint = null;
+  }
+
+  fontsLoaded() {
+    this.elements.fontUpdated();
   }
 
   /**
@@ -946,6 +962,7 @@ class Figure {
   }
 
   init(webgl: WebGLInstance) {
+    // this.webglLow.recreateAtlases();
     this.elements.init(webgl);
     this.animateNextFrame();
   }
@@ -1082,6 +1099,7 @@ class Figure {
       options.how === 'instant' // $FlowFixMe
       || this.elements.isStateSame(state.elements, true, ['cursor'])
     ) {
+      this.elements.clear();
       finished();
     } else if (options.how === 'animate') {
       this.elements.stop('freeze');  // This is cancelling the pulse
@@ -1380,6 +1398,7 @@ class Figure {
       this.defaultLength,
       this.timeKeeper,
       this.recorder,
+      0.7,
     );
   }
 
@@ -1437,12 +1456,15 @@ class Figure {
     event.preventDefault();
     this.lostContextMessage.innerHTML = '<div class="figureone__lostcontext_message"><p>Browser removed WebGL context from FigureOne and has yet to return it.</p> <p>Reload page to restore.</p></div>';
     this.lostContextMessage.style.display = 'table';
+    this.elements.contextLost();
+    this.webglLow.contextLost();
   }
 
   contextRestored() {
     this.lostContextMessage.innerHTML = '<div class="figureone__lostcontext_message"><p>Browser removed WebGL context from FigureOne and just returned it.</p> <p>FigureOne is reinitializing...</p></div>';
     // this.webglLow.init(this.canvasLow.getContext('webgl', { antialias: true }));
     this.webglLow.init(this.webglLow.gl);
+    this.webglLow.recreateAtlases();
     this.init(this.webglLow);
     this.lostContextMessage.style.display = 'none';
     Console('FigureOne context restored!');
@@ -1460,6 +1482,23 @@ class Figure {
   destroy() {
     this.gesture.destroy();
     this.loseContext();
+  }
+
+  /**
+   * Recreate all automatically generated atlases.
+   *
+   * This would be typically used after loading custom fonts.
+   */
+  recreateAtlases() {
+    this.webglLow.recreateAtlases();
+  }
+
+  recreateAtlas(atlasID: string) {
+    this.webglLow.atlases[atlasID].recreate();
+  }
+
+  getAtlases() {
+    return this.webglLow.atlases;
   }
 
   /**
@@ -2925,6 +2964,9 @@ class Figure {
     let colorIndex = 0;
     for (let i = 0; i < elements.length; i += 1) {
       const e = elements[i];
+      if (!e.isShown) { // eslint-disable-next-line no-continue
+        continue;
+      }
 
       // $FlowFixMe
       const borderPoints = e.getBorder('figure', border);
@@ -2934,6 +2976,8 @@ class Figure {
           const el = this.get(name);
           if (el != null) { // $FlowFixMe
             el.custom.updatePoints({ points: borderPoints[j] });
+            // $FlowFixMe
+            el.showAll();
           } else {
             this.add({
               name: `__${border}${i}${j}`,
@@ -3074,7 +3118,7 @@ class Figure {
     // $FlowFixMe
     if (this.elements.__frameRate_ != null && this.frameRate.information != null) {
       // $FlowFixMe
-      this.elements.__frameRate_.custom.updateText({ text: this.frameRate.information });
+      this.elements.__frameRate_.setText({ text: this.frameRate.information, reform: false });
     }
     this.elements.setupDraw(
       now,
@@ -3396,13 +3440,13 @@ class Figure {
    * browser when an element is animating or moving. If everything is still,
    * then the frame rate will be 0.
    */
-  addFrameRate(numFrames: number = 10, options: OBJ_TextLines = {}) {
+  addFrameRate(numFrames: number = 10, options: OBJ_FormattedText = {}) {
     this.frameRate.num = numFrames;
     const frame = this.add(joinObjects(
       {},
       {
         name: '_frameRate_',
-        make: 'primitives.textLines',
+        make: 'collections.text',
         // mods: { isShown: true },
         text: ['Ave:', 'Max:'],
         position: [
@@ -3411,7 +3455,7 @@ class Figure {
         ],
         xAlign: 'left',
         yAlign: 'bottom',
-        font: { size: (this.scene.right - this.scene.left) / 30 },
+        font: { size: (this.scene.right - this.scene.left) / 30, type: '2d' },
       },
       options,
     ));

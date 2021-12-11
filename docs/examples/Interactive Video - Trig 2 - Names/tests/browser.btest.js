@@ -4,7 +4,7 @@ tester({
   title: 'Example - Trig 2 - Names',
   width: 500,
   height: 320,
-  htmlFile: `http://localhost:8080/${__dirname}/index.html`,
+  htmlFile: `http://localhost:8080/${__dirname.replace('/home/pwuser', '')}/index.html`,
   fromTimes: [
     0,
     21,

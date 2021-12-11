@@ -77,10 +77,10 @@ const xValues = range(-4, 4, 1);
 const yValues = range(4, -4, -1);
 let index = 0;
 
-function onClick(p, e) {
+function onClick(e) {
   misc.Console(`${e.custom.indexName}: ${e.name}`);
   e.custom.count += 1;
-  figure.get(`${e.name}count`).custom.setText({ text: `${e.custom.count}` });
+  figure.get(`${e.name}count`).setText({ text: `${e.custom.count}` });
   figure.animateNextFrame();
 }
 
@@ -123,6 +123,14 @@ function makePrimitive(name, options, touch = true, offset = [0, 0]) {
       name: `${name}count`,
       text: '0',
       position: [x, y + 0.3],
+      font: { render: 'gl' },
+      scene: {
+        style: '2D',
+        left: -4.5,
+        bottom: -4.5,
+        right: 4.5,
+        top: 4.5,
+      },
     });
   }
   return o;
@@ -161,6 +169,14 @@ function makeCollection(name, options = {}) {
     name: `${name}count`,
     text: '0',
     position: [x, y + 0.3],
+    font: { render: 'gl' },
+    scene: {
+      style: '2D',
+      left: -4.5,
+      bottom: -4.5,
+      right: 4.5,
+      top: 4.5,
+    },
   });
   return o;
 }

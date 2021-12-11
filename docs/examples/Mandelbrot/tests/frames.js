@@ -10,7 +10,7 @@ __height = 300;
 __startSteps = 10000;
 __frames = [
   [0, `
-figure.elements._primitive_000000003.move.freely = false;
+figure.elements._primitive_000000009.move.freely = false;
 `],
   [1, 'mousePan', [[0, 0], [0.3, 0.3]], 'pan'],
   [0.5, 'mouseWheelZoom', [[0, 500], [0, 0]], 'zoomIn'],

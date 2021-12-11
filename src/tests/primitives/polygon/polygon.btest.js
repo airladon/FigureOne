@@ -10,7 +10,7 @@ test('Primitives: polygons', async () => {
   // const context = await browser.newContext();
   // const page = await context.newPage();
   // eslint-disable-next-line no-undef
-  await page.goto(`file:/${__dirname}/index.html`);
+  await page.goto(`file://${__dirname}/index.html`);
   // eslint-disable-next-line no-undef
   const image = await page.screenshot({ fullPage: true });
   expect(image).toMatchImageSnapshot();

@@ -38,8 +38,9 @@ toc:
   - name: Text
     file: ./docs/api/tutorials/text/text.md
   - OBJ_Text
-  - OBJ_TextLine
-  - OBJ_TextLines
+  - OBJ_FormattedText
+  - OBJ_Font
+  - FontManager
   - name: 3D Shape Primitives
     file: ./docs/api/tutorials/shapes3D/shapes3d.md
   - OBJ_Generic3All
@@ -239,6 +240,7 @@ toc:
   - range
   - randSign
   - randInt
+  - randBool
   - rand
   - randElement
   - randElements
@@ -302,10 +304,7 @@ toc:
   - TypeTransformUserDefinition
   - name: Misc Shapes
   - OBJ_Texture
-  - OBJ_TextDefinition
-  - OBJ_Font
   - OBJ_TextLineDefinition
-  - OBJ_TextLinesDefinition
   - OBJ_TextModifierDefinition
   - OBJ_TextModifiersDefinition
   - OBJ_PulseScale
@@ -425,6 +424,16 @@ toc:
   - OBJ_RevolvePoints
   - OBJ_SpherePoints
   - OBJ_SurfacePoints
+  - name: Misc Text
+  - FigureElementPrimitive2DText
+  - OBJ_TextAdjustments
+  - OBJ_SetText
+  - FigureElementPrimitiveGLText
+  - TypeText
+  - OBJ_Outline
+  - OBJ_Underline
+  - OBJ_GlyphModifiers
+  - TypeFontWeight
   - name: Misc Animation
   - AnimationStep
   - ElementAnimationStep

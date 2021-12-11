@@ -1,6 +1,6 @@
 const { tester } = require('../../../../src/tests/browserTester/tester');
 
 tester(
-  `${__dirname}/test.html`,
+  `http://localhost:8080/${__dirname.replace('/home/pwuser', '')}/test.html`,
   `${__dirname}/frames.js`,
 );

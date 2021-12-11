@@ -39,6 +39,7 @@ import type {
   EQN_LineSymbol,
 } from './EquationSymbols';
 import type { OBJ_FigureForElement } from '../Figure';
+import type { TypeText } from '../FigurePrimitives/FigurePrimitiveTypes';
 
 // Priority:
 //   1. symbol
@@ -1003,6 +1004,8 @@ export class Equation extends FigureElementCollection {
 
   initialForm: string | null;
 
+  defaultTextType: TypeText;
+
   /**
    * {@link AnimationManager} extended to include additional animation steps
    * specific to equations
@@ -1042,12 +1045,14 @@ export class Equation extends FigureElementCollection {
       size: 0.2,
       weight: '200',
       color,
+      glyphs: 'mathlatin',
+      render: shapes.defaultFont.render,
     };
     const defaultOptions = {
       color,
       dimColor,
       position: new Point(0, 0),
-      scale: 0.7,
+      scale: shapes.equationScale,
       formDefaults: {
         alignment: {
           fixTo: new Point(0, 0),
@@ -1066,6 +1071,7 @@ export class Equation extends FigureElementCollection {
       touchBorder: 'rect',
       transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       timeKeeper: shapes.timeKeeper,
+      // type: shapes.defaultFont.render,
     };
 
     const optionsToUse = joinObjectsWithOptions({ except: ['font'] }, {}, defaultOptions, options);
@@ -1082,11 +1088,11 @@ export class Equation extends FigureElementCollection {
       optionsToUse.textFont = options.textFont;
     } else if (options.textFont != null) {
       optionsToUse.textFont = new FigureFont(
-        joinObjects({}, defaultFont, { style: 'italic' }, options.textFont),
+        joinObjects({}, optionsToUse.font, { style: 'italic' }, options.textFont),
       );
     } else {
       optionsToUse.textFont = new FigureFont(
-        joinObjects({}, defaultFont, { style: 'italic' }),
+        joinObjects({}, optionsToUse.font, { style: 'italic' }),
       );
     }
     if (optionsToUse.transform != null) {
@@ -1120,6 +1126,8 @@ export class Equation extends FigureElementCollection {
     this.shapes = shapes;
     this.setColor(optionsToUse.color);
     this.dimColor = optionsToUse.dimColor;
+    // this.defaultTextType = optionsToUse.type;
+    this.textureAtlases = {};
     // this.touchBorder = 'rect';
     // this.border = 'children';
     // this.isTouchDevice = isTouchDevice;
@@ -1292,6 +1300,7 @@ export class Equation extends FigureElementCollection {
     });
   }
 
+
   // _state(
   //   options: {
   //     precision?: number,
@@ -1319,13 +1328,23 @@ export class Equation extends FigureElementCollection {
         this.eqn.forms[form].positionsSet = false;
       }
     });
+    this.getAtlases(this.layoutForms.bind(this, 'reset', true));
   }
 
-  setFigure(figure: OBJ_FigureForElement) {
-    super.setFigure(figure);
+  setFigure(figure: OBJ_FigureForElement, notify: boolean = true) {
+    super.setFigure(figure, false);
+    // this.layoutForms();
     if (this.initialForm != null) {
       this.showForm(this.initialForm);
     }
+    if (notify) {
+      this.notifications.publish('setFigure');
+    }
+  }
+
+  fontUpdated() {
+    super.fontUpdated();
+    this.layoutForms('reset');
   }
 
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
@@ -1383,30 +1402,52 @@ export class Equation extends FigureElementCollection {
    * is fully loaded, then use this method to re-layout the equation when the
    * font is available.
    *
-   * Either the current form only, or all forms of the equation can be
-   * re-laid-out.
+   * Either the current form only, all forms already laid out (set), or all
+   * forms of the equation can be re-laid-out.
    *
-   * @param {'none' | 'current' | 'all'} forms
+   * @param {'none' | 'current' | 'all' | 'set' | 'reset'} forms
+   * @param {boolean} show true will re-show current form
    */
-  layoutForms(forms: 'none' | 'current' | 'all') {
+  layoutForms(
+    forms: 'none' | 'current' | 'all' | 'set' | 'reset' = 'all',
+    show: boolean = true,
+  ) {
     if (forms === 'none') {
       return;
     }
-    const arrange = (formName) => {
+    const arrange = (formName, setOnly, resetOnly) => {
       const form = this.eqn.forms[formName];
-      const {
-        scale, xAlign, yAlign, fixTo,
-      } = form.arranged;
-      form.arrange(scale, xAlign, yAlign, fixTo);
+      if (resetOnly) {
+        form.positionsSet = false;
+        return;
+      }
+      if (setOnly === false || form.positionsSet) {
+        const {
+          scale, xAlign, yAlign, fixTo,
+        } = form.arranged;
+        form.arrange(scale, xAlign, yAlign, fixTo);
+      }
     };
     if (forms === 'current') {
-      arrange(this.eqn.currentForm);
+      arrange(this.eqn.currentForm, false, false);
       return;
     }
     Object.keys(this.eqn.forms).forEach((formName) => {
-      arrange(formName);
+      arrange(formName, forms === 'set', forms === 'reset');
     });
-    this.showForm(this.eqn.currentForm);
+    if (show && this.getIsShown() && this.isAnimating() === false) {
+      this.clear();
+      this.showForm(this.eqn.currentForm);
+    } else if (show) {
+      this.eqn.forms[this.eqn.currentForm].rearrange();
+    }
+  }
+
+  contextLost() {
+    super.contextLost();
+    if (this.eqn.functions.fullLineHeight != null) {
+      this.eqn.functions.fullLineHeight.getAllElements().forEach(e => e.contextLost());
+    }
   }
 
   /**
@@ -1427,7 +1468,8 @@ export class Equation extends FigureElementCollection {
         return;
       }
       const col = e.color.slice();
-      e.custom.updateText({ text: elements[elementName] });
+      // $FlowFixMe
+      e.setText({ text: elements[elementName] });
       e.setColor(col, false);
     });
     this.layoutForms(layoutForms);
@@ -1447,6 +1489,7 @@ export class Equation extends FigureElementCollection {
       onClick?: () => void | 'string' | null,
       isTouchable?: boolean,
       mods?: Object,
+      // type?: TypeText,
     },
     defaultText: string = '',
   ) {
@@ -1490,6 +1533,7 @@ export class Equation extends FigureElementCollection {
     if (fontDefinition.color == null) {
       fontDefinition.color = this.color;
     }
+
     const p = this.shapes.text(
       {
         text: {
@@ -1504,16 +1548,22 @@ export class Equation extends FigureElementCollection {
         mods: {
           dimColor: this.dimColor.slice(),
         },
+        // type: options.type || this.defaultTextType,
       },
     );
     if (options.touchBorder != null) {
       p.touchBorder = options.touchBorder;
+      if (options.isTouchable == null) {
+        // eslint-disable-next-line no-param-reassign
+        options.isTouchable = true;
+      }
     }
     if (options.isTouchable != null) {
       p.isTouchable = options.isTouchable;
     }
     if (options.onClick != null) {
       p.onClick = options.onClick;
+      p.isTouchable = true;
     }
     if (options.mods != null) {
       p.setProperties(options.mods);
@@ -1593,6 +1643,9 @@ export class Equation extends FigureElementCollection {
     const text = cleanKey.replace(/_.*/, '');
     element = this.makeTextElem(joinObjects({ text }, options));
     this.add(key, element);
+    // if (element.isTouchable || element.hasTouchableElements) {
+    //   this.hasTouchableElements = true;
+    // }
     return element;
   }
 
@@ -1643,11 +1696,36 @@ export class Equation extends FigureElementCollection {
       const elem = elems[key];
       if (typeof elem === 'string') {
         if (!(key.startsWith('space') && key.startsWith(' ') && key.length > 0)) {
-          this.add(key, this.makeTextElem({ text: elem }));
+          const e = this.makeTextElem({ text: elem });
+          this.add(key, e);
+          // if (e.isTouchable || e.hasTouchableElements) {
+          //   this.hasTouchableElements = true;
+          // }
         }
       } else if (elem instanceof FigureElementPrimitive) {
+        // This is rough and will need to be refactored
+        // Maybe to build the elements into the equation or leave the elements
+        // outside of the equation
+        // $FlowFixMe
+        const { parent } = elem;
+        if (parent != null) { // $FlowFixMe
+          delete parent.elements[elem.name]; // $FlowFixMe
+          parent.drawOrder.splice(parent.drawOrder.indexOf(elem.name), 1);
+          // $FlowFixMe
+          delete parent[`_${elem.name}`];
+          elem.parent = null;
+        }
         this.add(key, elem);
       } else if (elem instanceof FigureElementCollection) {
+        const { parent } = elem;
+        if (parent != null) {
+          // $FlowFixMe
+          delete parent.elements[elem.name]; // $FlowFixMe
+          parent.drawOrder.splice(parent.drawOrder.indexOf(elem.name), 1);
+          // $FlowFixMe
+          delete parent[`_${elem.name}`];
+          elem.parent = null;
+        }
         this.add(key, elem);
       } else {
         let figureElem; // $FlowFixMe
@@ -1663,6 +1741,9 @@ export class Equation extends FigureElementCollection {
             figureElem.setProperties(elem.mods);
           }
           this.add(key, figureElem);
+          if (figureElem.isTouchable || figureElem.hasTouchableElements) {
+            this.hasTouchableElements = true;
+          }
         }
       }
     });
@@ -1792,6 +1873,7 @@ export class Equation extends FigureElementCollection {
       // eslint-disable-next-line prefer-destructuring
       this.initialForm = Object.keys(this.eqn.forms)[0];
     }
+    this.getAtlases(this.layoutForms.bind(this, 'reset', true));
   }
 
   checkFixTo(
@@ -2140,6 +2222,7 @@ export class Equation extends FigureElementCollection {
       form = this.getForm(formOrName);
     }
     if (form) {
+      this.clear();
       this.setCurrentForm(form);
       this.render(animationStop);         // $FlowFixMe
       this.fnMap.exec(form.onTransition); // $FlowFixMe
@@ -2151,6 +2234,17 @@ export class Equation extends FigureElementCollection {
     this.showForm();
   }
 
+  cleanup() {
+    this.cleanupForms();
+    super.cleanup();
+  }
+
+  cleanupForms() {
+    Object.keys(this.eqn.forms).forEach((form) => {
+      this.eqn.forms[form].cleanup();
+      delete this.eqn.forms[form];
+    });
+  }
 
   /**
    * Get an equation form object from a form name

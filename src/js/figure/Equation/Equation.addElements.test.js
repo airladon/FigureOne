@@ -141,63 +141,63 @@ describe('Figure Equations From Object', () => {
     eqn.addElements(addElements.simple);
     expect(eqn._a).not.toBe(null);
     expect(Object.keys(eqn.elements).length).toBe(3);
-    expect(eqn._a.drawingObject.text[0].text).toBe('a');
-    expect(eqn._a.drawingObject.text[0].font.style).toBe('italic');
+    expect(eqn._a.getText()).toBe('a');
+    expect(eqn._a.getFont().style).toBe('italic');
   });
   test('Multi add steps', () => {
     eqn.addElements(addElements.add1);
     eqn.addElements(addElements.add2);
-    expect(eqn._a.drawingObject.text[0].text).toBe('a');
-    expect(eqn._b.drawingObject.text[0].text).toBe('b');
-    expect(eqn._c.drawingObject.text[0].text).toBe('c');
+    expect(eqn._a.getText()).toBe('a');
+    expect(eqn._b.getText()).toBe('b');
+    expect(eqn._c.getText()).toBe('c');
   });
   test('Italics for text, normal for numbers', () => {
     eqn.addElements(addElements.autoFontSelection);
-    expect(eqn._a.drawingObject.text[0].font.style).toBe('italic');
-    expect(eqn.__1.drawingObject.text[0].font.style).toBe('normal');
+    expect(eqn._a.getFont().style).toBe('italic');
+    expect(eqn.__1.getFont().style).toBe('normal');
   });
   test('Simple object definition', () => {
     eqn.addElements(addElements.simpleObject);
-    expect(eqn._a.drawingObject.text[0].text).toBe('a');
-    expect(eqn._b.drawingObject.text[0].text).toBe('b');
+    expect(eqn._a.getText()).toBe('a');
+    expect(eqn._b.getText()).toBe('b');
   });
   test('Text Overrides', () => {
     eqn.addElements(addElements.textOverrides);
-    expect(eqn._a.drawingObject.text[0].text).toBe('a');
-    expect(eqn._b.drawingObject.text[0].text).toBe('b');
-    expect(eqn._c.drawingObject.text[0].text).toBe('c');
-    expect(eqn._d.drawingObject.text[0].text).toBe('d');
+    expect(eqn._a.getText()).toBe('a');
+    expect(eqn._b.getText()).toBe('b');
+    expect(eqn._c.getText()).toBe('c');
+    expect(eqn._d.getText()).toBe('d');
 
-    expect(eqn._a.drawingObject.text[0].font.style).toBe('italic');
-    expect(eqn._b.drawingObject.text[0].font.style).toBe('normal');
-    expect(eqn._c.drawingObject.text[0].font.style).toBe('normal');
-    expect(eqn._d.drawingObject.text[0].font.style).toBe('italic');
+    expect(eqn._a.getFont().style).toBe('italic');
+    expect(eqn._b.getFont().style).toBe('normal');
+    expect(eqn._c.getFont().style).toBe('normal');
+    expect(eqn._d.getFont().style).toBe('italic');
 
-    expect(eqn._a.drawingObject.text[0].font.family).toBe('Times New Roman');
-    expect(eqn._b.drawingObject.text[0].font.family).toBe('Times New Roman');
-    expect(eqn._c.drawingObject.text[0].font.family).toBe('Helvetica');
-    expect(eqn._d.drawingObject.text[0].font.family).toBe('Helvetica');
+    expect(eqn._a.getFont().family).toBe('Times New Roman');
+    expect(eqn._b.getFont().family).toBe('Times New Roman');
+    expect(eqn._c.getFont().family).toBe('Helvetica');
+    expect(eqn._d.getFont().family).toBe('Helvetica');
 
-    expect(eqn._a.drawingObject.text[0].font.color)
+    expect(eqn._a.getFont().color)
       .toEqual(defaultColor);
-    expect(eqn._b.drawingObject.text[0].font.color)
+    expect(eqn._b.getFont().color)
       .toEqual(defaultColor);
-    expect(eqn._c.drawingObject.text[0].font.color)
+    expect(eqn._c.getFont().color)
       .toEqual(color1);
-    expect(eqn._d.drawingObject.text[0].font.color)
+    expect(eqn._d.getFont().color)
       .toEqual(color2);
   });
   test('Symbol', () => {
     eqn.addElements(addElements.symbols);
-    expect(eqn._a.drawingObject.text[0].text).toBe('a');
+    expect(eqn._a.getText()).toBe('a');
     expect(eqn._v.drawingObject).toBeInstanceOf(VertexGeneric);
     expect(eqn._v1.drawingObject).toBeInstanceOf(VertexGeneric);
     // expect(eqn._v2.drawingObject).toBeInstanceOf(VertexHorizontalLine);
   });
   test('ElementOptions', () => {
     eqn.addElements(addElements.elementOptions);
-    expect(eqn._a.drawingObject.text[0].text).toBe('a');
-    expect(eqn._b.drawingObject.text[0].text).toBe('b');
+    expect(eqn._a.getText()).toBe('a');
+    expect(eqn._b.getText()).toBe('b');
     expect(eqn._v.drawingObject).toBeInstanceOf(VertexGeneric);
 
     expect(eqn._a.isTouchable).toBe(false);
@@ -213,9 +213,9 @@ describe('Figure Equations From Object', () => {
       elements: addElements.simple,
     };
     const eqn1 = new Equation(figure.shapes, equationOptions);
-    expect(eqn1._a.drawingObject.text[0].text).toBe('a');
-    expect(eqn1._b.drawingObject.text[0].text).toBe('b');
-    expect(eqn1._c.drawingObject.text[0].text).toBe('c');
+    expect(eqn1._a.getText()).toBe('a');
+    expect(eqn1._b.getText()).toBe('b');
+    expect(eqn1._c.getText()).toBe('c');
   });
   test('Symbol: Vinculum', () => {
     eqn.addElements(addElements.vinculum);

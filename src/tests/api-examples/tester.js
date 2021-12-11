@@ -120,7 +120,7 @@ figure.animateNextFrame();
     async (id, code) => {
       await jestPlaywright.resetBrowser();
       await page.setViewportSize({ width: 500, height: 375 });
-      await page.goto(`localhost:8080//${__dirname}/index.html`);
+      await page.goto(`localhost:8080/${__dirname.replace('/home/pwuser', '')}/index.html`);
       await page.evaluate(() => {
         figure.timeKeeper.setManualFrames();
       });

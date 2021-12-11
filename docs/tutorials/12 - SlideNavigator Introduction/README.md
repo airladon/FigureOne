@@ -33,7 +33,7 @@ const [eqn, description] = figure.add([
   },
   {
     name: 'description',
-    make: 'primitives.textLines',
+    make: 'ftext',
     modifiers: {
       a: { font: { family: 'Times New Roman', style: 'italic', size: 0.12 } },
       b: { font: { family: 'Times New Roman', style: 'italic', size: 0.12 } },
@@ -54,7 +54,7 @@ const slides = [
     show: [eqn, description],
     steadyState: () => {
       eqn.showForm('0');
-      description.custom.updateText({ text: 'Goal: Rearrange for |a|' });
+      description.setText({ text: 'Goal: Rearrange for |a|' });
     },
   },
 
@@ -63,13 +63,13 @@ const slides = [
     show: [eqn, description],
     enterState: () => {
       eqn.showForm('0');
-      description.custom.updateText({ text: 'Goal: Rearrange for |a|' });
+      description.setText({ text: 'Goal: Rearrange for |a|' });
     },
     transition: (done) => {
       description.animations.new()
         .dissolveOut(0.5)
         .trigger({
-          callback: () => description.custom.updateText({
+          callback: () => description.setText({
             text: 'Subtract |b| from both sides',
           }),
         })
@@ -78,7 +78,7 @@ const slides = [
         .start();
     },
     steadyState: () => {
-      description.custom.updateText({ text: 'Subtract |b| from both sides' });
+      description.setText({ text: 'Subtract |b| from both sides' });
     },
   },
 
@@ -87,7 +87,7 @@ const slides = [
     show: [eqn, description],
     enterState: () => {
       eqn.showForm('0');
-      description.custom.updateText({ text: 'Subtract |b| from both sides' });
+      description.setText({ text: 'Subtract |b| from both sides' });
     },
     transition: (done) => {
       eqn.animations.new()
@@ -105,13 +105,13 @@ const slides = [
     show: [eqn, description],
     enterState: () => {
       eqn.showForm('1');
-      description.custom.updateText({ text: 'Subtract |b| from both sides' });
+      description.setText({ text: 'Subtract |b| from both sides' });
     },
     transition: (done) => {
       description.animations.new()
         .dissolveOut(0.5)
         .trigger({
-          callback: () => description.custom.updateText({
+          callback: () => description.setText({
             text: '|b| cancels on left side',
           }),
         })
@@ -120,7 +120,7 @@ const slides = [
         .start();
     },
     steadyState: () => {
-      description.custom.updateText({ text: '|b| cancels on left side' });
+      description.setText({ text: '|b| cancels on left side' });
     },
   },
 
@@ -129,7 +129,7 @@ const slides = [
     show: [eqn, description],
     enterState: () => {
       eqn.showForm('1');
-      description.custom.updateText({ text: '|b| cancels on left side' });
+      description.setText({ text: '|b| cancels on left side' });
     },
     transition: (done) => {
       eqn.animations.new()
@@ -193,7 +193,7 @@ For example, the first slide in the tutorial is:
     show: [eqn, description],
     steadyState: () => {
       eqn.showForm('0');
-      description.custom.updateText({ text: 'Goal: Rearrange for |a|' });
+      description.setText({ text: 'Goal: Rearrange for |a|' });
     },
   },
 ```
@@ -214,13 +214,13 @@ Slide 1 is then:
     show: [eqn, description],
     enterState: () => {
       eqn.showForm('0');
-      description.custom.updateText({ text: 'Goal: Rearrange for |a|' });
+      description.setText({ text: 'Goal: Rearrange for |a|' });
     },
     transition: (done) => {
       description.animations.new()
         .dissolveOut(0.5)
         .trigger({
-          callback: () => description.custom.updateText({
+          callback: () => description.setText({
             text: 'Subtract |b| from both sides',
           }),
         })
@@ -229,7 +229,7 @@ Slide 1 is then:
         .start();
     },
     steadyState: () => {
-      description.custom.updateText({ text: 'Subtract |b| from both sides' });
+      description.setText({ text: 'Subtract |b| from both sides' });
     },
   },
 ```
@@ -244,7 +244,7 @@ We start by showing the `eqn` and `description` elements
 ```js
     enterState: () => {
       eqn.showForm('0');
-      description.custom.updateText({ text: 'Goal: Rearrange for |a|' });
+      description.setText({ text: 'Goal: Rearrange for |a|' });
     },
 ```
 
@@ -259,7 +259,7 @@ In this transition, the description is dissolving out, being repopulated with up
       description.animations.new()
         .dissolveOut(0.5)
         .trigger({
-          callback: () => description.custom.updateText({
+          callback: () => description.setText({
             text: 'Subtract |b| from both sides',
           }),
         })
@@ -274,7 +274,7 @@ When the tranisition is finished, `steadyState` is used to define what the end p
 
 ```
     steadyState: () => {
-      description.custom.updateText({ text: 'Subtract |b| from both sides' });
+      description.setText({ text: 'Subtract |b| from both sides' });
     },
 ```
 

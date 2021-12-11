@@ -176,7 +176,7 @@ figure.add([
           width: 0.006,
           dash: [0.01, 0.005],
           color: greyColor,
-          label: { text: 'd', location: 'top' },
+          label: { text: 'd', location: 'top', font: { family: 'Times New Roman' } },
         },
       },
       makeEqn('eqnF', 'f', 1.2, dGreyColor, 0.025),
@@ -210,7 +210,7 @@ figure.add([
         options: {
           width: 0.006,
           dash: [0.02, 0.005],
-          label: { text: 'x\'', location: 'start' },
+          label: { text: 'x\'', location: 'start', font: { family: 'Times New Roman' } },
           color: primaryCol,
         },
       },
@@ -227,6 +227,7 @@ figure.add([
                 left: ['x\'', '+', 'd'],
               },
             },
+            font: { family: 'Times New Roman' },
             location: 'start',
           },
           color: dGreyColor,
@@ -535,13 +536,13 @@ const modifiersCommon = {
   g1: {
     text: 'g',
     font: { family: mathFont, style: 'italic', color: primaryCol },
-    touchBorder: [0.1, 0.1, 0.25, 0.1],
+    touch: [0.1, 0.1, 0.25, 0.1],
     onClick: () => marks.getElement('markG7').pulse({ scale: 2 }),
   },
   f1: {
     text: 'f',
     font: { family: mathFont, style: 'italic' },
-    touchBorder: [0.1, 0.1, 0.25, 0.1],
+    touch: [0.1, 0.1, 0.25, 0.1],
     onClick: () => marks.getElement('markF7').pulse({ scale: 2 }),
     rSpace: 0.02,
   },
@@ -567,6 +568,7 @@ slides.push({
   steadyState: () => {
     trace.update(getFx(1.6, 0));
     fxTrace.update(getFx(-1.6, 0));
+    movePad.isMovable = false;
   },
   leaveState: () => {
     fxTrace.update(getFx(0, 0));
@@ -602,7 +604,7 @@ slides.push({
     'These pairs of values are |points|.',
   ],
   modifiers: {
-    points: { font: { color: actionColor }, onClick: () => nav.nextSlide() },
+    points: { touch: 0.05, font: { color: actionColor }, onClick: () => nav.nextSlide() },
   },
   showCommon: [
     { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title', 'fxTrace'] },
@@ -610,7 +612,7 @@ slides.push({
 });
 slides.push({
   modifiers: {
-    points: { font: { color: actionColor }, onClick: () => pulseMarks() },
+    points: { touch: 0.05, font: { color: actionColor }, onClick: () => pulseMarks() },
   },
   enterStateCommon: () => {
     marks.showAll();
@@ -629,7 +631,7 @@ slides.push({
     'shift to the right by |d|.',
   ],
   modifiers: {
-    points: { font: { color: actionColor }, onClick: () => pulseMarks() },
+    points: { touch: 0.05, font: { color: actionColor }, onClick: () => pulseMarks() },
   },
 });
 
@@ -638,14 +640,6 @@ slides.push({
     { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title', 'fxTrace'] },
     { diagram: ['marks', 'movePad'] },
   ],
-  modifiers: {
-    Shifting: {
-      font: { color: actionColor },
-      onClick: () => moveTrace(1.6, null),
-      touchBorder: 0.1,
-    },
-    value: { font: { color: actionColor }, onClick: pulseMarks },
-  },
   transition: done => moveTrace(1.6, done),
   form: { 'diagram.eqnF': 'funcX', 'diagram.eqnG': 'funcX' },
   steadyState: () => {
@@ -825,12 +819,12 @@ slides.push({
   modifiers: {
     left: {
       font: { color: primaryCol },
-      touchBorder: 0.1,
+      touch: 0.1,
       onClick: () => eqnG.pulse({ yAlign: 'top' }),
     },
     right: {
       font: { color: secondaryCol },
-      touchBorder: 0.1,
+      touch: 0.1,
       onClick: () => eqnH.pulse({ yAlign: 'top' }),
     },
   },
@@ -858,7 +852,7 @@ slides.push({
   ],
   modifiers: {
     change: {
-      font: { color: actionColor }, onClick: () => cycle(), touchBorder: 0.1,
+      font: { color: actionColor }, onClick: () => cycle(), touch: 0.1,
     },
   },
   scenario: ['default', 'example'],
@@ -884,6 +878,7 @@ slides.push({
     updateEqns = false;
     cycleIndex = 6;
     offsets = offsetsD;
+    movePad.isMovable = false;
   },
   fromForm: { eqn: 'value', 'diagram.eqnF': '0', 'diagram.eqnG': '0' },
   form: { eqn: 'value', 'diagram.eqnF': '0', 'diagram.eqnG': '0' },

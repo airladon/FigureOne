@@ -38,6 +38,10 @@ export default class TargetTexture {
 
   setFramebufferAttachmentSizes(width: number, height: number) {
     const { gl } = this.webgl;
+    // The target texture is always at texture index 0
+    gl.activeTexture(
+      gl.TEXTURE0,
+    );
     gl.bindTexture(gl.TEXTURE_2D, this.target);
     // define size and format of level 0
     const level = 0;

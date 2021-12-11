@@ -25,12 +25,12 @@ import HTMLObject from './DrawingObjects/HTMLObject/HTMLObject';
 import DrawingObject from './DrawingObjects/DrawingObject';
 import VertexGeneric from './DrawingObjects/VertexObject/VertexGeneric';
 import GLObject from './DrawingObjects/GLObject/GLObject';
-import { TextObjectBase } from './DrawingObjects/TextObject/TextObject';
+// import { TextObjectBase } from './DrawingObjects/TextObject/TextObject';
 import {
   duplicateFromTo, joinObjects, joinObjectsWithOptions, NotificationManager,
   generateUniqueId, PerformanceTimer, generateUniqueColor,
 } from '../tools/tools';
-import { colorArrayToRGBA, areColorsWithinDelta } from '../tools/color';
+import { areColorsWithinDelta } from '../tools/color';
 import TimeKeeper from './TimeKeeper';
 import type { TypeWhen } from './TimeKeeper';
 
@@ -40,10 +40,11 @@ import * as animations from './Animation/Animation';
 import WebGLInstance from './webgl/webgl';
 import { FunctionMap } from '../tools/FunctionMap';
 import type {
-  OBJ_Font, TypeColor, TypeCoordinateSpace,
+  TypeColor, TypeCoordinateSpace,
 } from '../tools/types';
 import type { OBJ_Touch } from './FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections/FigureCollections';
+import Atlas from './webgl/Atlas';
 
 const FIGURE1DEBUG = false;
 
@@ -1093,7 +1094,7 @@ class FigureElement {
   //   return fn(...args);
   // }
 
-  setFigure(figure: OBJ_FigureForElement) {
+  setFigure(figure: OBJ_FigureForElement, notify: boolean = true) {
     this.figure = figure;
     if (figure != null) {
       this.recorder = figure.recorder;
@@ -1108,7 +1109,9 @@ class FigureElement {
     if (this.isMovable) {
       this.setMovable();
     }
-    this.notifications.publish('setFigure');
+    if (notify) {
+      this.notifications.publish('setFigure');
+    }
   }
 
   setTimeDelta(delta: number) {
@@ -1121,6 +1124,16 @@ class FigureElement {
     if (this.state.movement.previousTime != null) {
       this.state.movement.previousTime += delta;
     }
+  }
+
+  getIsShown() {
+    if (this.isShown === false) {
+      return false;
+    }
+    if (this.parent != null) {
+      return this.parent.getIsShown();
+    }
+    return true;
   }
 
   getRootElement() {
@@ -1337,6 +1350,14 @@ class FigureElement {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  getFonts() {
+    return [];
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  fontUpdated() {}
+
   animateToState(
     state: Object,
     options: Object,
@@ -1436,6 +1457,9 @@ class FigureElement {
       .start(startTime);
     return duration;
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  contextLost() {}
 
   isStateSame(
     state: Object,
@@ -1750,6 +1774,15 @@ class FigureElement {
   // Used only to clear 2D context
   // eslint-disable-next-line class-methods-use-this
   clear() {
+  }
+
+  cleanup() {
+    this.stop();
+    this.notifications.cleanup();
+    this.animations.notifications.cleanup();
+    this.figure = {};
+    this.parent = null;
+    // this.textureAtlases = {};
   }
 
   willStartAnimating() {
@@ -3754,9 +3787,9 @@ class FigureElement {
       if (this.recorder.state === 'recording') {
         this.recorder.recordEvent('elementClick', [this.getPath(), glPoint.x, glPoint.y]);
       }
-      this.fnMap.exec(this.onClick, glPoint, this);
+      this.fnMap.exec(this.onClick, this, glPoint);
     }
-    this.notifications.publish('onClick', [glPoint, this]);
+    this.notifications.publish('onClick', [this, glPoint]);
   }
 
 
@@ -3986,6 +4019,11 @@ class FigureElementPrimitive extends FigureElement {
     this.drawingObject.init(webgl);
   }
 
+  cleanup() {
+    super.cleanup();
+    this.drawingObject.cleanup();
+  }
+
   _getStateProperties(options: { ignoreShown?: boolean }) {
     let { ignoreShown } = options;
     if (ignoreShown == null) {
@@ -4017,6 +4055,12 @@ class FigureElementPrimitive extends FigureElement {
     this.angleToDraw = angle;
   }
 
+  contextLost() { // $FlowFixMe
+    if (this.drawingObject.contextLost != null) { // $FlowFixMe
+      this.drawingObject.contextLost();
+    }
+  }
+
 
   // click(glPoint: Point = new Point(0, 0)) {
   //   super.click(glPoint);
@@ -4033,19 +4077,19 @@ class FigureElementPrimitive extends FigureElement {
 
   click(glPoint: Point = new Point(0, 0)) {
     super.click(glPoint);
-    if (this.drawingObject instanceof TextObjectBase) {
-      let p = glPoint;
-      if (this.getScene().style !== 'perspective') {
-        p = glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw'));
-      } // $FlowFixMe
-      this.drawingObject.click(
-        p,
-        this.fnMap,
-      );
-      if (this.recorder.state === 'recording') {
-        this.recorder.recordEvent('elementTextClick', [this.getPath(), glPoint.x, glPoint.y]);
-      }
-    }
+    // if (this.drawingObject instanceof TextObjectBase) {
+    //   let p = glPoint;
+    //   if (this.getScene().style !== 'perspective') {
+    //     p = glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw'));
+    //   } // $FlowFixMe
+    //   this.drawingObject.click(
+    //     p,
+    //     this.fnMap,
+    //   );
+    //   if (this.recorder.state === 'recording') {
+    //     this.recorder.recordEvent('elementTextClick', [this.getPath(), glPoint.x, glPoint.y]);
+    //   }
+    // }
   }
 
 
@@ -4069,7 +4113,8 @@ class FigureElementPrimitive extends FigureElement {
   }
 
   clear(canvasIndex: number = 0) {
-    if (this.drawingObject instanceof TextObjectBase) {
+    // $FlowFixMe
+    if (this.drawingObject.clear != null) {
       // $FlowFixMe
       this.drawingObject.clear(canvasIndex, this.pulseTransforms);
     }
@@ -4094,24 +4139,24 @@ class FigureElementPrimitive extends FigureElement {
       this.defaultColor = this.color.slice();
     }
     this.notifications.publish('color');
-    if (this instanceof FigureElementPrimitive) {
-      if (this.drawingObject instanceof TextObjectBase) {
-        this.drawingObject.setColor(this.color);
-      }
-      if (this.drawingObject instanceof HTMLObject) {
-        // $FlowFixMe
-        this.drawingObject.element.style.color = colorArrayToRGBA(this.color);
-      }
-    }
+    // if (this instanceof FigureElementPrimitive) {
+    //   if (this.drawingObject instanceof TextObjectBase) {
+    //     this.drawingObject.setColor(this.color);
+    //   }
+    //   if (this.drawingObject instanceof HTMLObject) {
+    //     // $FlowFixMe
+    //     this.drawingObject.element.style.color = colorArrayToRGBA(this.color);
+    //   }
+    // }
   }
 
   setOpacity(opacity: number) {
     // this.color[3] = opacity;
     this.opacity = opacity;
     if (this instanceof FigureElementPrimitive) {
-      if (this.drawingObject instanceof TextObjectBase) {
-        this.drawingObject.setOpacity(opacity);
-      }
+      // if (this.drawingObject instanceof TextObjectBase) {
+      //   this.drawingObject.setOpacity(opacity);
+      // }
       if (this.drawingObject instanceof HTMLObject) {
         this.drawingObject.element.style.opacity = `${opacity}`;
       }
@@ -4147,11 +4192,11 @@ class FigureElementPrimitive extends FigureElement {
   }
 
 
-  setFont(font: OBJ_Font, index: number = 0) {
-    if (this.drawingObject instanceof TextObjectBase) {
-      this.drawingObject.setFont(font, index);
-    }
-  }
+  // setFont(font: OBJ_Font, index: number = 0) {
+  //   if (this.drawingObject instanceof TextObjectBase) {
+  //     this.drawingObject.setFont(font, index);
+  //   }
+  // }
 
   resizeHtmlObject() {
     if (this.drawingObject instanceof HTMLObject) {
@@ -4484,6 +4529,10 @@ class FigureElementCollection extends FigureElement {
 
   childrenCanAnimate: boolean;
   drawNumberOrder: Array<number | null>
+  textureAtlases: { [textureID: string]: {
+    atlas: Atlas,
+    notif: string | null,
+  } };
 
   /**
    * @param {OBJ_FigureElementCollection} options
@@ -4504,6 +4553,7 @@ class FigureElementCollection extends FigureElement {
     if (o.position != null) {
       this.transform.updateTranslation(getPoint(o.position));
     }
+    this.textureAtlases = {};
     this.drawNumberOrder = [null];
     this.elements = {};
     this.drawOrder = [];
@@ -4552,6 +4602,21 @@ class FigureElementCollection extends FigureElement {
     }
     if (o.touchScale != null) {
       this.touchScale = getScale(o.touchScale);
+    }
+  }
+
+  cleanup() {
+    super.cleanup();
+    this.textureAtlases = {};
+    this.cleanupChildren();
+  }
+
+  cleanupChildren() {
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      this.elements[this.drawOrder[i]].cleanup();
+      delete this.elements[this.drawOrder[i]];
+      this.elements = {};
+      this.drawOrder = [];
     }
   }
 
@@ -4721,6 +4786,10 @@ class FigureElementCollection extends FigureElement {
     }
     // element.setFirstTransform(this.lastDrawTransform);
     this.animateNextFrame();
+    // $FlowFixMe
+    if (element.isTouchable || element.hasTouchableElements) {
+      this.setHasTouchableElements();
+    }
     return element;
   }
 
@@ -4920,6 +4989,7 @@ class FigureElementCollection extends FigureElement {
         `_${nameToUse}` in rootCollection
           && (addElementsToUse != null && addElementsToUse !== {})
           && !methodPathToUse.endsWith('equation')
+          && !methodPathToUse.endsWith('text')
       ) {
         newElement.add(addElementsToUse);
         // addedElements.push(addElementsToUse);
@@ -4955,6 +5025,10 @@ class FigureElementCollection extends FigureElement {
       ellipse: shapes.ellipse.bind(shapes),
       gl: shapes.gl.bind(shapes),
       morph: shapes.morph.bind(shapes),
+      glText: shapes.glText.bind(shapes),
+      // txt: shapes.txt.bind(shapes),
+      text: shapes.text.bind(shapes),
+      text2d: shapes.text2d.bind(shapes),
       arc: shapes.arc.bind(shapes),
       triangle: shapes.triangle.bind(shapes),
       generic: shapes.generic.bind(shapes),
@@ -4974,11 +5048,11 @@ class FigureElementCollection extends FigureElement {
       line: shapes.line.bind(shapes),
       star: shapes.star.bind(shapes),
       //
-      text: shapes.text.bind(shapes),
-      textLine: shapes.textLine.bind(shapes),
-      textLines: shapes.textLines.bind(shapes),
-      'text.line': shapes.textLine.bind(shapes),
-      'text.lines': shapes.textLines.bind(shapes),
+      // text: shapes.text.bind(shapes),
+      // textLine: shapes.textLine.bind(shapes),
+      // textLines: shapes.textLines.bind(shapes),
+      // 'text.line': shapes.textLine.bind(shapes),
+      // 'text.lines': shapes.textLines.bind(shapes),
       //
       textGL: shapes.textGL.bind(shapes),
       textHTML: shapes.htmlText.bind(shapes),
@@ -4990,6 +5064,8 @@ class FigureElementCollection extends FigureElement {
       //
       addEquation: collections.addEquation.bind(collections),
       equation: collections.equation.bind(collections),
+      ftext: collections.text.bind(collections),
+      // eqnText: collections.text.bind(collections),
       // addNavigator: collections.addNavigator.bind(collections),
     };
     if (make in methods) {
@@ -5009,8 +5085,8 @@ class FigureElementCollection extends FigureElement {
     return methodToUse;
   }
 
-  setFigure(figure: OBJ_FigureForElement) {
-    super.setFigure(figure);
+  setFigure(figure: OBJ_FigureForElement, notify: boolean = true) {
+    super.setFigure(figure, false);
     if (this.onAdd != null) {
       this.fnMap.exec(this.onAdd);
     }
@@ -5020,6 +5096,9 @@ class FigureElementCollection extends FigureElement {
       if (element.onAdd != null) {
         this.fnMap.exec(element.onAdd);
       }
+    }
+    if (notify) {
+      this.notifications.publish('setFigure');
     }
   }
 
@@ -6040,6 +6119,44 @@ class FigureElementCollection extends FigureElement {
     return elements;
   }
 
+  fontUpdated() {
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      this.elements[this.drawOrder[i]].fontUpdated();
+    }
+  }
+
+  getAtlases(callback: (() => void) | null = null) {
+    Object.keys(this.textureAtlases).forEach((id) => {
+      if (this.textureAtlases[id].notif != null) {
+        this.textureAtlases[id].atlas.notifications.remove('updated2', this.textureAtlases[id].notif);
+      }
+    });
+    this.textureAtlases = {};
+    const primitives = this.getAllPrimitives();
+    primitives.forEach((e) => {
+      if (e.atlas != null) {
+        const id = e.atlas.font.getTextureID();
+        if (this.textureAtlases[id] == null) {
+          this.textureAtlases[id] = {
+            atlas: e.atlas,
+            notif: callback ? e.atlas.notifications.add('updated2', callback) : null,
+          };
+        }
+      }
+    });
+  }
+
+  /**
+   * Recreate all atlases associated with children of this collection.
+   */
+  recreateAtlases() {
+    this.getAtlases();
+    Object.keys(this.textureAtlases).forEach(
+      id => this.textureAtlases[id].atlas.recreate(),
+    );
+  }
+
+
   /**
    * Get array of all children elements.
    *
@@ -6430,6 +6547,13 @@ class FigureElementCollection extends FigureElement {
     }
   }
 
+  contextLost() {
+    super.contextLost();
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      this.elements[this.drawOrder[i]].contextLost();
+    }
+  }
+
   _state(
     options: {
       precision?: number,
@@ -6490,6 +6614,24 @@ class FigureElementCollection extends FigureElement {
       const p = element.transform.t();
       element.transform.updateTranslation(p.add(offset));
     }
+  }
+
+  getFonts() {
+    const primitives = this.getAllPrimitives();
+    const fonts = {};
+    const output = [];
+    primitives.forEach((e) => {
+      const fnts = e.getFonts();
+      if (fnts.length === 0) {
+        return;
+      }
+      const [[fontID, font, atlas]] = fnts;
+      if (fonts[fontID] == null) {
+        fonts[fontID] = true;
+        output.push([fontID, font, atlas]);
+      }
+    });
+    return output;
   }
 }
 

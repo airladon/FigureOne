@@ -1,4 +1,5 @@
 // @flow
+import type { OBJ_AtlasMap } from '../figure/webgl/Atlas';
 
 /**
  * Defines whether a line is solid or dashed.
@@ -46,60 +47,195 @@ export type OBJ_CurvedCorner = {
   sides?: number,
 };
 
+/**
+ * Outline options.
+ *
+ * By default the glyphs will not be filled, with the outline the same color
+ * as the font.
+ *
+ * Glyphs can be filled with the `fill` property, but both fill and outline
+ * will be the same color unless the `color` property is used to override the
+ * outline's color.
+ *
+ * @property {number} [width] line width
+ * @property {boolean} [fill] include fill (`false`)
+ * @property {TypeColor} [color] outline color that overrides the font color -
+ * use if including a fill
+ */
+export type OBJ_Outline = {
+  width?: number,
+  fill?: boolean,
+  color?: TypeColor,
+};
+
+/**
+ * Underline options.
+ *
+ * An underline is defined as a horizontal line with some `width` with a bottom
+ * edge `descent` below the text baseline.
+ *
+ * If `descent` is negative, the line can be moved into a strike through
+ * position, or placed above the text.
+ *
+ * @property {number} [width]
+ * @property {number} [descent]
+ * @property {TypeColor} [color]
+ */
+export type OBJ_Underline = {
+  width?: number,
+  descent?: number,
+  color?: TypeColor,
+};
+
+/**
+ * Texture atlas font individual glyph ascent, descent and width modifiers.
+ *
+ * @property {w} [number] width
+ * @property {d} [number] descent
+ * @property {a} [number] ascent
+ */
+export type OBJ_GlyphModifiers = {
+  w?: number,
+  d?: number,
+  a?: number,
+};
+
+/* eslint-disable max-len */
+/**
+ * Font weight definition.
+ * `'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'`
+ */
+export type TypeFontWeight = 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
+/* eslint-enable max-len */
+
 /* eslint-disable max-len */
 /**
  * Font definition object.
  *
- * Text is drawn in a [Context2D canvas](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D) and so `family`, `style` and `weight` are any valid [options](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font).
+ * A font can be defined either from a subset of the properties used to define
+ * [fonts in css](https://developer.mozilla.org/en-US/docs/Web/CSS/font), or
+ * by using a texture altas of the various glyphs to be used.
  *
- * `size` is the draw space size of the font.
+ * A font can be rendered into a [2D canvas](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
+ * or into the WebGL canvas using the texture atlas.
  *
- * Width, descent and ascent of text is estimated, and there are times,
- * especially with non-standard fonts, that these estimates need ajustment.
+ * A texture atlas can either be supplied as an image, or generated
+ * automatically by FigureOne based on css font definitions.
  *
- * Most browsers only support a width measurement of text, and while this is
- * often good enough, there are times when it is not accurate (some fonts are
- * not accurate, sometimes the width of italics is inaccurate, width of
- * narrower letters is reported as thicker letters). Therefore, use the `width`
- * property to include a scaling factor that can reduce these errors in cases
- * where they arise.
+ * Choosing how to render text depends on the application.
  *
- * Many browsers don't yet support measurement of heights of text, and so
- * ascents and descents are calculated from measuring the width of an 'a'
- * character and then using scaling factors.
+ * If text size is to be animated through a large scale range, then rendering
+ * on the 2D canvas is advantageous as it can scale text to any size without a
+ * loss of sharpness. The main disadvantage of the 2D canvas is the fact that
+ * it's a different HTML canvas element to the WebGL canvas. Thus all text on
+ * the 2D canvas will always be above (default) or below the WebGl canvas
+ * independent of when it is drawn. This means text will always be above or
+ * below shapes. regenerated each time the size changes by some threshold.
  *
- * `maxAscent` is the scaling factor for letters that rise above an 'a', like
- * capital letters, lower case letters like 'd' and 'l', and punctuation like
- * '|', brackets and apostrophes. Note, some fonts have slightly different
- * heights for these different letters, but it is generally pretty close.
+ * Conversely, drawing text on the WebGL canvas provides control on which
+ * shapes can hide text and vise versa. The disadvantage is that text is drawn
+ * from a texture atlas of bitmapped fonts. This means as text is progressively
+ * scaled up or down, the the text will look more pixelated or blurry. For many
+ * scalings (like common scalings in an equation), this will likely not be a
+ * problem. But for large changes in animated scale, it will be better to use
+ * the 2D canvas. Scaling also needs to be considered if the WebGL canvas is
+ * expected to be resized. On a desktop browser, a canvas element can be
+ * resized a lot, and so if using the WebGL atlas, it may need to be
  *
- * `midAscent` is for lower case letters like 'a', 'g', 'p'.
+ * Note, the choice of where to render text can be made for each text element.
+ * Therefore it is possible to have some text rendered to the 2D canvas, and
+ * other text rendered to the WebGL canvas in the same figure.
  *
- * `descent` is for letters that generally do not go much below the baseline
- * like 'a', 'A', 't'.
+ * A texture atlas can either be supplied as an image, or generated
+ * automatically by FigureOne based on the css font definitions.
  *
- * `midDescent` is for punctuation that drops below the baseline a bit like
- * commas.
+ * CSS font definition:
+ *   * `family` - the typeface family from which it comes (e.g. 'Helvetica',
+ *     'Times New Roman')
+ *   * `style` - its slope (e.g. 'italic')
+ *   * `weight` - its thickness (e.g. 'bold')
+ *   * `size`
  *
- * `maxDescent` is for letters and punctuation that drops the furthest below
- * the baseline like 'g', '|', and brackets.
+ * Atlas font definition:
+ *   * `src` - the image or url to the image - if not supplied then atlas will
+ *      be generated automatically
+ *   * `map` - description of location and size of each glyph in the atlas
+ *   * `glyphs` - the available glyphs in the atlas. To reduce the size of the
+ *      atlas, include only the glyphs that are being used, or use a preset
+ *      alphabet (like 'latin', or 'math')
+ *   * `atlasColor` - if `true` then the rendered glyph color will be the same
+ *     as that in the texture. If `false`, then only the transparency channel of
+ *     the texture will be used and color will be defined by the FigureElement
+ *     drawing the text.
+ *   * `atlasSize` - if defined, and if the glyphs are generated automatically
+ *     then the glyphs will be created with a pixel size that is `atlasSize`
+ *     portion of the canvas height. If undefined, then the glyphs will be
+ *     created with a pixel size that is the ratio of the font size to the
+ *     scene height portion of the canvas height.
  *
- * @property {string} [family] The font family (`Times New Roman`)
- * @property {`normal` | `italic`} [style] (`normal`)
+ * A font can also have a number of modifying properties:
+ *   * `color` - fill or outline color of each glyph - not used if the texture
+ *      atlas color is to be used
+ *   * `underline`
+ *   * `outline` - defines whether the font is filled, is an outline, or both
+ *
+ * Fonts that are generated automatically rely on the client's browser to
+ * measure the font's width. From this the ascent and descent of each glyph
+ * is then estimated. Each glyph's width, ascent and descent is used to layout
+ * the glyphs in regular text and equations, as well as determine the borders
+ * and touch borders of FigureElements that draw the text.
+ *
+ * However, this estimate for different font families is not always perfectly
+ * accurate. If the estimate is not sufficient, then it can be modified by using
+ * the following properties (where each property is a proportion of the width
+ * of a character 'a'):
+ *   * `maxAscent`: Maximum ascent of glyphs like "A" or "$"
+ *   * `midAscent`: ascent of mid level glyphs like "a" and "g"
+ *   * `descent`: descent of glyphs that do not noticeably go below the
+ *      baseline (but often do a little) like "a" and "b"
+ *   * `midDescent`: descent of glyphs that go a little below the baseline like
+ *      "," and ";"
+ *   * `maxDescent`: maximum descent of glyphs like "g" and "|"
+ *
+ * Individual glyphs can also be modified (for atlas based fonts only) using
+ * the `modifiers` property.
+ *
+ *
+ * @property {string} [family] The font family (`'Times New Roman'`)
+ * @property {'normal' | 'italic' | 'oblique'} [style] (`'normal'`)
+ * @property {TypeFontWeight} [weight]
+ * font weight (`'normal'`)
  * @property {number} [size] size of font in draw space (`0.2`)
- * @property {'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'} [weight]
- * font weight (`200`)
+ * @property {boolean | OBJ_Underline} [underline] `true` to include
+ * an underline or use object to define its properties (`false`)
  * @property {[number, number, number, number]} [color] Font color
  * [red, green, blue, alpha] between 0 and 1 - (`[1, 0, 0, 1]`)
- * @property {number} [opacity] opacity multiplier (final opacity will be
- * `opacity` * `color` alpha) [`1`]
- * @property {number} [width] width multiplier for text when measured with
- * canvas2D.context.measureText (`1`)
+ * @property {OBJ_Outline} [outline] options to draw the text in outline
+ * instead of or in addition to a fill (`false`)
  * @property {number} [descent] (`0.8`)
  * @property {number} [maxDescent] (`0.2`)
  * @property {number} [midDescent] (`0.5`)
  * @property {number} [maxAscent] (`0.95`)
  * @property {number} [midAscent] (`1.4`)
+ * @property {OBJ_GlyphModifiers} [modifiers] individual glyph adjustments for
+ * texture atlas fonts
+ * @property {Image | string} [src] source image or url for atlas
+ * @property {OBJ_AtlasMap} [map] atlas definition needed if using a source
+ * image or url
+ * @property {string | 'greek' | 'math' | 'latin' | 'all' | 'common' | 'mathExt'} [glyphs]
+ * glyphs included in the font
+ * @property {null |number} [atlasSize] font size of atlas as a proportion of
+ * the WebGL canvas height. If this is null, then the atlas font size is
+ * calculated from the font size, scene height and number of pixels in the
+ * canvas height. (`null`)
+ * @property {TypeColor} [loadColor] color of temporary texture while actual
+ * texture is loading
+ * @property {boolean} [atlasColor] `true` to use the color of the glyphs in
+ * the atlas. `false` will just use the opacity and color the glyphs from the
+ * FigureElement drawing them
+ * @property {'gl' | '2d' | 'html'} [render] render the associated text to
+ * either the WebGL canvas, the 2D canvas, or the HTML canvas.
+
  * @example
  * // Full font definition
  * const font = new FigureFont({
@@ -117,17 +253,35 @@ export type OBJ_CurvedCorner = {
  */
 export type OBJ_Font = {
   family?: string,
-  style?: 'normal' | 'italic',
+  weight?: TypeFontWeight,
+  style?: 'normal' | 'italic' | 'oblique',
   size?: number,
-  weight?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
+
+  // Modifying properties
+  underline?: boolean | OBJ_Underline,
   color?: TypeColor | null,
-  opacity?: number,
-  width?: number,
+  outline?: boolean | OBJ_Outline,
+
+  // Font measurements
   descent?: number,
   maxDescent?: number,
   midDescent?: number,
   maxAscent?: number,
   midAscent?: number,
+  modifiers?: OBJ_GlyphModifiers,
+
+  // Atlas definition
+  src?: Image | string,
+  map?: OBJ_AtlasMap,
+  glyphs?: string | 'greek' | 'math' | 'latin' | 'all' | 'common' | 'mathExt',
+  loadColor?: TypeColor,
+  atlasColor?: boolean,
+  atlasSize?: number | null,
+
+  timeout?: number,
+  modifiers?: OBJ_GlyphModifiers,
+
+  render?: 'gl' | '2d' | 'html',
 };
 
 export type OBJ_Font_Fixed = {
@@ -136,7 +290,8 @@ export type OBJ_Font_Fixed = {
   size: number,
   weight: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
   color: TypeColor | null,
-  opacity: number,
+  underline: boolean | number | [number, number],
+  // opacity: number,
   width: number,
   descent: number,
   maxDescent: number,

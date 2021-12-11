@@ -341,7 +341,7 @@ describe('Collections line tests', () => {
   test('Label', () => {
     create('label');
     expect(l.getLabel()).toBe('a');
-    expect(l._label.getPosition().round(3)).toEqual(new Point(0.5, 0.151));
+    expect(l._label.getPosition().round(3)).toEqual(new Point(0.5, 0.157));
     l.setLabel('b');
     expect(l.getLabel()).toBe('b');
     expect(round(l._label.getRotation(), 3)).toBe(0);
@@ -350,21 +350,21 @@ describe('Collections line tests', () => {
   });
   test('Label BaseToLine', () => {
     create('labelBaseToLine');
-    expect(l._label.getPosition().round(3)).toEqual(new Point(0.5, 0.151));
+    expect(l._label.getPosition().round(3)).toEqual(new Point(0.5, 0.157));
     expect(round(l._label.getRotation(), 3)).toBe(0);
     l.setEndPoints([0, 0], [0, 1]);
     expect(round(l._label.getRotation(), 3)).toBe(0);
   });
   test('Label BaseAway', () => {
     create('labelBaseAway');
-    expect(l._label.getPosition().round(3)).toEqual(new Point(0.5, 0.151));
+    expect(l._label.getPosition().round(3)).toEqual(new Point(0.5, 0.157));
     expect(round(l._label.getRotation(), 3)).toBe(3.142);
     l.setEndPoints([0, 0], [0, 1]);
     expect(round(l._label.getRotation(), 3)).toBe(3.142);
   });
   test('Label Upright', () => {
     create('labelUpright');
-    expect(l._label.getPosition().round(3)).toEqual(new Point(0.5, 0.151));
+    expect(l._label.getPosition().round(3)).toEqual(new Point(0.5, 0.157));
     expect(round(l._label.getRotation(), 3)).toBe(0);
     l.setEndPoints([0, 0], [-1, 0]);
     expect(round(l._label.getRotation(), 3)).toBe(3.142);

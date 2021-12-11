@@ -128,8 +128,8 @@ describe('Equation Symbols - Box', () => {
     const box = eqn._boxDynamic.getBoundingRect('local');
     const a = eqn._a.getBoundingRect('local');
     expect(round(box.left)).toBe(0);
-    expect(round(box.width)).toBe(space * 2 + lineWidth * 2 + a.width);
-    expect(round(box.height)).toBe(space * 2 + lineWidth * 2 + a.height);
+    expect(round(box.width)).toBe(round(space * 2 + lineWidth * 2 + a.width));
+    expect(round(box.height)).toBe(round(space * 2 + lineWidth * 2 + a.height));
     expect(round(a.left)).toBe(round(space + lineWidth));
     expect(round(eqn._a.drawingObject.points)).toMatchSnapshot();
     expect(round(eqn._boxDynamic.drawingObject.points)).toMatchSnapshot();
@@ -152,8 +152,8 @@ describe('Equation Symbols - Box', () => {
     const box = eqn._boxStaticFirst.getBoundingRect('local');
     const a = eqn._a.getBoundingRect('local');
     expect(round(box.left)).toBe(0);
-    expect(round(box.width)).toBe(space * 2 + lineWidth * 2 + a.width);
-    expect(round(box.height)).toBe(space * 2 + lineWidth * 2 + a.height);
+    expect(round(box.width)).toBe(round(space * 2 + lineWidth * 2 + a.width));
+    expect(round(box.height)).toBe(round(space * 2 + lineWidth * 2 + a.height));
   });
   test('Box Static 1', () => {
     eqn.showForm('boxStatic1');

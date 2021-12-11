@@ -38,7 +38,8 @@ function layoutCirc() {
     length,
     angle: ang,
     label: {
-      text: { textFont: { style: 'normal' }, forms: { 0: text } },
+      text: { textFont: { style: 'normal', family: 'Times New Roman' }, forms: { 0: text } },
+      scale: 0.8,
       location,
       orientation: 'horizontal',
       update: true,
@@ -151,7 +152,9 @@ function layoutCirc() {
       curve: { width: 0.01, radius: rad, sides: 400 },
       startAngle,
       angle: angleSize,
-      label: { text, offset: 0.01, curvePosition },
+      label: {
+        text, offset: 0.01, curvePosition, font: { family: 'Times New Roman' }, scale: 1.5,
+      },
       sides,
       position,
     };
@@ -261,7 +264,7 @@ function layoutCirc() {
         },
         {
           name: 'label',
-          make: 'textLines',
+          make: 'ftext',
           position:
           textPosition,
           text,
@@ -741,11 +744,11 @@ function layoutCirc() {
   // Update the buttons that are dependent on the selected triangle
   const updateButtons = (triElement) => {
     if (triElement.customState.lock === 'theta') {
-      lockAngle._label.custom.updateText({ text: '|theta|' });
+      lockAngle._label.setText({ text: '|theta|' });
     } else if (triElement.customState.lock === 'comp') {
-      lockAngle._label.custom.updateText({ text: '|_90||min||theta|' });
+      lockAngle._label.setText({ text: '|_90||min||theta|' });
     } else {
-      lockAngle._label.custom.updateText({ text: '|_90|' });
+      lockAngle._label.setText({ text: '|_90|' });
     }
 
     if (triElement.customState.lockHyp) {

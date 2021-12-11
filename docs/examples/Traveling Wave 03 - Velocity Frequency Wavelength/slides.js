@@ -27,27 +27,27 @@ function addSlides() {
   const slides = [];
 
   // Helper functions to make defining text modifiers more succinct
-  const action = (text, onClick, touchBorder = 0, color = color1) => ({
-    text, font: { color }, onClick, touchBorder,
+  const action = (text, onClick, touch = 0, color = color1) => ({
+    text, font: { color }, onClick, touch,
   });
-  const actionMath = (text, onClick, touchBorder = 0, color = color1) => ({
+  const actionMath = (text, onClick, touch = 0, color = color1) => ({
     text,
     font: {
       family: 'Times New Roman', style: 'italic', size: 0.17, color,
     },
     onClick,
-    touchBorder,
+    touch,
   });
-  const pulse = (text, element, scale = 1.5, touchBorder = 0, xAlign = 'center', yAlign = 'middle', color = color1) => ({
+  const pulse = (text, element, scale = 1.5, touch = 0, xAlign = 'center', yAlign = 'middle', color = color1) => ({
     text,
     font: { color },
-    touchBorder,
+    touch,
     onClick: () => figure.getElement(element).pulse({ scale, xAlign, yAlign }),
   });
-  const eqnPulse = (text, elements, touchBorder = 0, color = color1) => ({
+  const eqnPulse = (text, elements, touch = 0, color = color1) => ({
     text,
     font: { color },
-    touchBorder,
+    touch,
     onClick: () => eqn.pulse({
       elements,
       frequency: 3,
@@ -158,7 +158,7 @@ function addSlides() {
     modifiers: {
       medium: action('medium', () => medium.custom.balls.pulse({
         translation: 0.02, angle: Math.PI / 2, min: -0.02, frequency: 3,
-      })),
+      }), 0.1),
       particle: action('particle', () => medium.custom.ball0.pulse({ scale: 4 }), 0.15, color0),
       // medium: highlight('medium'),
       disturbing: highlight('disturbing'),
@@ -414,7 +414,7 @@ function addSlides() {
         medium1.custom.balls.getElement('ball0').pulse({ scale: 4 });
         medium2.custom.balls.getElement('ball0').pulse({ scale: 4 });
       }, 0, color0),
-      faster: action('faster', () => figure.getElement('vFast').pulse()),
+      faster: action('faster', () => figure.getElement('vFast').pulse(), [0.1, 0.1, 0.05, 0.1]),
       'slow motion': action('slow motion', () => {
         layout.slowMotion();
         layout.disturbThenFreeze();
@@ -899,7 +899,7 @@ function addSlides() {
       {
         text: 'NB: The |minus sign| is a phase offset of |piSmall| (as |sinS|(\u2212|xS|) = \u2212|sinS|(|xS|) = |sinS|(|xS| + |piSmall|)).',
         font: { size: 0.09 },
-        lineSpace: 0.2,
+        lineSpace: 0.06,
       },
     ],
     form: 'sineConstT',

@@ -919,7 +919,7 @@ describe('Equation Functions - Ann', () => {
     const a = eqn._a.getBoundingRect('local');
     const top = eqn._top.getBoundingRect('local');
     const bottom = eqn._bottom.getBoundingRect('local');
-    expect(round(top.bottom)).toBe(a.top);
+    expect(round(top.bottom)).toBe(round(a.top));
     expect(round(bottom.top)).toBe(round(a.bottom));
   });
   test('Multi Annotation', () => {

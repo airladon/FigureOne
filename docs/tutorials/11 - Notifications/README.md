@@ -40,7 +40,7 @@ ball.notifications.add('setTransform', () => {
   // Convert x and y to string with 1 decimal place
   const x = p.x.toFixed(1);
   const y = p.y.toFixed(1);
-  text.custom.updateText({ text: `(${x}, ${y})` });
+  text.setText({ text: `(${x}, ${y})` });
 });
 ```
 

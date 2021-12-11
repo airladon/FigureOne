@@ -209,6 +209,22 @@ const updates = {
   zoomMinDelta: (e) => { e.zoomDelta(1, 0.5); e.zoomDelta(1, 0.5); e.zoomDelta(1, 0.5); },
   zoomMaxDelta: (e) => { e.zoomDelta(1, 0.5); e.zoomDelta(1, 0.5); e.zoomDelta(1, 0.5); },
   arrowZoom: e => e.zoom(1, 0.25, 1.3),
+  default: () => {
+    const gls = figure.elements.getAllPrimitives().filter(e => e.text != null);
+    const d2s = figure.elements.getAllPrimitives().filter(e => e.drawingObject.text != null);
+    figure.add({
+      make: 'text',
+      text: `gl: ${gls.length.toString()}`,
+      position: [-5, 4.8],
+      font: { size: 0.15 },
+    });
+    figure.add({
+      make: 'text',
+      text: `2d: ${d2s.length.toString()}`,
+      position: [-4, 4.8],
+      font: { size: 0.15 },
+    });
+  },
 };
 
 const getValues = {

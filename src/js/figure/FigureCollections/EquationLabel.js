@@ -125,6 +125,7 @@ export default class EquationLabel {
           base: ['base'],
         },
         position,
+        // render: font.render,
       });
       eqn.showForm('base');
     } else if (labelTextOrEquation instanceof Equation) {
@@ -192,16 +193,8 @@ export default class EquationLabel {
   setText(text: string) {
     const form = this.eqn.getCurrentForm();
     if (form != null) {
-      const key = Object.keys(form.elements)[0];
-      // This is ok to fix for flow because all the elements of the
-      // simple equation created by Equationlabel will be Primitives
-      // $FlowFixMe
-      const textObject = form.elements[key].drawingObject;
-      if (textObject != null) {
-        textObject.setText(text); // $FlowFixMe
-        form.elements[key].drawBorder = form.elements[key].drawingObject.textBorder; // $FlowFixMe
-        form.elements[key].drawBorderBuffer = form.elements[key].drawingObject.textBorderBuffer;
-      }
+      const key = Object.keys(form.elements)[0]; // $FlowFixMe
+      form.elements[key].setText(text);
       form.arrange(
         this.eqn.eqn.scale,
         this.eqn.eqn.formDefaults.alignment.xAlign,
@@ -219,14 +212,16 @@ export default class EquationLabel {
       // This is ok to fix for flow because all the elements of the
       // simple equation created by Equationlabel will be Primitives
       // $FlowFixMe
-      const textObject = form.elements[key].drawingObject;
-      // This is ok to fix for flow because all the elements of the
-      // simple equation created by Equationlabel will be Primitives
-      // that are text objects
-      if (textObject != null) {
-        // $FlowFixMe
-        textToReturn = textObject.text[0].text;
-      }
+      // const textObject = form.elements[key].drawingObject;
+      // // This is ok to fix for flow because all the elements of the
+      // // simple equation created by Equationlabel will be Primitives
+      // // that are text objects
+      // if (textObject != null) {
+      //   // $FlowFixMe
+      //   textToReturn = textObject.text[0].text;
+      // }
+      // $FlowFixMe
+      textToReturn = form.elements[key].getText();
     }
     return textToReturn;
   }
@@ -334,6 +329,12 @@ export default class EquationLabel {
     let h = 0;
     let w = 0;
     const currentForm = this.eqn.getCurrentForm();
+    if (
+      currentForm != null
+      && (currentForm.width === 0 || currentForm.height === 0)
+    ) {
+      this.eqn.layoutForms('current', false);
+    }
     let change = false;
     if (currentForm != null) {
       if (this.height !== currentForm.height) {
@@ -368,6 +369,7 @@ export default class EquationLabel {
       p = position.add(positionOffset).rotate(lineAngle, position);
       r = labelAngle - parentAngle + lineAngle;
     }
+
     this.eqn.setPosition(p);
     this.eqn.transform.updateRotation(r);
 

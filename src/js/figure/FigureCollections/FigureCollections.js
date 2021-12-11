@@ -59,7 +59,8 @@ import {
   FigureElementCollection,
 } from '../Element';
 import type { TypeColor } from '../../tools/types';
-// import { Equation } from '../Equation/Equation';
+import CollectionsText from './Text';
+import type { OBJ_FormattedText } from './Text';
 
 /**
  * Built in figure collections.
@@ -157,6 +158,14 @@ export default class FigureCollections {
     // const optionsToUse = Object.assign({}, ...options);
     const optionsToUse = joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options);
     return new EquationLabel(
+      this, optionsToUse,
+    );
+  }
+
+  text(...options: Array<OBJ_FormattedText>) {
+    const optionsToUse = joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options);
+
+    return new CollectionsText(
       this, optionsToUse,
     );
   }

@@ -9,6 +9,7 @@ import type {
 } from '../../tools/geometry/Bounds';
 import { joinObjects, joinObjectsWithOptions } from '../../tools/tools';
 import { round, range } from '../../tools/math';
+import type { OBJ_Font } from '../../tools/types';
 import {
   FigureElementCollection, FigureElementPrimitive,
 } from '../Element';
@@ -245,6 +246,7 @@ export type OBJ_PolylineSide = {}
  * @property {null | OBJ_ValidShape} [makeValid] if defined, whenever
  * points are updated the shape will be checked to ensure consistency with
  * displayed labels of angles and sides.
+ * @property {OBJ_Font} [font] default font to use for labels
  */
 /* eslint-enable max-len */
 export type COL_Polyline = {
@@ -253,6 +255,7 @@ export type COL_Polyline = {
   side?: OBJ_PolylineSide | Array<COL_Line>,
   pad?: OBJ_PolylinePad | Array<OBJ_PolylinePadSingle>,
   makeValid?: ?OBJ_ValidShape,
+  font?: OBJ_Font,
 } & OBJ_Polyline & OBJ_Collection;
 
 function processArray(
@@ -513,6 +516,8 @@ export default class CollectionsPolyline extends FigureElementCollection {
     }
   };
 
+  defaultFont: OBJ_Font;
+
   /**
    * @hideconstructor
    */
@@ -531,7 +536,10 @@ export default class CollectionsPolyline extends FigureElementCollection {
       reverse: false,
       transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       makeValid: null,
-    };
+      font: joinObjects({}, collections.primitives.defaultFont),
+    };  // $FlowFixMe
+    delete defaultOptions.font.style;  // $FlowFixMe
+    delete defaultOptions.font.color;
     if (options.makeValid != null && options.makeValid.shape != null && options.makeValid.shape === 'triangle') {
       defaultOptions.makeValid = {
         shape: 'triangle',
@@ -546,6 +554,7 @@ export default class CollectionsPolyline extends FigureElementCollection {
     const optionsToUse = joinObjects({}, defaultOptions, options);
     super(optionsToUse);
     this.setColor(optionsToUse.color);
+    this.defaultFont = optionsToUse.font;
 
     this.collections = collections;
     this.largerTouchBorder = optionsToUse.largerTouchBorder;
@@ -654,6 +663,7 @@ export default class CollectionsPolyline extends FigureElementCollection {
     const defaultAngleLabelOptions = {
       text: null,
       offset: 0.05,
+      font: this.defaultFont,
     };
     let pCount = this.points.length;
     if (close === false) {
@@ -700,6 +710,7 @@ export default class CollectionsPolyline extends FigureElementCollection {
     };
     const defaultSideLabelOptions = {
       offset: 0.1,
+      font: this.defaultFont,
       text: null,
       location: 'outside',
       subLocation: 'top',

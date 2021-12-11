@@ -138,7 +138,7 @@ const slider = figure.add({
 slider._slider.notifications.add('changed', (v) => {
   const iterations = Math.max(Math.floor(Fig.tools.math.easein(v) * 10000), 1);
   mandelbrot.drawingObject.uniforms.u_iterations.value = [iterations];
-  slider._label.custom.updateText({ text: `Max Iterations ${iterations}` });
+  slider._label.setText({ text: `Max Iterations ${iterations}` });
 });
 
 // Initial positions

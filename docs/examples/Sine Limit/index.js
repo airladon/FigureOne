@@ -23,27 +23,6 @@ const radius = 2;
 */
 figure.add([
   {
-    name: 'radius',
-    make: 'collections.line',
-    options: {
-      p1: origin,
-      length: radius,
-      angle: 1,
-      touchBorder: 0.5,
-      width: 0.01,
-      color: [0, 0.5, 1, 1],
-      label: {
-        text: '1',
-        offset: 0.05,
-        update: true,
-      },
-      move: {
-        type: 'rotation',
-        bounds: { min: 0.07, max: 1.1 },
-      },
-    },
-  },
-  {
     name: 'angle',
     make: 'collections.angle',
     options: {
@@ -61,8 +40,32 @@ figure.add([
         touchBorder: 0.1,
         isTouchable: true,
         color: [1, 0, 0, 1],
+        scale: 1.5,
+        font: { family: 'times new roman ' },
       },
       position: origin,
+    },
+  },
+  {
+    name: 'radius',
+    make: 'collections.line',
+    options: {
+      p1: origin,
+      length: radius,
+      angle: 1,
+      touchBorder: 0.5,
+      width: 0.01,
+      color: [0, 0.5, 1, 1],
+      label: {
+        text: '1',
+        scale: 1.4,
+        offset: 0.05,
+        update: true,
+      },
+      move: {
+        type: 'rotation',
+        bounds: { min: 0.07, max: 1.1 },
+      },
     },
   },
   {
@@ -235,38 +238,38 @@ const modifiersCommon = {
   'blue line': {
     font: { color: [0, 0.5, 1, 1] },
     onClick: () => radiusLine.pulseWidth(),
-    touchBorder: [0.1, 0.03, 0.1, 0.1],
+    touch: [0.1, 0.03, 0.1, 0.1],
   },
   radius: {
     font: { color: [0, 0.5, 1, 1] },
     onClick: () => radiusLine.pulseWidth(),
-    touchBorder: [0.1, 0.03, 0.1, 0.1],
+    touch: [0.1, 0.03, 0.1, 0.1],
   },
   arc: {
     font: { color: [1, 0, 0, 1] },
     onClick: () => figure.getElement('arc.label').pulse({ xAlign: 'left' }),
-    touchBorder: 0.1,
+    touch: 0.1,
   },
   angle: {
     font: { color: [1, 0, 0, 1] },
     onClick: () => figure.getElement('angle.label').pulse({ scale: 2 }),
-    touchBorder: [0.1, 0.01, 0.1, 0.1],
+    touch: [0.1, 0.01, 0.1, 0.1],
   },
   angle1: {
     text: 'angle',
     font: { color: [1, 0, 0, 1] },
     onClick: () => figure.getElement('angle.label').pulse({ scale: 2 }),
-    touchBorder: [0.1, 0.1, 0.1, 0.03],
+    touch: [0.1, 0.1, 0.1, 0.03],
   },
   vertical: {
     font: { color: [1, 0, 0, 1] },
     onClick: () => figure.getElement('sine.label').pulse({ xAlign: 'right' }),
-    touchBorder: [0.1, 0.1, 0.1, 0.03],
+    touch: [0.1, 0.1, 0.1, 0.03],
   },
   limit: {
     font: { color: [0, 0.5, 1, 1] },
     onClick: () => eqn.pulse({ elements: ['as ', 'xTo', '_0', 'lim'], centerOn: '_0', xAlign: 'right' }),
-    touchBorder: 0.1,
+    touch: 0.1,
   },
   sin: {
     font: { color: [1, 0, 0, 1], family: 'Times New Roman', size: 0.12 },
@@ -276,7 +279,7 @@ const modifiersCommon = {
       });
       figure.getElement('sine.label').pulse();
     },
-    touchBorder: 0.1,
+    touch: 0.1,
   },
   x1: {
     text: 'x',
@@ -289,7 +292,7 @@ const modifiersCommon = {
       });
       figure.getElement('sine.label').pulse({ xAlign: 0.9 });
     },
-    touchBorder: 0.1,
+    touch: 0.1,
   },
   x: {
     font: {
@@ -299,7 +302,7 @@ const modifiersCommon = {
       figure.getElement('eqn.x_2').pulse({ yAlign: 'top' });
       figure.getElement('angle.label').pulse();
     },
-    touchBorder: 0.1,
+    touch: 0.1,
   },
   sine: { font: { style: 'italic' } },
   equal: { font: { style: 'italic' } },

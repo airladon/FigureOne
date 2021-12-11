@@ -14,7 +14,7 @@ import {
 } from '../Element';
 import type { FigureElement } from '../Element';
 import type {
-  OBJ_TextLines, OBJ_Arrow,
+  OBJ_Arrow,
 } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 import type {
   OBJ_Collection,
@@ -25,6 +25,7 @@ import type { OBJ_SlideNavigatorSlide } from '../SlideNavigator';
 import type { COL_Rectangle } from './Rectangle';
 import type Figure from '../Figure';
 import type { Equation } from '../Equation/Equation';
+import type { OBJ_FormattedText } from './Text';
 
 
 /**
@@ -61,7 +62,7 @@ export type COL_SlideNavigatorEqnDefaults = {
  * options - use `null` to hide
  * @property {COL_SlideNavigatorButton | null} [nextButton] next button options
  * - use `null` to hide
- * @property {OBJ_TextLines | null} [text] text options - use `null` to hide
+ * @property {OBJ_FormattedText | null} [text] text options - use `null` to hide
  * @property {Equation | string | Array<string | Equation>} [equation] equation
  * to tie to SlideNavigator
  * @property {COL_SlideNavigatorEqnDefaults} [equationDefaults] default
@@ -73,7 +74,7 @@ export type COL_SlideNavigator = {
   slides?: Array<OBJ_SlideNavigatorSlide>,
   prevButton?: COL_SlideNavigatorButton | null,
   nextButton?: COL_SlideNavigatorButton | null,
-  text?: OBJ_TextLines | null,
+  text?: OBJ_FormattedText | null,
   equation?: Equation | string | Array<string | Equation>,
   equationDefaults?: COL_SlideNavigatorEqnDefaults,
   disableOpacity?: number,
@@ -218,7 +219,7 @@ export type COL_SlideNavigator = {
  * const update = (sideLength) => {
  *   square.custom.updatePoints({ width: sideLength, height: sideLength });
  *   label.setPosition(sideLength / 2 + 0.1, 0);
- *   label.custom.updateText({ text: `${(sideLength / 0.4).toFixed(1)}` });
+ *   label.setText({ text: `${(sideLength / 0.4).toFixed(1)}` });
  * };
  *
  * // Add slides to the navigator
@@ -354,7 +355,7 @@ class CollectionsSlideNavigator extends FigureElementCollection {
   }
 
 
-  addText(textOptions: OBJ_TextLines | string) {
+  addText(textOptions: OBJ_FormattedText | string) {
     const defaultOptions = {
       font: joinObjects({}, this.collections.primitives.defaultFont),
       text: '',
@@ -370,8 +371,8 @@ class CollectionsSlideNavigator extends FigureElementCollection {
       optionsIn = textOptions;
     }
     const o = joinObjects({}, defaultOptions, optionsIn);
-    const text = this.collections.primitives.textLines(o);
-    text.isTouchable = true;
+    const text = this.collections.text(o);
+    // text.isTouchable = true;
     this.add('text', text);
   }
 

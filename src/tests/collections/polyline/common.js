@@ -17,6 +17,7 @@ function makeShape(name, options, mods, getPos) {
       color: [1, 0, 0, 0.7],
       width: 0.05,
       points: [[0, 0], [0.3, 0], [0, 0.3]],
+      font: { size: 0.2, family: 'Times New Roman' },
     }, options),
     mods: tools.misc.joinObjects({}, {
       isTouchable: true,

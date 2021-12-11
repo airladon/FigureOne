@@ -17,11 +17,14 @@ import type {
   OBJ_Font, OBJ_Font_Fixed, TypeDash, TypeColor,
 } from '../../tools/types';
 import type {
-  OBJ_Line, OBJ_TextLines,
+  OBJ_Line,
 } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections';
+import type { OBJ_FormattedText } from './Text';
 import type { TypeArrowHead, OBJ_LineArrows } from '../geometries/arrow';
+import type FigureElementPrimitive2DText from '../FigurePrimitives/FigureElementPrimitive2DText';
+import type FigureElementPrimitiveGLText from '../FigurePrimitives/FigureElementPrimitiveGLText';
 
 function calcAuto(auto: [number, number]) {
   const [min, max] = auto;
@@ -264,7 +267,7 @@ export type OBJ_AxisLabels_Fixed = {
 
  * @extends {@link OBJ_TextLines}
  */
-export type OBJ_AxisTitle = OBJ_TextLines & {
+export type OBJ_AxisTitle = OBJ_FormattedText & {
   rotation?: number,
   offset?: TypeParsablePoint,
   location?: 'bottom' | 'top' | 'left' | 'right',
@@ -302,7 +305,7 @@ export type OBJ_AxisTitle = OBJ_TextLines & {
  * options. Use an Array to setup multiple sets/styles of ticks. Use a boolean
  * value to turn ticks on or off. Use a {@link TypeTickLocation} to only set
  * tick location property (`false`)
- * @property {OBJ_AxisLabels | string | (Object) => Array<string>} [labels]
+ * @property {OBJ_AxisLabels | string | () => Array<string>} [labels]
  * label options. Use `false` to turn labels off, or a string or function as
  * a callback to define custom labels for a set of values. Use
  * {@link TypeLabelLocation} to only set the label location property.
@@ -489,7 +492,7 @@ export type COL_Axis = {
 class CollectionsAxis extends FigureElementCollection {
   // Figure elements
   _line: ?FigureElementPrimitive;
-  _labels: ?FigureElementPrimitive;
+  _labels: ?(FigureElementPrimitive2DText | FigureElementPrimitiveGLText);
   _grid: ?FigureElementPrimitive;
   _ticks0: ?FigureElementPrimitive;
   _grid0: ?FigureElementPrimitive;
@@ -724,10 +727,15 @@ class CollectionsAxis extends FigureElementCollection {
       } else if (labelsO === true) {
         labelsO = {};
       }
+      let defaultPrecision = 0;
+      const span = this.stopValue - this.startValue;
+      if (span < 5) {
+        defaultPrecision = Math.max(-Math.log10((span)), 0) + 1;
+      }
       const o = joinObjects(
         {},
         {
-          precision: 1,
+          precision: defaultPrecision,
           format: 'decimal',  // or 'exponent'
           font: this.defaultFont,
           xAlign: this.axis === 'x' ? 'center' : 'right',
@@ -754,15 +762,23 @@ class CollectionsAxis extends FigureElementCollection {
           if (o.location === 'right') { o.xAlign = 'left'; }
         }
       }
-      const labels = this.collections.primitives.text(joinObjects({}, o, { text: '0' }));
+      const labels = this.collections.primitives.text(joinObjects({}, o, { text: '0', location: [0, 0] }));
       labels.transform.updateRotation(o.rotation);
       labels._custom.location = o.location;
       this.add('labels', labels);
     }
     this.update(this.startValue, this.stopValue);
     if (this.showAxis && options.title != null) {
-      this.addTitle(options.title);
+      if (typeof options.title === 'string' || options.title.text != null) {
+        this.addTitle(options.title);
+      }
     }
+    this.getAtlases(() => this.update());
+  }
+
+  fontUpdated() {
+    super.fontUpdated();
+    this.update();
   }
 
   addTicks(
@@ -944,6 +960,15 @@ class CollectionsAxis extends FigureElementCollection {
     this.update(start, stop);
   }
 
+  // recreateAtlases() {
+  //   if (this._labels != null) {
+  //     this._labels.recreateAtlases();
+  //   }
+  //   if (this._title != null) {
+  //     this._title.recreateAtlases();
+  //   }
+  // }
+
   update(
     startValueIn: number = this.startValue,
     stopValueIn: number = this.stopValue,
@@ -1056,6 +1081,7 @@ class CollectionsAxis extends FigureElementCollection {
       // }
     }
     const text = [];
+    const locations = [];
     let spaceBounds = -space;
     if (this.ticks[0] !== false) {
       if (this.axis === 'x') {
@@ -1112,23 +1138,24 @@ class CollectionsAxis extends FigureElementCollection {
           label = '';
         }
       }
-      text.push({
-        text: label,
-        location,
-      });
+      text.push(label);
+      locations.push(location);
     }
     // $FlowFixMe
-    this._labels.drawingObject.clear(); // $FlowFixMe
-    this._labels.drawingObject.loadText({
-      text, // $FlowFixMe
-      font: this.labels.font, // $FlowFixMe
-      xAlign: this.labels.xAlign, // $FlowFixMe
-      yAlign: this.labels.yAlign,
+    // this._labels.drawingObject.clear(); // $FlowFixMe
+    // this._labels.drawingObject.loadText({
+    //   text, // $FlowFixMe
+    //   font: this.labels.font, // $FlowFixMe
+    //   xAlign: this.labels.xAlign, // $FlowFixMe
+    //   yAlign: this.labels.yAlign,
+    // });
+    this._labels.setText({  // $FlowFixMe
+      text, location: locations, xAlign: this.labels.xAlign, yAlign: this.labels.yAlign,
     });
     // $FlowFixMe
-    this._labels.drawBorder = this._labels.drawingObject.textBorder;
+    // this._labels.drawBorder = this._labels.drawingObject.textBorder;
     // $FlowFixMe
-    this._labels.drawBorderBuffer = this._labels.drawingObject.textBorderBuffer;
+    // this._labels.drawBorderBuffer = this._labels.drawingObject.textBorderBuffer;
   }
 
   updateTicks(type: 'ticks' | 'grid', values: Array<number>, index: number) {
@@ -1164,7 +1191,7 @@ class CollectionsAxis extends FigureElementCollection {
     }
   }
 
-  addTitle(optionsIn: OBJ_TextLines & OBJ_AxisTitle | string) {
+  addTitle(optionsIn: OBJ_FormattedText & OBJ_AxisTitle | string) {
     let optionsToUse = optionsIn;
     if (typeof optionsIn === 'string') {
       optionsToUse = { text: [optionsIn] };
@@ -1226,7 +1253,7 @@ class CollectionsAxis extends FigureElementCollection {
       //   o.position = new Point(bounds.left - o.font.size / 1.5, this.length / 2).add(o.offset);
       // }
     }
-    const title = this.collections.primitives.textLines(o);
+    const title = this.collections.text(o);
     title.transform.updateRotation(o.rotation);
     this.add('title', title);
   }

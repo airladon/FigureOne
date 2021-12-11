@@ -432,6 +432,11 @@ class CollectionsToggle extends FigureElementCollection {
     }
   }
 
+  fontUpdated() {
+    super.fontUpdated();
+    this.updateLabel();
+  }
+
   updateLabel() {
     const { label, _label } = this;
     if (label != null && _label != null) {

@@ -25,7 +25,7 @@ import type {
 } from './EquationLabel';
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Animation/Animation';
-import type { TypeColor } from '../../tools/types';
+import type { TypeColor, OBJ_Font } from '../../tools/types';
 import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections';
 
@@ -436,8 +436,11 @@ class AngleLabel extends EquationLabel {
     location: 'left' | 'right' | 'top' | 'bottom' | 'outside' | 'inside' | 'positive' | 'negative',
     subLocation: 'left' | 'right' | 'top' | 'bottom',
     scale: number = 0.7,
+    font: OBJ_Font,
   ) {
-    super(equation, { label: labelText, color, scale });
+    super(equation, {
+      label: labelText, color, scale, font,
+    });
     this.radius = radius;
     this.curvePosition = curvePosition;
     this.offset = offset;
@@ -1179,7 +1182,11 @@ class CollectionsAngle extends FigureElementCollection {
       color: this.color,
       location: 'outside',
       update: false,
+      font: joinObjects({}, this.collections.primitives.defaultFont),
     };
+    delete defaultLabelOptions.font.style;
+    delete defaultLabelOptions.font.color;
+    delete defaultLabelOptions.font.type;
     if (this.curve) {
       defaultLabelOptions.radius = Math.max(
         this.curve.radius,
@@ -1208,6 +1215,7 @@ class CollectionsAngle extends FigureElementCollection {
       optionsToUse.location,
       optionsToUse.subLocation,
       optionsToUse.scale,
+      optionsToUse.font,
     );
     this.label.eqn.initialForm = null;
     if (optionsToUse.isTouchable != null) {
@@ -1224,6 +1232,7 @@ class CollectionsAngle extends FigureElementCollection {
     }
     this.setAutoUpdate(optionsToUse.update);
     this.updateLabel();
+    this.getAtlases(() => this.updateLabelUnshow());
   }
 
   addCurve(curveOptions: {
@@ -1572,7 +1581,11 @@ class CollectionsAngle extends FigureElementCollection {
         this.updateCurve(curveAngle, fullCurveAngle, rotationForArrow1, true);
       }
     }
-    this.updateLabel();
+    if (labelRotationOffset != null) {
+      this.updateLabel(this.getRotation() + labelRotationOffset);
+    } else {
+      this.updateLabel();
+    }
 
     const { _side1, side1 } = this;
     if (_side1 && side1) {
@@ -1641,6 +1654,12 @@ class CollectionsAngle extends FigureElementCollection {
       label.showRealAngle = false;
     }
     this.updateLabel();
+    this.getAtlases(() => this.updateLabelUnshow());
+  }
+
+  fontUpdated() {
+    super.fontUpdated();
+    this.updateLabelUnshow();
   }
 
   /**
@@ -1662,6 +1681,17 @@ class CollectionsAngle extends FigureElementCollection {
       label.showRealAngle = true;
     }
     this.updateLabel();
+    this.getAtlases(() => this.updateLabelUnshow());
+  }
+
+  // setFigure(figure: OBJ_FigureForElement) {
+  //   super.setFigure(figure, false);
+  //   this.updateLabel();
+  //   this.notifications.publish('setFigure');
+  // }
+
+  updateLabelUnshow() {
+    this.updateLabel(this.getRotation(), false);
   }
 
   /**
@@ -1671,11 +1701,13 @@ class CollectionsAngle extends FigureElementCollection {
    * <a href="collectionsangle#setautoupdate">setAutoUpdate</a>
    * @param {number | null} rotationOffset
    */
-  updateLabel(rotationOffset: ?number = this.getRotation()) {
+  updateLabel(rotationOffset: ?number = this.getRotation(), forceShow: boolean = true) {
     if (rotationOffset != null) {
       this.lastLabelRotationOffset = rotationOffset;
     }
     const { _label, label } = this;
+    // const labelWasHidden = !_label.isShown;
+    // const angleWasHidden = !this.getIsShown();
     if (_label && label) {
       if (
         (label.autoHide != null && label.autoHide > Math.abs(this.angle)) // $FlowFixMe
@@ -1683,7 +1715,9 @@ class CollectionsAngle extends FigureElementCollection {
       ) {
         _label.hide();
       } else {
-        _label.show();
+        if (forceShow) {
+          _label.show();
+        }
         if (label.showRealAngle) {
           let { angle } = this;
           if (angle >= 0 && this.direction === -1) {
@@ -1752,6 +1786,12 @@ class CollectionsAngle extends FigureElementCollection {
         );
       }
     }
+    // if (labelWasHidden) {
+    //   _label.hide();
+    // }
+    // if (angleWasHidden) {
+    //   this.hide();
+    // }
   }
 
   /**
@@ -1993,6 +2033,9 @@ class CollectionsAngle extends FigureElementCollection {
         });
       } else {
         rotPad.move.element = this;
+        this.notifications.add('setTransform', () => {
+          this.updateLabel();
+        });
       }
     }
   }

@@ -3,7 +3,7 @@
 import {
   Rect, Point, Transform, getPoint, getRect, getTransform,
   getBorder, getPoints,
-  getBoundingBorder, isBuffer, toNumbers,
+  toNumbers,
   sphere, cube, cylinder, cone, revolve, surface, prism, line3,
   getScale,
 } from '../../tools/g2';
@@ -23,20 +23,21 @@ import DrawContext2D from '../DrawContext2D';
 import * as tools from '../../tools/math';
 import { generateUniqueId, joinObjects, joinObjectsWithOptions } from '../../tools/tools';
 // eslint-disable-next-line import/no-cycle
-import DrawingObject from '../DrawingObjects/DrawingObject';
 // eslint-disable-next-line import/no-cycle
 import GLObject from '../DrawingObjects/GLObject/GLObject';
 // eslint-disable-next-line import/no-cycle
 import { CustomAnimationStep } from '../Animation/Animation';
 // eslint-disable-next-line import/no-cycle
 import FigureElementPrimitiveMorph from './FigureElementPrimitiveMorph';
+import FigureElementPrimitive2DText from './FigureElementPrimitive2DText';
+import FigureElementPrimitiveGLText from './FigureElementPrimitiveGLText';
 // eslint-disable-next-line import/no-cycle
 // import Generic from './Generic';
 import Text from './Text';
 // eslint-disable-next-line import/no-cycle
-import {
-  TextObject, TextLineObject, TextLinesObject,
-} from '../DrawingObjects/TextObject/TextObject';
+// import {
+//   TextObject, TextLineObject, TextLinesObject,
+// } from '../DrawingObjects/TextObject/TextObject';
 // eslint-disable-next-line import/no-cycle
 import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 // eslint-disable-next-line import/no-cycle
@@ -66,7 +67,7 @@ import Scene from '../../tools/geometry/scene';
 import FigureElementPrimitiveGesture from './FigureElementPrimitiveGesture';
 import type { OBJ_Gesture } from './FigureElementPrimitiveGesture';
 import type {
-  OBJ_LineStyleSimple, OBJ_GenericGL, OBJ_Morph, TypeGLPrimitive,
+  OBJ_LineStyleSimple, OBJ_GenericGL, OBJ_Morph, TypeGLPrimitive, OBJ_Text,
 } from './FigurePrimitiveTypes';
 import type {
   OBJ_Generic,
@@ -82,10 +83,6 @@ import type {
   OBJ_Line,
   OBJ_Grid,
   OBJ_Arrow,
-  OBJ_TextDefinition,
-  OBJ_Text,
-  OBJ_TextLine,
-  OBJ_TextLines,
 } from './FigurePrimitiveTypes2D';
 import type {
   OBJ_Generic3,
@@ -196,6 +193,7 @@ export default class FigurePrimitives {
   timeKeeper: TimeKeeper;
   recorder: Recorder;
   scene: Scene;
+  equationScale: number;
 
   /**
     * @hideconstructor
@@ -215,6 +213,7 @@ export default class FigurePrimitives {
     defaultLength: number,
     timeKeeper: TimeKeeper,
     recorder: Recorder,
+    equationScale: number,
   ) {
     if (Array.isArray(webgl)) {
       this.webgl = webgl;
@@ -241,6 +240,7 @@ export default class FigurePrimitives {
     this.defaultLength = defaultLength;
     this.timeKeeper = timeKeeper;
     this.recorder = recorder;
+    this.equationScale = equationScale;
     // this.draw2DFigures = draw2DFigures;
   }
 
@@ -1434,6 +1434,169 @@ export default class FigurePrimitives {
     return element;
   }
 
+  text(...options: Array<OBJ_Text>) {
+    const defaultOptions = {
+      font: {
+        family: this.defaultFont.family,
+        style: this.defaultFont.style,
+        size: this.defaultFont.size,
+        weight: this.defaultFont.weight,
+        underline: this.defaultFont.underline,
+        render: this.defaultFont.render,
+      },
+      xAlign: 'left',
+      yAlign: 'baseline',
+      transform: new Transform().scale(1).rotate(0).translate(0, 0),
+      color: this.defaultColor,
+      name: generateUniqueId('primitive_'),
+      vertexShader: { dimension: 2, color: 'texture' },
+      fragmentShader: { color: 'textureAlpha' },
+      vertices: [0, 0, 1, 0, 1, 1],
+      adjustments: {
+        width: 0,
+        ascent: 0,
+        descent: 0,
+      },
+      text: 'TEXT NOT DEFINED',
+      // type: this.defaultFont.type,
+    };
+    const o = this.parseTextOptions(defaultOptions, ...options);
+    if (o.scene == null) {
+      o.scene = this.scene;
+    }
+    // if (o.font.type != null) {
+    //   o.type = o.font.type;
+    // }
+
+    let element;
+    if (o.font.render === 'gl') {
+      if (o.font.atlasColor) {
+        o.fragmentShader = { color: 'texture' };
+      }
+      element = this.glText(o);
+    } else {
+      element = this.text2d(o);
+    }
+    if (o.border != null) { // $FlowFixMe
+      element.border = getBorder(o.border);
+    }
+    if (o.touchBorder != null) { // $FlowFixMe
+      element.touchBorder = getBorder(o.touchBorder);
+    }
+    return element;
+    // // const o = joinObjects({}, defaultOptions, ...options);
+    // o.figureElementPrimitiveCallback = (...fo) => new FigureElementPrimitiveGLText(...fo);
+
+    // // $FlowFixMe
+    // const element: FigureElementPrimitiveGLText = this.gl(o);
+    // element.setup(o);
+    // return element;
+  }
+
+  glText(...options: Array<OBJ_Text>) {
+    const defaultOptions = {
+      font: {
+        family: this.defaultFont.family,
+        style: this.defaultFont.style,
+        size: this.defaultFont.size,
+        weight: this.defaultFont.weight,
+      },
+      xAlign: 'left',
+      yAlign: 'baseline',
+      transform: new Transform().scale(1).rotate(0).translate(0, 0),
+      color: this.defaultColor,
+      name: generateUniqueId('primitive_'),
+      vertexShader: { dimension: 2, color: 'texture' },
+      fragmentShader: { color: 'textureAlpha' },
+      vertices: [0, 0, 1, 0, 1, 1],
+      adjustments: {
+        width: 0,
+        ascent: 0,
+        descent: 0,
+      },
+      text: 'TEXT NOT DEFINED',
+    };
+    const o = this.parseTextOptions(defaultOptions, ...options);
+    // const o = joinObjects({}, defaultOptions, ...options);
+    o.figureElementPrimitiveCallback = (...fo) => new FigureElementPrimitiveGLText(...fo);
+
+    // $FlowFixMe
+    const element: FigureElementPrimitiveGLText = this.gl(o);
+    element.setup(o);
+    return element;
+  }
+
+  elementSetup(element: FigureElementPrimitive, options: Object) {
+    element.dimColor = this.defaultDimColor.slice();
+
+    // Setup move, touch, scenarios, dim and default colors if defined in
+    // options
+    if (options.move != null && options.move !== false) {
+      element.setTouchable();
+      element.setMovable();
+      element.setMove(options.move);
+    }
+    if (options.touch != null) {
+      element.setTouchable(options.touch);
+    }
+    if (options.dimColor != null) {
+      element.dimColor = options.dimColor;
+    }
+    if (options.defaultColor != null) {
+      element.defaultColor = options.dimColor;
+    }
+    if (options.scenarios != null) {
+      element.scenarios = options.scenarios;
+    }
+
+    if (options.scene != null) {
+      if (options.scene instanceof Scene) {
+        element.scene = options.scene;
+      } else {
+        element.setScene(options.scene);
+      }
+    }
+
+    element.timeKeeper = this.timeKeeper;
+    element.recorder = this.recorder;
+    return element;
+  }
+
+  text2d(...options: Array<OBJ_Text>) {
+    const defaultOptions = {
+      font: {
+        family: this.defaultFont.family,
+        style: this.defaultFont.style,
+        size: this.defaultFont.size,
+        weight: this.defaultFont.weight,
+      },
+      xAlign: 'left',
+      yAlign: 'baseline',
+      transform: new Transform().scale(1).rotate(0).translate(0, 0),
+      color: this.defaultColor,
+      name: generateUniqueId('primitive_'),
+      adjustments: {
+        width: 0,
+        ascent: 0,
+        descent: 0,
+      },
+      text: 'TEXT NOT DEFINED',
+    };
+    const o = this.parseTextOptions(defaultOptions, ...options);
+    // const o = joinObjects({}, defaultOptions, ...options);
+    o.figureElementPrimitiveCallback = (...fo) => new FigureElementPrimitiveGLText(...fo);
+
+    o.transform = getTransform(o.transform);
+    if (o.position != null) {
+      o.position = getPoint(o.position);
+      o.transform.updateTranslation(o.position);
+    }
+
+    // $FlowFixMe
+    const element = new FigureElementPrimitive2DText(this.draw2D[0], o);
+    return this.elementSetup(element, o);
+  }
+
   gesture(...options: Array<OBJ_Gesture>): FigureElementPrimitiveGesture {
     const defaultOptions = {
       color: [0, 0, 0, 0],
@@ -2048,6 +2211,7 @@ export default class FigurePrimitives {
         style: this.defaultFont.style,
         size: this.defaultFont.size,
         weight: this.defaultFont.weight,
+        underline: this.defaultFont.underline,
       },
       xAlign: 'left',
       yAlign: 'baseline',
@@ -2056,6 +2220,13 @@ export default class FigurePrimitives {
       defaultTextTouchBorder: 0,
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
+    for (let i = 0; i < optionsIn.length; i += 1) {
+      if (optionsIn[i].font != null) {
+        if (optionsIn[i].font.src) {
+          options.font.src = optionsIn[i].font.src;
+        }
+      }
+    }
 
     // Make default color
     if (options.color == null && options.font.color != null) {
@@ -2104,164 +2275,164 @@ export default class FigurePrimitives {
     return options;
   }
 
-  genericTextPrimitive(
-    drawingObject: DrawingObject, optionsIn: Object,
-  ) {
-    const options = optionsIn;
-    // Define standard transform if no transform was input
-    if (options.transform == null) {
-      options.transform = new Transform().scale(1).rotate(0).translate();
-    } else {
-      options.transform = getTransform(options.transform);
-    }
+  // genericTextPrimitive(
+  //   drawingObject: DrawingObject, optionsIn: Object,
+  // ) {
+  //   const options = optionsIn;
+  //   // Define standard transform if no transform was input
+  //   if (options.transform == null) {
+  //     options.transform = new Transform().scale(1).rotate(0).translate();
+  //   } else {
+  //     options.transform = getTransform(options.transform);
+  //   }
 
-    // Override transform if position is defined
-    if (options.position != null) {
-      const p = getPoint(options.position);
-      options.transform.updateTranslation(p);
-    }
+  //   // Override transform if position is defined
+  //   if (options.position != null) {
+  //     const p = getPoint(options.position);
+  //     options.transform.updateTranslation(p);
+  //   }
 
-    const element = new FigureElementPrimitive(
-      drawingObject,
-      options.transform,
-      options.color,
-    );
-    element.timeKeeper = this.timeKeeper;
-    element.recorder = this.recorder;
+  //   const element = new FigureElementPrimitive(
+  //     drawingObject,
+  //     options.transform,
+  //     options.color,
+  //   );
+  //   element.timeKeeper = this.timeKeeper;
+  //   element.recorder = this.recorder;
 
-    setupPulse(element, options);
-    if (options.mods != null && options.mods !== {}) {
-      element.setProperties(options.mods);
-    }
-    element.custom.updateBorders = (o) => {
-      element.drawBorder = element.drawingObject.textBorder;
-      if (o.drawBorder != null) {
-        element.drawBorder = o.drawBorder;
-      }
-      element.drawBorderBuffer = element.drawingObject.textBorderBuffer;
-      if (o.drawBorderBuffer != null) {
-        element.drawBorderBuffer = o.drawBorderBuffer;
-      }
-      if (o.border != null) {
-        element.border = o.border;
-      }
-      if (o.touchBorder != null) {
-        element.touchBorder = o.touchBorder;
-      }
-    }; // $FlowFixMe
-    element.getBorderPointsSuper = element.getBorderPoints; // $FlowFixMe
-    element.getBorderPoints = (border: 'border' | 'touchBorder' = 'border') => {
-      if (border === 'border') { // $FlowFixMe
-        return element.getBorderPointsSuper(border);
-      }
-      // if (border === 'touchBorder') {
-      if (element.touchBorder === 'draw') {
-        return element.drawBorder;
-      }
-      if (element.touchBorder === 'buffer') {
-        return element.drawBorderBuffer;
-      }
-      if (element.touchBorder === 'border') {
-        return element.getBorderPoints('border');
-      }
-      if (element.touchBorder === 'rect') {
-        return [getBoundingBorder(element.drawBorderBuffer)];
-      }
-      if (isBuffer(element.touchBorder)) {
-        const b = element.drawBorderBuffer; // $FlowFixMe
-        return [getBoundingBorder(b, element.touchBorder)];
-      }
-      return element.touchBorder;
-      // }
-    };
-    element.custom.setText = (o: string | OBJ_TextDefinition, index: number = 0) => {
-      element.drawingObject.setText(o, index);
-      element.custom.updateBorders({});
-    };
-    return element;
-  }
+  //   setupPulse(element, options);
+  //   if (options.mods != null && options.mods !== {}) {
+  //     element.setProperties(options.mods);
+  //   }
+  //   element.custom.updateBorders = (o) => {
+  //     element.drawBorder = element.drawingObject.textBorder;
+  //     if (o.drawBorder != null) {
+  //       element.drawBorder = o.drawBorder;
+  //     }
+  //     element.drawBorderBuffer = element.drawingObject.textBorderBuffer;
+  //     if (o.drawBorderBuffer != null) {
+  //       element.drawBorderBuffer = o.drawBorderBuffer;
+  //     }
+  //     if (o.border != null) {
+  //       element.border = o.border;
+  //     }
+  //     if (o.touchBorder != null) {
+  //       element.touchBorder = o.touchBorder;
+  //     }
+  //   }; // $FlowFixMe
+  //   element.getBorderPointsSuper = element.getBorderPoints; // $FlowFixMe
+  //   element.getBorderPoints = (border: 'border' | 'touchBorder' = 'border') => {
+  //     if (border === 'border') { // $FlowFixMe
+  //       return element.getBorderPointsSuper(border);
+  //     }
+  //     // if (border === 'touchBorder') {
+  //     if (element.touchBorder === 'draw') {
+  //       return element.drawBorder;
+  //     }
+  //     if (element.touchBorder === 'buffer') {
+  //       return element.drawBorderBuffer;
+  //     }
+  //     if (element.touchBorder === 'border') {
+  //       return element.getBorderPoints('border');
+  //     }
+  //     if (element.touchBorder === 'rect') {
+  //       return [getBoundingBorder(element.drawBorderBuffer)];
+  //     }
+  //     if (isBuffer(element.touchBorder)) {
+  //       const b = element.drawBorderBuffer; // $FlowFixMe
+  //       return [getBoundingBorder(b, element.touchBorder)];
+  //     }
+  //     return element.touchBorder;
+  //     // }
+  //   };
+  //   element.custom.setText = (o: string | OBJ_TextDefinition, index: number = 0) => {
+  //     element.drawingObject.setText(o, index);
+  //     element.custom.updateBorders({});
+  //   };
+  //   return element;
+  // }
 
-  /**
-   * {@link FigureElementPrimitive} that draws a line of text.
-   * @see {@link OBJ_TextLine} for options and examples.
-   */
-  textLine(...optionsIn: Array<OBJ_TextLine>) {
-    const options = this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, ...optionsIn);
-    const to = new TextLineObject(this.draw2D);
-    to.loadText(options);
-    const element = this.genericTextPrimitive(to, options);
-    element.custom.options = to;
-    element.custom.updateText = (o: OBJ_Text) => { // $FlowFixMe
-      element.drawingObject.clear();
-      const parsed = this.parseTextOptions(
-        { border: 'rect', touchBorder: 'rect' },
-        element.custom.options,
-        o,
-      ); // $FlowFixMe
-      element.drawingObject.loadText(parsed);
-      element.custom.options = parsed;
-      element.custom.updateBorders({});
-    };
-    element.custom.updateBorders(options);
-    return element;
-  }
+  // /**
+  //  * {@link FigureElementPrimitive} that draws a line of text.
+  //  * @see {@link OBJ_TextLine} for options and examples.
+  //  */
+  // textLine(...optionsIn: Array<OBJ_TextLine>) {
+  //   const options = this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, ...optionsIn);
+  //   const to = new TextLineObject(this.draw2D);
+  //   to.loadText(options);
+  //   const element = this.genericTextPrimitive(to, options);
+  //   element.custom.options = to;
+  //   element.custom.updateText = (o: OBJ_Text) => { // $FlowFixMe
+  //     element.drawingObject.clear();
+  //     const parsed = this.parseTextOptions(
+  //       { border: 'rect', touchBorder: 'rect' },
+  //       element.custom.options,
+  //       o,
+  //     ); // $FlowFixMe
+  //     element.drawingObject.loadText(parsed);
+  //     element.custom.options = parsed;
+  //     element.custom.updateBorders({});
+  //   };
+  //   element.custom.updateBorders(options);
+  //   return element;
+  // }
 
-  /**
-   * {@link FigureElementPrimitive} that draws text lines.
-   * @see {@link OBJ_TextLines} for options and examples.
-   */
-  textLines(...optionsIn: Array<OBJ_TextLines | string>) {
-    const joinedOptions = joinObjects({}, { color: this.defaultColor }, ...optionsIn);
-    const to = new TextLinesObject(this.draw2D);
-    const element = this.genericTextPrimitive(to, joinedOptions);
-    element.custom.options = joinedOptions;
-    element.custom.updateText = (oIn: OBJ_Text) => {
-      // $FlowFixMe
-      element.drawingObject.clear();
-      let oToUse = oIn; // $FlowFixMe
-      if (oIn.length === 1 && typeof oIn[0] === 'string') {
-        oToUse = [{ text: [optionsIn[0]] }];
-      }
-      const o = this.parseTextOptions(
-        { border: 'rect', touchBorder: 'rect' },
-        element.custom.options,
-        oToUse,
-      );
-      if (o.justify == null) {
-        o.justify = 'left';
-      }
-      if (o.lineSpace == null) {
-        o.lineSpace = o.font.size * 1.2;
-      }
-      element.custom.options = o;  // $FlowFixMe
-      element.drawingObject.loadText(o);
-      element.custom.updateBorders(o);
-    };
-    element.custom.updateText(joinedOptions);
-    return element;
-  }
+  // /**
+  //  * {@link FigureElementPrimitive} that draws text lines.
+  //  * @see {@link OBJ_TextLines} for options and examples.
+  //  */
+  // textLines(...optionsIn: Array<OBJ_TextLines | string>) {
+  //   const joinedOptions = joinObjects({}, { color: this.defaultColor }, ...optionsIn);
+  //   const to = new TextLinesObject(this.draw2D);
+  //   const element = this.genericTextPrimitive(to, joinedOptions);
+  //   element.custom.options = joinedOptions;
+  //   element.custom.updateText = (oIn: OBJ_Text) => {
+  //     // $FlowFixMe
+  //     element.drawingObject.clear();
+  //     let oToUse = oIn; // $FlowFixMe
+  //     if (oIn.length === 1 && typeof oIn[0] === 'string') {
+  //       oToUse = [{ text: [optionsIn[0]] }];
+  //     }
+  //     const o = this.parseTextOptions(
+  //       { border: 'rect', touchBorder: 'rect' },
+  //       element.custom.options,
+  //       oToUse,
+  //     );
+  //     if (o.justify == null) {
+  //       o.justify = 'left';
+  //     }
+  //     if (o.lineSpace == null) {
+  //       o.lineSpace = o.font.size * 1.2;
+  //     }
+  //     element.custom.options = o;  // $FlowFixMe
+  //     element.drawingObject.loadText(o);
+  //     element.custom.updateBorders(o);
+  //   };
+  //   element.custom.updateText(joinedOptions);
+  //   return element;
+  // }
 
-  /**
-   * {@link FigureElementPrimitive} that draws text.
-   * @see {@link OBJ_Text} for options and examples.
-   */
-  text(...optionsIn: Array<OBJ_Text>) {
-    const options = this.parseTextOptions(...optionsIn);
-    const to = new TextObject(
-      this.draw2D,
-    );
-    to.loadText(options);
-    const element = this.genericTextPrimitive(to, options);
-    element.custom.options = options;
-    element.custom.updateText = (o: OBJ_Text) => { // $FlowFixMe
-      element.drawingObject.clear(); // $FlowFixMe
-      element.drawingObject.loadText(this.parseTextOptions(element.custom.options, o));
-      element.custom.updateBorders({});
-      element.animateNextFrame();
-    };
-    element.custom.updateBorders(options);
-    return element;
-  }
+  // /**
+  //  * {@link FigureElementPrimitive} that draws text.
+  //  * @see {@link OBJ_Text} for options and examples.
+  //  */
+  // text(...optionsIn: Array<OBJ_Text>) {
+  //   const options = this.parseTextOptions(...optionsIn);
+  //   const to = new TextObject(
+  //     this.draw2D,
+  //   );
+  //   to.loadText(options);
+  //   const element = this.genericTextPrimitive(to, options);
+  //   element.custom.options = options;
+  //   element.custom.updateText = (o: OBJ_Text) => { // $FlowFixMe
+  //     element.drawingObject.clear(); // $FlowFixMe
+  //     element.drawingObject.loadText(this.parseTextOptions(element.custom.options, o));
+  //     element.custom.updateBorders({});
+  //     element.animateNextFrame();
+  //   };
+  //   element.custom.updateBorders(options);
+  //   return element;
+  // }
 
   html(optionsIn: {
     element: HTMLElement | Array<HTMLElement>,

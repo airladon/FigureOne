@@ -2,17 +2,17 @@
 
 import type { CPY_Step } from '../geometries/copy/copy';
 import type {
-  OBJ_Texture, OBJ_LineStyleSimple, TypeGLPrimitive,
+  OBJ_Texture, OBJ_LineStyleSimple, TypeGLPrimitive, OBJ_FigurePrimitive,
 } from './FigurePrimitiveTypes';
 // @flow
 import type {
-  TypeParsablePoint, TypeParsableTransform,
+  TypeParsablePoint,
   TypeParsableBorder, Point, TypeParsableRect,
   TypeParsableBuffer,
 } from '../../tools/g2';
 // import type { OBJ_Scenarios, OBJ_ElementMove } from '../Element';
 import type {
-  TypeColor, TypeDash, OBJ_CurvedCorner, OBJ_Font,
+  TypeDash, OBJ_CurvedCorner, OBJ_Font,
 } from '../../tools/types';
 import type { OBJ_LineArrows, TypeArrowHead } from '../geometries/arrow';
 
@@ -160,7 +160,7 @@ export type OBJ_Generic = {
   border?: TypeParsableBuffer | TypeParsableBorder | 'buffer' | 'draw' | 'rect',
   touchBorder?: TypeParsableBuffer | TypeParsableBorder | 'rect' | 'border' | 'buffer' | 'draw',
   pulse?: number,
-}
+} & OBJ_FigurePrimitive;
 
 /**
  * Polyline shape options object that extends {@link OBJ_Generic} (without
@@ -1288,269 +1288,269 @@ export type OBJ_Arrow = {
 } & OBJ_Generic;
 
 
-/**
- * Text Definition object
- *
- * Used within {@link OBJ_Text} to define a single string
- *
- * @property {string} text string to show
- * @property {OBJ_Font} [font] font to apply to string
- * @property {TypeParsablePoint} [location] draw space location to draw text
- * (default: `[0, 0]`)
- * @property {'left' | 'right' | 'center'} [xAlign] how to align text
- * horizontally relative to `location` (default: from {@link OBJ_Text})
- * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] how to align
- * text vertically relative to `location` (default: from {@link OBJ_Text})
- * @property {string | function(): void} [onClick] function to execute on click
- * within the `touchBorder`
- * @property {TypeParsableBuffer | Array<TypeParsablePoint>} [touchBorder]
- * touch border can be custom points (`Array<TypeParsablePoint>`), set to
- * or set to some buffer (`number`) around the rext (default: `0`)
- */
-export type OBJ_TextDefinition = {
-  text: string,
-  font?: OBJ_Font,
-  location?: TypeParsablePoint,
-  xAlign?: 'left' | 'right' | 'center',
-  yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
-  onClick?: string | () => void,
-  touchBorder?: TypeParsableBuffer | Array<TypeParsablePoint>,
-};
+// /**
+//  * Text Definition object
+//  *
+//  * Used within {@link OBJ_Text} to define a single string
+//  *
+//  * @property {string} text string to show
+//  * @property {OBJ_Font} [font] font to apply to string
+//  * @property {TypeParsablePoint} [location] draw space location to draw text
+//  * (default: `[0, 0]`)
+//  * @property {'left' | 'right' | 'center'} [xAlign] how to align text
+//  * horizontally relative to `location` (default: from {@link OBJ_Text})
+//  * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] how to align
+//  * text vertically relative to `location` (default: from {@link OBJ_Text})
+//  * @property {string | function(): void} [onClick] function to execute on click
+//  * within the `touchBorder`
+//  * @property {TypeParsableBuffer | Array<TypeParsablePoint>} [touchBorder]
+//  * touch border can be custom points (`Array<TypeParsablePoint>`), set to
+//  * or set to some buffer (`number`) around the rext (default: `0`)
+//  */
+// export type OBJ_TextDefinition = {
+//   text: string,
+//   font?: OBJ_Font,
+//   location?: TypeParsablePoint,
+//   xAlign?: 'left' | 'right' | 'center',
+//   yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
+//   onClick?: string | () => void,
+//   touchBorder?: TypeParsableBuffer | Array<TypeParsablePoint>,
+// };
 
-/**
- * One or more text strings.
- *
- * ![](./apiassets/text_ex1.png)
- *
- * ![](./apiassets/text_ex2.png)
- *
- * Simple text options object.
- *
- * Use this to make a {@link FigureElementPrimitive} that renders text.
- *
- * `text` can either be a single string, or an array of
- * {@link OBJ_TextDefinition} objects to define multiple strings. Each string
- * can have a different location, alignment (`xAlign`, `yAlign`) and formatting.
- *
- * {@link FigureElementPrimitive} objects allow for a callback to be defined
- * when they are touched by a user. In text {@link FigureElementPrimitive},
- * each string can have its own callback assigned using the `onClick` property
- * of {@link OBJ_TextDefinition}. In addition custom touch borders to make it
- * easier to click the strings can be defined.
- *
- * Note: there is a slight performance improvement in including multiple
- * strings at different locations in the same {@link FigureElementPrimitive},
- * rather than creating a {@link FigureElementPrimitive} for each string.
- *
- * @property {string | OBJ_TextDefinition | Array<string | OBJ_TextDefinition>} text
- * text to draw, either as a single string or multiple strings in an array
- * @property {OBJ_Font} [font] default font to apply to all text
- * @property {'left' | 'right' | 'center'} [xAlign] default horizontal text
- * alignment for `text` relative to `location` (default: `"left"`)
- * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] default
- * vertical text alignment for `text` relative to `location` (default: `"baseline"`)
- * @property {TypeParsableBuffer} [defaultTextTouchBorder]?: default buffer for
- * `touchBorder` property in `text`
- * @property {TypeColor} [color] (default: `[1, 0, 0, 1`])
- * @property {TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number} [border]
- * border used for keeping shape within limits (`'draw'`)
- * @property {TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw'} [touchBorder]
- * border used for determining shape was touched. `number` and `'rect'` use
- * the the points in `'buffer'` to calculate the bounding rects (`'buffer'`).
- * @property {TypeParsablePoint} [position] if defined, overrides translation
- * in transform
- * @property {TypeParsableTransform} [transform]
- * @property {boolean} [fixColor] If `true`, {@link FigureElement}`.setColor`
- * method will not change the color of text
- * (default: `Transform())`)
- *
- * @see To test examples, append them to the
- * <a href="#text-boilerplate">boilerplate</a>
- *
- * @example
- * // Single string
- * figure.add(
- *   {
- *     name: 't',
- *     make: 'text',
- *     text: 'hello',
- *     xAlign: 'center',
- *     yAlign: 'middle',
- *   },
- * );
- *
- * @example
- * // Multi string
- * figure.add(
- *   {
- *     name: 't',
- *     make: 'text',
- *     text: [
- *       {
- *         text: 'hello',
- *         font: { style: 'italic', color: [0, 0.5, 1, 1], size: 0.1 },
- *         xAlign: 'left',
- *         yAlign: 'bottom',
- *         location: [-0.35, 0],
- *       },
- *       {
- *         text: 'world',
- *         location: [0, -0.1],
- *       },
- *     ],
- *     xAlign: 'center',
- *     yAlign: 'middle',
- *     font: { size: 0.3 },
- *     color: this.defaultColor,
- *   },
- * );
- */
-export type OBJ_Text = {
-  text: string | OBJ_TextDefinition | Array<string | OBJ_TextDefinition>;
-  font?: OBJ_Font,                    // default font
-  xAlign?: 'left' | 'right' | 'center',                // default xAlign
-  yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
-  defaultTextTouchBorder?: TypeParsableBuffer,
-  color?: TypeColor,
-  border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
-  touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
-  position?: TypeParsablePoint,
-  transform?: TypeParsableTransform,
-  fixColor?: boolean,
-}
+// /**
+//  * One or more text strings.
+//  *
+//  * ![](./apiassets/text_ex1.png)
+//  *
+//  * ![](./apiassets/text_ex2.png)
+//  *
+//  * Simple text options object.
+//  *
+//  * Use this to make a {@link FigureElementPrimitive} that renders text.
+//  *
+//  * `text` can either be a single string, or an array of
+//  * {@link OBJ_TextDefinition} objects to define multiple strings. Each string
+//  * can have a different location, alignment (`xAlign`, `yAlign`) and formatting.
+//  *
+//  * {@link FigureElementPrimitive} objects allow for a callback to be defined
+//  * when they are touched by a user. In text {@link FigureElementPrimitive},
+//  * each string can have its own callback assigned using the `onClick` property
+//  * of {@link OBJ_TextDefinition}. In addition custom touch borders to make it
+//  * easier to click the strings can be defined.
+//  *
+//  * Note: there is a slight performance improvement in including multiple
+//  * strings at different locations in the same {@link FigureElementPrimitive},
+//  * rather than creating a {@link FigureElementPrimitive} for each string.
+//  *
+//  * @property {string | OBJ_TextDefinition | Array<string | OBJ_TextDefinition>} text
+//  * text to draw, either as a single string or multiple strings in an array
+//  * @property {OBJ_Font} [font] default font to apply to all text
+//  * @property {'left' | 'right' | 'center'} [xAlign] default horizontal text
+//  * alignment for `text` relative to `location` (default: `"left"`)
+//  * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] default
+//  * vertical text alignment for `text` relative to `location` (default: `"baseline"`)
+//  * @property {TypeParsableBuffer} [defaultTextTouchBorder]?: default buffer for
+//  * `touchBorder` property in `text`
+//  * @property {TypeColor} [color] (default: `[1, 0, 0, 1`])
+//  * @property {TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number} [border]
+//  * border used for keeping shape within limits (`'draw'`)
+//  * @property {TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw'} [touchBorder]
+//  * border used for determining shape was touched. `number` and `'rect'` use
+//  * the the points in `'buffer'` to calculate the bounding rects (`'buffer'`).
+//  * @property {TypeParsablePoint} [position] if defined, overrides translation
+//  * in transform
+//  * @property {TypeParsableTransform} [transform]
+//  * @property {boolean} [fixColor] If `true`, {@link FigureElement}`.setColor`
+//  * method will not change the color of text
+//  * (default: `Transform())`)
+//  *
+//  * @see To test examples, append them to the
+//  * <a href="#text-boilerplate">boilerplate</a>
+//  *
+//  * @example
+//  * // Single string
+//  * figure.add(
+//  *   {
+//  *     name: 't',
+//  *     make: 'text',
+//  *     text: 'hello',
+//  *     xAlign: 'center',
+//  *     yAlign: 'middle',
+//  *   },
+//  * );
+//  *
+//  * @example
+//  * // Multi string
+//  * figure.add(
+//  *   {
+//  *     name: 't',
+//  *     make: 'text',
+//  *     text: [
+//  *       {
+//  *         text: 'hello',
+//  *         font: { style: 'italic', color: [0, 0.5, 1, 1], size: 0.1 },
+//  *         xAlign: 'left',
+//  *         yAlign: 'bottom',
+//  *         location: [-0.35, 0],
+//  *       },
+//  *       {
+//  *         text: 'world',
+//  *         location: [0, -0.1],
+//  *       },
+//  *     ],
+//  *     xAlign: 'center',
+//  *     yAlign: 'middle',
+//  *     font: { size: 0.3 },
+//  *     color: this.defaultColor,
+//  *   },
+//  * );
+//  */
+// export type OBJ_Text = {
+//   text: string | OBJ_TextDefinition | Array<string | OBJ_TextDefinition>;
+//   font?: OBJ_Font,                    // default font
+//   xAlign?: 'left' | 'right' | 'center',                // default xAlign
+//   yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
+//   defaultTextTouchBorder?: TypeParsableBuffer,
+//   color?: TypeColor,
+//   border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
+//   touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
+//   position?: TypeParsablePoint,
+//   transform?: TypeParsableTransform,
+//   fixColor?: boolean,
+// }
 
 
-/**
- * Line Text Definition object
- *
- * Used to define a string within a text line primitive {@link OBJ_TextLine}.
- *
- * @property {string} [text] string to show
- * @property {OBJ_Font} [font] font to apply to string
- * @property {TypeParsablePoint} [offset] offset to draw text (default: `[0, 0]`)
- * @property {boolean} [followOffsetY] `true` will make any subsequent text
- * have the same y offset as a starting point (`false`)
- * @property {boolean} [inLine] `false` means next text will follow previous
- * and not this (default: `true`)
- * @property {string | function(): void} [onClick] function to execute on click
- * within the `touchBorder` of string
- * @property {TypeParsableBuffer | Array<TypeParsablePoint>} [touchBorder]
- * touch border can be custom (`Array<TypeParsablePoint>`), or be set to some
- * buffer (`TypeParsableBuffer`) around the rectangle (default: `'0'`)
- * @property {boolean} [fixColor] If `true`, {@link FigureElement}`.setColor`
- * method will not change the color of text
- */
-export type OBJ_TextLineDefinition = {
-  text: string,
-  font?: OBJ_Font,
-  offset?: TypeParsablePoint,
-  followOffsetY?: boolean,
-  inLine?: boolean,
-  onClick?: string | () => void,
-  touchBorder?: TypeParsableBuffer | Array<TypeParsablePoint>,
-  fixColor?: boolean,
-};
+// /**
+//  * Line Text Definition object
+//  *
+//  * Used to define a string within a text line primitive {@link OBJ_TextLine}.
+//  *
+//  * @property {string} [text] string to show
+//  * @property {OBJ_Font} [font] font to apply to string
+//  * @property {TypeParsablePoint} [offset] offset to draw text (default: `[0, 0]`)
+//  * @property {boolean} [followOffsetY] `true` will make any subsequent text
+//  * have the same y offset as a starting point (`false`)
+//  * @property {boolean} [inLine] `false` means next text will follow previous
+//  * and not this (default: `true`)
+//  * @property {string | function(): void} [onClick] function to execute on click
+//  * within the `touchBorder` of string
+//  * @property {TypeParsableBuffer | Array<TypeParsablePoint>} [touchBorder]
+//  * touch border can be custom (`Array<TypeParsablePoint>`), or be set to some
+//  * buffer (`TypeParsableBuffer`) around the rectangle (default: `'0'`)
+//  * @property {boolean} [fixColor] If `true`, {@link FigureElement}`.setColor`
+//  * method will not change the color of text
+//  */
+// export type OBJ_TextLineDefinition = {
+//   text: string,
+//   font?: OBJ_Font,
+//   offset?: TypeParsablePoint,
+//   followOffsetY?: boolean,
+//   inLine?: boolean,
+//   onClick?: string | () => void,
+//   touchBorder?: TypeParsableBuffer | Array<TypeParsablePoint>,
+//   fixColor?: boolean,
+// };
 
-/**
- * Text Line
- *
- * ![](./apiassets/textLine.png)
- *
- * Array of strings that are arranged into a line. Each string is arranged so
- * that it is to the right of the previous string.
- *
- * Strings can be arranged out of the line flow by using the `inLine` property
- * in {@link OBJ_TextLineDefinition}.
- *
- * @property {Array<string | OBJ_TextLineDefinition>} [text] array of strings,
- * to layout into a line
- * @property {OBJ_Font} [font] Default font for strings in line
- * @property {TypeColor} [color] Default color for strings in line
- * (`[1, 0, 0, 1`])
- * @property {TypeParsableBuffer} [defaultTextTouchBorder]?: default buffer for
- * `touchBorder` property in `text`
- * @property {'left' | 'right' | 'center'} [xAlign] horizontal alignment of
- * line with `position` (`left`)
- * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] vertical
- * alignment of line with `position` (`baseline`)
- * @property {TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number} [border]
- * border used for keeping shape within limits (`'draw'`)
- * @property {TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw'} [touchBorder]
- * border used for determining shape was touched. `number` and `'rect'` use
- * the the points in `'buffer'` to calculate the bounding rects (`'buffer'`).
- * @property {TypeParsablePoint} [position] if defined, overrides translation
- * in transform
- * @property {TypeParsableTransform} [transform]
- * (`Transform())`)
- *
- * @see To test examples, append them to the
- * <a href="#text-boilerplate">boilerplate</a>
- *
- * @example
- * // "Hello to the world1" with highlighted "to the" and superscript "1"
- * figure.add(
- *   {
- *     name: 'line',
- *     make: 'text.line',
- *     text: [
- *       'Hello ',
- *       {
- *         text: 'to the',
- *         font: {
- *           style: 'italic',
- *           color: [0, 0.5, 1, 1],
- *         },
- *       },
- *       ' world',
- *       {
- *         text: '1',
- *         offset: [0, 0.1],
- *         font: { size: 0.1, color: [0, 0.6, 0, 1] },
- *       },
- *     ],
- *     xAlign: 'center',
- *     yAlign: 'bottom',
- *     font: {
- *       style: 'normal',
- *       size: 0.2,
- *     },
- *     color: this.defaultColor,
- *   },
- * );
- */
-export type OBJ_TextLine = {
-  text: Array<string | OBJ_TextLineDefinition>;
-  font: OBJ_Font,
-  color: TypeColor,
-  defaultTextTouchBorder?: TypeParsableBuffer,
-  xAlign: 'left' | 'right' | 'center',
-  yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
-  border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
-  touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
-  position: TypeParsablePoint,
-  transform: TypeParsableTransform,
-}
+// /**
+//  * Text Line
+//  *
+//  * ![](./apiassets/textLine.png)
+//  *
+//  * Array of strings that are arranged into a line. Each string is arranged so
+//  * that it is to the right of the previous string.
+//  *
+//  * Strings can be arranged out of the line flow by using the `inLine` property
+//  * in {@link OBJ_TextLineDefinition}.
+//  *
+//  * @property {Array<string | OBJ_TextLineDefinition>} [text] array of strings,
+//  * to layout into a line
+//  * @property {OBJ_Font} [font] Default font for strings in line
+//  * @property {TypeColor} [color] Default color for strings in line
+//  * (`[1, 0, 0, 1`])
+//  * @property {TypeParsableBuffer} [defaultTextTouchBorder]?: default buffer for
+//  * `touchBorder` property in `text`
+//  * @property {'left' | 'right' | 'center'} [xAlign] horizontal alignment of
+//  * line with `position` (`left`)
+//  * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] vertical
+//  * alignment of line with `position` (`baseline`)
+//  * @property {TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number} [border]
+//  * border used for keeping shape within limits (`'draw'`)
+//  * @property {TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw'} [touchBorder]
+//  * border used for determining shape was touched. `number` and `'rect'` use
+//  * the the points in `'buffer'` to calculate the bounding rects (`'buffer'`).
+//  * @property {TypeParsablePoint} [position] if defined, overrides translation
+//  * in transform
+//  * @property {TypeParsableTransform} [transform]
+//  * (`Transform())`)
+//  *
+//  * @see To test examples, append them to the
+//  * <a href="#text-boilerplate">boilerplate</a>
+//  *
+//  * @example
+//  * // "Hello to the world1" with highlighted "to the" and superscript "1"
+//  * figure.add(
+//  *   {
+//  *     name: 'line',
+//  *     make: 'text.line',
+//  *     text: [
+//  *       'Hello ',
+//  *       {
+//  *         text: 'to the',
+//  *         font: {
+//  *           style: 'italic',
+//  *           color: [0, 0.5, 1, 1],
+//  *         },
+//  *       },
+//  *       ' world',
+//  *       {
+//  *         text: '1',
+//  *         offset: [0, 0.1],
+//  *         font: { size: 0.1, color: [0, 0.6, 0, 1] },
+//  *       },
+//  *     ],
+//  *     xAlign: 'center',
+//  *     yAlign: 'bottom',
+//  *     font: {
+//  *       style: 'normal',
+//  *       size: 0.2,
+//  *     },
+//  *     color: this.defaultColor,
+//  *   },
+//  * );
+//  */
+// export type OBJ_TextLine = {
+//   text: Array<string | OBJ_TextLineDefinition>;
+//   font: OBJ_Font,
+//   color: TypeColor,
+//   defaultTextTouchBorder?: TypeParsableBuffer,
+//   xAlign: 'left' | 'right' | 'center',
+//   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
+//   border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
+//   touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
+//   position: TypeParsablePoint,
+//   transform: TypeParsableTransform,
+// }
 
-/**
- * Lines Text Definition object.
- *
- * Used to define a string within a text lines primitive {@link OBJ_TextLines}.
- *
- * @property {string} [text] string representing a line of text
- * @property {OBJ_Font} [font] line specific default font
- * @property {'left' | 'right' | 'center'} [justify] line specific justification
- * @property {number} [lineSpace] line specific separation from baseline of
- * this line to baseline of previous line
- * @property {boolean} [fixColor] If `true`, {@link FigureElement}`.setColor`
- * method will not change the color of text
- */
-export type OBJ_TextLinesDefinition = {
-  text: string,
-  font?: OBJ_Font,
-  justify?: 'left' | 'right' | 'center',
-  lineSpace?: number,
-  fixColor?: boolean,
-};
+// /**
+//  * Lines Text Definition object.
+//  *
+//  * Used to define a string within a text lines primitive {@link OBJ_TextLines}.
+//  *
+//  * @property {string} [text] string representing a line of text
+//  * @property {OBJ_Font} [font] line specific default font
+//  * @property {'left' | 'right' | 'center'} [justify] line specific justification
+//  * @property {number} [lineSpace] line specific separation from baseline of
+//  * this line to baseline of previous line
+//  * @property {boolean} [fixColor] If `true`, {@link FigureElement}`.setColor`
+//  * method will not change the color of text
+//  */
+// export type OBJ_TextLinesDefinition = {
+//   text: string,
+//   font?: OBJ_Font,
+//   justify?: 'left' | 'right' | 'center',
+//   lineSpace?: number,
+//   fixColor?: boolean,
+// };
 
 /**
  * Modifier Text Definition object.
@@ -1580,7 +1580,7 @@ export type OBJ_TextModifierDefinition = {
   touchBorder?: TypeParsableBuffer | Array<TypeParsablePoint>,
   onClick?: string | () => void,
   followOffsetY?: boolean,
-}
+};
 
 /**
  * Modifier object.
@@ -1595,140 +1595,140 @@ export type OBJ_TextModifiersDefinition = {
   [modifierId: string]: OBJ_TextModifierDefinition,
 }
 
-/**
- * Text Lines
- *
- * ![](./apiassets/textLines_ex1.png)
- *
- * ![](./apiassets/textLines_ex2.png)
- *
- * Layout multiple lines of text, justified to the `left`,
- * `center` or `right`.
- *
- * Each line is defined by a string in `lines`.
- *
- * A word or phrase within the line can have custom formatting by defining a
- * unique ID surrounded in “|” characters. The unique id is then used as a key
- * in the modifiers object to define the formatting and replacement text. By
- * default, the unique id will be used as the replacement text.
- *
- * Each line can have custom formatting or justification by defining a
- * {@link OBJ_TextLinesDefinition} object instead or a string in the lines
- * array.
- *
- * To escape the modifier special character "|", use a forward slash. e.g.
- *
- * `"This line has a uses the special char: /|"`
- *
- * @property {Array<string | OBJ_TextLinesDefinition>} [text] array of line
- * strings
- * @property {OBJ_TextModifiersDefinition} [modifiers] modifier definitions
- * @property {OBJ_Font} [font] Default font to use in lines
- * @property {TypeColor} [color] Default color to use in lines
- * (`[1, 0, 0, 1`])
- * @property {TypeParsableBuffer} [defaultTextTouchBorder]?: default buffer for
- * `touchBorder` property in `text`
- * @property {'left' | 'right' | 'center} [justify] justification of lines
- * (`left`)
- * @property {number} [lineSpace] Space between baselines of lines
- * (`font.size * 1.2`)
- * @property {'left' | 'right' | 'center'} [xAlign] horizontal alignment of
- * lines with `position` (`left`)
- * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] vertical
- * alignment of lines with `position` (`baseline`)
- * @property {TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number} [border]
- * border used for keeping shape within limits (`'draw'`)
- * @property {TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw'} [touchBorder]
- * border used for determining shape was touched. `number` and `'rect'` use
- * the the points in `'buffer'` to calculate the bounding rects (`'buffer'`).
- * @property {TypeParsablePoint} [position] if defined, overrides translation
- * in transform
- * @property {TypeParsableTransform} [transform]
- * (`Transform())`)
- * @property {OBJ_Font} [defaultAccent] default font for text modifiers that
- * are not defined.
- *
- * @see To test examples, append them to the
- * <a href="#text-boilerplate">boilerplate</a>
- *
- * @example
- * // "Two justified lines"
- * figure.add(
- *   {
- *     name: 't',
- *     make: 'text.lines',
- *     text: [
- *       'First line',
- *       'This is the second line',
- *     ],
- *     font: {
- *       style: 'normal',
- *       size: 0.2,
- *     },
- *     justify: 'center',
- *     color: this.defaultColor,
- *   },
- * );
- *
- * @example
- * // "Example showing many features of textLines"
- * figure.add(
- *   {
- *     name: 'lines',
- *     make: 'textLines',
- *     text: [
- *       'Lines justified to the left',
- *       'A |line| with a |modified_phrase|',
- *       {
- *         text: 'A |line| with custom defaults',
- *         font: {
- *           style: 'italic',
- *           color: [0, 0.5, 1, 1],
- *         },
- *       },
- *     ],
- *     modifiers: {
- *       modified_phrase: {
- *         text: 'modified phrase',
- *         font: {
- *           style: 'italic',
- *           color: [0, 0.5, 1, 1],
- *         },
- *       },
- *       line: {
- *         font: {
- *           family: 'Times New Roman',
- *           color: [0, 0.6, 0, 1],
- *           style: 'italic',
- *         },
- *       },
- *     },
- *     font: {
- *       family: 'Helvetica Neue',
- *       weight: '200',
- *       style: 'normal',
- *       size: 0.2,
- *     },
- *     justify: 'left',
- *     lineSpace: -0.4,
- *     position: [-0.5, 0.1],
- *   },
- * );
- */
-export type OBJ_TextLines = {
-  text: Array<string | OBJ_TextLinesDefinition>,
-  modifiers: OBJ_TextModifiersDefinition,
-  font?: OBJ_Font,
-  defaultTextTouchBorder?: TypeParsableBuffer,
-  justify?: 'left' | 'center' | 'right',
-  lineSpace?: number,
-  xAlign: 'left' | 'right' | 'center',
-  yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
-  color: TypeColor,
-  border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
-  touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
-  position: TypeParsablePoint,
-  transform: TypeParsableTransform,
-  defaultAccent?: OBJ_Font,
-};
+// /**
+//  * Text Lines
+//  *
+//  * ![](./apiassets/textLines_ex1.png)
+//  *
+//  * ![](./apiassets/textLines_ex2.png)
+//  *
+//  * Layout multiple lines of text, justified to the `left`,
+//  * `center` or `right`.
+//  *
+//  * Each line is defined by a string in `lines`.
+//  *
+//  * A word or phrase within the line can have custom formatting by defining a
+//  * unique ID surrounded in “|” characters. The unique id is then used as a key
+//  * in the modifiers object to define the formatting and replacement text. By
+//  * default, the unique id will be used as the replacement text.
+//  *
+//  * Each line can have custom formatting or justification by defining a
+//  * {@link OBJ_TextLinesDefinition} object instead or a string in the lines
+//  * array.
+//  *
+//  * To escape the modifier special character "|", use a forward slash. e.g.
+//  *
+//  * `"This line has a uses the special char: /|"`
+//  *
+//  * @property {Array<string | OBJ_TextLinesDefinition>} [text] array of line
+//  * strings
+//  * @property {OBJ_TextModifiersDefinition} [modifiers] modifier definitions
+//  * @property {OBJ_Font} [font] Default font to use in lines
+//  * @property {TypeColor} [color] Default color to use in lines
+//  * (`[1, 0, 0, 1`])
+//  * @property {TypeParsableBuffer} [defaultTextTouchBorder]?: default buffer for
+//  * `touchBorder` property in `text`
+//  * @property {'left' | 'right' | 'center} [justify] justification of lines
+//  * (`left`)
+//  * @property {number} [lineSpace] Space between baselines of lines
+//  * (`font.size * 1.2`)
+//  * @property {'left' | 'right' | 'center'} [xAlign] horizontal alignment of
+//  * lines with `position` (`left`)
+//  * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] vertical
+//  * alignment of lines with `position` (`baseline`)
+//  * @property {TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number} [border]
+//  * border used for keeping shape within limits (`'draw'`)
+//  * @property {TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw'} [touchBorder]
+//  * border used for determining shape was touched. `number` and `'rect'` use
+//  * the the points in `'buffer'` to calculate the bounding rects (`'buffer'`).
+//  * @property {TypeParsablePoint} [position] if defined, overrides translation
+//  * in transform
+//  * @property {TypeParsableTransform} [transform]
+//  * (`Transform())`)
+//  * @property {OBJ_Font} [defaultAccent] default font for text modifiers that
+//  * are not defined.
+//  *
+//  * @see To test examples, append them to the
+//  * <a href="#text-boilerplate">boilerplate</a>
+//  *
+//  * @example
+//  * // "Two justified lines"
+//  * figure.add(
+//  *   {
+//  *     name: 't',
+//  *     make: 'text.lines',
+//  *     text: [
+//  *       'First line',
+//  *       'This is the second line',
+//  *     ],
+//  *     font: {
+//  *       style: 'normal',
+//  *       size: 0.2,
+//  *     },
+//  *     justify: 'center',
+//  *     color: this.defaultColor,
+//  *   },
+//  * );
+//  *
+//  * @example
+//  * // "Example showing many features of textLines"
+//  * figure.add(
+//  *   {
+//  *     name: 'lines',
+//  *     make: 'textLines',
+//  *     text: [
+//  *       'Lines justified to the left',
+//  *       'A |line| with a |modified_phrase|',
+//  *       {
+//  *         text: 'A |line| with custom defaults',
+//  *         font: {
+//  *           style: 'italic',
+//  *           color: [0, 0.5, 1, 1],
+//  *         },
+//  *       },
+//  *     ],
+//  *     modifiers: {
+//  *       modified_phrase: {
+//  *         text: 'modified phrase',
+//  *         font: {
+//  *           style: 'italic',
+//  *           color: [0, 0.5, 1, 1],
+//  *         },
+//  *       },
+//  *       line: {
+//  *         font: {
+//  *           family: 'Times New Roman',
+//  *           color: [0, 0.6, 0, 1],
+//  *           style: 'italic',
+//  *         },
+//  *       },
+//  *     },
+//  *     font: {
+//  *       family: 'Helvetica Neue',
+//  *       weight: '200',
+//  *       style: 'normal',
+//  *       size: 0.2,
+//  *     },
+//  *     justify: 'left',
+//  *     lineSpace: -0.4,
+//  *     position: [-0.5, 0.1],
+//  *   },
+//  * );
+//  */
+// export type OBJ_TextLines = {
+//   text: Array<string | OBJ_TextLinesDefinition>,
+//   modifiers: OBJ_TextModifiersDefinition,
+//   font?: OBJ_Font,
+//   defaultTextTouchBorder?: TypeParsableBuffer,
+//   justify?: 'left' | 'center' | 'right',
+//   lineSpace?: number,
+//   xAlign: 'left' | 'right' | 'center',
+//   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
+//   color: TypeColor,
+//   border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
+//   touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
+//   position: TypeParsablePoint,
+//   transform: TypeParsableTransform,
+//   defaultAccent?: OBJ_Font,
+// };
 

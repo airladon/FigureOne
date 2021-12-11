@@ -359,6 +359,14 @@ function randSign() {
 }
 
 /**
+ * Return a true or false randomly
+ * @return {boolean}
+ */
+function randBool() {
+  return Math.random() > 0.5;
+}
+
+/**
  * Return a random int.
  *
  * If a `max = null`, then the returned integer will be in the range of 0 to
@@ -374,9 +382,9 @@ function randInt(minOrMax: number, max: ?number = null, sign: boolean = false) {
   let r = 0;
   if (max != null) {
     const min = minOrMax;
-    r = Math.floor(Math.random() * Math.floor((max - min)) + Math.floor(min));
+    r = Math.round(Math.random() * Math.floor((max - min)) + Math.floor(min));
   } else {
-    r = Math.floor(Math.random() * Math.floor(minOrMax));
+    r = Math.round(Math.random() * Math.floor(minOrMax));
   }
   if (sign) {
     r *= randSign();
@@ -467,5 +475,6 @@ export {
   randElements,
   rand2D,
   randSign,
+  randBool,
 };
 

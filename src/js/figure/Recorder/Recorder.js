@@ -1334,6 +1334,7 @@ ${cursorData}
     if (stateTime === this.lastSeekTime && !force) {
       return;
     }
+    this.figure.elements.clear();
     const time = stateTime > 0 ? stateTime : timeIn;
     const timeToUse = time;
 
@@ -1396,7 +1397,6 @@ ${cursorData}
         this.setEvent(eventName, index);
       });
     };
-
     playEvents(eventsToSetBeforeState);
 
     if (this.stateIndex !== -1) {

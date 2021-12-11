@@ -12,7 +12,7 @@ export default class Offset extends BaseEquationFunction {
     this.location = location._dup();
     const loc = location._dup();
     const {
-      offset, // inSize,
+      offset, inSize,
       fullContentBounds,
     } = this.options;
     const [mainContent] = this.contents;
@@ -29,17 +29,17 @@ export default class Offset extends BaseEquationFunction {
       fullBounds.copyFrom(mainContent.getBounds(true));
     }
 
-    // if (inSize) {
-    //   this.width = offset.x + contentBounds.width;
-    //   this.height = contentBounds.height;
-    //   this.descent = contentBounds.descent;
-    //   this.ascent = contentBounds.ascent;
-    // } else {
-    this.width = 0;
-    this.height = 0;
-    this.descent = 0;
-    this.ascent = 0;
-    // }
+    if (inSize) {
+      this.width = Math.max(0, offset.x + contentBounds.width);
+      this.height = contentBounds.height;
+      this.descent = contentBounds.descent;
+      this.ascent = contentBounds.ascent;
+    } else {
+      this.width = 0;
+      this.height = 0;
+      this.descent = 0;
+      this.ascent = 0;
+    }
     this.fullSize = {
       leftOffset: location.x - fullBounds.left,
       width: fullBounds.width,

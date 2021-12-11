@@ -30,7 +30,7 @@ const [eqn, description] = figure.add([
     },
   },
   {
-    make: 'primitives.textLines',
+    make: 'ftext',
     modifiers: {
       a: { font: { family: 'Times New Roman', style: 'italic', size: 0.12 } },
       b: { font: { family: 'Times New Roman', style: 'italic', size: 0.12 } },

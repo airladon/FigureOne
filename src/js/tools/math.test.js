@@ -306,7 +306,7 @@ describe('Math tools testing', () => {
       const max = 20;
       for (let i = 0; i < 1000; i += 1) {
         const result = randInt(max);
-        if (result < min || result > max - 1) {
+        if (result < min || result > max) {
           expected = false;
         }
       }
@@ -318,7 +318,7 @@ describe('Math tools testing', () => {
       const max = 20;
       for (let i = 0; i < 1000; i += 1) {
         const result = randInt(min, max);
-        if (result < min || result > max - 1) {
+        if (result < min || result > max) {
           expected = false;
         }
       }

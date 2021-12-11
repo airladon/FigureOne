@@ -166,6 +166,11 @@ export default class EquationForm extends Elements {
     // this.subForm = '';
   }
 
+  cleanup() {
+    this.elements = {};
+    super.cleanup();
+  }
+
   getNamedElements() {
     const namedElements = {};
     this.collectionMethods.getAllElements().forEach((element) => {
@@ -174,6 +179,11 @@ export default class EquationForm extends Elements {
     return namedElements;
   }
 
+  rearrange() {
+    this.arrange(
+      this.arranged.scale, this.arranged.xAlign, this.arranged.yAlign, this.arranged.fixTo,
+    );
+  }
 
   setPositions(noArrange: boolean = false) {
     if (!noArrange && (this.layout === 'always' || this.positionsSet === false)) {
@@ -289,10 +299,10 @@ export default class EquationForm extends Elements {
       yAlign,
       fixTo,
     };
-    const elementsInCollection = this.collectionMethods.getAllElements();
-    const elementsCurrentlyShowing = elementsInCollection.filter(e => e.isShown);
-    this.collectionMethods.hideAll();
-    this.collectionMethods.show();
+    // const elementsInCollection = this.collectionMethods.getAllElements();
+    // const elementsCurrentlyShowing = elementsInCollection.filter(e => e.isShown);
+    // this.collectionMethods.hideAll();
+    // this.collectionMethods.show();
 
     this.positionsSet = true;
     super.calcSize(new Point(0, 0), scale);
@@ -360,7 +370,7 @@ export default class EquationForm extends Elements {
       this.setPositions(true);
     }
     // this.positionsSet = false;
-    this.collectionMethods.showOnly(elementsCurrentlyShowing);
+    // this.collectionMethods.showOnly(elementsCurrentlyShowing);
   }
 
   lazyArrange(

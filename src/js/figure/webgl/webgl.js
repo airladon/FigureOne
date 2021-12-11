@@ -4,6 +4,12 @@ import getShaders from './shaders';
 import type { TypeFragmentShader, TypeVertexShader } from './shaders';
 import TargetTexture from './target';
 import { hash32 } from '../../tools/tools';
+import FontManager from '../FontManager';
+import { FunctionMap } from '../../tools/FunctionMap';
+import { colorToInt } from '../../tools/color';
+import Atlas from './Atlas';
+import type { TypeColor } from '../../tools/types';
+import type { OBJ_Atlas } from './Atlas';
 
 const glMock = {
   TRIANGLES: 1,
@@ -97,12 +103,6 @@ function createProgram(
     throw new Error(`Could not compile WebGL program. \n\n ${info || ''}`);
   }
   return program;
-  // const success = gl.getProgramParameter(program, gl.LINK_STATUS);
-  // if (success) {
-  //   return program;
-  // }
-  // gl.deleteProgram(program);
-  // return null;
 }
 
 
@@ -115,9 +115,6 @@ function createShader(gl: WebGLRenderingContext, type, source) {
     return shader;
   }
   throw new Error(`Could not compile shader: ${source}`);
-
-  // gl.deleteShader(shader);
-  // return null;
 }
 
 
@@ -185,6 +182,11 @@ function autoResize(event) {
 }
 
 
+/*
+  A webgl instance manages a webgl context.
+  
+  It loads and manages programs, shaders and textures for the context, and by extension also manages font atlases (as each atlas is a texture).
+*/
 class WebGLInstance {
   gl: WebGLRenderingContext;
   program: WebGLProgram;
@@ -194,11 +196,18 @@ class WebGLInstance {
     [name: string]: {
       glTexture: WebGLTexture;
       index: number;
-      type: 'image' | 'canvasText';
+      // type: 'image' | 'canvasText';
       state: 'loading' | 'loaded';
-      onLoad: Array<() => void>
+      onLoad: Array<((boolean, number) => void) | string>;
+      // atlas: Object;
+      // atlasDimension: number;
     };
   };
+
+  atlases: {
+    [atlasId: string]: Atlas,
+  };
+
   programs: Array<{
     vars: Array<string>,
     vertexShader: {
@@ -217,34 +226,239 @@ class WebGLInstance {
   }>;
 
   targetTexture: null | TargetTexture;
+  fnMap: FunctionMap;
+  fontManager: FontManager;
 
+  /*
+    Add, or update a texture. If the texture already exists, then do nothing.
+
+    A texture is referenced with a unique id, and defined by either a url (string), Image or html canvas element.
+
+    If the texture is a url, then it will be asynchronously loaded, and so a temporary solid color texture width color `loadColor` will be used in its place temporarily.
+
+    `repeat` can only repeat textures if the texture is a multiple of 2.
+
+    `onLoad` is a callback called once the url texture is loaded
+
+    Use `force` to force overwriting a texture that already exits
+  */
   addTexture(
     id: string,
-    glTexture: WebGLTexture,
-    type: 'image' | 'canvasText',
+    data: string | Image | HTMLCanvasElement,
+    loadColor: TypeColor = [0, 0, 0, 0],
+    repeat: boolean = false,
+    onLoad: null | string | ((boolean, number) => void) = null,
+    force: boolean = false,
   ) {
-    if (this.textures[id] && this.textures[id].glTexture != null) {
-      return this.textures[id].index;
+    /*
+      If the texture already exits, then return its index. If the texture is
+      still loading, then add the onLoad callback to the list of callbacks to
+      be called once the texture loads.
+    */
+    if (!force && this.textures[id] != null) {
+      if (this.textures[id].state === 'loaded') {
+        if (onLoad != null) {
+          this.textures[id].onLoad.push(onLoad);
+        }
+        this.onLoad(id);
+        return this.textures[id].index;
+      }
+      // Otherwise loading
+      if (onLoad != null) {
+        this.textures[id].onLoad.push(onLoad);
+      }
+      return this.textures[id].index;;
     }
     let index = 0;
-    if (this.textures[id]) {
+    if (this.textures[id] != null) {
       index = this.textures[id].index;
     } else {
-      index = Object.keys(this.textures).length;
+      index = Object.keys(this.textures).length + 1;
     }
+    // If a texture already exists, then unload it
+    this.deleteTexture(id);
+    const { gl } = this;
+
+    // $FlowFixMe
     this.textures[id] = {
-      glTexture,
-      index,
-      type,
-      state: 'loaded',
+      id,
+      state: 'loading',
       onLoad: [],
+      index,
+      data: null,
     };
-    return index;
+    const texture = this.textures[id];
+    if (onLoad != null) {
+      texture.onLoad.push(onLoad);
+    }
+    // If the data is a url string, then load the data into an image
+    if (typeof data === 'string') {
+      this.setTextureData(id, loadColor)
+      const image = new Image();
+      texture.state = 'loading';
+
+      image.src = data;
+      // When the image is loaded, set the texture to it
+      image.addEventListener('load', () => {
+        // $FlowFixMe
+        texture.data = image;
+        this.setTextureData(id, image, repeat);
+        this.onLoad(id);
+        texture.state = 'loaded';
+      });
+    } else {
+      // $FlowFixMe
+      texture.data = data;
+      // Otherwise, the data is an image so set it directly
+      this.setTextureData(id, data, repeat);
+      this.onLoad(id);
+      texture.state = 'loaded';
+    }
+    return this.textures[id].index;
   }
 
-  onLoad(textureId: string) {
-    this.textures[textureId].onLoad.forEach(f => f());
-    this.textures[textureId].onLoad = [];
+  getAtlas(options: OBJ_Atlas) {
+    const font = options.font; // $FlowFixMe
+    const textureID = font.getTextureID();
+    if (this.atlases[textureID] != null) {
+      return this.atlases[textureID];
+    }
+    const atlas = new Atlas(this, options);
+    this.atlases[textureID] = atlas;
+    // atlas.notifications.add('updated', () => {
+    //   // Notification for primitives
+    //   this.notifications.publish('atlasUpdated', textureID);
+    //   // Notificaiton for collections
+    //   this.notifications.publish('atlasUpdated2', textureID);
+    // });
+    return atlas;
+  }
+
+  recreateAtlases() {
+    Object.keys(this.atlases).forEach(textureID => this.atlases[textureID].recreate());
+  }
+
+  deleteTexture(id: string) {
+    const texture = this.textures[id];
+    if (texture == null) {
+      return;
+    }
+    const { gl } = this;
+
+    // If texture exists, then delete it
+    if (texture.glTexture != null) {
+      gl.activeTexture(gl.TEXTURE0 + texture.index);
+      gl.bindTexture(gl.TEXTURE_2D, null);
+      gl.deleteTexture(texture.glTexture);
+    }
+    this.cancel(id);
+    delete this.textures[id];
+  }
+
+  contextLost() {
+    Object.keys(this.textures).forEach((id) => {
+      this.textures[id].glTexture = null;
+    });
+  }
+
+
+  setTextureData(
+    id: string,
+    image: Object | TypeColor, // image data
+    repeat: boolean = false,
+  ) {
+    function isPowerOf2(value) { // eslint-disable-next-line no-bitwise
+      return (value & (value - 1)) === 0;
+    }
+
+    const texture = this.textures[id];
+    const { index } = texture;
+    const { gl } = this;
+
+    // If texture exists, then delete it
+    if (texture.glTexture != null) {
+      gl.activeTexture(gl.TEXTURE0 + index);
+      gl.bindTexture(gl.TEXTURE_2D, null);
+      gl.deleteTexture(texture.glTexture);
+    }
+    // Create a texture
+    const glTexture = gl.createTexture();
+    texture.glTexture = glTexture;
+    gl.activeTexture(gl.TEXTURE0 + index);
+    gl.bindTexture(gl.TEXTURE_2D, glTexture);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+
+    // If image is a color, then create s ingle pixel image of that color
+    if (Array.isArray(image)) {
+      gl.texImage2D(
+        gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0,
+        gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(colorToInt(image)),
+      );
+      return false;
+    }
+
+    // Load the image
+    gl.texImage2D(
+      gl.TEXTURE_2D, 0, gl.RGBA,
+      gl.RGBA, gl.UNSIGNED_BYTE, image,
+    );
+    // Check if the image is a power of 2 in both dimensions.
+    if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+      // Yes, it's a power of 2. Generate mips.
+      gl.generateMipmap(gl.TEXTURE_2D);
+      if (repeat != null && repeat === true) {
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+      } else {
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      }
+    } else {
+      // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    }
+    return true;
+  }
+
+  // addTexture(
+  //   id: string,
+  //   glTexture: WebGLTexture,
+  //   type: 'image' | 'canvasText',
+  //   atlas: Object = {},
+  //   atlasDimension: number = 0,
+  // ) {
+  //   if (this.textures[id] && this.textures[id].glTexture != null) {
+  //     return this.textures[id].index;
+  //   }
+  //   // Texture index 0 is dedicated to the target texture
+  //   let index = 1;
+  //   if (this.textures[id]) {
+  //     index = this.textures[id].index;
+  //   } else {
+  //     index = Object.keys(this.textures).length + 1;
+  //   }
+  //   this.textures[id] = {
+  //     glTexture,
+  //     index,
+  //     type,
+  //     state: 'loaded',
+  //     onLoad: [],
+  //     atlas,
+  //     atlasDimension,
+  //   };
+  //   return index;
+  // }
+
+  onLoad(id: string) {
+    this.textures[id].onLoad.forEach(f => this.fnMap.exec(f, true, this.textures[id].index));
+    this.textures[id].onLoad = [];
+  }
+
+  cancel(id: string) {
+    this.textures[id].onLoad.forEach(f => this.fnMap.exec(f, false, this.textures[id].index));
+    this.textures[id].onLoad = [];
   }
 
   getProgram(
@@ -318,6 +532,9 @@ class WebGLInstance {
       // premultipliedAlpha: false,
       // alpha: false
     });
+    this.fnMap = new FunctionMap();
+    this.fontManager = new FontManager();
+    this.atlases = {};
     if (gl == null) {
       // $FlowFixMe
       gl = glMock;
@@ -341,7 +558,7 @@ class WebGLInstance {
     this.gl.disable(this.gl.DEPTH_TEST);
     // $FlowFixMe
     this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
-    this.gl.enable(this.gl.BLEND);
+    this.gl.enable(this.gl.BLEND); // $FlowFixMe
     this.targetTexture = new TargetTexture(this);
   }
 

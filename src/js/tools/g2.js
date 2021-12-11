@@ -472,8 +472,10 @@ export type TypeParsableBorder = Array<TypeParsablePoint> | Array<Array<TypePars
 
 /**
  * A border is an array of point arrays. Each point array is a contigous, closed
- * border. Several pointa arrays represent a border that is several separate
+ * border. Several point arrays represent a border that is several separate
  * borders.
+ *
+ * `TypeBorder = Array<Array<Point>>`
  */
 export type TypeBorder = Array<Array<Point>>;
 
@@ -708,4 +710,5 @@ export {
   angleFromVectors,
   directionToAxisAngle,
   surfaceGrid,
+  getBuffer,
 };

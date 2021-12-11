@@ -421,6 +421,22 @@ const updates = {
   'move-all-angle': (e) => {
     e.setMovable({ startArm: 'angle', endArm: 'angle', movePadRadius: 0.2, width: 0.1 });
   },
+  default: () => {
+    const gls = figure.elements.getAllPrimitives().filter(e => e.text != null);
+    const d2s = figure.elements.getAllPrimitives().filter(e => e.drawingObject.text != null);
+    figure.add({
+      make: 'text',
+      text: `gl: ${gls.length.toString()}`,
+      position: [-5, 4.8],
+      font: { size: 0.15 },
+    });
+    figure.add({
+      make: 'text',
+      text: `2d: ${d2s.length.toString()}`,
+      position: [-4, 4.8],
+      font: { size: 0.15 },
+    });
+  },
 };
 
 const getValues = {
@@ -542,6 +558,7 @@ if (typeof process === 'object') {
     move,
   };
 } else {
+  figure.primitives.defaultFont.size = 0.2;
   figure.add(getShapes(index => getPosition(index)));
   startUpdates = () => {
     Object.keys(updates).forEach((name) => {

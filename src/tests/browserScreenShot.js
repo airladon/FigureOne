@@ -16,10 +16,10 @@ function browserScreenShot(title, file, testCase = '', duration = 0, step = 1) {
   }
 
   page.on('console', async (msg) => {
-    const msgType = msg.type();
+    // const msgType = msg.type();
     const args = await Promise.all(msg.args().map(jsHandle => jsHandle.jsonValue()));
     // eslint-disable-next-line no-console
-    console[msgType](...args);
+    console.log(...args);
   });
 
   // eslint-disable-next-line jest/valid-title

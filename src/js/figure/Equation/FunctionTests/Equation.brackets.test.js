@@ -229,9 +229,9 @@ describe('Equation Functions - Brackets', () => {
     });
     // Note, the letter a has the following bounds:
     //   width: 0.1,
-    //   height: 0.103,
+    //   height: 0.118,
     //   descent: -0.008,
-    //   ascent: top: 0.095,
+    //   ascent: top: 0.11,
     // The letter b has the following bounds:
     //   width: 0.1,
     //   height: 0.148,
@@ -250,8 +250,8 @@ describe('Equation Functions - Brackets', () => {
       const newLScale = eqn._lb._custom.scale._dup();
       const newL = eqn._lb.getPosition();
       const newB = eqn._b.getPosition();
-      // 0.1x2 + 0.103 = 0.303
-      expect(round(newLScale.y)).toBe(0.303);
+      // 0.1x2 + 0.118 = 0.318
+      expect(round(newLScale.y)).toBe(0.318);
       expect(round(newL.y)).toBe(-0.108);
       // 0 - 0.1 - 0.04 = -0.14
       expect(round(newL.x)).toBe(round(-0.1 - eqn._lb.getBoundingRect('local').width));
@@ -277,16 +277,16 @@ describe('Equation Functions - Brackets', () => {
       eqn.showForm('forceDecentGreaterThanActualDescent');
       const newLScale = eqn._lb._custom.scale._dup();
       const newL = eqn._lb.getPosition();
-      // 0.1 + 0.095 + 0.1 = 0.295
-      expect(round(newLScale.y)).toBe(0.295);
+      // 0.1 + 0.11 + 0.1 = 0.31
+      expect(round(newLScale.y)).toBe(0.31);
       expect(round(newL.y)).toBe(-0.1);
     });
     test('forceDecentLessThanActualDescent', () => {
       eqn.showForm('forceDecentLessThanActualDescent');
       const newLScale = eqn._lb._custom.scale._dup();
       const newL = eqn._lb.getPosition();
-      // 0.004 + 0.095 + 0.1 = 0.199
-      expect(round(newLScale.y)).toBe(0.199);
+      // 0.004 + 0.11 + 0.1 = 0.214
+      expect(round(newLScale.y)).toBe(0.214);
       expect(round(newL.y)).toBe(-0.004);
     });
     test('minContentDescentWithLargeMinHeight', () => {
@@ -301,25 +301,25 @@ describe('Equation Functions - Brackets', () => {
       eqn.showForm('minContentDescentWithSmallMinHeight');
       const newLScale = eqn._lb._custom.scale._dup();
       const newL = eqn._lb.getPosition();
-      // 1 + 0.095 + 0.1x2 = 1.295 as minHeight doesn't raise above minDescent
+      // 1 + 0.11 + 0.1x2 = 1.31 as minHeight doesn't raise above minDescent
       // more than old ascent does
-      expect(round(newLScale.y)).toBe(1.295);
+      expect(round(newLScale.y)).toBe(1.31);
       expect(round(newL.y)).toBe(-1.1);
     });
     test('minContentDescentWithSmallMinHeight', () => {
       eqn.showForm('minContentDescentWithSmallMinHeight');
       const newLScale = eqn._lb._custom.scale._dup();
       const newL = eqn._lb.getPosition();
-      // 1 + 0.095 + 0.1x2 = 1.295
-      expect(round(newLScale.y)).toBe(1.295);
+      // 1 + 0.11 + 0.1x2 = 1.31
+      expect(round(newLScale.y)).toBe(1.31);
       expect(round(newL.y)).toBe(-1.1);
     });
     test('minContentDescent', () => {
       eqn.showForm('minContentDescent');
       const newLScale = eqn._lb._custom.scale._dup();
       const newL = eqn._lb.getPosition();
-      // 1 + 0.095 + 0.1x2 = 1.295
-      expect(round(newLScale.y)).toBe(1.295);
+      // 1 + 0.11 + 0.1x2 = 1.31
+      expect(round(newLScale.y)).toBe(1.31);
       expect(round(newL.y)).toBe(-1.1);
     });
     test('minContentHeight', () => {

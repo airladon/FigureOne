@@ -241,7 +241,7 @@ function composeFragShader(
   if (color === 'vertex') {
     src += 'varying vec4 v_color;\n';
     vars.push('v_color');
-  } else if (color === 'texture') {
+  } else if (color === 'texture' || color === 'textureAlpha') {
     src += 'uniform sampler2D u_texture;\n';
     src += 'varying vec2 v_texcoord;\n';
     vars.push('u_texture');
@@ -274,6 +274,13 @@ function composeFragShader(
     src += '  gl_FragColor.rgb *= gl_FragColor.a;\n';
   } else if (color === 'texture') {
     src += '  gl_FragColor = texture2D(u_texture, v_texcoord) * u_color.a;\n';
+  } else if (color === 'textureAlpha') {
+    // src += '  gl_FragColor = texture2D(u_texture, v_texcoord).a * u_color;\n';
+    src += '  gl_FragColor = vec4(u_color.rgb, u_color.a * texture2D(u_texture, v_texcoord).a);\n';
+    // src += '  gl_FragColor.a = u_color.a * texture2D(u_texture, v_texcoord).a;\n'
+    // src += '  gl_FragColor.rgb *= gl_FragColor.a * texture2D(u_texture, v_texcoord).a;\n';
+    // src += '  gl_FragColor = texture2D(u_texture, v_texcoord).a * u_color;\n';
+    src += '  gl_FragColor.rgb *= gl_FragColor.a;\n';
   }
 
   // src += '  gl_FragColor.rgb *= gl_FragColor.a;\n';

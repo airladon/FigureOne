@@ -16,10 +16,17 @@ const { toMatchImageSnapshot } = require('jest-image-snapshot');
 expect.extend({ toMatchImageSnapshot });
 
 page.on('console', async (msg) => {
-  const msgType = msg.type();
+  let msgType = msg.type();
+  if (msgType === 'warning') {
+    msgType = 'warn';
+  }
   const args = await Promise.all(msg.args().map(jsHandle => jsHandle.jsonValue()));
+  if (args != null && args[0] != null) {
+  // console.log(msgType)
   // eslint-disable-next-line no-console
-  console[msgType](...args);
+    console[msgType](...args);
+  }
+  // console.log(...args);
 });
 
 

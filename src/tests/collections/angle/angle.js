@@ -42,6 +42,11 @@ function makeAngle(name, options, mods, getPos) {
   if (o.options.p3 != null) {
     o.options.p3 = tools.g2.getPoint(o.options.p3).add(x, y);
   }
+  if (o.options.label != null && typeof o.options.label === 'object') {
+    o.options.label = tools.misc.joinObjects(
+      {}, { font: { family: 'Times New Roman' } }, o.options.label,
+    );
+  }
   return o;
 }
 

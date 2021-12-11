@@ -12,13 +12,15 @@ const figure = new Fig.Figure({
 
 const count = figure.add({
   make: 'text',
+  font: { render: 'gl' },
   text: '0',
+  yAlign: 'middle',
   position: [0, 1],
 });
 
-function onClick(p, e) {
+function onClick(e, p) {
   e.custom.count += 1;
-  count.custom.setText({ text: `${e.custom.count}` });
+  count.setText({ text: `${e.custom.count}` });
   figure.animateNextFrame();
 }
 

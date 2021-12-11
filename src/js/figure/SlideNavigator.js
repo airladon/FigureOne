@@ -6,11 +6,12 @@ import type {
   OBJ_Collection,
 } from './FigurePrimitives/FigurePrimitiveTypes';
 import type {
-  OBJ_TextModifiersDefinition, OBJ_TextLines,
+  OBJ_TextModifiersDefinition,
 } from './FigurePrimitives/FigurePrimitiveTypes2D';
 import type Figure from './Figure';
 import { Equation } from './Equation/Equation';
 import type AnimationStep from './Animation/AnimationStep';
+import type CollectionsText, { OBJ_FormattedText } from './FigureCollections/Text';
 // enterStateCommon
 // enterState
 // showCommon
@@ -434,7 +435,7 @@ export type TypeRecorderTime = string | number;
  * reference state based on the current state
  */
 export type OBJ_SlideNavigatorSlide = {
-  text?: OBJ_TextLines,
+  text?: OBJ_FormattedText,
   modifiersCommon?: OBJ_TextModifiersDefinition;
   modifiers?: OBJ_TextModifiersDefinition;
   showCommon?: TypeElementPath;
@@ -554,7 +555,7 @@ export default class SlideNavigator {
   slides: Array<OBJ_SlideNavigatorSlide>;
   prevButton: ?FigureElement;
   nextButton: ?FigureElement;
-  textElement: ?FigureElement;
+  textElement: ?CollectionsText;
   inTransition: boolean;
   equationsOrder: Array<FigureElement>;
   equations: { [string]: FigureElement };
@@ -643,9 +644,9 @@ export default class SlideNavigator {
     if (o.slides != null) {
       this.slides = o.slides;
     }
-    if (typeof o.text === 'string') {
+    if (typeof o.text === 'string') {  // $FlowFixMe
       this.textElement = this.collection.getElement(o.text);
-    } else if (o.text != null) {
+    } else if (o.text != null) {  // $FlowFixMe
       this.textElement = o.text;
     } else {
       this.textElement = null;
@@ -1117,7 +1118,7 @@ export default class SlideNavigator {
     const mods = this.getProperty('modifiers', index, {});
     const commonMods = this.getProperty('modifiersCommon', index, {});
     const text = this.getText(index) || ' ';
-    textElement.custom.updateText({
+    textElement.setText({
       text,
       modifiers: joinObjects({}, commonMods, mods),
     });
