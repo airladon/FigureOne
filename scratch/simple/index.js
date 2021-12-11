@@ -23,27 +23,31 @@ const figure = new Fig.Figure({
 //   color: [0.8, 0.8, 0.8, 1],
 // });
 
-figure.add({
-  make: 'text',
-  text: 'Engage!',
-  font: { color: [0, 0, 1, 1], style: 'italic' },
-  xAlign: 'center',
-  position: [0, 0.5],
+const t = figure.add({
+  make: 'equation',
+  formDefaults: {
+    elementMods: {
+      b: { color: [1, 0, 0, 1] },
+    },
+  },
+  forms: {
+    0: ['a', 'b', 'c'],
+    1: {
+      content: ['a', 'b', 'c', 'd'],
+      elementMods: {
+        b: { color: [0, 1, 0, 1] },
+      },
+    },
+    2: ['a', 'b', 'c', 'd', 'e'],
+  },
+  touch: { onClick: e => e.nextForm() },
 });
 
-figure.add({
-  make: 'text',
-  text: 'Make it so!',
-  font: {
-    family: 'monospace',
-    color: [1, 1, 0, 1],
-    outline: { fill: true, color: [1, 0, 0, 1], width: 0.02 },
-    size: 0.6,
-    underline: { color: [0, 0, 1, 1] },
-  },
-  xAlign: 'center',
-  position: [0, -0.5],
-});
+// t.animations.new()
+//   .goToForm({ target: '1', delay: 1, animate: 'dissolveInThenMove' })
+//   .goToForm({ target: '2', delay: 1, animate: 'dissolveInThenMove' })
+//   .start();
+
 
 
 
