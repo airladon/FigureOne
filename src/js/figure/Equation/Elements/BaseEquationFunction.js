@@ -9,6 +9,7 @@ import {
 import { duplicateFromTo } from '../../../tools/tools';
 import { Element, Elements } from './Element';
 import Symbol from '../Symbols/SymbolNew';
+import type { TypeColor } from '../../../tools/types';
 // import type { ElementInterface } from './Element';
 // import Bounds from './Bounds';
 

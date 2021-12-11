@@ -9,7 +9,7 @@ import type { TypeColor } from '../../../tools/types';
 
 
 export default class Color extends BaseEquationFunction {
-  color: TypeColor;
+  color: TypeColor | null;
 
   calcSize(location: Point, scale: number) {
     this.location = location._dup();
