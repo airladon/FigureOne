@@ -164,6 +164,9 @@ function makeEquation() {
           ['eq3', '  ', 'secComp'],
         ], 0.5), 0.85),
       },
+      formDefaults: {
+        ignoreColor: true,
+      },
       forms: {
         final: { scale: [['final1', cont('', 0.8), 'final2'], 1.1] },
         sinCos: ['c1_sinCos'],
@@ -296,6 +299,7 @@ function makeEquation() {
       },
       formDefaults: {
         alignment: { yAlign: 'baseline', xAlign: 'left' },
+        ignoreColor: true,
       },
       phrases: {
         compAngle: { brac: ['lb', ['_90', 'comp'], 'rb'] },
