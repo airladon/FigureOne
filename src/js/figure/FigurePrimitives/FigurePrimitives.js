@@ -1447,7 +1447,7 @@ export default class FigurePrimitives {
       xAlign: 'left',
       yAlign: 'baseline',
       transform: new Transform().scale(1).rotate(0).translate(0, 0),
-      color: this.defaultColor,
+      // color: this.defaultColor,
       name: generateUniqueId('primitive_'),
       vertexShader: { dimension: 2, color: 'texture' },
       fragmentShader: { color: 'textureAlpha' },

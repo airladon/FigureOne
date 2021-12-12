@@ -137,6 +137,7 @@ export default class EquationForm extends Elements {
   translation: TypeElementTranslationOptions;
   positionsSet: boolean;
   layout: 'always' | 'lazy' | 'init';
+  ignoreColor: boolean;
   // };
 
   fromForm: {
@@ -174,6 +175,7 @@ export default class EquationForm extends Elements {
     this.fromForm = {};
     this.positionsSet = false;
     this.layout = 'always';
+    this.ignoreColor = false;
     // this.subForm = '';
   }
 
@@ -203,7 +205,9 @@ export default class EquationForm extends Elements {
       );
     }
     super.setPositions();
-    super.setColor();
+    if (!this.ignoreColor) {
+      super.setColor();
+    }
   }
 
   _dup(
@@ -638,7 +642,10 @@ export default class EquationForm extends Elements {
     const currentColors = this.collectionMethods.getElementColors(true);
     this.setPositions();
     const animateToTransforms = this.collectionMethods.getElementTransforms();
-    const animateToColors = this.collectionMethods.getElementColors(true);
+    let animateToColors = {};
+    if (!this.ignoreColor) {
+      animateToColors = this.collectionMethods.getElementColors(true);
+    }
 
     const elementsToMove = [];
     const toMoveStartTransforms = [];

@@ -466,6 +466,10 @@ export type EQN_FromForms = {
  * (@FigureElementPrimitive) when this form is shown
  * @property {EQN_FromForms} [fromForm] override `duration`, `translation`
  * `onTransition` and/or `onShow` with this if coming from specific forms
+ * @property {boolean} [ignoreColor] when `false`, color will be set
+ * automatically in the equation based on EQN_Color equation functions. In such
+ * cases, colors that are set external to the equation will be overridden. Use
+ * `true` to allow setting of colors externally only. (`false`)
  *
  * @example
  * // Simple form definition of two different forms of the same equation and one
@@ -554,6 +558,7 @@ type EQN_FormObjectDefinition = {
   onTransition?: string | (() => void),
   elementMods?: OBJ_ElementMods,
   fromForm: EQN_FromForms,
+  ignoreColor?: boolean,
 };
 
 
@@ -656,7 +661,8 @@ export type EQN_FormDefaults = {
   translation?: EQN_TranslationStyle,
   onShow?: null | string | (() => void),
   onTransition?: null | string | (() => void),
-  layout?: 'lazy' | 'init' | 'always'
+  layout?: 'lazy' | 'init' | 'always',
+  ignoreColor?: boolean,
 }
 
 /**
@@ -983,6 +989,7 @@ export class Equation extends FigureElementCollection {
       onShow?: null | string | (() => void),
       onTransition?: null | string | (() => void),
       layout?: 'always' | 'lazy' | 'init',
+      ignoreColor?: boolean,
     };
 
     isAnimating: boolean;
@@ -1061,6 +1068,7 @@ export class Equation extends FigureElementCollection {
         },
         elementMods: {},
         layout: 'always',
+        ignoreColor: false,
         // lazyLayout: true,
         // layoutonce: false,
       },
@@ -1151,6 +1159,7 @@ export class Equation extends FigureElementCollection {
         duration: optionsToUse.formDefaults.duration,
         translation: optionsToUse.formDefaults.translation,
         layout: optionsToUse.formDefaults.layout,
+        ignoreColor: optionsToUse.formDefaults.ignoreColor,
       },
       functions: new EquationFunctions(
         this.elements,
@@ -2061,7 +2070,7 @@ export class Equation extends FigureElementCollection {
     }
     const {
       description, modifiers, fromForm,
-      onShow, onTransition, duration, translation,
+      onShow, onTransition, duration, translation, ignoreColor,
     } = optionsToUse;
     const form = this.createForm();
     this.eqn.forms[name] = form;
@@ -2073,6 +2082,7 @@ export class Equation extends FigureElementCollection {
     form.fromForm = fromForm;
     form.onShow = onShow;
     form.onTransition = onTransition;
+    form.ignoreColor = ignoreColor;
 
     // Populate element mods
     form.elementMods = {};
