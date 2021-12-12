@@ -495,7 +495,7 @@ export type EQN_Scale = {
  *
  * ![](./apiassets/eqn_color.gif)
  *
- * Color an equation phrase
+ * Color an equation phrase.
  *
  * Options can be an object, or an array in the property order below
  *
@@ -513,6 +513,48 @@ export type EQN_Scale = {
  *   forms: {
  *     0: ['a', { color: ['b', [0, 0, 1, 1]] }, 'c'],
  *   },
+ * });
+ *
+ * @example
+ * // Simple Object Definition
+ * figure.add({
+ *   make: 'equation',
+ *   forms: {
+ *     0: [
+ *       'a',
+ *       {
+ *         color: {
+ *           content: 'b',
+ *           color: [0, 0, 1, 1],
+ *         },
+ *       },
+ *       'c',
+ *     ],
+ *   },
+ * });
+ *
+ * @example
+ * figure.add({
+ *   make: 'equation',
+ *   elements: {
+ *     equals: ' = ',
+ *     plus: ' + ',
+ *     brace: { symbol: 'brace', side: 'top' },
+ *   },
+ *   forms: {
+ *     0: ['2', 'plus', '3', 'equals', 'x'],
+ *     1: [
+ *       {
+ *         color: {
+ *           content: { topComment: [['2', 'plus', '3'], '5', 'brace'] },
+ *           color: [0, 0, 1, 1],
+ *         },
+ *       },
+ *       'equals', 'x',
+ *     ],
+ *     2: ['5', 'equals', 'x'],
+ *   },
+ *   touch: { onClick: e => e.nextForm() },
  * });
  */
 export type EQN_Color = {
