@@ -15,14 +15,14 @@ export default class Color extends BaseEquationFunction {
     this.location = location._dup();
     const loc = location._dup();
     const {
-      color,
+      color, fullContentBounds,
     } = this.options;
     const [mainContent] = this.contents;
     const contentBounds = new Bounds();
     const fullBounds = new Bounds();
     if (mainContent != null) {
       mainContent.calcSize(loc._dup(), scale);
-      contentBounds.copyFrom(mainContent.getBounds(true));
+      contentBounds.copyFrom(mainContent.getBounds(fullContentBounds));
       fullBounds.copyFrom(mainContent.getBounds(true));
     }
     this.color = color;

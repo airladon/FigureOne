@@ -480,6 +480,15 @@ export type EQN_Fraction = {
  * eqn.setTouchable();
  * eqn.showForm('1');
  */
+export type EQN_Scale = {
+  content: TypeEquationPhrase,
+  scale?: number,
+  fullContentBounds?: boolean;
+} | [
+  TypeEquationPhrase,
+  ?number,
+  ?boolean,
+];
 
 /**
  * Equation color
@@ -491,58 +500,29 @@ export type EQN_Fraction = {
  * Options can be an object, or an array in the property order below
  *
  * @property {TypeEquationPhrase} content
- * @property {number} [color]
+ * @property {TypeColor} color
+ * @property {boolean} [fullContentBounds] Use full bounds with content (`false`)
  *
  * @see To test examples, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
- * // Simple
+ * // Simple Array Definition
  * figure.add({
- *   name: 'eqn',
  *   make: 'equation',
  *   forms: {
- *     2: ['a', { color: ['b', [0, 0, 1, 1]] }, 'c'],
+ *     0: ['a', { color: ['b', [0, 0, 1, 1]] }, 'c'],
  *   },
  * });
- * figure.elements._eqn.showForm('1');
- *
- * // Some different bracket examples
- * figure.add({
- *   name: 'eqn',
- *   make: 'equation',
- *   forms: {
- *     // Default
- *     1: ['a', 'b', 'c'],
- *     // Array definition magnify
- *     2: ['a', { scale: ['b', 2] }, 'c'],
- *     // Object definition shrink
- *     3: [
- *       'a',
- *       {
- *         scale: {
- *           content: ['b', 1],
- *           scale: 0.5,
- *         },
- *       },
- *       'c',
- *     ],
- *     // Back to start
- *     4: ['a', { scale: ['b', 1] }, 'c'],
- *   },
- *   formSeries: ['1', '2', '3']
- * });
- * const eqn = figure.elements._eqn;
- * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchable();
- * eqn.showForm('1');
  */
 export type EQN_Color = {
   content: TypeEquationPhrase,
   color: TypeColor,
+  fullContentBounds?: boolean;
 } | [
   TypeEquationPhrase,
   TypeColor,
+  ?boolean,
 ];
 
 /**
@@ -3355,7 +3335,7 @@ export class EquationFunctions {
     if (name === 'lines') { return this.lines(params); }   // $FlowFixMe
     if (name === 'scale') { return this.scale(params); }   // $FlowFixMe
     if (name === 'container') { return this.container(params); }   // $FlowFixMe
-    if (name === 'offset') { return this.offset(params); }
+    if (name === 'offset') { return this.offset(params); }   // $FlowFixMe
     if (name === 'color') { return this.color(params); }
     return null;
   }
@@ -3914,7 +3894,7 @@ export class EquationFunctions {
   }
 
   /**
-   * Equation annotate function
+   * Equation color function
    * @see {@link EQN_Color} for description and examples
    */
   color(
@@ -3923,23 +3903,23 @@ export class EquationFunctions {
     try {
       let content;
       let color;
-      // let fullContentBounds;
+      let fullContentBounds;
       const defaultOptions = {
         color: null,
-        // fullContentBounds: false,
+        fullContentBounds: false,
       };
       if (Array.isArray(options)) {
         [
-          content, color, // fullContentBounds,
+          content, color, fullContentBounds,
         ] = options;
       } else {
         ({
-          content, color, // fullContentBounds,
+          content, color, fullContentBounds,
         } = options);
       }
       const optionsIn = {
         color,
-        // fullContentBounds,
+        fullContentBounds,
       };
       const o = joinObjects(defaultOptions, optionsIn);
       return new Color(
