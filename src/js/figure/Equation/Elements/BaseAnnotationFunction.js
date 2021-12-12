@@ -18,6 +18,7 @@ import type { ElementInterface } from './Element';
 // import Symbol from '../Symbols/Symbol';
 import SymbolNew from '../Symbols/SymbolNew';
 import { FunctionMap } from '../../../tools/FunctionMap';
+import type { TypeColor } from '../../../tools/types';
 // eslint-disable-next-line import/no-cycle
 // import type { TypeEquationPhrase } from '../EquationFunctions';
 
@@ -204,6 +205,13 @@ function offsetLocationForAnnotations(annotations: Array<EQN_Annotation>, offset
   });
 }
 
+function setColorForAnnotations(annotations: Array<EQN_Annotation>, color: TypeColor | null) {
+  annotations.forEach((annotation) => {
+    annotation.content.setColor(color);
+  });
+}
+
+
 function setPositionsForGlyphs(glyphs: EQN_Glyphs) {
   Object.keys(glyphs).forEach((key) => {
     if (glyphs[key] == null) {
@@ -221,6 +229,19 @@ function setPositionsForGlyphs(glyphs: EQN_Glyphs) {
     ]);
     glyph.glyph.setTransform(t);
     setPositionsForAnnotations(glyph.annotations);
+  });
+}
+
+function setColorForGlyphs(glyphs: EQN_Glyphs, color: TypeColor | null) {
+  Object.keys(glyphs).forEach((key) => {
+    if (glyphs[key] == null) {
+      return;
+    }
+    const glyph = glyphs[key];
+    if (color != null) {
+      glyph.glyph.setColor(color);
+    }
+    setColorForAnnotations(glyph.annotations, color);
   });
 }
 
@@ -243,6 +264,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
   height: number;
   scale: number;
   showContent: boolean;
+  color: TypeColor | null;
   fullSize: {
     leftOffset: number,
     width: number,
@@ -272,6 +294,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     this.fnMap = new FunctionMap();
     this.showContent = showContent;
     this.scale = 1;
+    this.color = null;
   }
 
   _dup(namedCollection?: Object) {
@@ -307,6 +330,18 @@ export default class BaseAnnotationFunction implements ElementInterface {
     this.content.setPositions();
     setPositionsForAnnotations(this.annotations);
     setPositionsForGlyphs(this.glyphs);
+  }
+
+  setColor(colorIn: TypeColor | null = null) {
+    let color = null;
+    if (this.color != null) {
+      color = this.color;
+    } else if (colorIn != null) {
+      color = colorIn;
+    }
+    this.content.setColor(color);
+    setColorForAnnotations(this.annotations, color);
+    setColorForGlyphs(this.glyphs, color);
   }
 
   offsetLocation(offset: Point = new Point(0, 0)) {

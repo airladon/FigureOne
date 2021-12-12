@@ -161,6 +161,7 @@ function fig4() {
         phi: { text: '0.0', touchBorder: [0.16, 0.3], isTouchable: true },
         r: { text: '0.0', touchBorder: [0.2, 0.2, 0.16, 0.4], isTouchable: true },
       },
+      formDefaults: { ignoreColor: true },
       forms: {
         0: [
           'y', '_  =', { container: ['ASign', 0.1] }, 'A', ' ', 'sin', { brac: ['lb', [{ frac: ['twoPi', 'vinculum', 'r'] }, ' ', 'theta', 'phiSign', 'phi', ' '], 'rb'] }, 'BSign', 'B'],

@@ -9,6 +9,7 @@ import {
 import { duplicateFromTo } from '../../../tools/tools';
 import { Element, Elements } from './Element';
 import Symbol from '../Symbols/SymbolNew';
+import type { TypeColor } from '../../../tools/types';
 // import type { ElementInterface } from './Element';
 // import Bounds from './Bounds';
 
@@ -138,6 +139,25 @@ export default class BaseEquationFunction extends Elements {
     this.contents.forEach((content) => {
       if (content != null) {
         content.setPositions();
+      }
+    });
+  }
+
+  setColor(colorIn: TypeColor | null = null) {
+    let color = null;
+    if (this.color != null) {
+      color = this.color;
+    } else if (colorIn != null) {
+      color = colorIn;
+    }
+    this.glyphs.forEach((glyph) => {
+      if (glyph != null && color != null) {
+        glyph.setColor(color);
+      }
+    });
+    this.contents.forEach((content) => {
+      if (content != null) {
+        content.setColor(color);
       }
     });
   }

@@ -4,6 +4,8 @@ import {
 } from '../../tools/g2';
 // import { roundNum } from '../../../tools/math';
 import { duplicateFromTo, joinObjects } from '../../tools/tools';
+import type { TypeColor } from '../../tools/types';
+import { areColorsSame } from '../../tools/color';
 import {
   FigureElementPrimitive, FigureElementCollection,
 } from '../Element';
@@ -73,12 +75,21 @@ export type TypeCollectionMethods = {
   showOnly: (Array<FigureElementPrimitive | FigureElementCollection>) => void,
   stop(cancelled?: boolean, forceSetToEndOfPlan?: boolean): void;
   getElementTransforms: () => { [string: string]: Transform },
+  getElementColors: (boolean) => { [string: string]: TypeColor },
   setElementTransforms: ({ [string: string]: Transform }) => void,
+  setElementColors: ({ [string: string]: TypeColor }) => void,
   animateToTransforms(
     elementTransforms: Object,
     time?: number,
     delay?: number,
     rotDirection?: number,
+    callback?: ?(string | ((?mixed) => void)),
+    name?: string,
+    easeFunction?: string | ((number) => number)): number,
+  animateToColors(
+    elementColors: Object,
+    time?: number,
+    delay?: number,
     callback?: ?(string | ((?mixed) => void)),
     name?: string,
     easeFunction?: string | ((number) => number)): number,
@@ -126,6 +137,7 @@ export default class EquationForm extends Elements {
   translation: TypeElementTranslationOptions;
   positionsSet: boolean;
   layout: 'always' | 'lazy' | 'init';
+  ignoreColor: boolean;
   // };
 
   fromForm: {
@@ -163,6 +175,7 @@ export default class EquationForm extends Elements {
     this.fromForm = {};
     this.positionsSet = false;
     this.layout = 'always';
+    this.ignoreColor = false;
     // this.subForm = '';
   }
 
@@ -192,6 +205,9 @@ export default class EquationForm extends Elements {
       );
     }
     super.setPositions();
+    if (!this.ignoreColor) {
+      super.setColor();
+    }
   }
 
   _dup(
@@ -623,8 +639,13 @@ export default class EquationForm extends Elements {
       elementsShownTarget.filter(e => elementsShown.indexOf(e) === -1);
 
     const currentTransforms = this.collectionMethods.getElementTransforms();
+    const currentColors = this.collectionMethods.getElementColors(true);
     this.setPositions();
     const animateToTransforms = this.collectionMethods.getElementTransforms();
+    let animateToColors = {};
+    if (!this.ignoreColor) {
+      animateToColors = this.collectionMethods.getElementColors(true);
+    }
 
     const elementsToMove = [];
     const toMoveStartTransforms = [];
@@ -639,9 +660,27 @@ export default class EquationForm extends Elements {
       }
     });
 
+    const elementsToChangeColor = [];
+    const toColorStart = [];
+    const toColorStop = [];
+    Object.keys(animateToColors).forEach((key) => {
+      const currentC = currentColors[key];
+      const nextC = animateToColors[key];
+      if (!areColorsSame(currentC, nextC)) {
+        elementsToChangeColor.push(key);
+        toColorStart.push(currentC);
+        toColorStop.push(nextC);
+      }
+    });
+
     const toShowTransforms = {};
     elementsToShow.forEach((element) => {
       toShowTransforms[element.name] = element.transform._dup();
+    });
+
+    const toShowColors = {};
+    elementsToShow.forEach((element) => {
+      toShowColors[element.name] = element.color.slice();
     });
 
     // Find move time to use. If moveTime is null, then a velocity is used.
@@ -658,11 +697,15 @@ export default class EquationForm extends Elements {
     }
     this.collectionMethods.setElementTransforms(currentTransforms);
     this.collectionMethods.setElementTransforms(toShowTransforms);
+    this.collectionMethods.setElementColors(currentColors);
+    this.collectionMethods.setElementColors(toShowColors);
+
     let cumTime = delay;
 
     let moveCallback = null;
     let dissolveInCallback = null;
     let dissolveOutCallback = null;
+    let colorCallback = null;
 
     if (dissolveInBeforeMove) {
       if (elementsToMove.length === 0 && elementsToShow.length === 0) {
@@ -679,10 +722,29 @@ export default class EquationForm extends Elements {
     } else {
       dissolveInCallback = callback;
     }
+    if (
+      elementsToChangeColor.length > 0
+      && elementsToMove.length === 0
+      && elementsToShow.length === 0
+      && elementsToHide.length === 0
+    ) {
+      colorCallback = callback;
+    }
+    let colorAnimationsStarted = false;
 
     if (elementsToHide.length > 0) {
       this.dissolveElements(elementsToHide, 'out', delay, dissolveOutTime, dissolveOutCallback);
       cumTime += dissolveOutTime;
+      if (
+        elementsToChangeColor.length > 0
+        && elementsToShow.length === 0
+        && elementsToMove.length === 0
+      ) {
+        this.collectionMethods.animateToColors(
+          animateToColors, dissolveOutTime, delay, null, '_EquationAnimateColor',
+        );
+        colorAnimationsStarted = true;
+      }
     } else if (dissolveOutCallback != null) {
       this.fnMap.exec(dissolveOutCallback);
     }
@@ -728,9 +790,26 @@ export default class EquationForm extends Elements {
 
     if (dissolveInBeforeMove) {
       if (elementsToShow.length > 0) {
+        if (elementsToChangeColor.length > 0) {
+          this.collectionMethods.animateToColors(
+            animateToColors, dissolveOutTime, cumTime, null, '_EquationAnimateColor',
+          );
+          colorAnimationsStarted = true;
+        }
         this.dissolveElements(elementsToShow, 'in', cumTime, dissolveInTime, dissolveInCallback);
         cumTime += dissolveInTime + 0.001;
       }
+    }
+    if (
+      elementsToChangeColor.length > 0
+      && elementsToShow.length === 0
+      && elementsToMove.length > 0
+      && !colorAnimationsStarted
+    ) {
+      this.collectionMethods.animateToColors(
+        animateToColors, dissolveOutTime, moveTimeToUse, null, '_EquationAnimateColor',
+      );
+      colorAnimationsStarted = true;
     }
     const t = this.collectionMethods.animateToTransforms(
       animateToTransforms,
@@ -750,9 +829,34 @@ export default class EquationForm extends Elements {
     // }
     if (!dissolveInBeforeMove) {
       if (elementsToShow.length > 0) {
+        if (elementsToChangeColor.length > 0) {
+          this.collectionMethods.animateToColors(
+            animateToColors, dissolveInTime, cumTime, null, '_EquationAnimateColor',
+          );
+          colorAnimationsStarted = true;
+        }
+        // const t = this.collectionMethods.animateToColors(
+        //   animateToColors,
+        //   dissolveInTime,
+        //   cumTime,
+        //   null,
+        //   '_EquationAnimateColor',
+        // );
         this.dissolveElements(elementsToShow, 'in', cumTime, dissolveInTime, dissolveInCallback);
         cumTime += dissolveInTime + 0.001;
       }
+    }
+    if (
+      elementsToChangeColor.length > 0
+      && elementsToShow.length === 0
+      && elementsToMove.length === 0
+      && elementsToHide.length === 0
+      && !colorAnimationsStarted
+    ) {
+      cumTime += this.collectionMethods.animateToColors(
+        animateToColors, dissolveInTime, cumTime, colorCallback, '_EquationAnimateColor',
+      );
+      colorAnimationsStarted = true;
     }
     return cumTime;
   }

@@ -202,3 +202,8 @@ API cleanup
 * Fix: `randInt` was not returning the max value
 * Fix: `collections.angle` was not correctly rotating label when angle was part of a collection
 * Add `randBool` to retrieve a random boolean
+
+## 0.15.0
+* Add `EQN_Color` to color equation phrases and forms
+* Automatic animation of color between equation forms added
+* Add `ignoreColor` to form options to allow for external color setting of elements

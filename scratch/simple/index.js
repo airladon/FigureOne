@@ -7,7 +7,8 @@
 
 const figure = new Fig.Figure({
   scene: [-3, -3, 3, 3],
-  font: { size: 0.4 }
+  font: { size: 0.4 },
+  // color: [0, 1, 0, 1],
 });
 
 // figure.add({
@@ -23,29 +24,106 @@ const figure = new Fig.Figure({
 //   color: [0.8, 0.8, 0.8, 1],
 // });
 
-const t = figure.add({
+// const a = figure.add({
+//   make: 'collections.angle',
+//   angle: Math.PI / 4,
+//   sides: { length: 1 },
+//   curve: { radius: 0.5 },
+//   label: { color: [1, 0, 0, 1] },
+//   color: [1, 0, 0, 1],
+// });
+
+// // Simple example showing color change in forms
+// figure.add({
+//   scale: 1.5,
+//   make: 'equation',
+//   forms: {
+//     0: ['a', 'b'],
+//     1: [{ color: ['a', [1, 0, 0, 1]] }, 'b'],
+//     3: ['a', 'b'],
+//   },
+//   touch: { onClick: e => e.nextForm({ dissolveInTime: 1.5 }) },
+// });
+
+
+// // Example showing default colors and temporary phrase/form colors
+// figure.add({
+//   scale: 1.5,
+//   make: 'equation',
+//   // Default color of all equation elements is black
+//   color: [0, 0, 0, 1],
+//   elements: {
+//     a: { color: [0, 1, 0, 1] }, // Default color of 'a' is green
+//   },
+//   forms: {
+//     // Default colors of 'a' and 'b' used
+//     0: ['a', 'b'],
+//     // 'a' is temporarily set to red
+//     1: [{ color: ['a', [1, 0, 0, 1]] }, 'b'],
+//     // 'b' is temporarily set to red, 'a' is back to default color
+//     2: ['a', { color: ['b', [1, 0, 0, 1]] }],
+//     // Return to default colors for both 'a' and 'b'
+//     3: ['a', 'b'],
+//   },
+//   touch: { onClick: e => e.nextForm({ dissolveInTime: 1.5 }) },
+// });
+
+// // Same color substitution
+// figure.add({
+//   scale: 1.5,
+//   make: 'equation',
+//   elements: {
+//     equals: ' = ',
+//     plus: ' + ',
+//     brace: { symbol: 'brace', side: 'top' },
+//   },
+//   forms: {
+//     0: ['2', 'plus', '3', 'equals', 'x'],
+//     1: [
+//       {
+//         color: {
+//           content: { topComment: [['2', 'plus', '3'], '5', 'brace'] },
+//           color: [1, 0, 0, 1],
+//         },
+//       },
+//       'equals', 'x',
+//     ],
+//     2: ['5', 'equals', 'x'],
+//   },
+//   touch: { onClick: e => e.nextForm({ dissolveInTime: 1.5 }) },
+// });
+
+// Multi color substitution
+figure.add({
+  scale: 1.5,
   make: 'equation',
-  formDefaults: {
-    elementMods: {
-      b: { color: [1, 0, 0, 1] },
-    },
+  elements: {
+    equals: ' = ',
+    plus: ' + ',
+    brace: { symbol: 'brace', side: 'top', color: [0.5, 0.5, 0.5, 1] },
   },
   forms: {
-    0: ['a', 'b', 'c'],
-    1: {
-      content: [{ color: ['a', [1, 0, 0, 1]] }, 'b', 'c', 'd'],
-      // elementMods: {
-      //   b: { color: [0, 1, 0, 1] },
-      // },
-    },
-    2: ['a', 'b', 'c', 'd', 'e'],
+    0: ['2', 'plus', '3', 'equals', 'x'],
+    1: [{ color: [['2', 'plus', '3'], [1, 0, 0, 1]] }, 'equals', 'x'],
+    2: [
+      {
+        topComment: {
+          content: { color: [['2', 'plus', '3'], [1, 0, 0, 1]] },
+          comment: { color: ['5', [0, 0.7, 0, 1]] },
+          symbol: 'brace',
+        },
+      },
+      'equals', 'x',
+    ],
+    3: ['5', 'equals', 'x'],
   },
-  touch: { onClick: e => e.nextForm() },
+  touch: { onClick: e => e.nextForm({ dissolveInTime: 0.5 }) },
 });
 
+
 // t.animations.new()
-//   .goToForm({ target: '1', delay: 1, animate: 'dissolveInThenMove' })
-//   .goToForm({ target: '2', delay: 1, animate: 'dissolveInThenMove' })
+//   .goToForm({ target: '1', delay: 3, animate: 'move' })
+//   .goToForm({ target: '2', delay: 1, animate: 'move' })
 //   .start();
 
 

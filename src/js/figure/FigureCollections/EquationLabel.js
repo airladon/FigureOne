@@ -117,6 +117,7 @@ export default class EquationLabel {
             xAlign,
             yAlign,
           },
+          ignoreColor: true,
         },
         font,
         textFont: font,

@@ -149,6 +149,7 @@ toc:
   - EQN_Container
   - EQN_TouchBox
   - EQN_Offset
+  - EQN_Color
   - EQN_Annotate
   - name: Equation Symbols
   - EQN_Symbol

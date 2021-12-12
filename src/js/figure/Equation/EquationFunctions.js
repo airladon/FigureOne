@@ -22,6 +22,9 @@ import Container from './Elements/Container';
 import BaseAnnotationFunction from './Elements/BaseAnnotationFunction';
 import EquationLine from './Symbols/Line';
 import Offset from './Elements/Offset';
+import Color from './Elements/Color';
+import type { TypeColor } from '../../tools/types';
+
 // eslint-disable-next-line import/no-cycle
 // import type {
 //   EQN_Annotation, EQN_EncompassGlyph, EQN_LeftRightGlyph, EQN_TopBottomGlyph,
@@ -480,10 +483,87 @@ export type EQN_Fraction = {
 export type EQN_Scale = {
   content: TypeEquationPhrase,
   scale?: number,
-  fullContentBounds?: boolean,
+  fullContentBounds?: boolean;
 } | [
   TypeEquationPhrase,
   ?number,
+  ?boolean,
+];
+
+/**
+ * Equation color
+ *
+ * ![](./apiassets/eqn_color.gif)
+ *
+ * Color an equation phrase.
+ *
+ * Options can be an object, or an array in the property order below
+ *
+ * @property {TypeEquationPhrase} content
+ * @property {TypeColor} color
+ * @property {boolean} [fullContentBounds] Use full bounds with content (`false`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Simple Array Definition
+ * figure.add({
+ *   make: 'equation',
+ *   forms: {
+ *     0: ['a', { color: ['b', [0, 0, 1, 1]] }, 'c'],
+ *   },
+ * });
+ *
+ * @example
+ * // Simple Object Definition
+ * figure.add({
+ *   make: 'equation',
+ *   forms: {
+ *     0: [
+ *       'a',
+ *       {
+ *         color: {
+ *           content: 'b',
+ *           color: [0, 0, 1, 1],
+ *         },
+ *       },
+ *       'c',
+ *     ],
+ *   },
+ * });
+ *
+ * @example
+ * figure.add({
+ *   make: 'equation',
+ *   elements: {
+ *     equals: ' = ',
+ *     plus: ' + ',
+ *     brace: { symbol: 'brace', side: 'top' },
+ *   },
+ *   forms: {
+ *     0: ['2', 'plus', '3', 'equals', 'x'],
+ *     1: [
+ *       {
+ *         color: {
+ *           content: { topComment: [['2', 'plus', '3'], '5', 'brace'] },
+ *           color: [0, 0, 1, 1],
+ *         },
+ *       },
+ *       'equals', 'x',
+ *     ],
+ *     2: ['5', 'equals', 'x'],
+ *   },
+ *   touch: { onClick: e => e.nextForm() },
+ * });
+ */
+export type EQN_Color = {
+  content: TypeEquationPhrase,
+  color: TypeColor,
+  fullContentBounds?: boolean;
+} | [
+  TypeEquationPhrase,
+  TypeColor,
   ?boolean,
 ];
 
@@ -3297,7 +3377,8 @@ export class EquationFunctions {
     if (name === 'lines') { return this.lines(params); }   // $FlowFixMe
     if (name === 'scale') { return this.scale(params); }   // $FlowFixMe
     if (name === 'container') { return this.container(params); }   // $FlowFixMe
-    if (name === 'offset') { return this.offset(params); }
+    if (name === 'offset') { return this.offset(params); }   // $FlowFixMe
+    if (name === 'color') { return this.color(params); }
     return null;
   }
 
@@ -3851,6 +3932,45 @@ export class EquationFunctions {
       );
     } catch (e) {
       throw new Error(`FigureOne Equation Scale Error: ${e.message}`);
+    }
+  }
+
+  /**
+   * Equation color function
+   * @see {@link EQN_Color} for description and examples
+   */
+  color(
+    options: EQN_Color,
+  ) {
+    try {
+      let content;
+      let color;
+      let fullContentBounds;
+      const defaultOptions = {
+        color: null,
+        fullContentBounds: false,
+      };
+      if (Array.isArray(options)) {
+        [
+          content, color, fullContentBounds,
+        ] = options;
+      } else {
+        ({
+          content, color, fullContentBounds,
+        } = options);
+      }
+      const optionsIn = {
+        color,
+        fullContentBounds,
+      };
+      const o = joinObjects(defaultOptions, optionsIn);
+      return new Color(
+        [this.contentToElement(content)],
+        [],
+        o,
+      );
+    } catch (e) {
+      throw new Error(`FigureOne Equation Color Error: ${e.message}`);
     }
   }
 

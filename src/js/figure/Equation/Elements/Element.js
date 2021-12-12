@@ -8,6 +8,7 @@ import {
   FigureElementPrimitive, FigureElementCollection,
 } from '../../Element';
 import { FunctionMap } from '../../../tools/FunctionMap';
+import type { TypeColor } from '../../../tools/types';
 
 export interface ElementInterface {
   ascent: number;
@@ -33,6 +34,7 @@ export interface ElementInterface {
   offsetLocation(offset: Point): void;
   getBounds(useFullSize?: boolean): Bounds;
   cleanup(): void;
+  setColor(colorIn: TypeColor | null): void;
 }
 
 // Equation is a class that takes a set of drawing objects (TextObjects,
@@ -43,12 +45,14 @@ class BlankElement {
   descent: number;
   width: number;
   height: number;
+  color: TypeColor;
 
   constructor(width: number = 0.03, ascent: number = 0, descent: number = 0) {
     this.width = width;
     this.ascent = ascent;
     this.descent = descent;
     this.height = this.ascent + this.descent;
+    this.color = [0, 0, 0, 0];
   }
 
   _dup() {
@@ -66,6 +70,8 @@ class Element implements ElementInterface {
   scale: number;
   fnMap: FunctionMap;
   showContent: boolean;
+  color: TypeColor | null;
+  defaultColor: TypeColor;
   fullSize: {
     leftOffset: number,
     width: number,
@@ -89,6 +95,8 @@ class Element implements ElementInterface {
       ascent: this.ascent,
       descent: this.descent,
     };
+    this.color = null;
+    this.defaultColor = content.color.slice();
     this.fnMap = new FunctionMap();
     this.showContent = true;
   }
@@ -204,6 +212,20 @@ class Element implements ElementInterface {
     }
   }
 
+  setColor(colorIn: TypeColor | null = null) {
+    let color = this.defaultColor;
+    if (colorIn != null) {
+      color = colorIn;
+    } else if (this.color != null) {
+      color = this.color;
+    }
+    const { content } = this;
+    if (content instanceof FigureElementCollection
+        || content instanceof FigureElementPrimitive) {
+      content.setColor(color);
+    }
+  }
+
   offsetLocation(offset: Point = new Point(0, 0)) {
     this.location = this.location.add(offset);
   }
@@ -256,6 +278,7 @@ class Elements implements ElementInterface {
   height: number;
   fnMap: FunctionMap;
   showContent: boolean;
+  color: TypeColor | null;
   fullSize: {
     leftOffset: number,
     width: number,
@@ -279,6 +302,7 @@ class Elements implements ElementInterface {
     this.height = 0;
     this.fnMap = new FunctionMap();
     this.showContent = true;
+    this.color = null;
   }
 
   cleanup() {
@@ -392,6 +416,19 @@ class Elements implements ElementInterface {
       e.setPositions();
     });
   }
+
+  setColor(colorIn: TypeColor | null = null) {
+    let color = null;
+    if (this.color != null) {
+      color = this.color;
+    } else if (colorIn != null) {
+      color = colorIn;
+    }
+    this.content.forEach((e) => {
+      e.setColor(color);
+    });
+  }
+
 
   offsetLocation(offset: Point = new Point(0, 0)) {
     this.location = this.location.add(offset);

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset='utf-8'>
-  <title>figureone 0.14.0 | Documentation</title>
+  <title>figureone 0.15.0 | Documentation</title>
   <meta name='description' content='Draw, animate and interact with shapes, text, plots and equations in Javascript. Create interactive slide shows, and interactive videos.'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>figureone</h3>
-          <div class='mb1'><code>0.14.0</code></div>
+          <div class='mb1'><code>0.15.0</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -3869,6 +3869,16 @@
                   href='#eqn_offset'
                   class="">
                   EQN_Offset
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#eqn_color'
+                  class="">
+                  EQN_Color
                   
                 </a>
                 
@@ -7941,6 +7951,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#equationfunctionscolor'
+                        class='regular pre-open'>
+                        #color
+                      </a></li>
+                      
+                      <li><a
                         href='#equationfunctionsfrac'
                         class='regular pre-open'>
                         #frac
@@ -8449,7 +8465,7 @@
 <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"figureOneContainer"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"width: 1200px; height: 800px; background-color: white;"</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://cdn.jsdelivr.net/npm/figureone@0.14.0/figureone.min.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://cdn.jsdelivr.net/npm/figureone@0.15.0/figureone.min.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'./index.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
@@ -8780,7 +8796,7 @@ labeledLine.setMovable();</pre>
 <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"figureOneContainer"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"width: 800px; height: 800px; background-color: white;"</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://cdn.jsdelivr.net/npm/figureone@0.14.0/figureone.min.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://cdn.jsdelivr.net/npm/figureone@0.15.0/figureone.min.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'./index.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
@@ -18684,7 +18700,7 @@ left corner <span class="hljs-keyword">of</span> <span class="hljs-string">`(-2,
 <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"figureOneContainer"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"width: 1200px; height: 800px; background-color: white;"</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://cdn.jsdelivr.net/npm/figureone@0.14.0/figureone.min.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://cdn.jsdelivr.net/npm/figureone@0.15.0/figureone.min.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'./index.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
@@ -18823,7 +18839,7 @@ element
 <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"figureOneContainer"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"width: 800px; height: 800px; background-color: white;"</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://cdn.jsdelivr.net/npm figureone@0.14.0/figureone.min.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://cdn.jsdelivr.net/npm figureone@0.15.0/figureone.min.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'./index.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span>
@@ -24580,7 +24596,7 @@ visible
 <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"figureOneContainer"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"width: 800px; height: 800px; background-color: white;"</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://cdn.jsdelivr.net/npm/figureone@0.14.0/figureone.min.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://cdn.jsdelivr.net/npm/figureone@0.15.0/figureone.min.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'./index.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
@@ -29300,7 +29316,7 @@ cube.animations.new()
 <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"figureOneContainer"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"width: 800px; height: 800px; background-color: white;"</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://cdn.jsdelivr.net/npm/figureone@0.14.0/figureone.min.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://cdn.jsdelivr.net/npm/figureone@0.15.0/figureone.min.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'./index.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
@@ -47371,7 +47387,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
 
   
     <p style="display: none;">      Type:
-      {forms: {}, functions: <a href="#equationfunctions">EquationFunctions</a>, symbols: EquationSymbols, currentForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, font: FigureFont, textFont: FigureFont, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, formSeries: {}, currentFormSeries: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, currentFormSeriesName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, formDefaults: {alignment: {fixTo: (<a href="#figureelementprimitive">FigureElementPrimitive</a> | <a href="#figureelementcollection">FigureElementCollection</a> | <a href="#point">Point</a>), xAlign: <a href="#typehalign">TypeHAlign</a>, yAlign: <a href="#typevalign">TypeVAlign</a>}, elementMods: <a href="#obj_elementmods">OBJ_ElementMods</a>, duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, translation: <a href="#eqn_translationstyle">EQN_TranslationStyle</a>?, onShow: (null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?, onTransition: (null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?, layout: (<code>"always"</code> | <code>"lazy"</code> | <code>"init"</code>)?}, isAnimating: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, descriptionElement: (<a href="#figureelementprimitive">FigureElementPrimitive</a> | null), descriptionPosition: <a href="#point">Point</a>, formRestart: {moveFrom: (<a href="#point">Point</a> | <a href="#figureelementcollection">FigureElementCollection</a>)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, element: <a href="#figureelement">FigureElement</a>}?}?}
+      {forms: {}, functions: <a href="#equationfunctions">EquationFunctions</a>, symbols: EquationSymbols, currentForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, font: FigureFont, textFont: FigureFont, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, formSeries: {}, currentFormSeries: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, currentFormSeriesName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, formDefaults: {alignment: {fixTo: (<a href="#figureelementprimitive">FigureElementPrimitive</a> | <a href="#figureelementcollection">FigureElementCollection</a> | <a href="#point">Point</a>), xAlign: <a href="#typehalign">TypeHAlign</a>, yAlign: <a href="#typevalign">TypeVAlign</a>}, elementMods: <a href="#obj_elementmods">OBJ_ElementMods</a>, duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, translation: <a href="#eqn_translationstyle">EQN_TranslationStyle</a>?, onShow: (null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?, onTransition: (null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?, layout: (<code>"always"</code> | <code>"lazy"</code> | <code>"init"</code>)?, ignoreColor: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}, isAnimating: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, descriptionElement: (<a href="#figureelementprimitive">FigureElementPrimitive</a> | null), descriptionPosition: <a href="#point">Point</a>, formRestart: {moveFrom: (<a href="#point">Point</a> | <a href="#figureelementcollection">FigureElementCollection</a>)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, element: <a href="#figureelement">FigureElement</a>}?}?}
     </p>
   
   
@@ -49144,7 +49160,7 @@ elements have, and some animation properties for when animating to this form.</p
 
   
     <p style="display: none;">      Type:
-      {content: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, alignment: <a href="#eqn_formalignment">EQN_FormAlignment</a>?, description: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, modifiers: {}?, duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, translation: <a href="#eqn_translationstyles">EQN_TranslationStyles</a>?, onShow: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?, onTransition: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?, elementMods: <a href="#obj_elementmods">OBJ_ElementMods</a>?, fromForm: <a href="#eqn_fromforms">EQN_FromForms</a>}
+      {content: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, alignment: <a href="#eqn_formalignment">EQN_FormAlignment</a>?, description: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, modifiers: {}?, duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, translation: <a href="#eqn_translationstyles">EQN_TranslationStyles</a>?, onShow: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?, onTransition: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?, elementMods: <a href="#obj_elementmods">OBJ_ElementMods</a>?, fromForm: <a href="#eqn_fromforms">EQN_FromForms</a>, ignoreColor: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}
     </p>
   
   
@@ -49237,6 +49253,22 @@ when animating to this form
  and/or 
 <code>onShow</code>
  with this if coming from specific forms
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>ignoreColor</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : when 
+<code>false</code>
+, color will be set
+automatically in the equation based on EQN_Color equation functions. In such
+cases, colors that are set external to the equation will be overridden. Use
+
+<code>true</code>
+ to allow setting of colors externally only. (
+<code>false</code>
+)
 
           
         </div>
@@ -49994,7 +50026,7 @@ through an up or down curve
 
   
     <p style="display: none;">      Type:
-      {alignment: <a href="#eqn_formalignment">EQN_FormAlignment</a>?, elementMods: <a href="#obj_elementmods">OBJ_ElementMods</a>?, duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, translation: <a href="#eqn_translationstyle">EQN_TranslationStyle</a>?, onShow: (null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?, onTransition: (null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?, layout: (<code>"lazy"</code> | <code>"init"</code> | <code>"always"</code>)?}
+      {alignment: <a href="#eqn_formalignment">EQN_FormAlignment</a>?, elementMods: <a href="#obj_elementmods">OBJ_ElementMods</a>?, duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, translation: <a href="#eqn_translationstyle">EQN_TranslationStyle</a>?, onShow: (null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?, onTransition: (null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?, layout: (<code>"lazy"</code> | <code>"init"</code> | <code>"always"</code>)?, ignoreColor: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}
     </p>
   
   
@@ -50050,6 +50082,12 @@ through an up or down curve
       
         <div class='space-bottom0'>
           <span class='code bold'>layout</span> <code class='quiet'>((<code>"lazy"</code> | <code>"init"</code> | <code>"always"</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>ignoreColor</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
           
           
         </div>
@@ -55008,6 +55046,154 @@ boilerplate
     },
   },
 ]);</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eqn_color'>
+      EQN_Color
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation color</p>
+<p><img src="./apiassets/eqn_color.gif"></p>
+<p>Color an equation phrase.</p>
+<p>Options can be an object, or an array in the property order below</p>
+
+  
+    <p style="display: none;">      Type:
+      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, color: <a href="#typecolor">TypeColor</a>, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typecolor">TypeColor</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : Use full bounds with content (
+<code>false</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#drawing-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple Array Definition</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">forms</span>: {
+    <span class="hljs-number">0</span>: [<span class="hljs-string">'a'</span>, { <span class="hljs-attr">color</span>: [<span class="hljs-string">'b'</span>, [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>]] }, <span class="hljs-string">'c'</span>],
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple Object Definition</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">forms</span>: {
+    <span class="hljs-number">0</span>: [
+      <span class="hljs-string">'a'</span>,
+      {
+        <span class="hljs-attr">color</span>: {
+          <span class="hljs-attr">content</span>: <span class="hljs-string">'b'</span>,
+          <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+        },
+      },
+      <span class="hljs-string">'c'</span>,
+    ],
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">elements</span>: {
+    <span class="hljs-attr">equals</span>: <span class="hljs-string">' = '</span>,
+    <span class="hljs-attr">plus</span>: <span class="hljs-string">' + '</span>,
+    <span class="hljs-attr">brace</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'brace'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'top'</span> },
+  },
+  <span class="hljs-attr">forms</span>: {
+    <span class="hljs-number">0</span>: [<span class="hljs-string">'2'</span>, <span class="hljs-string">'plus'</span>, <span class="hljs-string">'3'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'x'</span>],
+    <span class="hljs-number">1</span>: [
+      {
+        <span class="hljs-attr">color</span>: {
+          <span class="hljs-attr">content</span>: { <span class="hljs-attr">topComment</span>: [[<span class="hljs-string">'2'</span>, <span class="hljs-string">'plus'</span>, <span class="hljs-string">'3'</span>], <span class="hljs-string">'5'</span>, <span class="hljs-string">'brace'</span>] },
+          <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+        },
+      },
+      <span class="hljs-string">'equals'</span>, <span class="hljs-string">'x'</span>,
+    ],
+    <span class="hljs-number">2</span>: [<span class="hljs-string">'5'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'x'</span>],
+  },
+  <span class="hljs-attr">touch</span>: { <span class="hljs-attr">onClick</span>: <span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> e.nextForm() },
+});</pre>
     
   
 
@@ -94231,6 +94417,76 @@ start times.</p>
     
       
         <a href="#eqn_scale">EQN_Scale</a>
+ for description and examples
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='equationfunctionscolor'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>color(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Equation color function</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#eqn_color">EQN_Color</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#eqn_color">EQN_Color</a>
  for description and examples
 
       

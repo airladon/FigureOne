@@ -1,0 +1,1590 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Collection: Equation Color - Animations Shape color-only 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.3,
+        -0.006,
+      ],
+      Array [
+        -0.22,
+        -0.006,
+      ],
+      Array [
+        -0.22,
+        0.088,
+      ],
+      Array [
+        -0.3,
+        0.088,
+      ],
+    ],
+    Array [
+      Array [
+        -0.22,
+        -0.006,
+      ],
+      Array [
+        -0.14,
+        -0.006,
+      ],
+      Array [
+        -0.14,
+        0.12,
+      ],
+      Array [
+        -0.22,
+        0.12,
+      ],
+    ],
+    Array [
+      Array [
+        -0.14,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        0.088,
+      ],
+      Array [
+        -0.14,
+        0.088,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "a": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            0.088,
+          ],
+          Array [
+            -0.3,
+            0.088,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            0.088,
+          ],
+          Array [
+            -0.3,
+            0.088,
+          ],
+        ],
+      ],
+    },
+    "b": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            0.12,
+          ],
+          Array [
+            -0.22,
+            0.12,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            0.12,
+          ],
+          Array [
+            -0.22,
+            0.12,
+          ],
+        ],
+      ],
+    },
+    "c": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            0.088,
+          ],
+          Array [
+            -0.14,
+            0.088,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            0.088,
+          ],
+          Array [
+            -0.14,
+            0.088,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.3,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        0.12,
+      ],
+      Array [
+        -0.3,
+        0.12,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Equation Color - Animations Shape color-out-only 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.3,
+        -0.006,
+      ],
+      Array [
+        -0.22,
+        -0.006,
+      ],
+      Array [
+        -0.22,
+        0.088,
+      ],
+      Array [
+        -0.3,
+        0.088,
+      ],
+    ],
+    Array [
+      Array [
+        -0.22,
+        -0.006,
+      ],
+      Array [
+        -0.14,
+        -0.006,
+      ],
+      Array [
+        -0.14,
+        0.12,
+      ],
+      Array [
+        -0.22,
+        0.12,
+      ],
+    ],
+    Array [
+      Array [
+        -0.14,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        0.088,
+      ],
+      Array [
+        -0.14,
+        0.088,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "a": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            0.088,
+          ],
+          Array [
+            -0.3,
+            0.088,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            0.088,
+          ],
+          Array [
+            -0.3,
+            0.088,
+          ],
+        ],
+      ],
+    },
+    "b": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            0.12,
+          ],
+          Array [
+            -0.22,
+            0.12,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            0.12,
+          ],
+          Array [
+            -0.22,
+            0.12,
+          ],
+        ],
+      ],
+    },
+    "c": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            0.088,
+          ],
+          Array [
+            -0.14,
+            0.088,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            0.088,
+          ],
+          Array [
+            -0.14,
+            0.088,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.3,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        0.12,
+      ],
+      Array [
+        -0.3,
+        0.12,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Equation Color - Animations Shape dissolveIn 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.3,
+        -0.006,
+      ],
+      Array [
+        -0.22,
+        -0.006,
+      ],
+      Array [
+        -0.22,
+        0.088,
+      ],
+      Array [
+        -0.3,
+        0.088,
+      ],
+    ],
+    Array [
+      Array [
+        -0.22,
+        -0.006,
+      ],
+      Array [
+        -0.14,
+        -0.006,
+      ],
+      Array [
+        -0.14,
+        0.12,
+      ],
+      Array [
+        -0.22,
+        0.12,
+      ],
+    ],
+    Array [
+      Array [
+        -0.14,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        0.088,
+      ],
+      Array [
+        -0.14,
+        0.088,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "a": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            0.088,
+          ],
+          Array [
+            -0.3,
+            0.088,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            0.088,
+          ],
+          Array [
+            -0.3,
+            0.088,
+          ],
+        ],
+      ],
+    },
+    "b": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            0.12,
+          ],
+          Array [
+            -0.22,
+            0.12,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            0.12,
+          ],
+          Array [
+            -0.22,
+            0.12,
+          ],
+        ],
+      ],
+    },
+    "c": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            0.088,
+          ],
+          Array [
+            -0.14,
+            0.088,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            0.088,
+          ],
+          Array [
+            -0.14,
+            0.088,
+          ],
+        ],
+      ],
+    },
+    "d": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.008,
+          ],
+          Array [
+            -0.2,
+            -0.008,
+          ],
+          Array [
+            -0.2,
+            0.15,
+          ],
+          Array [
+            -0.3,
+            0.15,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.008,
+          ],
+          Array [
+            -0.2,
+            -0.008,
+          ],
+          Array [
+            -0.2,
+            0.15,
+          ],
+          Array [
+            -0.3,
+            0.15,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.3,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        0.12,
+      ],
+      Array [
+        -0.3,
+        0.12,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Equation Color - Animations Shape dissolveOut 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.3,
+        -0.006,
+      ],
+      Array [
+        -0.22,
+        -0.006,
+      ],
+      Array [
+        -0.22,
+        0.088,
+      ],
+      Array [
+        -0.3,
+        0.088,
+      ],
+    ],
+    Array [
+      Array [
+        -0.22,
+        -0.006,
+      ],
+      Array [
+        -0.14,
+        -0.006,
+      ],
+      Array [
+        -0.14,
+        0.12,
+      ],
+      Array [
+        -0.22,
+        0.12,
+      ],
+    ],
+    Array [
+      Array [
+        -0.14,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        0.088,
+      ],
+      Array [
+        -0.14,
+        0.088,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "a": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            0.088,
+          ],
+          Array [
+            -0.3,
+            0.088,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            0.088,
+          ],
+          Array [
+            -0.3,
+            0.088,
+          ],
+        ],
+      ],
+    },
+    "b": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            0.12,
+          ],
+          Array [
+            -0.22,
+            0.12,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            0.12,
+          ],
+          Array [
+            -0.22,
+            0.12,
+          ],
+        ],
+      ],
+    },
+    "c": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            0.088,
+          ],
+          Array [
+            -0.14,
+            0.088,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            0.088,
+          ],
+          Array [
+            -0.14,
+            0.088,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.3,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        0.12,
+      ],
+      Array [
+        -0.3,
+        0.12,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Equation Color - Animations Shape dissolveOutDissolveIn 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.3,
+        -0.006,
+      ],
+      Array [
+        -0.22,
+        -0.006,
+      ],
+      Array [
+        -0.22,
+        0.088,
+      ],
+      Array [
+        -0.3,
+        0.088,
+      ],
+    ],
+    Array [
+      Array [
+        -0.22,
+        -0.006,
+      ],
+      Array [
+        -0.14,
+        -0.006,
+      ],
+      Array [
+        -0.14,
+        0.12,
+      ],
+      Array [
+        -0.22,
+        0.12,
+      ],
+    ],
+    Array [
+      Array [
+        -0.14,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        0.088,
+      ],
+      Array [
+        -0.14,
+        0.088,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "a": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            0.088,
+          ],
+          Array [
+            -0.3,
+            0.088,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            0.088,
+          ],
+          Array [
+            -0.3,
+            0.088,
+          ],
+        ],
+      ],
+    },
+    "b": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            0.12,
+          ],
+          Array [
+            -0.22,
+            0.12,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            0.12,
+          ],
+          Array [
+            -0.22,
+            0.12,
+          ],
+        ],
+      ],
+    },
+    "c": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            0.088,
+          ],
+          Array [
+            -0.14,
+            0.088,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            0.088,
+          ],
+          Array [
+            -0.14,
+            0.088,
+          ],
+        ],
+      ],
+    },
+    "d": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.008,
+          ],
+          Array [
+            -0.2,
+            -0.008,
+          ],
+          Array [
+            -0.2,
+            0.15,
+          ],
+          Array [
+            -0.3,
+            0.15,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.008,
+          ],
+          Array [
+            -0.2,
+            -0.008,
+          ],
+          Array [
+            -0.2,
+            0.15,
+          ],
+          Array [
+            -0.3,
+            0.15,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.3,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        0.12,
+      ],
+      Array [
+        -0.3,
+        0.12,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Equation Color - Animations Shape dissolveOutMoveIn 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.3,
+        -0.006,
+      ],
+      Array [
+        -0.22,
+        -0.006,
+      ],
+      Array [
+        -0.22,
+        0.088,
+      ],
+      Array [
+        -0.3,
+        0.088,
+      ],
+    ],
+    Array [
+      Array [
+        -0.22,
+        -0.006,
+      ],
+      Array [
+        -0.14,
+        -0.006,
+      ],
+      Array [
+        -0.14,
+        0.12,
+      ],
+      Array [
+        -0.22,
+        0.12,
+      ],
+    ],
+    Array [
+      Array [
+        -0.14,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        0.088,
+      ],
+      Array [
+        -0.14,
+        0.088,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "a": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            0.088,
+          ],
+          Array [
+            -0.3,
+            0.088,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            0.088,
+          ],
+          Array [
+            -0.3,
+            0.088,
+          ],
+        ],
+      ],
+    },
+    "b": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            0.12,
+          ],
+          Array [
+            -0.22,
+            0.12,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            0.12,
+          ],
+          Array [
+            -0.22,
+            0.12,
+          ],
+        ],
+      ],
+    },
+    "c": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            0.088,
+          ],
+          Array [
+            -0.14,
+            0.088,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            0.088,
+          ],
+          Array [
+            -0.14,
+            0.088,
+          ],
+        ],
+      ],
+    },
+    "d": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.008,
+          ],
+          Array [
+            -0.2,
+            -0.008,
+          ],
+          Array [
+            -0.2,
+            0.15,
+          ],
+          Array [
+            -0.3,
+            0.15,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.008,
+          ],
+          Array [
+            -0.2,
+            -0.008,
+          ],
+          Array [
+            -0.2,
+            0.15,
+          ],
+          Array [
+            -0.3,
+            0.15,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.3,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        0.12,
+      ],
+      Array [
+        -0.3,
+        0.12,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Equation Color - Animations Shape move 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.3,
+        -0.006,
+      ],
+      Array [
+        -0.22,
+        -0.006,
+      ],
+      Array [
+        -0.22,
+        0.088,
+      ],
+      Array [
+        -0.3,
+        0.088,
+      ],
+    ],
+    Array [
+      Array [
+        -0.22,
+        -0.006,
+      ],
+      Array [
+        -0.14,
+        -0.006,
+      ],
+      Array [
+        -0.14,
+        0.12,
+      ],
+      Array [
+        -0.22,
+        0.12,
+      ],
+    ],
+    Array [
+      Array [
+        -0.14,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        0.088,
+      ],
+      Array [
+        -0.14,
+        0.088,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "a": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            0.088,
+          ],
+          Array [
+            -0.3,
+            0.088,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.3,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.22,
+            0.088,
+          ],
+          Array [
+            -0.3,
+            0.088,
+          ],
+        ],
+      ],
+    },
+    "b": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            0.12,
+          ],
+          Array [
+            -0.22,
+            0.12,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.22,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.14,
+            0.12,
+          ],
+          Array [
+            -0.22,
+            0.12,
+          ],
+        ],
+      ],
+    },
+    "c": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            0.088,
+          ],
+          Array [
+            -0.14,
+            0.088,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.14,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            -0.006,
+          ],
+          Array [
+            -0.06,
+            0.088,
+          ],
+          Array [
+            -0.14,
+            0.088,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.3,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        -0.006,
+      ],
+      Array [
+        -0.06,
+        0.12,
+      ],
+      Array [
+        -0.3,
+        0.12,
+      ],
+    ],
+  ],
+}
+`;
