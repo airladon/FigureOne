@@ -270,5 +270,5 @@ plot.notifications.add('pan', () => {
     out = `Warp ${calcWarp(aveSpeed).toFixed(fix)}`;
   }
   lastStart = plot._x.startValue;
-  speed.custom.updateText({ text: `Speed: ${aveSpeed.toFixed(1)}c (${out})` });
+  speed.setText({ text: `Speed: ${aveSpeed.toFixed(1)}c (${out})` });
 });
