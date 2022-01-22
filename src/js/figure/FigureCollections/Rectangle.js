@@ -610,8 +610,15 @@ class CollectionsRectangle extends FigureElementCollection {
    * Get button label.
    */
   getLabel() {
-    if (this._label != null) {  // $FlowFixMe
-      return this._label.drawingObject.text[0].text;
+    // $FlowFixMe
+    if (this._label != null && this._label.drawingObject != null) {
+      let out = '';
+      // $FlowFixMe
+      for (let i = 0; i < this._label.drawingObject.text.length; i += 1) {
+        // $FlowFixMe
+        out = `${out}${this._label.drawingObject.text[i].text}`;
+      }
+      return out;
     }
     return '';
   }
