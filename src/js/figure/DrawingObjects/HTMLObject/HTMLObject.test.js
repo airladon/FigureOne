@@ -47,6 +47,7 @@ describe('Figure HTML Object', () => {
     document.body.appendChild(element);
     h = new HTMLObject(parentDiv, 'html_test_element', new Point(0, 0), 'middle', 'center');
     h.element = mockElement;
+    h.originalElement = mockElement;
   });
   test('Instantiation', () => {
     expect(h.location).toEqual(new Point(0, 0));

@@ -61,7 +61,34 @@ const next = figure.add({
 
 next.notifications.add('touch', () => eqn.animations.new().nextForm(1).start());
 
+const div = document.createElement('div');
+div.style.width = '100px';
+div.style.height = '100px';
+div.style.backgroundColor = 'red';
+figure.htmlCanvas.appendChild(div);
+const abc = figure.add({
+  make: 'html',
+  name: 'asdf',
+  element: div,
+  // wrap: false,
+  // id: 'asdfasdf',
+  position: [0, 0],
+});
 
+const xyz = figure.add({
+  make: 'polygon',
+  radius: 0.1,
+})
+// abc.hide()
+// abc.show()
+
+abc.animations.new()
+  .position({ target: [1, 0], duration: 1 })
+  .start();
+
+xyz.animations.new()
+  .position({ target: [1, 0], duration: 1 })
+  .start();
 // function anyBase(input, base) {
 //   sum=0;
 //   for(let i = 0; i < input.length; i += 1) {

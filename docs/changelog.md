@@ -207,3 +207,6 @@ API cleanup
 * Add `EQN_Color` to color equation phrases and forms
 * Automatic animation of color between equation forms added
 * Add `ignoreColor` to form options to allow for external color setting of elements
+
+## 0.15.1
+* Enable html element primitive (beta)
