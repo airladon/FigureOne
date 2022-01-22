@@ -210,3 +210,6 @@ API cleanup
 
 ## 0.15.1
 * Enable html element primitive (beta)
+
+## 0.15.2
+* Fix `collections.rectangle` `getLabel` error for when label is blank
