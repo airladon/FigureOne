@@ -2485,6 +2485,7 @@ export default class FigurePrimitives {
       new Point(0, 0),
       options.yAlign,
       options.xAlign,
+      options.element,
     );
     const p = getPoint(options.position);
     const figureElement = new FigureElementPrimitive(

@@ -5055,6 +5055,7 @@ class FigureElementCollection extends FigureElement {
       // 'text.lines': shapes.textLines.bind(shapes),
       //
       textGL: shapes.textGL.bind(shapes),
+      html: shapes.html.bind(shapes),
       textHTML: shapes.htmlText.bind(shapes),
       htmlImage: shapes.htmlImage.bind(shapes),
       //

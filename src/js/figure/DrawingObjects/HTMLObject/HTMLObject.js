@@ -24,6 +24,8 @@ class HTMLObject extends DrawingObject {
   show: boolean;
   lastMatrix: Array<number>;
   lastColor: Array<number>;
+  forceDraw: boolean;
+  originalElement: HTMLElement;
 
   copy: () => HTMLObject;
   // +change: (string | HTMLElement, Array<number>) => void;
@@ -34,6 +36,7 @@ class HTMLObject extends DrawingObject {
     location: Point,
     yAlign: 'top' | 'bottom' | 'middle' = 'middle',
     xAlign: 'left' | 'right' | 'center' = 'center',
+    originalElement: HTMLElement,
   ) {
     super();
     const element = document.getElementById(id);
@@ -49,12 +52,15 @@ class HTMLObject extends DrawingObject {
     this.setBorder();
     this.lastMatrix = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     this.lastColor = [-1, -1, -1, -1];
+    this.forceDraw = false;
+    this.originalElement = originalElement;
   }
 
   _dup() {
     const c = new HTMLObject(
       this.parentDiv, this.id,
       this.location._dup(), this.yAlign, this.xAlign,
+      this.originalElement,
     );
     c.show = this.show;
     c.border = this.border.map(b => b.map(p => p._dup()));
@@ -131,9 +137,8 @@ class HTMLObject extends DrawingObject {
     if (this.show) {
       const glLocation = this.location.transformBy(transformMatrix);
       const pixelLocation = this.glToPixelSpace(glLocation);
-
-      const w = this.element.clientWidth;
-      const h = this.element.clientHeight;
+      const w = this.originalElement.clientWidth;
+      const h = this.originalElement.clientHeight;
       let left = 0;
       let top = 0;
       if (this.xAlign === 'center') {
@@ -163,16 +168,20 @@ class HTMLObject extends DrawingObject {
 
   drawWithTransformMatrix(scene: Scene, worldMatrix: Type3DMatrix, color: TypeColor) {
     let isDifferent = false;
-    const transformMatrix = m3.transpose(m3.mul(scene.viewProjectionMatrix, worldMatrix));
+    const transformMatrix = m3.mul(scene.viewProjectionMatrix, worldMatrix);
     for (let i = 0; i < transformMatrix.length; i += 1) {
       if (round(transformMatrix[i], 8) !== this.lastMatrix[i]) {
         isDifferent = true;
       }
     }
-    if (isDifferent || this.lastColor[3] !== round(color[3], 8)) {
+    if (
+      isDifferent
+      || this.lastColor[3] !== round(color[3], 8)
+    ) {
       this.transformHtml(transformMatrix, color[3]); // $FlowFixMe
       this.lastMatrix = round(transformMatrix, 8);
       this.lastColor = round(color, 8);
+      this.forceDraw = false;
     }
   }
 }
