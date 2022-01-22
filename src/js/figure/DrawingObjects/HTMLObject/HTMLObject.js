@@ -36,7 +36,7 @@ class HTMLObject extends DrawingObject {
     location: Point,
     yAlign: 'top' | 'bottom' | 'middle' = 'middle',
     xAlign: 'left' | 'right' | 'center' = 'center',
-    originalElement: HTMLElement,
+    originalElement: HTMLElement | Array<HTMLElement>,
   ) {
     super();
     const element = document.getElementById(id);
@@ -53,7 +53,12 @@ class HTMLObject extends DrawingObject {
     this.lastMatrix = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     this.lastColor = [-1, -1, -1, -1];
     this.forceDraw = false;
-    this.originalElement = originalElement;
+    if (Array.isArray(originalElement)) {
+      // eslint-disable-next-line
+      this.originalElement = originalElement[0];
+    } else {
+      this.originalElement = originalElement;
+    }
   }
 
   _dup() {

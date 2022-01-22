@@ -2435,7 +2435,7 @@ export default class FigurePrimitives {
   // }
 
   html(optionsIn: {
-    element: HTMLElement | Array<HTMLElement>,
+    element: HTMLElement,
     classes?: string,
     position?: TypeParsablePoint,
     xAlign?: 'left' | 'right' | 'center',
@@ -2519,7 +2519,7 @@ export default class FigurePrimitives {
     element.style.position = 'absolute';
     element.setAttribute('id', id);
     this.htmlCanvas.appendChild(element);
-    const hT = new HTMLObject(this.htmlCanvas, id, new Point(0, 0), yAlign, xAlign);
+    const hT = new HTMLObject(this.htmlCanvas, id, new Point(0, 0), yAlign, xAlign, elementToAdd);
     const figureElement = new FigureElementPrimitive(
       hT,
       new Transform().scale(1, 1).translate(location.x, location.y),
