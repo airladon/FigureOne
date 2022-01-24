@@ -611,12 +611,16 @@ class CollectionsRectangle extends FigureElementCollection {
    */
   getLabel() {
     // $FlowFixMe
-    if (this._label != null && this._label.drawingObject != null) {
+    if (this._label != null) {
       let out = '';
-      // $FlowFixMe
-      for (let i = 0; i < this._label.drawingObject.text.length; i += 1) {
-        // $FlowFixMe
-        out = `${out}${this._label.drawingObject.text[i].text}`;
+      const form = this._label.getCurrentForm();
+      if (form == null) {
+        return '';
+      }
+      const elements = form.getAllElements();
+      for (let i = 0; i < elements.length; i += 1) {
+        const e = elements[i];
+        out += e.getText();
       }
       return out;
     }

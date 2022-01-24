@@ -505,6 +505,10 @@ class CollectionsText extends Equation {
     } else {
       lines = [linesIn];
     }
+    if (lines.length === 1 && lines[0] === '') {
+      this.lines = [];
+      return;
+    }
     lines.forEach((lineDefinition, lineIndex) => {
       // const lineIndex = i;
       // const lineDefinition = lines[i];
@@ -618,6 +622,20 @@ class CollectionsText extends Equation {
       joinObjects(elements, elementOptions);
       content.push(lineOptions);
     });
+    if (this.lines.length === 0) {
+      return {
+        name: 'lines',
+        make: 'equation',
+        color: this.color,
+        font: this.font,
+        textFont: this.font,
+        scale: 1,
+        elements,
+        forms: {
+          base: [],
+        },
+      };
+    }
     const o = {
       name: 'lines',
       make: 'equation',
