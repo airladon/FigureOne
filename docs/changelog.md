@@ -1,7 +1,7 @@
 # Releases
 
 
-## 0.15.3
+## 0.15.4
 * `collections.rectangle` `getLabel` returns all labels instead of just the first formatted label
 
 
