@@ -1,5 +1,7 @@
 # Releases
 
+## 0.15.5
+* Fix rearrange crash when using gl text rendering of equations without any forms
 
 ## 0.15.4
 * `collections.rectangle` `getLabel` returns all labels instead of just the first formatted label
