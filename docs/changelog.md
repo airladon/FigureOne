@@ -2,6 +2,8 @@
 
 ## 0.15.5
 * Fix rearrange crash when using gl text rendering of equations without any forms
+* Fix color animation delay in equation when color animates with position
+* Add not equals unicode char to latin charset
 
 ## 0.15.4
 * `collections.rectangle` `getLabel` returns all labels instead of just the first formatted label
