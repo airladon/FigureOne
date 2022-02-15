@@ -1441,13 +1441,14 @@ export class Equation extends FigureElementCollection {
       arrange(this.eqn.currentForm, false, false);
       return;
     }
+
     Object.keys(this.eqn.forms).forEach((formName) => {
       arrange(formName, forms === 'set', forms === 'reset');
     });
     if (show && this.getIsShown() && this.isAnimating() === false) {
       this.clear();
       this.showForm(this.eqn.currentForm);
-    } else if (show) {
+    } else if (show && Object.keys(this.eqn.forms).length > 0) {
       this.eqn.forms[this.eqn.currentForm].rearrange();
     }
   }

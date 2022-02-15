@@ -807,7 +807,7 @@ export default class EquationForm extends Elements {
       && !colorAnimationsStarted
     ) {
       this.collectionMethods.animateToColors(
-        animateToColors, dissolveOutTime, moveTimeToUse, null, '_EquationAnimateColor',
+        animateToColors, dissolveOutTime, cumTime, null, '_EquationAnimateColor',
       );
       colorAnimationsStarted = true;
     }

@@ -421,6 +421,9 @@ export type TypeRecorderTime = string | number;
  * @property {string | Array<string | null> | null | Object} [fromForm]
  * @property {string | Array<string>} [scenarioCommon] common property
  * @property {string | Array<string>} [scenario]
+ * @property {'move' | 'dissolve' | 'moveFrom' | 'pulse' |
+ *  'dissolveInThenMove'} [animate] override default animation option for
+ * automatic form animation using the 'form' property
  * @property {boolean} [clear] `true` does not use any prior common properties (`false`)
  * @property {TypeRecorderTime} [time] recorder only - absolute time to
  * transition to slide.
@@ -1097,7 +1100,9 @@ export default class SlideNavigator {
             .goToForm(joinObjects({}, {
               start: fromForm,
               target: toForm,
-            }, this.equationDefaults))
+            }, this.equationDefaults, { // $FlowFixMe
+              animate: slide.animate || this.equationDefaults.animate,
+            }))
             .whenFinished(done)
             .start();
           done = null;
