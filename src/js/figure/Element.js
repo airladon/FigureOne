@@ -4529,6 +4529,8 @@ class FigureElementCollection extends FigureElement {
 
   childrenCanAnimate: boolean;
   drawNumberOrder: Array<number | null>
+  preserveChildColor: boolean;
+
   textureAtlases: { [textureID: string]: {
     atlas: Atlas,
     notif: string | null,
@@ -4557,6 +4559,7 @@ class FigureElementCollection extends FigureElement {
     this.drawNumberOrder = [null];
     this.elements = {};
     this.drawOrder = [];
+    this.preserveChildColor = false;
     if (options.move != null && options.move !== false) {
       this.setTouchable();
       this.setMovable(); // $FlowFixMex
@@ -5947,7 +5950,9 @@ class FigureElementCollection extends FigureElement {
     const nonNullColor = color != null ? color : [0, 0, 0, 0];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.setColor(nonNullColor, setDefault);
+      if (!this.preserveChildColor) {
+        element.setColor(nonNullColor, setDefault);
+      }
     }
     this.color = nonNullColor.slice();
     this.notifications.publish('color');
