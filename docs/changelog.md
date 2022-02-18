@@ -1,5 +1,8 @@
 # Releases
 
+## 0.15.6
+* Fix animation complete race condition when multiple equations are automatically automated between forms in a slide navigator
+
 ## 0.15.5
 * Fix rearrange crash when using gl text rendering of equations without any forms
 * Fix color animation delay in equation when color animates with position

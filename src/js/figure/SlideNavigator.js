@@ -566,6 +566,7 @@ export default class SlideNavigator {
   notifications: NotificationManager;
   from: 'prev' | 'next' | number;
   slideTransitionDoneName: string;
+  doneCount: number;
   equationDefaults: {
     duration: number,
     animate: "move" | "dissolve" | "moveFrom" | "pulse" | "dissolveInThenMove",
@@ -644,6 +645,9 @@ export default class SlideNavigator {
     this.collection.fnMap.global.add(this.slideTransitionDoneName, this.transitionDone.bind(this));
     this.from = 'prev';
 
+    this.doneCount = 0;
+    this.collection.fnMap.global.add('syncDone', this.syncDone.bind(this));
+
     if (o.slides != null) {
       this.slides = o.slides;
     }
@@ -692,6 +696,13 @@ export default class SlideNavigator {
       }
     }
     this.loadRecorder();
+  }
+
+  syncDone = () => {
+    this.doneCount -= 1;
+    if (this.doneCount === 0) {
+      this.collection.fnMap.exec(this.slideTransitionDoneName);
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -1081,7 +1092,7 @@ export default class SlideNavigator {
 
     const forms = this.getForm(this.currentSlideIndex);
     const fromForms = this.getFromForm(this.currentSlideIndex);
-    let done = this.slideTransitionDoneName;
+    let done = 'syncDone';
 
     Object.keys(fromForms).forEach((eqnName) => {
       const e = this.collection.getElement(this.equations[eqnName]);
@@ -1089,13 +1100,15 @@ export default class SlideNavigator {
         const fromForm = fromForms[eqnName];
         const toForm = forms[eqnName];
         if (fromForm == null && toForm != null) {
+          this.doneCount += 1;
           e.showForm(toForm);
           e.animations.new()
             .dissolveIn(0.4)
-            .whenFinished(done)
+            .whenFinished('syncDone')
             .start();
           done = null;
         } else if (fromForm !== toForm) {
+          this.doneCount += 1;
           e.animations.new()
             .goToForm(joinObjects({}, {
               start: fromForm,
@@ -1103,7 +1116,7 @@ export default class SlideNavigator {
             }, this.equationDefaults, { // $FlowFixMe
               animate: slide.animate || this.equationDefaults.animate,
             }))
-            .whenFinished(done)
+            .whenFinished('syncDone')
             .start();
           done = null;
         }
