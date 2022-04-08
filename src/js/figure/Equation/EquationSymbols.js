@@ -881,7 +881,7 @@ export type EQN_RadicalSymbol = {
  *
  * </pre>
  *
- * @property {'radical'} symbol
+ * @property {'division'} symbol
  * @property {number} [lineWidth] (`0.01`)
  * @property {number} [width] force width of content area (normally defined by content size)
  * @property {number} [height] force height of content area (normally defined by content size)
@@ -942,7 +942,7 @@ export type EQN_RadicalSymbol = {
  * });
  */
 export type EQN_DivisionSymbol = {
-  symbol: 'radical',
+  symbol: 'division',
   lineWidth?: number,
   width?: number,
   height?: number,
