@@ -166,6 +166,7 @@ toc:
   - EQN_BarSymbol
   - EQN_SquareBracketSymbol
   - EQN_RadicalSymbol
+  - EQN_DivisionSymbol
   - EQN_LineSymbol
   - name: Morphing
     file: ./docs/api/tutorials/morph/morph.md

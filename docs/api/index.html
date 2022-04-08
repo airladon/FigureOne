@@ -4320,6 +4320,16 @@
               
                 
                 <li><a
+                  href='#eqn_divisionsymbol'
+                  class="">
+                  EQN_DivisionSymbol
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#eqn_linesymbol'
                   class="">
                   EQN_LineSymbol
@@ -62055,6 +62065,243 @@ figure.add({
   <span class="hljs-attr">make</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">forms</span>: {
     <span class="hljs-attr">form1</span>: { <span class="hljs-attr">root</span>: [{ <span class="hljs-attr">radical</span>: { <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.005</span> } }, <span class="hljs-string">'a'</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0.05</span>] },
+  },
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eqn_divisionsymbol'>
+      EQN_DivisionSymbol
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Radical equation symbol used in <a href="#eqn_root">EQN_Root</a>.</p>
+<p>The radical symbol allows customization on how to draw the radical. Mostly
+it will not be needed, but for edge case equation layouts it may be useful.</p>
+<p><img src="./apiassets/eqn_symbol_division.png"></p>
+<pre>
+
+                           left space                right space
+             bend width |<->|<---->|                     >|--|<
+                        |   |      |                      |  |
+                        |   |      |                      |  |
+                ------- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX____V
+                A        X  |      |                      |_______|
+                |         X |       CCCCCCCCCCCCCCCCCCCCCCC       A
+                |          X        CCCCCCCCCCCCCCCCCCCCCCC    top space
+                |           X       CCCCCCCCCCCCCCCCCCCCCCC
+         height |           X       CCCCCCCCCCCCCCCCCCCCCCC
+                |           X       CCCCCCCCCCCCCCCCCCCCCCC
+                |           X       CCCCCCCCCCCCCCCCCCCCCCC
+                |          X        CCCCCCCCCCCCCCCCCCCCCCC
+                |         X         CCCCCCCCCCCCCCCCCCCCCCC
+                |        X          CCCCCCCCCCCCCCCCCCCCCCC   bottom space
+                V       X           CCCCCCCCCCCCCCCCCCCCCCC_______V
+                ------ X _________________________________________|
+                       |                                          A
+                       |                                          |
+                       |                  width                   |
+                       |<----------------------------------------->
+
+</pre>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#eqn_symbol">EQN_Symbol</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<code>"radical"</code>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>0.01</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : force width of content area (normally defined by content size)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : force height of content area (normally defined by content size)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bendWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>10</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>draw</span> <code class='quiet'>((<code>"static"</code> | <code>"dynamic"</code>)?)</code>
+          : <code>'static'</code>
+ updates vertices on
+resize, 
+<code>'static'</code>
+ only changes scale transform (
+<code>dynamic</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>staticHeight</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
+          : used when 
+<code>draw</code>
+=
+<code>static</code>
+.
+
+<code>number</code>
+ sets height of static symbol - 
+<code>'first'</code>
+ calculates and sets height
+based on first use (
+<code>'first'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>staticWidth</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
+          : used when 
+<code>draw</code>
+=
+<code>static</code>
+.
+
+<code>number</code>
+ sets width of static symbol - 
+<code>'first'</code>
+ calculates and sets width
+based on first use (
+<code>'first'</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define in element</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">elements</span>: {
+    <span class="hljs-attr">d</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'division'</span>, <span class="hljs-attr">bendWidth</span>: <span class="hljs-number">0.05</span> },
+  },
+  <span class="hljs-attr">forms</span>: {
+    <span class="hljs-attr">form1</span>: { <span class="hljs-attr">box</span>: [<span class="hljs-string">'abc'</span>, <span class="hljs-string">'d'</span>] },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define inline simple one use</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">forms</span>: {
+    <span class="hljs-attr">form1</span>: { <span class="hljs-attr">box</span>: [<span class="hljs-string">'abc'</span>, <span class="hljs-string">'division'</span>] },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define inline with reuse</span>
+<span class="hljs-keyword">const</span> eqn = figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">forms</span>: {
+    <span class="hljs-attr">form1</span>: { <span class="hljs-attr">box</span>: [<span class="hljs-string">'abc'</span>, <span class="hljs-string">'d1_division'</span>] },
+    <span class="hljs-attr">form2</span>: { <span class="hljs-attr">box</span>: [<span class="hljs-string">'abc'</span>, <span class="hljs-string">'d1'</span>] },
+  },
+});
+eqn.animations.new()
+  .goToForm({ <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">target</span>: <span class="hljs-string">'form2'</span>, <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define inline with customization</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">forms</span>: {
+    <span class="hljs-attr">form1</span>: { <span class="hljs-attr">box</span>: [<span class="hljs-string">'abc'</span>, { <span class="hljs-attr">division</span>: { <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.005</span> } }] },
   },
 });</pre>
     

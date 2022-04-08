@@ -28,6 +28,7 @@ import type { OBJ_LineArrows } from '../geometries/arrow';
 import VinculumNew from './Symbols/Vinculum';
 import Strike from './Symbols/Strike';
 import Radical from './Symbols/Radical';
+import Division from './Symbols/Division';
 import Line from './Symbols/Line';
 import type {
   TypeColor, TypeDash,
@@ -844,6 +845,114 @@ export type EQN_RadicalSymbol = {
   staticWidth?: number | 'first',
 } & EQN_Symbol;
 
+
+/**
+ * Division equation symbol used in {@link EQN_Root}.
+ *
+ * The division symbol allows customization on how to draw the long form and
+ * short form division symbol. Mostly it will not be needed, but for edge case
+ * equation layouts it may be useful.
+ *
+ * ![](./apiassets/eqn_symbol_division.png)
+ *
+ * <pre>
+ *
+ *                            left space                right space
+ *              bend width |<->|<---->|                     >|--|<
+ *                         |   |      |                      |  |
+ *                         |   |      |                      |  |
+ *                 ------- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX____V
+ *                 A        X  |      |                      |_______|
+ *                 |         X |       CCCCCCCCCCCCCCCCCCCCCCC       A
+ *                 |          X        CCCCCCCCCCCCCCCCCCCCCCC    top space
+ *                 |           X       CCCCCCCCCCCCCCCCCCCCCCC
+ *          height |           X       CCCCCCCCCCCCCCCCCCCCCCC
+ *                 |           X       CCCCCCCCCCCCCCCCCCCCCCC
+ *                 |           X       CCCCCCCCCCCCCCCCCCCCCCC
+ *                 |          X        CCCCCCCCCCCCCCCCCCCCCCC
+ *                 |         X         CCCCCCCCCCCCCCCCCCCCCCC
+ *                 |        X          CCCCCCCCCCCCCCCCCCCCCCC   bottom space
+ *                 V       X           CCCCCCCCCCCCCCCCCCCCCCC_______V
+ *                 ------ X _________________________________________|
+ *                        |                                          A
+ *                        |                                          |
+ *                        |                  width                   |
+ *                        |<----------------------------------------->
+ *
+ * </pre>
+ *
+ * @property {'radical'} symbol
+ * @property {number} [lineWidth] (`0.01`)
+ * @property {number} [width] force width of content area (normally defined by content size)
+ * @property {number} [height] force height of content area (normally defined by content size)
+ * @property {number} [bendWidth] (`0`)
+ * @property {number} [sides] (`10`)
+ * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
+ * resize, `'static'` only changes scale transform (`dynamic`)
+ * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
+ * `number` sets height of static symbol - `'first'` calculates and sets height
+ * based on first use (`'first'`)
+ * @property {number | 'first'} [staticWidth] used when `draw`=`static`.
+ * `number` sets width of static symbol - `'first'` calculates and sets width
+ * based on first use (`'first'`)
+ *
+ * @extends EQN_Symbol
+ *
+ * @example
+ * // Define in element
+ * figure.add({
+ *   make: 'equation',
+ *   elements: {
+ *     d: { symbol: 'division', bendWidth: 0.05 },
+ *   },
+ *   forms: {
+ *     form1: { box: ['abc', 'd'] },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline simple one use
+ * figure.add({
+ *   make: 'equation',
+ *   forms: {
+ *     form1: { box: ['abc', 'division'] },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline with reuse
+ * const eqn = figure.add({
+ *   make: 'equation',
+ *   forms: {
+ *     form1: { box: ['abc', 'd1_division'] },
+ *     form2: { box: ['abc', 'd1'] },
+ *   },
+ * });
+ * eqn.animations.new()
+ *   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
+ *   .start();
+ *
+ * @example
+ * // Define inline with customization
+ * figure.add({
+ *   make: 'equation',
+ *   forms: {
+ *     form1: { box: ['abc', { division: { lineWidth: 0.005 } }] },
+ *   },
+ * });
+ */
+export type EQN_DivisionSymbol = {
+  symbol: 'radical',
+  lineWidth?: number,
+  width?: number,
+  height?: number,
+  bendWidth?: number,
+  sides?: number,
+  draw: 'static' | 'dynamic',
+  staticHeight?: number | 'first',
+  staticWidth?: number | 'first',
+} & EQN_Symbol;
+
 /**
  * Strike equation symbol used in {@link EQN_Strike}.
  *
@@ -1598,6 +1707,9 @@ export default class EquationSymbols {
     if (name === 'box') {                   // $FlowFixMe
       return this.box(options);
     }
+    if (name === 'division') {                   // $FlowFixMe
+      return this.division(options);
+    }
     if (name === 'angleBracket') {          // $FlowFixMe
       return this.angleBracket(options);
     }
@@ -1667,6 +1779,27 @@ export default class EquationSymbols {
     };
     const optionsToUse = joinObjects(defaultOptions, optionsIn);
     return (new Box(
+      this.shapes.webgl[0],
+      optionsToUse.color,
+      new Transform().scale(1, 1).translate(0, 0),
+      optionsToUse,
+    ));
+  }
+
+  division(optionsIn: EQN_DivisionSymbol) {
+    const defaultOptions = {
+      color: this.defaultColor,
+      width: null,
+      height: null,
+      lineWidth: 0.01,
+      bendWidth: 0,
+      sides: 10,
+      draw: 'dynamic',
+      staticHeight: 'first',
+      staticWidth: 'first',
+    };
+    const optionsToUse = joinObjects(defaultOptions, optionsIn);
+    return (new Division(
       this.shapes.webgl[0],
       optionsToUse.color,
       new Transform().scale(1, 1).translate(0, 0),
