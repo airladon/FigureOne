@@ -54,7 +54,7 @@ class FigureFont {
   src: Image | string;
   id: string;
   map: OBJ_AtlasMap;
-  glyphs: string | 'greek' | 'math' | 'mathExt' | 'common' | 'latin' | 'all' | 'numbers' | 'mathlatin';
+  glyphs: string | 'greek' | 'math' | 'mathExt' | 'common' | 'latin' | 'all' | 'numbers' | 'mathlatin' | Array<string>;
   atlasSize: null | number;
   loadColor: TypeColor;
 
@@ -193,7 +193,11 @@ class FigureFont {
     this.render = options.render;
     this.testString = options.testString;
     if (this.testString == null) {
-      this.testString = this.glyphs;
+      if (this.glyphs === 'all' || this.glyphs === 'common' || this.glyphs === 'mathlatin' || this.glyphs === 'greek' || this.glyphs === 'latin' || this.glyphs === 'mathExt' || this.glyphs === 'math') {
+        this.testString = this.glyphs;
+      } else {
+        this.testString = this.getGlyphs();
+      }
     }
     this.modifiers = options.modifiers;
     this.mods = glyphMeasures(
@@ -270,43 +274,41 @@ class FigureFont {
   }
 
   getGlyphs() {
-    if (this.glyphs === 'all') {
-      return `${latin}${greek}${mathExt}`;
+    const presets = {
+      all: latin + greek + mathExt,
+      common: latin + greek + math,
+      mathlatin: latin + math,
+      latin,
+      greek,
+      math,
+      mathExt,
+      numbers: math,
+    };
+    let { glyphs } = this.glyphs;
+
+    if (typeof glyphs === 'string') {
+      glyphs = [glyphs];
     }
-    if (this.glyphs === 'common') {
-      return `${latin}${greek}${math}`;
+
+    let out = '';
+
+    for (let i = 0; i < glyphs.length; i += 1) {
+      const newGlyphs = presets[glyphs[i]] == null ? glyphs[i] : presets[glyphs[i]];
+      out = `${out}${newGlyphs}`;
     }
-    if (this.glyphs === 'mathlatin') {
-      return `${latin}${math}`;
+
+    if (out.includes('gh') === false) {
+      out = `${out}gh`;
     }
-    if (this.glyphs === 'latin') {
-      return latin;
-    }
-    if (this.glyphs === 'greek') {
-      return greek;
-    }
-    if (this.glyphs === 'math') {
-      return math;
-    }
-    if (this.glyphs === 'mathExt') {
-      return mathExt;
-    }
-    return this.glyphs;
+    return out;
   }
 
   getGlyphsID() {
-    if (
-      this.glyphs === 'all'
-      || this.glyphs === 'common'
-      || this.glyphs === 'greek'
-      || this.glyphs === 'mathlatin'
-      || this.glyphs === 'latin'
-      || this.glyphs === 'mathExt'
-      || this.glyphs === 'math'
-    ) {
+    if (this.glyphs === 'all' || this.glyphs === 'common' || this.glyphs === 'greek' || this.glyphs === 'mathlatin' || this.glyphs === 'latin' || this.glyphs === 'mathExt' || this.glyphs === 'math') {
       return this.glyphs;
     }
-    return hash32(this.glyphs).toString.slice(0, 8);
+
+    return hash32(this.getGlyphs()).toString.slice(0, 8);
   }
 
   getTestStringID() {

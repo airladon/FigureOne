@@ -206,7 +206,14 @@ export default class Atlas {
 
     const glyphs = this.font.getGlyphs();
     this.map = {};
-    const dimension = Math.floor(Math.ceil(Math.sqrt(glyphs.length) + 2) * fontSizePX * 1.5);
+    let dimension = Math.floor(Math.ceil(Math.sqrt(glyphs.length) + 2) * fontSizePX * 1.5);
+    const maxDimension = this.webgl.gl.getParameter(this.webgl.gl.MAX_TEXTURE_SIZE);
+
+    if (dimension > maxDimension) {
+      fontSizePX *= maxDimension / dimension * 0.95;
+      this.fontSize = fontSizePX;
+      dimension = Math.floor(Math.ceil(Math.sqrt(glyphs.length) + 2) * fontSizePX * 1.5);
+    }
 
     const canvas = document.createElement('canvas');
     canvas.width = dimension;
