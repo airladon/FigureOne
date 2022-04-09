@@ -89,7 +89,7 @@ const txt = (name, options, lineOptions = null) => makeShape(
   tools.misc.joinObjects({}, {
     color: [1, 0, 0, 1],
     touchBorder: 'buffer',
-    font: { render: 'gl' },
+    font: { render: 'gl', glyphs: ['common', '≤≥å'] },
   }, options),
   lineOptions,
 );
@@ -252,6 +252,8 @@ const arrows = [
   ..######...######..########.##....##.########
   */
   txt('s5', { text: 'asdf', scene: { left: -4.5, bottom: -4.5, right: 4.5, top: 4.5 } }),
+
+  txt('sc1', { text: '≤≥å' }),
 ];
 figure.add(arrows);
 figure.getElement('u1').setText('updated');

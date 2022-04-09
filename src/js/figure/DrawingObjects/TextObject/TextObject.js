@@ -284,7 +284,7 @@ class FigureFont {
       mathExt,
       numbers: math,
     };
-    let { glyphs } = this.glyphs;
+    let { glyphs } = this;
 
     if (typeof glyphs === 'string') {
       glyphs = [glyphs];
