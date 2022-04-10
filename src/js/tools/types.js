@@ -222,8 +222,8 @@ export type TypeFontWeight = 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | 
  * @property {Image | string} [src] source image or url for atlas
  * @property {OBJ_AtlasMap} [map] atlas definition needed if using a source
  * image or url
- * @property {string | 'greek' | 'math' | 'latin' | 'all' | 'common' | 'mathExt'} [glyphs]
- * glyphs included in the font
+ * @property {string | 'greek' | 'math' | 'latin' | 'all' | 'common' | 'mathExt' | Array<string>} [glyphs]
+ * glyphs included in the font - an array can be used combining glyphs together
  * @property {null |number} [atlasSize] font size of atlas as a proportion of
  * the WebGL canvas height. If this is null, then the atlas font size is
  * calculated from the font size, scene height and number of pixels in the

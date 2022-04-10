@@ -1,5 +1,9 @@
 # Releases
 
+## 0.15.7
+* Auto generated atlases will now have their dimension limited to the WebGL context max texture size
+* Glyph definitions in OBJ_Font can now be arrays allowing combining preset and custom definitions
+
 ## 0.15.6
 * Fix animation complete race condition when multiple equations are automatically automated between forms in a slide navigator
 * Add long form division symbol for equations to be used with box
