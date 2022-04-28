@@ -107,8 +107,8 @@ export default class Lines extends BaseEquationFunction {
 
     this.width = lineBounds.width;
     this.height = lineBounds.height;
-    this.descent = lineBounds.descent;
-    this.ascent = lineBounds.ascent;
+    this.descent = lineBounds.descent - yOffset;
+    this.ascent = lineBounds.ascent + yOffset;
     this.fullSize = {
       leftOffset: this.location.x - fullBounds.left,
       width: fullBounds.width,
