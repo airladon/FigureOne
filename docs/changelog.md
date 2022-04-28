@@ -1,5 +1,9 @@
 # Releases
 
+## 0.15.8
+* Add ≤≥≠ glyphs to default math glyphs
+* Fix yOffset adjustments to ascent and descent of lines equation element (seen when nesting line elements)
+
 ## 0.15.7
 * Auto generated atlases will now have their dimension limited to the WebGL context max texture size
 * Glyph definitions in OBJ_Font can now be arrays allowing combining preset and custom definitions
