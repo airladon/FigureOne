@@ -5478,6 +5478,9 @@ class FigureElementCollection extends FigureElement {
       return elementPath;
     }
     const getElement = (inputElementPath, parent) => {
+      if (parent.elements[inputElementPath] != null) {
+        return parent.elements[inputElementPath];
+      }
       const ep = inputElementPath.split('.');
       let newParent = parent.elements[ep[0]];
       if (newParent == null) {
