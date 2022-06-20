@@ -248,7 +248,7 @@ export default class Atlas {
       if (font.mods[glyphs[i]]) {
         w = font.mods[glyphs[i]].w;
       }
-      const width = ctx.measureText(glyphs[i]).width * w;
+      const width = ctx.measureText(glyphs[i]).width * w + font.letterSpacing * fontSizePX;
       const { ascent, descent } = font.measureText(glyphs[i], aWidth);
 
       const offsetX = x;

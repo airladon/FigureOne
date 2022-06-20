@@ -81,6 +81,8 @@ class FigureFont {
   maxCount: number;
   atlasColor: boolean;
 
+  letterSpacing: number;
+
   render: 'gl' | '2d' | 'html';
 
   constructor(optionsIn: OBJ_Font | FigureFont = {}) {
@@ -110,6 +112,7 @@ class FigureFont {
       this.loadColor = optionsIn.loadColor;
       this.atlasColor = optionsIn.atlasColor;
       this.atlasSize = optionsIn.atlasSize;
+      this.letterSpacing = optionsIn.letterSpacing;
       this.render = optionsIn.render;
       this.mods = glyphMeasures(
         this.family, this.style,
@@ -132,6 +135,7 @@ class FigureFont {
       midAscent: 1.1,
       maxAscent: 1.5,
       underline: false,
+      letterSpacing: 0,
       src: '',
       map: {},
       glyphs: 'common',
@@ -148,6 +152,7 @@ class FigureFont {
     this.family = options.family;
     this.style = options.style;
     this.size = options.size;
+    this.letterSpacing = options.letterSpacing;
     if (options.outline === true) {
       this.outline = {
         fill: false,
@@ -446,6 +451,7 @@ class FigureFont {
       atlasColor: this.atlasColor,
       atlasSize: this.atlasSize,
       render: this.render,
+      letterSpacing: this.letterSpacing,
     };
   }
 
