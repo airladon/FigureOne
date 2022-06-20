@@ -3,6 +3,7 @@
 ## 0.15.9
 * Add letter spacing adjustments in GL fonts
 * Fix element.getElement method to allow for periods in element names
+* Equations allow expressions with '.' and numbers to have default math font styling (instead of just numbers)
 
 ## 0.15.8
 * Add ≤≥≠ glyphs to default math glyphs

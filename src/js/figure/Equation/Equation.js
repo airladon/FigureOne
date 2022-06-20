@@ -1508,7 +1508,7 @@ export class Equation extends FigureElementCollection {
       textToUse = options.text;
     }
     let defaultFontDefinition;
-    if (textToUse.match(/[A-Z,a-z,?,,.,\u0370-\u03ff]/)) {
+    if (textToUse.match(/[A-Z,a-z,?,,\u0370-\u03ff]/)) {
       defaultFontDefinition = this.eqn.textFont.definition();
     } else {
       defaultFontDefinition = this.eqn.font.definition();
