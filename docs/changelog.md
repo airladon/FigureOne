@@ -1,5 +1,9 @@
 # Releases
 
+## 0.15.9
+* Add letter spacing adjustments in GL fonts
+* Fix element.getElement method to allow for periods in element names
+
 ## 0.15.8
 * Add ≤≥≠ glyphs to default math glyphs
 * Fix yOffset adjustments to ascent and descent of lines equation element (seen when nesting line elements)
