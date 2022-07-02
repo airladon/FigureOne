@@ -953,6 +953,9 @@ class FigureElement {
       finishedCallback: this.animationFinished.bind(this),
       timeKeeper: this.timeKeeper,
     });
+    this.animations.notifications.add('frame', () => {
+      this.notifications.publish('animated');
+    });
     // $FlowFixMe
     this.tieToHTML = {
       element: null,

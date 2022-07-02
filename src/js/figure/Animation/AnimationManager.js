@@ -847,6 +847,7 @@ export default class AnimationManager {
         ]);
       }
     }
+    this.notifications.publish('frame');
     return remaining;
   }
 
