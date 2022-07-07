@@ -5484,7 +5484,11 @@ class FigureElementCollection extends FigureElement {
       if (parent.elements[inputElementPath] != null) {
         return parent.elements[inputElementPath];
       }
-      const ep = inputElementPath.split('.');
+      let ep = inputElementPath.split('.');
+      if (ep[ep.length - 1] === '') {
+        ep = ep.slice(0, -1);
+        ep[ep.length - 1] = `${ep[ep.length - 1]}.`;
+      }
       let newParent = parent.elements[ep[0]];
       if (newParent == null) {
         // $FlowFixMe
