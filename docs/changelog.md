@@ -6,6 +6,7 @@
 * Equations allow expressions with '.' and numbers to have default math font styling (instead of just numbers)
 * "()!:;' added to equation math font discrimination
 * Add 'animated' notification to all elements fired after an animation frame is executed
+* Fix crash when getElement is called on string with last char as a '.'
 
 ## 0.15.8
 * Add ≤≥≠ glyphs to default math glyphs
