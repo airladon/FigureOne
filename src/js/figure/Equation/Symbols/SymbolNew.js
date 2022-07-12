@@ -43,6 +43,9 @@ export default class Symbol extends FigureElementPrimitive {
     if (symbolOptions.isTouchable != null) {
       this.isTouchable = symbolOptions.isTouchable;
     }
+    if (symbolOptions.drawNumber != null) {
+      this.drawNumber = symbolOptions.drawNumber;
+    }
     this._custom.options = symbolOptions;
     if (this._custom.options.draw === 'dynamic') {
       this._custom.scale = new Point(1, 1);
