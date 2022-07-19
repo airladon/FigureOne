@@ -7,6 +7,7 @@
 * "()!:;' added to equation math font discrimination
 * Add 'animated' notification to all elements fired after an animation frame is executed
 * Fix crash when getElement is called on string with last char as a '.'
+* Fix Equation lines baseline space and normal space to be scaled by scale
 
 ## 0.15.8
 * Add ≤≥≠ glyphs to default math glyphs

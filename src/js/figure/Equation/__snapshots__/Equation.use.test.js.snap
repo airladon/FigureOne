@@ -25,7 +25,26 @@ FigureElementPrimitive2DText {
         },
         "map": Object {},
       },
-      "notifications": Object {},
+      "notifications": Object {
+        "frame": Notification {
+          "fnMap": FunctionMap {
+            "global": GlobalFunctionMap {
+              "map": Object {},
+            },
+            "map": Object {},
+          },
+          "nextId": 1,
+          "order": Array [
+            "0",
+          ],
+          "subscribers": Object {
+            "0": Object {
+              "callback": [Function],
+              "num": -1,
+            },
+          },
+        },
+      },
     },
     "options": Object {
       "translation": Object {},
@@ -225,6 +244,7 @@ FigureElementPrimitive2DText {
       "family": "Times New Roman",
       "glyphs": "mathlatin",
       "id": undefined,
+      "letterSpacing": 0,
       "loadColor": Array [
         0,
         0,

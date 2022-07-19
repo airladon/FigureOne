@@ -47,7 +47,7 @@ function makeEquation() {
   });
 
   const lin = (content, baselineSpace = 0.5) => ({
-    lines: { content, baselineSpace, justify: 'left' },
+    lines: { content, baselineSpace: baselineSpace / 0.7, justify: 'left' },
   });
 
   figure.add({
@@ -144,12 +144,12 @@ function makeEquation() {
           ['oppHyp', '  ', 'eq1', '  ', 'sin'],
           ['oppAdj', '  ', 'eq3', '  ', 'tan'],
           ['hypAdj', '  ', 'eq5', '  ', 'sec'],
-        ], 0.6),
+        ], 0.6 / 1.1),
         final2: lin([
           ['adjHyp', '  ', 'eq2', '  ', 'cos'],
           ['adjOpp', '  ', 'eq6', '  ', 'cot'],
           ['hypOpp', '  ', 'eq4', '  ', 'csc'],
-        ], 0.6),
+        ], 0.6 / 1.1),
         adjDen: cont(lin(['oppAdj', 'hypAdj']), 0.6),
         tanSec: lin(['tanTheta', 'secTheta']),
         oppDen: cont(lin(['adjOpp', 'hypOpp']), 0.6),

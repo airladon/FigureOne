@@ -43,11 +43,11 @@ export default class Lines extends BaseEquationFunction {
       const previousY = locs[lineNum - 1].y;
       const { space, baselineSpace } = lineOptions[lineNum];
       if (baselineSpace != null) {
-        locs[lineNum].y = previousY - baselineSpace;
+        locs[lineNum].y = previousY - baselineSpace * scale;
       } else {
         const prevDesc = bounds[lineNum - 1].descent;
         const asc = bounds[lineNum].ascent;
-        locs[lineNum].y = previousY - asc - prevDesc - space;
+        locs[lineNum].y = previousY - asc - prevDesc - space * scale;
       }
       const lineMaxY = locs[lineNum].y + bounds[lineNum].ascent;
       const lineMinY = locs[lineNum].y - bounds[lineNum].descent;
@@ -66,7 +66,11 @@ export default class Lines extends BaseEquationFunction {
       yOffset -= minY;
     } else if (typeof yAlign === 'number' && yAlign < numLines) {
       yOffset -= locs[yAlign].y;
+    } else if (yAlign.slice(-1)[0] === 'r') {
+      const mag = parseFloat(yAlign);
+      yOffset = -minY - height * mag;
     }
+
 
     // All lines are currently left justified
     // Justify them in x
