@@ -1522,6 +1522,40 @@ function hash32(s: string) {
 }
 /* eslint-enable no-bitwise, no-plusplus */
 
+
+function findReferences(toFind: any, start: any, path: str = '', alreadyParsed: Array<any> = [], depth = 0) {
+  if (depth > 20) {
+    return [];
+  }
+  if (start == null) {
+    return [];
+  }
+  if (typeof start === 'boolean' || typeof start === 'number' || typeof start === 'string' || typeof start === 'function') {
+    return [];
+  }
+  const out = [];
+  if (toFind === start) {
+    if (alreadyParsed.indexOf(toFind) > -1) {
+      return [path]
+    }
+    out.push([path]);
+  }
+  if (alreadyParsed.indexOf(start) > -1) {
+    return [];
+  }
+  alreadyParsed.push(start);
+  if (Array.isArray(start)) {
+    for (let i = 0; i < start.length; i += 1) {
+      out.push(...findReferences(toFind, start[i], `${path}[${i}]`, alreadyParsed, depth + 1));
+    }
+  } else {
+    Object.keys(start).forEach((key) => {
+      out.push(...findReferences(toFind, start[key], `${path}.${key}`, alreadyParsed, depth + 1));
+    });
+  }
+  return out;
+}
+
 export {
   diffPathsToObj, diffObjToPaths,
   Console,
@@ -1539,5 +1573,6 @@ export {
   getFromObject,
   splitString, PerformanceTimer,
   generateUniqueColor, hash32,
+  findReferences,
 };
 
