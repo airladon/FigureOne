@@ -105,6 +105,8 @@ export default class FigureCollections {
       touchBorder: 'children',
       color: this.primitives.defaultColor,
       parent: null,
+      drawNumber: 0,
+      drawNumberOrder: [null],
       // scene: this.primitives.scene,
     };
     let optionsToUse;
@@ -127,7 +129,8 @@ export default class FigureCollections {
     ) {
       element.pulseDefault.scale = optionsToUse.pulse;
     }
-
+    element.drawNumber = optionsToUse.drawNumber;
+    element.drawNumberOrder = optionsToUse.drawNumberOrder;
     element.collections = this;
     return element;
   }
