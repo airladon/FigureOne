@@ -42,7 +42,7 @@ function makeEquation() {
 
   // Helper function to make a 'lines' equation element
   const lin = (content, baselineSpace = 0.5) => ({
-    lines: { content, baselineSpace, justify: 'left' },
+    lines: { content, baselineSpace: baselineSpace / 0.7, justify: 'left' },
   });
 
   figure.add({
@@ -139,12 +139,12 @@ function makeEquation() {
           ['oppHyp', '  ', 'eq1', '  ', 'sinTheta'],
           ['oppAdj', '  ', 'eq3', '  ', 'tanTheta'],
           ['hypAdj', '  ', 'eq5', '  ', 'secTheta'],
-        ], 0.6),
+        ], 0.6 / 1.1),
         final2: lin([
           ['adjHyp', '  ', 'eq2', '  ', 'cosTheta'],
           ['adjOpp', '  ', 'eq4', '  ', 'cotTheta'],
           ['hypOpp', '  ', 'eq6', '  ', 'cscTheta'],
-        ], 0.6),
+        ], 0.6 / 1.1),
       },
       layout: 'init',
       forms: {
