@@ -278,6 +278,7 @@ export default class FigurePrimitives {
       },
       name: generateUniqueId('primitive_'),
       color: this.defaultColor, // $FlowFixMe
+      drawNumber: 0,
       transform: [['s', 1], ['r', 0, 0, 0, 1], ['t', 0, 0, 0]],
       dimension: 2,
     };
@@ -469,6 +470,7 @@ export default class FigurePrimitives {
         element.setScene(options.scene);
       }
     }
+    element.drawNumber = options.drawNumber;
 
     element.timeKeeper = this.timeKeeper;
     element.recorder = this.recorder;

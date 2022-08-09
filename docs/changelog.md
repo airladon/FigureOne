@@ -1,5 +1,9 @@
 # Releases
 
+## 0.15.10
+* Add drawNumber to GL object definition
+* Add allowSetColor property to all elements so color can be frozen when needed
+
 ## 0.15.9
 * Add letter spacing adjustments in GL fonts
 * Fix element.getElement method to allow for periods in element names
