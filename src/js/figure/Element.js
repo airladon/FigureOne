@@ -5979,7 +5979,8 @@ class FigureElementCollection extends FigureElement {
     if (this.allowSetColor === 'all') {
       this.color = nonNullColor.slice();
     } else if (this.allowSetColor === 'opacity') {
-      this.color[3] = nonNullColor[3]
+      // eslint-disable-next-line
+      this.color[3] = nonNullColor[3];
     }
 
     this.notifications.publish('color');

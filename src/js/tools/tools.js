@@ -1523,7 +1523,7 @@ function hash32(s: string) {
 /* eslint-enable no-bitwise, no-plusplus */
 
 
-function findReferences(toFind: any, start: any, path: str = '', alreadyParsed: Array<any> = [], depth = 0) {
+function findReferences(toFind: any, start: any, path: string = '', alreadyParsed: Array<any> = [], depth: number = 0) {
   if (depth > 20) {
     return [];
   }
@@ -1536,7 +1536,7 @@ function findReferences(toFind: any, start: any, path: str = '', alreadyParsed: 
   const out = [];
   if (toFind === start) {
     if (alreadyParsed.indexOf(toFind) > -1) {
-      return [path]
+      return [path];
     }
     out.push([path]);
   }
