@@ -770,7 +770,7 @@ class FigureElement {
   drawNumber: number;
   moveSetTransform: boolean;
 
-  freezeColor: boolean;
+  allowSetColor: string;
 
   // // TODO
   // move: {
@@ -811,7 +811,7 @@ class FigureElement {
     this.uniqueColor = null;
     this.isShown = true;
     this.simple = false;
-    this.freezeColor = false;
+    this.allowSetColor = 'all';
     this.transform = transform._dup();
     this.dependantTransform = false;
     this.fnMap = new FunctionMap();
@@ -1804,11 +1804,13 @@ class FigureElement {
    @param {boolean} [setDefault] also set the default color to this color
    */
   setColor(color: TypeColor, setDefault: boolean = true) {
-    if (!this.freezeColor) {
+    if (this.allowSetColor === 'all') {
       this.color = color != null ? color.slice() : [0, 0, 0, 0];
-      if (setDefault) {
-        this.defaultColor = this.color.slice();
-      }
+    } else if (this.allowSetColor === 'opacity') {
+      this.color[3] = color != null ? color[3] : 0;
+    }
+    if (setDefault) {
+      this.defaultColor = this.color.slice();
     }
     this.notifications.publish('color');
     this.animateNextFrame();
@@ -4142,11 +4144,13 @@ class FigureElementPrimitive extends FigureElement {
   }
 
   setColor(color: TypeColor, setDefault: boolean = true) {
-    if (!this.freezeColor) {
+    if (this.allowSetColor === 'all') {
       this.color = color != null ? color.slice() : [0, 0, 0, 0];
-      if (setDefault) {
-        this.defaultColor = this.color.slice();
-      }
+    } else if (this.allowSetColor === 'opacity') {
+      this.color[3] = color != null ? color[3] : 0;
+    }
+    if (setDefault) {
+      this.defaultColor = this.color.slice();
     }
     this.notifications.publish('color');
     // if (this instanceof FigureElementPrimitive) {
@@ -5965,20 +5969,22 @@ class FigureElementCollection extends FigureElement {
 
   setColor(color: TypeColor = [0, 0, 0, 1], setDefault: boolean = true) {
     const nonNullColor = color != null ? color : [0, 0, 0, 0];
-    if (!this.freezeColor) {
-      for (let i = 0; i < this.drawOrder.length; i += 1) {
-        const element = this.elements[this.drawOrder[i]];
-        if (!this.preserveChildColor) {
-          element.setColor(nonNullColor, setDefault);
-        }
+
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (!this.preserveChildColor) {
+        element.setColor(nonNullColor, setDefault);
       }
-      this.color = nonNullColor.slice();
     }
+    if (this.allowSetColor === 'all') {
+      this.color = nonNullColor.slice();
+    } else if (this.allowSetColor === 'opacity') {
+      this.color[3] = nonNullColor[3]
+    }
+
     this.notifications.publish('color');
-    if (!this.freezeColor) {
-      if (setDefault) {
-        this.defaultColor = this.color.slice();
-      }
+    if (setDefault) {
+      this.defaultColor = this.color.slice();
     }
   }
 
