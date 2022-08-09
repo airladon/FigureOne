@@ -4,6 +4,7 @@ exports[`line tests Update1 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -682,6 +683,7 @@ exports[`line tests arrow-bar 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -1560,6 +1562,7 @@ exports[`line tests arrow-barb 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -2546,6 +2549,7 @@ exports[`line tests arrow-circ 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -4492,6 +4496,7 @@ exports[`line tests arrow-line 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -5550,6 +5555,7 @@ exports[`line tests arrow-poly 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -7496,6 +7502,7 @@ exports[`line tests arrow-revTri 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -8446,6 +8453,7 @@ exports[`line tests arrow-tri 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -9288,6 +9296,7 @@ exports[`line tests border-buffer 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -10020,6 +10029,7 @@ exports[`line tests border-custom 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -10738,6 +10748,7 @@ exports[`line tests border-custom2 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -11498,6 +11509,7 @@ exports[`line tests border-draw 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -12176,6 +12188,7 @@ exports[`line tests border-num 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -12854,6 +12867,7 @@ exports[`line tests border-rect 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -13532,6 +13546,7 @@ exports[`line tests dash 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -14309,6 +14324,7 @@ exports[`line tests dash-neg 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -15086,6 +15102,7 @@ exports[`line tests dash-offset 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -15864,6 +15881,7 @@ exports[`line tests dash-pos 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -16641,6 +16659,7 @@ exports[`line tests dash-widthIsNum 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -17418,6 +17437,7 @@ exports[`line tests definition-length 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -18096,6 +18116,7 @@ exports[`line tests definition-override 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -18774,6 +18795,7 @@ exports[`line tests definition-points 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -19452,6 +19474,7 @@ exports[`line tests drawBorder-custom 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -20147,6 +20170,7 @@ exports[`line tests drawBorderBuffer-0 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -20825,6 +20849,7 @@ exports[`line tests drawBorderBuffer-custom 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -21520,6 +21545,7 @@ exports[`line tests drawBorderBuffer-number 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -22198,6 +22224,7 @@ exports[`line tests linePrimitives-close 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -23036,6 +23063,7 @@ exports[`line tests linePrimitives-open 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -23730,6 +23758,7 @@ exports[`line tests touchBorder-border 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -24408,6 +24437,7 @@ exports[`line tests touchBorder-buffer 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -25086,6 +25116,7 @@ exports[`line tests touchBorder-custom 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -25804,6 +25835,7 @@ exports[`line tests touchBorder-custom2 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -26564,6 +26596,7 @@ exports[`line tests touchBorder-draw 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -27242,6 +27275,7 @@ exports[`line tests touchBorder-num 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -27974,6 +28008,7 @@ exports[`line tests touchBorder-rect 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -28652,6 +28687,7 @@ exports[`line tests widthIs-mid 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -29330,6 +29366,7 @@ exports[`line tests widthIs-neg 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -30008,6 +30045,7 @@ exports[`line tests widthIs-num 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],
@@ -30686,6 +30724,7 @@ exports[`line tests widthIs-pos 1`] = `
 FigureElementPrimitive {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "anim": null,
   "animationFinishedCallback": [Function],

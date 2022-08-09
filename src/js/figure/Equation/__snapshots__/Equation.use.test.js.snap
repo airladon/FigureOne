@@ -4,6 +4,7 @@ exports[`Different ways to make an equation All Text in constructor with all opt
 FigureElementPrimitive2DText {
   "_custom": Object {},
   "afterDrawCallback": null,
+  "allowSetColor": "all",
   "angleToDraw": -1,
   "animationFinishedCallback": null,
   "animations": AnimationManager {
