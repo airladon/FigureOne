@@ -1,5 +1,9 @@
 # Releases
 
+## 0.15.11
+* Add figure.gesturePreventDefault to customize how touch/mouse events are handled
+* Add onClick event to Figure with bool for if an element is touched or not
+
 ## 0.15.10
 * Add drawNumber to GL object definition
 * Add allowSetColor property to all elements so color can be frozen when needed

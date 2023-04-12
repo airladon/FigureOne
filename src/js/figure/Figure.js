@@ -304,6 +304,7 @@ class Figure {
   defaultLength: number;
 
   animationFinishedCallback: ?(string | (() => void));
+  gesturePreventDefault: 'prevent' | 'allow' | 'ifTouched';
 
 
   isTouchDevice: boolean;
@@ -414,6 +415,7 @@ class Figure {
     this.nextDrawTimerDuration = 0;
     this.mousePixelPosition = null;
     this.defaultPrevented = false;
+    this.gesturePreventDefault = 'prevent';
 
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
@@ -2070,7 +2072,16 @@ class Figure {
     const glPoint = this.transformPoint(pixel, 'pixel', 'gl');
     // glPoint.z = -1;
     this.touchDownHandler(glPoint, eventFromPlayback);
-    return true;
+
+    this.notifications.publish("onClick", this.beingTouchedElement != null);
+    if (this.gesturePreventDefault === 'prevent') {
+      return true;
+    }
+    if (this.gesturePreventDefault === 'allow') {
+      return false;
+    }
+    return this.beingTouchedElement != null;
+
     // if (e != null) {
     //   // console.log(e.getPosition('figure'))
     //   const drawPosition = e.getPosition('draw');
@@ -2125,7 +2136,6 @@ class Figure {
       this.showCursor('hide');
     }
     this.isTouchDown = true;
-
 
     let element;
     let backCameraControl;
