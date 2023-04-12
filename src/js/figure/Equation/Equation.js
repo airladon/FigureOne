@@ -1439,6 +1439,7 @@ export class Equation extends FigureElementCollection {
     };
     if (forms === 'current') {
       arrange(this.eqn.currentForm, false, false);
+      this.notifications.publish('layoutForms', forms);
       return;
     }
 
@@ -1451,6 +1452,7 @@ export class Equation extends FigureElementCollection {
     } else if (show && Object.keys(this.eqn.forms).length > 0) {
       this.eqn.forms[this.eqn.currentForm].rearrange();
     }
+    this.notifications.publish('layoutForms', forms);
   }
 
   contextLost() {
