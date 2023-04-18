@@ -4,6 +4,7 @@
 * Add figure.gesturePreventDefault to customize how touch/mouse events are handled
 * Add onClick event to Figure with bool for if an element is touched or not
 * Add layoutForms notification for equations
+* Limit iOS max canvas size to 16M
 
 ## 0.15.10
 * Add drawNumber to GL object definition
