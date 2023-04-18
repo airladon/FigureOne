@@ -74,6 +74,13 @@ Fonts may be system fonts (available immediately), cached or synchronous web fon
 */
 /* eslint-enable max-len */
 
+function isIOS() {
+  const ua = navigator.userAgent;
+  if ((/iPad|iPhone|iPod/.test(ua)) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+    return true;
+  }
+  return false;
+}
 export type OBJ_AtlasMap = {
   [char: string]: {
     width: number,
@@ -212,6 +219,11 @@ export default class Atlas {
     if (dimension > maxDimension) {
       fontSizePX *= maxDimension / dimension * 0.95;
       this.fontSize = fontSizePX;
+      dimension = Math.floor(Math.ceil(Math.sqrt(glyphs.length) + 2) * fontSizePX * 1.5);
+    }
+    if (dimension ** 2 > 16777216 && isIOS()) {
+      const mDim = Math.sqrt(16777216);
+      fontSizePX *= mDim / dimension * 0.95;
       dimension = Math.floor(Math.ceil(Math.sqrt(glyphs.length) + 2) * fontSizePX * 1.5);
     }
 
