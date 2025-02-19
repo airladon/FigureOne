@@ -21,7 +21,9 @@ The examples are also hosted (and thus can be directly interacted with) on this 
 
 ![](docs/summary.gif)
 
-The library used to draw interactive slides at <a href="https://www.thisiget.com">thisiget.com</a>.
+The library used to render all questions on <a href="https://www.grokkoli.com">Grokkoli</a> and draw interactive slides at <a href="https://www.thisiget.com">thisiget.com</a>.
+
+The library is rarely updated as it is stable. It renders thousands of interactive figures and videos daily on Grokkoli, and has no dependencies.
 
 ## Getting Started
 
