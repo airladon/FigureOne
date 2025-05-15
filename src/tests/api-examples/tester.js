@@ -137,7 +137,7 @@ figure.animateNextFrame();
       const remainingDuration = await page.evaluate(() => figure.getRemainingAnimationTime());
       let image = await page.screenshot();
       expect(image).toMatchImageSnapshot({
-        customSnapshotIdentifier: `${id}-00000`,
+        customSnapshotIdentifier: `${id}-00000-snap`,
         failureThreshold: threshold,
         customSnapshotsDir: `${__dirname}/${snapshots}`,
       });
@@ -149,7 +149,7 @@ figure.animateNextFrame();
           image = await page.screenshot();
           // eslint-disable-next-line jest/no-conditional-expect
           expect(image).toMatchImageSnapshot({
-            customSnapshotIdentifier: `${id}-${zeroPad(Math.floor(timeStep * i * 1000), 5)}`,
+            customSnapshotIdentifier: `${id}-${zeroPad(Math.floor(timeStep * i * 1000), 5)}-snap`,
             failureThreshold: threshold,
             customSnapshotsDir: `${__dirname}/${snapshots}`,
           });
