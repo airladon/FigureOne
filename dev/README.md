@@ -24,6 +24,19 @@ When it is time to deploy the build to NPM, exit the container and from the repo
 
 This will start a container, run all linting and tests, and then build and deploy the package.
 
+## Run browser tests
+To run browser tests you need:
+* A packaged version of FigureOne
+* A running http server
+
+```sh
+./start_dev.sh
+webpack
+http-server &
+./browser.sh [PATH]
+```
+
+
 ## Update Packages
 
 To update all packages
