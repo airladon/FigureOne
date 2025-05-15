@@ -51,7 +51,7 @@ const updates = {
     e.pulseAngle({
       curve: 1.1,
       arrow: 1.2,
-      duration: 2,
+      duration: 1.95,
       thick: 4,
     });
   },
