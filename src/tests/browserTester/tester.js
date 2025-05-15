@@ -228,7 +228,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
           const image = await page.screenshot();
           // eslint-disable-next-line jest/no-conditional-expect
           expect(image).toMatchImageSnapshot({
-            customSnapshotIdentifier: `${zeroPad(Math.round(time * 1000), 5)}-${description}`,
+            customSnapshotIdentifier: `${zeroPad(Math.round(time * 1000), 5)}-${description}-snap`,
             failureThreshold: threshold,
           });
           lastTime = time;
