@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright:v1.16.3-focal
+FROM mcr.microsoft.com/playwright:v1.52.0
 
 
 WORKDIR /home/pwuser
