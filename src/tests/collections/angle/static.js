@@ -593,6 +593,7 @@ if (typeof process === 'object') {
     }
     Object.keys(move).forEach((name) => {
       const element = figure.getElement(move[name].element);
+      element.move
       const p = element.getPosition('figure');
       move[name].events.forEach((event) => {
         const [action] = event;
@@ -600,6 +601,7 @@ if (typeof process === 'object') {
         figure[action]([loc.x + p.x, loc.y + p.y]);
       });
     });
+    figure.stop('freeze');
     figure.setFirstTransform();
   };
   startMove();
