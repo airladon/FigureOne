@@ -72,8 +72,6 @@ figure.add([
 ]);
 
 
-  figure.primitives.equationScale = 2;
-  
 figure.timeKeeper.setManualFrames();
 figure.timeKeeper.frame(0);
 figure.animateNextFrame();
