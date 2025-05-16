@@ -62,7 +62,7 @@ async function getCurrentTime() {
 async function snap(time, threshold) {
   const image = await page.screenshot({ timeout: 300000 });
   return expect(image).toMatchImageSnapshot({
-    customSnapshotIdentifier: `${zeroPad(Math.round(time * 10000), 7)}`,
+    customSnapshotIdentifier: `${zeroPad(Math.round(time * 10000), 7)}-snap`,
     failureThreshold: threshold,
   });
 }
