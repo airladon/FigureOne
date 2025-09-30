@@ -153,15 +153,23 @@ module.exports = (env) => {
         }),
       ],
     },
+    resolve: {
+      extensions: ['.ts', '.tsx', '.js', '.jsx']
+    },
     module: {
       rules: [
         {
-          test: /\.js$/,
+          test: /\.[jt]sx?$/,
           exclude: [
             /(node_modules)/,
             /\.worker\.js$/,
           ],
-          use: 'babel-loader',
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env', '@babel/preset-flow', '@babel/preset-typescript']
+            }
+          },
         },
         {
           test: /\.worker\.js$/,
