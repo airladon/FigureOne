@@ -14,7 +14,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "allowJs": false,
+    "allowJs": true,
     "checkJs": false,
     "declaration": false,
     "noEmit": true,

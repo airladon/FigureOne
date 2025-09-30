@@ -1,4 +1,3 @@
-// @flow
 import { Point } from './Point';
 
 function deg(angle: number): number {
@@ -131,7 +130,6 @@ function getDeltaAngle(
   const start = normAngle(startAngle);
   const target = normAngle(targetAngle);
   let dir = rotDirection;
-
   if (start === target) {
     return 0;
   }
@@ -172,7 +170,7 @@ function getDeltaAngle3D(
   targetAngle: Point,
   rotDirection: TypeRotationDirection
     | [TypeRotationDirection, TypeRotationDirection, TypeRotationDirection] = 0,
-) {
+): Point {
   const delta = new Point(0, 0, 0);
   let direction: [TypeRotationDirection, TypeRotationDirection, TypeRotationDirection];
   if (typeof rotDirection === 'number' || rotDirection == null) {

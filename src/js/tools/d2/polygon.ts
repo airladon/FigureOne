@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable prefer-destructuring */
 import { Point, getPoint } from '../geometry/Point';
 import type { TypeParsablePoint } from '../geometry/Point';
@@ -23,18 +22,18 @@ import type { TypeParsableTransform } from '../geometry/Transform';
  * the polygon. `2` returns just x/y components and `3` returns x/y/z
  * components.
  */
-export type OBJ_PolygonPoints = {
-  center?: TypeParsablePoint,
-  radius?: number,
-  sides?: number,
-  rotation?: number,
-  direction?: 1 | -1,
-  tris?: 2 | 3,
-  transform?: Type3DMatrix | TypeParsableTransform,
-  close?: boolean,
-  // sidesToDraw?: number,
-  // angleToDraw?: number,
-};
+export interface OBJ_PolygonPoints {
+  center?: TypeParsablePoint;
+  radius?: number;
+  sides?: number;
+  rotation?: number;
+  direction?: 1 | -1;
+  tris?: 2 | 3;
+  transform?: Type3DMatrix | TypeParsableTransform;
+  close?: boolean;
+  // sidesToDraw?: number;
+  // angleToDraw?: number;
+}
 
 /**
  * @property {number} [innerRadius] distance from center to inside polygon
@@ -42,9 +41,9 @@ export type OBJ_PolygonPoints = {
  *
  * @extends OBJ_PolygonPoints
  */
-export type OBJ_PolygonLinePoints = {
-  innerRadius?: number,
-} & OBJ_PolygonPoints;
+export interface OBJ_PolygonLinePoints extends OBJ_PolygonPoints {
+  innerRadius?: number;
+}
 
 function getPolygonCorners(
   radius: number,
@@ -53,8 +52,8 @@ function getPolygonCorners(
   direction: 1 | -1,
   center: Point,
   transformMatrix: Type3DMatrix | null = null,
-  close?: boolean = false,
-) {
+  close: boolean = false,
+): Point[] {
   const points = Array(sides + (close ? 1 : 0));
   const deltaAngle = Math.PI * 2 / sides;
   for (let i = 0; i < sides; i += 1) {
@@ -75,29 +74,42 @@ function getPolygonCorners(
   return points;
 }
 
-function processOptions(options: OBJ_PolygonPoints) {
+function processOptions(options: OBJ_PolygonPoints): [
+  number, // radius
+  number, // sides
+  number, // rotation
+  1 | -1, // direction
+  Point, // center
+  Type3DMatrix | null, // matrix
+  2 | 3 | undefined, // tris
+  boolean, // close
+  number, // innerRadius
+] {
   const o = joinObjects(
     {
       sides: 4,
       radius: 1,
       rotation: 0,
-      direction: 1,
+      direction: 1 as 1 | -1,
       center: [0, 0, 0],
       close: false,
     },
     options,
   );
   const p = getPoint(o.center);
-  let matrix;
+  let matrix: Type3DMatrix | null = null;
   // let matrix = new Transform().matrix();
   if (o.transform != null) {
     matrix = getMatrix(o.transform);
   }
 
-  let { innerRadius } = o;
-  if (o.innerRadius == null) {
+  let innerRadius: number;
+  if ((o as OBJ_PolygonLinePoints).innerRadius == null) {
     innerRadius = o.radius * 0.5;
+  } else {
+    innerRadius = (o as OBJ_PolygonLinePoints).innerRadius!;
   }
+
   return [
     o.radius, o.sides, o.rotation, o.direction, p, matrix, o.tris, o.close,
     innerRadius,
@@ -111,7 +123,7 @@ function processOptions(options: OBJ_PolygonPoints) {
  * - Array<{@link Point}> - corners of a polygon
  * - Array<`number`> - interlaced points of triangles used to a polygon fill
  */
-function polygon(options: OBJ_PolygonPoints): Array<Point> | Array<number> {
+function polygon(options: OBJ_PolygonPoints): Point[] | number[] {
   const [
     radius, sides, rotation, direction, center, matrix, tris, close,
   ] = processOptions(options);
@@ -143,7 +155,7 @@ function polygon(options: OBJ_PolygonPoints): Array<Point> | Array<number> {
  *   outer corner 1, inner corner 2...]
  * - Array<`number`> - interlaced points of triangles used to draw a polygon line
  */
-function polygonLine(options: OBJ_PolygonLinePoints): Array<Point> | Array<number> {
+function polygonLine(options: OBJ_PolygonLinePoints): Point[] | number[] {
   const [
     radius, sides, rotation, direction, center, matrix,
     tris, close, innerRadius,
