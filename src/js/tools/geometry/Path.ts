@@ -1,5 +1,4 @@
-// @flow
-
+/* eslint-disable no-use-before-define */
 import { Point, getPoint } from './Point';
 import type { TypeParsablePoint } from './Point';
 import { Line } from './Line';
@@ -13,7 +12,6 @@ import { clipAngle } from './angle';
 //  * - cubic bezier
 //  */
 // class Path {}
-
 
 function linearPath(
   start: Point,
@@ -79,8 +77,7 @@ export type OBJ_QuadraticBezier = {
  * Translation path options object
  */
 export type OBJ_TranslationPath = {
-  style: 'curve' | 'linear' | 'curved',
-  // curve options
+  style?: 'curve' | 'linear' | 'curved',
   angle?: number,
   magnitude?: number,
   offset?: number,
@@ -88,18 +85,15 @@ export type OBJ_TranslationPath = {
   direction?: 'positive' | 'negative' | 'up' | 'down' | 'left' | 'right',
 }
 
-
-// export type pathOptionsType = OBJ_QuadraticBezier & linearPathOptionsType;
-
 function curvedPath(
   start: Point,
   delta: Point,
   percent: number,
   options: OBJ_TranslationPath,
 ) {
-  const o = options;
+  const o = options as any;
 
-  let { controlPoint } = options;
+  let { controlPoint } = options as any;
 
   if (controlPoint == null) {
     let angleDelta = Math.PI / 2;
@@ -121,14 +115,10 @@ function curvedPath(
     const lineAngle = clipAngle(displacementLine.angle(), '0to360');
     const linePoint = start.add(new Point(delta.x * offsetToUse, delta.y * offsetToUse));
 
-    // norm line angle is between 0 and 180
-    let normLineAngle = lineAngle; // clipAngle(lineAngle, '0to360');
+    let normLineAngle = lineAngle;
     if (normLineAngle >= Math.PI) {
       normLineAngle -= Math.PI;
     }
-    // if (lineAngle < 0) {
-    //   lineAngle += Math.PI;
-    // }
     let controlAngle = lineAngle + angleDelta;
     const { direction } = o;
 
@@ -166,20 +156,17 @@ function curvedPath(
     controlPoint = new Point(
       linePoint.x + dist * Math.cos(controlAngle),
       linePoint.y + dist * Math.sin(controlAngle),
-      // midPoint.x + dist * xDelta,
-      // midPoint.y + dist * yDelta,
     );
   }
 
   const p0 = start;
-  const p1 = getPoint(controlPoint);
+  const p1 = getPoint(controlPoint as any);
   const p2 = start.add(delta);
   const t = percent;
   const bx = quadraticBezier(p0.x, p1.x, p2.x, t);
   const by = quadraticBezier(p0.y, p1.y, p2.y, t);
   return new Point(bx, by);
 }
-
 
 function translationPath(
   pathType: 'linear' | 'curved' | 'curve' = 'linear',
@@ -201,7 +188,7 @@ function toDelta(
   start: Point,
   delta: Point,
   percent: number,
-  translationStyle: 'linear' | 'curved' | 'curve' = 'linear',  // $FlowFixMe
+  translationStyle: 'linear' | 'curved' | 'curve' = 'linear',
   translationOptions: OBJ_TranslationPath = {
     magnitude: 0.5,
     offset: 0.5,
