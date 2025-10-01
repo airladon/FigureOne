@@ -1,6 +1,7 @@
-// @flow
-import type { TypeParsablePoint } from '../g2';
-import { getPoint, Plane, Point } from '../g2';
+/* eslint-disable no-use-before-define */
+import type { TypeParsablePoint } from './Point';
+import { getPoint, Point } from './Point';
+import { Plane } from './Plane';
 import { joinObjects } from '../tools';
 import * as m3 from '../m3';
 import type { Type3DMatrix } from '../m3';
@@ -110,6 +111,9 @@ export type OBJ_Scene = {
 
   // View
   camera?: OBJ_Camera,
+  // Pan/Zoom (runtime convenience)
+  zoom?: number,
+  pan?: Point,
 }
 
 /**
@@ -186,65 +190,65 @@ export type OBJ_SceneDefined = {
   * @param {null | (() => void)} onUpdate callback if scene is updated
   */
 export default class Scene {
-  style: '2D' | 'orthographic' | 'perspective';
-  left: number;
-  right: number;
-  bottom: number;
-  top: number;
+  style!: '2D' | 'orthographic' | 'perspective';
+  left!: number;
+  right!: number;
+  bottom!: number;
+  top!: number;
 
   // 3D
-  near: number;
-  far: number;
-  camera: OBJ_CameraDefined;
+  near!: number;
+  far!: number;
+  camera!: OBJ_CameraDefined;
 
   // Perspective
-  aspectRatio: number;
-  fieldOfView: number;
+  aspectRatio!: number;
+  fieldOfView!: number;
 
   // Light
-  light: OBJ_LightDefined;
+  light!: OBJ_LightDefined;
 
-  projectionMatrix: Type3DMatrix;
-  viewMatrix: Type3DMatrix;
-  cameraMatrix: Type3DMatrix;
-  viewProjectionMatrix: Type3DMatrix;
+  projectionMatrix!: Type3DMatrix;
+  viewMatrix!: Type3DMatrix;
+  cameraMatrix!: Type3DMatrix;
+  viewProjectionMatrix!: Type3DMatrix;
   onUpdate: null | (() => void);
 
-  cameraPosition: Point;
-  cameraVector: Point;
-  inverseViewProjectionMatrix: Type3DMatrix;
-  rightVector: Point;
-  upVector: Point;
-  nearCenter: Point;
-  farCenter: Point;
-  nearPlane: Plane;
-  farPlane: Plane;
-  heightNear: number;
-  heightFar: number;
-  widthNear: number;
-  widthFar: number;
+  cameraPosition!: Point;
+  cameraVector!: Point;
+  inverseViewProjectionMatrix!: Type3DMatrix;
+  rightVector!: Point;
+  upVector!: Point;
+  nearCenter!: Point;
+  farCenter!: Point;
+  nearPlane!: Plane;
+  farPlane!: Plane;
+  heightNear!: number;
+  heightFar!: number;
+  widthNear!: number;
+  widthFar!: number;
 
-  zoom: number;
-  pan: Point;
-  pannedCameraPosition: Point;
-  pannedLookAt: Point;
+  zoom!: number;
+  pan!: Point;
+  pannedCameraPosition!: Point;
+  pannedLookAt!: Point;
 
   // eslint-disable-next-line class-methods-use-this
-  defaultOptions(): {|
+  defaultOptions(): {
   aspectRatio: number,
   bottom: number,
-  camera: {|lookAt: Array<number>, position: Array<number>, up: Array<number>|},
+  camera: {lookAt: number[] | TypeParsablePoint, position: number[] | TypeParsablePoint, up: number[] | TypeParsablePoint},
   far: number,
   fieldOfView: number,
   left: number,
-  light: {|ambient: number, directional: Array<number>, point: Array<number>|},
+  light: {ambient: number, directional: number[] | TypeParsablePoint, point: number[] | TypeParsablePoint},
   near: number,
   right: number,
   style: '2D' | 'orthographic' | 'perspective',
   top: number,
   zoom: number,
   pan: Point,
-  |} {
+  } {
     return {
       style: '2D',
       left: -1,
@@ -276,10 +280,10 @@ export default class Scene {
   }
 
   reset(options: OBJ_Scene) {
-    this.camera = {};
-    this.light = {};
+    this.camera = {} as any;
+    this.light = {} as any;
     const defaultOptions = this.defaultOptions();
-    const o = joinObjects({}, defaultOptions, options);
+    const o = joinObjects<any>({}, defaultOptions, options);
     this.style = o.style;
     this.left = o.left;
     this.right = o.right;
@@ -289,8 +293,8 @@ export default class Scene {
     this.far = o.far;
     this.zoom = o.zoom;
     this.pan = o.pan;
-    this.setCameraProperties(o.camera);
-    this.setLight(o.light);
+    this.setCameraProperties(o.camera || {});
+    this.setLight(o.light || {});
     this.aspectRatio = o.aspectRatio;
     this.fieldOfView = o.fieldOfView;
     this.calcProjectionMatrix();
@@ -311,8 +315,8 @@ export default class Scene {
       near: this.near,
       far: this.far,
       aspectRatio: this.aspectRatio,
-      fieldOfView: this.fieldOfView,  // $FlowFixMe
-      light: this.light,  // $FlowFixMe
+      fieldOfView: this.fieldOfView,
+      light: this.light,
       camera: this.camera,
       zoom: this.zoom,
       pan: this.pan,
@@ -358,9 +362,9 @@ export default class Scene {
       .add(this.upVector.scale(this.pan.y))
       .add(this.rightVector.scale(this.pan.x));
     this.cameraMatrix = m3.lookAt(
-      getPoint(this.pannedCameraPosition).toArray(),
-      getPoint(this.pannedLookAt).toArray(),
-      getPoint(this.camera.up).toArray(),
+      getPoint(this.pannedCameraPosition).toArray() as [number, number, number],
+      getPoint(this.pannedLookAt).toArray() as [number, number, number],
+      getPoint(this.camera.up).toArray() as [number, number, number],
     );
     this.viewMatrix = m3.inverse(this.cameraMatrix);
   }
@@ -411,7 +415,7 @@ export default class Scene {
 
   // eslint-disable-next-line class-methods-use-this
   dupMatrix(matrix: Type3DMatrix): Type3DMatrix { // $FlowFixMe
-    return matrix.slice();
+    return matrix.slice() as Type3DMatrix;
   }
 
   /**
