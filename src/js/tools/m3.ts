@@ -1,7 +1,5 @@
-// @flow
-
 // 3D Vector functions
-function crossProduct(a, b) {
+function crossProduct(a: number[], b: number[]): [number, number, number] {
   return [
     a[1] * b[2] - a[2] * b[1],
     a[2] * b[0] - a[0] * b[2],
@@ -9,19 +7,19 @@ function crossProduct(a, b) {
   ];
 }
 
-function dotProduct(a, b) {
+function dotProduct(a: number[], b: number[]): number {
   return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 }
 
-function subtract(a, b) {
+function subtract(a: number[], b: number[]): [number, number, number] {
   return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 }
 
-function length(v) {
+function length(v: number[]): number {
   return Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 }
 
-function normalize(v) {
+function normalize(v: number[]): [number, number, number] {
   const len = length(v);
   if (len > 0.00001) {
     return [v[0] / len, v[1] / len, v[2] / len];
@@ -73,7 +71,7 @@ function mul(a: Type3DMatrix, b: Type3DMatrix): Type3DMatrix {
   ];
 }
 
-function mul3(a: Type2DMatrix, b: Type2DMatrix) {
+function mul3(a: Type2DMatrix, b: Type2DMatrix): Type2DMatrix {
   return [
     (a[0] * b[0]) + (a[1] * b[3]) + (a[2] * b[6]),
     (a[0] * b[1]) + (a[1] * b[4]) + (a[2] * b[7]),
@@ -183,7 +181,7 @@ function rotationMatrixXYZ(rx: number, ry: number, rz: number): Type3DMatrix {
 function rotationMatrixUnitAxis(
   axis: [number, number, number],
   angle: number,
-) {
+): Type3DMatrix {
   const c = Math.cos(angle);
   const s = Math.sin(angle);
   const [x, y, z] = axis;
@@ -200,7 +198,7 @@ function rotationMatrixUnitAxis(
 function rotationMatrixAxis(
   axis: [number, number, number],
   angle: number,
-) {
+): Type3DMatrix {
   return rotationMatrixUnitAxis(normalize(axis), angle);
 }
 
@@ -209,7 +207,7 @@ function rotationMatrixAxis(
 function rotationMatrixVectorToVector(
   fromVector: [number, number, number],
   toVector: [number, number, number],
-) {
+): Type3DMatrix {
   const axis = crossProduct(fromVector, toVector);
   const d = dotProduct(fromVector, toVector);
   const angle = Math.acos(d / (length(fromVector) * length(toVector)));
@@ -218,7 +216,7 @@ function rotationMatrixVectorToVector(
 
 function rotationMatrixDirection(
   vector: [number, number, number],
-) {
+): Type3DMatrix {
   // If x is the dominant term, then the crossProducts and dotProducts are
   // going to be error prone as the vector will be close to collinear with
   // [1, 0, 0]. Therefore, if the x term accounts for 99.9% of the magnitude,
@@ -236,17 +234,17 @@ function rotationMatrixDirection(
 function directionToAxisAngle(
   vector: [number, number, number],
   axisIfCollinear: [number, number, number] = [0, 0, 1],
-) {
+): [[number, number, number], number] {
   if (Math.abs(vector[0]) / length(vector) > 0.999999) {
     return [axisIfCollinear, vector[0] > 0 ? 0 : Math.PI];
   }
   const axis = crossProduct([1, 0, 0], vector);
   const d = dotProduct([1, 0, 0], vector);
   const angle = Math.acos(d / length(vector));
-  return [axis, angle];
+  return [axis as [number, number, number], angle];
 }
 
-function isEqual(data1: Array<number>, data2: Array<number>, within: number = 0.000001) {
+function isEqual(data1: number[], data2: number[], within: number = 0.000001): boolean {
   for (let i = 0; i < data1.length; i += 1) {
     if (Math.abs(data1[i] - data2[i]) > within) {
       return false;
@@ -259,8 +257,8 @@ function vectorToVectorToAxisAngle(
   fromVector: [number, number, number],
   toVector: [number, number, number],
   axisIfCollinear: [number, number, number] | null = null,
-) {
-  let axis = crossProduct(fromVector, toVector);
+): [[number, number, number], number] {
+  let axis: [number, number, number] = crossProduct(fromVector, toVector);
   // Check if vectors are collinear
   if (isEqual(axis, [0, 0, 0], 0.000001)) {
     const normFrom = normalize(fromVector);
@@ -328,8 +326,8 @@ function transform(m: Type3DMatrix, px: number, py: number, pz: number): [number
   ];
 }
 
-function transformVectorT(m: Type3DMatrix, v: [number, number, number, number]) {
-  const a = [0, 0, 0, 0];
+function transformVectorT(m: Type3DMatrix, v: [number, number, number, number]): [number, number, number, number] {
+  const a: [number, number, number, number] = [0, 0, 0, 0];
   for (let i = 0; i < 4; i += 1) {
     a[i] = 0.0;
     for (let j = 0; j < 4; j += 1) {
@@ -339,8 +337,8 @@ function transformVectorT(m: Type3DMatrix, v: [number, number, number, number]) 
   return a;
 }
 
-function transformVector(m: Type3DMatrix, v: [number, number, number, number]) {
-  const a = [0, 0, 0, 0];
+function transformVector(m: Type3DMatrix, v: [number, number, number, number]): [number, number, number, number] {
+  const a: [number, number, number, number] = [0, 0, 0, 0];
   for (let i = 0; i < 4; i += 1) {
     a[i] = 0.0;
     for (let j = 0; j < 4; j += 1) {
@@ -352,7 +350,7 @@ function transformVector(m: Type3DMatrix, v: [number, number, number, number]) {
 
 function orthographic(
   left: number, right: number, bottom: number, top: number, near: number, far: number,
-) {
+): Type3DMatrix {
   return [
     2 / (right - left), 0, 0, (left + right) / (left - right),
     0, 2 / (top - bottom), 0, (bottom + top) / (bottom - top),
@@ -363,7 +361,7 @@ function orthographic(
 
 function perspective(
   fieldOfView: number, aspectRatio: number, near: number, far: number,
-) {
+): Type3DMatrix {
   const f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfView);
   const rangeInv = 1.0 / (near - far);
   return [
@@ -379,7 +377,7 @@ function lookAt(
   cameraPosition: [number, number, number],
   target: [number, number, number],
   up: [number, number, number],
-) {
+): Type3DMatrix {
   const zAxis = normalize(subtract(cameraPosition, target));
   const xAxis = normalize(crossProduct(up, zAxis));
   const yAxis = normalize(crossProduct(zAxis, xAxis));
@@ -393,7 +391,7 @@ function lookAt(
 }
 
 
-function inverse3(m: Array<number>) {
+function inverse3(m: number[]): Type2DMatrix {
   const det = (m[0] * ((m[4] * m[8]) - (m[7] * m[5]))) - // eslint-disable-line
               (m[1] * ((m[3] * m[8]) - (m[5] * m[6]))) + // eslint-disable-line
               (m[2] * ((m[3] * m[7]) - (m[4] * m[6])));
@@ -416,7 +414,7 @@ function inverse3(m: Array<number>) {
   ];
 }
 
-function toHomogonous(a: Type3Matrix) {
+function toHomogonous(a: Type3Matrix): Type3DMatrix {
   return [
     a[0], a[1], a[2], 0,
     a[3], a[4], a[5], 0,
@@ -428,13 +426,13 @@ function toHomogonous(a: Type3Matrix) {
 function basisToBasisMatrix(
   from: [Type3Vector, Type3Vector, Type3Vector],
   to: [Type3Vector, Type3Vector, Type3Vector],
-) {
-  const a = [
+): Type3DMatrix {
+  const a: Type2DMatrix = [
     from[0][0], from[1][0], from[2][0],
     from[0][1], from[1][1], from[2][1],
     from[0][2], from[1][2], from[2][2],
   ];
-  const b = [
+  const b: Type2DMatrix = [
     to[0][0], to[1][0], to[2][0],
     to[0][1], to[1][1], to[2][1],
     to[0][2], to[1][2], to[2][2],
@@ -446,7 +444,7 @@ function basisMatrix(
   i: Type3Vector,
   j: Type3Vector,
   k: Type3Vector,
-) {
+): Type3DMatrix {
   return toHomogonous([
     i[0], j[0], k[0],
     i[1], j[1], k[1],
@@ -456,8 +454,8 @@ function basisMatrix(
 
 
 // Guass-Jordan Elimination
-function inverseN(A: Array<number>) {
-  let m;
+function inverseN(A: number[]): number[] {
+  let m: number;
   if (A.length === 9) {
     m = 3;
     return inverse3(A);
@@ -566,13 +564,11 @@ function inverseN(A: Array<number>) {
 }
 
 function inverse(A: Type3DMatrix): Type3DMatrix {
-  // $FlowFixMe
-  return inverseN(A);
+  return inverseN(A) as Type3DMatrix;
 }
 
 function dup(A: Type3DMatrix): Type3DMatrix {
-  // $FlowFixMe
-  return A.slice();
+  return A.slice() as Type3DMatrix;
 }
 
 
