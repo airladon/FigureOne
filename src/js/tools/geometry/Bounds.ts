@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable no-use-before-define */
 import { Point, getPoint } from './Point';
 import { Plane } from './Plane';
@@ -66,7 +65,7 @@ export type BoundsValueIntersect = {
  *   direction
  */
 class Bounds {
-  boundary: Object;
+  boundary: any;
   precision: number;
   // bounds: 'inside' | 'outside';
 
@@ -75,7 +74,7 @@ class Bounds {
    * @param {number} precision default precision for calculations
    */
   constructor(
-    boundary: Object,
+    boundary: any = {},
     precision: number = 8,
   ) {
     this.boundary = boundary;
@@ -87,26 +86,26 @@ class Bounds {
    * Duplicate the bounds object
    */
   // eslint-disable-next-line class-methods-use-this
-  _dup() {
+  _dup(): Bounds {
     return new Bounds();
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  _state(options: { precision: number }) {
+  _state(options: { precision: number }): { f1Type: string, state: any[] } {
     return {
       f1Type: 'bounds',
-      state: [
-      ],
+      state: [],
     };
   }
 
   /**
    * Returns `true` if a value or {@link Point} is within the bounds.
    * @param {number | TypeParsablePoint} valueOrPosition
+   * @param {boolean} [projectToPlane] optional flag used by some bounds types
    * @return {boolean}
    */
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  contains(valueOrPosition: number | TypeParsablePoint) {
+  contains(valueOrPosition: number | TypeParsablePoint, projectToPlane?: boolean): boolean {
     return true;
   }
 
@@ -116,18 +115,20 @@ class Bounds {
    * @return {BoundsIntersect}
    */
   // eslint-disable-next-line class-methods-use-this
-  intersect(valueOrPosition: number | TypeParsablePoint, direction: number = 0): BoundsIntersect {
+  intersect(valueOrPosition: number | TypeParsablePoint, direction: number | TypeParsablePoint = 0): BoundsIntersect {
     if (typeof valueOrPosition === 'number') {
+      // const dirNum = typeof direction === 'number' ? direction : 0;
       return {
         intersect: valueOrPosition,
         distance: 0,
-        reflection: direction + Math.PI,
+        reflection: (direction as number) + Math.PI,
       };
     }
+    // const dirPoint = typeof direction === 'number' ? getPoint([0, 0, 0]) : getPoint(direction);
     return {
       intersect: getPoint(valueOrPosition),
       distance: 0,
-      reflection: direction + Math.PI,
+      reflection: (direction as number) + Math.PI,
     };
   }
 
@@ -137,7 +138,7 @@ class Bounds {
    * @return {number | Point}
    */
   // eslint-disable-next-line class-methods-use-this
-  clip(valueOrPosition: number | TypeParsablePoint) {
+  clip(valueOrPosition: number | TypeParsablePoint): number | Point {
     if (typeof valueOrPosition === 'number') {
       return valueOrPosition;
     }
@@ -145,7 +146,7 @@ class Bounds {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  isDefined() {
+  isDefined(): boolean {
     return false;
   }
 
@@ -205,7 +206,7 @@ type TypeF1DefRangeBounds = {
  * of the point separately.
  */
 class RangeBounds extends Bounds {
-  boundary: { min: number | null, max: number | null };
+  override boundary!: { min: number | null, max: number | null };
 
   /**
    * @param {OBJ_RangeBounds} boundary
@@ -216,7 +217,7 @@ class RangeBounds extends Bounds {
       min: null,
       max: null,
     };
-    const o = joinObjects({}, defaultOptions, boundary);
+  const o = joinObjects<{ precision: number, min: number | null, max: number | null }>({}, defaultOptions, boundary as any);
     const b = {
       min: o.min,
       max: o.max,
@@ -224,14 +225,14 @@ class RangeBounds extends Bounds {
     super(b, o.precision);
   }
 
-  isDefined() {
+  override isDefined() {
     if (this.boundary.min == null && this.boundary.max == null) {
       return false;
     }
     return true;
   }
 
-  _dup() {
+  override _dup() {
     return new RangeBounds({
       precision: this.precision,
       min: this.boundary.min,
@@ -239,8 +240,7 @@ class RangeBounds extends Bounds {
     });
   }
 
-  _state(options: { precision: number }) {
-    // const { precision } = options;
+  override _state(options: { precision: number }): { f1Type: string, state: [number, number | null, number | null] } {
     const precision = getPrecision(options);
     return {
       f1Type: 'rangeBounds',
@@ -259,7 +259,8 @@ class RangeBounds extends Bounds {
    * @param {number | TypeParsablePoint} valueOrPosition
    * @return {boolean}
    */
-  contains(position: number | TypeParsablePoint): boolean {
+  // Overloads to provide precise return types
+  override contains(position: number | TypeParsablePoint): boolean {
     if (typeof position === 'number') {
       const p = roundNum(position, this.precision);
       if (
@@ -296,32 +297,23 @@ class RangeBounds extends Bounds {
    * @param {number} value
    * @return {BoundsIntersect}
    */
-  // $FlowFixMe
-  intersect( // $FlowFixMe
+  override intersect(
     value: number,
-    direction: 1 | -1 = 1,
-  ) {
+    direction: number = 1,
+  ): BoundsValueIntersect {
     // const reflection = direction * -1;
     const { min, max } = this.boundary;
     if (typeof value !== 'number') {
       throw new Error(`FigureOne RangeBounds.intersect only accepts 'number' parameter for value. Provide: ${JSON.stringify(value)}`);
     }
-    const v = this.clip(value);
-    // if (!(typeof position === 'number')) {
-    //   return {
-    //     intersect: null,
-    //     distance: 0,
-    //     reflection: direction,
-    //   };
-    // }
+    const v = this.clip(value) as number;
 
-    // if (this.contains(position)) {
     if (direction === 1) {
       if (max == null) {
         return { intersect: null, distance: 0, reflection: direction };
       }
       return {
-        intersect: max, // $FlowFixMe
+        intersect: max,
         distance: Math.abs(v - max),
         reflection: -1,
       };
@@ -330,38 +322,10 @@ class RangeBounds extends Bounds {
       return { intersect: null, distance: 0, reflection: direction };
     }
     return {
-      intersect: min, // $FlowFixMe
+      intersect: min,
       distance: Math.abs(v - min),
       reflection: 1,
     };
-    // }
-    // if (
-    //   min != null
-    //   && position < min
-    //   && direction === 1
-    // ) {
-    //   return {
-    //     intersect: min,
-    //     distance: Math.abs(position - min),
-    //     reflection,
-    //   };
-    // }
-    // if (
-    //   max != null
-    //   && position > max
-    //   && direction === -1
-    // ) {
-    //   return {
-    //     intersect: max,
-    //     distance: Math.abs(position - max),
-    //     reflection,
-    //   };
-    // }
-    // return {
-    //   intersect: null,
-    //   distance: 0,
-    //   reflection: direction,
-    // };
   }
 
   /**
@@ -373,7 +337,10 @@ class RangeBounds extends Bounds {
    * @param {number | TypeParsablePoint} valueOrPosition
    * @return {number | Point}
    */
-  clip<T: number | TypeParsablePoint>(valueOrPosition: T) {
+  // Overloads to provide precise return types
+  override clip(value: number): number;
+  override clip(position: TypeParsablePoint): Point;
+  override clip(valueOrPosition: number | TypeParsablePoint): number | Point {
     if (typeof valueOrPosition === 'number') {
       return clipValue(valueOrPosition, this.boundary.min, this.boundary.max);
     }
@@ -449,8 +416,8 @@ export type TypeF1DefRectBounds = {
  * @property {TypeParsablePoint} [topDirection]
  * @property {number} [left]
  * @property {number} [right]
- * @property {number} [up]
- * @property {number} [down]
+ * @property {number} [top]
+ * @property {number} [bottom]
  * @property {number} [precision] precision with which to calculate boundary
  * `intersect` and `contains` (`8`)
  */
@@ -461,15 +428,16 @@ export type OBJ_RectBounds = {
   topDirection?: TypeParsablePoint,
   left?: number,
   right?: number,
-  up?: number,
-  down?: number,
-  pecision?: number,
+  // up?: number,
+  // down?: number,
+  bottom?: number,
+  top?: number,
+  precision?: number,
 };
 
 /**
  * A RectBounds defines a rectangular bounds for a {@link Point}.
  */
-// $FlowFixMe
 class RectBounds extends Bounds {
   plane: Plane;
   rightDirection: Point;
@@ -478,7 +446,7 @@ class RectBounds extends Bounds {
   right: number;
   bottom: number;
   top: number;
-  boundary: {
+  override boundary!: {
     left: Line;
     right: Line;
     bottom: Line;
@@ -499,7 +467,18 @@ class RectBounds extends Bounds {
       // bounds: 'inside',
       precision: 8,
     };
-    const o = joinObjects({}, defaultOptions, boundary);
+    type RectOptions = {
+      position: TypeParsablePoint,
+      normal: TypeParsablePoint,
+      left: number,
+      right: number,
+      top: number,
+      bottom: number,
+      precision: number,
+      rightDirection?: TypeParsablePoint,
+      topDirection?: TypeParsablePoint,
+    };
+    const o = joinObjects<RectOptions>({}, defaultOptions as any, boundary as any);
     const position = getPoint(o.position);
 
     // Calculate plane, topDirection and rightDirection of the rectangle
@@ -527,13 +506,13 @@ class RectBounds extends Bounds {
     // Calculate the corner points of the rectangle
     let {
       left, right, top, bottom,
-    } = o;
-    let topLeft = null;
-    let bottomLeft = null;
-    let topRight = null;
-    let bottomRight = null;
-    let centerLeft = null;
-    let centerRight = null;
+    } = o as any;
+    let topLeft = null as Point | null;
+    let bottomLeft = null as Point | null;
+    let topRight = null as Point | null;
+    let bottomRight = null as Point | null;
+    let centerLeft = null as Point | null;
+    let centerRight = null as Point | null;
 
     centerLeft = position.add(rightDirection.scale(o.left));
     centerRight = position.add(rightDirection.scale(o.right));
@@ -563,7 +542,7 @@ class RectBounds extends Bounds {
     this.top = o.top;
   }
 
-  isDefined() {
+  override isDefined() {
     if (
       this.boundary.left == null
       && this.boundary.right == null
@@ -575,7 +554,7 @@ class RectBounds extends Bounds {
     return true;
   }
 
-  _dup() {
+  override _dup() {
     return new RectBounds({
       // bounds: this.bounds,
       precision: this.precision,
@@ -595,13 +574,12 @@ class RectBounds extends Bounds {
    * @param {number} precision
    * @return {RectBounds}
    */
-  // $FlowFixMe
   round(precision: number = 8): RectBounds {
     const d = this._dup();
     d.left = round(d.left, precision);
-    d.right = round(d.left, precision);
-    d.bottom = round(d.left, precision);
-    d.top = round(d.left, precision);
+    d.right = round(d.right, precision);
+    d.bottom = round(d.bottom, precision);
+    d.top = round(d.top, precision);
     d.boundary.left = d.boundary.left.round(precision);
     d.boundary.right = d.boundary.right.round(precision);
     d.boundary.top = d.boundary.top.round(precision);
@@ -609,22 +587,23 @@ class RectBounds extends Bounds {
     d.plane = d.plane.round(precision);
     d.rightDirection = d.rightDirection.round(precision);
     d.topDirection = d.topDirection.round(precision);
+    return d;
   }
 
-  _state(options: { precision: number }) {
+  override _state(options: { precision: number }): TypeF1DefRectBounds {
     // const { precision } = options;
     const precision = getPrecision(options);
     return {
-      f1Type: 'rectBounds',
+  f1Type: 'rectBounds',
       state: [
         this.precision,
         roundNum(this.left, precision),
         roundNum(this.right, precision),
         roundNum(this.bottom, precision),
         roundNum(this.top, precision),
-        this.plane.p.toArray(),
-        this.topDirection.toArray(),
-        this.rightDirection.toArray(),
+  this.plane.p.toArray(3) as [number, number, number],
+  this.topDirection.toArray(3) as [number, number, number],
+  this.rightDirection.toArray(3) as [number, number, number],
       ],
     };
   }
@@ -669,8 +648,7 @@ class RectBounds extends Bounds {
    * @param {boolean} projectToPlane
    * @return {boolean}
    */
-  // $FlowFixMe
-  contains(position: TypeParsablePoint, projectToPlane: boolean = true): boolean {
+  override contains(position: TypeParsablePoint, projectToPlane: boolean = true): boolean {
     if (projectToPlane === false && !this.plane.hasPointOn(position)) {
       return false;
     }
@@ -732,8 +710,7 @@ class RectBounds extends Bounds {
    * @param {TypeParsablePoint} position
    * @return {Point}
    */
-  // $FlowFixMe
-  clip(position: TypeParsablePoint) {
+  override clip(position: TypeParsablePoint): Point {
     // First project point onto plane
     const p = this.plane.pointProjection(getPoint(position)).round(this.precision);
 
@@ -770,15 +747,15 @@ class RectBounds extends Bounds {
     posBound: Line,
     negBound: Line,
     posDirection: Point,
-  ) {
+  ): { intersect: Point, distance: number, normal: Point } | null {
     const dMag = direction.length();
     const theta = Math.acos(
       direction.dotProduct(posDirection) / dMag / posDirection.length(),
     );
 
     const projection = dMag * Math.cos(theta);
-    let bound;
-    let boundNormal;
+    let bound: Line | undefined;
+    let boundNormal: Point | undefined;
     if (projection < 0) {
       bound = negBound;
       boundNormal = posDirection;
@@ -804,7 +781,7 @@ class RectBounds extends Bounds {
     return {
       intersect: i.intersect,
       distance: i.intersect.distance(position),
-      normal: boundNormal,
+      normal: boundNormal as Point,
     };
   }
 
@@ -816,11 +793,10 @@ class RectBounds extends Bounds {
    * @param {TypeParsablePoint} direction direction vector
    * @return {BoundsIntersect}
    */
-  // $FlowFixMe
-  intersect(
+  override intersect(
     position: TypeParsablePoint,
     direction: TypeParsablePoint,
-  ) {
+  ): BoundsPointIntersect {
     const p = this.clip(getPoint(position)).round(this.precision);
     const d = this.plane
       .pointProjection(this.plane.p.add(getPoint(direction).normalize()))
@@ -828,7 +804,7 @@ class RectBounds extends Bounds {
 
     const {
       left, right, top, bottom,
-    } = this.boundary;
+    } = this.boundary as any;
 
     // Get the right direction intersect and top direction intersects.
     // If the intersects don't exist, a null will be returned.
@@ -838,9 +814,9 @@ class RectBounds extends Bounds {
     if (rI == null && tI == null) {
       return { intersect: null, distance: 0, reflection: d };
     }
-    let intersect;
-    let distance;
-    let normal;
+    let intersect: Point;
+    let distance: number;
+    let normal: Point;
     // If only the right intersect exists, then it is our intersect
     if (rI != null && tI == null) {
       ({ intersect, distance, normal } = rI);
@@ -848,17 +824,16 @@ class RectBounds extends Bounds {
     } else if (tI != null && rI == null) {
       ({ intersect, distance, normal } = tI);
     // If both intersects exist, then take the one with the smallest distance
-    // $FlowFixMe
-    } else if (rI.distance > tI.distance) { // $FlowFixMe
-      ({ intersect, distance, normal } = tI); // $FlowFixMe
-    } else if (tI.distance > rI.distance) { // $FlowFixMe
+    } else if (rI && tI && rI.distance > tI.distance) {
+      ({ intersect, distance, normal } = tI);
+    } else if (rI && tI && tI.distance > rI.distance) {
       ({ intersect, distance, normal } = rI);
     // If the distances (and thus intersect points) are equal, then reflect
     // the direction fully
     } else {
-      return { // $FlowFixMe
-        intersect: rI.intersect, // $FlowFixMe
-        distance: rI.distance,
+      return {
+        intersect: (rI as any).intersect,
+        distance: (rI as any).distance,
         reflection: d.scale(-1),
       };
     }
@@ -869,7 +844,7 @@ class RectBounds extends Bounds {
     // This perpendicular boundary plane is used to calculate the reflection.
     // From: https://www.3dkingdoms.com/weekly/weekly.php?a=2
     const V = d;
-    const N = normal; // $FlowFixMe
+    const N = normal;
     const R = N.scale(-2 * (N.dotProduct(V))).add(V).normalize();
     return {
       distance,
@@ -926,7 +901,17 @@ export type TypeF1DefLineBounds = {
  * A Line defines a line bounds for a {@link Point}.
  */
 class LineBounds extends Bounds {
-  boundary: Line;
+  override boundary!: Line;
+  
+  override isDefined(): boolean {
+    return true;
+  }
+  override _dup(): LineBounds {
+    return new LineBounds({
+      precision: this.precision,
+      line: this.boundary,
+    });
+  }
 
   /**
    * @param {OBJ_LineBounds} boundary
@@ -937,32 +922,20 @@ class LineBounds extends Bounds {
       precision: 8,
     };
     const options = joinObjects({}, defaultOptions, boundary);
-    if (options.line != null) {
-      boundaryToUse = getLine(options.line);
+    if ((options as any).line != null) {
+      boundaryToUse = getLine((options as any).line);
     } else {
-      boundaryToUse = getLine(options);
+      boundaryToUse = getLine(options as any);
     }
 
-    super(boundaryToUse, options.precision);
+    super(boundaryToUse, (options as any).precision);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  isDefined() {
-    return true;
-  }
-
-  _dup() {
-    return new LineBounds({
-      precision: this.precision,
-      line: this.boundary,
-    });
-  }
-
-  _state(options: { precision: number }) {
+  override _state(options: { precision: number }): TypeF1DefLineBounds {
     // const { precision } = options;
     const precision = getPrecision(options);
     return {
-      f1Type: 'lineBounds',
+      f1Type: 'lineBounds' as const,
       state: [
         this.precision,
         [
@@ -986,8 +959,7 @@ class LineBounds extends Bounds {
    * @param {TypeParsablePoint} position
    * @return {boolean}
    */
-  // $FlowFixMe
-  contains(position: TypeParsablePoint) {
+  override contains(position: TypeParsablePoint): boolean {
     if (typeof position === 'number') {
       throw new Error(`LineBounds.contains only accepts a point: ${position}`);
     }
@@ -1002,8 +974,7 @@ class LineBounds extends Bounds {
    * @param {TypeParsablePoint} position
    * @return {Point}
    */
-  // $FlowFixMe
-  clip(position: number | TypeParsablePoint) {
+  override clip(position: number | TypeParsablePoint): Point {
     if (typeof position === 'number') {
       throw new Error(`LineBounds.clip only accepts a point: ${position}`);
     }
@@ -1026,8 +997,7 @@ class LineBounds extends Bounds {
    * @param {TypeParsablePoint} direction direction vector
    * @return {BoundsIntersect}
    */
-  // $FlowFixMe
-  intersect(position: TypeParsablePoint, direction: TypeParsablePoint) {
+  override intersect(position: TypeParsablePoint, direction: TypeParsablePoint): BoundsPointIntersect {
     if (typeof position === 'number') {
       throw new Error(`LineBounds.clip only accepts a point: ${position}`);
     }
@@ -1106,45 +1076,45 @@ function getBounds(
     return new Bounds();
   }
   if (bounds instanceof Bounds) {
-    return bounds;
+    return bounds as Bounds;
   }
 
-  // $FlowFixMe
-  if (bounds.min !== undefined || bounds.max !== undefined) { // $FlowFixMe
-    return new RangeBounds(bounds);
+  const anyBounds: any = bounds as any;
+  if (anyBounds.min !== undefined || anyBounds.max !== undefined) {
+    return new RangeBounds(anyBounds);
   }
   if (
-    bounds.left !== undefined
-    || bounds.right !== undefined // $FlowFixMe
-    || bounds.top !== undefined // $FlowFixMe
-    || bounds.bottom !== undefined
-    || bounds.position !== undefined
-    || bounds.normal !== undefined
-    || bounds.rightDirection !== undefined
-    || bounds.topDirection !== undefined
-  ) { // $FlowFixMe
-    return new RectBounds(bounds);
+    anyBounds.left !== undefined
+    || anyBounds.right !== undefined
+    || anyBounds.top !== undefined
+    || anyBounds.bottom !== undefined
+    || anyBounds.position !== undefined
+    || anyBounds.normal !== undefined
+    || anyBounds.rightDirection !== undefined
+    || anyBounds.topDirection !== undefined
+  ) {
+    return new RectBounds(anyBounds);
   }
-  if ( // $FlowFixMe
-    bounds.line !== undefined // $FlowFixMe
-    || bounds.p1 !== undefined // $FlowFixMe
-    || bounds.p2 !== undefined // $FlowFixMe
-    || bounds.angle !== undefined // $FlowFixMe
-    || bounds.mag !== undefined // $FlowFixMe
-    || bounds.ends !== undefined
-  ) { // $FlowFixMe
-    return new LineBounds(bounds);
+  if (
+    anyBounds.line !== undefined
+    || anyBounds.p1 !== undefined
+    || anyBounds.p2 !== undefined
+    || anyBounds.angle !== undefined
+    || anyBounds.mag !== undefined
+    || anyBounds.ends !== undefined
+  ) {
+    return new LineBounds(anyBounds);
   }
 
-  if (bounds.f1Type !== undefined && bounds.state != null) {
-    const { f1Type, state } = bounds;
+  if (anyBounds.f1Type !== undefined && anyBounds.state != null) {
+    const { f1Type, state } = anyBounds;
     if (f1Type != null
       && f1Type === 'rangeBounds'
       && state != null
-      && Array.isArray([state])
+      && Array.isArray(state)
       && state.length === 3
-    ) { // $FlowFixMe
-      const [precision, min, max] = state;
+    ) {
+      const [precision, min, max] = state as [number, number | null, number | null];
       return new RangeBounds({
         precision, min, max,
       });
@@ -1153,23 +1123,23 @@ function getBounds(
     if (f1Type != null
       && f1Type === 'rectBounds'
       && state != null
-      && Array.isArray([state])
+      && Array.isArray(state)
       && state.length === 8
     ) {
-      const [ // $FlowFixMe
+      const [
         precision, left, right, bottom, top, position, topDirection, rightDirection,
-      ] = state;
+      ] = state as [number, number, number, number, number, TypeParsablePoint, TypeParsablePoint, TypeParsablePoint];
       return new RectBounds({
-        precision, left, bottom, right, top, position, topDirection, rightDirection,
+        precision, left, right, bottom, top, position, topDirection, rightDirection,
       });
     }
     if (f1Type != null
       && f1Type === 'lineBounds'
       && state != null
-      && Array.isArray([state])
+      && Array.isArray(state)
       && state.length === 4
-    ) { // $FlowFixMe
-      const [precision, p1, p2, ends] = state;
+    ) {
+      const [precision, p1, p2, ends] = state as [number, TypeParsablePoint, TypeParsablePoint, 2 | 1 | 0];
       return new LineBounds({
         precision,
         p1,

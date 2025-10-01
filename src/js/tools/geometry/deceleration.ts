@@ -1,12 +1,9 @@
-// @flow
 import { Point } from './Point';
 import { round } from '../math';
 // import { Transform, transformValueToArray } from './Transform';
 // import { polarToRect } from './coordinates';
 // import { clipAngle } from './angle';
-import {
-  RectBounds, RangeBounds, LineBounds,
-} from './Bounds';
+import { RectBounds, RangeBounds, LineBounds } from './Bounds';
 // import type { TypeTransformBounds, TypeTransformBoundsDefinition } from './Bounds';
 // import type { TypeTransformValue, TransformDefinition } from './Transform';
 
@@ -15,7 +12,7 @@ function getDistance(
   deltaTimeIn: number | null,
   deceleration: number,
   zeroVelocityThreshold: number,
-) {
+): [number, number] {
   // Initial Velocity
   const v0 = Math.abs(velocity);
   // Total change in velocity to go to zero threshold
@@ -31,7 +28,7 @@ function getDistance(
   return [v0 * deltaTime - 0.5 * deceleration * (deltaTime ** 2), deltaTime];
 }
 
-function timeFromVS(velocity: number, distance: number, deceleration: number) {
+function timeFromVS(velocity: number, distance: number, deceleration: number): [number, number] {
   // Calculate the time to the intersect point
   const v0 = Math.abs(velocity);
   const acc = -v0 / Math.abs(v0) * deceleration;
@@ -96,7 +93,6 @@ function decelerateValue(
 
   // Clip the current value to within the bounds, and make the deceleration non
   // zero to prevent divide by zeros
-  // $FlowFixMe
   const value: number = bounds != null ? bounds.clip(valueIn) : valueIn;
   const deceleration = Math.max(decelerationIn, 0.0000001);
   // Direciton of velocity
@@ -138,7 +134,7 @@ function decelerateValue(
   }
 
   // if we got here, the new value is out of bounds
-  const bounceScaler = 1 - bounceLossIn; // $FlowFixMe
+  const bounceScaler = 1 - bounceLossIn;
   const result = bounds.intersect(value, direction);
 
   // if new value is not contained within bounds, but the intersect distance
@@ -158,8 +154,8 @@ function decelerateValue(
   // If there is no bounce (all energy is lost) then return the result
   if (bounceLossIn === 1) {
     return {
-      velocity: new Point(0, 0),  // $FlowFixMe
-      value: intersect,
+      velocity: 0,
+      value: intersect as number,
       duration: t,
     };
   }
@@ -170,25 +166,18 @@ function decelerateValue(
   // new bounce velocity and bounce position.
   // If deltaTimeIn == null, looking for the zero velocity time/value
   if (deltaTimeIn == null) {
-    const newStop = decelerateValue(  // $FlowFixMe
-      intersect, bounceVelocity, deceleration, deltaTimeIn,
+    const newStop = decelerateValue(
+      intersect as number, bounceVelocity, deceleration, deltaTimeIn,
       bounds, bounceLossIn, zeroVelocityThreshold, precision,
     );
-    // if (newStop.duration == null) {
-    //   return {
-    //     duration: null,
-    //     value: newStop.value,
-    //     velocity: new Point(0, 0),
-    //   };
-    // }
-    return {  // $FlowFixMe
-      duration: t + newStop.duration,
+    return {
+      duration: t + (newStop.duration as number),
       value: newStop.value,
       velocity: 0,
     };
   }
-  return decelerateValue(  // $FlowFixMe
-    intersect, bounceVelocity, deceleration, deltaTime - t, bounds,
+  return decelerateValue(
+    intersect as number, bounceVelocity, deceleration, deltaTime - t, bounds,
     bounceLossIn, zeroVelocityThreshold, precision,
   );
 }
@@ -202,7 +191,7 @@ function decelerateVector(
   bounceLossIn: number = 0,
   zeroVelocityThreshold: number = 0,
   precision: number = 8,
-) {
+): { velocity: Point, position: Point, duration: number | null } {
   // If deltaTimeIn === null, then the caller is requesting the time it takes
   // for the velocity to go to zero, and the final value at that time.
   // However, if the deceleration is 0, then the velocity will never go to
@@ -217,12 +206,12 @@ function decelerateVector(
     return {
       velocity: velocityIn,
       position: positionIn,
-      duration: null,
+      duration: null as null | number,
     };
   }
 
   // clip velocity to the dimension of interest
-  let velocity = velocityIn;    // $FlowFixMe
+  let velocity = velocityIn;
   if (bounds instanceof LineBounds) {
     velocity = bounds.boundary
       .pointProjection(bounds.boundary.p1.add(velocity))
@@ -284,7 +273,7 @@ function decelerateVector(
 
   // if we got here, the new position is out of bounds
   const bounceScaler = 1 - bounceLossIn;
-  const result = bounds.intersect(position, direction);
+  const result = (bounds as RectBounds | LineBounds).intersect(position, direction);
 
   // if newPosition is not contained within bounds, but the intersect distance
   // is larger than the distance travelled in deltaTime, then there is likely a
@@ -337,8 +326,8 @@ function decelerateVector(
     //     velocity: new Point(0, 0),
     //   };
     // }
-    return {  // $FlowFixMe
-      duration: t + newStop.duration,
+    return {
+      duration: t + (newStop.duration as number),
       position: newStop.position,
       velocity: new Point(0, 0),
     };
