@@ -414,7 +414,7 @@ export default class Scene {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  dupMatrix(matrix: Type3DMatrix): Type3DMatrix { // $FlowFixMe
+  dupMatrix(matrix: Type3DMatrix): Type3DMatrix {
     return matrix.slice() as Type3DMatrix;
   }
 
