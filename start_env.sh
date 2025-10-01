@@ -10,10 +10,10 @@ docker run -it --rm \
   -v $PROJECT_PATH/src:/opt/app/src \
   -v $PROJECT_PATH/static:/opt/app/static \
   -v $PROJECT_PATH/tools:/opt/app/tools \
-  -v $PROJECT_PATH/containers/figureone/webpack.config.js:/opt/app/webpack.config.js \
+  -v $PROJECT_PATH/webpack.config.js:/opt/app/webpack.config.js \
   -v $PROJECT_PATH/build.sh:/opt/app/build.sh \
-  -v $PROJECT_PATH/containers/generate_docs.sh:/opt/app/generate_docs.sh \
-  -v $PROJECT_PATH/containers/browser.sh:/opt/app/browser.sh \
+  -v $PROJECT_PATH/generate_docs.sh:/opt/app/generate_docs.sh \
+  -v $PROJECT_PATH/browser.sh:/opt/app/browser.sh \
   -v $PROJECT_PATH/.eslintrc.json:/opt/app/.eslintrc.json \
   -v $PROJECT_PATH/.dockerignore:/opt/app/.dockerignore \
   -v $PROJECT_PATH/.eslintignore:/opt/app/.eslintignore \

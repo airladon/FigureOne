@@ -85,7 +85,7 @@ function processOptions(options: OBJ_PolygonPoints): [
   boolean, // close
   number, // innerRadius
 ] {
-  const o = joinObjects(
+  const o = joinObjects<Required<OBJ_PolygonPoints>>(
     {
       sides: 4,
       radius: 1,

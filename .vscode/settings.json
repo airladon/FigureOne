@@ -1,0 +1,6 @@
+{
+  "debug.javascript.autoAttachFilter": "disabled",
+  "terminal.integrated.env.linux": {
+    "NODE_OPTIONS": ""
+  }
+}
