@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable no-use-before-define */
 import {
   Point, getPoint,
@@ -106,7 +105,7 @@ function parseLine(lIn: TypeParsableLine): Line {
     throw new Error(`FigureOne could not parse line with no input: '${lIn}'`);
   }
 
-  let l = lIn;
+  let l: any = lIn;
   if (typeof l === 'string') {
     try {
       l = JSON.parse(l);
@@ -116,7 +115,6 @@ function parseLine(lIn: TypeParsableLine): Line {
   }
 
   if (Array.isArray(l)) {
-    // point, length, direction, ends
     if (l.length === 3) {
       return new Line(l[0], l[1], l[2]);
     }
@@ -131,14 +129,14 @@ function parseLine(lIn: TypeParsableLine): Line {
       && l.state != null
       && Array.isArray([l.state])
       && l.state.length === 3
-    ) { // $FlowFixMe
-      const [p1, p2, ends] = l.state;
+    ) {
+      const [p1, p2, ends] = l.state as any;
       return new Line(getPoint(p1), getPoint(p2), ends);
     }
     throw new Error(`FigureOne could not parse line from state: ${JSON.stringify(lIn)}`);
   }
 
-  const { // $FlowFixMe
+  const {
     p1, p2, length, direction, ends,
   } = l;
   if (p1 != null) {
@@ -154,12 +152,12 @@ function parseLine(lIn: TypeParsableLine): Line {
       });
     }
     if (l.phi != null && l.theta != null && l.length != null) {
-      return new Line({ // $FlowFixMe
+      return new Line({
         p1, phi: l.phi, theta: l.theta, ends, length,
       });
     }
     if (l.angle != null && l.length != null) {
-      return new Line({ // $FlowFixMe
+      return new Line({
         p1, angle: l.angle, ends, length,
       });
     }
@@ -215,8 +213,8 @@ class Line {
     ends: 2 | 1 | 0 = 2,
   ) {
     if (p1OrOptions instanceof Point || Array.isArray(p1OrOptions) || typeof p1OrOptions === 'string') {
-      this.p1 = getPoint(p1OrOptions);
-      this.p2 = getPoint(p2);
+      this.p1 = getPoint(p1OrOptions as any);
+      this.p2 = getPoint(p2 as any);
       this.ends = ends;
     } else {
       const defaultOptions = {
@@ -225,8 +223,8 @@ class Line {
         theta: 0,
         phi: 0,
         ends: 2,
-      };
-      const o = joinObjects({}, defaultOptions, p1OrOptions);
+      } as any;
+  const o = joinObjects<any>({}, defaultOptions, p1OrOptions as any);
       this.p1 = getPoint(o.p1);
       this.ends = o.ends;
       if (o.p2 != null) {
@@ -243,11 +241,9 @@ class Line {
         this.p2 = this.p1.add(new Point(sphericalToCartesian(o.length, o.theta, o.phi)));
       }
     }
-    // this.setupLine();
   }
 
   _state(options: { precision: number }): TypeF1DefLine {
-    // const { precision } = options;
     const precision = getPrecision(options);
     return {
       f1Type: 'l',
@@ -292,7 +288,7 @@ class Line {
     this.p1 = getPoint(p1);
   }
 
-  /**
+    /**
    * Change p2 of the line
    */
   setP2(p2: TypeParsablePoint) {
@@ -355,7 +351,7 @@ class Line {
    * Return a duplicate line with values rounded to `precision`
    * @return {Line}
    */
-  round(precision?: number = 8): Line {
+  round(precision: number = 8): Line {
     return new Line(this.p1.round(precision), this.p2.round(precision), this.ends);
   }
 
@@ -402,13 +398,12 @@ class Line {
    * `true` if `point` is along the line extended to infinity on both ends
    * @return {boolean}
    */
-  hasPointAlong(point: TypeParsablePoint, precision?: number = 8): boolean {
+  hasPointAlong(point: TypeParsablePoint, precision: number = 8): boolean {
     if (this.p1.isEqualTo(point, precision)) {
       return true;
     }
     const n = this.unitVector();
     const m = getPoint(point).sub(this.p1).normalize();
-    // const d = round(dotProduct3(m.toArray(), n.toArray()), precision);
     const d = roundNum(m.dotProduct(n), precision);
     if (d === 1 || d === -1) {
       return true;
@@ -422,7 +417,7 @@ class Line {
    * defined ends.
    * @return {boolean}
    */
-  hasPointOn(point: TypeParsablePoint, precision?: number = 8): boolean {
+  hasPointOn(point: TypeParsablePoint, precision: number = 8): boolean {
     const p = getPoint(point);
     if (this.ends === 0) {
       return this.hasPointAlong(p, precision);
@@ -452,7 +447,6 @@ class Line {
    * @return {number}
    */
   distanceToPoint(point: TypeParsablePoint): number {
-    // Equation from https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
     const n = this.unitVector();
     const p = getPoint(point);
     const a = this.p1;
@@ -510,7 +504,6 @@ class Line {
       return true;
     }
 
-    // otherwise ends === 0
     if (!l1.hasPointOn(l2.p1, precision)) {
       return false;
     }
@@ -548,10 +541,6 @@ class Line {
     return this.hasPointAlong(l.p1, precision);
   }
 
-  /**
-   * `true` if this line is contained within `line2`
-   * @return {boolean}
-   */
   isWithinLine(line: TypeParsableLine, precision: number = 8): boolean {
     const l1 = this.round(precision);
     const l2 = getLine(line).round(precision);
@@ -594,18 +583,18 @@ class Line {
     dist: number | null = null,
     perpendicular: boolean = true,
   ): Line {
-    if (typeof direction === 'string') {  // $FlowFixMe
-      return this.offset2D(direction, dist);
+    if (typeof direction === 'string') {
+      return this.offset2D(direction as 'left' | 'right' | 'top' | 'bottom' | 'positive' | 'negative', dist as any);
     }
-    let distToUse;
-    const dir = getPoint(direction);
-    if (dist == null) {  // $FlowFixMe
+    let distToUse: number;
+    const dir = getPoint(direction as any);
+    if (dist == null) {
       distToUse = dir.distance();
     } else {
-      distToUse = dist;
+      distToUse = dist as number;
     }
 
-    const d = dir.normalize().scale(distToUse);
+    const d = dir.normalize().scale(distToUse as number);
 
     if (perpendicular === false) {
       const p1 = this.p1.add(d);
@@ -614,7 +603,7 @@ class Line {
     }
     const u = this.unitVector();
     const normal = d.crossProduct(u);
-    const perp = u.crossProduct(normal).normalize().scale(distToUse);
+    const perp = u.crossProduct(normal).normalize().scale(distToUse as number);
     const p1 = this.p1.add(perp);
     const p2 = this.p2.add(perp);
     return new Line(p1, p2, this.ends);
@@ -728,8 +717,8 @@ class Line {
     line: TypeParsableLine,
     precision: number = 8,
   ): OBJ_LineIntersect {
-    const l2 = getLine(line); // line2.round(precision);
-    const l1 = this;  // this.round(precision);
+    const l2 = getLine(line);
+    const l1 = this;
 
     const collinear = l1.isAlongLine(l2, precision);
 
