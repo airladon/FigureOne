@@ -1,18 +1,9 @@
-// @flow
 /* eslint-disable no-use-before-define */
-import {
-  roundNum, clipValue, round,
-} from '../math';
-import {
-  getPrecision, dotProduct, quadraticBezier, cartesianToSpherical,
-} from './common';
-import type {
-  Type2Components, Type3Components,
-} from './types';
-// import * as m2 from '../m2';
+import { roundNum, clipValue, round } from '../math';
+import { getPrecision, dotProduct, quadraticBezier, cartesianToSpherical } from './common';
+import type { Type2Components, Type3Components } from './types';
 import * as m3 from '../m3';
 import type { Type3DMatrix } from '../m3';
-// import type { Type2DMatrix } from '../m2';
 
 // Point definition in a state capture
 type TypeF1DefPoint = {
@@ -28,7 +19,7 @@ type TypeF1DefPoint = {
  * - As an x, y string: '[number, number]'
  * - As an x, y, z string: '[number, number, number]'
  * - As a recorder state definition: { f1Type: 'p', state: [number, number, number] }
- }
+ * }
  * - A string representation of all options except the first
  *
  * If points are defined with only a `x` and `y` component, then `z` will be
@@ -42,11 +33,12 @@ type TypeF1DefPoint = {
  * p4 = { f1Type: 'p', state: [2, 3] };
  * p5 = [2, 3, 0];
  */
-export type TypeParsablePoint = Type2Components
-                                | Type3Components
-                                | Point
-                                | string
-                                | TypeF1DefPoint;
+export type TypeParsablePoint =
+  | Type2Components
+  | Type3Components
+  | Point
+  | string
+  | TypeF1DefPoint;
 
 
 function parsePoint(pIn: TypeParsablePoint): Point {
@@ -57,7 +49,7 @@ function parsePoint(pIn: TypeParsablePoint): Point {
     throw new Error(`FigureOne could not parse point with no input: '${pIn}'`);
   }
 
-  let p = pIn;
+  let p: any = pIn as any;
   if (typeof p === 'string') {
     try {
       p = JSON.parse(p);
@@ -75,29 +67,30 @@ function parsePoint(pIn: TypeParsablePoint): Point {
         return new Point(p[0], p[1], 0);
       }
       throw new Error(`FigureOne could not parse point from array: '${JSON.stringify(pIn)}'`);
-    } catch { // $FlowFixMe
+    } catch {
       throw new Error(`FigureOne could not parse point from array: '${JSON.stringify(pIn)}'`);
     }
   }
 
-  if (p.f1Type != null) {
+  const maybeState: any = p;
+  if (maybeState.f1Type != null) {
     if (
-      p.f1Type === 'p'
-      && p.state != null
-      && Array.isArray([p.state])
+      maybeState.f1Type === 'p'
+      && maybeState.state != null
+      && Array.isArray([maybeState.state])
     ) {
-      if (p.state.length === 3) {
-        const [x, y, z] = p.state;
+      if (maybeState.state.length === 3) {
+        const [x, y, z] = maybeState.state as [number, number, number];
         return new Point(x, y, z);
       }
-      if (p.state.length === 2) {
-        const [x, y] = p.state;
+      if (maybeState.state.length === 2) {
+        const [x, y] = maybeState.state as [number, number];
         return new Point(x, y);
       }
-    } // $FlowFixMe
-    throw new Error(`FigureOne could not parse point from state: ${pIn}`);
-  } // $FlowFixMe
-  throw new Error(`FigureOne could not parse point: ${pIn}`);
+    }
+    throw new Error(`FigureOne could not parse point from state: ${pIn as any}`);
+  }
+  throw new Error(`FigureOne could not parse point: ${pIn as any}`);
 }
 
 /**
@@ -105,7 +98,7 @@ function parsePoint(pIn: TypeParsablePoint): Point {
  */
 function isParsablePoint(pIn: any): boolean {
   try {
-    parsePoint(pIn);
+    parsePoint(pIn as any);
   } catch {
     return false;
   }
@@ -124,7 +117,6 @@ function getPoint(p: TypeParsablePoint): Point {
   return parsedPoint;
 }
 
-
 /**
  * Parse an array of parsable point definitions ({@link TypeParsablePoint})
  * returning an array of points.
@@ -134,11 +126,11 @@ function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<
   if (Array.isArray(points)) {
     if (
       (points.length === 2 || points.length === 3)
-      && typeof points[0] === 'number'
-    ) { // $FlowFixMe
-      return [getPoint(points)];
-    } // $FlowFixMe
-    return points.map(p => getPoint(p));
+      && typeof (points as any)[0] === 'number'
+    ) {
+      return [getPoint(points as any)];
+    }
+    return (points as Array<TypeParsablePoint>).map(p => getPoint(p));
   }
   return [getPoint(points)];
 }
@@ -151,7 +143,7 @@ function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<
  * @return {Point} x and y scale
  */
 function getScale(s: TypeParsablePoint | number) {
-  let parsedPoint;
+  let parsedPoint: Point;
   if (typeof s === 'number') {
     parsedPoint = new Point(s, s, s);
   } else if (Array.isArray(s) && s.length === 2) {
@@ -184,35 +176,31 @@ function getScale(s: TypeParsablePoint | number) {
  * const q = p.add(3, 1);
  */
 class Point {
-  x: number;
-  y: number;
-  z: number;
+  x!: number;
+  y!: number;
+  z!: number;
   _type: 'point';
 
-  constructor(
-    xOrArray: Type3Components | Type2Components | number,
-    y: number = 0,
-    z: number = 0,
-  ) {
+  constructor(xOrArray: Type3Components | Type2Components | number, y: number = 0, z: number = 0) {
     this._type = 'point';
     if (Array.isArray(xOrArray)) {
       try {
         const [_x, _y] = xOrArray;
         let _z = 0;
         if (xOrArray.length === 3) {
-          [, , _z] = xOrArray;
+          [, , _z] = xOrArray as any;
         }
-        this.x = _x;
-        this.y = _y;
-        this.z = _z;
+        this.x = _x as number;
+        this.y = _y as number;
+        this.z = _z as number;
       } catch {
-        if (xOrArray.length !== 3) {
+        if ((xOrArray as any).length !== 3) {
           throw new Error(`FigureOne Point creation failed - array definition must have length of 3: ${JSON.stringify(xOrArray)}`);
         }
       }
       return;
     }
-    this.x = xOrArray;
+    this.x = xOrArray as number;
     this.y = y;
     this.z = z;
   }
@@ -223,9 +211,9 @@ class Point {
    */
   toArray(dimension: 2 | 3 = 3) {
     if (dimension === 2) {
-      return [this.x, this.y];
+      return [this.x, this.y] as [number, number];
     }
-    return [this.x, this.y, this.z];
+    return [this.x, this.y, this.z] as [number, number, number];
   }
 
   /**
@@ -246,20 +234,18 @@ class Point {
    */
   toSpherical() {
     const [mag, theta, phi] = cartesianToSpherical(this.x, this.y, this.z);
-    return {
-      mag, theta, phi,
-    };
+    return { mag, theta, phi };
   }
 
   _state(options: { precision: number } = { precision: 8 }) {
     const precision = getPrecision(options);
     return {
-      f1Type: 'p',
+      f1Type: 'p' as const,
       state: [
         roundNum(this.x, precision),
         roundNum(this.y, precision),
         roundNum(this.z, precision),
-      ],
+      ] as [number, number, number],
     };
   }
 
@@ -268,7 +254,8 @@ class Point {
    * @return {Point}
    */
   _dup(): Point {
-    return new this.constructor(this.x, this.y, this.z);
+    const Ctor = this.constructor as typeof Point;
+    return new Ctor(this.x, this.y, this.z);
   }
 
   /**
@@ -280,7 +267,8 @@ class Point {
    * // s = Point{x: 3, y: 3, z: 3}
    */
   scale(scalar: number): Point {
-    return new this.constructor(this.x * scalar, this.y * scalar, this.z * scalar);
+    const Ctor = this.constructor as typeof Point;
+    return new Ctor(this.x * scalar, this.y * scalar, this.z * scalar);
   }
 
   /**
@@ -294,7 +282,8 @@ class Point {
    * // q = Point{x: -1, y: -2, z: -3}
    */
   neg(): Point {
-    return new this.constructor(-this.x, -this.y, -this.z);
+    const Ctor = this.constructor as typeof Point;
+    return new Ctor(-this.x, -this.y, -this.z);
   }
 
   /**
@@ -310,7 +299,8 @@ class Point {
    */
   mul(p: TypeParsablePoint) {
     const q = getPoint(p);
-    return new this.constructor(this.x * q.x, this.y * q.y, this.z * q.z);
+    const Ctor = this.constructor as typeof Point;
+    return new Ctor(this.x * q.x, this.y * q.y, this.z * q.z);
   }
 
   /**
@@ -328,10 +318,11 @@ class Point {
    */
   cmul(complexPoint: TypeParsablePoint) {
     const b = getPoint(complexPoint);
-    return new this.constructor(
+    const Ctor = this.constructor as typeof Point;
+    return new Ctor(
       this.x * b.x - this.y * b.y,
       this.x * b.y + this.y * b.x,
-    );
+  );
   }
 
   /**
@@ -351,7 +342,8 @@ class Point {
   cdiv(complexPoint: TypeParsablePoint) {
     const b = getPoint(complexPoint);
     const den = b.x * b.x + b.y * b.y;
-    return new this.constructor(
+    const Ctor = this.constructor as typeof Point;
+    return new Ctor(
       (this.x * b.x + this.y * b.y) / den,
       (-this.x * b.y + this.y * b.x) / den,
     );
@@ -371,10 +363,11 @@ class Point {
    * // d = Point{x: 2, y: 2, z: 2}
    */
   sub(pointOrX: Point | number, y: number = 0, z: number = 0): Point {
+    const Ctor = this.constructor as typeof Point;
     if (typeof pointOrX === 'number') {
-      return new this.constructor(this.x - pointOrX, this.y - y, this.z - z);
+      return new Ctor(this.x - pointOrX, this.y - y, this.z - z);
     }
-    return new this.constructor(this.x - pointOrX.x, this.y - pointOrX.y, this.z - pointOrX.z);
+    return new Ctor(this.x - pointOrX.x, this.y - pointOrX.y, this.z - pointOrX.z);
   }
 
   /**
@@ -391,10 +384,11 @@ class Point {
    * // d = Point{x: 4, y: 4, z: 4}
    */
   add(pointOrX: Point | number, y: number = 0, z: number = 0): Point {
+    const Ctor = this.constructor as typeof Point;
     if (typeof pointOrX === 'number') {
-      return new this.constructor(this.x + pointOrX, this.y + y, this.z + z);
+      return new Ctor(this.x + pointOrX, this.y + y, this.z + z);
     }
-    return new this.constructor(this.x + pointOrX.x, this.y + pointOrX.y, this.z + pointOrX.z);
+    return new Ctor(this.x + pointOrX.x, this.y + pointOrX.y, this.z + pointOrX.z);
   }
 
   /**
@@ -510,7 +504,8 @@ class Point {
    * // q = Point{x: 1.23, y: 1.23, z: 1.23}
    */
   round(precision: number = 8): Point {
-    return new this.constructor(
+    const Ctor = this.constructor as typeof Point;
+    return new Ctor(
       roundNum(this.x, precision),
       roundNum(this.y, precision),
       roundNum(this.z, precision),
@@ -539,12 +534,12 @@ class Point {
    * // q = Point{x: -1, y: -1.5}
    */
   clip(min: Point | number | null, max: Point | number | null): Point {
-    let minX;
-    let minY;
-    let minZ;
-    let maxX;
-    let maxY;
-    let maxZ;
+    let minX: number | null | undefined;
+    let minY: number | null | undefined;
+    let minZ: number | null | undefined;
+    let maxX: number | null | undefined;
+    let maxY: number | null | undefined;
+    let maxZ: number | null | undefined;
     if (typeof min === 'number' || min == null) {
       minX = min;
       minY = min;
@@ -563,10 +558,11 @@ class Point {
       maxY = max.y;
       maxZ = max.z;
     }
-    const x = clipValue(this.x, minX, maxX);
-    const y = clipValue(this.y, minY, maxY);
-    const z = clipValue(this.z, minZ, maxZ);
-    return new this.constructor(x, y, z);
+    const x = clipValue(this.x, minX ?? null, maxX ?? null);
+    const y = clipValue(this.y, minY ?? null, maxY ?? null);
+    const z = clipValue(this.z, minZ ?? null, maxZ ?? null);
+    const Ctor = this.constructor as typeof Point;
+    return new Ctor(x, y, z);
   }
 
   /**
@@ -580,22 +576,19 @@ class Point {
    * // m = [0, -1, 0, -2, 1, 0, 0, 2, 0, 0, 0, 1]
    * q = p.transformBy(m)
    * // q = Point{x: -3, y: 3, 0}
-  */
+   */
   transformBy(matrix: Type3DMatrix): Point {
-    // if (matrix.length === 9) {
-    //   const transformedPoint = m2.transform(matrix, this.x, this.y);
-    //   return new Point(transformedPoint[0], transformedPoint[1]);
-    // }
-    // const transformedPoint = m3.transform(matrix, this.x, this.y, this.z);
     const transformedPoint = m3.transform(matrix, this.x, this.y, this.z);
-    return new this.constructor(transformedPoint[0], transformedPoint[1], transformedPoint[2]);
+    const Ctor = this.constructor as typeof Point;
+    return new Ctor(transformedPoint[0], transformedPoint[1], transformedPoint[2]);
   }
 
   quadraticBezier(p1: Point, p2: Point, t: number) {
     const bx = quadraticBezier(this.x, p1.x, p2.x, t);
     const by = quadraticBezier(this.y, p1.y, p2.y, t);
     const bz = quadraticBezier(this.z, p1.z, p2.z, t);
-    return new this.constructor(bx, by, bz);
+    const Ctor = this.constructor as typeof Point;
+    return new Ctor(bx, by, bz);
   }
 
   /**
@@ -616,14 +609,15 @@ class Point {
    */
   rotate(
     angle: number,
-    center?: TypeParsablePoint = new Point(0, 0, 0),
-    axis?: TypeParsablePoint = new Point(0, 0, 1),
+    center: TypeParsablePoint = new Point(0, 0, 0),
+    axis: TypeParsablePoint = new Point(0, 0, 1),
   ): Point {
     const a = getPoint(axis);
     const c = getPoint(center);
     const centered = this.sub(c);
-    const rotated = centered.transformBy(m3.rotationMatrixAxis(a.toArray(), angle));
-
+    const rotated = centered.transformBy(
+      m3.rotationMatrixAxis(a.toArray(3) as [number, number, number], angle),
+    );
     return rotated.add(c);
   }
 
@@ -638,7 +632,6 @@ class Point {
   }
 
   /* eslint-enable comma-dangle */
-
   /**
    * Compare two points for equality to some precision or delta
    * @param {TypeParsablePoint} p point to compare
@@ -660,13 +653,11 @@ class Point {
     precision: number = 8,
     delta: boolean = false,
   ) {
-    let pr = this;
+    let pr: Point = this;
     let qr = getPoint(p);
-
     if (delta) {
       return this.isWithinDelta(qr, precision);
     }
-
     if (typeof precision === 'number') {
       pr = this.round(precision);
       qr = qr.round(precision);
