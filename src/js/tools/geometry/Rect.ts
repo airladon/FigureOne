@@ -1,4 +1,3 @@
-// @flow
 import { roundNum } from '../math';
 import { getPrecision } from './common';
 import { Point, getPoint } from './Point';
@@ -127,28 +126,28 @@ class Rect {
    * @param {TypeParsablePoint} point
    * @return {Point | null} intersect
    */
-  intersectsWith(point: TypeParsablePoint): ?Point {
+  intersectsWith(point: TypeParsablePoint): Point | null {
     const p = getPoint(point);
     const center = this.center();
-    const centerToP = new Line(center, p); // $FlowFixMe
+    const centerToP = new Line(center, p);
     const centerOut = new Line(
       { p1: center, length: this.width + this.height, angle: centerToP.angle() },
     );
     const left = new Line([this.left, this.bottom], [this.left, this.top]);
     let i = centerOut.intersectsWith(left);
-    if (i.onLines) { return i.intersect; }
+    if (i.onLines) { return i.intersect ?? null; }
 
     const top = new Line([this.left, this.top], [this.right, this.top]);
     i = centerOut.intersectsWith(top);
-    if (i.onLines) { return i.intersect; }
+    if (i.onLines) { return i.intersect ?? null; }
 
     const right = new Line([this.right, this.top], [this.right, this.bottom]);
     i = centerOut.intersectsWith(right);
-    if (i.onLines) { return i.intersect; }
+    if (i.onLines) { return i.intersect ?? null; }
 
     const bottom = new Line([this.left, this.bottom], [this.right, this.bottom]);
     i = centerOut.intersectsWith(bottom);
-    if (i.onLines) { return i.intersect; }
+    if (i.onLines) { return i.intersect ?? null; }
     return null;
   }
 
@@ -158,13 +157,13 @@ class Rect {
    * @param {TypeParsableLine} line
    * @return {Array<Point>}
    */
-  intersectsWithLine(line: TypeParsableLine): Array<any | void | Point> {
+  intersectsWithLine(line: TypeParsableLine): Array<Point | undefined> {
     const l = getLine(line);
     const left = new Line([this.left, this.bottom], [this.left, this.top]);
     const top = new Line([this.left, this.top], [this.right, this.top]);
     const right = new Line([this.right, this.top], [this.right, this.bottom]);
     const bottom = new Line([this.left, this.bottom], [this.right, this.bottom]);
-    const intersects = [];
+    const intersects: Array<Point | undefined> = [];
     const leftIntersect = l.intersectsWith(left);
     if (leftIntersect.onLines) { intersects.push(leftIntersect.intersect); }
     const topIntersect = l.intersectsWith(top);
@@ -180,7 +179,7 @@ class Rect {
    * The center point of the rectangle
    * @return {Point}
    */
-  center() {
+  center(): Point {
     return new Point(this.left + this.width / 2, this.bottom + this.height / 2);
   }
 }
@@ -222,12 +221,12 @@ export type TypeParsableRect = [number, number, number, number]
                                | string;
 
 
-function parseRect<T>(rIn: TypeParsableRect, onFail: T): Rect | T | null {
+function parseRect<T>(rIn: TypeParsableRect, onFail?: T): Rect | T | null {
   if (rIn instanceof Rect) {
     return rIn;
   }
 
-  let onFailToUse = onFail;
+  let onFailToUse: T | null = (onFail as any);
   if (onFailToUse == null) {
     onFailToUse = null;
   }
@@ -236,7 +235,7 @@ function parseRect<T>(rIn: TypeParsableRect, onFail: T): Rect | T | null {
     return onFailToUse;
   }
 
-  let r = rIn;
+  let r: any = rIn as any;
   if (typeof r === 'string') {
     try {
       r = JSON.parse(r);
@@ -248,7 +247,8 @@ function parseRect<T>(rIn: TypeParsableRect, onFail: T): Rect | T | null {
   if (Array.isArray(r) && r.length === 4) {
     return new Rect(r[0], r[1], r[2], r[3]);
   }
-  const { f1Type, state } = r;
+  const anyR: any = r;
+  const { f1Type, state } = anyR;
 
   if (f1Type != null
       && f1Type === 'rect'
@@ -256,7 +256,7 @@ function parseRect<T>(rIn: TypeParsableRect, onFail: T): Rect | T | null {
       && Array.isArray([state])
       && state.length === 4
   ) {
-    const [l, b, w, h] = state;
+    const [l, b, w, h] = state as [number, number, number, number];
     return new Rect(l, b, w, h);
   }
 
@@ -273,7 +273,7 @@ function getRect(r: TypeParsableRect): Rect {
   if (parsedRect == null) {
     parsedRect = new Rect(0, 0, 1, 1);
   }
-  return parsedRect;
+  return parsedRect as Rect;
 }
 
 export {

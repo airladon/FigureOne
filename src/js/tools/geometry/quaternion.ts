@@ -1,4 +1,3 @@
-// @flow
 import type { TypeParsablePoint, Point } from './Point';
 import { getPoint } from './Point';
 
@@ -62,7 +61,7 @@ function rotatePoint(
   axis: TypeParsablePoint = [1, 0, 0],
 ): Point {
   if (typeof angleOrRotations === 'number') {
-    const q1 = quaternionFromAngleAxis(angleOrRotations, ...getPoint(axis).toArray());
+  const q1 = quaternionFromAngleAxis(angleOrRotations, ...getPoint(axis).toArray() as [number, number, number]);
     return transformPoint(p, q1);
   }
   if (angleOrRotations.length === 0) {
@@ -70,11 +69,11 @@ function rotatePoint(
   }
   let q = quaternionFromAngleAxis(
     angleOrRotations[angleOrRotations.length - 1][0],
-    ...getPoint(angleOrRotations[angleOrRotations.length - 1][1]).toArray(),
+  ...getPoint(angleOrRotations[angleOrRotations.length - 1][1]).toArray() as [number, number, number],
   );
   for (let i = angleOrRotations.length - 2; i >= 0; i -= 1) {
     q = mul(q, quaternionFromAngleAxis(
-      angleOrRotations[i][0], ...getPoint(angleOrRotations[i][1]).toArray(),
+  angleOrRotations[i][0], ...getPoint(angleOrRotations[i][1]).toArray() as [number, number, number],
     ));
   }
   return transformPoint(p, q);
