@@ -1,5 +1,3 @@
-// @flow
-
 // 2D Matrix functions
 export type Type2DMatrix = [
   number, number, number,
@@ -7,7 +5,7 @@ export type Type2DMatrix = [
   number, number, number,
 ];
 
-function mul(a: Type2DMatrix, b: Type2DMatrix) {
+function mul(a: Type2DMatrix, b: Type2DMatrix): Type2DMatrix {
   return [
     (a[0] * b[0]) + (a[1] * b[3]) + (a[2] * b[6]),
     (a[0] * b[1]) + (a[1] * b[4]) + (a[2] * b[7]),
@@ -20,35 +18,35 @@ function mul(a: Type2DMatrix, b: Type2DMatrix) {
     (a[6] * b[2]) + (a[7] * b[5]) + (a[8] * b[8]),
   ];
 }
-function t(a: Type2DMatrix) {
+function t(a: Type2DMatrix): Type2DMatrix {
   return [
     a[0], a[3], a[6],
     a[1], a[4], a[7],
     a[2], a[5], a[8],
   ];
 }
-function identity() {
+function identity(): Type2DMatrix {
   return [
     1, 0, 0,
     0, 1, 0,
     0, 0, 1,
   ];
 }
-function copy(a: Type2DMatrix) {
+function copy(a: Type2DMatrix): Type2DMatrix {
   return [
     a[0], a[1], a[2],
     a[3], a[4], a[5],
     a[6], a[7], a[8],
   ];
 }
-function translationMatrix(tx: number, ty: number) {
+function translationMatrix(tx: number, ty: number): Type2DMatrix {
   return [
     1, 0, tx,
     0, 1, ty,
     0, 0, 1,
   ];
 }
-function translate(m: Type2DMatrix, tx: number, ty: number) {
+function translate(m: Type2DMatrix, tx: number, ty: number): Type2DMatrix {
   // return mul(m, translationMatrix(tx, ty));
   return [
     m[0], m[1], m[2] + m[0] * tx + m[1] * ty,
@@ -56,7 +54,7 @@ function translate(m: Type2DMatrix, tx: number, ty: number) {
     m[6], m[7], m[8] + m[6] * tx + m[7] * ty,
   ];
 }
-function rotationMatrix(angle: number) {
+function rotationMatrix(angle: number): Type2DMatrix {
   const c = Math.cos(angle);
   const s = Math.sin(angle);
   return [
@@ -65,7 +63,7 @@ function rotationMatrix(angle: number) {
     0, 0, 1,
   ];
 }
-function rotate(m: Type2DMatrix, angle: number) {
+function rotate(m: Type2DMatrix, angle: number): Type2DMatrix {
   // return mul(m, rotationMatrix(angle));
   const c = Math.cos(angle);
   const s = Math.sin(angle);
@@ -76,7 +74,7 @@ function rotate(m: Type2DMatrix, angle: number) {
   ];
 }
 
-function scaleMatrix(sx: number, sy: number) {
+function scaleMatrix(sx: number, sy: number): Type2DMatrix {
   return [
     sx, 0, 0,
     0, sy, 0,
@@ -84,7 +82,7 @@ function scaleMatrix(sx: number, sy: number) {
   ];
 }
 
-function scale(m: Type2DMatrix, sx: number, sy: number) {
+function scale(m: Type2DMatrix, sx: number, sy: number): Type2DMatrix {
   // return mul(m, scaleMatrix(sx, sy));
   return [
     m[0] * sx, m[1] * sy, m[2],
@@ -93,14 +91,14 @@ function scale(m: Type2DMatrix, sx: number, sy: number) {
   ];
 }
 
-function transform(m: Type2DMatrix, px: number, py: number) {
+function transform(m: Type2DMatrix, px: number, py: number): [number, number] {
   return [
     (m[0] * px) + (m[1] * py) + m[2],
     (m[3] * px) + (m[4] * py) + m[5],
   ];
 }
 
-function inverse(m: Type2DMatrix) {
+function inverse(m: Type2DMatrix): Type2DMatrix {
   const det = (m[0] * ((m[4] * m[8]) - (m[7] * m[5]))) - // eslint-disable-line
               (m[1] * ((m[3] * m[8]) - (m[5] * m[6]))) + // eslint-disable-line
               (m[2] * ((m[3] * m[7]) - (m[4] * m[6])));

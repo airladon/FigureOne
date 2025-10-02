@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable no-use-before-define */
 import { rand2D } from './math';
 import { joinObjects } from './tools';
@@ -86,9 +85,7 @@ function isTransformArrayZero(
   if (Array.isArray(transformValue)) {
     return isArrayZero(transformValue);
   }
-  // $FlowFixMe
-  const values = Object.values(transformValue).filter(v => v != null);
-  // $FlowFixMe
+  const values = Object.values(transformValue).filter((v): v is number => v != null);
   return isArrayZero(values);
 }
 
@@ -198,10 +195,10 @@ export type TypeParsableBuffer = number
  * @return {OBJ_Buffer}
  */
 function getBuffer(buffer: TypeParsableBuffer): OBJ_Buffer {
-  let left;
-  let right;
-  let top;
-  let bottom;
+  let left: number;
+  let right: number;
+  let top: number;
+  let bottom: number;
   if (typeof buffer === 'number') {
     left = buffer;
     right = buffer;
@@ -216,12 +213,12 @@ function getBuffer(buffer: TypeParsableBuffer): OBJ_Buffer {
       [left, bottom, right, top] = buffer;
     }
   } else {
-    const o = joinObjects({
+    const o = joinObjects<OBJ_Buffer>({
       left: 0,
       right: 0,
       top: 0,
       bottom: 0,
-    }, buffer);
+    }, buffer as TypeParsableBuffer);
     ({
       left, right, top, bottom,
     } = o);
@@ -244,8 +241,8 @@ function isBuffer(input: any) {
     }
     return false;
   }
-  if (typeof input === 'object') {
-    const keys = Object.keys(input);
+  if (typeof input === 'object' && input != null) {
+    const keys = Object.keys(input as object);
     if (keys.length > 4) {
       return false;
     }
@@ -327,7 +324,7 @@ function getMaxTimeFromVelocity(
 ) {
   const deltaTransform = stopTransform.sub(startTransform);
   let time = 0;
-  let velocityTransformToUse;
+  let velocityTransformToUse: Transform;
   if (typeof velocityTransform === 'number') {
     velocityTransformToUse = startTransform._dup().constant(velocityTransform);
   } else {
@@ -340,8 +337,8 @@ function getMaxTimeFromVelocity(
         (v[0] === 't' || v[0] === 's')
       ) {
         for (let i = 1; i < 4; i += 1) {
-          if (v[i] !== 0) {  // $FlowFixMe
-            const t = Math.abs(delta[i] / v[i]);
+          if (v[i] !== 0) {
+            const t = Math.abs((delta[i] as number) / (v[i] as number));
             time = t > time ? t : time;
           }
         }
@@ -350,13 +347,11 @@ function getMaxTimeFromVelocity(
     const start = startTransform.def[index];
     const target = stopTransform.def[index];
     if (delta[0] === 'r' && start[0] === 'r' && target[0] === 'r') {
-      for (let i = 1; i < 4; i += 1) {  // $FlowFixMe
-        const rotDiff = getDeltaAngle(start[i], target[i], rotDirection);
-        // eslint-disable-next-line no-param-reassign
-        // delta = rotDiff;
+      for (let i = 1; i < 4; i += 1) {
+        const rotDiff = getDeltaAngle(start[i] as number, target[i] as number, rotDirection);
         const v = velocityTransformToUse.def[index][i];
-        if (v !== 0) {  // $FlowFixMe
-          const rTime = Math.abs(rotDiff / v);
+        if (v !== 0) {
+          const rTime = Math.abs(rotDiff / (v as number));
           time = rTime > time ? rTime : time;
         }
       }
@@ -395,17 +390,17 @@ function getMoveTime(
     for (let i = 0; i < velocity.def.length; i += 1) {
       const v = velocity.def[i];
       if (v[0] === 't') {
-        v[1] = translationVelocity.x; // $FlowFixMe
-        v[2] = translationVelocity.y; // $FlowFixMe
-        v[3] = translationVelocity.z;
+        (v as any)[1] = translationVelocity.x;
+        (v as any)[2] = translationVelocity.y;
+        (v as any)[3] = translationVelocity.z;
       } else if (v[0] === 'r') {
-        v[1] = rotationVelocity.x; // $FlowFixMe
-        v[2] = rotationVelocity.y; // $FlowFixMe
-        v[3] = rotationVelocity.z;
+        (v as any)[1] = rotationVelocity.x;
+        (v as any)[2] = rotationVelocity.y;
+        (v as any)[3] = rotationVelocity.z;
       } else {
-        v[1] = scaleVelocity.x; // $FlowFixMe
-        v[2] = scaleVelocity.y; // $FlowFixMe
-        v[3] = scaleVelocity.z;
+        (v as any)[1] = scaleVelocity.x;
+        (v as any)[2] = scaleVelocity.y;
+        (v as any)[3] = scaleVelocity.z;
       }
     }
     const time = getMaxTimeFromVelocity(
@@ -424,7 +419,7 @@ function quadBezierPoints(p0: Point, p1: Point, p2: Point, sides: number) {
   if (sides === 0 || sides === 1 || sides === 2) {
     return [p0, p1, p2];
   }
-  const points = [];
+  const points: Point[] = [];
   for (let i = 0; i < sides + 1; i += 1) {
     const t = 0 + i * step;
     points.push(new Point(
@@ -486,19 +481,19 @@ function getBorder(
   if (
     typeof border === 'string'
     || typeof border === 'number'
-    || isBuffer(border)
-  ) { // $FlowFixMe
-    return border;
-  } // $FlowFixMe
-  if (isParsablePoint(border[0])) {  // $FlowFixMe
-    return [border.map(p => getPoint(p))];
-  } // $FlowFixMe
-  return border.map(b => b.map(p => getPoint(p)));
+    || isBuffer(border as any)
+  ) {
+    return border as any;
+  }
+  if (Array.isArray(border) && (border.length === 0 || isParsablePoint((border as any)[0]))) {
+    return [(border as Array<TypeParsablePoint>).map(p => getPoint(p))];
+  }
+  return (border as Array<Array<TypeParsablePoint>>).map(b => b.map(p => getPoint(p)));
 }
 
-export type TypeXAlign = 'left' | 'right' | 'center' | 'string' | number;
+export type TypeXAlign = 'left' | 'right' | 'center' | number | string;
 
-export type TypeYAlign = 'bottom' | 'top' | 'middle' | 'string' | number;
+export type TypeYAlign = 'bottom' | 'top' | 'middle' | number | string;
 
 function getPositionInRect(
   r: TypeParsableRect,
@@ -514,7 +509,7 @@ function getPositionInRect(
     position.x = rect.right;
   } else if (typeof xAlign === 'number') {
     position.x += rect.width * xAlign;
-  } else if (xAlign.startsWith('o')) {
+  } else if (typeof xAlign === 'string' && xAlign.startsWith('o')) {
     position.x += parseFloat(xAlign.slice(1));
   }
   if (yAlign === 'middle') {
@@ -523,7 +518,7 @@ function getPositionInRect(
     position.y = rect.top;
   } else if (typeof yAlign === 'number') {
     position.y += rect.height * yAlign;
-  } else if (yAlign.startsWith('o')) {
+  } else if (typeof yAlign === 'string' && yAlign.startsWith('o')) {
     position.y += parseFloat(yAlign.slice(1));
   }
   return position;
@@ -538,9 +533,9 @@ function getPositionInRect(
  * (x, y), (x, z), or (y, z) and outputs the third (z, y or x repsectively).
  */
 export type OBJ_SurfaceGrid = {
-  x: ((number, number) => number) | [number, number, number],
-  y: ((number, number) => number) | [number, number, number],
-  z: ((number, number) => number) | [number, number, number],
+  x: ((a: number, b: number) => number) | [number, number, number],
+  y: ((a: number, b: number) => number) | [number, number, number],
+  z: ((a: number, b: number) => number) | [number, number, number],
 };
 
 /**
@@ -594,13 +589,13 @@ export type OBJ_SurfaceGrid = {
  * ]);
  */
 function surfaceGrid(components: OBJ_SurfaceGrid) {
-  const surfacePoints = [];
+  const surfacePoints: Point[][] = [];
   if (Array.isArray(components.x) && Array.isArray(components.y)) {
     if (typeof components.z !== 'function') {
       throw new Error('surfaceGrid must have two components as ranges, and the third as a function');
     }
     for (let x = components.x[0]; x <= components.x[1]; x += components.x[2]) {
-      const row = [];
+      const row: Point[] = [];
       for (let y = components.y[0]; y <= components.y[1]; y += components.y[2]) {
         row.push(new Point(x, y, components.z(x, y)));
       }
@@ -613,7 +608,7 @@ function surfaceGrid(components: OBJ_SurfaceGrid) {
       throw new Error('surfaceGrid must have two components as ranges, and the third as a function');
     }
     for (let x = components.x[0]; x <= components.x[1]; x += components.x[2]) {
-      const row = [];
+      const row: Point[] = [];
       for (let z = components.z[0]; z <= components.z[1]; z += components.z[2]) {
         row.push(new Point(x, components.y(x, z), z));
       }
@@ -626,7 +621,7 @@ function surfaceGrid(components: OBJ_SurfaceGrid) {
       throw new Error('surfaceGrid must have two components as ranges, and the third as a function');
     }
     for (let y = components.y[0]; y <= components.y[1]; y += components.y[2]) {
-      const row = [];
+      const row: Point[] = [];
       for (let z = components.z[0]; z <= components.z[1]; z += components.z[2]) {
         row.push(new Point(components.x(y, z), y, z));
       }
