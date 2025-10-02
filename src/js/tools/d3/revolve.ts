@@ -1,4 +1,4 @@
-// @flow
+// Migrated from revolve.js (Flow) to TypeScript. Comments/docstrings preserved and logic unchanged.
 import { getPoint, getPoints, Point } from '../geometry/Point';
 import type { TypeParsablePoint } from '../geometry/Point';
 import { joinObjects } from '../tools';
@@ -147,30 +147,28 @@ export type OBJ_RevolveDefined = {
   transform?: TypeParsableTransform,
 }
 
-
 // Return a 2D matrix where a column represents the same profile x position, and
 // a row represents the same revolve rotation position.
 function getLathePoints(o: OBJ_RevolveDefined) {
-  const points = [];
+  const points: Point[][] = [];
   const {
     profile, sides, rotation, matrix, transform,
   } = o;
-  let transformMatrix;
+  let transformMatrix: Type3DMatrix | undefined;
   if (transform != null) {
     transformMatrix = getTransform(transform).matrix();
   }
   const dAngle = Math.PI * 2 / sides;
   for (let i = 0; i < sides + 1; i += 1) {
-    const profilePoints = [];
+    const profilePoints: Point[] = [];
     for (let j = 0; j < profile.length; j += 1) {
       let p = new Point(
         profile[j].x,
         profile[j].y * Math.cos(dAngle * i + rotation),
         profile[j].y * Math.sin(dAngle * i + rotation),
       );
-      if (matrix !== 0) {
-        p = p.transformBy(matrix);
-      }
+      // In TypeScript, always apply the matrix as it's a valid 4x4 matrix
+      p = p.transformBy(matrix);
       if (transformMatrix) {
         p = p.transformBy(transformMatrix);
       }
@@ -207,7 +205,7 @@ function getLathePoints(o: OBJ_RevolveDefined) {
  * @return {[Array<Point>, Array<Point>]} an array of points and normals. If
  * the points represent lines, then the array of normals will be empty.
  */
-function revolve(options: OBJ_RevolvePoints) {
+function revolve(options: OBJ_RevolvePoints): [Point[]] | [Point[], Point[]] {
   const o = joinObjects(
     {
       sides: 10,
@@ -218,9 +216,9 @@ function revolve(options: OBJ_RevolvePoints) {
       rotation: 0,
     },
     options,
-  );
+  ) as any;
   o.position = getPoint(o.position);
-  if (o.profile == null) {  // $FlowFixMe
+  if (o.profile == null) {
     o.profile = getPoints([[0, 0.1, 0], [1, 0.2, 0]]);
   } else {
     o.profile = getPoints(o.profile);
@@ -231,7 +229,7 @@ function revolve(options: OBJ_RevolvePoints) {
   } = o;
   const matrix = new Transform().direction(o.axis).matrix();
 
-  const defined = {
+  const defined: OBJ_RevolveDefined = {
     sides,
     profile,
     normals: o.normals,
@@ -241,12 +239,12 @@ function revolve(options: OBJ_RevolvePoints) {
     transform: o.transform,
   };
 
-  let norm = o.normals;
+  let norm = o.normals as 'flat' | 'curveProfile' | 'curveRadial' | 'curve';
   if (norm === 'curveRadial') {
-    norm = 'curveColumns';
+    norm = 'curveColumns' as any;
   }
   if (norm === 'curveProfile') {
-    norm = 'curveRows';
+    norm = 'curveRows' as any;
   }
 
   const points = getLathePoints(defined);
@@ -254,15 +252,15 @@ function revolve(options: OBJ_RevolvePoints) {
     return [getLines(points)];
   }
   const surfaceNormals = getSurfaceNormals(points);
-  const triangles = getTriangles(points);
-  let normals;
+  const triangles: Point[] = getTriangles(points);
+  let normals: Point[];
   if (norm === 'flat') {
     normals = getFlatNormals(surfaceNormals, points);
   } else {
     normals = getCurveNormals(
       surfaceNormals,
       points,
-      norm,
+      norm as any,
       profile[0].isEqualTo(profile[profile.length - 1]),
       true,
     );

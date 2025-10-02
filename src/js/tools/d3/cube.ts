@@ -1,9 +1,9 @@
-// @flow
 import { getPoint } from '../geometry/Point';
 import { Transform, getTransform } from '../geometry/Transform';
 import type { TypeParsablePoint, Point } from '../geometry/Point';
 import { joinObjects } from '../tools';
 import * as m3 from '../m3';
+import type { Type3DMatrix } from '../m3';
 import { toPoints } from '../geometry/tools';
 import type { TypeParsableTransform } from '../geometry/Transform';
 
@@ -31,8 +31,8 @@ export type OBJ_CubePoints = {
 
 function toLines(
   side: number,
-  center: TypeParsablePoint,
-  transform: TypeParsableTransform,
+  center?: TypeParsablePoint,
+  transform?: TypeParsableTransform,
 ): Array<Point> {
   const s = side / 2;
   const sidePoints: Array<number> = [
@@ -77,13 +77,18 @@ function toLines(
  * @return {[Array<Point>, Array<Point>]} an array of points and normals. If
  * the points represent lines, then the array of normals will be empty.
  */
-export default function cube(options: OBJ_CubePoints) {
-  const o = joinObjects(
-    {
-      side: 1,
-    },
-    options,
-  );
+type CubeOptionsDefined = {
+  side: number,
+  center?: TypeParsablePoint,
+  transform?: TypeParsableTransform,
+  lines: boolean,
+}
+
+export default function cube(options: OBJ_CubePoints): [Point[]] | [Point[], Point[]] {
+  const o = joinObjects<CubeOptionsDefined>({
+    side: 1,
+    lines: false,
+  }, options as OBJ_CubePoints);
   const {
     side, center, transform,
   } = o;
@@ -187,39 +192,32 @@ export default function cube(options: OBJ_CubePoints) {
   if (center == null && transform == null) {
     return [pointsRaw, normalsRaw];
   }
-  let matrix;
 
-  let transformMatrix;
-  let normalTransformMatrix;
+  let transformMatrix: Type3DMatrix | undefined;
+  let normalTransformMatrix: Type3DMatrix | undefined;
   if (transform != null) {
     transformMatrix = getTransform(transform).matrix();
     normalTransformMatrix = m3.transpose(m3.inverse(transformMatrix));
   }
 
-  let c;
-  if (center != null) {
-    c = getPoint(center);
-  }
-  const points = [];
-  let xNormal = [1, 0, 0];
-  let xNegNormal = [-1, 0, 0];
-  let yNormal = [0, 1, 0];
-  let yNegNormal = [0, -1, 0];
-  let zNormal = [0, 0, 1];
-  let zNegNormal = [0, 0, -1];
+  const c = center != null ? getPoint(center) : undefined;
+  const points: Point[] = [];
+  let xNormal: [number, number, number] = [1, 0, 0];
+  let xNegNormal: [number, number, number] = [-1, 0, 0];
+  let yNormal: [number, number, number] = [0, 1, 0];
+  let yNegNormal: [number, number, number] = [0, -1, 0];
+  let zNormal: [number, number, number] = [0, 0, 1];
+  let zNegNormal: [number, number, number] = [0, 0, -1];
   if (normalTransformMatrix != null) {
-    xNormal = m3.transform(normalTransformMatrix, ...xNormal);
-    xNegNormal = m3.transform(normalTransformMatrix, ...xNegNormal);
-    yNormal = m3.transform(normalTransformMatrix, ...yNormal);
-    yNegNormal = m3.transform(normalTransformMatrix, ...yNegNormal);
-    zNormal = m3.transform(normalTransformMatrix, ...zNormal);
-    zNegNormal = m3.transform(normalTransformMatrix, ...zNegNormal);
+    xNormal = m3.transform(normalTransformMatrix, ...xNormal) as [number, number, number];
+    xNegNormal = m3.transform(normalTransformMatrix, ...xNegNormal) as [number, number, number];
+    yNormal = m3.transform(normalTransformMatrix, ...yNormal) as [number, number, number];
+    yNegNormal = m3.transform(normalTransformMatrix, ...yNegNormal) as [number, number, number];
+    zNormal = m3.transform(normalTransformMatrix, ...zNormal) as [number, number, number];
+    zNegNormal = m3.transform(normalTransformMatrix, ...zNegNormal) as [number, number, number];
   }
   for (let i = 0; i < 36; i += 1) {
     let p = pointsRaw[i];
-    if (matrix != null) {
-      p = getPoint(m3.transform(matrix, p.x, p.y, p.z));
-    }
     if (c != null) {
       p = p.add(c);
     }
@@ -228,7 +226,7 @@ export default function cube(options: OBJ_CubePoints) {
     }
     points.push(p);
   }
-  const normals = [
+  const normals: Point[] = [
     // +z
     getPoint(zNormal),
     getPoint(zNormal),

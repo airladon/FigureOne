@@ -1,4 +1,4 @@
-// @flow
+// Migrated from prism.js (Flow) to TypeScript. Comments/docstrings preserved and logic unchanged.
 import { getPoints, Point } from '../geometry/Point';
 import { getTransform } from '../geometry/Transform';
 import type { TypeParsablePoint } from '../geometry/Point';
@@ -38,21 +38,28 @@ export type OBJ_PrismPoints = {
   lines?: boolean,
 }
 
+type PrismOptionsDefined = {
+  base: Array<TypeParsablePoint>,
+  baseTriangles?: Array<TypeParsablePoint>,
+  length: number,
+  transform?: TypeParsableTransform,
+  lines: boolean,
+}
 
 function toLines(
   base: Array<TypeParsablePoint>,
   length: number,
-  transform: TypeParsableTransform,
+  transform?: TypeParsableTransform,
 ): Array<Point> {
-  const frontFace = [];
+  const frontFace: Point[] = [];
   const basePoints = getPoints(base);
 
   for (let i = 0; i < basePoints.length - 1; i += 1) {
     frontFace.push(basePoints[i], basePoints[i + 1]);
   }
   frontFace.push(basePoints[basePoints.length - 1], basePoints[0]);
-  const backFace = frontFace.map(p => p.add(0, 0, length));
-  const sides = [];
+  const backFace = frontFace.map((p: Point) => p.add(0, 0, length));
+  const sides: Point[] = [];
   for (let i = 0; i < frontFace.length; i += 2) {
     sides.push(frontFace[i], backFace[i]);
   }
@@ -76,11 +83,12 @@ function toLines(
  * @return {[Array<Point>, Array<Point>]} an array of points and normals. If
  * the points represent lines, then the array of normals will be empty.
  */
-export default function prism(options: OBJ_PrismPoints) {
-  const o = joinObjects({}, {
+export default function prism(options: OBJ_PrismPoints): [Point[]] | [Point[], Point[]] {
+  const o = joinObjects<PrismOptionsDefined>({
+    base: [],
     length: 1,
-    options,
-  }, options);
+    lines: false,
+  }, options as any);
   const {
     base, length, transform, lines, baseTriangles,
   } = o;
@@ -93,8 +101,8 @@ export default function prism(options: OBJ_PrismPoints) {
   }
 
   const baseBorder = getPoints(base);
-  const zBaseBorder = baseBorder.map(p => p.add(0, 0, length));
-  let baseFace = [];
+  const zBaseBorder = baseBorder.map((p: Point) => p.add(0, 0, length));
+  let baseFace: Point[] = [];
   if (baseTriangles != null) {
     baseFace = getPoints(baseTriangles);
   } else {
@@ -102,8 +110,8 @@ export default function prism(options: OBJ_PrismPoints) {
       baseFace.push(baseBorder[0], baseBorder[i], baseBorder[i - 1]);
     }
   }
-  const zBaseFace = baseFace.map(p => p.add(0, 0, length));
-  const sides = [];
+  const zBaseFace = baseFace.map((p: Point) => p.add(0, 0, length));
+  const sides: Point[] = [];
   for (let i = 0; i < baseBorder.length - 1; i += 1) {
     sides.push(zBaseBorder[i], baseBorder[i], baseBorder[i + 1]);
     sides.push(zBaseBorder[i], baseBorder[i + 1], zBaseBorder[i + 1]);
@@ -112,8 +120,8 @@ export default function prism(options: OBJ_PrismPoints) {
   sides.push(zBaseBorder[j], baseBorder[j], baseBorder[0]);
   sides.push(zBaseBorder[j], baseBorder[0], zBaseBorder[0]);
 
-  let triangles: Array<Point> = [...baseFace, ...sides, ...zBaseFace];
-  let normals: Array<Point> = [];
+  let triangles: Point[] = [...baseFace, ...sides, ...zBaseFace];
+  let normals: Point[] = [];
   for (let i = 0; i < baseFace.length; i += 1) {
     normals.push(new Point(0, 0, -1));
   }
@@ -126,7 +134,6 @@ export default function prism(options: OBJ_PrismPoints) {
   }
   if (transform != null) {
     const matrix = getTransform(transform).matrix();
-    // $FlowFixMe
     triangles = triangles.map((p: Point) => p.transformBy(matrix));
     normals = normals.map((p: Point) => p.transformBy(matrix));
   }

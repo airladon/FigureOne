@@ -1,6 +1,5 @@
-// @flow
 import { Line } from '../geometry/Line';
-import type { TypeParsablePoint } from '../geometry/Point';
+import type { TypeParsablePoint, Point } from '../geometry/Point';
 import { getPoint } from '../geometry/Point';
 import type { TypeParsableTransform } from '../geometry/Transform';
 import { joinObjects } from '../tools';
@@ -48,7 +47,7 @@ export type OBJ_Line3Points = {
   p1?: TypeParsablePoint,
   p2?: TypeParsablePoint,
   width?: number,
-  arrow?: OBJ_Line3Arrow | boolean,
+  arrow?: OBJ_Line3Arrow | boolean | null,
   sides?: number,
   normals?: 'curve' | 'flat',
   transform?: TypeParsableTransform,
@@ -70,30 +69,39 @@ export type OBJ_Line3Points = {
  * @return {[Array<Point>, Array<Point>]} an array of points and normals. If
  * the points represent lines, then the array of normals will be empty.
  */
-export default function line3(options: OBJ_Line3Points) {
-  const o = joinObjects(
-    {
-      p1: [0, 0, 0],
-      sides: 10,
-      width: 0.01,
-      normals: 'curve',
-      rotation: 0,
-      lines: false,
-    },
-    options,
-  );
+type Line3OptionsDefined = {
+  p1: TypeParsablePoint,
+  p2?: TypeParsablePoint,
+  width: number,
+  arrow?: OBJ_Line3Arrow | boolean | null,
+  sides: number,
+  normals: 'curve' | 'flat',
+  transform?: TypeParsableTransform,
+  lines: boolean,
+  rotation: number,
+}
+
+export default function line3(options: OBJ_Line3Points): [Point[]] | [Point[], Point[]] {
+  const o = joinObjects<Line3OptionsDefined>({
+    p1: [0, 0, 0] as TypeParsablePoint,
+    sides: 10,
+    width: 0.01,
+    normals: 'curve' as 'curve' | 'flat',
+    rotation: 0,
+    lines: false,
+  }, options as OBJ_Line3Points);
   const {
-    rotation, sides, normals, p1, width, transform, lines, arrow,
+    rotation, sides, normals, p1, width, transform, lines,
   } = o;
-  let { p2 } = o;
-  let arrowToUse = arrow;
+  let { p2 } = o as { p2?: TypeParsablePoint };
+  let arrowToUse = o.arrow as OBJ_Line3Arrow | boolean | null | undefined;
   if (arrowToUse != null) {
     if (typeof arrowToUse === 'boolean') {
       if (arrowToUse) {
         arrowToUse = {
           ends: 'end',
-          width: width * 2.5,
-          length: width * 2.5 * 3,
+          width: (width as number) * 2.5,
+          length: (width as number) * 2.5 * 3,
         };
       } else {
         arrowToUse = null;
@@ -103,7 +111,7 @@ export default function line3(options: OBJ_Line3Points) {
         arrowToUse.ends = 'end';
       }
       if (arrowToUse.width == null) {
-        arrowToUse.width = width * 2.5;
+        arrowToUse.width = (width as number) * 2.5;
       }
       if (arrowToUse.length == null) {
         arrowToUse.length = arrowToUse.width * 3;
@@ -120,21 +128,21 @@ export default function line3(options: OBJ_Line3Points) {
   let endLine = l.length();
   if (arrowToUse != null) {
     if (arrowToUse.ends === 'start' || arrowToUse.ends === 'all') {
-      startLine = arrowToUse.length;
+      startLine = arrowToUse.length as number;
     }
     if (arrowToUse.ends === 'end' || arrowToUse.ends === 'all') {
-      endLine = l.length() - arrowToUse.length;
+      endLine = l.length() - (arrowToUse.length as number);
     }
   }
-  const profile = [];
+  const profile: Array<[number, number]> = [];
   profile.push([0, 0]);
   if (arrowToUse != null && (arrowToUse.ends === 'start' || arrowToUse.ends === 'all')) {
-    profile.push([startLine, arrowToUse.width]);
+    profile.push([startLine, arrowToUse.width as number]);
   }
-  profile.push([startLine, width]);
-  profile.push([endLine, width]);
+  profile.push([startLine, width as number]);
+  profile.push([endLine, width as number]);
   if (arrowToUse != null && (arrowToUse.ends === 'end' || arrowToUse.ends === 'all')) {
-    profile.push([endLine, arrowToUse.width]);
+    profile.push([endLine, arrowToUse.width as number]);
   }
   profile.push([l.length(), 0]);
 

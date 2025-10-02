@@ -1,12 +1,12 @@
-// @flow
 import { getPoint } from '../geometry/Point';
 import { getTransform } from '../geometry/Transform';
 import type { TypeParsableTransform } from '../geometry/Transform';
-import * as m3 from '../m3';
 import type { Point, TypeParsablePoint } from '../geometry/Point';
 import { sphericalToCartesian } from '../geometry/common';
 import { getLines } from './surface';
 import { joinObjects } from '../tools';
+import type { Type3DMatrix } from '../m3';
+import * as m3 from '../m3';
 
 /**
  * Sphere options object.
@@ -34,6 +34,7 @@ export type OBJ_SpherePoints = {
   normals?: 'curve' | 'flat',
   center?: TypeParsablePoint,
   transform?: TypeParsableTransform,
+  lines?: boolean,
 }
 
 /**
@@ -50,17 +51,24 @@ export type OBJ_SpherePoints = {
  * @return {[Array<Point>, Array<Point>]} an array of points and normals. If
  * the points represent lines, then the array of normals will be empty.
  */
-export default function sphere(options: OBJ_SpherePoints) {
-  const o = joinObjects(
-    {
-      sides: 10,
-      radius: 1,
-      normals: 'flat',
-      output: 'points',
-      center: [0, 0, 0],
-    },
-    options,
-  );
+type SphereOptionsDefined = {
+  sides: number,
+  radius: number,
+  normals: 'curve' | 'flat',
+  center: TypeParsablePoint,
+  transform?: TypeParsableTransform,
+  lines: boolean,
+}
+
+export default function sphere(options: OBJ_SpherePoints): [Point[]] | [Point[], Point[]] {
+  const o = joinObjects<SphereOptionsDefined>({
+    sides: 10,
+    radius: 1,
+    normals: 'flat',
+    output: 'points',
+    center: [0, 0, 0],
+    lines: false,
+  } as any, options);
   const {
     sides, radius, normals, transform,
   } = o;
@@ -69,12 +77,12 @@ export default function sphere(options: OBJ_SpherePoints) {
   const dTheta = dAngle;
   const dPhi = dAngle;
   const arcs: Array<Array<Point>> = [];
-  const curvedNormals = [];
-  const points = [];
-  const norms = [];
+  const curvedNormals: Array<Array<Point>> = [];
+  const points: Point[] = [];
+  const norms: Point[] = [];
   for (let phi = 0; phi < Math.PI * 2 + 0.0001; phi += dPhi) {
     const thetaArc: Array<Point> = [];
-    const curvedNormalsArc = [];
+    const curvedNormalsArc: Array<Point> = [];
     for (let theta = 0; theta < Math.PI + 0.0001; theta += dTheta) {
       thetaArc.push(getPoint(sphericalToCartesian(radius, theta, phi)).add(center));
       curvedNormalsArc.push(getPoint(sphericalToCartesian(1, theta, phi)));
@@ -82,8 +90,8 @@ export default function sphere(options: OBJ_SpherePoints) {
     arcs.push(thetaArc);
     curvedNormals.push(curvedNormalsArc);
   }
-  let matrix;
-  let inverseTranspose;
+  let matrix: Type3DMatrix | undefined;
+  let inverseTranspose: Type3DMatrix | undefined;
   if (transform != null) {
     matrix = getTransform(transform).matrix();
     inverseTranspose = m3.transpose(m3.inverse(matrix));

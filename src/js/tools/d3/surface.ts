@@ -1,4 +1,3 @@
-// @flow
 import { Point, getPoints, getPoint } from '../geometry/Point';
 import type { TypeParsablePoint } from '../geometry/Point';
 import { getNormal } from '../geometry/Plane';
@@ -127,12 +126,12 @@ Which means the normals for vertex a1 will be:
 // Along a rotation, there will be sides segments
 function getSurfaceNormals(
   surfacePoints: Array<Array<Point>>,
-) {
+): Point[][] {
   const rows = surfacePoints.length;
   const cols = surfacePoints[0].length;
-  const surfaceNormals = [];
+  const surfaceNormals: Point[][] = [];
   for (let r = 0; r < rows - 1; r += 1) {
-    const normsAlongRow = [];
+    const normsAlongRow: Point[] = [];
     for (let c = 0; c < cols - 1; c += 1) {
       const a1 = surfacePoints[r][c];
       const a2 = surfacePoints[r][c + 1];
@@ -151,10 +150,10 @@ function getSurfaceNormals(
 
 function getTriangles(
   surfacePoints: Array<Array<Point>>,
-) {
+): Point[] {
   const rows = surfacePoints.length;
   const cols = surfacePoints[0].length;
-  const triangles = [];
+  const triangles: Point[] = [];
   for (let r = 0; r < rows - 1; r += 1) {
     for (let c = 0; c < cols - 1; c += 1) {
       const a1 = surfacePoints[r][c];
@@ -178,13 +177,13 @@ function getTriangles(
 
 function getLines(
   surfacePoints: Array<Array<Point>>,
-) {
+): Point[] {
   if (surfacePoints.length === 0) {
-    return [];
+    return [] as Point[];
   }
   const rows = surfacePoints.length;
   const cols = surfacePoints[0].length;
-  const lines = [];
+  const lines: Point[] = [];
   for (let r = 0; r < rows - 1; r += 1) {
     for (let c = 0; c < cols - 1; c += 1) {
       const a1 = surfacePoints[r][c];
@@ -215,10 +214,10 @@ function getLines(
 function getFlatNormals(
   surfaceNormals: Array<Array<Point>>,
   surfacePoints: Array<Array<Point>>,
-) {
+): Point[] {
   const rows = surfacePoints.length;
   const cols = surfacePoints[0].length;
-  const normals = [];
+  const normals: Point[] = [];
   for (let r = 0; r < rows - 1; r += 1) {
     for (let c = 0; c < cols - 1; c += 1) {
       const n = surfaceNormals[r][c];
@@ -250,23 +249,23 @@ function getCurveNormals(
   curve: 'curveColumns' | 'curveRows' | 'curve',
   closeColumns: boolean,
   closeRows: boolean,
-) {
+): Point[] {
   const rows = surfacePoints.length;
   const cols = surfacePoints[0].length;
-  const normals = [];
-  let pp;
-  let cp;
-  let np;
-  let pc;
-  let cc;
-  let nc;
-  let pn;
-  let cn;
-  let nn;
-  let nextProfileIndex;
-  let prevProfileIndex;
-  let nextSideIndex;
-  let prevSideIndex;
+  const normals: Point[] = [];
+  let pp: Point;
+  let cp: Point;
+  let np: Point;
+  let pc: Point;
+  let cc: Point;
+  let nc: Point;
+  let pn: Point;
+  let cn: Point;
+  let nn: Point;
+  let nextProfileIndex: number | null;
+  let prevProfileIndex: number | null;
+  let nextSideIndex: number | null;
+  let prevSideIndex: number | null;
   for (let r = 0; r < rows - 1; r += 1) {
     for (let c = 0; c < cols - 1; c += 1) {
       nc = new Point(0, 0, 0);
@@ -429,10 +428,21 @@ export type OBJ_SurfacePoints = {
  * If the points represent triangles, then a second array of normal vectors
  * for each point will be available.
  */
-function surface(options: OBJ_SurfacePoints) {
+type SurfaceOptionsDefined = {
+  points: Array<Array<TypeParsablePoint>>,
+  normals: 'curveColumns' | 'curveRows' | 'curve' | 'flat',
+  closeColumns: boolean,
+  closeRows: boolean,
+  transform?: TypeParsableTransform,
+  lines: boolean,
+  invertNormals: boolean,
+};
+
+function surface(options: OBJ_SurfacePoints): [Point[], Point[]] {
   const {
     transform, lines, closeRows, closeColumns, normals, points, invertNormals,
-  } = joinObjects({
+  } = joinObjects<SurfaceOptionsDefined>({
+    points: [],
     normals: 'flat',
     lines: false,
     closeColumns: false,
@@ -440,17 +450,17 @@ function surface(options: OBJ_SurfacePoints) {
     invertNormals: false,
   }, options);
 
-  let surfacePoints = points.map(p => getPoints(p));
+  let surfacePoints: Array<Array<Point>> = points.map((p: Array<TypeParsablePoint>) => getPoints(p));
   if (transform != null) {
     const matrix = getTransform(transform).matrix();
-    surfacePoints = points.map(rows => rows.map(col => getPoint(col).transformBy(matrix)));
+    surfacePoints = points.map((rows: Array<TypeParsablePoint>) => rows.map((col: TypeParsablePoint) => getPoint(col).transformBy(matrix)));
   }
   if (lines) {
     return [getLines(surfacePoints), []];
   }
   const triangles = getTriangles(surfacePoints);
   const surfaceNormals = getSurfaceNormals(surfacePoints);
-  let norms = surfaceNormals;
+  let norms: Point[] = surfaceNormals as unknown as Point[];
   if (normals !== 'flat') {
     norms = getCurveNormals(surfaceNormals, surfacePoints, normals, closeColumns, closeRows);
   } else {

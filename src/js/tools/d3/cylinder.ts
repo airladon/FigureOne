@@ -1,9 +1,10 @@
-// @flow
+// Migrated from cylinder.js (Flow) to TypeScript. Comments/docstrings preserved and logic unchanged.
 import { Line, getLine } from '../geometry/Line';
 import type { TypeParsableLine } from '../geometry/Line';
 import { joinObjects } from '../tools';
 import { revolve } from './revolve';
 import type { TypeParsableTransform } from '../geometry/Transform';
+import type { Point } from '../geometry/Point';
 
 /**
  * Cylinder options object.
@@ -40,33 +41,44 @@ export type OBJ_CylinderPoints = {
   line?: TypeParsableLine,
   length?: number,
   ends?: boolean | 1 | 2,
+  rotation?: number,
   transform?: TypeParsableTransform,
+  lines?: boolean,
 }
 
-export default function cylinder(options: OBJ_CylinderPoints) {
-  const o = joinObjects(
-    {
-      sides: 10,
-      radius: 0.1,
-      normals: 'flat',
-      ends: true,
-      rotation: 0,
-      length: 1,
-      lines: false,
-    },
-    options,
-  );
+type CylinderOptionsDefined = {
+  sides: number,
+  radius: number,
+  normals: 'curve' | 'flat',
+  line?: TypeParsableLine,
+  length: number,
+  ends: boolean | 1 | 2,
+  rotation: number,
+  transform?: TypeParsableTransform,
+  lines: boolean,
+}
+
+export default function cylinder(options: OBJ_CylinderPoints): [Point[]] | [Point[], Point[]] {
+  const o = joinObjects<CylinderOptionsDefined>({
+    sides: 10,
+    radius: 0.1,
+    normals: 'flat',
+    ends: true,
+    rotation: 0,
+    length: 1,
+    lines: false,
+  }, options as OBJ_CylinderPoints);
   const {
     ends, rotation, sides, radius, normals, length, transform, lines,
   } = o;
-  let line;
+  let line: Line;
   if (o.line == null) {
     line = new Line([0, 0, 0], [length, 0, 0]);
   } else {
     line = getLine(o.line);
   }
 
-  const profile = [];
+  const profile: Array<[number, number]> = [];
   if (ends === true || ends === 1) {
     profile.push([0, 0]);
   }

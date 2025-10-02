@@ -1,9 +1,10 @@
-// @flow
+// Migrated from cone.js (Flow) to TypeScript. Comments/docstrings preserved and logic unchanged.
 import { Line, getLine } from '../geometry/Line';
 import type { TypeParsableLine } from '../geometry/Line';
 import type { TypeParsableTransform } from '../geometry/Transform';
 import { joinObjects } from '../tools';
 import { revolve } from './revolve';
+import type { Point } from '../geometry/Point';
 
 /**
  * Cone options object.
@@ -42,6 +43,17 @@ export type OBJ_ConePoints = {
   lines?: boolean,
 }
 
+type ConeOptionsDefined = {
+  sides: number,
+  radius: number,
+  normals: 'curve' | 'flat',
+  line?: TypeParsableLine,
+  length: number,
+  rotation: number,
+  transform?: TypeParsableTransform,
+  lines: boolean,
+}
+
 /**
  * Return points of a cone.
  *
@@ -56,28 +68,26 @@ export type OBJ_ConePoints = {
  * @return {[Array<Point>, Array<Point>]} an array of points and normals. If
  * the points represent lines, then the array of normals will be empty.
  */
-export default function cone(options: OBJ_ConePoints) {
-  const o = joinObjects(
-    {
-      sides: 10,
-      radius: 0.1,
-      normals: 'flat',
-      rotation: 0,
-      length: 1,
-      lines: false,
-    },
-    options,
-  );
+export default function cone(options: OBJ_ConePoints): [Point[]] | [Point[], Point[]] {
+  const defaults: ConeOptionsDefined = {
+    sides: 10,
+    radius: 0.1,
+    normals: 'flat',
+    rotation: 0,
+    length: 1,
+    lines: false,
+  };
+  const o = joinObjects<ConeOptionsDefined>({}, defaults, options as any);
   const {
     rotation, sides, radius, normals, length, transform, lines,
   } = o;
-  let line;
+  let line: Line;
   if (o.line == null) {
     line = new Line([0, 0, 0], [length, 0, 0]);
   } else {
     line = getLine(o.line);
   }
-  const profile = [];
+  const profile: Array<[number, number]> = [];
   profile.push([0, 0], [0, radius], [line.length(), 0]);
 
   return revolve({
