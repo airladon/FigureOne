@@ -1,4 +1,3 @@
-// Migrated from prism.js (Flow) to TypeScript. Comments/docstrings preserved and logic unchanged.
 import { getPoints, Point } from '../geometry/Point';
 import { getTransform } from '../geometry/Transform';
 import type { TypeParsablePoint } from '../geometry/Point';
@@ -86,9 +85,10 @@ function toLines(
 export default function prism(options: OBJ_PrismPoints): [Point[]] | [Point[], Point[]] {
   const o = joinObjects<PrismOptionsDefined>({
     base: [],
+    // options,
     length: 1,
     lines: false,
-  }, options as any);
+  }, options as OBJ_PrismPoints);
   const {
     base, length, transform, lines, baseTriangles,
   } = o;
