@@ -1,4 +1,3 @@
-// @flow
 import { cssColorToArray } from './color';
 
 // Gets the css color definitions from the project's scss files, converts them
@@ -7,8 +6,8 @@ import { cssColorToArray } from './color';
 // Returns an dictionary of:
 //    key: color name defined in css
 //    value: rgba color array with each element between 0 and 1
-const getScssColors = (styles: Object) => {
-  const colors: Object = {};                 // Object of colors and values
+const getScssColors = (styles: Record<string, string>) => {
+  const colors: Record<string, number[]> = {};                 // Object of colors and values
 
   // styles is a dictionary of "color name from css": "color value" where
   // the color value might be one of:

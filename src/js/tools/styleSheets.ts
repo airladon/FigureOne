@@ -1,5 +1,3 @@
-// @flow
-
 import {
   getCSSVariables, getDefinedCSSVariables, searchObject,
 } from './getCssVariables';

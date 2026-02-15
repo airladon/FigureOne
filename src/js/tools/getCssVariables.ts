@@ -1,8 +1,7 @@
-// @flow
 import { addToObject } from './tools';
 
-function searchObject(obj: Object, path: string, text: string) {
-  let results = [];
+function searchObject(obj: Record<string, any>, path: string, text: string): string[] {
+  let results: string[] = [];
   Object.keys(obj).forEach((key) => {
     const newPath = `${path}.${key}`;
     if (key.includes(text)) {
@@ -21,11 +20,11 @@ function searchObject(obj: Object, path: string, text: string) {
   return results;
 }
 
-function toCamelCase(input: string, prefix) {
+function toCamelCase(input: string, prefix: string) {
   const rePrefix = new RegExp(prefix, 'g');
   const reCamelCase1 = /-[a-z]/g;
   const reCamelCase2 = /_[a-z]/g;
-  const repl = str => str[1].toUpperCase();
+  const repl = (str: string) => str[1].toUpperCase();
   const noPrefix = input.replace(rePrefix, '');
   const camelCase1 = noPrefix.replace(reCamelCase1, repl);
   const camelCase2 = camelCase1.replace(reCamelCase2, repl);
@@ -38,10 +37,10 @@ function getDefinedCSSVariables(
   propertyNames: Array<string>,
   prefix: string = '',
   makeFlat: boolean = true,
-  modifier: (string | number) => string | number = a => a,
-) {
-  const variables = {};
-  let elem = idOrElement;
+  modifier: (value: string | number) => string | number = a => a,
+): Record<string, any> {
+  const variables: Record<string, any> = {};
+  let elem: string | HTMLElement | null = idOrElement;
   if (typeof idOrElement === 'string') {
     elem = document.getElementById(idOrElement);
   }
@@ -55,7 +54,7 @@ function getDefinedCSSVariables(
         }
         value = value.trim();
         const fValue = parseFloat(value);
-        let valueToAdd = value;
+        let valueToAdd: string | number = value;
         if (!Number.isNaN(fValue)) {
           valueToAdd = fValue;
         }
@@ -78,9 +77,9 @@ function getCSSVariables(
   idOrElement: string | HTMLElement,
   prefix: string = '',
   makeFlat: boolean = true,
-): Object {
-  const variables = {};
-  let elem = idOrElement;
+): Record<string, any> {
+  const variables: Record<string, any> = {};
+  let elem: string | HTMLElement | null = idOrElement;
   if (typeof idOrElement === 'string') {
     elem = document.getElementById(idOrElement);
   }
@@ -96,7 +95,7 @@ function getCSSVariables(
           if (value != null) {
             value = value.trim();
             const fValue = parseFloat(value);
-            let valueToAdd = value;
+            let valueToAdd: string | number = value;
             if (!Number.isNaN(fValue)) {
               valueToAdd = fValue;
             }

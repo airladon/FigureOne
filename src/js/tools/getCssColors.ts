@@ -1,4 +1,3 @@
-// @flow
 // eslint-disable-next-line import/no-cycle
 import { cssColorToArray } from './color';
 import { getDefinedCSSVariables } from './getCssVariables';
@@ -29,7 +28,7 @@ const shades = [
   'lower',
 ];
 
-const paletteColorNames = [];
+const paletteColorNames: string[] = [];
 baseColors.forEach((color) => {
   shades.forEach((shade) => {
     paletteColorNames.push(`--palette-${color}-${shade}`);
@@ -69,30 +68,27 @@ const figureColorNames = [
   '--figure-qr-background',
 ];
 
-export default function getCSSColors(customColorNames: Array<string> = []): Object {
-  let colors: Object = {};
-  let paletteColors: Object = {};
-  let figureColors: Object = {};
+export default function getCSSColors(customColorNames: Array<string> = []): Record<string, any> {
+  let colors: Record<string, any> = {};
+  let paletteColors: Record<string, any> = {};
+  let figureColors: Record<string, any> = {};
   const colorNames = customColorNames.map(name => `--colors-${name}`);
 
   const { body } = document;
   if (body) {
     colors = getDefinedCSSVariables(
       body, colorNames, '--colors-', false,
-      // $FlowFixMe
-      cssColorToArray,
+      cssColorToArray as unknown as (value: string | number) => string | number,
     );
 
     paletteColors = getDefinedCSSVariables(
       body, paletteColorNames, '--palette-', false,
-      // $FlowFixMe
-      cssColorToArray,
+      cssColorToArray as unknown as (value: string | number) => string | number,
     );
 
     figureColors = getDefinedCSSVariables(
       body, figureColorNames, '--figure-', false,
-      // $FlowFixMe
-      cssColorToArray,
+      cssColorToArray as unknown as (value: string | number) => string | number,
     );
   }
 
@@ -100,4 +96,3 @@ export default function getCSSColors(customColorNames: Array<string> = []): Obje
   colors.figure = figureColors;
   return colors;
 }
-

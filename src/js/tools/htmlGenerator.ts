@@ -1,4 +1,3 @@
-// @flow
 import { colorArrayToRGBA } from './color';
 import { generateUniqueId, joinObjects } from './tools';
 import type { TypeColor } from './types';
@@ -56,18 +55,18 @@ function centerH(text: string | Array<string> = '') {
 
 function style(
   options: number | {
-    left?: number,
-    top?: number,
-    line?: number,
-    right?: number,
-    size?: number,
-    className?: string,
-    color?: TypeColor,
-    centerV?: boolean,
-    centerH?: boolean,
-    list?: ?'ordered' | 'unordered',
-    listStyleType?: string,  // css styes
-    id?: string,
+    left?: number;
+    top?: number;
+    line?: number;
+    right?: number;
+    size?: number;
+    className?: string;
+    color?: TypeColor;
+    centerV?: boolean;
+    centerH?: boolean;
+    list?: 'ordered' | 'unordered' | null;
+    listStyleType?: string;  // css styes
+    id?: string;
   } = 0,
   text: string | Array<string> = '',
 ) {
@@ -123,13 +122,13 @@ function style(
   const ol = `<ol style="${marginLeft}${marginRight}${marginTop}${size}${color}"${className}${id}>`;
 
   let textToUse;
-  if (options.list != null) {
+  if ((options as any).list != null) {
     if (Array.isArray(text)) {
       textToUse = text.join(`</li>${li}`);
     } else {
       textToUse = text;
     }
-    if (options.list === 'unordered') {
+    if ((options as any).list === 'unordered') {
       textToUse = `${ul}${li}${textToUse}</ul>`;
     } else {
       textToUse = `${ol}${li}${textToUse}</ol>`;
@@ -142,10 +141,10 @@ function style(
     }
     textToUse = `${pFirst}${textToUse}</p>`;
   }
-  if (options.centerH) {
+  if ((options as any).centerH) {
     textToUse = centerH(textToUse);
   }
-  if (options.centerV) {
+  if ((options as any).centerV) {
     textToUse = centerV(textToUse);
   }
   return textToUse;
@@ -156,7 +155,7 @@ function itemSelector(
   classes: string = '',
   selectorIndex: number = 0,
 ) {
-  let outStr = `<ul id="id__figureone_item_selector_${selectorIndex}" 
+  let outStr = `<ul id="id__figureone_item_selector_${selectorIndex}"
                     class=${classes}>`;
   items.forEach((item, index) => {
     outStr += `<li id="id__figureone_item_selector_${index}">${item}</li>`;
@@ -209,15 +208,15 @@ function highlight(classesOrColor: string | Array<number> = '') {
 function link(
   linkStr: string,
   colorOrOptions: Array<number> | {
-    color?: ?Array<number>,
-    id?: string,
-    classes?: string,
-    text?: ?string,
-    newTab?: ?boolean,
+    color?: Array<number> | null;
+    id?: string;
+    classes?: string;
+    text?: string | null;
+    newTab?: boolean | null;
   } | null = null,
 ) {
   let classStr = 'action_word interactive_word';
-  let colorToUse = null;
+  let colorToUse: Array<number> | null = null;
   const defaultOptions = {
     color: null,
     id: `figureone__id_${generateUniqueId()}`,
@@ -287,17 +286,17 @@ function addId(id: string = '') {
 
 function click(
   actionMethod: Function,
-  bind: Array<mixed>,
+  bind: Array<any>,
   colorOrOptions: Array<number> | {
-    color?: ?Array<number>,
-    interactive?: boolean,
-    id?: string,
-    classes?: string,
-    text?: ?string,
+    color?: Array<number> | null;
+    interactive?: boolean;
+    id?: string;
+    classes?: string;
+    text?: string | null;
   } | null = null,
 ) {
   let classStr = 'action_word';
-  let colorToUse = null;
+  let colorToUse: Array<number> | null = null;
   const defaultOptions = {
     color: null,
     id: `figureone__id_${generateUniqueId()}`,
@@ -335,7 +334,7 @@ function click(
 function clickW(
   textToUse: string,
   actionMethod: Function,
-  bind: Array<mixed>,
+  bind: Array<any>,
   color: TypeColor | null = null,
 ) {
   return click(actionMethod, bind, {
@@ -370,7 +369,7 @@ function actionWord(
 function modifyText(
   text: string,
   key: string,
-  mod: Object,
+  mod: Record<string, any>,
 ): string {
   let outText = '';
   const expression = new RegExp(`\\|${key}\\|`, 'gi');
@@ -389,7 +388,7 @@ function modifyText(
 function onClickId(
   id: string,
   actionMethod: Function,
-  bind: Array<mixed>,
+  bind: Array<any>,
   additionalClassesToAdd: string = '',
   // recorder: Recorder = new Recorder(),
 ) {
@@ -406,7 +405,7 @@ function onClickId(
       // if (recorder.state === 'recording') {
       //   recorder.recordEvent('click', [id]);
       // }
-      actionMethod.bind(...bind)();
+      (actionMethod.bind as Function)(...bind)();
     };
     element.onclick = onClickFn;
   }
@@ -414,7 +413,7 @@ function onClickId(
 
 function applyModifiers(
   text: string,
-  modifiers: Object,
+  modifiers: Record<string, any>,
   highlightClass: string = 'highlight_word',
   monochrome: boolean = false,
 ) {
@@ -434,14 +433,14 @@ function applyModifiers(
     outText = outText.replace(h, '');
     const i = RegExp(/interactive_word/gi);
     outText = outText.replace(i, '');
-    const id = RegExp(/id="[^"]*"/gi);
-    outText = outText.replace(id, '');
+    const idRe = RegExp(/id="[^"]*"/gi);
+    outText = outText.replace(idRe, '');
   }
   return outText;
 }
 
 function setOnClicks(
-  modifiers: Object,
+  modifiers: Record<string, any>,
   additionalClassesToAdd: string = '',
   // recorder: Recorder = new Recorder(),
 ) {
@@ -462,7 +461,7 @@ function setOnClicks(
 function setHTML(
   element: HTMLElement,
   text: string,
-  modifiers: Object = {},
+  modifiers: Record<string, any> = {},
   classesToAdd: string = '',
 ) {
   const modifiedText = applyModifiers(text, modifiers);

@@ -1,5 +1,3 @@
-// @flow
-
 import type { TypeColor } from './types';
 import { rand, randInt } from './math';
 import { joinObjectsWithOptions, joinObjects } from './tools';
@@ -77,13 +75,13 @@ function hexFill(center: TypeParsablePoint, radius: number = 0.01) {
 function polygonFill(sides: number, center: TypeParsablePoint, radius: number = 0.01) {
   const c = getPoint(center);
   const a = Math.PI * 2 / sides;
-  const points = [];
+  const points: number[][] = [];
   for (let i = 0; i < sides; i += 1) {
     points.push(
       [radius * Math.cos(a * i) + c.x, radius * Math.sin(a * i) + c.y],
     );
   }
-  const vertices = [];
+  const vertices: number[] = [];
   for (let i = 1; i < sides - 1; i += 1) {
     vertices.push(...[
       points[0][0], points[0][1],
@@ -96,24 +94,24 @@ function polygonFill(sides: number, center: TypeParsablePoint, radius: number = 
 
 // Determine which shape function to use
 function processShapeFunction(
-  makePoints: ((TypeParsablePoint, number) => Array<number>) | 'square' | 'hex' | number,
+  makePoints: ((center: TypeParsablePoint, size: number) => Array<number>) | 'square' | 'hex' | number,
 ) {
   if (typeof makePoints === 'number' && makePoints > 2) {
     if (makePoints === 4) {
-      return squareFill.bind(this);
+      return squareFill.bind(undefined);
     }
     if (makePoints === 6) {
-      return hexFill.bind(this);
+      return hexFill.bind(undefined);
     }
-    return polygonFill.bind(this, makePoints);
+    return polygonFill.bind(undefined, makePoints);
   }
   if (makePoints === 'hex') {
-    return hexFill.bind(this);
+    return hexFill.bind(undefined);
   }
   if (typeof makePoints === 'function') {
     return makePoints;
   }
-  return squareFill.bind(this);
+  return squareFill.bind(undefined);
 }
 
 /**
@@ -124,7 +122,7 @@ function processShapeFunction(
  * @return {Array<number>} color copies juxtaposed in single array
  */
 const makeColors = (color: TypeColor, numCopies: number) => {
-  const colors = [];
+  const colors: number[] = [];
   for (let i = 0; i < numCopies; i += 1) {
     colors.push(...color);
   }
@@ -136,10 +134,10 @@ function getPixels(
   data: Uint8ClampedArray,
   imageWidth: number,
   imageHeight: number,
-  filter: (TypeColor, [number, number]) => boolean,
+  filter: (color: TypeColor, position: [number, number]) => boolean,
 ) {
-  const pixels = [];
-  const pixelColors = [];
+  const pixels: number[][] = [];
+  const pixelColors: number[][] = [];
   const min = [imageWidth, imageHeight];
   const max = [0, 0];
   for (let h = 0; h < imageHeight; h += 1) {
@@ -220,21 +218,21 @@ function getPixels(
  * [r1, b1, g1, a1, r2, g2, b, a2, ...]
  */
 export type OBJ_ImageToShapes = {
- image: Image,
- maxPoints?: number | null,
- xAlign?: TypeHAlign,
- yAlign?: TypeVAlign,
- align?: 'image' | 'filteredImage',
- distribution?: 'raster' | 'random',
- filter?: 'none' | Array<number>,
- position?: TypeParsablePoint,
- dither?: number,
- width?: number | null,
- height?: number | null,
- size?: number,
- excess?: 'repeatOpaqueOnly' | 'lastOpaque' | 'repeat',
- makeColors?: (TypeColor, number) => Array<number>,
- shape?: number | (Point, number) => Array<number>,
+ image: HTMLImageElement;
+ maxPoints?: number | null;
+ xAlign?: TypeHAlign;
+ yAlign?: TypeVAlign;
+ align?: 'image' | 'filteredImage';
+ distribution?: 'raster' | 'random';
+ filter?: 'none' | Array<number>;
+ position?: TypeParsablePoint;
+ dither?: number;
+ width?: number | null;
+ height?: number | null;
+ size?: number;
+ excess?: 'repeatOpaqueOnly' | 'lastOpaque' | 'repeat';
+ makeColors?: (color: TypeColor, num: number) => Array<number>;
+ shape?: number | ((center: Point, size: number) => Array<number>);
 };
 
 /**
@@ -350,7 +348,7 @@ function imageToShapes(options: OBJ_ImageToShapes) {
     height: null,
     excess: 'repeatOpaqueOnly',
     shape: 'square',
-    makeColors: makeColors.bind(this),
+    makeColors: makeColors.bind(undefined),
   };
   const o = joinObjectsWithOptions({ except: 'image' }, {}, defaultOptions, options);
   const { image } = options;
@@ -437,8 +435,8 @@ function imageToShapes(options: OBJ_ImageToShapes) {
   }
 
   // Final points and colors
-  const points = [];
-  const colors = [];
+  const points: number[] = [];
+  const colors: number[] = [];
 
   // The final points will be taken from `pixels`. If
   // `distribution` === 'raster' then the final points will be in the same
@@ -455,7 +453,7 @@ function imageToShapes(options: OBJ_ImageToShapes) {
   // multiple pixels on top of each other will change the overall transparency.
   // Create an array of indeces pointing to each pixel
   const pixelIndeces = Array(pixels.length);
-  const opaquePixelIndeces = [];
+  const opaquePixelIndeces: number[] = [];
   for (let i = 0; i < pixels.length; i += 1) {
     pixelIndeces[i] = i;
     if (pixelColors[i][3] >= 0.99999999) {
@@ -502,7 +500,7 @@ function imageToShapes(options: OBJ_ImageToShapes) {
     );
     // Create the vertices from the center point
     const pointVertices = shape(point, o.size || pixelWidth);
-    let pointColors = [];
+    let pointColors: number[] = [];
     if (o.makeColors != null) {
       pointColors = o.makeColors(color, pointVertices.length / 2);
     }
@@ -534,7 +532,7 @@ function getPolylineStats(polylinePoints: Array<Point>, close: boolean) {
     distances[0] = distance;
     cumDistances[0] = cumDistance;
   }
-  return [cumDistance, cumDistances, distances];
+  return [cumDistance, cumDistances, distances] as const;
 }
 
 // Break a polyline into a polyline with `num` equal length segments
@@ -555,7 +553,7 @@ function _segmentPolyline(
   const distanceStep = cumDistance / (numPoints - 1);
 
   // Final points
-  const points = [];
+  const points: Point[] = [];
   let nextLinePointIndex = 1;
   let currLinePointIndex = 0;
   for (let i = 0; i < numPoints - 1; i += 1) {
@@ -622,12 +620,12 @@ function _segmentPolyline(
  * containing all vertex colors.
  */
 export type OBJ_PolylineToShapes = {
-  points: Array<TypeParsablePoint>,
-  num?: number,
-  close?: boolean,
-  size?: number,
-  shape?: number | (Point, number) => Array<number>,
-  makeColors?: (number, Point, number, number, number) => Array<number>,
+  points: Array<TypeParsablePoint>;
+  num?: number;
+  close?: boolean;
+  size?: number;
+  shape?: number | ((center: Point, size: number) => Array<number>);
+  makeColors?: (num: number, center: Point, cumDist: number, percentDist: number, index: number) => Array<number>;
 };
 
 /**
@@ -742,19 +740,19 @@ function polylineToShapes(options: OBJ_PolylineToShapes) {
   const defaultOptions = {
     close: false,
     size: 0.01,
-    shape: squareFill.bind(this),
+    shape: squareFill.bind(undefined),
     makeColors: null,
   };
-  const o = joinObjects({}, defaultOptions, options);
+  const o = joinObjects<any>({}, defaultOptions, options);
   const shape = processShapeFunction(o.shape);
-  const points = o.points.map(p => getPoint(p));
-  const vertices = [];
-  const colors = [];
+  const points = o.points.map((p: TypeParsablePoint) => getPoint(p));
+  const vertices: number[] = [];
+  const colors: number[] = [];
   const [centerPoints, cumDistance, distanceStep] = _segmentPolyline(points, o.num, o.close);
   for (let i = 0; i < centerPoints.length; i += 1) {
     const center = centerPoints[i];
     const shapeVertices = shape(center, o.size);
-    let vertexColors = [];
+    let vertexColors: number[] = [];
     const currentCumDist = i * distanceStep;
     if (o.makeColors != null) {
       vertexColors = o.makeColors(
@@ -787,10 +785,10 @@ function polylineToShapes(options: OBJ_PolylineToShapes) {
  * containing all vertex colors.
  */
 export type OBJ_PointsToShapes = {
-  points: Array<TypeParsablePoint>,
-  size?: number,
-  shape?: number | (Point, number) => Array<number>,
-  makeColors?: (number, Point, number, number, number) => Array<number>,
+  points: Array<TypeParsablePoint>;
+  size?: number;
+  shape?: number | ((center: Point, size: number) => Array<number>);
+  makeColors?: (num: number, center: Point, cumDist: number, percentDist: number, index: number) => Array<number>;
 };
 /**
  * `pointsToShapes` creates shapes at each point input.
@@ -834,17 +832,17 @@ export type OBJ_PointsToShapes = {
 function pointsToShapes(options: OBJ_PointsToShapes) {
   const defaultOptions = {
     size: 0.01,
-    shape: squareFill.bind(this),
+    shape: squareFill.bind(undefined),
     makeColors: null,
   };
-  const o = joinObjects({}, defaultOptions, options);
+  const o = joinObjects<any>({}, defaultOptions, options);
   const shape = processShapeFunction(o.shape);
-  const vertices = [];
-  const colors = [];
+  const vertices: number[] = [];
+  const colors: number[] = [];
   for (let i = 0; i < o.points.length; i += 1) {
     const point = getPoint(o.points[i]);
     const shapeVertices = shape(point, o.size);
-    let vertexColors = [];
+    let vertexColors: number[] = [];
     if (o.makeColors != null) {
       vertexColors = o.makeColors(
         shapeVertices.length / 2, point,
@@ -867,12 +865,12 @@ function pointsToShapes(options: OBJ_PointsToShapes) {
  * @property {boolean} [simple] `false` fills corners.
  */
 export type OBJ_MorphPolyline = {
-  points: Array<TypeParsablePoint>,
-  num?: number,
-  close?: boolean,
-  width?: number,
-  simple?: boolean,
-}
+  points: Array<TypeParsablePoint>;
+  num?: number;
+  close?: boolean;
+  width?: number;
+  simple?: boolean;
+};
 
 /**
  * Creates triangles to the width of a polyline.
@@ -924,7 +922,7 @@ function polyline(options: OBJ_MorphPolyline) {
     stripPoints.splice(-2, 2);
   }
   stripPoints = stripPoints.map(p => p.round());
-  let vertices;
+  let vertices: number[];
   if (o.simple) {
     vertices = Array(stripPoints.length * 6 * 2);
   } else if (o.close) {
@@ -933,7 +931,7 @@ function polyline(options: OBJ_MorphPolyline) {
     vertices = Array(stripPoints.length * 12 * 2);
   }
   let index = 0;
-  const fillVertices = (p1, p2, p3, p4, p5, p6) => {
+  const fillVertices = (p1: Point, p2: Point, p3: Point, p4: Point, p5: Point, p6: Point) => {
     vertices[index] = p1.x;
     vertices[index + 1] = p1.y;
     vertices[index + 2] = p2.x;
@@ -982,11 +980,11 @@ function polyline(options: OBJ_MorphPolyline) {
  * @property {1 | -1} [direction] 1 is CCW, -1 is CW (`1`)
  */
 export type OBJ_GetPolygonCorners = {
-  radius?: number,
-  sides?: number,
-  position?: TypeParsablePoint,
-  rotation?: number,
-  direction?: 1 | -1,
+  radius?: number;
+  sides?: number;
+  position?: TypeParsablePoint;
+  rotation?: number;
+  direction?: 1 | -1;
 };
 
 /**
@@ -1004,9 +1002,9 @@ function getPolygonCorners(options: OBJ_GetPolygonCorners) {
     position: [0, 0],
     direction: 1,
   };
-  const o = joinObjects({}, defaultOptions, options);
+  const o = joinObjects<any>({}, defaultOptions, options);
   const position = getPoint(o.position);
-  const points = [];
+  const points: Point[] = [];
   const dAngle = Math.PI * 2 / o.sides;
   for (let i = 0; i < o.sides; i += 1) {
     points.push(new Point(
@@ -1036,13 +1034,13 @@ function getPolygonCorners(options: OBJ_GetPolygonCorners) {
  * [x1, y1, x2, y2, x3, y3, ....]
  */
 export type OBJ_PolygonCloudShapes = {
-  radius?: number,
-  sides?: number,
-  position?: TypeParsablePoint,
-  rotation?: number,
-  num?: number,
-  size?: number,
-  shape?: number | ((Point, number) => Array<number>),
+  radius?: number;
+  sides?: number;
+  position?: TypeParsablePoint;
+  rotation?: number;
+  num?: number;
+  size?: number;
+  shape?: number | ((center: Point, size: number) => Array<number>);
 };
 
 /**
@@ -1086,11 +1084,11 @@ function polygonCloudShapes(options: OBJ_PolygonCloudShapes) {
     position: [0, 0],
     num: 10,
     size: 0.01,
-    shape: squareFill.bind(this),
+    shape: squareFill.bind(undefined),
   };
-  const o = joinObjects({}, defaultOptions, options);
+  const o = joinObjects<any>({}, defaultOptions, options);
   const position = getPoint(o.position);
-  const points = [];
+  const points: number[] = [];
   const apothem = o.radius * Math.cos(Math.PI / o.sides);
   const makePoints = processShapeFunction(o.makePoints);
 
@@ -1128,11 +1126,11 @@ function polygonCloudShapes(options: OBJ_PolygonCloudShapes) {
  * [x1, y1, x2, y2, x3, y3, ....]
  */
 export type OBJ_CircleCloudShapes = {
-  radius?: number,
-  position?: TypeParsablePoint,
-  num?: number,
-  shape?: ([number, number], number) => Array<number>,
-  size?: number,
+  radius?: number;
+  position?: TypeParsablePoint;
+  num?: number;
+  shape?: ((position: [number, number], size: number) => Array<number>);
+  size?: number;
 };
 
 /**
@@ -1172,11 +1170,11 @@ function circleCloudShapes(options: OBJ_CircleCloudShapes) {
     position: [0, 0],
     num: 10,
     size: 0.01,
-    shape: squareFill.bind(this),
+    shape: squareFill.bind(undefined),
   };
-  const o = joinObjects({}, defaultOptions, options);
+  const o = joinObjects<any>({}, defaultOptions, options);
   const position = getPoint(o.position);
-  const points = [];
+  const points: number[] = [];
   const shape = processShapeFunction(o.shape);
 
   for (let i = 0; i < o.num; i += 1) {
@@ -1211,12 +1209,12 @@ function circleCloudShapes(options: OBJ_CircleCloudShapes) {
  * [x1, y1, x2, y2, x3, y3, ....]
  */
 export type OBJ_RectangleCloudShapes = {
-  width?: number,
-  height?: number,
-  position?: TypeParsablePoint,
-  num?: number,
-  shape?: ([number, number], number) => Array<number>,
-  size?: number,
+  width?: number;
+  height?: number;
+  position?: TypeParsablePoint;
+  num?: number;
+  shape?: ((position: [number, number], size: number) => Array<number>);
+  size?: number;
 };
 
 /**
@@ -1260,11 +1258,11 @@ function rectangleCloudShapes(options: OBJ_RectangleCloudShapes) {
     position: [0, 0],
     num: 10,
     size: 0.01,
-    shape: squareFill.bind(this),
+    shape: squareFill.bind(undefined),
   };
-  const o = joinObjects({}, defaultOptions, options);
+  const o = joinObjects<any>({}, defaultOptions, options);
   const position = getPoint(o.position);
-  const points = [];
+  const points: number[] = [];
   const shape = processShapeFunction(o.shape);
 
   for (let i = 0; i < o.num; i += 1) {

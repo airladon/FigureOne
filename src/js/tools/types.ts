@@ -1,5 +1,16 @@
-// @flow
-import type { OBJ_AtlasMap } from '../figure/webgl/Atlas';
+/**
+ * Atlas map type - defined locally to avoid dependency on unmigrated figure layer.
+ * Mirrors OBJ_AtlasMap from '../figure/webgl/Atlas'.
+ */
+type OBJ_AtlasMap = {
+  [char: string]: {
+    width: number;
+    ascent: number;
+    descent: number;
+    offsetX: number;
+    offsetY: number;
+  };
+};
 
 /**
  * Defines whether a line is solid or dashed.
@@ -43,8 +54,8 @@ export type TypeCoordinateSpace = 'pixel' | 'gl' | 'figure' | 'local' | 'draw';
   Curved Corner Definition
  */
 export type OBJ_CurvedCorner = {
-  radius?: number,
-  sides?: number,
+  radius?: number;
+  sides?: number;
 };
 
 /**
@@ -63,9 +74,9 @@ export type OBJ_CurvedCorner = {
  * use if including a fill
  */
 export type OBJ_Outline = {
-  width?: number,
-  fill?: boolean,
-  color?: TypeColor,
+  width?: number;
+  fill?: boolean;
+  color?: TypeColor;
 };
 
 /**
@@ -82,9 +93,9 @@ export type OBJ_Outline = {
  * @property {TypeColor} [color]
  */
 export type OBJ_Underline = {
-  width?: number,
-  descent?: number,
-  color?: TypeColor,
+  width?: number;
+  descent?: number;
+  color?: TypeColor;
 };
 
 /**
@@ -95,9 +106,9 @@ export type OBJ_Underline = {
  * @property {a} [number] ascent
  */
 export type OBJ_GlyphModifiers = {
-  w?: number,
-  d?: number,
-  a?: number,
+  w?: number;
+  d?: number;
+  a?: number;
 };
 
 /* eslint-disable max-len */
@@ -252,52 +263,51 @@ export type TypeFontWeight = 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | 
  * });
  */
 export type OBJ_Font = {
-  family?: string,
-  weight?: TypeFontWeight,
-  style?: 'normal' | 'italic' | 'oblique',
-  size?: number,
+  family?: string;
+  weight?: TypeFontWeight;
+  style?: 'normal' | 'italic' | 'oblique';
+  size?: number;
 
   // Modifying properties
-  underline?: boolean | OBJ_Underline,
-  color?: TypeColor | null,
-  outline?: boolean | OBJ_Outline,
+  underline?: boolean | OBJ_Underline;
+  color?: TypeColor | null;
+  outline?: boolean | OBJ_Outline;
 
   // Font measurements
-  descent?: number,
-  maxDescent?: number,
-  midDescent?: number,
-  maxAscent?: number,
-  midAscent?: number,
-  modifiers?: OBJ_GlyphModifiers,
+  descent?: number;
+  maxDescent?: number;
+  midDescent?: number;
+  maxAscent?: number;
+  midAscent?: number;
+  modifiers?: OBJ_GlyphModifiers;
 
   // Atlas definition
-  src?: Image | string,
-  map?: OBJ_AtlasMap,
-  glyphs?: string | 'greek' | 'math' | 'latin' | 'all' | 'common' | 'mathExt',
-  loadColor?: TypeColor,
-  atlasColor?: boolean,
-  atlasSize?: number | null,
+  src?: HTMLImageElement | string;
+  map?: OBJ_AtlasMap;
+  glyphs?: string | 'greek' | 'math' | 'latin' | 'all' | 'common' | 'mathExt';
+  loadColor?: TypeColor;
+  atlasColor?: boolean;
+  atlasSize?: number | null;
 
-  timeout?: number,
-  modifiers?: OBJ_GlyphModifiers,
+  timeout?: number;
 
-  render?: 'gl' | '2d' | 'html',
+  render?: 'gl' | '2d' | 'html';
 };
 
 export type OBJ_Font_Fixed = {
-  family: string,
-  style: 'normal' | 'italic',
-  size: number,
-  weight: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
-  color: TypeColor | null,
-  underline: boolean | number | [number, number],
-  // opacity: number,
-  width: number,
-  descent: number,
-  maxDescent: number,
-  midDescent: number,
-  maxAscent: number,
-  midAscent: number,
+  family: string;
+  style: 'normal' | 'italic';
+  size: number;
+  weight: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
+  color: TypeColor | null;
+  underline: boolean | number | [number, number];
+  // opacity: number;
+  width: number;
+  descent: number;
+  maxDescent: number;
+  midDescent: number;
+  maxAscent: number;
+  midAscent: number;
 };
 
 const doNothing = 1;

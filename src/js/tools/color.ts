@@ -1,5 +1,3 @@
-// @flow
-
 import colorNames from './colorNames';  // official css color names
 // eslint-disable-next-line import/no-cycle
 import getCSSColors from './getCssColors';

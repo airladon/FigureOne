@@ -1,8 +1,7 @@
-// @flow
 class GeneralFunctionMap {
   map: { [id: string]: {
-    fn: Function,
-  }}
+    fn: Function;
+  }};
 
   constructor() {
     this.map = {};
@@ -17,7 +16,7 @@ class GeneralFunctionMap {
     };
   }
 
-  exec(idOrFn: string | Function | null, ...args: any) {
+  exec(idOrFn: string | Function | null, ...args: any[]): any {
     if (idOrFn == null) {
       return null;
     }
@@ -36,7 +35,7 @@ class GeneralFunctionMap {
     throw new Error(`${idOrFn} needs to be a function or a string`);
   }
 
-  execOnMaps(idOrFn: string | Function | null, mapsIn: Array<Object>, ...args: any) {
+  execOnMaps(idOrFn: string | Function | null, mapsIn: Array<Record<string, any>>, ...args: any[]): any {
     if (idOrFn == null) {
       return null;
     }
@@ -63,7 +62,7 @@ class GeneralFunctionMap {
 
 
 class GlobalFunctionMap extends GeneralFunctionMap {
-  static instance: Object;
+  static instance: GlobalFunctionMap;
   constructor() {
     // If the instance alread exists, then don't create a new instance.
     // If it doesn't, then setup some default values.
@@ -108,10 +107,6 @@ class GlobalFunctionMap extends GeneralFunctionMap {
  * figure.fnMap.exec('toConsole', 'hello');
  */
 class FunctionMap extends GeneralFunctionMap {
-  map: { [id: string]: {
-    fn: Function,
-  }}
-
   global: GlobalFunctionMap;
 
   constructor() {
@@ -128,11 +123,11 @@ class FunctionMap extends GeneralFunctionMap {
    * function will be exectuted. If `null`, then nothing will happen.
    * @param {any} ...args arguments to pass to function.
    */
-  exec(idOrFn: string | Function | null, ...args: any) {
+  override exec(idOrFn: string | Function | null, ...args: any[]) {
     return this.execOnMaps(idOrFn, [this.global.map], ...args);
   }
 
-  execOnMaps(idOrFn: string | Function | null, mapsIn: Array<Object>, ...args: any) {
+  override execOnMaps(idOrFn: string | Function | null, mapsIn: Array<Record<string, any>>, ...args: any[]) {
     return super.execOnMaps(idOrFn, [...mapsIn, this.global.map], ...args);
   }
 
@@ -141,7 +136,7 @@ class FunctionMap extends GeneralFunctionMap {
    * @param {string} id unique identifier
    * @param {Function} fn function to add
    */
-  add(id: string, fn: Function) {
+  override add(id: string, fn: Function) {
     return super.add(id, fn);
   }
 }

@@ -1,6 +1,6 @@
 // @ flow
 
-function colorNames() {
+function colorNames(): Record<string, string> {
   return {
     aliceblue: '#f0f8ff',
     antiquewhite: '#faebd7',
