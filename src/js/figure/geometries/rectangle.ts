@@ -1,4 +1,3 @@
-// @flow
 import {
   Point,
 } from '../../tools/g2';
@@ -24,7 +23,7 @@ function getRectPoints(
       new Point(x + offset.x, y + height + offset.y),
     ];
   }
-  const points = [];
+  const points: Point[] = [];
   const deltaAngle = Math.PI / 2 / sides;
   const r = Math.min(width / 2, height / 2, radius);
   const corners = [
@@ -47,20 +46,20 @@ function getRectPoints(
 
 function getRectangleBorder(
   options: {
-    width: number,
-    height: number,
-    xAlign: 'left' | 'center' | 'right' | number,
-    yAlign: 'bottom' | 'middle' | 'top' | number,
+    width: number;
+    height: number;
+    xAlign: 'left' | 'center' | 'right' | number;
+    yAlign: 'bottom' | 'middle' | 'top' | number;
     corner: {
-      radius: number,
-      sides: number,
-    },
+      radius: number;
+      sides: number;
+    };
     line?: {
-      widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid' | number,
-      width: number,
-    },
-    drawBorderBuffer: number | Array<Array<Point>>,
-    offset: Point,
+      widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid' | number;
+      width: number;
+    };
+    drawBorderBuffer: number | Array<Array<Point>>;
+    offset: Point;
   },
 ) {
   const {
@@ -101,4 +100,3 @@ export {
   getRectangleBorder,
   rectangleBorderToTris,
 };
-

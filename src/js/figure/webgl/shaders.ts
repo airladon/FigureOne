@@ -1,4 +1,3 @@
-// @flow
 import { joinObjects } from '../../tools/tools';
 
 /**
@@ -60,9 +59,9 @@ import { joinObjects } from '../../tools/tools';
  * @property {'point' | 'directional' | null} [light] (`null`)
  */
 export type OBJ_VertexShader = {
-  light?: 'point' | 'directional' | null,
-  color?: 'vertex' | 'uniform' | 'texture',
-  dimension?: 2 | 3,
+  light?: 'point' | 'directional' | null;
+  color?: 'vertex' | 'uniform' | 'texture';
+  dimension?: 2 | 3;
 };
 
 /**
@@ -74,7 +73,7 @@ export type OBJ_VertexShader = {
  *   options for a composable shader
  */
 export type TypeVertexShader = string
-  | { src: string, vars?: Array<string> }
+  | { src: string; vars?: Array<string> }
   | Array<string | number | boolean>
   | OBJ_VertexShader;
 
@@ -119,8 +118,8 @@ export type TypeVertexShader = string
  * @property {'point' | 'directional' | null} [light] (`null`)
  */
 export type OBJ_FragmentShader = {
-  light?: 'point' | 'directional' | null,
-  color?: 'vertex' | 'uniform' | 'texture',
+  light?: 'point' | 'directional' | null;
+  color?: 'vertex' | 'uniform' | 'texture';
 };
 
 /**
@@ -132,17 +131,17 @@ export type OBJ_FragmentShader = {
  *   options for a composable shader
  */
 export type TypeFragmentShader = string
-  | { src: string, vars?: Array<string> }
+  | { src: string; vars?: Array<string> }
   | Array<string | number | boolean>
   | OBJ_FragmentShader;
 
 function composeVertexShader(
   options: {
-    dimension: 2 | 3,
-    color: 'vertex' | 'uniform' | 'texture',
-    light: null | 'point ' | 'directional',
+    dimension?: 2 | 3;
+    color?: 'vertex' | 'uniform' | 'texture';
+    light?: null | 'point ' | 'directional';
   } = {},
-) {
+): [string, string[]] {
   const defaultOptions = {
     dimension: 2,
     color: 'uniform',
@@ -150,7 +149,7 @@ function composeVertexShader(
   };
   const {
     dimension, light, color,
-  } = joinObjects(defaultOptions, options);
+  } = joinObjects<any>(defaultOptions, options);
   let src = '\nuniform mat4 u_worldViewProjectionMatrix;\n';
   const vars = ['u_worldViewProjectionMatrix'];
 
@@ -222,17 +221,17 @@ function composeVertexShader(
 
 function composeFragShader(
   options: {
-    light: null | 'point ' | 'directional',
-    color: 'vertex' | 'uniform' | 'texture',
+    light?: null | 'point ' | 'directional';
+    color?: 'vertex' | 'uniform' | 'texture';
   } = {},
-) {
+): [string, string[]] {
   const defaultOptions = {
     color: 'uniform',
     light: null,
   };
   const {
     light, color,
-  } = joinObjects(defaultOptions, options);
+  } = joinObjects<any>(defaultOptions, options);
 
   let src = '\nprecision mediump float;\n';
   src += 'uniform vec4 u_color;\n';
@@ -305,7 +304,7 @@ function composeFragShader(
 const vertex = {
   simple: {
     src: `
-attribute vec4 a_vertex; 
+attribute vec4 a_vertex;
 uniform mat4 u_worldViewProjectionMatrix;
 void main() {
   gl_Position = u_worldViewProjectionMatrix * a_vertex;
@@ -314,7 +313,7 @@ void main() {
   },
   selector: {
     src: `
-attribute vec4 a_vertex; 
+attribute vec4 a_vertex;
 uniform mat4 u_worldViewProjectionMatrix;
 void main() {
   gl_Position = u_worldViewProjectionMatrix * a_vertex;
@@ -684,44 +683,46 @@ const getShaders = (
 ) => {
   let vertexSource = '';
   let fragmentSource = '';
-  let vars = [];
+  let vars: string[] = [];
   if (typeof vName === 'string') {
-    if (vertex[vName] == null) {
+    const entry = (vertex as Record<string, any>)[vName];
+    if (entry == null) {
       throw new Error(`Built in vertex shader does not exist: ${vName}`);
     }
-    vertexSource = vertex[vName].src;
-    vars.push(...vertex[vName].vars);
+    vertexSource = entry.src;
+    vars.push(...entry.vars);
   } else if (Array.isArray(vName) && typeof vName[0] === 'string') {
-    const shader = vertex[vName[0]](...vName.slice(1));
+    const shader = (vertex as any)[vName[0]](...vName.slice(1));
     vertexSource = shader.src;
     vars.push(...shader.vars);
-  } else if (!Array.isArray(vName) && vName.src != null) {
-    vertexSource = vName.src; // $FlowFixMe
+  } else if (!Array.isArray(vName) && 'src' in vName) {
+    vertexSource = vName.src;
     vars.push(...(vName.vars || []));
-  } else if (typeof vName === 'object') { // $FlowFixMe
-    [vertexSource, vars] = composeVertexShader(vName);
-  } else {  // $FlowFixMe
-    throw new Error(`Vertex shader definition incorrect: ${vName}`);
+  } else if (typeof vName === 'object') {
+    [vertexSource, vars] = composeVertexShader(vName as any);
+  } else {
+    throw new Error(`Vertex shader definition incorrect: ${vName as any}`);
   }
   if (typeof fName === 'string') {
-    if (fragment[fName] == null) {
+    const entry = (fragment as Record<string, any>)[fName];
+    if (entry == null) {
       throw new Error(`Built in fragment shader does not exist: ${fName}`);
     }
-    fragmentSource = fragment[fName].src;
-    vars.push(...fragment[fName].vars);
+    fragmentSource = entry.src;
+    vars.push(...entry.vars);
   } else if (Array.isArray(fName) && typeof fName[0] === 'string') {
-    const shader = vertex[fName[0]](...fName.slice(1));
+    const shader = (vertex as any)[fName[0]](...fName.slice(1));
     fragmentSource = shader.src;
     vars.push(...shader.vars);
-  } else if (!Array.isArray(fName) && fName.src != null && typeof fName.src === 'string') {
-    fragmentSource = fName.src; // $FlowFixMe
+  } else if (!Array.isArray(fName) && 'src' in fName && typeof fName.src === 'string') {
+    fragmentSource = fName.src;
     vars.push(...(fName.vars || []));
   } else if (typeof fName === 'object') {
-    let fVars; // $FlowFixMe
-    [fragmentSource, fVars] = composeFragShader(fName);
+    let fVars: string[];
+    [fragmentSource, fVars] = composeFragShader(fName as any);
     vars.push(...fVars);
-  } else {  // $FlowFixMe
-    throw new Error(`Fragment shader definition incorrect: ${fName}`);
+  } else {
+    throw new Error(`Fragment shader definition incorrect: ${fName as any}`);
   }
   // } else {
   //   fragmentSource = fName.src;
@@ -749,4 +750,3 @@ const getShaders = (
 };
 
 export default getShaders;
-

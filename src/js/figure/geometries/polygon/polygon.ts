@@ -1,4 +1,3 @@
-// @flow
 import {
   Point,
 } from '../../../tools/g2';
@@ -8,13 +7,13 @@ import {
 // } from '../../../../tools/math';
 
 function getPolygonPoints(options: {
-  radius: number,
-  innerRadius?: number,
-  rotation: number,
-  offset: Point,
-  sides: number,
-  sidesToDraw: number,
-  direction: 1 | -1,
+  radius: number;
+  innerRadius?: number;
+  rotation: number;
+  offset: Point;
+  sides: number;
+  sidesToDraw: number;
+  direction: 1 | -1;
 }): Array<Point> {
   const {
     radius, rotation, offset, sides, sidesToDraw, direction, innerRadius,

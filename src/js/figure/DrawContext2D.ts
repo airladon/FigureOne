@@ -1,5 +1,3 @@
-// @flow
-
 class DrawContext2D {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
@@ -7,18 +5,13 @@ class DrawContext2D {
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
-    this.ctx = this.canvas.getContext('2d');
+    this.ctx = this.canvas.getContext('2d')!;
 
-    /* $FlowFixMe */
-    const bsr = this.ctx.webkitBackingStorePixelRatio
-              /* $FlowFixMe */
-              || this.ctx.mozBackingStorePixelRatio
-              /* $FlowFixMe */
-              || this.ctx.msBackingStorePixelRatio
-              /* $FlowFixMe */
-              || this.ctx.oBackingStorePixelRatio
-              /* $FlowFixMe */
-              || this.ctx.backingStorePixelRatio || 1;
+    const bsr = (this.ctx as any).webkitBackingStorePixelRatio
+              || (this.ctx as any).mozBackingStorePixelRatio
+              || (this.ctx as any).msBackingStorePixelRatio
+              || (this.ctx as any).oBackingStorePixelRatio
+              || (this.ctx as any).backingStorePixelRatio || 1;
 
     let dpr = window.devicePixelRatio || 1;
     if (dpr === 1) {

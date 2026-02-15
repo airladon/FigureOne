@@ -1,4 +1,3 @@
-// @flow
 
 import FontManager from '../FontManager';
 import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
@@ -83,41 +82,41 @@ function isIOS() {
 }
 export type OBJ_AtlasMap = {
   [char: string]: {
-    width: number,
-    ascent: number,
-    descent: number,
-    offsetX: number,
-    offsetY: number,
+    width: number;
+    ascent: number;
+    descent: number;
+    offsetX: number;
+    offsetY: number;
   }
 };
 
 export type OBJ_Atlas = {
-  font?: FigureFont,
-  loadColor?: TypeColor,
-  scene?: Scene,
-  maxCount?: number,
-  timeout?: number,
-  map?: OBJ_AtlasMap,
+  font?: FigureFont;
+  loadColor?: TypeColor;
+  scene?: Scene;
+  maxCount?: number;
+  timeout?: number;
+  map?: OBJ_AtlasMap;
 };
 
 export default class Atlas {
   webgl: WebGLInstance;
   font: FigureFont;             // font definition
-  fontSize: number;             // calculated pixel size
-  src: Image | string;          // external image of atlas
-  fontID: string;               // FontManager font id
-  dimension: number;            // side length of atlas in pixels
+  fontSize!: number;             // calculated pixel size
+  src!: HTMLImageElement | string;          // external image of atlas
+  fontID!: string;               // FontManager font id
+  dimension!: number;            // side length of atlas in pixels
   loaded: boolean;              // true once FontManager says font is loaded
-  scene: Scene;
-  canvas: HTMLCanvasElement;
-  fontManager: FontManager;
+  scene!: Scene;
+  canvas!: HTMLCanvasElement;
+  fontManager!: FontManager;
   notifications: NotificationManager;
-  map: OBJ_AtlasMap
+  map!: OBJ_AtlasMap;
 
 
   constructor(webgl: WebGLInstance, options: OBJ_Atlas) {
     this.webgl = webgl;
-    const o = joinObjects({}, {
+    const o = joinObjects<any>({}, {
       // src: null,
       // alphabet: 'latin',
       loadColor: [0, 0, 0, 0],
@@ -165,7 +164,7 @@ export default class Atlas {
       maxCount: o.maxCount,
       callback: this.fontLoaded.bind(this),
       atlas: true,
-    });
+    } as any);
     this.fontID = fontID;
     // this.textureId = this.font.getTextureId();
     this.createAtlas(options.scene);
@@ -231,7 +230,7 @@ export default class Atlas {
     canvas.width = dimension;
     canvas.height = dimension;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d')!;
     ctx.font = `${font.style} ${font.weight} ${fontSizePX}px ${font.family}`;
 
     let x = fontSizePX;
@@ -241,12 +240,12 @@ export default class Atlas {
     const aWidth = this.fontSize / 2;
 
     font.setColorInContext(ctx, font.color);
-    if (font.outline.color) { // $FlowFixMe
+    if (font.outline.color) {
       font.setStrokeColorInContext(ctx, font.outline.color);
     } else {
       font.setStrokeColorInContext(ctx, font.color);
     }
-    if (font.outline.width !== 0) { // $FlowFixMe
+    if (font.outline.width !== 0) {
       ctx.lineWidth = font.outline.width * fontSizePX / font.size;
     }
     for (let i = 0; i < glyphs.length; i += 1) {
@@ -282,7 +281,6 @@ export default class Atlas {
     if (font.underline != null && font.underline.color != null) {
       underlineColor = font.underline.color;
     }
-    // $FlowFixMe
     font.setColorInContext(ctx, underlineColor);
     ctx.fillRect(0, dimension - 5, 5, 5);
 

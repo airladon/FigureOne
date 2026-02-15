@@ -1,4 +1,3 @@
-// @flow
 import {
   Point, Line, getPoint,
 } from '../../tools/g2';
@@ -53,14 +52,14 @@ import type { TypeParsablePoint } from '../../tools/g2';
 // }
 
 function getLine(options: {
-  p1: Point,
-  p2?: Point,
-  length: number,
-  width: number,
-  angle: number,
-  widthIs: 'mid' | 'positive' | 'negative',
-  border: 'rect' | 'outline' | Array<Array<TypeParsablePoint>>,
-  touchBorder: 'rect' | 'border' | Array<Array<TypeParsablePoint>>,
+  p1: Point;
+  p2?: Point;
+  length: number;
+  width: number;
+  angle: number;
+  widthIs: 'mid' | 'positive' | 'negative';
+  border: 'rect' | 'outline' | Array<Array<TypeParsablePoint>>;
+  touchBorder: 'rect' | 'border' | number | Array<Array<TypeParsablePoint>>;
 }) {
   const {
     p1, p2, length, width, angle, border, touchBorder, widthIs,
@@ -75,7 +74,7 @@ function getLine(options: {
     points.push(getPoint(p2));
   }
 
-  let borderToUse = border;
+  let borderToUse: 'rect' | 'outline' | 'line' | Array<Array<TypeParsablePoint>> = border;
   let touchBorderToUse = touchBorder;
   if (border === 'outline') {
     borderToUse = 'line';

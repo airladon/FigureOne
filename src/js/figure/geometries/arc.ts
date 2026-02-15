@@ -1,4 +1,4 @@
-// @flow
+
 import {
   Point,
 } from '../../tools/g2';
@@ -7,21 +7,21 @@ import type {
 } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 
 export type OBJ_Arc_Defined = {
-  radius: number,
-  sides: number,
-  startAngle: number,
-  angle: number,
+  radius: number;
+  sides: number;
+  startAngle: number;
+  angle: number;
   line?: {
-    widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
-    width: number,
-  },
-  offset: Point,
-  fillCenter: boolean,
-  drawBorderBuffer: number | Array<Array<Point>>
+    widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid';
+    width: number;
+  };
+  offset: Point;
+  fillCenter: boolean;
+  drawBorderBuffer: number | Array<Array<Point>>;
 } & OBJ_Generic;
 
 function getArcBorder(options: OBJ_Arc_Defined): Array<Point> {
-  const points = [];
+  const points: Point[] = [];
   const {
     radius, startAngle, angle, offset, sides,
   } = options;

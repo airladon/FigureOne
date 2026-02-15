@@ -1,4 +1,3 @@
-// @flow
 import {
   Point, Line,
 } from '../../../tools/g2';
@@ -9,7 +8,7 @@ import type { TypeDash } from '../../../tools/types';
 
 
 function makeDashDefinition(dashes: Array<number>) {
-  const cum = [];
+  const cum: number[] = [];
   const cycleLength = dashes.reduce((p, sum) => {
     cum.push(p + sum);
     return p + sum;
@@ -23,9 +22,9 @@ function makeDashDefinition(dashes: Array<number>) {
 
 function getDashElementAndRemainder(
   dash: {
-    definition: Array<number>,
-    cum: Array<number>,
-    sum: number,
+    definition: Array<number>;
+    cum: Array<number>;
+    sum: number;
   },
   offset: number,
   precision: number = 8,
@@ -53,16 +52,16 @@ function getDashElementAndRemainder(
 
 function makeDashes(
   dash: {
-    definition: Array<number>,
-    cum: Array<number>,
-    sum: number,
+    definition: Array<number>;
+    cum: Array<number>;
+    sum: number;
   },
   p1: Point,
   p2: Point,
   offset: number,
   precision: number = 8,
 ) {
-  const points = [];
+  const points: Point[][] = [];
   let cumDistance = 0;
   // eslint-disable-next-line prefer-const
   let [index, remainder] = getDashElementAndRemainder(dash, offset, precision);
@@ -114,12 +113,12 @@ function lineToDash(
     dashToUse = dash.slice(1);
     [offset] = dash;
   }
-  let out = [];
+  let out: Point[][] = [];
   const dd = makeDashDefinition(dashToUse);
   let cumLength = offset;
   let lastContinue = false;
   let onLine = true;
-  const processLine = (p1, p2) => {
+  const processLine = (p1: Point, p2: Point) => {
     const dashes = makeDashes(dd, p1, p2, cumLength, precision);
     ({ onLine } = dashes);
     const dashLines = dashes.points;

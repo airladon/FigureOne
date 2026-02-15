@@ -1,4 +1,3 @@
-// @flow
 import {
   Point, Transform, Line, minAngleDiff, threePointAngle, getPoints, getTriangleCenter,
 } from '../../tools/g2';
@@ -34,7 +33,7 @@ function alignTriangle(
   pointsIn: Array<Point>,
   xAlign: 'left' | 'center' | 'right' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid' | 'points',
   yAlign: 'bottom' | 'middle' | 'top' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid' | 'points',
-  rotation: number | 's1' | 's2' | 's3' | { side?: 's1' | 's2' | 's3', angle?: number },
+  rotation: number | 's1' | 's2' | 's3' | { side?: 's1' | 's2' | 's3'; angle?: number },
   // definedWithPoints: boolean,
 ): Array<Point> {
   let rotationMatrix;
@@ -46,7 +45,7 @@ function alignTriangle(
     if (typeof rotation === 'string') {
       side = rotation;
     } else {
-      ({ side, angle } = joinObjects({}, { side: 's1', angle: 0 }, rotation));
+      ({ side, angle } = joinObjects<any>({}, { side: 's1', angle: 0 }, rotation));
     }
     let r = 0;
     if (side === 's1') {
@@ -240,26 +239,26 @@ function getSSSPoints(
 }
 
 export type OBJ_Triangle_Defined = {
-  width: number,
-  height: number,
+  width: number;
+  height: number;
   // xAlign: 'left' | 'center' | 'right' | number,
   // yAlign: 'bottom' | 'middle' | 'top' | number,
-  top: 'left' | 'right' | 'center',
-  points?: Array<TypeParsablePoint>,
-  SSS?: [number, number, number],
-  ASA?: [number, number, number],
-  AAS?: [number, number, number],
-  SAS?: [number, number, number],
-  direction: 1 | -1,
+  top: 'left' | 'right' | 'center';
+  points?: Array<TypeParsablePoint>;
+  SSS?: [number, number, number];
+  ASA?: [number, number, number];
+  AAS?: [number, number, number];
+  SAS?: [number, number, number];
+  direction: 1 | -1;
   // rotation: number | { side: number, angle: number },
-  xAlign: 'left' | 'center' | 'right' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid' | 'points',
-  yAlign: 'bottom' | 'middle' | 'top' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid' | 'points',
-  rotation: number | 's1' | 's2' | 's3' | { side?: 's1' | 's2' | 's3', angle?: number },
+  xAlign: 'left' | 'center' | 'right' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid' | 'points';
+  yAlign: 'bottom' | 'middle' | 'top' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid' | 'points';
+  rotation: number | 's1' | 's2' | 's3' | { side?: 's1' | 's2' | 's3'; angle?: number };
   line?: {
-    widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
-    width: number,
-  },
-  drawBorderBuffer: number | Array<Array<TypeParsablePoint>>
+    widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid';
+    width: number;
+  };
+  drawBorderBuffer: number | Array<Array<TypeParsablePoint>>;
 };
 
 function getTriangleBorder(options: OBJ_Triangle_Defined) {

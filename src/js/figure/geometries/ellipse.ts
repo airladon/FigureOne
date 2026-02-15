@@ -1,4 +1,4 @@
-// @flow
+
 import {
   Point,
 } from '../../tools/g2';
@@ -7,16 +7,16 @@ import type {
 } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 
 export type OBJ_Ellipse_Defined = {
-  width: number,
-  height: number,
-  xAlign: 'left' | 'center' | 'right' | number,
-  yAlign: 'bottom' | 'middle' | 'top' | number,
-  sides: number,
+  width: number;
+  height: number;
+  xAlign: 'left' | 'center' | 'right' | number;
+  yAlign: 'bottom' | 'middle' | 'top' | number;
+  sides: number;
   line?: {
-    widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
-    width: number,
-  },
-  drawBorderBuffer: number | Array<Array<Point>>
+    widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid';
+    width: number;
+  };
+  drawBorderBuffer: number | Array<Array<Point>>;
 } & OBJ_Generic;
 
 // import {
@@ -30,7 +30,7 @@ function getEllipsePoints(
   x: number,
   y: number,
 ): Array<Point> {
-  const points = [];
+  const points: Point[] = [];
   const deltaAngle = Math.PI * 2 / sides;
   for (let i = 0; i < sides; i += 1) {
     points.push(new Point(

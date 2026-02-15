@@ -1,5 +1,4 @@
 
-// @flow
 /* eslint-disable camelcase */
 import {
   Transform, Point, polarToRect, getBoundingRect, getPoints, getPoint,
@@ -174,15 +173,15 @@ import {
  */
 export type CPY_Step = {
   to?: TypeParsablePoint | TypeParsableTransform
-    | Array<TypeParsablePoint | TypeParsableTransform>,
-  along?: 'x' | 'y' | 'z' | number | 'rotation' | 'moveOnly' | TypeParsablePoint,
-  axis?: TypeParsablePoint,
-  num?: number,
-  step?: number,
-  center?: TypeParsablePoint,
-  start?: number | string,
-  end?: number | string,
-  original?: boolean,
+    | Array<TypeParsablePoint | TypeParsableTransform>;
+  along?: 'x' | 'y' | 'z' | number | 'rotation' | 'moveOnly' | TypeParsablePoint;
+  axis?: TypeParsablePoint;
+  num?: number;
+  step?: number;
+  center?: TypeParsablePoint;
+  start?: number | string;
+  end?: number | string;
+  original?: boolean;
 };
 /* eslint-enable max-len */
 
@@ -196,7 +195,7 @@ function getPointsToCopy(
   endIn: number | string,
   marks: CPY_Marks,
 ) {
-  const out = [];
+  const out: Point[] = [];
   const start = marks[`${startIn}`];
   let end;
   if (endIn === 'end') {
@@ -252,9 +251,9 @@ function copyLinear(
     num: 1,
   };
   let angle = 0;
-  let direction = [1, 0, 0];
+  let direction: any = [1, 0, 0];
 
-  const options = joinObjects({}, defaultOptions, optionsIn);
+  const options = joinObjects<any>({}, defaultOptions, optionsIn);
 
   if (options.along === 'y') {
     // angle = Math.PI / 2;
@@ -280,7 +279,7 @@ function copyLinear(
     options.step = Math.abs(bounds.height / Math.sin(angle));
   }
 
-  let out = [];
+  let out: Point[] = [];
   for (let i = 1; i < options.num + 1; i += 1) {
     const step = options.step * i;
     // const t = new Transform.translate()
@@ -308,10 +307,10 @@ function copyAngle(
     axis: [0, 0, 1],
   };
 
-  const options = joinObjects({}, defaultOptions, optionsIn);
+  const options = joinObjects<any>({}, defaultOptions, optionsIn);
   options.center = getPoint(options.center);
 
-  let out = [];
+  let out: Point[] = [];
   let { center } = options;
   if (type === 'normals') {
     center = getPoint([0, 0, 0]);
@@ -362,17 +361,17 @@ function copyStep(
       return copyTransform(points, to, type);
     }
     if (Array.isArray(to)) {
-      const processToCopyStep = (toStep) => {
+      const processToCopyStep = (toStep: any) => {
         if (
           (Array.isArray(toStep) && typeof toStep[0] === 'number')
           || (toStep instanceof Point)
-        ) { // $FlowFixMe
-          return copyOffset(points, getPoint(toStep), type);
+        ) {
+          return copyOffset(points, getPoint(toStep as TypeParsablePoint), type);
         }
         if (
           (Array.isArray(toStep) && typeof toStep[0] === 'string')
           || (toStep instanceof Transform)
-        ) { // $FlowFixMe
+        ) {
           return copyTransform(points, getTransform(toStep), type);
         }
         return null;
@@ -381,7 +380,7 @@ function copyStep(
       if (result != null) {
         return result;
       }
-      const out = [];
+      const out: Point[] = [];
       for (let i = 0; i < to.length; i += 1) {
         const res = processToCopyStep(to[i]);
         if (res != null) {
@@ -413,19 +412,18 @@ function copyStep(
 
 function copyPoints(
   points: Array<TypeParsablePoint> | Array<Point>,
-  chain: ?CPY_Step | CPY_Steps,
+  chain: CPY_Step | CPY_Steps | null | undefined,
   type: 'points' | 'normals' = 'points',
 ): Array<Point> {
-  const marks = {};
+  const marks: Record<string, number> = {};
   // let out = [];
   let startIndex = 0;
   // let all = [];
-  // $FlowFixMe
   let out = getPoints(points);
   if (chain == null) {
     return out;
   }
-  let chainToUse = [];
+  let chainToUse: (CPY_Step | string)[] = [];
   if (!Array.isArray(chain)) {
     chainToUse = [chain];
   } else {
@@ -444,8 +442,8 @@ function copyPoints(
         end: 'end',
         original: true,
       };
-      const options = joinObjects({}, defaultOptions, c);
-      let copyStyle = 'to';
+      const options = joinObjects<any>({}, defaultOptions, c);
+      let copyStyle: any = 'to';
       if (options.along != null) {
         copyStyle = options.along;
       }
@@ -462,9 +460,8 @@ function copyPoints(
   return [...out.slice(startIndex)];
 }
 
-function getCopyCount(chain: ?CPY_Step | CPY_Steps) {
-  // $FlowFixMe
-  const copy = copyPoints([0, 0, 0], chain);
+function getCopyCount(chain: CPY_Step | CPY_Steps | null | undefined) {
+  const copy = copyPoints([[0, 0, 0]], chain);
   return copy.length;
 }
 

@@ -1,4 +1,3 @@
-// @flow
 import { cornerLine, lineToCorners } from './corners';
 import { lineToDash } from './dashes';
 import { Line } from '../../../tools/geometry/Line';
@@ -43,9 +42,9 @@ function lineSegmentsToPoints(
   corner: 'auto' | 'fill' | 'none',
   close: boolean,
 ): [Array<Point>, Array<Array<Point>>] {
-  const tris = [];
-  const positiveBorder = [];
-  const negativeBorder = [];
+  const tris: Point[] = [];
+  const positiveBorder: Point[] = [];
+  const negativeBorder: Point[] = [];
   lineSegments.forEach((lineSegment, index) => {
     const negative = lineSegment[0];
     const positive = lineSegment.slice(-1)[0];
@@ -149,7 +148,7 @@ function lineSegmentsToPoints(
     //   );
     // }
   });
-  let border = [[]];
+  let border: Point[][] = [[]];
   if (borderIs === 'positive') {
     border = [positiveBorder];
   } else if (borderIs === 'negative') {
@@ -180,7 +179,7 @@ function joinLinesInPoint(
     return;
   }
   if (intersect.intersect != null) {
-    line1.setP2(intersect.intersect._dup());  // $FlowFixMe
+    line1.setP2(intersect.intersect._dup());
     lineNext.setP1(intersect.intersect._dup());
   }
 }
@@ -298,22 +297,22 @@ function makeLineSegments(
   isInside: boolean,
   numLines: number = 2,
 ): [Array<Line>, Array<Array<Line>>, Array<Array<'negative' | 'positive' | 'mid'>>] {
-  const idealLines = [];
-  const makeLine = (p1, p2) => new Line(p1, p2);
+  const idealLines: Line[] = [];
+  const makeLine = (p1: Point, p2: Point) => new Line(p1, p2);
   for (let i = 0; i < points.length - 1; i += 1) {
     idealLines.push(makeLine(points[i], points[i + 1]));
   }
   if (close && points.length > 1) {
     idealLines.push(makeLine(points[points.length - 1], points[0]));
   }
-  const segmentSides = [];
-  const neg = 'negative';
-  const pos = 'positive';
-  const mid = 'mid';
+  const segmentSides: ('negative' | 'positive' | 'mid')[][] = [];
+  const neg = 'negative' as const;
+  const pos = 'positive' as const;
+  const mid = 'mid' as const;
 
   // lineSegments should be more negative to more positive
   const lineSegments: Array<Array<Line>> = [];
-  const makeOffset = (prev, current, next, offset: number, index: number) => {
+  const makeOffset = (prev: Line | null, current: Line, next: Line | null, offset: number, index: number) => {
     let minNegativeOffset = offset;
     let minPositiveOffset = offset;
     let prevAngle = Math.PI;
@@ -464,7 +463,7 @@ function makeThickLine(
   widthIsInside: boolean,
   close: boolean = false,
   corner: 'auto' | 'fill' | 'none',
-  minAngleIn: ?number = Math.PI / 7,
+  minAngleIn: number | null | undefined = Math.PI / 7,
   linePrimitives: boolean = false,
   lineNum: number = 2,
   borderIs: 'negative' | 'positive' | 'line' | Array<Array<Point>> = 'line',
@@ -570,7 +569,7 @@ function makeThickLine(
   };
 
   // Create fill triangles between the positive & mid, and negative and mid lines
-  const cornerFills = [];
+  const cornerFills: Point[] = [];
 
   // NB: this all assumes the GL primitive is TRIANGLES. Thus the order the
   // triangles is drawn is not important, and so fills can happen in chunks.
@@ -608,14 +607,14 @@ function circleLineIntersection(
   const dr = Math.sqrt(dx * dx + dy * dy);
   const D = x1 * y2 - x2 * y1;
   const r = radius;
-  const sgn = value => (value < 0 ? -1 : 1);
+  const sgn = (value: number) => (value < 0 ? -1 : 1);
 
   const i1x = (D * dy + sgn(dy) * dx * Math.sqrt(r * r * dr * dr - D * D)) / (dr * dr);
   const i2x = (D * dy - sgn(dy) * dx * Math.sqrt(r * r * dr * dr - D * D)) / (dr * dr);
   const i1y = (-D * dx + Math.abs(dy) * Math.sqrt(r * r * dr * dr - D * D)) / (dr * dr);
   const i2y = (-D * dx - Math.abs(dy) * Math.sqrt(r * r * dr * dr - D * D)) / (dr * dr);
 
-  const intersections = [];
+  const intersections: Point[] = [];
   // eslint-disable-next-line no-restricted-globals
   if (!isNaN(i1x) && !isNaN(i1y)) {
     const i = new Point(i1x, i1y).sub(offsetToZero);
@@ -644,30 +643,30 @@ function shortenLineForArrows(
   points: Array<Point>,
   arrow: {
     start?: {
-      head: TypeArrowHead,
-      length: number,
-      width: number,
-      barb: number,
-      tailWidth: number,
-      align: 'mid' | 'start',
-      tail: number | boolean,
-      radius: number,
-    },
+      head: TypeArrowHead;
+      length: number;
+      width: number;
+      barb: number;
+      tailWidth: number;
+      align: 'mid' | 'start';
+      tail: number | boolean;
+      radius: number;
+    };
     end?: {
-      head: TypeArrowHead,
-      length: number,
-      width: number,
-      barb: number,
-      tailWidth: number,
-      align: 'mid' | 'start',
-      tail: number | boolean,
-      radius: number,
-    },
+      head: TypeArrowHead;
+      length: number;
+      width: number;
+      barb: number;
+      tailWidth: number;
+      align: 'mid' | 'start';
+      tail: number | boolean;
+      radius: number;
+    };
   },
 ) {
   const { start, end } = arrow;
 
-  let shortenedPoints = [];
+  let shortenedPoints: Point[] = [];
 
   // let addStartArrow = false;
   if (start != null) {
@@ -735,19 +734,19 @@ function makePolyLine(
   borderIs: 'positive' | 'negative' | 'line' | Array<Array<Point>> = 'line',
   touchBorderBuffer: number = 0,
   arrowIn: null | TypeArrowHead | {
-    start: OBJ_Arrow | TypeArrowHead,
-    end: OBJ_Arrow | TypeArrowHead,
+    start: OBJ_Arrow | TypeArrowHead;
+    end: OBJ_Arrow | TypeArrowHead;
   } & OBJ_Arrow = null,
   precision: number = 8,
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
-  let points = [];
-  let cornerStyleToUse;
+  let points: Point[] = [];
+  let cornerStyleToUse: 'auto' | 'fill' | 'none';
   let orderedPoints = pointsIn;
 
   const arrow = simplifyArrowOptions(arrowIn, width, true);
 
-  if (close === false && arrowIn != null) { // $FlowFixMe
-    orderedPoints = shortenLineForArrows(pointsIn, arrow);
+  if (close === false && arrowIn != null) {
+    orderedPoints = shortenLineForArrows(pointsIn, arrow!);
   }
   // Convert line to line with corners
   if (cornerStyle === 'auto') {
@@ -763,10 +762,10 @@ function makePolyLine(
 
   const widthIs = getWidthIs(points, close, widthIsIn);
   // Convert line to dashed line
-  let dashedTris = [];
+  let dashedTris: Point[] = [];
   let onLine = true;
   if (dash.length > 1) {
-    const [dashes, onDash] = lineToDash(points, dash, close, precision);
+    const [dashes, onDash] = lineToDash(points, dash, close, precision) as [Point[][], boolean];
     onLine = onDash;
     let closeDashes = false;
     if (dashes.length === 1) {
@@ -810,7 +809,7 @@ function makePolyLine(
       const lastPoint = lastLine.pointAtLength(lastLine.length() + touchBorderBuffer);
       pointsToUse = [firstPoint, ...points.slice(1, -1), lastPoint];
     }
-    let borderIsToUse = borderIs;
+    let borderIsToUse: 'negative' | 'positive' | 'line' | Array<Array<Point>> = borderIs;
     if (Array.isArray(borderIs)) {
       borderIsToUse = 'line';
     }
@@ -853,9 +852,9 @@ function makePolyLineCorners(
   // split line into corners
   const corners = lineToCorners(pointsIn, close, cornerLength, false);
 
-  let tris = [];
-  let borders = [];
-  let borderBuffers = [];
+  let tris: Point[] = [];
+  let borders: Point[][] = [];
+  let borderBuffers: Point[][] = [];
   let drawBorderBufferToUse = 0;
   if (typeof drawBorderBuffer === 'number') {
     drawBorderBufferToUse = drawBorderBuffer;
@@ -874,22 +873,22 @@ function makePolyLineCorners(
 }
 
 function addArrows(
-  arrowIn: ?{
+  arrowIn: {
     start?: {
-      head: TypeArrowHead,
-      length: number,
-      width: number,
-      barb: number,
-      tailWidth: number,
-    },
+      head: TypeArrowHead;
+      length: number;
+      width: number;
+      barb: number;
+      tailWidth: number;
+    };
     end?: {
-      head: TypeArrowHead,
-      length: number,
-      width: number,
-      barb: number,
-      tailWidth: number,
-    },
-  },
+      head: TypeArrowHead;
+      length: number;
+      width: number;
+      barb: number;
+      tailWidth: number;
+    };
+  } | null | undefined,
   startArrowIn: [Point, Point],
   endArrowIn: [Point, Point],
   existingTriangles: Array<Point>,
@@ -899,7 +898,7 @@ function addArrows(
   lineWidth: number,
   onLine: boolean,
 ) {
-  let arrow = {};
+  let arrow: Record<string, any> = {};
   if (arrowIn != null) {
     arrow = arrowIn;
   }
@@ -915,7 +914,7 @@ function addArrows(
       p1: startLineMid, length: startArrowLine.length(), angle: startArrowLine.angle(),
     });
     const startArrow = [startArrowLine.p1, startArrowLine.p2];
-    const [border, touchBorder, tail] = getArrow(joinObjects(
+    const [border, touchBorder, tail] = getArrow(joinObjects<any>(
       {},
       start,
       {
@@ -946,7 +945,7 @@ function addArrows(
       p1: endLineMid, length: endArrowLine.length(), angle: endArrowLine.angle(),
     });
     const endArrow = [endArrowLine.p1, endArrowLine.p2];
-    const [border, touchBorder, tail] = getArrow(joinObjects(
+    const [border, touchBorder, tail] = getArrow(joinObjects<any>(
       {},
       end,
       {
@@ -960,7 +959,7 @@ function addArrows(
       },
     ));
     const points = getArrowTris(border, end);
-    let connection = [];
+    let connection: Point[] = [];
     if (onLine) {
       connection = [
         updatedTriangles[l - 2]._dup(), updatedTriangles[l - 1]._dup(), tail[0]._dup(),
@@ -977,7 +976,7 @@ function addArrows(
     updatedTriangles,
     updatedBorder,
     updatedTouchBorder,
-  ];
+  ] as [Point[], Point[][], Point[][]];
 }
 
 function makeFastPolyLine(
@@ -989,7 +988,7 @@ function makeFastPolyLine(
   const points = Array(len);
   const half = width / 2;
   const orth = Math.PI / 2;
-  const getPoints = (index1, index2) => {
+  const getPoints = (index1: number, index2: number) => {
     const p1 = pointsIn[index1];
     const p2 = pointsIn[index2];
     const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x);

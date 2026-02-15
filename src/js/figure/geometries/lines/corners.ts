@@ -1,4 +1,3 @@
-// @flow
 
 import {
   Point, Line, threePointAngleMin,
@@ -142,7 +141,7 @@ function cornerLine(
   sides: number,
   size: number,
 ) {
-  let points = [];
+  let points: Point[] = [];
   if (close) {
     points = cutCorner(
       pointsIn[pointsIn.length - 1], pointsIn[0], pointsIn[1],

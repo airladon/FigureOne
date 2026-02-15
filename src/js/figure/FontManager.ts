@@ -1,14 +1,13 @@
-// @flow
 import { joinObjects, NotificationManager } from '../tools/tools';
 import { FunctionMap } from '../tools/FunctionMap';
 import { FigureFont } from './DrawingObjects/TextObject/TextObject';
-import type { OBJ_Font, TypeFontWeight } from '../tools/types';
-import type { FigureElement } from './Element';
+import { OBJ_Font, TypeFontWeight } from '../tools/types';
+import { FigureElement } from './Element';
 
 export type OBJ_LoadFontOptions = {
-  maxCount?: number,
-  timeout?: number,
-  callback?: string | () => void,
+  maxCount?: number;
+  timeout?: number;
+  callback?: string | (() => void);
 };
 
 /**
@@ -22,20 +21,20 @@ export type OBJ_LoadFontOptions = {
  * - `fontUnavailable`: published when loading a font has timed out
  */
 export default class FontManager {
-  fonts: Object;
-  container: HTMLSpanElement;
+  fonts!: Record<string, any>;
+  container!: HTMLSpanElement;
   static instance: FontManager;
-  canvas: HTMLCanvasElement;
-  ctx: CanvasRenderingContext2D;
-  loaded: number;
-  loading: number;
-  fnMap: FunctionMap
-  timedOut: number;
-  notifications: NotificationManager;
-  checkTimer: TimeoutID | null;
-  startTime: number;
-  timeout: number;
-  animateNextFrameCallbacks: Array<() => void>;
+  canvas!: HTMLCanvasElement;
+  ctx!: CanvasRenderingContext2D;
+  loaded!: number;
+  loading!: number;
+  fnMap!: FunctionMap;
+  timedOut!: number;
+  notifications!: NotificationManager;
+  checkTimer!: ReturnType<typeof setTimeout> | null;
+  startTime!: number;
+  timeout!: number;
+  animateNextFrameCallbacks!: Array<() => void>;
 
   constructor(
     fnMap: FunctionMap = new FunctionMap(),
@@ -47,7 +46,7 @@ export default class FontManager {
       this.canvas = document.createElement('canvas');
       this.canvas.width = 10;
       this.canvas.height = 10;
-      this.ctx = this.canvas.getContext('2d');
+      this.ctx = this.canvas.getContext('2d')!;
       this.notifications = notifications;
       this.loading = 0;
       this.loaded = 0;
@@ -85,7 +84,7 @@ export default class FontManager {
   showDebugAtlas(fontID: string, fontFamily: string, fontSizePX: number = 10) {
     const f = this.fonts[fontID].font;
     const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d')!;
     const glyphs = f.getGlyphs();
     const dimension = Math.ceil(Math.sqrt(glyphs.length) + 2) * fontSizePX * 1.5;
     canvas.width = dimension;
@@ -104,8 +103,7 @@ export default class FontManager {
     }
     ctx.rect(0, 0, dimension, dimension);
     ctx.stroke();
-    // $FlowFixMe
-    document.body.appendChild(canvas);
+    document.body!.appendChild(canvas);
   }
 
   measure(
@@ -151,7 +149,7 @@ export default class FontManager {
    * @param {OBJ_Font} fontDefinition
    * @return {boolean} `true` if available
    */
-  isAvailable(fontDefinition: OBJ_Font): boolean { // $FlowFixMe
+  isAvailable(fontDefinition: OBJ_Font): boolean {
     const f = new FigureFont(fontDefinition);
     const glyphs = f.getGlyphs();
     const fam = f.getFamily();
@@ -185,7 +183,6 @@ export default class FontManager {
    * @param {Array<TypeFontWeight>} weights
    */
   areWeightsAvailable(fontDefinition: OBJ_Font, weights: Array<TypeFontWeight>) {
-    // $FlowFixMe
     if (!this.isAvailable(fontDefinition)) {
       return false;
     }
@@ -207,7 +204,6 @@ export default class FontManager {
    * Return arrays of weights that produce the same output.
    */
   getWeights(fontDefinition: OBJ_Font) {
-    // $FlowFixMe
     if (!this.isAvailable(fontDefinition)) {
       return [];
     }
@@ -265,7 +261,6 @@ export default class FontManager {
    * version if it is requested.
    */
   getStyles(fontDefinition: OBJ_Font) {
-    // $FlowFixMe
     if (!this.isAvailable(fontDefinition)) {
       return [];
     }
@@ -290,7 +285,6 @@ export default class FontManager {
   }
 
   areStylesAvailable(fontDefinition: OBJ_Font, styles: Array<string>) {
-    // $FlowFixMe
     if (!this.isAvailable(fontDefinition)) {
       return false;
     }
@@ -350,17 +344,17 @@ export default class FontManager {
   ) {
     const options = optionsOrCallback;
     let o;
-    const defaultOptions = {
+    const defaultOptions: Record<string, any> = {
       timeout: 5,
       callback: null,
       weights: 1,
       atlas: false,
     };
     if (typeof options === 'string' || typeof options === 'function') {
-      o = defaultOptions; // $FlowFixMe
+      o = defaultOptions;
       o.callback = options;
     } else {
-      o = joinObjects({}, {
+      o = joinObjects<any>({}, {
         timeout: 5,
         callback: null,
         weights: 1,
@@ -369,17 +363,16 @@ export default class FontManager {
     }
 
     const font = fontOrElement;
-    if (font.getFonts != null) {  // $FlowFixMe
-      const fonts = font.getFonts();
-      const result = [];
-      fonts.forEach((f) => {
+    if ((font as any).getFonts != null) {
+      const fonts = (font as any).getFonts();
+      const result: any[] = [];
+      fonts.forEach((f: any) => {
         const [, fnt, atlas] = f;
-        result.push(this.watch(fnt, joinObjects({}, { atlas }, o)));
+        result.push(this.watch(fnt, joinObjects<any>({}, { atlas }, o)));
       });
       return result;
     }
-    // $FlowFixMe
-    const f = new FigureFont(font);
+    const f = new FigureFont(font as any);
     const fontID = f.getFontID(o.atlas);
     // If the font family-weight-style has already been created, then
     // return the result of whether it is loaded or not
@@ -435,7 +428,7 @@ export default class FontManager {
 
   // Execute all the callbacks associated with some fontID
   execCallbacks(fontID: string, available: boolean) {
-    this.fonts[fontID].callbacks.forEach(c => this.fnMap.exec(c, available));
+    this.fonts[fontID].callbacks.forEach((c: any) => this.fnMap.exec(c, available));
     this.fonts[fontID].callbacks = [];
   }
 

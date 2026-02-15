@@ -1,11 +1,11 @@
-// @flow
+
 import type WebGLInstance from './webgl';
 
 export default class TargetTexture {
-  fb: WebGLBuffer;
+  fb!: WebGLFramebuffer | null;
   webgl: WebGLInstance;
-  target: WebGLTexture;
-  depthBuffer: WebGLBuffer;
+  target: WebGLTexture | null;
+  depthBuffer: WebGLRenderbuffer | null;
 
   constructor(webgl: WebGLInstance) {
     this.webgl = webgl;

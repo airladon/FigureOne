@@ -1,4 +1,3 @@
-// @flow
 
 import getShaders from './shaders';
 import type { TypeFragmentShader, TypeVertexShader } from './shaders';
@@ -106,8 +105,8 @@ function createProgram(
 }
 
 
-function createShader(gl: WebGLRenderingContext, type, source) {
-  const shader = gl.createShader(type);
+function createShader(gl: WebGLRenderingContext, type: number, source: string) {
+  const shader = gl.createShader(type)!;
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
   const success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
@@ -138,17 +137,17 @@ function createProgramFromScripts(
   return null;
 }
 
-function getGLLocations(gl, program, locationsList) {
+function getGLLocations(gl: WebGLRenderingContext, program: WebGLProgram | null, locationsList: string[]) {
   let i;
-  const newLocations = {};
+  const newLocations: Record<string, any> = {};
   let loc;
   for (i = 0; i < locationsList.length; i += 1) {
     loc = locationsList[i];
     if (loc[0] === 'a') {
-      newLocations[loc] = gl.getAttribLocation(program, loc);
+      newLocations[loc] = gl.getAttribLocation(program!, loc);
     }
     if (loc[0] === 'u') {
-      newLocations[loc] = gl.getUniformLocation(program, loc);
+      newLocations[loc] = gl.getUniformLocation(program!, loc);
     }
   }
   return newLocations;
@@ -169,7 +168,7 @@ function getGLLocations(gl, program, locationsList) {
 // }
 
 /* eslint-disable */
-function autoResize(event) {
+function autoResize(event: any) {
   // let contRect = document.getElementById('container').getBoundingClientRect();
   // let diagRect = document.getElementById('figure').getBoundingClientRect();
   // let textRect = document.getElementById('learning_text_container').getBoundingClientRect();
@@ -188,44 +187,38 @@ function autoResize(event) {
   It loads and manages programs, shaders and textures for the context, and by extension also manages font atlases (as each atlas is a texture).
 */
 class WebGLInstance {
-  gl: WebGLRenderingContext;
-  program: WebGLProgram;
+  gl!: WebGLRenderingContext;
+  program!: WebGLProgram;
   // locations: Object;
-  lastUsedProgram: ?WebGLProgram;
-  textures: {
+  lastUsedProgram!: WebGLProgram | null;
+  textures!: {
     [name: string]: {
       glTexture: WebGLTexture;
       index: number;
-      // type: 'image' | 'canvasText';
       state: 'loading' | 'loaded';
-      onLoad: Array<((boolean, number) => void) | string>;
-      // atlas: Object;
-      // atlasDimension: number;
+      onLoad: Array<((b: boolean, n: number) => void) | string>;
     };
   };
 
   atlases: {
-    [atlasId: string]: Atlas,
+    [atlasId: string]: Atlas;
   };
 
-  programs: Array<{
-    vars: Array<string>,
+  programs!: Array<{
+    vars: Array<string>;
     vertexShader: {
-      src: string,
-      hash: number,
-    },
+      src: string;
+      hash: number;
+    };
     fragmentShader: {
-      src: string,
-      // vars: Array<string>,
-      hash: number,
-    },
-    // vertexShader: string | { src: string, vars: Array<string>} | Array<string | bool | number>,
-    // fragmentShader: string| { src: string, vars: Array<string>} | Array<string | bool | number>,
-    locations: Object,
+      src: string;
+      hash: number;
+    };
+    locations: Record<string, any>;
     program: WebGLProgram;
   }>;
 
-  targetTexture: null | TargetTexture;
+  targetTexture!: null | TargetTexture;
   fnMap: FunctionMap;
   fontManager: FontManager;
 
@@ -244,10 +237,10 @@ class WebGLInstance {
   */
   addTexture(
     id: string,
-    data: string | Image | HTMLCanvasElement,
+    data: string | HTMLImageElement | HTMLCanvasElement,
     loadColor: TypeColor = [0, 0, 0, 0],
     repeat: boolean = false,
-    onLoad: null | string | ((boolean, number) => void) = null,
+    onLoad: null | string | ((b: boolean, n: number) => void) = null,
     force: boolean = false,
   ) {
     /*
@@ -279,36 +272,33 @@ class WebGLInstance {
     this.deleteTexture(id);
     const { gl } = this;
 
-    // $FlowFixMe
     this.textures[id] = {
       id,
       state: 'loading',
       onLoad: [],
       index,
       data: null,
-    };
+    } as any;
     const texture = this.textures[id];
     if (onLoad != null) {
       texture.onLoad.push(onLoad);
     }
     // If the data is a url string, then load the data into an image
     if (typeof data === 'string') {
-      this.setTextureData(id, loadColor)
+      this.setTextureData(id, loadColor);
       const image = new Image();
       texture.state = 'loading';
 
       image.src = data;
       // When the image is loaded, set the texture to it
       image.addEventListener('load', () => {
-        // $FlowFixMe
-        texture.data = image;
+        (texture as any).data = image;
         this.setTextureData(id, image, repeat);
         this.onLoad(id);
         texture.state = 'loaded';
       });
     } else {
-      // $FlowFixMe
-      texture.data = data;
+      (texture as any).data = data;
       // Otherwise, the data is an image so set it directly
       this.setTextureData(id, data, repeat);
       this.onLoad(id);
@@ -318,8 +308,8 @@ class WebGLInstance {
   }
 
   getAtlas(options: OBJ_Atlas) {
-    const font = options.font; // $FlowFixMe
-    const textureID = font.getTextureID();
+    const font = options.font;
+    const textureID = (font as any).getTextureID();
     if (this.atlases[textureID] != null) {
       return this.atlases[textureID];
     }
@@ -357,17 +347,17 @@ class WebGLInstance {
 
   contextLost() {
     Object.keys(this.textures).forEach((id) => {
-      this.textures[id].glTexture = null;
+      this.textures[id].glTexture = null as any;
     });
   }
 
 
   setTextureData(
     id: string,
-    image: Object | TypeColor, // image data
+    image: Record<string, any> | TypeColor, // image data
     repeat: boolean = false,
   ) {
-    function isPowerOf2(value) { // eslint-disable-next-line no-bitwise
+    function isPowerOf2(value: number) { // eslint-disable-next-line no-bitwise
       return (value & (value - 1)) === 0;
     }
 
@@ -400,7 +390,7 @@ class WebGLInstance {
     // Load the image
     gl.texImage2D(
       gl.TEXTURE_2D, 0, gl.RGBA,
-      gl.RGBA, gl.UNSIGNED_BYTE, image,
+      gl.RGBA, gl.UNSIGNED_BYTE, image as any,
     );
     // Check if the image is a power of 2 in both dimensions.
     if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
@@ -473,9 +463,9 @@ class WebGLInstance {
     //     return i;
     //   }
     // }
-    const shaders = getShaders(vertexShader, fragmentShader); // $FlowFixMe
-    const hashVertexSrc = hash32(shaders.vertexSource); // $FlowFixMe
-    const hashFragmentSrc = hash32(shaders.fragmentSource);
+    const shaders = getShaders(vertexShader, fragmentShader);
+    const hashVertexSrc = hash32((shaders as any).vertexSource);
+    const hashFragmentSrc = hash32((shaders as any).fragmentSource);
     for (let i = 0; i < this.programs.length; i += 1) {
       const program = this.programs[i];
       if (program.vertexShader.hash === hashVertexSrc
@@ -486,28 +476,28 @@ class WebGLInstance {
     }
 
     const newProgram = createProgramFromScripts(
-      this.gl, // $FlowFixMe
-      shaders.vertexSource, // $FlowFixMe
-      shaders.fragmentSource,
+      this.gl,
+      (shaders as any).vertexSource,
+      (shaders as any).fragmentSource,
     );
 
     const programDetails = {
       vertexShader:{
-        src: shaders.vertexSource, // $FlowFixMe
-        hash: hash32(shaders.vertexSource),
+        src: (shaders as any).vertexSource,
+        hash: hash32((shaders as any).vertexSource),
         def: vertexShader,
       },
       fragmentShader:{
-        src: shaders.fragmentSource,
-        hash: hash32(shaders.fragmentSource),
+        src: (shaders as any).fragmentSource,
+        hash: hash32((shaders as any).fragmentSource),
         def: fragmentShader,
       },
       vars: shaders.vars,
       // fragmentShader,
       program: newProgram,
       locations: getGLLocations(this.gl, newProgram, shaders.vars),
-    };  // $FlowFixMe
-    this.programs.push(programDetails);
+    };
+    this.programs.push(programDetails as any);
     return this.programs.length - 1;
   }
 
@@ -527,7 +517,7 @@ class WebGLInstance {
   // shaderLocations: Array<string>,
   backgroundColor: Array<number>,
 ) {
-    let gl: ?WebGLRenderingContext = canvas.getContext('webgl', {
+    let gl: WebGLRenderingContext | null = canvas.getContext('webgl', {
       antialias: true,
       // premultipliedAlpha: false,
       // alpha: false
@@ -536,11 +526,9 @@ class WebGLInstance {
     this.fontManager = new FontManager();
     this.atlases = {};
     if (gl == null) {
-      // $FlowFixMe
-      gl = glMock;
+      gl = glMock as any;
     }
     if (gl != null) {
-      // $FlowFixMe
       this.init(gl);
     }
   }
@@ -556,9 +544,8 @@ class WebGLInstance {
     // this.gl.clearColor(1, 1, 1, 1);
     // this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     this.gl.disable(this.gl.DEPTH_TEST);
-    // $FlowFixMe
     this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
-    this.gl.enable(this.gl.BLEND); // $FlowFixMe
+    this.gl.enable(this.gl.BLEND);
     this.targetTexture = new TargetTexture(this);
   }
 
@@ -568,9 +555,9 @@ class WebGLInstance {
     // and compute a size needed to make our drawingbuffer match it in
     // device pixels.
     var displayWidth  =
-      Math.floor(this.gl.canvas.clientWidth  * realToCSSPixels);
+      Math.floor((this.gl.canvas as HTMLCanvasElement).clientWidth  * realToCSSPixels);
     var displayHeight =
-      Math.floor(this.gl.canvas.clientHeight * realToCSSPixels);
+      Math.floor((this.gl.canvas as HTMLCanvasElement).clientHeight * realToCSSPixels);
     // Check if the canvas is not the same size.
     if (this.gl.canvas.width  !== displayWidth
         || this.gl.canvas.height !== displayHeight) {

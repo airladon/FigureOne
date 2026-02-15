@@ -1,4 +1,3 @@
-// @flow
 import {
   Point, Line, threePointAngle,
 } from '../../tools/g2';
@@ -16,11 +15,11 @@ function getBufferBorder(
   if (buffer === 0) {
     return bordersIn;
   }
-  const drawBorderBuffers = [];
+  const drawBorderBuffers: Point[][] = [];
   bordersIn.forEach((borderIn) => {
     // First remove all points that are >180º
-    const border = [];
-    const borderIndex = [];
+    const border: Point[] = [];
+    const borderIndex: number[] = [];
     for (let i = 0; i < borderIn.length; i += 1) {
       let prevPoint;
       let nextPoint;
@@ -46,8 +45,8 @@ function getBufferBorder(
         borderIndex.push(i);
       }
     }
-    const drawBorderBuffer = [];
-    const offsetLines = [];
+    const drawBorderBuffer: Point[] = [];
+    const offsetLines: Line[] = [];
     for (let i = 0; i < border.length; i += 1) {
       let line;
       if (i === 0) {

@@ -1,5 +1,3 @@
-// @flow
-
 /**
  * `'nextFrame'` | `'prevFrame'` | `'syncNow'` | `'now'`
  *
@@ -51,33 +49,33 @@ export type TypeWhen = 'now' | 'nextFrame' | 'prevFrame' | 'syncNow';
  */
 class TimeKeeper {
   // Method for requesting the next animation frame
-  requestNextAnimationFrame: (()=>mixed) => AnimationFrameID;
-  animationId: ?AnimationFrameID;    // used to cancel animation frames
-  static instance: Object;
-  drawQueue: Array<(number) => void>;
-  nextDrawQueue: Array<(number) => void>;
-  lastDrawTime: ?number;
-  nowTime: number;
-  timeoutId: ?TimeoutID;
-  speed: number;
-  synchronizedNow: number;
-  updateSyncNow: boolean;
-  syncNowTimer: number;
+  requestNextAnimationFrame: (callback: FrameRequestCallback) => number;
+  animationId!: number | null;    // used to cancel animation frames
+  static instance: TimeKeeper;
+  drawQueue!: Array<(time: number) => void>;
+  nextDrawQueue!: Array<(time: number) => void>;
+  lastDrawTime!: number | null;
+  nowTime!: number;
+  timeoutId!: ReturnType<typeof setTimeout> | null;
+  speed!: number;
+  synchronizedNow!: number;
+  updateSyncNow!: boolean;
+  syncNowTimer!: number;
 
-  manual: boolean;
-  animateOnFrame: boolean;
-  lastTime: number;
-  idCounter: number;
-  syncNowTimeout: number;
+  manual!: boolean;
+  animateOnFrame!: boolean;
+  lastTime!: number;
+  idCounter!: number;
+  syncNowTimeout!: number;
 
-  timers: {
+  timers!: {
     [id: string]: {
-      id: TimeoutID | null;   // if not null, then there is settimeout
+      id: ReturnType<typeof setTimeout> | null;   // if not null, then there is settimeout
       callback: () => void;
       timeout: number;        // timeout target time
       description: string;
       stateTimer: boolean;    // state timers should timeout before other timers
-    }
+    };
   };
 
   constructor() {
@@ -86,9 +84,9 @@ class TimeKeeper {
     // if (!TimeKeeper.instance) {
     this.requestNextAnimationFrame = (
       window.requestAnimationFrame
-      || window.mozRequestAnimationFrame
-      || window.webkitRequestAnimationFrame
-      || window.msRequestAnimationFrame
+      || (window as any).mozRequestAnimationFrame
+      || (window as any).webkitRequestAnimationFrame
+      || (window as any).msRequestAnimationFrame
     );
     //   TimeKeeper.instance = this;
     //   this.reset();
@@ -277,12 +275,12 @@ class TimeKeeper {
     this.animateNextFrame();
   }
 
-  incrementTimers(targetTime: number) {
+  incrementTimers(targetTime: number): number {
     if (this.timers == null || Object.keys(this.timers).length === 0) {
       return 0;
     }
     const ids = Object.keys(this.timers);
-    let nextTimer = null;
+    let nextTimer: { id: string; timer: { id: ReturnType<typeof setTimeout> | null; callback: () => void; timeout: number; description: string; stateTimer: boolean } } | null = null;
     for (let i = 0; i < ids.length; i += 1) {
       const id = ids[i];
       const timer = this.timers[id];
@@ -322,7 +320,7 @@ class TimeKeeper {
    * `clearTimeout`
    */
   setTimeout(
-    callback: function,
+    callback: () => void,
     time: number,
     description: string = '',
     stateTimer: boolean = false,
@@ -385,7 +383,7 @@ class TimeKeeper {
    * @param {function(number): void} func function that will be passed the
    * current time as an input parameter when it is called
    */
-  queueNextFrame(func: (?number) => void) {
+  queueNextFrame(func: (time: number | null) => void) {
     this.nextDrawQueue.push(func);
     if (this.nextDrawQueue.length === 1) {
       this.animateNextFrame();
@@ -407,7 +405,6 @@ class TimeKeeper {
       return;
     }
     if (this.animationId == null) {
-    // $FlowFixMe
       this.animationId = this.requestNextAnimationFrame.call(window, this.draw.bind(this));
     }
   }
