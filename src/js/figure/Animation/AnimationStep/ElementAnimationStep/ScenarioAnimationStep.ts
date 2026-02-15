@@ -1,4 +1,3 @@
-// @flow
 import {
   Transform, getMaxTimeFromVelocity, getScale, getTransform,
 } from '../../../../tools/g2';
@@ -37,13 +36,13 @@ import type { TypeColor } from '../../../../tools/types';
  * @property {number} [opacity]
  */
 export type OBJ_ScenarioVelocity = {
-  position?: TypeParsablePoint | number,
-  translation?: TypeParsablePoint | number,
-  rotation?: number,
-  scale?: TypeParsablePoint | number,
-  transform?: TypeParsableTransform,
-  color?: number,
-  opacity?: number,
+  position?: TypeParsablePoint | number;
+  translation?: TypeParsablePoint | number;
+  rotation?: number;
+  scale?: TypeParsablePoint | number;
+  transform?: TypeParsableTransform;
+  color?: number;
+  opacity?: number;
 };
 
 /**
@@ -76,11 +75,11 @@ export type OBJ_ScenarioAnimationStep = {
   start?: string | OBJ_Scenario;
   target?: string | OBJ_Scenario;
   velocity?: OBJ_ScenarioVelocity;
-  // minDuration?: number,
-  maxDuration?: number,
-  zeroDurationThreshold?: number,
-  allDurationsSame?: boolean,
-  path?: OBJ_TranslationPath,
+  // minDuration?: number;
+  maxDuration?: number;
+  zeroDurationThreshold?: number;
+  allDurationsSame?: boolean;
+  path?: OBJ_TranslationPath;
   rotDirection: 0 | 1 | -1 | 2;
   clipRotationTo: '0to360' | '-180to180' | null;
   progression: 'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression;
@@ -114,10 +113,10 @@ export type OBJ_ScenarioAnimationStep = {
 export type OBJ_ScenariosAnimationStep = {
   target?: string;
   velocity?: OBJ_ScenarioVelocity;
-  maxDuration?: number,
-  zeroDurationThreshold?: number,
-  allDurationsSame?: boolean,
-  path?: OBJ_TranslationPath,
+  maxDuration?: number;
+  zeroDurationThreshold?: number;
+  allDurationsSame?: boolean;
+  path?: OBJ_TranslationPath;
   rotDirection: 0 | 1 | -1 | 2;
   clipRotationTo: '0to360' | '-180to180' | null;
   progression: 'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression;
@@ -183,14 +182,14 @@ export type OBJ_ScenariosAnimationStep = {
  *   .start();
  */
 export default class ScenarioAnimationStep extends ParallelAnimationStep {
-  element: ?FigureElement;
+  override element: FigureElement | null | undefined;
   scenario: {
-    start: ?(string | OBJ_Scenario);  // null means use element props when unit is started
-    target: ?(string | OBJ_Scenario);
+    start: (string | OBJ_Scenario) | null | undefined;  // null means use element props when unit is started
+    target: (string | OBJ_Scenario) | null | undefined;
     rotDirection: 0 | 1 | -1 | 2;
     path: OBJ_TranslationPath;
-    velocity: ?OBJ_ScenarioVelocity;
-    maxDuration: ?number;
+    velocity: OBJ_ScenarioVelocity | null | undefined;
+    maxDuration: number | null | undefined;
     allDurationsSame: boolean;
     zeroDurationThreshold: number;
     clipRotationTo: '0to360' | '-180to180' | null;
@@ -203,7 +202,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
    */
   constructor(...optionsIn: Array<OBJ_ScenarioAnimationStep>) {
     const AnimationStepOptionsIn =
-      joinObjects({}, { type: 'scenario' }, ...optionsIn);
+      joinObjects<any>({}, { type: 'scenario' }, ...optionsIn);
     deleteKeys(AnimationStepOptionsIn, [
       'start', 'target', 'path',
       'velocity', 'maxDuration', 'allDurationsSame', 'rotDirection',
@@ -236,11 +235,10 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       const pathOptions = this.element.animations.options.translation;
       joinObjects(defaultScenarioOptions.path, pathOptions);
     }
-    const options = joinObjects({}, defaultScenarioOptions, ...optionsIn);
+    const options = joinObjects<any>({}, defaultScenarioOptions, ...optionsIn);
     this.element = options.element;
 
-    // $FlowFixMe
-    this.scenario = {};
+    this.scenario = {} as any;
     copyKeysFromTo(options, this.scenario, [
       'start', 'target', 'path',
       'velocity', 'maxDuration', 'allDurationsSame', 'zeroDurationThreshold',
@@ -253,14 +251,14 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     }
   }
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  override _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
       'scenario',
       'element',
     ];
   }
 
-  _getStateName() {  // eslint-disable-line class-methods-use-this
+  override _getStateName() {  // eslint-disable-line class-methods-use-this
     return 'scenarioAnimationStep';
   }
 
@@ -288,8 +286,8 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
   // }
 
   getDuration(
-    start: { transform?: Transform, color?: TypeColor, isShown?: boolean, opacity?: number },
-    target: { transform?: Transform, color?: TypeColor, isShown?: boolean },
+    start: { transform?: Transform; color?: TypeColor; isShown?: boolean; opacity?: number },
+    target: { transform?: Transform; color?: TypeColor; isShown?: boolean },
   ) {
     const { element } = this;
     const { velocity } = this.scenario;
@@ -343,9 +341,9 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       && !areColorsSame(target.color, start.color)
     ) {
       const deltaColor = Math.max(
-        Math.abs(target.color[0] - start.color[0]),  // $FlowFixMe
-        Math.abs(target.color[1] - start.color[1]),  // $FlowFixMe
-        Math.abs(target.color[2] - start.color[2]),  // $FlowFixMe
+        Math.abs(target.color[0] - start.color[0]),
+        Math.abs(target.color[1] - start.color[1]),
+        Math.abs(target.color[2] - start.color[2]),
         Math.abs(target.color[3] - start.color[3]),
       );
       // const deltaColor = Math.abs(target.color - start.color);
@@ -407,10 +405,10 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime: AnimationStartTime = null) {
+  override start(startTime: AnimationStartTime = null) {
     super.start(startTime);
     const { element } = this;
-    if (element == null) { // $FlowFixMe
+    if (element == null) {
       throw new Error(`Missing Element in scenario animation - null element for target: ${this.scenario.target}`);
     }
     let target = element.getScenarioTarget(this.scenario.target);
@@ -418,7 +416,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       target = element.getCurrentScenario();
     }
 
-    let start = {};
+    let start: Record<string, any> = {};
     if (this.scenario.start != null) {
       start = element.getScenarioTarget(this.scenario.start);
     }
@@ -443,7 +441,6 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       dissolveFromCurrent = true;
     }
 
-    // $FlowFixMe
     const [transformDuration, colorDuration, opacityDuration] = this.getDuration(start, target);
     const steps = [];
     if (target.transform != null) {
@@ -485,7 +482,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     // }
   }
 
-  _dup() {
+  override _dup() {
     const step = new ScenarioAnimationStep();
     duplicateFromTo(this, step, ['element', 'timeKeeper']);
     step.element = this.element;

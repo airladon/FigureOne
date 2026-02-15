@@ -135,8 +135,8 @@ export default class Atlas {
     // console.log(this.font.getTextureID(), '<', this.font.src, '>')
     if (this.font.src != null && this.font.src !== '') {
       this.map = this.font.map;
-      this.fontSize = this.font.map.fontSize;
-      this.dimension = this.font.map.dimension;
+      this.fontSize = (this.font.map as any).fontSize;
+      this.dimension = (this.font.map as any).dimension;
       this.webgl.addTexture(
         this.font.getTextureID(),
         this.font.src,
@@ -240,19 +240,19 @@ export default class Atlas {
     const aWidth = this.fontSize / 2;
 
     font.setColorInContext(ctx, font.color);
-    if (font.outline.color) {
+    if (font.outline && font.outline.color) {
       font.setStrokeColorInContext(ctx, font.outline.color);
     } else {
       font.setStrokeColorInContext(ctx, font.color);
     }
-    if (font.outline.width !== 0) {
+    if (font.outline && font.outline.width !== 0) {
       ctx.lineWidth = font.outline.width * fontSizePX / font.size;
     }
     for (let i = 0; i < glyphs.length; i += 1) {
-      if (font.outline.fill) {
+      if (font.outline && font.outline.fill) {
         ctx.fillText(glyphs[i], x, y);
       }
-      if (font.outline.width !== 0) {
+      if (font.outline && font.outline.width !== 0) {
         ctx.strokeText(glyphs[i], x, y);
       }
       let w = 1;
@@ -278,7 +278,7 @@ export default class Atlas {
     // Create a small square to draw color from when drawing the underline
     ctx.beginPath();
     let underlineColor = font.color;
-    if (font.underline != null && font.underline.color != null) {
+    if (font.underline && font.underline.color != null) {
       underlineColor = font.underline.color;
     }
     font.setColorInContext(ctx, underlineColor);

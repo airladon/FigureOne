@@ -1,4 +1,3 @@
-// @flow
 // import * as tools from '../../tools/math';
 // import { FigureElement } from '../Element';
 import type { OBJ_AnimationStep } from '../AnimationStep';
@@ -32,22 +31,22 @@ export class DelayAnimationStep extends AnimationStep {
     let options = {};
     const defaultOptions = { duration: 0 };
     if (typeof numOrOptions === 'number') {
-      options = joinObjects({}, defaultOptions, { duration: numOrOptions }, ...args);
+      options = joinObjects<any>({}, defaultOptions, { duration: numOrOptions }, ...args);
     } else {
-      options = joinObjects({}, defaultOptions, numOrOptions, ...args);
+      options = joinObjects<any>({}, defaultOptions, numOrOptions, ...args);
     }
     super(options);
     // this.duration = options.duration;
   }
 
-  _dup() {
+  override _dup() {
     const dup = new DelayAnimationStep();
     duplicateFromTo(this, dup, ['timeKeeper']);
     dup.timeKeeper = this.timeKeeper;
     return dup;
   }
 
-  start(startTime: ?AnimationStartTime = null) {
+  override start(startTime: AnimationStartTime | null = null) {
     super.start(startTime);
     if (startTime === 'now' || startTime === 'prevFrame') {
       this.setFrame(0);
@@ -62,7 +61,7 @@ export class DelayAnimationStep extends AnimationStep {
   //   ];
   // }
 
-  _getStateName() {  // eslint-disable-line class-methods-use-this
+  override _getStateName() {  // eslint-disable-line class-methods-use-this
     return 'delayAnimationStep';
   }
 }

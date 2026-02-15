@@ -1,4 +1,3 @@
-// @flow
 /**
 * Animations are simply interpolating each value within a rotation definition
  * independently (either between a `start` and `target` or from a `start` with
@@ -64,7 +63,7 @@ export type OBJ_TransformAnimationStep = {
   path?: OBJ_TranslationPath;       // default is linear
   rotDirection?: 0 | 1 | -1 | 2;
   clipRotationTo?: '0to360' | '-180to180' | null;
-  velocity?: ?Transform | number;
+  velocity?: Transform | number | null | undefined;
   maxDuration?: number;
 } & OBJ_ElementAnimationStep;
 
@@ -167,9 +166,9 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     target: Transform;
     rotDirection: 0 | 1 | -1 | 2;
     path: OBJ_TranslationPath;
-    velocity: ?Transform | number;
+    velocity: Transform | number | null | undefined;
     clipRotationTo: '0to360' | '-180to180' | null;
-    maxDuration: ?number;
+    maxDuration: number | null | undefined;
   };
 
   /**
@@ -177,7 +176,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
    */
   constructor(...optionsIn: Array<OBJ_TransformAnimationStep>) {
     const ElementAnimationStepOptionsIn =
-      joinObjects({}, { type: 'transform' }, ...optionsIn);
+      joinObjects<any>({}, { type: 'transform' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
       'start', 'delta', 'target', 'rotDirection', 'path',
       'velocity', 'clipRotationTo', 'maxDuration',
@@ -203,7 +202,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
       const pathOptions = this.element.animations.options.translation;
       joinObjects(defaultTransformOptions.path, pathOptions);
     }
-    const options = joinObjects({}, defaultTransformOptions, ...optionsIn);
+    const options = joinObjects<any>({}, defaultTransformOptions, ...optionsIn);
     if (options.start != null) {
       options.start = getTransform(options.start);
     }
@@ -216,21 +215,20 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     if (options.velocity != null && typeof options.velocity !== 'number') {
       options.velocity = getTransform(options.velocity);
     }
-    // $FlowFixMe
-    this.transform = {};
+    this.transform = {} as any;
     copyKeysFromTo(options, this.transform, [
       'start', 'delta', 'target', 'path',
       'velocity', 'rotDirection', 'clipRotationTo', 'maxDuration',
     ]);
   }
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  override _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
       'transform',
     ];
   }
 
-  _getStateName() {  // eslint-disable-line class-methods-use-this
+  override _getStateName() {  // eslint-disable-line class-methods-use-this
     return 'transformAnimationStep';
   }
 
@@ -238,7 +236,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime: ?AnimationStartTime = null) {
+  override start(startTime: AnimationStartTime | null = null) {
     super.start(startTime);
     if (this.transform.start === null) {
       if (this.element != null) {
@@ -296,7 +294,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     }
   }
 
-  setFrame(deltaTime: number) {
+  override setFrame(deltaTime: number) {
     const percentTime = deltaTime / (this.duration + 0.000001);
     const percentComplete = this.getPercentComplete(percentTime);
     const p = percentComplete;
@@ -315,13 +313,13 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     }
   }
 
-  setToEnd() {
+  override setToEnd() {
     if (this.element != null) {
       this.element.setTransform(this.transform.target);
     }
   }
 
-  _dup() {
+  override _dup() {
     const step = new TransformAnimationStep();
     duplicateFromTo(this, step, ['element', 'timeKeeper']);
     step.element = this.element;

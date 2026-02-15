@@ -1,4 +1,3 @@
-// @flow
 
 // import * as g2 from '../g2';
 // import { round } from '../../../tools/math';
@@ -42,50 +41,51 @@ class GLObject extends DrawingObject {
 
   z: number;
 
-  texture: ?{
+  texture: {
     id: string;
     src?: string;
     // data?: ?Object;
     points: Array<number>;
-    buffer?: ?WebGLBuffer;
+    buffer?: WebGLBuffer | null;
     // type: 'canvasText' | 'image';
     repeat?: boolean;
-    mapTo: Rect,
-    mapFrom: Rect,
-    data?: ?Image,
-    loadColor: TypeColor,
-  };
+    mapTo: Rect;
+    mapFrom: Rect;
+    data?: HTMLImageElement | null;
+    loadColor: TypeColor;
+    [key: string]: any;
+  } | null;
 
   attributes: {
     [attributeName: string]: {
-      buffer: WebGLBuffer,
-      size: number,
-      type: number,
-      normalize: boolean,
-      stride: number,
-      offset: number,
-      usage: number,
-      data: Array<number>
-      // len: number,
+      buffer: WebGLBuffer | null;
+      size: number;
+      type: number;
+      normalize: boolean;
+      stride: number;
+      offset: number;
+      usage: number;
+      data: Array<number>;
+      // len: number;
     };
   };
 
-  points: Array<number>;
+  points!: Array<number>;
 
   uniforms: {
     [uniformName: string]: {
-      value: Array<number>,
-      method: (location: WebGLUniformLocation, name: string) => void,
-    },
-  }
+      value: Array<number>;
+      method: (location: WebGLUniformLocation, name: string) => void;
+    };
+  };
 
   numVertices: number;
 
-  state: 'loading' | 'loaded';
+  override state!: 'loading' | 'loaded';
 
-  programIndex: number;
-  selectorProgramIndex: number;
-  onLoad: ?((boolean, string) => void);
+  programIndex!: number;
+  selectorProgramIndex!: number;
+  onLoad: ((result: boolean, id: string) => void) | null | undefined;
 
   vertexShader: TypeVertexShader;
   fragmentShader: TypeFragmentShader;
@@ -96,7 +96,7 @@ class GLObject extends DrawingObject {
   constructor(
     webgl: WebGLInstance,
     vertexShader: TypeVertexShader = {
-      color: 'uniform', dimension: 2, normals: false, light: null,
+      color: 'uniform', dimension: 2, light: null,
     },
     fragmentShader: TypeFragmentShader = { color: 'uniform', light: null },
     selectorVertexShader: TypeVertexShader = 'selector',
@@ -121,7 +121,7 @@ class GLObject extends DrawingObject {
     this.initProgram();
   }
 
-  init(webgl: WebGLInstance) {
+  override init(webgl: WebGLInstance) {
     this.webgl = webgl;
     this.gl = this.webgl.gl;
     this.initProgram();
@@ -149,7 +149,7 @@ class GLObject extends DrawingObject {
     Console(this.webgl.programs[this.selectorProgramIndex].fragmentShader.src);
   }
 
-  getCanvas() {
+  override getCanvas() {
     return this.gl.canvas;
   }
 
@@ -185,7 +185,7 @@ class GLObject extends DrawingObject {
 
   // addTextureToBuffer(
   //   glTexture: WebGLTexture,
-  //   image: Object, // image data
+  //   image: Record<string, any>, // image data
   //   repeat?: boolean,
   // ) {
   //   function isPowerOf2(value) {
@@ -314,7 +314,7 @@ class GLObject extends DrawingObject {
     this.onLoad = onLoad;
   }
 
-  updateTexture(data: Image) {
+  updateTexture(data: HTMLImageElement) {
     const { texture } = this;
     if (texture == null) {
       throw new Error('FigureOne GLObject Error: Cannot update an uninitialized texture');
@@ -345,8 +345,8 @@ class GLObject extends DrawingObject {
     //   new Float32Array(texture.points),
     //   gl.STATIC_DRAW,
     // );
-    webgl.addTexture( // $FlowFixMe
-      id, data || src, loadColor, repeat, this.executeOnLoad.bind(this), force,
+    webgl.addTexture(
+      id, (data || src) as any, loadColor, repeat, this.executeOnLoad.bind(this) as any, force,
     );
     this.state = webgl.textures[texture.id].state;
     // if (
@@ -377,7 +377,6 @@ class GLObject extends DrawingObject {
     //     webgl.textures[texture.id].onLoad.push(this.executeOnLoad.bind(this));
     //     image.addEventListener('load', () => {
     //       // Now that the image has loaded make copy it to the texture.
-    //       // $FlowFixMe
     //       texture.data = image;
     //       this.addTextureToBuffer(
     //         glTexture, texture.data, texture.repeat,
@@ -431,9 +430,9 @@ class GLObject extends DrawingObject {
     const { texture } = this;
     if (texture == null) {
       return;
-    } // $FlowFixMe
+    }
     const buffer = this.attributes[texture.mapToBuffer];
-    if (buffer == null) { // $FlowFixMe
+    if (buffer == null) {
       throw new Error(`FigureOne mapToAttribute buffer ('${texture.mapToBuffer}') does not exist. Available attributes: ${JSON.stringify(Object.keys(this.attributes))}.`);
     }
     if (texture != null) {
@@ -488,7 +487,7 @@ class GLObject extends DrawingObject {
     usageIn: TypeGLBufferUsage = 'STATIC',
   ) {
     const { gl } = this;
-    let usage = gl.STATIC_DRAW;
+    let usage: number = gl.STATIC_DRAW;
     if (usageIn === 'DYNAMIC') {
       usage = gl.DYNAMIC_DRAW;
     }
@@ -551,7 +550,7 @@ class GLObject extends DrawingObject {
     }
     this.attributes[name].buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.attributes[name].buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, processedData, usage);
+    gl.bufferData(gl.ARRAY_BUFFER, processedData!, usage);
   }
 
   executeOnLoad(result: boolean, id: string) {
@@ -567,18 +566,17 @@ class GLObject extends DrawingObject {
         gl.activeTexture(gl.TEXTURE0 + webgl.textures[texture.id].index);
         gl.bindTexture(gl.TEXTURE_2D, null);
         // gl.deleteTexture(webgl.textures[texture.id].glTexture);
-        webgl.textures[texture.id].glTexture = null;
+        webgl.textures[texture.id].glTexture = null as any;
       }
       if (texture.buffer != null) {
         gl.deleteBuffer(texture.buffer);
-        // $FlowFixMe
         texture.buffer = null;
       }
       // texture.glTexture = null;
     }
   }
 
-  cleanup(deleteTexture: boolean = true) {
+  override cleanup(deleteTexture: boolean = true) {
     this.resetBuffers(deleteTexture);
   }
 
@@ -594,7 +592,7 @@ class GLObject extends DrawingObject {
     this.resetTextureBuffer(deleteTexture);
   }
 
-  updateVertices(vertices: Array<number>) {
+  override updateVertices(vertices: Array<number>) {
     this.points = vertices;
     this.updateAttribute('a_vertex', vertices);
   }
@@ -619,7 +617,7 @@ class GLObject extends DrawingObject {
     }
   }
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  override _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
     ];
   }
@@ -627,8 +625,8 @@ class GLObject extends DrawingObject {
   /**
    * Get the current value of a uniform
    */
-  getUniform(uniformName: string) {
-    const uniform = this.uniforms[uniformName]; // $FlowFixMe
+  override getUniform(uniformName: string) {
+    const uniform = this.uniforms[uniformName];
     return uniform.value;
   }
 
@@ -657,8 +655,8 @@ class GLObject extends DrawingObject {
       typeToUse = 'FLOAT_VECTOR';
     }
     this.uniforms[uniformName] = {
-      value: Array(length).fill(0), // $FlowFixMe
-      method: this[`uploadUniform${length.toString()}${typeToUse[0].toLowerCase()}${typeToUse.endsWith('VECTOR') ? 'v' : ''}`].bind(this),
+      value: Array(length).fill(0),
+      method: (this as any)[`uploadUniform${length.toString()}${typeToUse[0].toLowerCase()}${typeToUse.endsWith('VECTOR') ? 'v' : ''}`].bind(this),
     };
     if (initialValue != null) {
       this.updateUniform(uniformName, initialValue);
@@ -717,11 +715,10 @@ class GLObject extends DrawingObject {
 
   uploadUniform16fv(location: WebGLUniformLocation, name: string) {
     // this.gl.uniformMatrix4fv(location, this.uniforms[name].value);
-    // $FlowFixMe
     this.gl.uniformMatrix4fv(
       location,
-      false,  // $FlowFixMe
-      m3.transpose(this.uniforms[name].value),
+      false,
+      m3.transpose(this.uniforms[name].value as Type3DMatrix),
     );
   }
 
@@ -745,11 +742,11 @@ class GLObject extends DrawingObject {
   }
 
 
-  updateUniform(uniformName: string, value: number | Array<number>) {
+  override updateUniform(uniformName: string, value: number | Array<number>) {
     this.uniforms[uniformName].value = Array.isArray(value) ? value : [value];
   }
 
-  drawWithTransformMatrix(
+  override drawWithTransformMatrix(
     scene: Scene,
     worldMatrix: Type3DMatrix,
     color: TypeColor,
@@ -816,7 +813,7 @@ class GLObject extends DrawingObject {
       );
     }
 
-    if (locations.u_worldInverseTranspose != null) {  // $FlowFixMe
+    if (locations.u_worldInverseTranspose != null) {
       gl.uniformMatrix4fv(
         locations.u_worldInverseTranspose,
         false,
@@ -824,7 +821,7 @@ class GLObject extends DrawingObject {
       );
     }
 
-    if (locations.u_worldViewProjectionMatrix != null) {  // $FlowFixMe
+    if (locations.u_worldViewProjectionMatrix != null) {
       gl.uniformMatrix4fv(
         locations.u_worldViewProjectionMatrix,
         false,
@@ -832,7 +829,7 @@ class GLObject extends DrawingObject {
       );
     }
 
-    if (locations.u_worldMatrix != null) {  // $FlowFixMe
+    if (locations.u_worldMatrix != null) {
       gl.uniformMatrix4fv(
         locations.u_worldMatrix,
         false,
@@ -840,7 +837,7 @@ class GLObject extends DrawingObject {
       );
     }
 
-    if (locations.u_projectionMatrix != null) {  // $FlowFixMe
+    if (locations.u_projectionMatrix != null) {
       gl.uniformMatrix4fv(
         locations.u_projectionMatrix,
         false,
@@ -848,7 +845,7 @@ class GLObject extends DrawingObject {
       );
     }
 
-    if (locations.u_viewMatrix != null) {  // $FlowFixMe
+    if (locations.u_viewMatrix != null) {
       gl.uniformMatrix4fv(
         locations.u_viewMatrix,
         false,
@@ -880,8 +877,7 @@ class GLObject extends DrawingObject {
       const texOffset = 0;        // start at the beginning of the buffer
 
       gl.enableVertexAttribArray(locations.a_texcoord);
-      // $FlowFixMe
-      gl.bindBuffer(gl.ARRAY_BUFFER, texture.buffer);
+      gl.bindBuffer(gl.ARRAY_BUFFER, texture.buffer!);
       gl.vertexAttribPointer(
         locations.a_texcoord, texSize, texType,
         texNormalize, texStride, texOffset,
@@ -904,7 +900,7 @@ class GLObject extends DrawingObject {
   }
 
   // eslint-disable-next-line no-unused-vars
-  getPointCountForAngle(drawAngle: number = Math.PI * 2) {
+  override getPointCountForAngle(drawAngle: number = Math.PI * 2) {
     return this.numVertices;
   }
 
@@ -968,7 +964,7 @@ class GLObject extends DrawingObject {
   //     );
   //   }
 
-  //   if (locations.u_worldInverseTranspose != null) {  // $FlowFixMe
+  //   if (locations.u_worldInverseTranspose != null) {
   //     gl.uniformMatrix4fv(
   //       locations.u_worldInverseTranspose,
   //       false,
@@ -976,7 +972,7 @@ class GLObject extends DrawingObject {
   //     );
   //   }
 
-  //   if (locations.u_worldViewProjectionMatrix != null) {  // $FlowFixMe
+  //   if (locations.u_worldViewProjectionMatrix != null) {
   //     gl.uniformMatrix4fv(
   //       locations.u_worldViewProjectionMatrix,
   //       false,
@@ -984,7 +980,7 @@ class GLObject extends DrawingObject {
   //     );
   //   }
 
-  //   if (locations.u_worldMatrix != null) {  // $FlowFixMe
+  //   if (locations.u_worldMatrix != null) {
   //     gl.uniformMatrix4fv(
   //       locations.u_worldMatrix,
   //       false,
@@ -992,7 +988,7 @@ class GLObject extends DrawingObject {
   //     );
   //   }
 
-  //   if (locations.u_projectionMatrix != null) {  // $FlowFixMe
+  //   if (locations.u_projectionMatrix != null) {
   //     gl.uniformMatrix4fv(
   //       locations.u_projectionMatrix,
   //       false,
@@ -1000,7 +996,7 @@ class GLObject extends DrawingObject {
   //     );
   //   }
 
-  //   if (locations.u_viewMatrix != null) {  // $FlowFixMe
+  //   if (locations.u_viewMatrix != null) {
   //     gl.uniformMatrix4fv(
   //       locations.u_viewMatrix,
   //       false,

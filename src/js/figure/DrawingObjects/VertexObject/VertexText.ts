@@ -1,5 +1,3 @@
-// @flow
-
 import {
   Point, Rect,
 } from '../../../tools/g2';
@@ -10,13 +8,13 @@ import { round } from '../../../tools/math';
 // import { identity } from '../../../tools/m2';
 
 type TypeVertexInputTextOptions = {
-  text: ?string;
-  size: ?number;
-  family: ?string;
-  weight: ?number;
-  style: ?'normal' | 'italic',
-  xAlign: ?'left' | 'center' | 'right',
-  yAlign: ?'top' | 'bottom' | 'middle' | 'baseline',
+  text: string | null | undefined;
+  size: number | string | null | undefined;
+  family: string | null | undefined;
+  weight: number | null | undefined;
+  style: 'normal' | 'italic' | null | undefined;
+  xAlign: 'left' | 'center' | 'right' | null | undefined;
+  yAlign: 'top' | 'bottom' | 'middle' | 'baseline' | null | undefined;
 };
 
 // type TypeTextOptions = {
@@ -30,31 +28,27 @@ type TypeVertexInputTextOptions = {
 // };
 
 class VertexText extends VertexGeneric {
-  glPrimitive: number;  // WebGL primitive used
-  text: number;       // radius from center to outside of polygon
-  center: Point;        // center point
-  dAngle: number;       // angle between adjacent verteces to center lines
-  ctx: Object;
-  figureToPixelSpaceScale: Point;
-  figureToGLSpaceTransformMatrix: Array<number>;
-  text: string;
-  size: number | string;
-  family: string;
-  weight: number;
-  style: 'normal' | 'italic';
-  xAlign: 'left' | 'center' | 'right';
-  yAlign: 'top' | 'bottom' | 'middle' | 'baseline';
-  canvas: HTMLCanvasElement;
-  ascent: number;
-  descent: number;
-  height: number;
-  width: number;
+  ctx: any;
+  figureToPixelSpaceScale!: Point;
+  figureToGLSpaceTransformMatrix!: Array<number>;
+  text!: string;
+  size!: number | string;
+  family!: string;
+  weight!: number;
+  style!: 'normal' | 'italic';
+  xAlign!: 'left' | 'center' | 'right';
+  yAlign!: 'top' | 'bottom' | 'middle' | 'baseline';
+  canvas!: HTMLCanvasElement;
+  ascent!: number;
+  descent!: number;
+  height!: number;
+  override width!: number;
 
   constructor(
     webgl: WebGLInstance,
     textOptions: TypeVertexInputTextOptions,
-  ) { // $FlowFixMe
-    super(webgl, 'withTexture', 'text');
+  ) {
+    super(webgl, 'withTexture', 'text' as any);
     this.glPrimitive = webgl.gl.TRIANGLE_FAN;
 
     const defaultTextOptions = {
@@ -67,7 +61,7 @@ class VertexText extends VertexGeneric {
       yAlign: 'alphabetic',
       id: generateUniqueId('vertexText'),
     };
-    const options = joinObjects({}, defaultTextOptions, textOptions);
+    const options = joinObjects<any>({}, defaultTextOptions, textOptions);
     this.size = options.size;
     this.text = options.text;
     this.family = options.family;
@@ -155,7 +149,7 @@ class VertexText extends VertexGeneric {
         1, 1,
         1, 0,
       ];
-      texture.data = this.ctx.canvas;
+      texture.data = this.ctx.canvas as any;
       if (texture.buffer) {
         this.resetBuffers();
       } else {
@@ -259,4 +253,3 @@ class VertexText extends VertexGeneric {
 }
 
 export default VertexText;
-

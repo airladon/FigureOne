@@ -1,4 +1,3 @@
-// @flow
 // import * as tools from '../../tools/math';
 // import { FigureElement } from '../Element';
 import type { OBJ_AnimationStep } from '../AnimationStep';
@@ -65,14 +64,14 @@ export class ParallelAnimationStep extends AnimationStep {
     const defaultOptions = { steps: [], duration: 0 };
     let options;
     if (Array.isArray(stepsOrOptionsIn)) {
-      options = joinObjects({}, defaultOptions, ...optionsIn);
+      options = joinObjects<any>({}, defaultOptions, ...optionsIn);
       options.steps = stepsOrOptionsIn;
     } else {
-      options = joinObjects({}, defaultOptions, stepsOrOptionsIn, ...optionsIn);
+      options = joinObjects<any>({}, defaultOptions, stepsOrOptionsIn, ...optionsIn);
     }
     super(options);
     this.steps = [];
-    let steps = [];
+    let steps: Array<AnimationStep | null> = [];
     if (!Array.isArray(options.steps) && options.steps != null) {
       steps = [options.steps];
     } else if (options.steps != null) {
@@ -86,17 +85,17 @@ export class ParallelAnimationStep extends AnimationStep {
     });
   }
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  override _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
       'steps',
     ];
   }
 
-  _getStateName() {  // eslint-disable-line class-methods-use-this
+  override _getStateName() {  // eslint-disable-line class-methods-use-this
     return 'parallelAnimationStep';
   }
 
-  setTimeDelta(delta: ?number) {
+  override setTimeDelta(delta: number | null | undefined) {
     super.setTimeDelta(delta);
     if (this.steps != null) {
       this.steps.forEach((step) => {
@@ -112,18 +111,18 @@ export class ParallelAnimationStep extends AnimationStep {
     return this;
   }
 
-  setTimeSpeed(oldSpeed: number, newSpeed: number, now: number) {
+  override setTimeSpeed(oldSpeed: number, newSpeed: number, now: number) {
     super.setTimeSpeed(oldSpeed, newSpeed, now);
     this.steps.forEach(step => step.setTimeSpeed(oldSpeed, newSpeed, now));
   }
 
-  nextFrame(now: number, speed: number = 1) {
+  override nextFrame(now: number, speed: number = 1) {
     if (this.startTime === null) {
       this.startTime = now - this.startTimeOffset;
     }
-    let remaining;
-    if (this.beforeFrame != null) { // $FlowFixMe - as this has been confirmed
-      this.beforeFrame(now - this.startTime);
+    let remaining: number | null | undefined;
+    if (this.beforeFrame != null) {
+      this.beforeFrame(now - this.startTime!);
     }
     this.steps.forEach((step) => {
       if (step.state === 'animating' || step.state === 'waitingToStart') {
@@ -137,8 +136,8 @@ export class ParallelAnimationStep extends AnimationStep {
         }
       }
     });
-    if (this.afterFrame != null) { // $FlowFixMe - as this has been confirmed
-      this.afterFrame(now - this.startTime);
+    if (this.afterFrame != null) {
+      this.afterFrame(now - this.startTime!);
     }
     if (remaining === null) {
       return null;
@@ -152,8 +151,8 @@ export class ParallelAnimationStep extends AnimationStep {
     return remaining;
   }
 
-  finishIfZeroDuration() {
-    let state = 'finished';
+  override finishIfZeroDuration() {
+    let state: string = 'finished';
     this.steps.forEach((step) => {
       if (step.state !== 'finished') {
         state = 'animating';
@@ -164,14 +163,14 @@ export class ParallelAnimationStep extends AnimationStep {
     }
   }
 
-  startWaiting() {
+  override startWaiting() {
     super.startWaiting();
     this.steps.forEach((step) => {
       step.startWaiting();
     });
   }
 
-  start(startTime: ?AnimationStartTime = null) {
+  override start(startTime: AnimationStartTime | null = null) {
     this.startWaiting();
     super.start(startTime);
     this.steps.forEach((step) => {
@@ -180,13 +179,13 @@ export class ParallelAnimationStep extends AnimationStep {
     });
   }
 
-  finish(cancelled: boolean = false, force: ?'complete' | 'freeze' = null) {
+  override finish(cancelled: boolean = false, force: 'complete' | 'freeze' | null = null) {
     if (this.state === 'idle' || this.state === 'finished') {
       return;
     }
     // super.finish(cancelled, force);
     this.state = 'finished';
-    let forceToUse = null;
+    let forceToUse: 'complete' | 'freeze' | null = null;
     if (this.completeOnCancel === true) {
       forceToUse = 'complete';
     }
@@ -206,7 +205,7 @@ export class ParallelAnimationStep extends AnimationStep {
     }
   }
 
-  getTotalDuration() {
+  override getTotalDuration() {
     let totalDuration = 0;
     for (let i = 0; i < this.steps.length; i += 1) {
       const step = this.steps[i];
@@ -221,7 +220,7 @@ export class ParallelAnimationStep extends AnimationStep {
     return totalDuration;
   }
 
-  getRemainingTime(now: number) {
+  override getRemainingTime(now: number) {
     if (this.state !== 'animating' && this.state !== 'waitingToStart') {
       return 0;
     }
@@ -239,7 +238,7 @@ export class ParallelAnimationStep extends AnimationStep {
     return totalDuration - deltaTime;
   }
 
-  _dup() {
+  override _dup() {
     const step = new ParallelAnimationStep();
     duplicateFromTo(this, step, ['timeKeeper']);
     step.timeKeeper = this.timeKeeper;

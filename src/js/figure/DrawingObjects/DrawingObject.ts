@@ -1,5 +1,3 @@
-// @flow
-
 import {
   Point, // Rect, getBoundingRect,
 } from '../../tools/g2';
@@ -69,15 +67,15 @@ import type WebGLInstance from '../webgl/webgl';
 class DrawingObject {
   // numPoints: number;           // Number of primative vertices
   location: Point;
-  border: Array<Array<Point>>; // Border vertices
-  textBorder: Array<Array<Point>>; // Border vertices
-  textBorderBuffer: Array<Array<Point>>;
+  border!: Array<Array<Point>>; // Border vertices
+  textBorder!: Array<Array<Point>>; // Border vertices
+  textBorderBuffer!: Array<Array<Point>>;
   // touchBorder: Array<Array<Point>>;
   // +change: (any, any, any) => void;
   // onLoad: Function | null;   // Only used for drawing objects with asynchronous
   //                            loading (like textures)
   type: string;
-  state: 'loading' | 'loaded';
+  state!: 'loading' | 'loaded';
 
   constructor() {
     // this.numPoints = 0;
@@ -104,16 +102,15 @@ class DrawingObject {
   // }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  setText(textOrOptions: string | Object, index: number = 1) {
+  setText(textOrOptions: string | Record<string, any>, index: number = 1) {
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  update(options: Object) {
+  update(options: Record<string, any>) {
   }
 
   /* eslint-disable class-methods-use-this */
-  // $FlowFixMe
-  getCanvas(): HTMLCanvasElement {}
+  getCanvas(): any {}
   /* eslint-enable class-methods-use-this */
 
 
@@ -217,7 +214,7 @@ class DrawingObject {
     return [];
   }
 
-  _state(options: Object) {
+  _state(options: Record<string, any>) {
     return getState(this, this._getStateProperties(), options);
   }
 

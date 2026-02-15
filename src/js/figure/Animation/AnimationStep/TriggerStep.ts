@@ -1,4 +1,3 @@
-// @flow
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 import type {
   OBJ_AnimationStep,
@@ -25,7 +24,7 @@ import type { AnimationStartTime } from '../AnimationManager';
 export type OBJ_TriggerAnimationStep = {
   callback?: Function;      // default is element transform
   payload?: any;
-  setToEnd?: string | Function
+  setToEnd?: string | Function;
 } & OBJ_AnimationStep;
 
 /**
@@ -89,11 +88,10 @@ export type OBJ_TriggerAnimationStep = {
  *   .start();
  */
 export class TriggerAnimationStep extends AnimationStep {
-  element: ?Object;
-  callback: ?(string | Function);
-  payload: ?Object;
-  setToEndCallback: ?(string | Function);
-  customProperties: Object;
+  callback: (string | Function) | null;
+  payload: Record<string, any> | null | undefined;
+  setToEndCallback!: (string | Function) | null;
+  customProperties: Record<string, any>;
   autoDuration: boolean;
 
   /**
@@ -114,10 +112,10 @@ export class TriggerAnimationStep extends AnimationStep {
       typeof triggerOrOptionsIn === 'function'
       || typeof triggerOrOptionsIn === 'string'
     ) {
-      options = joinObjects({}, defaultOptions, ...optionsIn);
+      options = joinObjects<any>({}, defaultOptions, ...optionsIn);
       options.callback = triggerOrOptionsIn;
     } else {
-      options = joinObjects({}, defaultOptions, triggerOrOptionsIn, ...optionsIn);
+      options = joinObjects<any>({}, defaultOptions, triggerOrOptionsIn, ...optionsIn);
     }
     super(options);
     this.element = options.element;
@@ -131,7 +129,7 @@ export class TriggerAnimationStep extends AnimationStep {
     this.customProperties = options.customProperties;
   }
 
-  fnExec(idOrFn: string | Function | null, ...args: any) {
+  override fnExec(idOrFn: string | Function | null, ...args: any) {
     if (this.element != null) {
       return this.fnMap.execOnMaps(
         idOrFn, [this.element.fnMap.map], ...args,
@@ -141,7 +139,7 @@ export class TriggerAnimationStep extends AnimationStep {
   }
 
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  override _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
       'callback',
       'payload',
@@ -150,11 +148,11 @@ export class TriggerAnimationStep extends AnimationStep {
     ];
   }
 
-  _getStateName() {  // eslint-disable-line class-methods-use-this
+  override _getStateName() {  // eslint-disable-line class-methods-use-this
     return 'triggerAnimationStep';
   }
 
-  setFrame() {
+  override setFrame() {
     const remainingTime = this.fnExec(this.callback, this.payload, this.customProperties);
     if (remainingTime != null && typeof remainingTime === 'number' && this.autoDuration) {
       this.duration = remainingTime;
@@ -162,14 +160,14 @@ export class TriggerAnimationStep extends AnimationStep {
     this.callback = null;
   }
 
-  start(startTime: ?AnimationStartTime = null) {
+  override start(startTime: AnimationStartTime | null = null) {
     super.start(startTime);
     if (startTime === 'now' || startTime === 'prevFrame') {
       this.setFrame();
     }
   }
 
-  setToEnd() {
+  override setToEnd() {
     if (this.setToEndCallback != null) {
       this.fnExec(this.setToEndCallback, this.payload, this.customProperties);
     } else {
@@ -178,7 +176,7 @@ export class TriggerAnimationStep extends AnimationStep {
     this.callback = null;
   }
 
-  _dup() {
+  override _dup() {
     const step = new TriggerAnimationStep();
     duplicateFromTo(this, step, ['element', 'timeKeeper']);
     step.timeKeeper = this.timeKeeper;

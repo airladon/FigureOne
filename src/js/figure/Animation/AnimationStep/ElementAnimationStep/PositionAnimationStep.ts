@@ -1,4 +1,3 @@
-// @flow
 import {
   Transform, Point, getMaxTimeFromVelocity, getPoint, getScale, toDelta,
 } from '../../../../tools/g2';
@@ -116,14 +115,14 @@ export type OBJ_PositionAnimationStep = {
  */
 export default class PositionAnimationStep extends ElementAnimationStep {
   position: {
-    start: ?Point;  // null means use element transform when unit is started
-    delta: ?Point;
-    target: ?Point;
+    start: Point | null | undefined;  // null means use element transform when unit is started
+    delta: Point | null | undefined;
+    target: Point | null | undefined;
     // rotDirection: 0 | 1 | -1 | 2;
     path: OBJ_TranslationPath;
     // pathOptions: OBJ_QuadraticBezier;
-    velocity: ?Point;
-    maxDuration: ?number;
+    velocity: Point | null | undefined;
+    maxDuration: number | null | undefined;
   };
 
   /**
@@ -131,7 +130,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
    */
   constructor(...optionsIn: Array<OBJ_PositionAnimationStep>) {
     const ElementAnimationStepOptionsIn =
-      joinObjects({}, { type: 'position' }, ...optionsIn);
+      joinObjects<any>({}, { type: 'position' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
       'start', 'delta', 'target', 'path', 'pathOptions',
       'velocity', 'maxDuration',
@@ -156,7 +155,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       const pathOptions = this.element.animations.options.translation;
       joinObjects(defaultPositionOptions.path, pathOptions);
     }
-    const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
+    const options = joinObjects<any>({}, defaultPositionOptions, ...optionsIn);
     if (options.start != null) {
       options.start = getPoint(options.start);
     }
@@ -166,8 +165,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     if (options.delta != null) {
       options.delta = getPoint(options.delta);
     }
-    // $FlowFixMe
-    this.position = { path: {} };
+    this.position = { path: {} } as any;
     copyKeysFromTo(options, this.position, [
       'start', 'delta', 'target', 'path',
       'velocity', 'maxDuration',
@@ -175,13 +173,13 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     // duplicateFromTo(options.path, this.position.path);
   }
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  override _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
       'position',
     ];
   }
 
-  _getStateName() {  // eslint-disable-line class-methods-use-this
+  override _getStateName() {  // eslint-disable-line class-methods-use-this
     return 'positionAnimationStep';
   }
 
@@ -189,7 +187,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime: ?AnimationStartTime = null) {
+  override start(startTime: AnimationStartTime | null = null) {
     super.start(startTime);
     if (this.position.start == null) {
       if (this.element != null) {
@@ -237,7 +235,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     }
   }
 
-  setFrame(deltaTime: number) {
+  override setFrame(deltaTime: number) {
     const percentTime = deltaTime / this.duration;
     const percentComplete = this.getPercentComplete(percentTime);
     const p = percentComplete;
@@ -255,13 +253,13 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     }
   }
 
-  setToEnd() {
+  override setToEnd() {
     if (this.element != null && this.position.target != null) {
       this.element.setPosition(this.position.target);
     }
   }
 
-  _dup() {
+  override _dup() {
     const step = new PositionAnimationStep();
     duplicateFromTo(this, step, ['element', 'timeKeeper']);
     step.element = this.element;

@@ -1,5 +1,3 @@
-// @flow
-// import * as tools from '../../tools/math';
 // eslint-disable-next-line import/no-cycle
 import { FigureElement } from '../Element';
 import type { OBJ_Scenario } from '../Element';
@@ -29,8 +27,8 @@ import type { TypeColor } from '../../tools/types';
 export type OBJ_AnimationBuilder = {
   element?: FigureElement;
   customSteps?: Array<{
-    step: (Object) => AnimationStep,
-    name: string,
+    step: (options: Record<string, any>) => AnimationStep;
+    name: string;
   }>;
 } & OBJ_SerialAnimationStep;
 
@@ -52,8 +50,6 @@ export type OBJ_AnimationBuilder = {
  *   .start();
  */
 export default class AnimationBuilder extends animation.SerialAnimationStep {
-  element: ?FigureElement;
-
   /**
    * @hideconstructor
    */
@@ -66,18 +62,18 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     };
     let optionsToUse;
     if (elementOrOptions instanceof FigureElement) {
-      optionsToUse = joinObjects({}, defaultOptions, ...options);
+      optionsToUse = joinObjects<any>({}, defaultOptions, ...options);
       optionsToUse.element = elementOrOptions;
     } else {
-      optionsToUse = joinObjects({}, defaultOptions, elementOrOptions, ...options);
+      optionsToUse = joinObjects<any>({}, defaultOptions, elementOrOptions, ...options);
     }
     super(optionsToUse);
     this.element = optionsToUse.element;
     this._stepType = 'builder';
-    optionsToUse.customSteps.forEach((customStep) => {  // $FlowFixMe
-      this[customStep.name] = (...optionsIn) => {
+    optionsToUse.customSteps.forEach((customStep: any) => {
+      (this as any)[customStep.name] = (...optionsIn: any[]) => {
         const defOptions = { element: this.element };
-        const o = joinObjects({}, defOptions, ...optionsIn);
+        const o = joinObjects<any>({}, defOptions, ...optionsIn);
         this.then(customStep.step(o));
         return this;
       };
@@ -85,7 +81,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  fnExec(idOrFn: string | Function | null, ...args: any) {
+  override fnExec(idOrFn: string | Function | null, ...args: any) {
     if (this.element != null) {
       return this.fnMap.execOnMaps(
         idOrFn, [this.element.fnMap.map], ...args,
@@ -94,13 +90,13 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this.fnMap.exec(idOrFn, ...args);
   }
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  override _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
       'element',
     ];
   }
 
-  _getStateName() {  // eslint-disable-line class-methods-use-this
+  override _getStateName() {  // eslint-disable-line class-methods-use-this
     return 'animationBuilder';
   }
 
@@ -110,7 +106,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
    * @return {AnimationBuilder}
    */
   custom(
-    callbackOrOptions: string | ((number) => void) | OBJ_CustomAnimationStep,
+    callbackOrOptions: string | ((percent: number) => void) | OBJ_CustomAnimationStep,
   ) {
     let optionsIn;
     if (typeof callbackOrOptions === 'string' || typeof callbackOrOptions === 'function') {
@@ -118,7 +114,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     } else {
       optionsIn = callbackOrOptions;
     }
-    const optionsToUse = joinObjects(
+    const optionsToUse = joinObjects<any>(
       {}, { element: this.element, timeKeeper: this.timeKeeper }, optionsIn,
     );
     this.then(new animation.CustomAnimationStep(optionsToUse));
@@ -258,8 +254,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
 
   /* eslint-disable no-param-reassign */
   addStep(animName: string, ...params: Array<any>) {
-    if (this.element != null) { // $FlowFixMe
-      this.then(this.element.animations[animName](...params));
+    if (this.element != null) {
+      this.then((this.element.animations as any)[animName](...params));
     }
     return this;
   }
@@ -299,11 +295,11 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   ) {
     let optionsToUse;
     if (typeof delayOrOptions === 'number') {
-      optionsToUse = joinObjects(
+      optionsToUse = joinObjects<any>(
         {}, { timeKeeper: this.timeKeeper }, { duration: delayOrOptions },
       );
     } else {
-      optionsToUse = joinObjects(
+      optionsToUse = joinObjects<any>(
         {}, { timeKeeper: this.timeKeeper }, delayOrOptions,
       );
     }
@@ -329,7 +325,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     } else {
       optionsIn = callbackOrOptions;
     }
-    const optionsToUse = joinObjects(
+    const optionsToUse = joinObjects<any>(
       {}, { element: this.element, timeKeeper: this.timeKeeper }, optionsIn,
     );
     this.then(animation.trigger(optionsToUse));
@@ -378,7 +374,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     this.state = 'idle';
   }
 
-  _dup() {
+  override _dup() {
     const newBuilder = new AnimationBuilder();
     duplicateFromTo(this, newBuilder, ['element']);
     duplicateFromTo(this, newBuilder, ['element', 'timeKeeper']);

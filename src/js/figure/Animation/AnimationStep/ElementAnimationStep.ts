@@ -1,4 +1,3 @@
-// @flow
 // import * as tools from '../../../tools/math';
 // import { FigureElement } from '../../Element';
 import type { OBJ_AnimationStep } from '../AnimationStep';
@@ -23,7 +22,7 @@ import type { AnimationStartTime } from '../AnimationManager';
  * @param {number} percent percentage of duration
  * @return {number} percent of animation complete
  */
-export type AnimationProgression = (number) => number;
+export type AnimationProgression = (percent: number) => number;
 
 /**
  * {@link ElementAnimationStep} options object
@@ -48,10 +47,8 @@ export type OBJ_ElementAnimationStep = {
  * @extends AnimationStep
  */
 export default class ElementAnimationStep extends AnimationStep {
-  element: ?FigureElement;
   type: 'transform' | 'color' | 'custom' | 'position' | 'setPosition' | 'opacity';
-  duration: number;
-  progression: ((number, ?boolean) => number) | string;
+  progression: ((percent: number, invert?: boolean) => number) | string;
 
   constructor(optionsIn: OBJ_ElementAnimationStep = {}) {
     super(optionsIn);
@@ -65,7 +62,7 @@ export default class ElementAnimationStep extends AnimationStep {
       progression: defaultProgression,
     };
 
-    const options = joinObjects({}, defaultOptions, optionsIn);
+    const options = joinObjects<any>({}, defaultOptions, optionsIn);
     this.element = options.element;
     this.type = options.type;
     this.onFinish = options.onFinish;
@@ -83,7 +80,7 @@ export default class ElementAnimationStep extends AnimationStep {
     }
   }
 
-  fnExec(idOrFn: string | Function | null, ...args: any) {
+  override fnExec(idOrFn: string | Function | null, ...args: any) {
     if (this.element != null) {
       return this.fnMap.execOnMaps(
         idOrFn, [this.element.fnMap.map], ...args,
@@ -92,7 +89,7 @@ export default class ElementAnimationStep extends AnimationStep {
     return this.fnMap.exec(idOrFn, ...args);
   }
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  override _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
       // 'element',
       'type',
@@ -117,14 +114,14 @@ export default class ElementAnimationStep extends AnimationStep {
     return 0;
   }
 
-  start(startTime: ?AnimationStartTime = null) {
+  override start(startTime: AnimationStartTime | null = null) {
     super.start(startTime);
     if (this.element != null) {
       this.element.animateNextFrame();
     }
   }
 
-  _dup() {
+  override _dup() {
     const step = new ElementAnimationStep();
     duplicateFromTo(this, step, ['element', 'timeKeeper']);
     step.element = this.element;

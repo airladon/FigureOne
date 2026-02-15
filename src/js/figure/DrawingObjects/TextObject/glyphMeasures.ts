@@ -1,10 +1,9 @@
-// @flow
 import { joinObjects } from '../../../tools/tools';
 
 // eslint-disable-next-line no-unused-vars
-function familyStyleMeasures(family: string, style: string, a, ma, d, md, d0) {
+function familyStyleMeasures(family: string, style: string, a: number, ma: number, d: number, md: number, d0: number) {
   const f = family.toLowerCase().split(',')[0];
-  const measures = {
+  const measures: Record<string, any> = {
     times: {
       italic: {
         f: { a, d, w: 1.5 },
@@ -37,10 +36,10 @@ function glyphMeasures(
   d: number,          // max descent
   md: number,         // mid descent
   d0: number,         // min descent
-  modifiers: Object,
+  modifiers: Record<string, any>,
 ) {
   const w = 1;
-  const defaults = {
+  const defaults: Record<string, any> = {
     a: { a: ma, d: d0, w },
     c: { a: ma, d: d0, w },
     e: { a: ma, d: d0, w },
@@ -76,11 +75,11 @@ function glyphMeasures(
     '|': { a, d, w },
     '-': { a: ma, d: d0, w },
   };
-  const mods = {};
+  const mods: Record<string, any> = {};
   Object.keys(modifiers).forEach((key) => {
-    mods[key] = joinObjects({}, { a, d: d0, w }, defaults[key], modifiers[key]);
+    mods[key] = joinObjects<any>({}, { a, d: d0, w }, defaults[key], modifiers[key]);
   });
-  const m = joinObjects(
+  const m = joinObjects<any>(
     {}, defaults, familyStyleMeasures(family, style, a, ma, d, md, d0), mods,
   );
   return m;

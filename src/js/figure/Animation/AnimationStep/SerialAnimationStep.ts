@@ -1,4 +1,3 @@
-// @flow
 // import * as tools from '../../tools/math';
 // import { FigureElement } from '../Element';
 import type { OBJ_AnimationStep } from '../AnimationStep';
@@ -76,10 +75,10 @@ export class SerialAnimationStep extends AnimationStep {
     const defaultOptions = { steps: [], duration: 0 };
     let options;
     if (Array.isArray(stepsOrOptionsIn)) {
-      options = joinObjects({}, defaultOptions, ...optionsIn);
+      options = joinObjects<any>({}, defaultOptions, ...optionsIn);
       options.steps = stepsOrOptionsIn;
     } else {
-      options = joinObjects({}, defaultOptions, stepsOrOptionsIn, ...optionsIn);
+      options = joinObjects<any>({}, defaultOptions, stepsOrOptionsIn, ...optionsIn);
     }
     super(options);
     this.index = 0;
@@ -91,14 +90,14 @@ export class SerialAnimationStep extends AnimationStep {
     }
   }
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  override _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
       'steps',
       'index',
     ];
   }
 
-  _getStateName() {  // eslint-disable-line class-methods-use-this
+  override _getStateName() {  // eslint-disable-line class-methods-use-this
     return 'serialAnimationStep';
   }
 
@@ -116,7 +115,7 @@ export class SerialAnimationStep extends AnimationStep {
   //   return this;
   // }
 
-  setTimeDelta(delta: ?number) {
+  override setTimeDelta(delta: number | null | undefined) {
     super.setTimeDelta(delta);
     if (this.steps != null) {
       this.steps.forEach((step) => {
@@ -125,22 +124,21 @@ export class SerialAnimationStep extends AnimationStep {
     }
   }
 
-  then(step: ?AnimationStep) {
+  then(step: AnimationStep | null | undefined) {
     if (step != null) {
       this.steps.push(step);
     }
     return this;
   }
 
-  startWaiting() {
+  override startWaiting() {
     super.startWaiting();
     this.steps.forEach((step) => {
       step.startWaiting();
     });
   }
 
-  // $FlowFixMe
-  start(startTime: ?AnimationStartTime = null) {
+  override start(startTime: AnimationStartTime | null = null) {
     if (this.state !== 'animating') {
       this.startWaiting();
       super.start(startTime);
@@ -154,7 +152,7 @@ export class SerialAnimationStep extends AnimationStep {
     // this.finishIfZeroDuration();
   }
 
-  finishIfZeroDuration(startIndex: number = 0) {
+  override finishIfZeroDuration(startIndex: number = 0) {
     let i = startIndex;
     let step = this.steps[startIndex];
     while (i < this.steps.length && step.state === 'finished') {
@@ -171,7 +169,7 @@ export class SerialAnimationStep extends AnimationStep {
     }
   }
 
-  startStep(startTime: ?AnimationStartTime = null) {
+  startStep(startTime: AnimationStartTime | null = null) {
     if (this.index >= this.steps.length) {
       this.finish();
       return;
@@ -189,24 +187,24 @@ export class SerialAnimationStep extends AnimationStep {
     }
   }
 
-  setTimeSpeed(oldSpeed: number, newSpeed: number, now: number) {
+  override setTimeSpeed(oldSpeed: number, newSpeed: number, now: number) {
     super.setTimeSpeed(oldSpeed, newSpeed, now);
     this.steps.forEach(step => step.setTimeSpeed(oldSpeed, newSpeed, now));
   }
 
-  nextFrame(now: number, speed: number = 1) {
+  override nextFrame(now: number, speed: number = 1): number | null {
     // console.log(now);
     if (this.startTime === null) {
       this.startTime = now - this.startTimeOffset;
     }
-    let remaining = -1;
-    if (this.beforeFrame != null) { // $FlowFixMe - as this has been confirmed
-      this.beforeFrame(now - this.startTime);
+    let remaining: number | null = -1;
+    if (this.beforeFrame != null) {
+      this.beforeFrame(now - this.startTime!);
     }
     if (this.index <= this.steps.length - 1) {
       remaining = this.steps[this.index].nextFrame(now, speed);
-      if (this.afterFrame != null) { // $FlowFixMe - as this has been confirmed
-        this.afterFrame(now - this.startTime);
+      if (this.afterFrame != null) {
+        this.afterFrame(now - this.startTime!);
       }
       if (remaining != null && remaining >= 0) {
         if (this.index === this.steps.length - 1) {
@@ -223,13 +221,13 @@ export class SerialAnimationStep extends AnimationStep {
     return remaining;
   }
 
-  finish(cancelled: boolean = false, force: ?'complete' | 'freeze' = null) {
+  override finish(cancelled: boolean = false, force: 'complete' | 'freeze' | null = null) {
     if (this.state === 'idle' || this.state === 'finished') {
       return;
     }
     // super.finish(cancelled, force);
     this.state = 'finished';
-    let forceToUse = null;
+    let forceToUse: 'complete' | 'freeze' | null = null;
     if (this.completeOnCancel === true) {
       forceToUse = 'complete';
     }
@@ -249,7 +247,7 @@ export class SerialAnimationStep extends AnimationStep {
     }
   }
 
-  getTotalDuration() {
+  override getTotalDuration() {
     let totalDuration = 0;
     for (let i = 0; i < this.steps.length; i += 1) {
       const step = this.steps[i];
@@ -257,12 +255,12 @@ export class SerialAnimationStep extends AnimationStep {
       if (stepDuration == null) {
         return null;
       }
-      totalDuration += step.getTotalDuration();
+      totalDuration += step.getTotalDuration()!;
     }
     return totalDuration;
   }
 
-  getRemainingTime(now: number) {
+  override getRemainingTime(now: number) {
     if (this.state !== 'animating' && this.state !== 'waitingToStart') {
       return 0;
     }
@@ -280,7 +278,7 @@ export class SerialAnimationStep extends AnimationStep {
     return totalDuration - deltaTime;
   }
 
-  _dup() {
+  override _dup() {
     const step = new SerialAnimationStep();
     duplicateFromTo(this, step, ['timeKeeper']);
     step.timeKeeper = this.timeKeeper;
@@ -294,4 +292,3 @@ export function inSerial(
 ) {
   return new SerialAnimationStep(stepsOrOptionsIn, ...optionsIn);
 }
-

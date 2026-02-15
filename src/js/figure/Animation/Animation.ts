@@ -1,4 +1,3 @@
-// @flow
 import type {
   OBJ_PositionAnimationStep,
 } from './AnimationStep/ElementAnimationStep/PositionAnimationStep';

@@ -1,4 +1,3 @@
-// @flow
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
@@ -52,21 +51,21 @@ export type OBJ_PulseAnimationStep = {
   // scale: ?number;
   // numLines: ?number;
   // frequency: ?number;
-  stopAfterDuration: ?boolean;
+  stopAfterDuration?: boolean | null | undefined;
 
-  frequency?: number,
-  scale?: number,
-  rotation?: number,
-  translation?: number,
-  angle?: number,
-  min?: number,
-  centerOn?: null | FigureElement | TypeParsablePoint,
-  xAlign?: 'left' | 'center' | 'right' | 'origin' | number,
-  yAlign?: 'bottom' | 'middle' | 'top' | 'origin' | number,
-  space?: 'figure' | 'gl' | 'local' | 'draw',
-  done?: ?(mixed) => void,
-  num?: number,
-  when?: TypeWhen,
+  frequency?: number;
+  scale?: number;
+  rotation?: number;
+  translation?: number;
+  angle?: number;
+  min?: number;
+  centerOn?: null | FigureElement | TypeParsablePoint;
+  xAlign?: 'left' | 'center' | 'right' | 'origin' | number;
+  yAlign?: 'bottom' | 'middle' | 'top' | 'origin' | number;
+  space?: 'figure' | 'gl' | 'local' | 'draw';
+  done?: ((arg: any) => void) | null | undefined;
+  num?: number;
+  when?: TypeWhen;
 } & OBJ_ElementAnimationStep;
 
 /**
@@ -136,7 +135,7 @@ export default class PulseAnimationStep extends ElementAnimationStep {
     xAlign: 'left' | 'center' | 'right' | 'origin' | number;
     yAlign: 'bottom' | 'middle' | 'top' | 'origin' | number;
     space: 'figure' | 'gl' | 'local' | 'draw';
-    done: ?(mixed) => void;
+    done: ((arg: any) => void) | null | undefined;
     num: number;
     when: TypeWhen;
     stopAfterDuration: boolean;
@@ -146,7 +145,7 @@ export default class PulseAnimationStep extends ElementAnimationStep {
 
   constructor(...optionsIn: Array<OBJ_PulseAnimationStep>) {
     const ElementAnimationStepOptionsIn =
-      joinObjects({}, { type: 'position' }, ...optionsIn);
+      joinObjects<any>({}, { type: 'position' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
       'stopAfterDuration', 'frequency', 'scale', 'rotation', 'translation',
       'angle', 'min', 'centerOn', 'xAlign', 'yAlign', 'space', 'done', 'num', 'when',
@@ -179,11 +178,11 @@ export default class PulseAnimationStep extends ElementAnimationStep {
       // frequency: 0,
       stopAfterDuration: true,
     };
-    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    const options = joinObjects<any>({}, defaultOptions, ...optionsIn);
     if (options.centerOn === undefined && this.element != null) {
       options.centerOn = this.element;
     }
-    this.pulse = {};
+    this.pulse = {} as any;
     copyKeysFromTo(options, this.pulse, [
       'stopAfterDuration', 'frequency', 'scale', 'rotation', 'translation',
       'angle', 'min', 'centerOn', 'xAlign', 'yAlign', 'space', 'done', 'num', 'when',
@@ -194,7 +193,7 @@ export default class PulseAnimationStep extends ElementAnimationStep {
     this.toStart = true;
   }
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  override _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
       // 'scale',
       // 'numLines',
@@ -205,11 +204,11 @@ export default class PulseAnimationStep extends ElementAnimationStep {
     ];
   }
 
-  _getStateName() {  // eslint-disable-line class-methods-use-this
+  override _getStateName() {  // eslint-disable-line class-methods-use-this
     return 'pulseAnimationStep';
   }
 
-  setFrame() {
+  override setFrame() {
     if (this.toStart) {
       const { element } = this;
       if (element != null) {
@@ -219,7 +218,7 @@ export default class PulseAnimationStep extends ElementAnimationStep {
     }
   }
 
-  setToEnd() {
+  override setToEnd() {
     if (this.element != null) {
       if (this.pulse.stopAfterDuration) {
         this.element.stopPulsing();
@@ -227,7 +226,7 @@ export default class PulseAnimationStep extends ElementAnimationStep {
     }
   }
 
-  _dup() {
+  override _dup() {
     const step = new PulseAnimationStep();
     duplicateFromTo(this, step, ['element', 'timeKeeper']);
     step.element = this.element;

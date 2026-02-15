@@ -1,4 +1,3 @@
-// @flow
 // import * as tools from '../../../tools/math';
 import {
   joinObjects, duplicateFromTo,
@@ -20,10 +19,10 @@ import type { AnimationStartTime } from '../AnimationManager';
  * @property {'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression} [progression]
  */
 export type OBJ_CustomAnimationStep = {
-  callback?: string | ((number) => void);
+  callback?: string | ((percent: number) => void);
   startPercent?: number;
-  progression?: 'linear' | 'easeinout' | 'easein' | 'easeout' | (number) => number;
-  duration?: number | null,
+  progression?: 'linear' | 'easeinout' | 'easein' | 'easeout' | ((percent: number) => number);
+  duration?: number | null;
 } & OBJ_AnimationStep;
 
 /**
@@ -84,18 +83,17 @@ export type OBJ_CustomAnimationStep = {
  *   .start();
  */
 export class CustomAnimationStep extends AnimationStep {
-  element: ?Object;
-  callback: ?(number) => void;
-  startPercent: ?number;
-  progression: string | ((number, ?boolean) => number);
-  customProperties: Object;
+  callback: ((percent: number) => void) | null;
+  startPercent: number | null | undefined;
+  progression: string | ((percent: number, invert?: boolean) => number);
+  customProperties: Record<string, any>;
   isInfinite: boolean;
 
   /**
    * @hideconstructor
    */
   constructor(...optionsIn: Array<OBJ_CustomAnimationStep>) {
-    const AnimationStepOptionsIn = joinObjects({}, ...optionsIn);
+    const AnimationStepOptionsIn = joinObjects<any>({}, ...optionsIn);
     super(AnimationStepOptionsIn);
     const defaultPositionOptions = {
       element: null,
@@ -104,7 +102,7 @@ export class CustomAnimationStep extends AnimationStep {
       progression: 'linear',
       duration: 1,
     };
-    const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
+    const options = joinObjects<any>({}, defaultPositionOptions, ...optionsIn);
     this.element = options.element;
     this.progression = options.progression;
     if (this.progression === 'linear') {
@@ -134,7 +132,7 @@ export class CustomAnimationStep extends AnimationStep {
   //   }
   //   return result;
   // }
-  fnExec(idOrFn: string | Function | null, ...args: any) {
+  override fnExec(idOrFn: string | Function | null, ...args: any) {
     // const result = this.fnMap.exec(idOrFn, ...args);
     // if (result == null && this.element != null) {
     //   return this.element.fnMap.exec(idOrFn, ...args);
@@ -148,14 +146,14 @@ export class CustomAnimationStep extends AnimationStep {
     return this.fnMap.exec(idOrFn, ...args);
   }
 
-  start(startTime: ?AnimationStartTime = null) {
+  override start(startTime: AnimationStartTime | null = null) {
     super.start(startTime);
     if (startTime === 'now' || startTime === 'prevFrame') {
       this.setFrame(0);
     }
   }
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  override _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
       'callback',
       'startPercent',
@@ -186,11 +184,11 @@ export class CustomAnimationStep extends AnimationStep {
   //   return state;
   // }
 
-  _getStateName() {  // eslint-disable-line class-methods-use-this
+  override _getStateName() {  // eslint-disable-line class-methods-use-this
     return 'customAnimationStep';
   }
 
-  setFrame(deltaTime: number) {
+  override setFrame(deltaTime: number) {
     let cancelled;
     if (this.duration == null) {
       cancelled = this.fnExec(this.callback, deltaTime, this.customProperties);
@@ -218,13 +216,13 @@ export class CustomAnimationStep extends AnimationStep {
     return 0;
   }
 
-  setToEnd() {
+  override setToEnd() {
     if (!this.isInfinite) {
       this.fnExec(this.callback, 1, this.customProperties);
     }
   }
 
-  _dup() {
+  override _dup() {
     const step = new CustomAnimationStep();
     duplicateFromTo(this, step, ['timeKeeper']);
     step.timeKeeper = this.timeKeeper;
@@ -235,4 +233,3 @@ export class CustomAnimationStep extends AnimationStep {
 export function custom(...optionsIn: Array<OBJ_CustomAnimationStep>) {
   return new CustomAnimationStep(...optionsIn);
 }
-

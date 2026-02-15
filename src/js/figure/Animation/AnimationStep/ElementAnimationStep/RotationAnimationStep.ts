@@ -1,4 +1,3 @@
-// @flow
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
@@ -55,8 +54,8 @@ export type OBJ_RotationAnimationStep = {
   // 1 is CCW, -1 is CW, 0 is fastest, 2 is not through 0
   // direction: 0 | 1 | -1 | 2;
   // clipTo: '0to360' | '-180to180' | null;
-  velocity?: ?number,
-  maxDuration?: ?number;
+  velocity?: number | null;
+  maxDuration?: number | null;
 } & OBJ_ElementAnimationStep;
 
 
@@ -113,7 +112,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     target: number;
     // direction: 0 | 1 | -1 | 2;
     velocity: number;
-    maxDuration: ?number;
+    maxDuration: number | null | undefined;
     clipTo: '0to360' | '-180to180' | null;
   };
 
@@ -122,7 +121,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
    */
   constructor(...optionsIn: Array<OBJ_RotationAnimationStep>) {
     const ElementAnimationStepOptionsIn =
-      joinObjects({}, { type: 'rotation' }, ...optionsIn);
+      joinObjects<any>({}, { type: 'rotation' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
       'start', 'delta', 'target', 'direction', 'velocity', 'clipTo', 'maxDuration',
     ]);
@@ -136,10 +135,9 @@ export default class RotationAnimationStep extends ElementAnimationStep {
       clipTo: null,
       maxDuration: null,
     };
-    const options = joinObjects({}, defaultTransformOptions, ...optionsIn);
+    const options = joinObjects<any>({}, defaultTransformOptions, ...optionsIn);
 
-    // $FlowFixMe
-    this.rotation = {};
+    this.rotation = {} as any;
     copyKeysFromTo(options, this.rotation, [
       'start', 'delta', 'target', 'velocity',
       // 'direction',
@@ -148,14 +146,14 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     ]);
   }
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  override _getStateProperties() {  // eslint-disable-line class-methods-use-this
     const a = [...super._getStateProperties(),
       'rotation',
     ];
     return a;
   }
 
-  _getStateName() {  // eslint-disable-line class-methods-use-this
+  override _getStateName() {  // eslint-disable-line class-methods-use-this
     return 'rotationAnimationStep';
   }
 
@@ -163,7 +161,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime: ?AnimationStartTime = null) {
+  override start(startTime: AnimationStartTime | null = null) {
     super.start(startTime);
     if (this.rotation.start === null) {
       if (this.element != null) {
@@ -234,7 +232,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     }
   }
 
-  setFrame(deltaTime: number) {
+  override setFrame(deltaTime: number) {
     if (this.duration == null || this.rotation.delta == null) {
       const { start } = this.rotation;
       const v = start + deltaTime * this.rotation.velocity;
@@ -245,7 +243,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     }
     const percentTime = deltaTime / (this.duration + 0.000001);
     const percentComplete = this.getPercentComplete(percentTime);
-    const { start, delta } = this.rotation; // $FlowFixMe
+    const { start, delta } = this.rotation;
     const nextR = start + delta * percentComplete;
     const { element } = this;
     if (element != null) {
@@ -253,17 +251,17 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     }
   }
 
-  setToEnd() {
+  override setToEnd() {
     const { element } = this;
     if (element != null) {
-      if (this.rotation.target != null) { // $FlowFixMe
+      if (this.rotation.target != null) {
         element.transform.updateRotation(this.rotation.target);
       }
       this.fnExec(element.setTransformCallback, element.transform);
     }
   }
 
-  _dup() {
+  override _dup() {
     const step = new RotationAnimationStep();
     duplicateFromTo(this, step, ['element', 'timeKeeper']);
     step.element = this.element;

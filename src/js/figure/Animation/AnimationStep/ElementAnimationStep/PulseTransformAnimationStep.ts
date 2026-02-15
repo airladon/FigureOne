@@ -1,4 +1,3 @@
-// @flow
 import {
   Transform, getScale, getTransform,
   getMaxTimeFromVelocity,
@@ -26,15 +25,15 @@ export type OBJ_PulseTransformAnimationStep = {
   path?: OBJ_TranslationPath;       // default is linear
   rotDirection: 0 | 1 | -1 | 2;
   clipRotationTo: '0to360' | '-180to180' | null;
-  velocity: ?Transform | number | {
-    position?: TypeParsablePoint | number,
-    translation?: TypeParsablePoint | number,
-    rotation?: number,
-    scale?: TypeParsablePoint | number,
-    transform?: TypeParsableTransform,
-  };
+  velocity?: Transform | number | {
+    position?: TypeParsablePoint | number;
+    translation?: TypeParsablePoint | number;
+    rotation?: number;
+    scale?: TypeParsablePoint | number;
+    transform?: TypeParsableTransform;
+  } | null;
   maxDuration?: number;
-  zeroDurationThreshold?: Number;
+  zeroDurationThreshold?: number;
   // minDuration?: number;
 } & OBJ_ElementAnimationStep;
 
@@ -55,22 +54,22 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     target: Array<Transform>;
     rotDirection: 0 | 1 | -1 | 2;
     path: OBJ_TranslationPath;
-    velocity: ?Transform | number | {
-      position?: TypeParsablePoint | number,
-      translation?: TypeParsablePoint | number,
-      rotation?: number,
-      scale?: TypeParsablePoint | number,
-      transform?: TypeParsableTransform,
-    };
+    velocity: Transform | number | {
+      position?: TypeParsablePoint | number;
+      translation?: TypeParsablePoint | number;
+      rotation?: number;
+      scale?: TypeParsablePoint | number;
+      transform?: TypeParsableTransform;
+    } | null | undefined;
     clipRotationTo: '0to360' | '-180to180' | null;
-    maxDuration: ?number;
+    maxDuration: number | null | undefined;
     // minDuration: number;
     zeroDurationThreshold: number;
   };
 
   constructor(...optionsIn: Array<OBJ_PulseTransformAnimationStep>) {
     const ElementAnimationStepOptionsIn =
-      joinObjects({}, { type: 'transform' }, ...optionsIn);
+      joinObjects<any>({}, { type: 'transform' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
       'start', 'delta', 'target', 'rotDirection', 'path',
       'velocity', 'clipRotationTo', 'maxDuration',
@@ -99,9 +98,8 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
       const pathOptions = this.element.animations.options.translation;
       joinObjects(defaultTransformOptions.path, pathOptions);
     }
-    const options = joinObjects({}, defaultTransformOptions, ...optionsIn);
-    // $FlowFixMe
-    this.transform = {};
+    const options = joinObjects<any>({}, defaultTransformOptions, ...optionsIn);
+    this.transform = {} as any;
     copyKeysFromTo(options, this.transform, [
       'start', 'delta', 'target', 'path',
       'velocity', 'rotDirection', 'clipRotationTo', 'maxDuration',
@@ -207,13 +205,13 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     }
   }
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  override _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
       'transform',
     ];
   }
 
-  _getStateName() {  // eslint-disable-line class-methods-use-this
+  override _getStateName() {  // eslint-disable-line class-methods-use-this
     return 'transformAnimationStep';
   }
 
@@ -245,17 +243,17 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
       const t = transformVelocity.def[i];
       if (t[0] === 's' && velocity.scale != null) {
         const s = getScale(velocity.scale);
-        t[1] = s.x; // $FlowFixMe
+        t[1] = s.x;
         t[2] = s.y;
       }
       if (t[0] === 't' && velocity.translation != null) {
         const s = getScale(velocity.translation);
-        t[1] = s.x; // $FlowFixMe
+        t[1] = s.x;
         t[2] = s.y;
       }
       if (t[0] === 't' && velocity.position != null) {
         const s = getScale(velocity.position);
-        t[1] = s.x; // $FlowFixMe
+        t[1] = s.x;
         t[2] = s.y;
       }
       if (t[0] === 'r' && velocity.rotation != null) {
@@ -270,12 +268,12 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime: ?AnimationStartTime = null) {
+  override start(startTime: AnimationStartTime | null = null) {
     super.start(startTime);
     if (this.transform.start == null || this.transform.start.length === 0) {
       if (this.element != null) {
         if (this.element.pulseTransforms.length > 0) {
-          this.transform.start = this.element.pulseTransforms.map(t => t._dup());
+          this.transform.start = this.element.pulseTransforms.map((t: any) => t._dup());
         } else {
           this.transform.start = [this.transform.target[0].identity()];
         }
@@ -327,7 +325,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     }
   }
 
-  setFrame(deltaTime: number) {
+  override setFrame(deltaTime: number) {
     const percentTime = deltaTime / this.duration;
     const percentComplete = this.getPercentComplete(percentTime);
     const p = percentComplete;
@@ -349,7 +347,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     }
   }
 
-  setToEnd() {
+  override setToEnd() {
     if (this.element == null) {
       return;
     }
@@ -360,7 +358,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     });
   }
 
-  _dup() {
+  override _dup() {
     const step = new PulseTransformAnimationStep();
     duplicateFromTo(this, step, ['element', 'timeKeeper']);
     step.element = this.element;

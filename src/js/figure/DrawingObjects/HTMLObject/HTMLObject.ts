@@ -1,5 +1,3 @@
-// @flow
-
 // import * as m2 from '../tools/m2';
 import {
   Point, spaceToSpaceTransform,
@@ -13,11 +11,11 @@ import type Scene from '../../../tools/geometry/scene';
 
 
 class HTMLObject extends DrawingObject {
-  border: Array<Array<Point>>;
+  override border!: Array<Array<Point>>;
   id: string;
-  location: Point;
+  override location: Point;
   // figureLimits: Rect;
-  element: HTMLElement;
+  element!: HTMLElement;
   parentDiv: HTMLElement;
   xAlign: 'left' | 'right' | 'center';
   yAlign: 'top' | 'bottom' | 'middle';
@@ -27,7 +25,7 @@ class HTMLObject extends DrawingObject {
   forceDraw: boolean;
   originalElement: HTMLElement;
 
-  copy: () => HTMLObject;
+  copy!: () => HTMLObject;
   // +change: (string | HTMLElement, Array<number>) => void;
 
   constructor(
@@ -61,7 +59,7 @@ class HTMLObject extends DrawingObject {
     }
   }
 
-  _dup() {
+  override _dup(): any {
     const c = new HTMLObject(
       this.parentDiv, this.id,
       this.location._dup(), this.yAlign, this.xAlign,
@@ -80,7 +78,7 @@ class HTMLObject extends DrawingObject {
     const top = elementRect.top - parentRect.top;
     const bottom = top + elementRect.height;
 
-    const boundary = [];
+    const boundary: Array<Point> = [];
     boundary.push(new Point(left, top));
     boundary.push(new Point(right, top));
     boundary.push(new Point(right, bottom));
@@ -109,7 +107,7 @@ class HTMLObject extends DrawingObject {
     const top = elementRect.top - parentRect.top;
     const bottom = top + elementRect.height;
 
-    const boundary = [];
+    const boundary: Array<Point> = [];
     boundary.push(new Point(left, top));
     boundary.push(new Point(right, top));
     boundary.push(new Point(right, bottom));
@@ -124,8 +122,7 @@ class HTMLObject extends DrawingObject {
     return new Point(x, y);
   }
 
-  // $FlowFixMe
-  change(newHtml: string | HTMLElement, lastDrawTransformMatrix: Type3DMatrix) {
+  override change(newHtml: any, lastDrawTransformMatrix?: any) {
     let element = newHtml;
     if (typeof newHtml === 'string') {
       element = document.createElement('div');
@@ -171,7 +168,7 @@ class HTMLObject extends DrawingObject {
     }
   }
 
-  drawWithTransformMatrix(scene: Scene, worldMatrix: Type3DMatrix, color: TypeColor) {
+  override drawWithTransformMatrix(scene: Scene, worldMatrix: Type3DMatrix, color: TypeColor) {
     let isDifferent = false;
     const transformMatrix = m3.mul(scene.viewProjectionMatrix, worldMatrix);
     for (let i = 0; i < transformMatrix.length; i += 1) {
@@ -183,9 +180,9 @@ class HTMLObject extends DrawingObject {
       isDifferent
       || this.lastColor[3] !== round(color[3], 8)
     ) {
-      this.transformHtml(transformMatrix, color[3]); // $FlowFixMe
-      this.lastMatrix = round(transformMatrix, 8);
-      this.lastColor = round(color, 8);
+      this.transformHtml(transformMatrix, color[3]);
+      this.lastMatrix = round(transformMatrix, 8) as Array<number>;
+      this.lastColor = round(color, 8) as Array<number>;
       this.forceDraw = false;
     }
   }

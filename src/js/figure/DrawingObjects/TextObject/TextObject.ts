@@ -1,4 +1,3 @@
-// @flow
 
 // import * as m2 from '../../../tools/m2';
 // import * as m3 from '../../../tools/m3';
@@ -51,7 +50,7 @@ class FigureFont {
   style: 'normal' | 'italic';
 
   // Atlas font definition
-  src: Image | string;
+  src: HTMLImageElement | string;
   id: string;
   map: OBJ_AtlasMap;
   glyphs: string | 'greek' | 'math' | 'mathExt' | 'common' | 'latin' | 'all' | 'numbers' | 'mathlatin' | Array<string>;
@@ -60,9 +59,9 @@ class FigureFont {
 
   // Font properties
   size: number;
-  underline: false | { width: number, descent: number, color?: TypeColor };
+  underline: false | { width: number; descent: number; color?: TypeColor };
   color: TypeColor;
-  outline: false | { width: number, fill: boolean, color?: TypeColor };
+  outline: false | { width: number; fill: boolean; color?: TypeColor };
   opacity: number;  // deprecated
 
   // Font measurements
@@ -73,7 +72,7 @@ class FigureFont {
   midAscent: number;
   maxAscent: number;
   modifiers: OBJ_GlyphModifiers;
-  mods: OBJ_GlyphModifiers;
+  mods: Record<string, any>;
 
   // Font load detection parameters
   testString: string;
@@ -85,7 +84,7 @@ class FigureFont {
 
   render: 'gl' | '2d' | 'html';
 
-  constructor(optionsIn: OBJ_Font | FigureFont = {}) {
+  constructor(optionsIn: OBJ_Font | FigureFont = {} as any) {
     if (optionsIn instanceof FigureFont) {
       this.family = optionsIn.family;
       this.style = optionsIn.style;
@@ -148,7 +147,7 @@ class FigureFont {
       atlasSize: null,
       render: '2d',
     };
-    const options = joinObjects({}, defaultOptions, optionsIn);
+    const options = joinObjects<any>({}, defaultOptions, optionsIn);
     this.family = options.family;
     this.style = options.style;
     this.size = options.size;
@@ -163,7 +162,7 @@ class FigureFont {
     } else if (options.outline == null) {
       this.outline = { fill: true, width: 0 };
     } else {
-      this.outline = joinObjects({}, { width: this.size / 40, fill: false }, options.outline);
+      this.outline = joinObjects<any>({}, { width: this.size / 40, fill: false }, options.outline);
     }
     const underlineDefaults = {
       width: this.size / 40,
@@ -172,7 +171,7 @@ class FigureFont {
     if (options.underline === true) {
       this.underline = underlineDefaults;
     } else if (options.underline) {
-      this.underline = joinObjects({}, underlineDefaults, options.underline);
+      this.underline = joinObjects<any>({}, underlineDefaults, options.underline);
     } else {
       this.underline = false;
     }
@@ -279,7 +278,7 @@ class FigureFont {
   }
 
   getGlyphs() {
-    const presets = {
+    const presets: Record<string, string> = {
       all: latin + greek + mathExt,
       common: latin + greek + math,
       mathlatin: latin + math,
@@ -313,7 +312,7 @@ class FigureFont {
       return this.glyphs;
     }
 
-    return hash32(this.getGlyphs()).toString.slice(0, 8);
+    return (hash32(this.getGlyphs()).toString as any).slice(0, 8);
   }
 
   getTestStringID() {
@@ -511,8 +510,8 @@ class FigureFont {
     ctx.strokeStyle = colorArrayToRGBA(colorToUse);
   }
 
-  _dup() {  // $FlowFixMe
-    return new FigureFont(this.definition());
+  _dup() {
+    return new FigureFont(this.definition() as any);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -797,7 +796,7 @@ class FigureFont {
 //   }
 
 //   calcTouchBorder() {
-//     if (isBuffer(this.touchBorder)) { // $FlowFixMe
+//     if (isBuffer(this.touchBorder)) {
 //       this.textBorderBuffer = getBoundingBorder(this.textBorder, this.touchBorder);
 //     // }
 //     // if (
@@ -808,7 +807,7 @@ class FigureFont {
 //     //   )
 //     // ) {
 //     //   this.textBorderBuffer = getBoundingBorder(this.textBorder, this.touchBorder);
-//     } else { // $FlowFixMe
+//     } else {
 //       this.textBorderBuffer = this.touchBorder;
 //     }
 //   }
@@ -970,7 +969,7 @@ class FigureFont {
 //   }
 
 //   // eslint-disable-next-line no-unused-vars
-//   loadText(options: Object) {
+//   loadText(options: Record<string, any>) {
 //     // Assign text to this.text here
 //     // this.text = options.text
 //     // Calculate Scaling Factor
@@ -1352,17 +1351,17 @@ class FigureFont {
 //         touchBorder != null
 //         && Array.isArray(touchBorder)
 //         && !isBuffer(touchBorder)
-//       ) { // $FlowFixMe
+//       ) {
 //         [touchBorder] = getBorder(touchBorder);
 //       }
 //       const fontDefinition = joinObjects({}, options.font, fontToUse);
 //       figureTextArray.push(new FigureText(
 //         this.drawContext2D,
-//         locationToUse,  // $FlowFixMe
+//         locationToUse,
 //         textToUse,
 //         fontDefinition,
 //         xAlign || options.xAlign,
-//         yAlign || options.yAlign, // $FlowFixMe
+//         yAlign || options.yAlign,
 //         touchBorder || options.defaultTextTouchBorder,
 //         onClick,
 //       ));
@@ -1374,7 +1373,7 @@ class FigureFont {
 //   }
 
 //   _dup() {
-//     const c = new TextObject(this.drawContext2D); // $FlowFixMe
+//     const c = new TextObject(this.drawContext2D);
 //     c.text = this.text.map(t => t._dup());
 //     c.scalingFactor = this.scalingFactor;
 //     c.layoutText();
@@ -1497,7 +1496,7 @@ class FigureFont {
 //           touchBorder != null
 //           && Array.isArray(touchBorder)
 //           && !isBuffer(touchBorder)
-//         ) { // $FlowFixMe
+//         ) {
 //           [touchBorder] = getBorder(touchBorder);
 //         }
 //       }
@@ -1522,7 +1521,7 @@ class FigureFont {
 //         textToUse,
 //         fontDefinition,
 //         offsetToUse,
-//         inLine, // $FlowFixMe
+//         inLine,
 //         touchBorder || options.defaultTextTouchBorder,
 //         onClick,
 //         followOffsetY,
@@ -1711,7 +1710,7 @@ class FigureFont {
 //               touchBorder != null
 //               && Array.isArray(touchBorder)
 //               && !isBuffer(touchBorder)
-//             ) { // $FlowFixMe
+//             ) {
 //               [touchBorder] = getBorder(touchBorder);
 //             }
 //           }
@@ -1719,10 +1718,10 @@ class FigureFont {
 //           if (mod.followOffsetY != null) { followOffsetY = mod.followOffsetY; }
 //           if (mod.lSpace != null) { lSpace = mod.lSpace; }
 //           if (mod.rSpace != null) { rSpace = mod.rSpace; }
-//           // if (Array.isArray(border)) {  // $FlowFixMe
+//           // if (Array.isArray(border)) {
 //           //   border = getPoints(border);
 //           // }
-//           // if (Array.isArray(touchBorder)) {  // $FlowFixMe
+//           // if (Array.isArray(touchBorder)) {
 //           //   touchBorder = getBorder(touchBorder);
 //           // }
 //         }
@@ -1733,7 +1732,7 @@ class FigureFont {
 //           textFont,
 //           offset,
 //           inLine,
-//           lineIndex, // $FlowFixMe
+//           lineIndex,
 //           touchBorder || options.defaultTextTouchBorder,
 //           onClick,
 //           followOffsetY,
@@ -1766,7 +1765,7 @@ class FigureFont {
 //   }
 
 //   setTextLocations() {
-//     const { width, minY, maxY } = this.createLines(); // $FlowFixMe
+//     const { width, minY, maxY } = this.createLines();
 //     align(this.text, this.xAlign, this.yAlign, width, minY, maxY);
 //   }
 

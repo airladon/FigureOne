@@ -1,17 +1,15 @@
-// @flow
-
 import {
   joinObjects,
 } from '../../tools/tools';
 
 
 function getState(
-  obj: Object,
+  obj: Record<string, any>,
   stateProperties: Array<string>,
   optionsIn: {
-    precision?: number,
-    ignoreShown?: boolean,
-    min?: boolean,
+    precision?: number;
+    ignoreShown?: boolean;
+    min?: boolean;
   },
 ) {
   const defaultOptions = {
@@ -19,10 +17,10 @@ function getState(
     ignoreShown: false,
     min: false,
   };
-  const options = joinObjects({}, defaultOptions, optionsIn);
+  const options = joinObjects<any>({}, defaultOptions, optionsIn);
   const { precision } = options;
-  const state: Object = {};
-  const processValue = (value) => {
+  const state: Record<string, any> = {};
+  const processValue = (value: any): any => {
     if (typeof value === 'string') {
       return value;
     }
@@ -45,8 +43,8 @@ function getState(
       return value._state(options);
     }
     if (Array.isArray(value)) {
-      const dupArray = [];
-      value.forEach((v) => {
+      const dupArray: Array<any> = [];
+      value.forEach((v: any) => {
         dupArray.push(processValue(v));
       });
       return dupArray;
@@ -54,7 +52,7 @@ function getState(
     if (value._dup != null) {
       return value._dup();
     }
-    const out = {};
+    const out: Record<string, any> = {};
     let keys = Object.keys(value);
     if (value._stateKeys) {
       keys = value._stateKeys();
@@ -63,13 +61,13 @@ function getState(
     if (value._excludeStateKeys) {
       keysToUse = [];
       const excludedKeys = value._excludeStateKeys();
-      keys.forEach((key) => {
+      keys.forEach((key: string) => {
         if (excludedKeys.indexOf(key) === -1) {
           keysToUse.push(key);
         }
       });
     }
-    keysToUse.forEach((key) => {
+    keysToUse.forEach((key: string) => {
       if (typeof value[key] !== 'function') {
         out[key] = processValue(value[key]);
       }
@@ -77,8 +75,8 @@ function getState(
     return out;
     // return joinObjects({}, value);
   };
-  stateProperties.forEach((prop) => {
-    const processPath = (currentState, currentObj, remainingPath) => {
+  stateProperties.forEach((prop: string) => {
+    const processPath = (currentState: any, currentObj: any, remainingPath: Array<string>): any => {
       const [nextLevel] = remainingPath;
       if (remainingPath.length === 1) {
         return [currentState, currentObj, remainingPath[0]];
@@ -101,7 +99,7 @@ function getState(
   return state;
 }
 
-function setState(obj: Object, stateIn: Object) {
+function setState(obj: Record<string, any>, stateIn: Record<string, any>) {
   joinObjects(obj, stateIn);
 }
 

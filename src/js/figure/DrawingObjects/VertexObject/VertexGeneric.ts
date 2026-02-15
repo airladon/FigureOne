@@ -1,4 +1,3 @@
-// @flow
 import {
   Point, Rect, getRect, // getPoints,
 } from '../../../tools/g2';
@@ -12,15 +11,15 @@ import type { TypeGLPrimitive } from '../../FigurePrimitives/FigurePrimitiveType
 
 
 class VertexGeneric extends GLObject {
-  width: number;
-  close: boolean;
+  width!: number;
+  close!: boolean;
   copy: Array<CPY_Step>;
-  vertices: Array<Point>;
-  texOptions: {
-    location: string,
-    mapFrom: Rect,
-    mapTo: Rect,
-    repeat: boolean,
+  vertices!: Array<Point>;
+  texOptions!: {
+    location: string;
+    mapFrom: Rect;
+    mapTo: Rect;
+    repeat: boolean;
   };
 
   // borderToPoint: TypeBorderToPoint;
@@ -33,7 +32,7 @@ class VertexGeneric extends GLObject {
     textureCoords: Rect = new Rect(0, 0, 1, 1),
     textureRepeat: boolean = false,
     // copy: Array<CPY_Step> = [],
-  ): void {
+  ) {
     if (textureLocation !== '') {
       super(webgl, 'withTexture', 'withTexture');
     } else {
@@ -73,29 +72,18 @@ class VertexGeneric extends GLObject {
   }
 
   // eslint-disable-next-line no-unused-vars
-  getPointCountForAngle(drawAngle: number = Math.PI * 2) {
+  override getPointCountForAngle(drawAngle: number = Math.PI * 2) {
     // return this.numPoints * drawAngle / (Math.PI * 2);
     return this.numVertices;
   }
 
   // Abstract method - should be reimplemented for any vertexObjects that
   // eslint-disable-next-line no-unused-vars
-  getPointCountForLength(drawLength: number) {
+  override getPointCountForLength(drawLength: number) {
     return this.numVertices;
   }
 
-  // $FlowFixMe
-  change(options: {
-    points?: Array<Point>,
-    copy?: Array<CPY_Step>,
-    drawType?: TypeGLPrimitive,
-    texture?: {
-      location?: string,
-      mapFrom?: Rect,
-      mapTo?: Rect,
-      repeat?: boolean,
-    }
-  }) {
+  override change(options: any) {
     const {
       points, drawType, copy, texture,
     } = options;
@@ -144,7 +132,7 @@ class VertexGeneric extends GLObject {
       if (texture.mapFrom != null) {
         texture.mapFrom = getRect(texture.mapFrom);
       }
-      this.texOptions = joinObjects({}, this.texOptions, texture);
+      this.texOptions = joinObjects<any>({}, this.texOptions, texture);
       this.updateTextureMap();
     }
 

@@ -1,4 +1,3 @@
-// @flow
 // import {
 //   Transform, Point,
 //   Rotation, getDeltaAngle, getMaxTimeFromVelocity,
@@ -41,8 +40,8 @@ import type { AnimationStartTime } from './AnimationManager';
  * animation step will automatically inherit the figure's TimeKeeper.
  */
 export type OBJ_AnimationStep = {
-  onFinish?: ?(boolean) => void;
-  completeOnCancel?: ?boolean;    // true: yes, false: no, null: no preference
+  onFinish?: ((cancelled: boolean) => void) | null;
+  completeOnCancel?: boolean | null;    // true: yes, false: no, null: no preference
   removeOnFinish?: boolean;
   name?: string;
   duration?: number;
@@ -68,24 +67,24 @@ export type OBJ_AnimationStep = {
  * @property {'animating' | 'waitingToStart' | 'idle' | 'finished'} state
  */
 export default class AnimationStep {
-  startTime: ?number;
+  startTime: number | null | undefined;
   duration: number;
   // animations: Array<AnimationStep>;
   // onFinish: ?(boolean) => void;
-  onFinish: ?(string | (boolean) => void);
-  completeOnCancel: ?boolean;
+  onFinish: (string | ((cancelled: boolean) => void)) | null | undefined;
+  completeOnCancel: boolean | null | undefined;
   state: 'animating' | 'waitingToStart' | 'idle' | 'finished';
   startTimeOffset: number;
   removeOnFinish: boolean;
   name: string;
   startDelay: number;
-  beforeFrame: ?(number) => void;
-  afterFrame: ?(number) => void;
-  _stepType: string;
+  beforeFrame: ((percent: number) => void) | null | undefined;
+  afterFrame: ((percent: number) => void) | null | undefined;
+  _stepType!: string;
   fnMap: FunctionMap;
   precision: number;
   timeKeeper: TimeKeeper | null;
-  element: ?FigureElement;
+  element: FigureElement | null | undefined;
 
   constructor(optionsIn: OBJ_AnimationStep = {}) {
     const defaultOptions = {
@@ -100,7 +99,7 @@ export default class AnimationStep {
       precision: 8,
       element: null,
     };
-    const options = joinObjects({}, defaultOptions, optionsIn);
+    const options = joinObjects<any>({}, defaultOptions, optionsIn);
     this.onFinish = options.onFinish;
     this.completeOnCancel = options.completeOnCancel;
     this.duration = options.duration;
@@ -138,7 +137,7 @@ export default class AnimationStep {
 
 
   // eslint-disable-next-line no-unused-vars
-  _fromDef(definition: Object, getElement: ?(string) => FigureElement = null) {
+  _fromDef(definition: Record<string, any>, getElement: ((name: string) => FigureElement) | null = null) {
     joinObjects(this, definition);
     return this;
   }
@@ -147,7 +146,7 @@ export default class AnimationStep {
     return this.fnMap.exec(idOrFn, ...args);
   }
 
-  setTimeDelta(delta: ?number) {
+  setTimeDelta(delta: number | null | undefined) {
     if (this.startTime != null && delta != null) {
       this.startTime += delta;
     }
@@ -177,7 +176,7 @@ export default class AnimationStep {
     return 'animationStep';
   }
 
-  _state(options: Object) {
+  _state(options: Record<string, any>) {
     return {
       f1Type: this._getStateName(),
       state: getState(this, this._getStateProperties(), options),
@@ -185,7 +184,7 @@ export default class AnimationStep {
   }
 
 
-  _fromState(state: Object, getElement: ?(string) => FigureElement, timeKeeper: TimeKeeper) {
+  _fromState(state: Record<string, any>, getElement: ((name: string) => FigureElement) | null | undefined, timeKeeper: TimeKeeper) {
     // const obj = new this.constructor();
     joinObjects(this, state);
     if (this.element != null && typeof this.element === 'string' && getElement != null) {
@@ -290,7 +289,7 @@ export default class AnimationStep {
    * Start animation
    * @param {AnimationStartTime} startTime
    */
-  start(startTime: ?AnimationStartTime = null) {
+  start(startTime: AnimationStartTime | null = null) {
     this.state = 'animating';
     if (typeof startTime === 'number' || startTime == null) {
       this.startTime = startTime;
@@ -307,7 +306,7 @@ export default class AnimationStep {
       } else {
         this.startTime = null;
       }
-    } else if (startTime === 'nextFrame') {
+    } else if ((startTime as string) === 'nextFrame') {
       this.startTime = null;
     } else {
       this.startTime = performance.now();
@@ -331,7 +330,7 @@ export default class AnimationStep {
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  finish(cancelled: boolean = false, force: ?'complete' | 'freeze' = null) {
+  finish(cancelled: boolean = false, force: 'complete' | 'freeze' | null = null) {
     // this.startTime = -2;
     // this.onFinish(false);
     if (this.state === 'idle' || this.state === 'finished') {
@@ -372,7 +371,7 @@ export default class AnimationStep {
   cancelledWithNoComplete() {
   }
 
-  cancel(force: ?'complete' | 'freeze' = null) {
+  cancel(force: 'complete' | 'freeze' | null = null) {
     this.finish(true, force);
   }
 
@@ -384,7 +383,7 @@ export default class AnimationStep {
     return step;
   }
 
-  whenFinished(callback: string | (boolean) => void) {
+  whenFinished(callback: string | ((cancelled: boolean) => void)) {
     this.onFinish = callback;
     return this;
   }

@@ -1,4 +1,3 @@
-// @flow
 // import {
 //   Transform, Point, getMaxTimeFromVelocity,
 // } from '../../../../tools/g2';
@@ -28,8 +27,8 @@ export type OBJ_OpacityAnimationStep = {
   start?: number;      // default is element transform
   target?: number;     // Either target or delta must be defined
   delta?: number;      // delta overrides target if both are defined
-  dissolve?: 'in' | 'out' | null,
-  dissolveFromCurrent?: boolean,
+  dissolve?: 'in' | 'out' | null;
+  dissolveFromCurrent?: boolean;
 } & OBJ_ElementAnimationStep;
 
 /**
@@ -116,7 +115,7 @@ export class OpacityAnimationStep extends ElementAnimationStep {
     target: number;
     whenComplete: number;  // Color after dissolving
     dissolve?: 'in' | 'out' | null;
-    dissolveFromCurrent: boolean,
+    dissolveFromCurrent: boolean;
   };
 
   /**
@@ -124,7 +123,7 @@ export class OpacityAnimationStep extends ElementAnimationStep {
    */
   constructor(...optionsIn: Array<OBJ_OpacityAnimationStep>) {
     const ElementAnimationStepOptionsIn =
-      joinObjects({}, ...optionsIn, { type: 'opacity' });
+      joinObjects<any>({}, ...optionsIn, { type: 'opacity' });
     deleteKeys(ElementAnimationStepOptionsIn, [
       'start', 'delta', 'target', 'dissolve', 'dissolveFromCurrent',
     ]);
@@ -136,21 +135,20 @@ export class OpacityAnimationStep extends ElementAnimationStep {
       dissolve: null,
       dissolveFromCurrent: false,
     };
-    const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
-    // $FlowFixMe
-    this.opacity = {};
+    const options = joinObjects<any>({}, defaultPositionOptions, ...optionsIn);
+    this.opacity = {} as any;
     copyKeysFromTo(options, this.opacity, [
       'start', 'delta', 'target', 'dissolve', 'dissolveFromCurrent',
     ]);
   }
 
-  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+  override _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
       'opacity',
     ];
   }
 
-  _getStateName() {  // eslint-disable-line class-methods-use-this
+  override _getStateName() {  // eslint-disable-line class-methods-use-this
     return 'opacityAnimationStep';
   }
 
@@ -158,7 +156,7 @@ export class OpacityAnimationStep extends ElementAnimationStep {
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime: ?AnimationStartTime = null) {
+  override start(startTime: AnimationStartTime | null = null) {
     const { element } = this;
     if (element != null) {
       super.start(startTime);
@@ -215,7 +213,7 @@ export class OpacityAnimationStep extends ElementAnimationStep {
     }
   }
 
-  cancelledWithNoComplete() {
+  override cancelledWithNoComplete() {
     const { element } = this;
     if (element != null) {
       if (element.opacity === 0.001) {
@@ -225,7 +223,7 @@ export class OpacityAnimationStep extends ElementAnimationStep {
     }
   }
 
-  setFrame(deltaTime: number) {
+  override setFrame(deltaTime: number) {
     const percentTime = deltaTime / this.duration;
     const percentComplete = this.getPercentComplete(percentTime);
     const p = percentComplete;
@@ -242,7 +240,7 @@ export class OpacityAnimationStep extends ElementAnimationStep {
   }
 
 
-  setToEnd() {
+  override setToEnd() {
     const { element } = this;
     if (element != null) {
       element.setOpacity(this.opacity.whenComplete);
@@ -252,7 +250,7 @@ export class OpacityAnimationStep extends ElementAnimationStep {
     }
   }
 
-  _dup() {
+  override _dup() {
     const step = new OpacityAnimationStep();
     duplicateFromTo(this, step, ['element', 'timeKeeper']);
     step.element = this.element;
@@ -314,9 +312,9 @@ export class DissolveInAnimationStep extends OpacityAnimationStep {
     let options = {};
     const defaultOptions = { duration: 1, dissolve: 'in', completeOnCancel: true };
     if (typeof timeOrOptionsIn === 'number') {
-      options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+      options = joinObjects<any>({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
     } else {
-      options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+      options = joinObjects<any>({}, defaultOptions, timeOrOptionsIn, ...args);
     }
     super(options);
   }
@@ -379,9 +377,9 @@ export class DissolveOutAnimationStep extends OpacityAnimationStep {
     let options = {};
     const defaultOptions = { duration: 1, dissolve: 'out', completeOnCancel: true };
     if (typeof timeOrOptionsIn === 'number') {
-      options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+      options = joinObjects<any>({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
     } else {
-      options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+      options = joinObjects<any>({}, defaultOptions, timeOrOptionsIn, ...args);
     }
     super(options);
   }
