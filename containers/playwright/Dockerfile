@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright:v1.52.0
+FROM mcr.microsoft.com/playwright:v1.58.2
 
 
 WORKDIR /home/pwuser
