@@ -114,7 +114,7 @@ function decelerateValue(
     // were for when the velocity went to zero
     if (deltaTimeIn == null) {
       return {
-        duration: deltaTime,
+        duration: round(deltaTime, precision),
         value: newValue,
         velocity: 0,
       };
