@@ -17,7 +17,8 @@
     "jest-perf-debug": "node --inspect-brk=0.0.0.0 node_modules/.bin/jest --runInBand --config jest.perf.config.js",
     "lint": "eslint src",
     "flowcopysource": "flow-copy-source src package",
-    "jest-debug": "node --inspect-brk=0.0.0.0 node_modules/.bin/jest --runInBand"
+    "jest-debug": "node --inspect-brk=0.0.0.0 node_modules/.bin/jest --runInBand",
+    "postinstall": "node tools/patch-documentation.js"
   },
   "keywords": [
     "interactive",
@@ -44,7 +45,7 @@
     "babel-jest": "^27.2.1",
     "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "^4.0.0",
-    "documentation": "^12.3.0",
+    "documentation": "^14.0.3",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-flowtype": "^6.1.0",
