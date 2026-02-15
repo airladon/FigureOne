@@ -427,7 +427,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       }
     }
 
-    let dissolve = null;
+    let dissolve: 'in' | 'out' | null = null;
     let dissolveFromCurrent = false;
     if (start.isShown === false && target.isShown === true && start.opacity == null) {
       dissolve = 'in';
