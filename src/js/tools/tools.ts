@@ -1,10 +1,12 @@
-// @flow
+// Migrated from tools.js (Flow) to TypeScript. Comments/docstrings preserved and logic unchanged where possible.
 import { roundNum } from './math';
+// FunctionMap is JS; rely on its runtime shape and light typings
 import { FunctionMap } from './FunctionMap';
-// import Worker from '../figure/recorder.worker.js';
+// Provide a minimal ambient module if TS can't find dts (handled via tools.d.ts too)
 
-const Console = (...msg: Array<any>) => {
-  console.log(...msg); // eslint-disable-line no-console
+const Console = (...msg: any[]) => {
+  // eslint-disable-next-line no-console
+  console.log(...msg);
 };
 
 // function add(a: number, b: number): number {
@@ -26,9 +28,9 @@ const classify = (key: string, value: string) => {
 };
 
 class ObjectKeyPointer {
-  object: Object;
+  object: Record<string, any>;
   key: string;
-  constructor(object: Object, key: string) {
+  constructor(object: Record<string, any>, key: string) {
     this.object = object;
     this.key = '';
     if (key in object) {
@@ -36,13 +38,13 @@ class ObjectKeyPointer {
     }
   }
 
-  setValue(value: mixed) {
+  setValue(value: any) {
     if (this.key) {
       this.object[this.key] = value;
     }
   }
 
-  execute(...args: mixed) {
+  execute(...args: any[]) {
     if (this.key) {
       return this.object[this.key].apply(null, args);
     }
@@ -58,12 +60,12 @@ class ObjectKeyPointer {
 }
 //
 function extractFrom(
-  objectToExtractFrom: Object,
-  keyValues: Object | Array<any> | string,
+  objectToExtractFrom: Record<string, any>,
+  keyValues: Record<string, any> | Array<any> | string,
   keyPrefix: string = '',
   keySeparator: string = '_',
 ) {
-  const out = [];
+  const out: any[] = [];
   if (typeof keyValues === 'string') {
     if (keyPrefix + keyValues in objectToExtractFrom) {
       return new ObjectKeyPointer(objectToExtractFrom, keyPrefix + keyValues);
@@ -90,7 +92,7 @@ function extractFrom(
 
   if (Array.isArray(keyValues)) {
     keyValues.forEach((kv) => {
-      const result = extractFrom(objectToExtractFrom, kv, keyPrefix, keySeparator);
+      const result = extractFrom(objectToExtractFrom, kv as any, keyPrefix, keySeparator);
       if (result !== undefined) {
         out.push(result);
       }
@@ -100,8 +102,7 @@ function extractFrom(
       if (keyPrefix + key in objectToExtractFrom) {
         out.push({
           obj: new ObjectKeyPointer(objectToExtractFrom, keyPrefix + key),
-          // $FlowFixMe
-          value: keyValues[key],
+          value: (keyValues as any)[key],
         });
       }
     });
@@ -110,7 +111,7 @@ function extractFrom(
 }
 
 function getFromObject(
-  objectToGetFrom: Object,
+  objectToGetFrom: Record<string, any>,
   keyPath: string,
   levelSeparator: string = '.',
 ) {
@@ -121,41 +122,25 @@ function getFromObject(
   if (result === undefined) {
     return undefined;
   }
-  // $FlowFixMe
-  return result.value();
+  return (result as any).value();
 }
 
-// function getObjectValueFromPath(
-//   objectToExtractFrom: Object,
-//   path: string,
-//   pathSeparator: string = '.',
-// ) {
-//   const result = extractFrom(objectToExtractFrom, path, '', pathSeparator);
-//   if (result === undefined) {
-//     return undefined;
-//   }
-//   if (Array.isArray(result)) {
-//     return result[0].value();
-//   }
-//   return result.value();
-// }
-
 function getElement(
-  collection: Object,
-  keyValues: Object | Array<any> | string,
+  collection: Record<string, any>,
+  keyValues: Record<string, any> | Array<any> | string,
 ) {
   return extractFrom(collection, keyValues, '_', '_');
 }
 
 
 function addToObject(
-  obj: Object,
+  obj: Record<string, any>,
   keyPath: string,
-  valueToAdd: mixed,
+  valueToAdd: any,
   levelSeparator: string = '.',
 ) {
   const levels = keyPath.split(levelSeparator).filter(a => a.length > 0);
-  let currentLevel: Object = obj;
+  let currentLevel: Record<string, any> = obj;
   levels.forEach((level, index) => {
     if (index === levels.length - 1) {
       currentLevel[level] = valueToAdd;
@@ -168,47 +153,7 @@ function addToObject(
   });
 }
 
-// function duplicateFromTo(
-//   fromObject: Object,
-//   toObject: Object,
-//   exceptKeys: Array<string> = [],
-// ) {
-//   const copyValue = (value) => {
-//     if (typeof value === 'number'
-//         || typeof value === 'boolean'
-//         || typeof value === 'string'
-//         || value == null
-//         || typeof value === 'function') {
-//       return value;
-//     }
-//     if (typeof value._dup === 'function') {
-//       return value._dup();
-//     }
-//     if (Array.isArray(value)) {
-//       const arrayCopy = [];
-//       value.forEach(arrayElement => arrayCopy.push(copyValue(arrayElement)));
-//       return arrayCopy;
-//     }
-//     if (typeof value === 'object') {
-//       const objectCopy = {};
-//       Object.keys(value).forEach((key) => {
-//         const v = copyValue(value[key]);
-//         objectCopy[key] = v;
-//       });
-//       return objectCopy;
-//     }
-//     return value;
-//   };
-
-//   Object.keys(fromObject).forEach((key) => {
-//     if (exceptKeys.indexOf(key) === -1) {
-//       // eslint-disable-next-line no-param-reassign
-//       toObject[key] = copyValue(fromObject[key]);
-//     }
-//   });
-// }
-
-function duplicate(value: ?(number | boolean | string | Object), precision: number | null = null) {
+function duplicate(value: number | boolean | string | Record<string, any> | null | undefined, precision: number | null = null): any {
   if (typeof value === 'number' && precision != null) {
     return roundNum(value, precision);
   }
@@ -216,47 +161,44 @@ function duplicate(value: ?(number | boolean | string | Object), precision: numb
       || typeof value === 'boolean'
       || typeof value === 'string'
       || value == null
-      || value === NaN  // eslint-disable-line
+      // eslint-disable-next-line no-self-compare
+      || (value as any) === (Number as any).NaN
       || typeof value === 'function') {
-    return value;
+    return value as any;
   }
-  if (typeof value._dup === 'function') {
-    return value._dup();
+  if ((value as any)._dup != null && typeof (value as any)._dup === 'function') {
+    return (value as any)._dup();
   }
   if (Array.isArray(value)) {
-    const arrayDup = [];
-    value.forEach(arrayElement => arrayDup.push(duplicate(arrayElement, precision)));
+    const arrayDup: any[] = [];
+    (value as any[]).forEach(arrayElement => arrayDup.push(duplicate(arrayElement as any, precision)));
     return arrayDup;
   }
-  // if (typeof value === 'object') {
-  const objectDup = {};
-  Object.keys(value).forEach((key) => {
-    const v = duplicate(value[key], precision);
+  const objectDup: Record<string, any> = {};
+  Object.keys(value as Record<string, any>).forEach((key) => {
+    const v = duplicate((value as Record<string, any>)[key], precision);
     objectDup[key] = v;
   });
   return objectDup;
-  // }
-  // return value;
 }
 
 function assignObjectFromTo(
-  fromObject: Object,
-  toObject: Object,
+  fromObject: Record<string, any>,
+  toObject: Record<string, any>,
   exceptIn: Array<string> | string = [],
   duplicateValues: boolean = false,
   parentPath: string = '',
 ) {
   const except = typeof exceptIn === 'string' ? [exceptIn] : exceptIn;
   Object.keys(fromObject).forEach((key) => {
-    // debugger;
     const keyPath = parentPath !== '' ? `${parentPath}.${key}` : key;
     if (except.indexOf(keyPath) !== -1) {
       return;
     }
-    const value = fromObject[key];
-    if (typeof value === 'object' && value != null && value._assignAsLinkOnly) {
+    const value = (fromObject as any)[key];
+    if (typeof value === 'object' && value != null && (value as any)._assignAsLinkOnly) {
       // eslint-disable-next-line no-param-reassign
-      toObject[key] = fromObject[key];
+      (toObject as any)[key] = (fromObject as any)[key];
       return;
     }
     if (typeof value === 'number'
@@ -264,23 +206,23 @@ function assignObjectFromTo(
       || typeof value === 'string'
       || value == null
       || typeof value === 'function'
-      || typeof value._dup === 'function'
+      || (value as any)._dup instanceof Function
       || Array.isArray(value)
     ) {
       // Only assign the value if:
       //    * Value is not undefined OR
       //    * Value is undefined and toObject[key] is undefined
-      if (value !== undefined || toObject[key] === undefined) {
+      if (value !== undefined || (toObject as any)[key] === undefined) {
         if (duplicateValues) {     // eslint-disable-next-line no-param-reassign
-          toObject[key] = duplicate(value);
+          (toObject as any)[key] = duplicate(value);
         } else {                   // eslint-disable-next-line no-param-reassign
-          toObject[key] = value;
+          (toObject as any)[key] = value;
         }
       }
     } else {
       // If the fromObject[key] value is an object, but the toObject[key] value
       // is not an object, but then make toObject[key] an empty object
-      const toValue = toObject[key];
+      const toValue = (toObject as any)[key];
       if (typeof toValue === 'number'
         || typeof toValue === 'boolean'
         || typeof toValue === 'string'
@@ -289,9 +231,9 @@ function assignObjectFromTo(
         || Array.isArray(toValue)
       ) {
         // eslint-disable-next-line no-param-reassign
-        toObject[key] = {};
+        (toObject as any)[key] = {};
       }
-      assignObjectFromTo(value, toObject[key], except, duplicateValues, keyPath);
+      assignObjectFromTo(value, (toObject as any)[key], except, duplicateValues, keyPath);
     }
   });
 }
@@ -299,16 +241,15 @@ function assignObjectFromTo(
 function joinObjectsWithOptions(options: {
   duplicate?: boolean,
   except?: Array<string> | string,
-}, ...objects: Array<Object>): Object {
-  let { except } = options;
-  let dup = options.duplicate;
+}, ...objects: Array<Record<string, any>>): Record<string, any> {
+  let { except } = options as { except?: Array<string> | string };
+  let dup = (options as { duplicate?: boolean }).duplicate;
   if (except == null) {
     except = [];
   }
   if (dup == null) {
     dup = false;
   }
-
   const num = objects.length;
   const out = objects[0];
   for (let i = 1; i < num; i += 1) {
@@ -322,33 +263,29 @@ function joinObjectsWithOptions(options: {
 
 // joins objects like object.assign but goes as many levels deep as the object
 // is. Objects later in the arrawy overwrite objects earlier.
-function joinObjects(...objects: Array<Object>): Object {
-  return joinObjectsWithOptions({}, ...objects);
+function joinObjects<T>(...objects: any[]): T {
+  return joinObjectsWithOptions({}, ...objects) as unknown as T;
 }
 
 function duplicateFromTo(
-  fromObject: Object,
-  toObject: Object,
+  fromObject: Record<string, any>,
+  toObject: Record<string, any>,
   exceptKeys: Array<string> = [],
 ) {
   joinObjectsWithOptions({ except: exceptKeys, duplicate: true }, toObject, fromObject);
 }
 
-function zeroPad(num, places) {
+function zeroPad(num: number, places: number) {
   const zero = places - num.toString().length + 1;
   return Array(+(zero > 0 && zero)).join('0') + num;
 }
 
 class UniqueIdGenerator {
-  static instance: Object;
+  static instance: any;
 
-  seeds: {
-    [seedString: string]: number,
-  };
+  seeds!: { [seedString: string]: number };
 
-  colorSeeds: {
-    [seedString: string]: number,
-  };
+  colorSeeds!: { [seedString: string]: number };
 
   // All slides, events and states are relative to 0, where 0 is the start of a recording.
   // Slides, events and states do not have to have a 0 time,
@@ -380,7 +317,7 @@ class UniqueIdGenerator {
     return id;
   }
 
-  getColor(seed: string) {
+  getColor(seed: string): number[] {
     const initialColors = [
       [255, 0, 0, 255],
       [0, 255, 0, 255],
@@ -445,11 +382,10 @@ function generateUniqueColor(seed: string = '') {
 
 function isTouchDevice() {
   const prefixes = ' -webkit- -moz- -o- -ms- '.split(' ');
-  const mq = query => window.matchMedia(query).matches;
+  const mq = (query: any) => window.matchMedia(query).matches;
 
   /* eslint-disable no-undef, no-mixed-operators */
-  // $FlowFixMe
-  if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) {
+  if ((('ontouchstart' in window) || ((window as any).DocumentTouch && (document as any) instanceof (window as any).DocumentTouch))) {
     return true;
   }
   /* eslint-enable no-undef, no-mixed-operators */
@@ -463,7 +399,7 @@ function isTouchDevice() {
 function loadRemote(
   scriptId: string,
   url: string,
-  callback: null | (string, string) => void = null,
+  callback: null | ((id: string, url: string) => void) = null,
 ) {
   const existingScript = document.getElementById(scriptId);
   if (!existingScript) {
@@ -487,7 +423,7 @@ function loadRemote(
 function loadRemoteCSS(
   id: string,
   url: string,
-  callback: null | (string, string) => void = null,
+  callback: null | ((id: string, url: string) => void) = null,
 ) {
   const existingScript = document.getElementById(id);
   if (!existingScript) {
@@ -519,7 +455,7 @@ function loadRemoteCSS(
 
 // }
 
-const cleanUIDs = (objectToClean: Object) => {
+const cleanUIDs = (objectToClean: any) => {
   const genericUID = '0000000000';
   if (objectToClean == null) {
     return;
@@ -534,7 +470,7 @@ const cleanUIDs = (objectToClean: Object) => {
   const keys = Object.keys(objectToClean);
   for (let i = 0; i < keys.length; i += 1) {
     const key = keys[i];
-    const value = objectToClean[key];
+    const value = (objectToClean as any)[key];
     if (
       typeof value === 'object'
       && !Array.isArray(value)
@@ -548,27 +484,27 @@ const cleanUIDs = (objectToClean: Object) => {
     ) {
       cleanUIDs(value);
     }
-    if (key === 'recorder' && objectToClean.recorder != null) {
+    if (key === 'recorder' && (objectToClean as any).recorder != null) {
       // eslint-disable-next-line no-param-reassign
-      objectToClean.recorder.figure = null;
+      (objectToClean as any).recorder.figure = null;
     }
   }
 };
 
-function deleteKeys(obj: Object, keys: Array<string>) {
+function deleteKeys(obj: Record<string, any>, keys: Array<string>) {
   keys.forEach((key) => {
-    if (obj[key] !== undefined) {
+    if ((obj as any)[key] !== undefined) {
       // eslint-disable-next-line no-param-reassign
-      delete obj[key];
+      delete (obj as any)[key];
     }
   });
 }
 
-function copyKeysFromTo(source: Object, destination: Object, keys: Array<string>) {
+function copyKeysFromTo(source: Record<string, any>, destination: Record<string, any>, keys: Array<string>) {
   keys.forEach((key) => {
-    if (source[key] !== undefined) {
+    if ((source as any)[key] !== undefined) {
       // eslint-disable-next-line no-param-reassign
-      destination[key] = source[key];
+      (destination as any)[key] = (source as any)[key];
     }
   });
 }
@@ -578,8 +514,8 @@ function generateRandomString() {
 }
 
 class UniqueMap {
-  map: Object;
-  inverseMap: Object;
+  map: Record<string, any>;
+  inverseMap: Record<string, any>;
   index: number;
   letters: string;
   undefinedCode: string;
@@ -646,7 +582,7 @@ function compressObject(
   map: UniqueMap,
   keys: boolean = true,
   strValues: boolean = true,
-  precision: ?number = null,
+  precision: number | null = null,
   uncompress: boolean = false,
 ) {
   if (typeof obj === 'string') {
@@ -686,20 +622,20 @@ function compressObject(
 
   if (typeof obj === 'object') {
     const objKeys = Object.keys(obj);
-    const obj2 = {};
+    const obj2: Record<string, any> = {};
     for (let i = 0; i < objKeys.length; i += 1) {
       const k = objKeys[i];
       // eslint-disable-next-line no-param-reassign
-      obj[k] = compressObject(obj[k], map, keys, strValues, precision, uncompress);
+      (obj as any)[k] = compressObject((obj as any)[k], map, keys, strValues, precision, uncompress);
       if (keys && uncompress) {
         const value = map.get(k);
         if (value != null) {
-          obj2[value] = obj[k];
+          obj2[value] = (obj as any)[k];
         }
       } else if (keys) {
-        obj2[map.add(k)] = obj[k];
+        obj2[map.add(k)] = (obj as any)[k];
       } else {
-        obj2[k] = obj[k];
+        obj2[k] = (obj as any)[k];
       }
     }
     if (keys) {
@@ -719,7 +655,7 @@ function uncompressObject(
   return compressObject(obj, map, keys, strValues, null, true);
 }
 
-function minify(objectOrArray: any, precision: ?number = 4) {
+function minify(objectOrArray: any, precision: number | null = 4) {
   const map = new UniqueMap();
   return {
     minified: compressObject(objectOrArray, map, true, true, precision),
@@ -727,27 +663,24 @@ function minify(objectOrArray: any, precision: ?number = 4) {
   };
 }
 
-function unminify(minObjectOrArray: {
-  map: Object | UniqueMap,
-  minified: Object,
-}) {
+function unminify(minObjectOrArray: { map: any, minified: any }) {
   let { map } = minObjectOrArray;
   if (!(map instanceof UniqueMap)) {
     const uMap = new UniqueMap();
-    uMap.map = map.map;
-    uMap.index = map.index;
-    uMap.letters = map.letters;
+    uMap.map = (map as any).map;
+    uMap.index = (map as any).index;
+    uMap.letters = (map as any).letters;
     map = uMap;
   }
-  map.makeInverseMap();
-  return uncompressObject(minObjectOrArray.minified, map, true, true);
+  (map as UniqueMap).makeInverseMap();
+  return uncompressObject(minObjectOrArray.minified, map as UniqueMap, true, true);
 }
 
 function objectToPaths(
   obj: any,
   path: string = '',
-  pathObj: Object = {},
-  precision: ?number = null,
+  pathObj: Record<string, any> = {},
+  precision: number | null = null,
 ) {
   if (
     typeof obj === 'string'
@@ -785,16 +718,16 @@ function objectToPaths(
     return pathObj;
   }
   Object.keys(obj).forEach((key) => {
-    objectToPaths(obj[key], `${path}.${key}`, pathObj, precision);
+    objectToPaths((obj as any)[key], `${path}.${key}`, pathObj, precision);
   });
   return pathObj;
 }
 
 function getObjectDiff(
-  obj1In: Object,
-  diffs: Array<Object>,
-  obj2: Object,
-  precision: ?number = null,
+  obj1In: Record<string, any>,
+  diffs: Array<Record<string, any>>,
+  obj2: Record<string, any>,
+  precision: number | null = null,
   debug: boolean = false,
 ) {
   // const pathMap = {};
@@ -804,43 +737,43 @@ function getObjectDiff(
   }
   const paths1 = objectToPaths(obj1, '', {}, precision);
   const paths2 = objectToPaths(obj2, '', {}, precision);
-  const added = {};
-  const diff = {};
-  const removed = {};
+  const added: Record<string, any> = {};
+  const diff: Record<string, any> = {};
+  const removed: Record<string, any> = {};
   Object.keys(paths1).forEach((key1) => {
-    if (paths2[key1] === undefined) {
-      removed[key1] = paths1[key1];
+    if ((paths2 as any)[key1] === undefined) {
+      (removed as any)[key1] = (paths1 as any)[key1];
       return;
     }
-    if (paths1[key1] !== paths2[key1]) {
+    if ((paths1 as any)[key1] !== (paths2 as any)[key1]) {
       if (debug) {
-        diff[key1] = [paths1[key1], paths2[key1]];
+        (diff as any)[key1] = [(paths1 as any)[key1], (paths2 as any)[key1]];
       } else {
-        diff[key1] = paths2[key1];
+        (diff as any)[key1] = (paths2 as any)[key1];
       }
     }
   });
   Object.keys(paths2).forEach((key2) => {
-    if (paths1[key2] === undefined) {
-      added[key2] = paths2[key2];
+    if ((paths1 as any)[key2] === undefined) {
+      (added as any)[key2] = (paths2 as any)[key2];
     }
   });
-  const out = {};
+  const out: Record<string, any> = {};
   if (Object.keys(diff).length > 0) {
-    out.diff = diff;
+    (out as any).diff = diff;
   }
   if (Object.keys(added).length > 0) {
-    out.added = added;
+    (out as any).added = added;
   }
   if (Object.keys(removed).length > 0) {
-    out.removed = removed;
+    (out as any).removed = removed;
   }
   return out;
 }
 
 function updateObjFromPath(
   remainingPath: Array<string>,
-  obj: Object,
+  obj: Record<string, any>,
   value: any,
   remove: boolean = false,
 ) {
@@ -852,15 +785,15 @@ function updateObjFromPath(
   const p = fullP.replace(/\[.*/, '');
   if (remainingPath.length === 1 && remove && !arrayStringIndeces) {
     // eslint-disable-next-line no-param-reassign
-    delete obj[p];
+    delete (obj as any)[p];
     return;
   }
   if (arrayStringIndeces) {
     const arrayIndeces = arrayStringIndeces.map(e => parseInt(e.replace(/\[|\]/g, ''), 10));
-    if (obj[p] == null || !Array.isArray(obj[p])) {
-      obj[p] = [];  // eslint-disable-line no-param-reassign
+    if ((obj as any)[p] == null || !Array.isArray((obj as any)[p])) {
+      (obj as any)[p] = [];
     }
-    let currentArray = obj[p];
+    let currentArray = (obj as any)[p] as any[];
     let index = 0;
     for (let i = 0; i < arrayIndeces.length; i += 1) {
       index = arrayIndeces[i];
@@ -870,7 +803,6 @@ function updateObjFromPath(
         }
       }
       if (i < arrayIndeces.length - 1) {
-        // currentArray[index] = currentArray[index][i];
         if (!Array.isArray(currentArray[index])) {
           currentArray[index] = [];
         }
@@ -893,20 +825,20 @@ function updateObjFromPath(
   }
 
   if (remainingPath.length === 1) {
-    obj[p] = value;  // eslint-disable-line no-param-reassign
+    (obj as any)[p] = value;
     return;
   }
-  if (obj[p] == null) {
-    obj[p] = {};  // eslint-disable-line no-param-reassign
+  if ((obj as any)[p] == null) {
+    (obj as any)[p] = {};
   }
-  updateObjFromPath(remainingPath.slice(1), obj[p], value, remove);
+  updateObjFromPath(remainingPath.slice(1), (obj as any)[p], value, remove);
 }
 
-function pathsToObj(paths: Object) {
-  const obj = {};
+function pathsToObj(paths: Record<string, any>) {
+  const obj: Record<string, any> = {};
   Object.keys(paths).forEach((key) => {
     const path = key.split('.').filter(p => p.length > 0);
-    const value = paths[key];
+    const value = (paths as any)[key];
     if (Array.isArray(value)) {
       updateObjFromPath(path, obj, value.slice(-1)[0]);
     } else {
@@ -917,18 +849,18 @@ function pathsToObj(paths: Object) {
 }
 
 function refAndDiffToObject(
-  referenceIn: Object,
+  referenceIn: Record<string, any>,
   ...diffsIn: Array<{
-    added: Object,
-    diff: Object,
-    removed: Object,
+    added?: Record<string, any>,
+    diff?: Record<string, any>,
+    removed?: Record<string, any>,
   }>
 ) {
   const ref = duplicate(referenceIn);
-  const processPaths = (paths: Object, remove: boolean = false) => {
+  const processPaths = (paths: Record<string, any>, remove: boolean = false) => {
     Object.keys(paths).forEach((pathStr) => {
       const path = pathStr.split('.').filter(p => p.length > 0);
-      const value = paths[pathStr];
+      const value = (paths as any)[pathStr];
       if (Array.isArray(value)) {
         updateObjFromPath(path, ref, value.slice(-1)[0], remove);
       } else {
@@ -951,51 +883,51 @@ function refAndDiffToObject(
   return ref;
 }
 
-function diffPathsToObj(diff: { added: Object, removed: Object, diff: Object }) {
-  const out = {};
-  if (diff.diff && Object.keys(diff.diff).length > 0) {
-    out.diff = pathsToObj(diff.diff);
+function diffPathsToObj(diff: { added?: Record<string, any>, removed?: Record<string, any>, diff?: Record<string, any> }) {
+  const out: Record<string, any> = {};
+  if ((diff as any).diff && Object.keys((diff as any).diff).length > 0) {
+    (out as any).diff = pathsToObj((diff as any).diff);
   }
-  if (diff.added && Object.keys(diff.added).length > 0) {
-    out.added = pathsToObj(diff.added);
+  if ((diff as any).added && Object.keys((diff as any).added).length > 0) {
+    (out as any).added = pathsToObj((diff as any).added);
   }
-  if (diff.removed && Object.keys(diff.removed).length > 0) {
-    out.removed = pathsToObj(diff.removed);
+  if ((diff as any).removed && Object.keys((diff as any).removed).length > 0) {
+    (out as any).removed = pathsToObj((diff as any).removed);
   }
   return out;
 }
 
-function diffObjToPaths(diff: { added: Object, removed: Object, diff: Object }) {
-  const out = {};
-  if (diff.diff && Object.keys(diff.diff).length > 0) {
-    out.diff = objectToPaths(diff.diff);
+function diffObjToPaths(diff: { added?: Record<string, any>, removed?: Record<string, any>, diff?: Record<string, any> }) {
+  const out: Record<string, any> = {};
+  if ((diff as any).diff && Object.keys((diff as any).diff).length > 0) {
+    (out as any).diff = objectToPaths((diff as any).diff);
   }
-  if (diff.added && Object.keys(diff.added).length > 0) {
-    out.added = objectToPaths(diff.added);
+  if ((diff as any).added && Object.keys((diff as any).added).length > 0) {
+    (out as any).added = objectToPaths((diff as any).added);
   }
-  if (diff.removed && Object.keys(diff.removed).length > 0) {
-    out.removed = objectToPaths(diff.removed);
+  if ((diff as any).removed && Object.keys((diff as any).removed).length > 0) {
+    (out as any).removed = objectToPaths((diff as any).removed);
   }
   return out;
 }
 
 // Class that can track an object's differences over time
 class ObjectTracker {
-  baseReference: ?Object;
-  references: {
+  baseReference!: Record<string, any> | null;
+  references!: {
     [refName: string]: {
       basedOn: string,
-      diff: Object,
+      diff: Record<string, any>,
     },
   };
 
   precision: number;
-  worker: typeof Worker;
+  worker: Worker | any;
 
   //             time   refName  diff
-  diffs: Array<[number, string, Object, number]>
+  diffs!: Array<[number, string, Record<string, any>, number]>;
 
-  lastReferenceName: string;
+  lastReferenceName!: string;
 
   constructor(precision: number = 8) {
     this.precision = precision;
@@ -1003,14 +935,13 @@ class ObjectTracker {
   }
 
   toObj() {
-    const references = {};
+    const references: Record<string, any> = {};
     Object.keys(this.references).forEach((refName) => {
       references[refName] = {
         basedOn: this.references[refName].basedOn,
         diff: diffPathsToObj(this.references[refName].diff),
       };
     });
-    // $FlowFixMe
     const diffs = this.diffs.map(d => [d[0], d[1], diffPathsToObj(d[2]), d[3]]);
     return {
       baseReference: duplicate(this.baseReference),
@@ -1021,35 +952,35 @@ class ObjectTracker {
     };
   }
 
-  setFromObj(obj: Object) {
-    const references = {};
+  setFromObj(obj: any) {
+    const references: Record<string, any> = {};
     Object.keys(obj.references).forEach((refName) => {
       references[refName] = {
         basedOn: obj.references[refName].basedOn,
         diff: diffObjToPaths(obj.references[refName].diff),
       };
     });
-    this.references = references;
+    this.references = references as any;
     this.baseReference = duplicate(obj.baseReference);
     this.precision = obj.precision;
-    this.diffs = obj.diffs.map(d => [d[0], d[1], diffObjToPaths(d[2]), d[3]]);
+    this.diffs = obj.diffs.map((d: any[]) => [d[0], d[1], diffObjToPaths(d[2]), d[3]]) as any;
     this.lastReferenceName = obj.lastReferenceName;
   }
 
   reset() {
     this.baseReference = null;
-    this.references = {};
-    this.diffs = [];
+    this.references = {} as any;
+    this.diffs = [] as any;
     this.lastReferenceName = '__base';
   }
 
-  setBaseReference(obj: Object) {
+  setBaseReference(obj: Record<string, any>) {
     this.baseReference = duplicate(obj);
     this.lastReferenceName = '__base';
   }
 
   addReference(
-    obj: Object,
+    obj: Record<string, any>,
     refName: string,
     basedOn: string = '__base',
   ) {
@@ -1060,12 +991,12 @@ class ObjectTracker {
       this.references[refName] = {
         diff: this.getDiffToReference(obj, basedOn),
         basedOn,
-      };
+      } as any;
       this.lastReferenceName = refName;
     }
   }
 
-  getReferenceChain(name: string, chain: Array<Object>) {
+  getReferenceChain(name: string, chain: Array<Record<string, any>>): Array<Record<string, any>> {
     if (name === '__base') {
       return chain;
     }
@@ -1079,28 +1010,28 @@ class ObjectTracker {
 
   getReference(refName: string) {
     const referenceChain = this.getReferenceChain(refName, []);
-    return refAndDiffToObject(this.baseReference, ...referenceChain);
+    return refAndDiffToObject(this.baseReference as any, ...referenceChain);
   }
 
   getDiffToReference(
-    obj: Object,
+    obj: Record<string, any>,
     refName: string,
   ) {
     const referenceChain = this.getReferenceChain(refName, []);
-    const diff = getObjectDiff(this.baseReference, referenceChain, obj, this.precision);
+    const diff = getObjectDiff(this.baseReference as any, referenceChain, obj, this.precision);
     return diff;
   }
 
   getObjFromDiffAndReference(
-    diff: Object,
+    diff: Record<string, any>,
     refName: string,
   ) {
     const referenceChain = this.getReferenceChain(refName, []);
     const diffs = [...referenceChain, diff];
-    return refAndDiffToObject(this.baseReference, ...diffs);
+    return refAndDiffToObject(this.baseReference as any, ...diffs);
   }
 
-  add(time: number, obj: Object, refName: string = this.lastReferenceName, timeCount: number = 0) {
+  add(time: number, obj: Record<string, any>, refName: string = this.lastReferenceName, timeCount: number = 0) {
     if (this.baseReference == null) {
       this.setBaseReference(obj);
     }
@@ -1110,7 +1041,7 @@ class ObjectTracker {
 
   addWithWorker(
     time: number,
-    obj: Object,
+    obj: Record<string, any>,
     refName: string = this.lastReferenceName,
     timeCount: number = 0,
   ) {
@@ -1118,8 +1049,8 @@ class ObjectTracker {
       this.setBaseReference(obj);
     }
     this.startWorker();
-    if (this.worker != null) {  // $FlowFixMe
-      this.worker.postMessage([time, refName, obj, timeCount]);
+    if (this.worker != null) {
+      (this.worker as any).postMessage([time, refName, obj, timeCount]);
     }
   }
 
@@ -1127,8 +1058,8 @@ class ObjectTracker {
     if (this.worker != null) {
       return;
     }
-    // $FlowFixMe
-    this.worker = new Worker();
+    const W: any = (Worker as any);
+    this.worker = new W();
   }
 
   getFromIndex(index: number) {
@@ -1147,8 +1078,8 @@ class ObjectTracker {
  * @property {number} num number of notifications
  */
  type OBJ_Subscriber = {
-   callback: string | () => void;
-   num: number;
+   callback: string | (() => void),
+   num: number,
  };
 
  /**
@@ -1158,8 +1089,7 @@ class ObjectTracker {
  * identifier associated with a subscriber callback.
  */
  type OBJ_Subscribers = {
-  //  _id: OBJ_Subscriber;
-   [id: string]: OBJ_Subscriber;
+   [id: string]: OBJ_Subscriber,
  };
 
 /**
@@ -1188,10 +1118,9 @@ class Notification {
 
   cleanup() {
     Object.keys(this.subscribers).forEach((s) => {
-      // $FlowFixMe
-      delete s.callback;  // eslint-disable-line
+      delete (s as any).callback;  // eslint-disable-line
     });
-    this.subscribers = {};
+    this.subscribers = {} as any;
   }
 
   /**
@@ -1205,7 +1134,7 @@ class Notification {
    * subscription will receive. `-1` is no limit (`-1`).
    * @return {number} subscirber id
    */
-  add(callback: string | () => void, numberOfPublications: number = -1) {
+  add(callback: string | (() => void), numberOfPublications: number = -1) {
     this.subscribers[`${this.nextId}`] = {
       callback,
       num: numberOfPublications,
@@ -1221,7 +1150,7 @@ class Notification {
    * @param {any} functionArgument argument to pass to subscriber callback
    */
   publish(functionArgument: any = undefined, asArray: boolean = true) {
-    const subscribersToRemove = [];
+    const subscribersToRemove: string[] = [];
     for (let i = 0; i < this.order.length; i += 1) {
       const id = this.order[i];
       const { callback, num } = this.subscribers[id];
@@ -1237,9 +1166,9 @@ class Notification {
       }
       if (publishOk) {
         if (asArray) {
-          this.fnMap.exec(callback, functionArgument);
+          this.fnMap.exec(callback as any, functionArgument);
         } else {
-          this.fnMap.exec(callback, ...functionArgument);
+          this.fnMap.exec(callback as any, ...(functionArgument as any));
         }
       }
     }
@@ -1274,7 +1203,7 @@ class Notification {
  * unique notification name associated with an event.
  */
  type OBJ_Notifications = {
-   [notificationName: string]: Notification;
+   [notificationName: string]: Notification,
  };
 /**
  * Notification manager.
@@ -1327,7 +1256,7 @@ class NotificationManager {
    * need only be used with {@link Recorder}.
    */
   constructor(fnMap: FunctionMap = new FunctionMap()) {
-    this.notifications = {};
+    this.notifications = {} as any;
     this.fnMap = fnMap;
   }
 
@@ -1335,7 +1264,7 @@ class NotificationManager {
     Object.keys(this.notifications).forEach((name) => {
       this.notifications[name].cleanup();
     });
-    this.notifications = {};
+    this.notifications = {} as any;
   }
 
   /**
@@ -1353,7 +1282,7 @@ class NotificationManager {
    */
   add(
     name: string,
-    callback: string | () => void,
+    callback: string | (() => void),
     num: number = -1,
   ) {
     if (this.notifications[name] == null) {
@@ -1416,8 +1345,8 @@ function download(filename: string, text: string) {
 
 function splitString(str: string, token: string = '|', escape: string = '') {
   const letters = str.split('');
-  const split = [];
-  let currentSplit = [];
+  const split: string[] = [];
+  let currentSplit: string[] = [];
   let escaped = false;
   let escapedEscape = false;
   let tokenStringIndex = 0;
@@ -1463,12 +1392,12 @@ function splitString(str: string, token: string = '|', escape: string = '') {
   if (currentSplit.length > 0) {
     split.push(currentSplit.join(''));
   }
-  return [split, firstToken];
+  return [split, firstToken] as [string[], number];
 }
 
 class PerformanceTimer {
-  stamps: Array<[number, string]>;
-  index: number;
+  stamps!: Array<[number, string]>;
+  index!: number;
 
   constructor() {
     this.reset();
@@ -1485,8 +1414,8 @@ class PerformanceTimer {
   }
 
   deltas() {
-    let lastTime;
-    const out = [0];
+    let lastTime: number = 0;
+    const out: any[] = [0];
     let cumTime = 0;
     this.stamps.forEach((stamp, i) => {
       const [t, label] = stamp;
@@ -1502,10 +1431,10 @@ class PerformanceTimer {
   }
 
   log() {
-    if (window.figureOneDebug == null) {
-      window.figureOneDebug = { misc: [] };
+    if ((window as any).figureOneDebug == null) {
+      (window as any).figureOneDebug = { misc: [] };
     }
-    window.figureOneDebug.misc.push(this.deltas());
+    (window as any).figureOneDebug.misc.push(this.deltas());
   }
 }
 
@@ -1525,23 +1454,23 @@ function hash32(s: string) {
 
 function findReferences(toFind: any, start: any, path: string = '', alreadyParsed: Array<any> = [], depth: number = 0) {
   if (depth > 20) {
-    return [];
+    return [] as any[];
   }
   if (start == null) {
-    return [];
+    return [] as any[];
   }
   if (typeof start === 'boolean' || typeof start === 'number' || typeof start === 'string' || typeof start === 'function') {
-    return [];
+    return [] as any[];
   }
-  const out = [];
+  const out: any[] = [];
   if (toFind === start) {
     if (alreadyParsed.indexOf(toFind) > -1) {
-      return [path];
+      return [path] as any;
     }
     out.push([path]);
   }
   if (alreadyParsed.indexOf(start) > -1) {
-    return [];
+    return [] as any[];
   }
   alreadyParsed.push(start);
   if (Array.isArray(start)) {
@@ -1550,7 +1479,7 @@ function findReferences(toFind: any, start: any, path: string = '', alreadyParse
     }
   } else {
     Object.keys(start).forEach((key) => {
-      out.push(...findReferences(toFind, start[key], `${path}.${key}`, alreadyParsed, depth + 1));
+      out.push(...findReferences(toFind, (start as any)[key], `${path}.${key}`, alreadyParsed, depth + 1));
     });
   }
   return out;
@@ -1575,4 +1504,3 @@ export {
   generateUniqueColor, hash32,
   findReferences,
 };
-
