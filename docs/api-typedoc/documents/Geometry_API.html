@@ -1,0 +1,294 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>Geometry API | figureone</title><meta name="description" content="Documentation for figureone"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><link rel="stylesheet" href="../assets/custom.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><a href="../index.html" class="title">figureone</a><div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/><ul role="listbox" id="tsd-search-results"></ul><div id="tsd-search-status" aria-live="polite" aria-atomic="true"><div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb" aria-label="Breadcrumb"><li><a href="" aria-current="page">Geometry API</a></li></ul></div><div class="tsd-panel tsd-typography"><h1 id="geometry-api-reference" class="tsd-anchor-link">Geometry API Reference<a href="#geometry-api-reference" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1>
+<h2 id="contents" class="tsd-anchor-link">Contents<a href="#contents" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<ul>
+<li><a href="#polygon">polygon</a></li>
+<li><a href="#polygonline">polygonLine</a></li>
+<li><a href="#cone">cone</a></li>
+<li><a href="#cubeoptionsdefined">CubeOptionsDefined</a></li>
+<li><a href="#line3optionsdefined">Line3OptionsDefined</a></li>
+<li><a href="#prism">prism</a></li>
+<li><a href="#revolve">revolve</a></li>
+<li><a href="#sphereoptionsdefined">SphereOptionsDefined</a></li>
+<li><a href="#surfaceoptionsdefined">SurfaceOptionsDefined</a></li>
+<li><a href="#typeparsableline">TypeParsableLine</a></li>
+<li><a href="#line">Line</a></li>
+<li><a href="#typeparsableplane">TypeParsablePlane</a></li>
+<li><a href="#plane">Plane</a></li>
+<li><a href="#typeparsablepoint">TypeParsablePoint</a></li>
+<li><a href="#point">Point</a></li>
+<li><a href="#rect">Rect</a></li>
+<li><a href="#typeparsablerect">TypeParsableRect</a></li>
+<li><a href="#typeparsabletransform">TypeParsableTransform</a></li>
+<li><a href="#transform">Transform</a></li>
+</ul>
+<hr>
+<h2 id="polygon" class="tsd-anchor-link">polygon<a href="#polygon" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Create points a regular polygon.</p>
+<p>Can return either:</p>
+<ul>
+<li>Array&lt; Point&gt; - corners of a polygon</li>
+<li>Array&lt;<code>number</code>&gt; - interlaced points of triangles used to a polygon fill</li>
+</ul>
+<hr>
+<h2 id="polygonline" class="tsd-anchor-link">polygonLine<a href="#polygonline" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Create a solid regular polygon line.</p>
+<p>Can return either:</p>
+<ul>
+<li>Array&lt; Point&gt; - [inner corner 0, outer corner 0, inner corner 1,
+outer corner 1, inner corner 2...]</li>
+<li>Array&lt;<code>number</code>&gt; - interlaced points of triangles used to draw a polygon line</li>
+</ul>
+<hr>
+<h2 id="cone" class="tsd-anchor-link">cone<a href="#cone" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Return points of a cone.</p>
+<p>The points can either represent the triangles that make up each face, or
+represent the start and end points lines that are the edges of each face of
+the cone.</p>
+<p>If the points represent triangles, then a second array of normal vectors
+for each point will be available.</p>
+<h3 id="properties" class="tsd-anchor-link">Properties<a href="#properties" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="fo-prop"><span class="fo-prop-name">options</span> <span class="fo-prop-type">(<a href="../interfaces/d3_cube.OBJ_CubePoints.html">OBJ_CubePoints</a>)</span><span class="fo-prop-desc">: cone options
+@return {[Array&lt;Point&gt;, Array&lt;Point&gt;]} an array of points and normals. If
+the points represent lines, then the array of normals will be empty.</span></div>
+<hr>
+<h2 id="cubeoptionsdefined" class="tsd-anchor-link">CubeOptionsDefined<a href="#cubeoptionsdefined" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Return points of a cube.</p>
+<p>The points can either represent the triangles that make up each face, or
+represent the start and end points lines that are the edges of the cube.</p>
+<p>If the points represent triangles, then a second array of normal vectors
+for each point will be available.</p>
+<h3 id="properties-1" class="tsd-anchor-link">Properties<a href="#properties-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="fo-prop"><span class="fo-prop-name">options</span> <span class="fo-prop-type">(<a href="../interfaces/d3_cube.OBJ_CubePoints.html">OBJ_CubePoints</a>)</span><span class="fo-prop-desc">: cube options
+@return {[Array&lt;Point&gt;, Array&lt;Point&gt;]} an array of points and normals. If
+the points represent lines, then the array of normals will be empty.</span></div>
+<hr>
+<h2 id="line3optionsdefined" class="tsd-anchor-link">Line3OptionsDefined<a href="#line3optionsdefined" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Return points of a 3D line with optional arrows.</p>
+<p>The points can either represent the triangles that make up each face, or
+represent the start and end points of lines that are the edges of each face
+of the shape.</p>
+<p>If the points represent triangles, then a second array of normal vectors
+for each point will be available.</p>
+<h3 id="properties-2" class="tsd-anchor-link">Properties<a href="#properties-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="fo-prop"><span class="fo-prop-name">options</span> <span class="fo-prop-type">(<a href="../interfaces/d3_line3.OBJ_Line3Points.html">OBJ_Line3Points</a>)</span><span class="fo-prop-desc">: line options
+@return {[Array&lt;Point&gt;, Array&lt;Point&gt;]} an array of points and normals. If
+the points represent lines, then the array of normals will be empty.</span></div>
+<hr>
+<h2 id="prism" class="tsd-anchor-link">prism<a href="#prism" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Return points of a prism.</p>
+<p>The points can either represent the triangles that make up each base, or
+represent the start and end points lines that are the edges of the prism.</p>
+<p>If the points represent triangles, then a second array of normal vectors
+for each point will be available.</p>
+<h3 id="properties-3" class="tsd-anchor-link">Properties<a href="#properties-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="fo-prop"><span class="fo-prop-name">options</span> <span class="fo-prop-type">(<a href="../interfaces/d3_prism.OBJ_PrismPoints.html">OBJ_PrismPoints</a>)</span><span class="fo-prop-desc">: cube options
+@return {[Array&lt;Point&gt;, Array&lt;Point&gt;]} an array of points and normals. If
+the points represent lines, then the array of normals will be empty.</span></div>
+<hr>
+<h2 id="revolve" class="tsd-anchor-link">revolve<a href="#revolve" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Return points of a 3D surface created by revolving (or radially sweeping) a
+2D profile around an axis.</p>
+<p>The points can either represent the triangles that make up each face, or
+represent the start and end points lines that are the edges of each face of
+the cone.</p>
+<p>If the points represent triangles, then a second array of normal vectors
+for each point will be available.</p>
+<p>A profile is defined in the XY plane, and then revolved around the x axis.</p>
+<p>The resulting points can oriented and positioned by defining a axis and
+position. The axis directs the x axis (around which the profile was
+rotated) to any direction. The position then offsets the transformed points
+in 3D space, there the original (0, 0, [0]) point is translated to
+(position.x, position.y, position.z)</p>
+<p>All profile points must have a y value that is not 0, with the exceptions of
+the ends which can be 0.</p>
+<p>@param {OBJ_Revolve} options
+@return {[Array<Point>, Array<Point>]} an array of points and normals. If
+the points represent lines, then the array of normals will be empty.</p>
+<hr>
+<h2 id="sphereoptionsdefined" class="tsd-anchor-link">SphereOptionsDefined<a href="#sphereoptionsdefined" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Return points of a sphere.</p>
+<p>The points can either represent the triangles that make up each face, or
+represent the start and end points lines that are the edges of each face of
+the sphere.</p>
+<p>If the points represent triangles, then a second array of normal vectors
+for each point will be available.</p>
+<h3 id="properties-4" class="tsd-anchor-link">Properties<a href="#properties-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="fo-prop"><span class="fo-prop-name">options</span> <span class="fo-prop-type">(<a href="../interfaces/d3_cube.OBJ_CubePoints.html">OBJ_CubePoints</a>)</span><span class="fo-prop-desc">: sphere options
+@return {[Array&lt;Point&gt;, Array&lt;Point&gt;]} an array of points and normals. If
+the points represent lines, then the array of normals will be empty.</span></div>
+<hr>
+<h2 id="surfaceoptionsdefined" class="tsd-anchor-link">SurfaceOptionsDefined<a href="#surfaceoptionsdefined" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Return points of a 3D surface. A 3D surface is defined by a 2D matrix of
+points (a grid).</p>
+<p>The points can either represent the triangles that make up each face, or
+represent the start and end points lines that are the edges of each face of
+the cone.</p>
+<p>If the points represent triangles, then a second array of normal vectors
+for each point will be available.</p>
+<hr>
+<h2 id="typeparsableline" class="tsd-anchor-link">TypeParsableLine<a href="#typeparsableline" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>A  Line is defined with either:</p>
+<ul>
+<li>an instantiated  Line</li>
+<li>two points [ TypeParsablePoint,  TypeParsablePoint]</li>
+<li>two points and the number of ends
+[ TypeParsablePoint,  TypeParsablePoint, <code>1 | 2 | 0</code>]</li>
+<li>a line definition object  OBJ_LineDefinition</li>
+<li>A recorder state definition  TypeF1DefLine</li>
+<li>A string representation of all options except the first</li>
+</ul>
+<p>The <code>ends</code> defines whether a line is finite (a line segment between two
+points - <code>ends = 2</code>), a ray (a line extending to infinity in one direction
+from a point - <code>ends = 1</code>), or a infinite line (a line extending to infinity
+in both directions - <code>ends = 0</code>).</p>
+<h4 id="l1-l2-l3-l4-l5-and-l6-are-all-the-same" class="tsd-anchor-link">l1, l2, l3, l4, l5, and l6 are all the same<a href="#l1-l2-l3-l4-l5-and-l6-are-all-the-same" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-8">l1</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">Line</span><span class="hl-5">([</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">], [</span><span class="hl-12">2</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">]);</span><br/><span class="hl-8">l2</span><span class="hl-5"> = </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">getLine</span><span class="hl-5">([[</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">], [</span><span class="hl-12">2</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">]]);</span><br/><span class="hl-8">l3</span><span class="hl-5"> = </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">getLine</span><span class="hl-5">({ </span><span class="hl-8">p1:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">], </span><span class="hl-8">length:</span><span class="hl-5"> </span><span class="hl-12">2</span><span class="hl-5">, </span><span class="hl-8">direction:</span><span class="hl-5"> [</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">] });</span><br/><span class="hl-8">l4</span><span class="hl-5"> = </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">getLine</span><span class="hl-5">({ </span><span class="hl-8">p1:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">], </span><span class="hl-8">length:</span><span class="hl-5"> </span><span class="hl-12">2</span><span class="hl-5">, </span><span class="hl-8">angle:</span><span class="hl-5"> </span><span class="hl-12">0</span><span class="hl-5"> });</span><br/><span class="hl-8">l5</span><span class="hl-5"> = </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">getLine</span><span class="hl-5">({ </span><span class="hl-8">p1:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">], </span><span class="hl-8">length:</span><span class="hl-5"> </span><span class="hl-12">2</span><span class="hl-5">, </span><span class="hl-8">theta:</span><span class="hl-5"> </span><span class="hl-8">Math</span><span class="hl-5">.</span><span class="hl-7">PI</span><span class="hl-5"> / </span><span class="hl-12">2</span><span class="hl-5">, </span><span class="hl-8">phi:</span><span class="hl-5"> </span><span class="hl-12">0</span><span class="hl-5"> });</span><br/><span class="hl-8">l6</span><span class="hl-5"> = </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">getLine</span><span class="hl-5">({ </span><span class="hl-8">p1:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">], </span><span class="hl-8">p2:</span><span class="hl-5"> [</span><span class="hl-12">2</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">] });</span>
+</code><button type="button">Copy</button></pre>
+
+<hr>
+<h2 id="line" class="tsd-anchor-link">Line<a href="#line" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Object representing a Line.</p>
+<p>Contains methods that makes it conventient to use lines in calculations.</p>
+<h4 id="get-line-from-fig" class="tsd-anchor-link">get Line from Fig<a href="#get-line-from-fig" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-6">const</span><span class="hl-5"> { </span><span class="hl-7">Line</span><span class="hl-5"> } = </span><span class="hl-8">Fig</span><span class="hl-5">;</span><br/><br/><span class="hl-10">// define a line from [0, 0] to [1, 0]</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">l</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-9">Line</span><span class="hl-5">([</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">], [</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">]);</span><br/><br/><span class="hl-10">// find the length of the line</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">len</span><span class="hl-5"> = </span><span class="hl-8">l</span><span class="hl-5">.</span><span class="hl-9">length</span><span class="hl-5">();</span><br/><br/><span class="hl-10">// get the point at length 0.2 along the line</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">p</span><span class="hl-5"> = </span><span class="hl-8">l</span><span class="hl-5">.</span><span class="hl-9">pointAtLength</span><span class="hl-5">(</span><span class="hl-12">0.2</span><span class="hl-5">);</span><br/><br/><span class="hl-10">// find the intersect with another line</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">i</span><span class="hl-5"> = </span><span class="hl-8">l</span><span class="hl-5">.</span><span class="hl-9">intersectsWith</span><span class="hl-5">([[</span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">], [</span><span class="hl-12">0.5</span><span class="hl-5">, -</span><span class="hl-12">0.5</span><span class="hl-5">]]);</span>
+</code><button type="button">Copy</button></pre>
+
+<hr>
+<h2 id="typeparsableplane" class="tsd-anchor-link">TypeParsablePlane<a href="#typeparsableplane" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>A  Plane is defined with either:</p>
+<ul>
+<li>an instantiated  Plane</li>
+<li>a position and normal vector
+[ TypeParsablePoint,  TypeParsablePoint]</li>
+<li>three points [ TypeParsablePoint,  TypeParsablePoint,
+TypeParsablePoint]</li>
+<li>A recorder state definition  TypeF1DefPlane</li>
+<li>A string representation of all options except the first</li>
+</ul>
+<p>When defining 3 points p1, p2 and p3, the normal will be in the direction of
+the cross product of p12 with p13.</p>
+<h4 id="p1-p2-and-p3-are-all-equal-planes" class="tsd-anchor-link">p1, p2, and p3 are all equal planes<a href="#p1-p2-and-p3-are-all-equal-planes" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-8">p1</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">Plane</span><span class="hl-5">([</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">], [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">]);</span><br/><span class="hl-8">p2</span><span class="hl-5"> = </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">getPlane</span><span class="hl-5">([[</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">], [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">]]);</span><br/><span class="hl-8">p3</span><span class="hl-5"> = </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">getPlane</span><span class="hl-5">([[</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">], [</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">], [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">]]);</span>
+</code><button type="button">Copy</button></pre>
+
+<hr>
+<h2 id="plane" class="tsd-anchor-link">Plane<a href="#plane" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Object representing a plane.</p>
+<p>Contains methods that makes it convenient to operate on planes,
+points and lines.</p>
+<p>A plane can either be created with:</p>
+<ul>
+<li>a point on the plane and a normal</li>
+<li>3 points on the plane</li>
+</ul>
+<p>If defined with 3 points P1, P2, and P3, then the normal will be in the
+direction of the cross product of vectors P1P2 and P1P3.</p>
+<h4 id="define-a-plane-at-the-origin-in-the-xz-plane" class="tsd-anchor-link">define a plane at the origin in the XZ plane<a href="#define-a-plane-at-the-origin-in-the-xz-plane" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">p</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-9">Plane</span><span class="hl-5">([</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">], [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">]);</span><br/><br/><span class="hl-10">// see if a point is on the plane</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">result</span><span class="hl-5"> = </span><span class="hl-8">p</span><span class="hl-5">.</span><span class="hl-9">hasPointOn</span><span class="hl-5">([</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">]);</span><br/><br/><span class="hl-10">// find the intersect with a line</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">i</span><span class="hl-5"> = </span><span class="hl-9">lineIntersect</span><span class="hl-5">([[</span><span class="hl-12">0</span><span class="hl-5">, -</span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">], [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">]])</span>
+</code><button type="button">Copy</button></pre>
+
+<hr>
+<h2 id="typeparsablepoint" class="tsd-anchor-link">TypeParsablePoint<a href="#typeparsablepoint" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>A  Point can be defined in several ways</p>
+<ul>
+<li>As an instantiated  Point</li>
+<li>As an x, y tuple: [number, number]</li>
+<li>As an x, y, z tuple: [number, number, number]</li>
+<li>As an x, y string: '[number, number]'</li>
+<li>As an x, y, z string: '[number, number, number]'</li>
+<li>As a recorder state definition: { f1Type: 'p', state: [number, number, number] }
+}</li>
+<li>A string representation of all options except the first</li>
+</ul>
+<p>If points are defined with only a <code>x</code> and <code>y</code> component, then <code>z</code> will be
+set to 0 automatically.</p>
+<h4 id="p1-p2-p3-and-p4-are-all-the-same-when-parsed-by" class="tsd-anchor-link">p1, p2, p3 and p4 are all the same when parsed by <code>getPoint</code><a href="#p1-p2-p3-and-p4-are-all-the-same-when-parsed-by" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-8">p1</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">Point</span><span class="hl-5">(</span><span class="hl-12">2</span><span class="hl-5">, </span><span class="hl-12">3</span><span class="hl-5">);</span><br/><span class="hl-8">p2</span><span class="hl-5"> = [</span><span class="hl-12">2</span><span class="hl-5">, </span><span class="hl-12">3</span><span class="hl-5">];</span><br/><span class="hl-8">p3</span><span class="hl-5"> = </span><span class="hl-11">&#39;[2, 3]&#39;</span><span class="hl-5">;</span><br/><span class="hl-8">p4</span><span class="hl-5"> = { </span><span class="hl-8">f1Type:</span><span class="hl-5"> </span><span class="hl-11">&#39;p&#39;</span><span class="hl-5">, </span><span class="hl-8">state:</span><span class="hl-5"> [</span><span class="hl-12">2</span><span class="hl-5">, </span><span class="hl-12">3</span><span class="hl-5">] };</span><br/><span class="hl-8">p5</span><span class="hl-5"> = [</span><span class="hl-12">2</span><span class="hl-5">, </span><span class="hl-12">3</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">];</span>
+</code><button type="button">Copy</button></pre>
+
+<hr>
+<h2 id="point" class="tsd-anchor-link">Point<a href="#point" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Object representing a point or vector.</p>
+<p>Contains methods that makes it convenient to work with points and vectors.</p>
+<h4 id="get-point-from-fig" class="tsd-anchor-link">get Point from Fig<a href="#get-point-from-fig" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-6">const</span><span class="hl-5"> { </span><span class="hl-7">Point</span><span class="hl-5"> } = </span><span class="hl-8">Fig</span><span class="hl-5">;</span><br/><br/><span class="hl-10">// define a point at (0, 2)</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">p</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-9">Point</span><span class="hl-5">(</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">2</span><span class="hl-5">);</span><br/><br/><span class="hl-10">// find the distance to another point (0, 1) which will be 1</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">d</span><span class="hl-5"> = </span><span class="hl-8">p</span><span class="hl-5">.</span><span class="hl-9">distance</span><span class="hl-5">([</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">]);</span><br/><br/><span class="hl-10">// add to another point (3, 1) which will result in (3, 3)</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">q</span><span class="hl-5"> = </span><span class="hl-8">p</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">(</span><span class="hl-12">3</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">);</span>
+</code><button type="button">Copy</button></pre>
+
+<blockquote>
+<p>TypeParsablePoint,  isParsablePoint</p>
+</blockquote>
+<hr>
+<h2 id="rect" class="tsd-anchor-link">Rect<a href="#rect" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>An object representing a rectangle.</p>
+<h4 id="get-rect-from-fig" class="tsd-anchor-link">get Rect from Fig<a href="#get-rect-from-fig" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-6">const</span><span class="hl-5"> { </span><span class="hl-7">Rect</span><span class="hl-5"> } = </span><span class="hl-8">Fig</span><span class="hl-5">;</span><br/><br/><span class="hl-10">// define a rect centered at origin with width 4 and height 2</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">r</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-9">Rect</span><span class="hl-5">(-</span><span class="hl-12">2</span><span class="hl-5">, -</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">4</span><span class="hl-5">, </span><span class="hl-12">2</span><span class="hl-5">);</span>
+</code><button type="button">Copy</button></pre>
+
+<hr>
+<h2 id="typeparsablerect" class="tsd-anchor-link">TypeParsableRect<a href="#typeparsablerect" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>A  Rect can be defined with either</p>
+<ul>
+<li>an instantiated  Rect</li>
+<li>an array of left, bottom, width, height values
+<code>[number, number, number, number]</code></li>
+<li>a recorder state definition  TypeF1DefRect</li>
+<li>a string representation of all options except the first</li>
+</ul>
+<h4 id="all-rectangles-are-the-same-when-parsed-by-and-have-a-lower" class="tsd-anchor-link">All rectangles are the same when parsed by <code>getRect</code> and have a lower<a href="#all-rectangles-are-the-same-when-parsed-by-and-have-a-lower" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-8">left</span><span class="hl-5"> </span><span class="hl-8">corner</span><span class="hl-5"> </span><span class="hl-6">of</span><span class="hl-5"> </span><span class="hl-11">`(-2, -1)`</span><span class="hl-5">, </span><span class="hl-8">a</span><span class="hl-5"> </span><span class="hl-8">width</span><span class="hl-5"> </span><span class="hl-6">of</span><span class="hl-5"> </span><span class="hl-11">`4`</span><span class="hl-5">, </span><span class="hl-8">and</span><span class="hl-5"> </span><span class="hl-8">a</span><span class="hl-5"> </span><span class="hl-8">height</span><span class="hl-5"> </span><span class="hl-6">of</span><span class="hl-5"> </span><span class="hl-11">`2`</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">r1</span><span class="hl-5"> = </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">getRect</span><span class="hl-5">([-</span><span class="hl-12">2</span><span class="hl-5">, -</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">4</span><span class="hl-5">, </span><span class="hl-12">2</span><span class="hl-5">]);</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">r2</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">Rect</span><span class="hl-5">(-</span><span class="hl-12">2</span><span class="hl-5">, -</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">4</span><span class="hl-5">, </span><span class="hl-12">2</span><span class="hl-5">);</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">r3</span><span class="hl-5"> = </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">getRect</span><span class="hl-5">(</span><span class="hl-11">&#39;[-2, -1, 4, 2]&#39;</span><span class="hl-5">);</span>
+</code><button type="button">Copy</button></pre>
+
+<hr>
+<h2 id="typeparsabletransform" class="tsd-anchor-link">TypeParsableTransform<a href="#typeparsabletransform" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>A transform is defined with either:</p>
+<ul>
+<li>an instantiated  Transform</li>
+<li>an array of transform components  TypeTransformUserDefinition</li>
+<li>a single transform component  TypeTransformComponentUserDefinition</li>
+<li>a recorder state definition  TypeF1DefTransform</li>
+<li>A string representation of all options except the first</li>
+</ul>
+<h4 id="t1-t2-and-t3-are-all-equal-transforms" class="tsd-anchor-link">t1, t2 and t3 are all equal transforms<a href="#t1-t2-and-t3-are-all-equal-transforms" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">t1</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">Transform</span><span class="hl-5">().</span><span class="hl-9">scale</span><span class="hl-5">(</span><span class="hl-12">2</span><span class="hl-5">).</span><span class="hl-9">rotate</span><span class="hl-5">(</span><span class="hl-8">Math</span><span class="hl-5">.</span><span class="hl-7">PI</span><span class="hl-5"> / </span><span class="hl-12">2</span><span class="hl-5">).</span><span class="hl-9">translate</span><span class="hl-5">(</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">);</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">t2</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">Transform</span><span class="hl-5">([[</span><span class="hl-11">&#39;s&#39;</span><span class="hl-5">, </span><span class="hl-12">2</span><span class="hl-5">], [</span><span class="hl-11">&#39;r&#39;</span><span class="hl-5">, </span><span class="hl-8">Math</span><span class="hl-5">.</span><span class="hl-7">PI</span><span class="hl-5"> / </span><span class="hl-12">2</span><span class="hl-5">], [</span><span class="hl-11">&#39;t&#39;</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">]]);</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">t3</span><span class="hl-5"> = </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">getTransform</span><span class="hl-5">([[</span><span class="hl-11">&#39;s&#39;</span><span class="hl-5">, </span><span class="hl-12">2</span><span class="hl-5">], [</span><span class="hl-11">&#39;r&#39;</span><span class="hl-5">, </span><span class="hl-8">Math</span><span class="hl-5">.</span><span class="hl-7">PI</span><span class="hl-5"> / </span><span class="hl-12">2</span><span class="hl-5">], [</span><span class="hl-11">&#39;t&#39;</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">]]);</span>
+</code><button type="button">Copy</button></pre>
+
+<blockquote>
+<p>See  Transform for a summary of transfom components available.</p>
+</blockquote>
+<hr>
+<h2 id="transform" class="tsd-anchor-link">Transform<a href="#transform" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>A Transform is a chain or cascade of transform components, such as rotations
+and translations.</p>
+<p>The transform components cascade to form a single 3D transform matrix in
+homogenous coordinates - meaning the result is a 4x4 matrix. This matrix can
+be used to transform a point in space.</p>
+<p>There are several built in transform components:</p>
+<ul>
+<li>Translation</li>
+<li>Scale</li>
+<li>Rotation</li>
+<li>Direction transform</li>
+<li>Custom (where a specific matrix can be defined)</li>
+<li>Change of basis from standard basis</li>
+<li>Change of basis from an initial basis</li>
+</ul>
+<p>Matrix multiplication is not commutative, and so chaining transforms is not
+commutative. This means the order of components is important.</p>
+<p>For example, if a point (1, 0) is first translated by (1, 0) and then
+rotated by π / 2, then it will start at (1, 0), then move to (2, 0), then
+rotate to (0, 2).</p>
+<p>In comparison if the same point is first rotated by π / 2 then translated by
+(1, 0) it will start at (1, 0), then rotate to (0, 1), then move to (1, 1).</p>
+<p>In this Transform object, the order that components are defined, is the order
+the resulting transform will represent.</p>
+<p>A transform can be created by either chaining transform component methods on
+an instantiated Transform object, or using an array definition of
+components. For example the following two transforms are the same:</p>
+<pre><code><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">t1</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-9">Transform</span><span class="hl-5">().</span><span class="hl-9">scale</span><span class="hl-5">(</span><span class="hl-12">1</span><span class="hl-5">).</span><span class="hl-9">translate</span><span class="hl-5">(</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">);</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">t2</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-9">Transform</span><span class="hl-5">([[</span><span class="hl-11">&#39;s&#39;</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">], [</span><span class="hl-11">&#39;t&#39;</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">]]);</span>
+</code><button>Copy</button></pre>
+
+<blockquote>
+<p>See  TypeParsableTransform for the different ways to define a transform.</p>
+</blockquote>
+<hr>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg><h3>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg><h3>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#geometry-api-reference"><span>Geometry <wbr/>API <wbr/>Reference</span></a><ul><li><a href="#contents"><span>Contents</span></a></li><li><a href="#polygon"><span>polygon</span></a></li><li><a href="#polygonline"><span>polygon<wbr/>Line</span></a></li><li><a href="#cone"><span>cone</span></a></li><li><ul><li><a href="#properties"><span>Properties</span></a></li></ul></li><li><a href="#cubeoptionsdefined"><span>Cube<wbr/>Options<wbr/>Defined</span></a></li><li><ul><li><a href="#properties-1"><span>Properties</span></a></li></ul></li><li><a href="#line3optionsdefined"><span>Line3<wbr/>Options<wbr/>Defined</span></a></li><li><ul><li><a href="#properties-2"><span>Properties</span></a></li></ul></li><li><a href="#prism"><span>prism</span></a></li><li><ul><li><a href="#properties-3"><span>Properties</span></a></li></ul></li><li><a href="#revolve"><span>revolve</span></a></li><li><a href="#sphereoptionsdefined"><span>Sphere<wbr/>Options<wbr/>Defined</span></a></li><li><ul><li><a href="#properties-4"><span>Properties</span></a></li></ul></li><li><a href="#surfaceoptionsdefined"><span>Surface<wbr/>Options<wbr/>Defined</span></a></li><li><a href="#typeparsableline"><span>Type<wbr/>Parsable<wbr/>Line</span></a></li><li><ul><li><ul><li><a href="#l1-l2-l3-l4-l5-and-l6-are-all-the-same"><span>l1, l2, l3, l4, l5, and l6 are all the same</span></a></li></ul></li></ul></li><li><a href="#line"><span>Line</span></a></li><li><ul><li><ul><li><a href="#get-line-from-fig"><span>get <wbr/>Line from <wbr/>Fig</span></a></li></ul></li></ul></li><li><a href="#typeparsableplane"><span>Type<wbr/>Parsable<wbr/>Plane</span></a></li><li><ul><li><ul><li><a href="#p1-p2-and-p3-are-all-equal-planes"><span>p1, p2, and p3 are all equal planes</span></a></li></ul></li></ul></li><li><a href="#plane"><span>Plane</span></a></li><li><ul><li><ul><li><a href="#define-a-plane-at-the-origin-in-the-xz-plane"><span>define a plane at the origin in the <wbr/>XZ plane</span></a></li></ul></li></ul></li><li><a href="#typeparsablepoint"><span>Type<wbr/>Parsable<wbr/>Point</span></a></li><li><ul><li><ul><li><a href="#p1-p2-p3-and-p4-are-all-the-same-when-parsed-by"><span>p1, p2, p3 and p4 are all the same when parsed by </span></a></li></ul></li></ul></li><li><a href="#point"><span>Point</span></a></li><li><ul><li><ul><li><a href="#get-point-from-fig"><span>get <wbr/>Point from <wbr/>Fig</span></a></li></ul></li></ul></li><li><a href="#rect"><span>Rect</span></a></li><li><ul><li><ul><li><a href="#get-rect-from-fig"><span>get <wbr/>Rect from <wbr/>Fig</span></a></li></ul></li></ul></li><li><a href="#typeparsablerect"><span>Type<wbr/>Parsable<wbr/>Rect</span></a></li><li><ul><li><ul><li><a href="#all-rectangles-are-the-same-when-parsed-by-and-have-a-lower"><span>All rectangles are the same when parsed by  and have a lower</span></a></li></ul></li></ul></li><li><a href="#typeparsabletransform"><span>Type<wbr/>Parsable<wbr/>Transform</span></a></li><li><ul><li><ul><li><a href="#t1-t2-and-t3-are-all-equal-transforms"><span>t1, t2 and t3 are all equal transforms</span></a></li></ul></li></ul></li><li><a href="#transform"><span>Transform</span></a></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">figureone</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

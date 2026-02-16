@@ -104,8 +104,8 @@ function extractJSDocBlocks(source) {
 function getExportName(source, position) {
   // Look at the code right after the JSDoc block
   const after = source.substring(position).trimStart();
-  // Match export type/interface/class/function name
-  const m = after.match(/^(?:\/\*[^*].*?\*\/\s*)*export\s+(?:type|interface|class|function)\s+(\w+)/s);
+  // Match export or non-export type/interface/class/function name
+  const m = after.match(/^(?:\/\*[^*].*?\*\/\s*)*(?:export\s+)?(?:default\s+)?(?:type|interface|class|function)\s+(\w+)/s);
   if (m) return m[1];
   return null;
 }
@@ -301,6 +301,10 @@ for (const entry of entries) {
 
   md += '---\n\n';
 }
+
+// Rewrite image paths: source files use ./apiassets/ relative to themselves,
+// but the output markdown lives in docs/api/tutorials/ so needs ../apiassets/
+md = md.replace(/\.\/apiassets\//g, '../apiassets/');
 
 // Write output
 const outFile = path.join(__dirname, '..', 'docs', 'api', 'tutorials', `${groupName.toLowerCase().replace(/\s+/g, '-')}-api.md`);

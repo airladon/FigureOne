@@ -1,0 +1,229 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>Text API | figureone</title><meta name="description" content="Documentation for figureone"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><link rel="stylesheet" href="../assets/custom.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><a href="../index.html" class="title">figureone</a><div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/><ul role="listbox" id="tsd-search-results"></ul><div id="tsd-search-status" aria-live="polite" aria-atomic="true"><div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb" aria-label="Breadcrumb"><li><a href="" aria-current="page">Text API</a></li></ul></div><div class="tsd-panel tsd-typography"><h1 id="text-api-reference" class="tsd-anchor-link">Text API Reference<a href="#text-api-reference" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1>
+<h2 id="contents" class="tsd-anchor-link">Contents<a href="#contents" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<ul>
+<li><a href="#obj_formattedtext">OBJ_FormattedText</a></li>
+<li><a href="#fontmanager">FontManager</a></li>
+<li><a href="#obj_font">OBJ_Font</a></li>
+</ul>
+<hr>
+<h2 id="obj_formattedtext" class="tsd-anchor-link">OBJ_FormattedText<a href="#obj_formattedtext" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p><em>Extends  OBJ_Collection</em></p>
+<p>FormattedText options object that extends  OBJ_Collection
+options object (without <code>parent</code>).</p>
+<p><img src="../media/ftext1.png" alt=""></p>
+<p><img src="../media/ftext2.png" alt=""></p>
+<p><img src="../media/ftext3.png" alt=""></p>
+<p><img src="../media/ftext4.gif" alt=""></p>
+<p><img src="../media/ftext5.png" alt=""></p>
+<p><img src="../media/ftext6.gif" alt=""></p>
+<p>Formatted text allows:</p>
+<ul>
+<li>Use of more than one font</li>
+<li>Multi-line text</li>
+<li>Embedded equations</li>
+<li>Interactivity on select strings</li>
+</ul>
+<p>If <code>text</code> is defined as an array of strings of line definition objects, then
+each element of the array will be a new line of text.</p>
+<p>All text will be laid out with the default font (or default line font if a
+line definition object is used).</p>
+<p>To modify the font of portions of text within a line, surround the text to
+modify with '|' characters. The string surrounded by the '|' characters will
+then be a unique identifier that can be referenced in the <code>modifiers</code>
+property which will then allow for replacing that text with some other text,
+changing the font of the text, changing the touchability of the text and/or
+replacing the text with an embedded equation.</p>
+<p>If a string is surrounded by '|' characters but not defined in <code>modifiers</code>
+then that string will have the formmating of the <code>accent</code> property applied
+to it.</p>
+<h3 id="properties" class="tsd-anchor-link">Properties<a href="#properties" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="fo-prop"><span class="fo-prop-name">text</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="../interfaces/FigureCollections_Text.OBJ_TextLineDefinition.html">OBJ_TextLineDefinition</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</span><span class="fo-prop-desc">: array of
+line strings - single string is single line only.</span></div>
+<div class="fo-prop"><span class="fo-prop-name">modifiers</span> <span class="fo-prop-type">(<a href="../types/FigurePrimitives_FigurePrimitiveTypes2D.OBJ_TextModifiersDefinition.html">OBJ_TextModifiersDefinition</a>?)</span><span class="fo-prop-desc">: modifier definitions</span></div>
+<div class="fo-prop"><span class="fo-prop-name">font</span> <span class="fo-prop-type">(<a href="../interfaces/types.OBJ_Font.html">OBJ_Font</a>?)</span><span class="fo-prop-desc">: Default font to use in lines</span></div>
+<div class="fo-prop"><span class="fo-prop-name">defaultTextTouchBorder</span> <span class="fo-prop-type">(<a href="../types/g2.TypeParsableBuffer.html">TypeParsableBuffer</a>?)</span><span class="fo-prop-desc">: default buffer for
+<code>touch</code> property in  OBJ_TextModifiersDefinition</span></div>
+<div class="fo-prop"><span class="fo-prop-name">elements</span> <span class="fo-prop-type">(<a href="../interfaces/Equation_Equation.EQN_EquationElements.html">EQN_EquationElements</a>?)</span><span class="fo-prop-desc">: equation elements to use within
+the equation phrases defined in <code>modifiers</code></span></div>
+<div class="fo-prop"><span class="fo-prop-name">justify</span> <span class="fo-prop-type">('left' | 'right' | 'center?)</span><span class="fo-prop-desc">: justification of lines (<code>left</code>)</span></div>
+<div class="fo-prop"><span class="fo-prop-name">lineSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: Space between ascent of each line with
+descent of previous line (<code>font.size * 0.5</code>)</span></div>
+<div class="fo-prop"><span class="fo-prop-name">baselineSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: Space between baselines of lines. This
+will override <code>lineSpace</code> for all lines including individual line settings (<code>undefined</code>)</span></div>
+<div class="fo-prop"><span class="fo-prop-name">xAlign</span> <span class="fo-prop-type">('left' | 'right' | 'center'?)</span><span class="fo-prop-desc">: horizontal alignment of
+lines with <code>position</code> (<code>left</code>)</span></div>
+<div class="fo-prop"><span class="fo-prop-name">yAlign</span> <span class="fo-prop-type">('bottom' | 'baseline' | 'middle' | 'top'?)</span><span class="fo-prop-desc">: vertical
+alignment of lines with <code>position</code> (<code>baseline</code>)</span></div>
+<div class="fo-prop"><span class="fo-prop-name">border</span> <span class="fo-prop-type">(<a href="../types/g2.TypeParsableBuffer.html">TypeParsableBuffer</a> | <a href="../types/g2.TypeParsableBorder.html">TypeParsableBorder</a> | 'children' | 'rect' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: border used for keeping shape within limits (<code>'draw'</code>)</span></div>
+<div class="fo-prop"><span class="fo-prop-name">touchBorder</span> <span class="fo-prop-type">(<a href="../types/g2.TypeParsableBuffer.html">TypeParsableBuffer</a> | <a href="../types/g2.TypeParsableBorder.html">TypeParsableBorder</a> | 'border' | 'children' | 'rect' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: border used for determining shape was touched. <code>number</code> and <code>'rect'</code> use
+the the points in <code>'buffer'</code> to calculate the bounding rects (<code>'buffer'</code>).</span></div>
+<div class="fo-prop"><span class="fo-prop-name">accent</span> <span class="fo-prop-type">(<a href="../interfaces/types.OBJ_Font.html">OBJ_Font</a>?)</span><span class="fo-prop-desc">: default modifier for accented text without a
+specific modification. By default accented text will be italic.</span></div>
+<h4 id="multi-line-center-justified" class="tsd-anchor-link">Multi-line center justified<a href="#multi-line-center-justified" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;ftext&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">text:</span><span class="hl-5"> [</span><span class="hl-11">&#39;First line&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;Second line&#39;</span><span class="hl-5">],</span><br/><span class="hl-5">  </span><span class="hl-8">justify:</span><span class="hl-5"> </span><span class="hl-11">&#39;center&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">});</span>
+</code><button type="button">Copy</button></pre>
+
+<h4 id="modifiers" class="tsd-anchor-link">Modifiers<a href="#modifiers" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;ftext&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">text:</span><span class="hl-5"> [</span><span class="hl-11">&#39;|First| |line|&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;Second |line2|&#39;</span><span class="hl-5">],</span><br/><span class="hl-5">  </span><span class="hl-8">modifiers:</span><span class="hl-5"> {</span><br/><span class="hl-5">    </span><span class="hl-8">First:</span><span class="hl-5"> { </span><span class="hl-8">font:</span><span class="hl-5"> { </span><span class="hl-8">underline:</span><span class="hl-5"> </span><span class="hl-11">&#39;true&#39;</span><span class="hl-5">, </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.7</span><span class="hl-5">, </span><span class="hl-12">0.7</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">] } },</span><br/><span class="hl-5">    </span><span class="hl-8">line:</span><span class="hl-5"> { </span><span class="hl-8">font:</span><span class="hl-5"> { </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">] } },</span><br/><span class="hl-5">    </span><span class="hl-8">line2:</span><span class="hl-5"> { </span><span class="hl-8">text:</span><span class="hl-5"> </span><span class="hl-11">&#39;line&#39;</span><span class="hl-5">, </span><span class="hl-8">font:</span><span class="hl-5"> { </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.7</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">], </span><span class="hl-8">style:</span><span class="hl-5"> </span><span class="hl-11">&#39;italic&#39;</span><span class="hl-5"> } },</span><br/><span class="hl-5">  },</span><br/><span class="hl-5">});</span>
+</code><button type="button">Copy</button></pre>
+
+<h4 id="interactive-words-in-formatted-text" class="tsd-anchor-link">Interactive words in formatted text<a href="#interactive-words-in-formatted-text" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;ftext&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">text:</span><span class="hl-5"> </span><span class="hl-11">&#39;Touch |here| or |here2|&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">modifiers:</span><span class="hl-5"> {</span><br/><span class="hl-5">    </span><span class="hl-8">here:</span><span class="hl-5"> {</span><br/><span class="hl-5">      </span><span class="hl-8">font:</span><span class="hl-5"> { </span><span class="hl-8">underline:</span><span class="hl-5"> </span><span class="hl-6">true</span><span class="hl-5">, </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">] },</span><br/><span class="hl-5">      </span><span class="hl-8">touch:</span><span class="hl-5"> </span><span class="hl-12">0.1</span><span class="hl-5">,</span><br/><span class="hl-5">      </span><span class="hl-9">onClick</span><span class="hl-8">:</span><span class="hl-5"> () </span><span class="hl-6">=&gt;</span><span class="hl-5"> </span><span class="hl-8">console</span><span class="hl-5">.</span><span class="hl-9">log</span><span class="hl-5">(</span><span class="hl-11">&#39;here 1&#39;</span><span class="hl-5">),</span><br/><span class="hl-5">    },</span><br/><span class="hl-5">    </span><span class="hl-8">here2:</span><span class="hl-5"> {</span><br/><span class="hl-5">      </span><span class="hl-8">text:</span><span class="hl-5"> </span><span class="hl-11">&#39;here&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">      </span><span class="hl-8">font:</span><span class="hl-5"> { </span><span class="hl-8">underline:</span><span class="hl-5"> </span><span class="hl-6">true</span><span class="hl-5">, </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.8</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">] },</span><br/><span class="hl-5">      </span><span class="hl-8">touch:</span><span class="hl-5"> </span><span class="hl-12">0.1</span><span class="hl-5">,</span><br/><span class="hl-5">      </span><span class="hl-9">onClick</span><span class="hl-8">:</span><span class="hl-5"> () </span><span class="hl-6">=&gt;</span><span class="hl-5"> </span><span class="hl-8">console</span><span class="hl-5">.</span><span class="hl-9">log</span><span class="hl-5">(</span><span class="hl-11">&#39;here 2&#39;</span><span class="hl-5">),</span><br/><span class="hl-5">    },</span><br/><span class="hl-5">  },</span><br/><span class="hl-5">  </span><span class="hl-8">xAlign:</span><span class="hl-5"> </span><span class="hl-11">&#39;center&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">});</span>
+</code><button type="button">Copy</button></pre>
+
+<h4 id="embedded-equation-inline-form-definition" class="tsd-anchor-link">Embedded equation (inline form definition)<a href="#embedded-equation-inline-form-definition" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;ftext&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">text:</span><span class="hl-5"> </span><span class="hl-11">&#39;|root2| is irrational&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">modifiers:</span><span class="hl-5"> {</span><br/><span class="hl-5">    </span><span class="hl-8">root2:</span><span class="hl-5"> { </span><span class="hl-8">eqn:</span><span class="hl-5"> { </span><span class="hl-8">root:</span><span class="hl-5"> [</span><span class="hl-11">&#39;radical&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;2&#39;</span><span class="hl-5">] } },</span><br/><span class="hl-5">  },</span><br/><span class="hl-5">  </span><span class="hl-8">xAlign:</span><span class="hl-5"> </span><span class="hl-11">&#39;center&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">});</span>
+</code><button type="button">Copy</button></pre>
+
+<h4 id="embedded-equation-with-defined-touchable-elements" class="tsd-anchor-link">Embedded equation with defined, touchable elements<a href="#embedded-equation-with-defined-touchable-elements" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">name:</span><span class="hl-5"> </span><span class="hl-11">&#39;t&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;ftext&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">text:</span><span class="hl-5"> [</span><span class="hl-11">&#39;A fraction is |fraction|&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;Touch it!&#39;</span><span class="hl-5">],</span><br/><span class="hl-5">  </span><span class="hl-8">modifiers:</span><span class="hl-5"> {</span><br/><span class="hl-5">    </span><span class="hl-8">fraction:</span><span class="hl-5"> {</span><br/><span class="hl-5">      </span><span class="hl-8">eqn:</span><span class="hl-5"> {</span><br/><span class="hl-5">        </span><span class="hl-8">scale:</span><span class="hl-5"> [{ </span><span class="hl-8">frac:</span><span class="hl-5"> [</span><span class="hl-11">&#39;num&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;v&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;den&#39;</span><span class="hl-5">] }, </span><span class="hl-12">0.7</span><span class="hl-5">],</span><br/><span class="hl-5">      },</span><br/><span class="hl-5">      </span><span class="hl-8">offset:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.2</span><span class="hl-5">],</span><br/><span class="hl-5">      </span><span class="hl-8">touch:</span><span class="hl-5"> </span><span class="hl-12">0.1</span><span class="hl-5">,</span><br/><span class="hl-5">      </span><span class="hl-9">onClick</span><span class="hl-8">:</span><span class="hl-5"> () </span><span class="hl-6">=&gt;</span><span class="hl-5"> </span><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">get</span><span class="hl-5">(</span><span class="hl-11">&#39;t&#39;</span><span class="hl-5">).</span><span class="hl-9">pulse</span><span class="hl-5">({</span><br/><span class="hl-5">        </span><span class="hl-8">elements:</span><span class="hl-5"> [</span><span class="hl-11">&#39;num&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;den&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;v&#39;</span><span class="hl-5">],</span><br/><span class="hl-5">        </span><span class="hl-8">centerOn:</span><span class="hl-5"> </span><span class="hl-11">&#39;v&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">        </span><span class="hl-8">xAlign:</span><span class="hl-5"> </span><span class="hl-11">&#39;left&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">        </span><span class="hl-8">scale:</span><span class="hl-5"> </span><span class="hl-12">1.3</span><span class="hl-5">,</span><br/><span class="hl-5">      }),</span><br/><span class="hl-5">      </span><span class="hl-8">space:</span><span class="hl-5"> </span><span class="hl-12">0.3</span><span class="hl-5">,</span><br/><span class="hl-5">    },</span><br/><span class="hl-5">  },</span><br/><span class="hl-5">  </span><span class="hl-8">elements:</span><span class="hl-5"> {</span><br/><span class="hl-5">    </span><span class="hl-8">num:</span><span class="hl-5"> </span><span class="hl-11">&#39;numerator&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-8">den:</span><span class="hl-5"> { </span><span class="hl-8">text:</span><span class="hl-5"> </span><span class="hl-11">&#39;denominator&#39;</span><span class="hl-5">, </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">], </span><span class="hl-8">style:</span><span class="hl-5"> </span><span class="hl-11">&#39;italic&#39;</span><span class="hl-5"> },</span><br/><span class="hl-5">    </span><span class="hl-8">v:</span><span class="hl-5"> { </span><span class="hl-8">symbol:</span><span class="hl-5"> </span><span class="hl-11">&#39;vinculum&#39;</span><span class="hl-5"> },</span><br/><span class="hl-5">  },</span><br/><span class="hl-5">  </span><span class="hl-8">xAlign:</span><span class="hl-5"> </span><span class="hl-11">&#39;center&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">});</span>
+</code><button type="button">Copy</button></pre>
+
+<blockquote>
+<p>To test examples, append them to the
+<a href="#drawing-boilerplate">boilerplate</a></p>
+</blockquote>
+<p>// Accent a word
+figure.add({
+make: 'ftext',
+text: 'Hello |World|',
+});</p>
+<hr>
+<h2 id="fontmanager" class="tsd-anchor-link">FontManager<a href="#fontmanager" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Font manager can be used to query if fonts are available, and watch to see
+when they load or time out.</p>
+<p>Notifications - The notification manager property <code>notifications</code> will
+publish the following events:</p>
+<ul>
+<li><code>fontsLoaded</code>: published when all fonts have been loaded or timed out</li>
+<li><code>fontLoaded</code>: published after each font is loaded</li>
+<li><code>fontUnavailable</code>: published when loading a font has timed out</li>
+</ul>
+<hr>
+<h2 id="obj_font" class="tsd-anchor-link">OBJ_Font<a href="#obj_font" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Font definition object.</p>
+<p>A font can be defined either from a subset of the properties used to define
+<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/font">fonts in css</a>, or
+by using a texture altas of the various glyphs to be used.</p>
+<p>A font can be rendered into a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">2D canvas</a>
+or into the WebGL canvas using the texture atlas.</p>
+<p>A texture atlas can either be supplied as an image, or generated
+automatically by FigureOne based on css font definitions.</p>
+<p>Choosing how to render text depends on the application.</p>
+<p>If text size is to be animated through a large scale range, then rendering
+on the 2D canvas is advantageous as it can scale text to any size without a
+loss of sharpness. The main disadvantage of the 2D canvas is the fact that
+it's a different HTML canvas element to the WebGL canvas. Thus all text on
+the 2D canvas will always be above (default) or below the WebGl canvas
+independent of when it is drawn. This means text will always be above or
+below shapes. regenerated each time the size changes by some threshold.</p>
+<p>Conversely, drawing text on the WebGL canvas provides control on which
+shapes can hide text and vise versa. The disadvantage is that text is drawn
+from a texture atlas of bitmapped fonts. This means as text is progressively
+scaled up or down, the the text will look more pixelated or blurry. For many
+scalings (like common scalings in an equation), this will likely not be a
+problem. But for large changes in animated scale, it will be better to use
+the 2D canvas. Scaling also needs to be considered if the WebGL canvas is
+expected to be resized. On a desktop browser, a canvas element can be
+resized a lot, and so if using the WebGL atlas, it may need to be</p>
+<p>Note, the choice of where to render text can be made for each text element.
+Therefore it is possible to have some text rendered to the 2D canvas, and
+other text rendered to the WebGL canvas in the same figure.</p>
+<p>A texture atlas can either be supplied as an image, or generated
+automatically by FigureOne based on the css font definitions.</p>
+<p>CSS font definition:</p>
+<ul>
+<li><code>family</code> - the typeface family from which it comes (e.g. 'Helvetica',
+'Times New Roman')</li>
+<li><code>style</code> - its slope (e.g. 'italic')</li>
+<li><code>weight</code> - its thickness (e.g. 'bold')</li>
+<li><code>size</code></li>
+</ul>
+<p>Atlas font definition:</p>
+<ul>
+<li><code>src</code> - the image or url to the image - if not supplied then atlas will
+be generated automatically</li>
+<li><code>map</code> - description of location and size of each glyph in the atlas</li>
+<li><code>glyphs</code> - the available glyphs in the atlas. To reduce the size of the
+atlas, include only the glyphs that are being used, or use a preset
+alphabet (like 'latin', or 'math')</li>
+<li><code>atlasColor</code> - if <code>true</code> then the rendered glyph color will be the same
+as that in the texture. If <code>false</code>, then only the transparency channel of
+the texture will be used and color will be defined by the FigureElement
+drawing the text.</li>
+<li><code>atlasSize</code> - if defined, and if the glyphs are generated automatically
+then the glyphs will be created with a pixel size that is <code>atlasSize</code>
+portion of the canvas height. If undefined, then the glyphs will be
+created with a pixel size that is the ratio of the font size to the
+scene height portion of the canvas height.</li>
+</ul>
+<p>A font can also have a number of modifying properties:</p>
+<ul>
+<li><code>color</code> - fill or outline color of each glyph - not used if the texture
+atlas color is to be used</li>
+<li><code>underline</code></li>
+<li><code>outline</code> - defines whether the font is filled, is an outline, or both</li>
+</ul>
+<p>Fonts that are generated automatically rely on the client's browser to
+measure the font's width. From this the ascent and descent of each glyph
+is then estimated. Each glyph's width, ascent and descent is used to layout
+the glyphs in regular text and equations, as well as determine the borders
+and touch borders of FigureElements that draw the text.</p>
+<p>However, this estimate for different font families is not always perfectly
+accurate. If the estimate is not sufficient, then it can be modified by using
+the following properties (where each property is a proportion of the width
+of a character 'a'):</p>
+<ul>
+<li><code>maxAscent</code>: Maximum ascent of glyphs like &quot;A&quot; or &quot;$&quot;</li>
+<li><code>midAscent</code>: ascent of mid level glyphs like &quot;a&quot; and &quot;g&quot;</li>
+<li><code>descent</code>: descent of glyphs that do not noticeably go below the
+baseline (but often do a little) like &quot;a&quot; and &quot;b&quot;</li>
+<li><code>midDescent</code>: descent of glyphs that go a little below the baseline like
+&quot;,&quot; and &quot;;&quot;</li>
+<li><code>maxDescent</code>: maximum descent of glyphs like &quot;g&quot; and &quot;|&quot;</li>
+</ul>
+<p>Individual glyphs can also be modified (for atlas based fonts only) using
+the <code>modifiers</code> property.</p>
+<h3 id="properties-1" class="tsd-anchor-link">Properties<a href="#properties-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="fo-prop"><span class="fo-prop-name">family</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</span><span class="fo-prop-desc">: The font family (<code>'Times New Roman'</code>)</span></div>
+<div class="fo-prop"><span class="fo-prop-name">style</span> <span class="fo-prop-type">('normal' | 'italic' | 'oblique'?)</span><span class="fo-prop-desc"> (<code>'normal'</code>)</span></div>
+<div class="fo-prop"><span class="fo-prop-name">weight</span> <span class="fo-prop-type">(<a href="../types/types.TypeFontWeight.html">TypeFontWeight</a>?)</span><span class="fo-prop-desc">: font weight (<code>'normal'</code>)</span></div>
+<div class="fo-prop"><span class="fo-prop-name">size</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: size of font in draw space (<code>0.2</code>)</span></div>
+<div class="fo-prop"><span class="fo-prop-name">underline</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="../interfaces/types.OBJ_Underline.html">OBJ_Underline</a>?)</span><span class="fo-prop-desc">: <code>true</code> to include
+an underline or use object to define its properties (<code>false</code>)</span></div>
+<div class="fo-prop"><span class="fo-prop-name">color</span> <span class="fo-prop-type">([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]?)</span><span class="fo-prop-desc">: Font color
+[red, green, blue, alpha] between 0 and 1 - (<code>[1, 0, 0, 1]</code>)</span></div>
+<div class="fo-prop"><span class="fo-prop-name">outline</span> <span class="fo-prop-type">(<a href="../interfaces/types.OBJ_Outline.html">OBJ_Outline</a>?)</span><span class="fo-prop-desc">: options to draw the text in outline
+instead of or in addition to a fill (<code>false</code>)</span></div>
+<div class="fo-prop"><span class="fo-prop-name">descent</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.8</code>)</span></div>
+<div class="fo-prop"><span class="fo-prop-name">maxDescent</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.2</code>)</span></div>
+<div class="fo-prop"><span class="fo-prop-name">midDescent</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.5</code>)</span></div>
+<div class="fo-prop"><span class="fo-prop-name">maxAscent</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.95</code>)</span></div>
+<div class="fo-prop"><span class="fo-prop-name">midAscent</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>1.4</code>)</span></div>
+<div class="fo-prop"><span class="fo-prop-name">modifiers</span> <span class="fo-prop-type">(<a href="../interfaces/types.OBJ_GlyphModifiers.html">OBJ_GlyphModifiers</a>?)</span><span class="fo-prop-desc">: individual glyph adjustments for
+texture atlas fonts</span></div>
+<div class="fo-prop"><span class="fo-prop-name">src</span> <span class="fo-prop-type">(Image | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</span><span class="fo-prop-desc">: source image or url for atlas</span></div>
+<div class="fo-prop"><span class="fo-prop-name">map</span> <span class="fo-prop-type">(OBJ_AtlasMap?)</span><span class="fo-prop-desc">: atlas definition needed if using a source
+image or url</span></div>
+<div class="fo-prop"><span class="fo-prop-name">glyphs</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | 'greek' | 'math' | 'latin' | 'all' | 'common' | 'mathExt' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>?)</span><span class="fo-prop-desc">: glyphs included in the font - an array can be used combining glyphs together</span></div>
+<div class="fo-prop"><span class="fo-prop-name">atlasSize</span> <span class="fo-prop-type">(null |<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: font size of atlas as a proportion of
+the WebGL canvas height. If this is null, then the atlas font size is
+calculated from the font size, scene height and number of pixels in the
+canvas height. (<code>null</code>)</span></div>
+<div class="fo-prop"><span class="fo-prop-name">loadColor</span> <span class="fo-prop-type">(<a href="../types/types.TypeColor.html">TypeColor</a>?)</span><span class="fo-prop-desc">: color of temporary texture while actual
+texture is loading</span></div>
+<div class="fo-prop"><span class="fo-prop-name">atlasColor</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: <code>true</code> to use the color of the glyphs in
+the atlas. <code>false</code> will just use the opacity and color the glyphs from the
+FigureElement drawing them</span></div>
+<div class="fo-prop"><span class="fo-prop-name">render</span> <span class="fo-prop-type">('gl' | '2d' | 'html'?)</span><span class="fo-prop-desc">: render the associated text to
+either the WebGL canvas, the 2D canvas, or the HTML canvas.</span></div>
+<h4 id="full-font-definition" class="tsd-anchor-link">Full font definition<a href="#full-font-definition" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">font</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-9">FigureFont</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">family:</span><span class="hl-5"> </span><span class="hl-11">&#39;Helvetica&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">style:</span><span class="hl-5"> </span><span class="hl-11">&#39;italic&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">weight:</span><span class="hl-5"> </span><span class="hl-11">&#39;bold&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">],</span><br/><span class="hl-5">  </span><span class="hl-8">opacity:</span><span class="hl-5"> </span><span class="hl-12">1</span><span class="hl-5">,</span><br/><span class="hl-5">});</span>
+</code><button type="button">Copy</button></pre>
+
+<h4 id="define-style-only-remaining-properties-are-defaults" class="tsd-anchor-link">Define style only, remaining properties are defaults<a href="#define-style-only-remaining-properties-are-defaults" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">font</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-9">FigureFont</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">style:</span><span class="hl-5"> </span><span class="hl-11">&#39;italic&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">});</span>
+</code><button type="button">Copy</button></pre>
+
+<hr>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg><h3>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg><h3>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#text-api-reference"><span>Text <wbr/>API <wbr/>Reference</span></a><ul><li><a href="#contents"><span>Contents</span></a></li><li><a href="#obj_formattedtext"><span>OBJ_<wbr/>Formatted<wbr/>Text</span></a></li><li><ul><li><a href="#properties"><span>Properties</span></a></li><li><ul><li><a href="#multi-line-center-justified"><span>Multi-<wbr/>line center justified</span></a></li><li><a href="#modifiers"><span>Modifiers</span></a></li><li><a href="#interactive-words-in-formatted-text"><span>Interactive words in formatted text</span></a></li><li><a href="#embedded-equation-inline-form-definition"><span>Embedded equation (inline form definition)</span></a></li><li><a href="#embedded-equation-with-defined-touchable-elements"><span>Embedded equation with defined, touchable elements</span></a></li></ul></li></ul></li><li><a href="#fontmanager"><span>Font<wbr/>Manager</span></a></li><li><a href="#obj_font"><span>OBJ_<wbr/>Font</span></a></li><li><ul><li><a href="#properties-1"><span>Properties</span></a></li><li><ul><li><a href="#full-font-definition"><span>Full font definition</span></a></li><li><a href="#define-style-only-remaining-properties-are-defaults"><span>Define style only, remaining properties are defaults</span></a></li></ul></li></ul></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">figureone</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>
