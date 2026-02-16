@@ -50,6 +50,8 @@ import type FigureCollections from './FigureCollections';
  * @property {boolean} [movable] `true` to make movable, `false` to not (`true`)
  * @property {number} [movePadRadius] radius of move pad (`0`)
  * @property {number} [width] width of pads over lines (`0.5`)
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_MovableAngle = {
   movable: boolean;
@@ -122,6 +124,7 @@ export type OBJ_MovableAngle = {
  * @property {boolean} [update] (`false`)
  * @property {number} [scale] size of the label
  * @property {TypeColor} [color]
+ * @group Misc Shapes
  */
 export type TypeAngleLabelOptions = {
   text: null | string | Array<string> | Equation | EQN_Equation;
@@ -159,6 +162,8 @@ export type TypeAngleLabelOptions = {
  * = π/2 (`false`)
  * @property {number} [rightAngleRange] Range around π/2 for right angle curve
  * display (`0.01745329...` or 1 degree)
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_AngleCurve = {
   width?: number;           // Curve line width
@@ -199,6 +204,8 @@ export type OBJ_AngleCurve = {
  * small enough that the arrows start to touch (`true`)
  * @property {number} [radius] location of the arrows, by default they will be
  * at the radius of the curve.
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_AngleArrows = {
   curveOverlap?: number;
@@ -214,6 +221,7 @@ export type OBJ_AngleArrows = {
  * Use `single` string to specify head type of two arrows with default
  * dimensions. Otherwise use options object to select and/or customize one or
  * both arrows.
+ * @group Misc Shapes
  */
 export type TypeAngleArrows = string | OBJ_LineArrows & OBJ_AngleArrows;
 
@@ -226,6 +234,8 @@ export type TypeAngleArrows = string | OBJ_LineArrows & OBJ_AngleArrows;
  * the same as the curve
  * @property {TypeColor} [color]
  * @property {'fill' | 'auto' | 'none'} [style] style of the corner
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_AngleCorner = {
   length?: number;
@@ -261,6 +271,8 @@ export type OBJ_AngleCorner = {
  * @property {number} [frequency] in Hz
  * @property {TypeWhen} [when] when to start the pulse (`'nextFrame'`)
  * @property {function(): void} [done] execute when pulsing is finished
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_PulseAngle = {
   curve?: number | OBJ_Pulse;
@@ -343,6 +355,8 @@ export type OBJ_PulseAngle = {
  * @property {OBJ_AngleCorner} [corner] options for drawing a corner
  * @property {TypeAngleLabelOptions} [label] options for label annotations
  * @property {OBJ_PulseAngle} [pulseAngle] default pulseAngle options
+ * @interface
+ * @group 2D Shape Collections
  */
 export type COL_Angle = {
   position?: Point;         // Position of angle vertex
@@ -462,6 +476,8 @@ class AngleLabel extends EquationLabel {
  * @property {TypeParsablePoint} [p1]
  * @property {TypeParsablePoint} [p2]
  * @property {TypeParsablePoint} [p3]
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_AngleSet = {
   position?: TypeParsablePoint;
@@ -478,6 +494,8 @@ export type OBJ_AngleSet = {
  * @property {number} [start] start angle (`current angle`)
  * @property {number} [target] angle to animate to (`current angle`)
  * @extends OBJ_CustomAnimationStep
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_AngleAnimationStep = {
   start?: number;
@@ -495,6 +513,8 @@ export type OBJ_AngleAnimationStep = {
  * @property {number} [duration] in seconds
  * @property {number} [frequency] in Hz
  * @extends OBJ_TriggerAnimationStep
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_PulseAngleAnimationStep = {
   curve?: number | OBJ_Pulse;
@@ -687,6 +707,7 @@ export type OBJ_PulseAngleAnimationStep = {
  *   endArm: 'angle',
  *   movePadRadius: 0.3,
  * });
+ * @group 2D Shape Collections
  */
 class CollectionsAngle extends FigureElementCollection {
   // Figure elements

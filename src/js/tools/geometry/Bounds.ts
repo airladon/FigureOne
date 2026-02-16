@@ -19,6 +19,7 @@ import type { OBJ_LineDefinition, TypeParsableLine } from './Line';
  * @property {number | Point} [reflection]
  * @property {number} [distance] distance from value or Point and boundary in
  * direction specified
+ * @group Misc Shapes
  */
 export type BoundsIntersect = {
   intersect: number | Point | null,
@@ -32,6 +33,7 @@ export type BoundsIntersect = {
  * @property {Point | null} [intersect]
  * @property {Point} [reflection]
  * @property {number} [distance]
+ * @group Misc Shapes
  */
 export type BoundsPointIntersect = {
   intersect: Point | null,
@@ -45,6 +47,7 @@ export type BoundsPointIntersect = {
  * @property {number | null} [intersect]
  * @property {number} [reflection]
  * @property {number} [distance]
+ * @group Misc Shapes
  */
 export type BoundsValueIntersect = {
   intersect: number | null,
@@ -63,6 +66,7 @@ export type BoundsValueIntersect = {
  * - clip a value or point to within the boundary
  * - find the intersect between the boundary and a value or point in some
  *   direction
+ * @group Misc Shapes
  */
 class Bounds {
   boundary: any;
@@ -174,6 +178,8 @@ class Bounds {
  * (`null`)
  * @property {number} [precision] precision with which to calculate boundary
  * `intersect` and `contains` (`8`)
+ * @interface
+ * @group Interactivity
  */
 export type OBJ_RangeBounds = {
   min?: number | null,
@@ -192,6 +198,7 @@ export type OBJ_RangeBounds = {
  *     number, number | null, number | null,
  * }
  * ```
+ * @group Misc Shapes
  */
 type TypeF1DefRangeBounds = {
   f1Type: 'rangeBounds',
@@ -204,6 +211,7 @@ type TypeF1DefRangeBounds = {
  *
  * When using points, the minimum and maximum value is applied to each component
  * of the point separately.
+ * @group Misc Shapes
  */
 class RangeBounds extends Bounds {
   override boundary!: { min: number | null, max: number | null };
@@ -368,6 +376,7 @@ class RangeBounds extends Bounds {
  *     [number, number, number],
  * }
  * ```
+ * @group Misc Shapes
  */
 export type TypeF1DefRectBounds = {
   f1Type: 'rectBounds',
@@ -420,6 +429,8 @@ export type TypeF1DefRectBounds = {
  * @property {number} [bottom]
  * @property {number} [precision] precision with which to calculate boundary
  * `intersect` and `contains` (`8`)
+ * @interface
+ * @group Interactivity
  */
 export type OBJ_RectBounds = {
   position?: TypeParsablePoint,
@@ -437,6 +448,7 @@ export type OBJ_RectBounds = {
 
 /**
  * A RectBounds defines a rectangular bounds for a {@link Point}.
+ * @group Misc Shapes
  */
 class RectBounds extends Bounds {
   plane: Plane;
@@ -870,6 +882,8 @@ class RectBounds extends Bounds {
  * @property {TypeParsableLine} [line]
  * @property {number} [precision] precision with which to calculate boundary
  * `intersect` and `contains` (`8`)
+ * @interface
+ * @group Interactivity
  */
 export type OBJ_LineBounds = OBJ_LineDefinition
   & {
@@ -891,6 +905,7 @@ export type OBJ_LineBounds = OBJ_LineDefinition
  *     2 | 1 | 0,
  * }
  * ```
+ * @group Misc Shapes
  */
 export type TypeF1DefLineBounds = {
   f1Type: 'lineBounds',
@@ -899,6 +914,7 @@ export type TypeF1DefLineBounds = {
 
 /**
  * A Line defines a line bounds for a {@link Point}.
+ * @group Misc Shapes
  */
 class LineBounds extends Bounds {
   override boundary!: Line;
@@ -1060,6 +1076,7 @@ class LineBounds extends Bounds {
   | {@link RectBounds}` | `{@link LineBounds}` | `{@link RangeBounds}
  ` | `{@link OBJ_RectBounds}` | `{@link OBJ_LineBounds}` | `{@link OBJ_RangeBounds}
  ` | `{@link TypeF1DefRangeBounds}` | `{@link TypeF1DefRectBounds}` | `{@link TypeF1DefLineBounds}
+ * @group Interactivity
  */
 export type TypeParsableBounds = null | Bounds
   | RectBounds | LineBounds | RangeBounds
@@ -1068,6 +1085,7 @@ export type TypeParsableBounds = null | Bounds
 
 /**
  * Get bounds from a parsable bounds.
+ * @group Misc Shapes
  */
 function getBounds(
   bounds: TypeParsableBounds,

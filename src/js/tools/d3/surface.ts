@@ -406,6 +406,8 @@ function getCurveNormals(
  * representing two triangles per face and an
  * associated normal for each point will be returned.
  * @property {boolean} [invertNormals] if `true`, all normals will be inverted
+ * @interface
+ * @group Misc Geometry Creation
  */
 export type OBJ_SurfacePoints = {
   points?: Array<Array<TypeParsablePoint>>,
@@ -427,6 +429,7 @@ export type OBJ_SurfacePoints = {
  *
  * If the points represent triangles, then a second array of normal vectors
  * for each point will be available.
+ * @group Geometry Creation
  */
 type SurfaceOptionsDefined = {
   points: Array<Array<TypeParsablePoint>>,

@@ -28,6 +28,8 @@ import type { TypeParsableTransform } from '../geometry/Transform';
  * the edges of the prism will be returned. If `false`, then points
  * representing triangle bases and associated normals will be returned.
  * (`false`)
+ * @interface
+ * @group Misc Geometry Creation
  */
 export type OBJ_PrismPoints = {
   base?: Array<TypeParsablePoint>,
@@ -81,6 +83,7 @@ function toLines(
  * @property {OBJ_PrismPoints} options cube options
  * @return {[Array<Point>, Array<Point>]} an array of points and normals. If
  * the points represent lines, then the array of normals will be empty.
+ * @group Geometry Creation
  */
 export default function prism(options: OBJ_PrismPoints): [Point[]] | [Point[], Point[]] {
   const o = joinObjects<PrismOptionsDefined>({

@@ -31,6 +31,7 @@ type OBJ_AtlasMap = {
  * For example [0.1, 0.01, 0.02, 0.01] produces 0.1 length dash, then a 0.01
  * length gap, then a 0.02 length dash, then a 0.01 length gap. This pattern
  * will repeat for the length of the line.
+ * @group Misc Shapes
  */
 export type TypeDash = Array<number>;
 
@@ -42,16 +43,20 @@ export type TypeDash = Array<number>;
  * Color is defined as an RGBA array with values between 0 and 1. The alpha
  * channel defines the transparency or opacity of the color where
  * 1 is fully opaque and 0 is fully transparent.
+ * @group Misc Shapes
  */
 export type TypeColor = Array<number>;
 
 /**
  * `'pixel' | 'gl' | 'figure' | 'local' | 'draw'`
+ * @group Misc Figure Element
  */
 export type TypeCoordinateSpace = 'pixel' | 'gl' | 'figure' | 'local' | 'draw';
 
 /**
   Curved Corner Definition
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_CurvedCorner = {
   radius?: number;
@@ -72,6 +77,8 @@ export type OBJ_CurvedCorner = {
  * @property {boolean} [fill] include fill (`false`)
  * @property {TypeColor} [color] outline color that overrides the font color -
  * use if including a fill
+ * @interface
+ * @group Misc Text
  */
 export type OBJ_Outline = {
   width?: number;
@@ -91,6 +98,8 @@ export type OBJ_Outline = {
  * @property {number} [width]
  * @property {number} [descent]
  * @property {TypeColor} [color]
+ * @interface
+ * @group Misc Text
  */
 export type OBJ_Underline = {
   width?: number;
@@ -104,6 +113,8 @@ export type OBJ_Underline = {
  * @property {w} [number] width
  * @property {d} [number] descent
  * @property {a} [number] ascent
+ * @interface
+ * @group Misc Text
  */
 export type OBJ_GlyphModifiers = {
   w?: number;
@@ -115,6 +126,7 @@ export type OBJ_GlyphModifiers = {
 /**
  * Font weight definition.
  * `'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'`
+ * @group Misc Text
  */
 export type TypeFontWeight = 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
 /* eslint-enable max-len */
@@ -247,6 +259,8 @@ export type TypeFontWeight = 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | 
  * @property {'gl' | '2d' | 'html'} [render] render the associated text to
  * either the WebGL canvas, the 2D canvas, or the HTML canvas.
 
+ * @interface
+ * @group Text
  * @example
  * // Full font definition
  * const font = new FigureFont({

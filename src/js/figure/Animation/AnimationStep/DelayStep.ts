@@ -19,6 +19,7 @@ import type { AnimationStartTime } from '../AnimationManager';
  *
  * @param {number | OBJ_AnimationStep} delayOrOptions
  * @extends AnimationStep
+ * @group Animation
  */
 export class DelayAnimationStep extends AnimationStep {
   /**

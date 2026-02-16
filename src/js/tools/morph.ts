@@ -14,6 +14,7 @@ import { makeFastPolyLine } from '../figure/geometries/lines/lines';
  * @param {number} sideLength
  * @return {Array<number>} array of interlaced x and y components of 6 vertices
  * (12 numbers total)
+ * @group Misc Morphing
  */
 function squareFill(center: TypeParsablePoint, sideLength: number = 0.01) {
   const c = getPoint(center);
@@ -34,6 +35,7 @@ function squareFill(center: TypeParsablePoint, sideLength: number = 0.01) {
  * @param {number} radius
  * @return {Array<number>} array of interlaced x and y components of 12 vertices
  * (24 numbers total)
+ * @group Misc Morphing
  */
 function hexFill(center: TypeParsablePoint, radius: number = 0.01) {
   const c = getPoint(center);
@@ -71,6 +73,7 @@ function hexFill(center: TypeParsablePoint, radius: number = 0.01) {
  * @param {TypeParsablePoint} center
  * @param {number} sideLength
  * @return {Array<number>} array of interlaced x and y components of vertices
+ * @group Misc Morphing
  */
 function polygonFill(sides: number, center: TypeParsablePoint, radius: number = 0.01) {
   const c = getPoint(center);
@@ -120,6 +123,7 @@ function processShapeFunction(
  * @param {TypeColor} color
  * @param {number} numCopies
  * @return {Array<number>} color copies juxtaposed in single array
+ * @group Misc Morphing
  */
 const makeColors = (color: TypeColor, numCopies: number) => {
   const colors: number[] = [];
@@ -216,6 +220,8 @@ function getPixels(
  * pixel's color, and the number of vertices that need to be colored. It
  * outputs an array of colors for each vertex - i.e.:
  * [r1, b1, g1, a1, r2, g2, b, a2, ...]
+ * @interface
+ * @group Morphing
  */
 export type OBJ_ImageToShapes = {
  image: HTMLImageElement;
@@ -333,6 +339,7 @@ export type OBJ_ImageToShapes = {
  *
  * micImage.onload = loaded.bind(this);
  * headphonesImage.onload = loaded.bind(this);
+ * @group Morphing
  */
 function imageToShapes(options: OBJ_ImageToShapes) {
   const defaultOptions = {
@@ -618,6 +625,8 @@ function _segmentPolyline(
  * cumulative length from the start of the polyline, and the percentLength from
  * the start of the polyline. The function must return a single array
  * containing all vertex colors.
+ * @interface
+ * @group Morphing
  */
 export type OBJ_PolylineToShapes = {
   points: Array<TypeParsablePoint>;
@@ -735,6 +744,7 @@ export type OBJ_PolylineToShapes = {
  *     .morph({ start: 1, target: 0, duration: 2 })
  *     .start();
  * }
+ * @group Morphing
  */
 function polylineToShapes(options: OBJ_PolylineToShapes) {
   const defaultOptions = {
@@ -783,6 +793,8 @@ function polylineToShapes(options: OBJ_PolylineToShapes) {
  * Function input parameters are the number of shape vertices to be colored,
  * and the position of the shape. The function must return a single array
  * containing all vertex colors.
+ * @interface
+ * @group Morphing
  */
 export type OBJ_PointsToShapes = {
   points: Array<TypeParsablePoint>;
@@ -828,6 +840,7 @@ export type OBJ_PointsToShapes = {
  * m.animations.new()
  *   .morph({ start: 0, target: 1, duration: 2 })
  *   .start();
+ * @group Morphing
  */
 function pointsToShapes(options: OBJ_PointsToShapes) {
   const defaultOptions = {
@@ -863,6 +876,8 @@ function pointsToShapes(options: OBJ_PointsToShapes) {
  * @property {boolean} [close] `true` to close the polyline
  * @property {number} [width] width of the polyline
  * @property {boolean} [simple] `false` fills corners.
+ * @interface
+ * @group Misc Morphing
  */
 export type OBJ_MorphPolyline = {
   points: Array<TypeParsablePoint>;
@@ -898,6 +913,7 @@ export type OBJ_MorphPolyline = {
  * change during morphing. Especially for thick lines, it will often be better
  * to use `polylineToShapes`.
  *
+ * @group Misc Morphing
  */
 function polyline(options: OBJ_MorphPolyline) {
   const defaultOptions = {
@@ -978,6 +994,8 @@ function polyline(options: OBJ_MorphPolyline) {
  * @property {number} [rotation] polygon rotation (first vertex will be along
  * the positive x axis) (`0`)
  * @property {1 | -1} [direction] 1 is CCW, -1 is CW (`1`)
+ * @interface
+ * @group Misc Morphing
  */
 export type OBJ_GetPolygonCorners = {
   radius?: number;
@@ -993,6 +1011,7 @@ export type OBJ_GetPolygonCorners = {
  * @param {OBJ_GetPolygonCorners} options
  * @return {Array<Point>} Array of vertices
  * tuples
+ * @group Misc Morphing
  */
 function getPolygonCorners(options: OBJ_GetPolygonCorners) {
   const defaultOptions = {
@@ -1032,6 +1051,8 @@ function getPolygonCorners(options: OBJ_GetPolygonCorners) {
  * position of the point to build the shape around, and `size`. It outputs an
  * array of interlaced x and y coordinates of triangle vertices - i.e.:
  * [x1, y1, x2, y2, x3, y3, ....]
+ * @interface
+ * @group Morphing
  */
 export type OBJ_PolygonCloudShapes = {
   radius?: number;
@@ -1075,6 +1096,7 @@ export type OBJ_PolygonCloudShapes = {
  * m.animations.new()
  *   .morph({ start: 0, target: 1, duration: 2 })
  *   .start();
+ * @group Morphing
  */
 function polygonCloudShapes(options: OBJ_PolygonCloudShapes) {
   const defaultOptions = {
@@ -1124,6 +1146,8 @@ function polygonCloudShapes(options: OBJ_PolygonCloudShapes) {
  * position of the point to build the shape around, and `size`. It outputs an
  * array of interlaced x and y coordinates of triangle vertices - i.e.:
  * [x1, y1, x2, y2, x3, y3, ....]
+ * @interface
+ * @group Morphing
  */
 export type OBJ_CircleCloudShapes = {
   radius?: number;
@@ -1163,6 +1187,7 @@ export type OBJ_CircleCloudShapes = {
  * m.animations.new()
  *   .morph({ start: 0, target: 1, duration: 2 })
  *   .start();
+ * @group Morphing
  */
 function circleCloudShapes(options: OBJ_CircleCloudShapes) {
   const defaultOptions = {
@@ -1207,6 +1232,8 @@ function circleCloudShapes(options: OBJ_CircleCloudShapes) {
  * position of the point to build the shape around, and `size`. It outputs an
  * array of interlaced x and y coordinates of triangle vertices - i.e.:
  * [x1, y1, x2, y2, x3, y3, ....]
+ * @interface
+ * @group Morphing
  */
 export type OBJ_RectangleCloudShapes = {
   width?: number;
@@ -1250,6 +1277,7 @@ export type OBJ_RectangleCloudShapes = {
  * m.animations.new()
  *   .morph({ start: 0, target: 1, duration: 2 })
  *   .start();
+ * @group Morphing
  */
 function rectangleCloudShapes(options: OBJ_RectangleCloudShapes) {
   const defaultOptions = {

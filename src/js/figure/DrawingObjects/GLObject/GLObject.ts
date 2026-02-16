@@ -17,22 +17,26 @@ import { Console } from '../../../tools/tools';
 
 /**
  * `'BYTE' | 'UNSIGNED_BYTE' | 'SHORT' | 'UNSIGNED_SHORT' | 'FLOAT'`
+ * @group Shaders
  */
 export type TypeGLBufferType = 'BYTE' | 'UNSIGNED_BYTE' | 'SHORT' | 'UNSIGNED_SHORT' | 'FLOAT';
 
 /**
  * `'STATIC' | 'DYNAMIC'`
+ * @group Shaders
  */
 export type TypeGLBufferUsage = 'STATIC' | 'DYNAMIC';
 
 /**
  * `'FLOAT' | 'FLOAT_VECTOR' | 'INT' | 'INT_VECTOR'`
+ * @group Shaders
  */
 export type TypeGLUniform = 'FLOAT' | 'FLOAT_VECTOR' | 'INT' | 'INT_VECTOR';
 
 /**
  * FigureElementPrimitive that can be used to utilize custom shaders for WebGL.
  *
+ * @group Misc Figure Element
  */
 class GLObject extends DrawingObject {
   gl: WebGLRenderingContext;

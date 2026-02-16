@@ -43,6 +43,8 @@ import type FigureCollections from './FigureCollections';
  *
  * @extends OBJ_Collection
  *
+ * @interface
+ * @group 3D Shape Collections
  */
 export type COL_Axis3 = {
   width?: number | [number, number, number];
@@ -124,6 +126,7 @@ export type COL_Axis3 = {
  *     color: [1, 0, 0, 1],
  *   },
  * );
+ * @group 3D Shape Collections
  */
 /* eslint-enable max-len */
 class CollectionsAxis3 extends FigureElementCollection {

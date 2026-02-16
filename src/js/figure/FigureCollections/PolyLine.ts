@@ -37,6 +37,8 @@ import type { OBJ_Polyline, OBJ_Polygon } from '../FigurePrimitives/FigurePrimit
  * associated polyline point (`false`)
  * @property {OBJ_RangeBounds | OBJ_RectBounds | RangeBounds | RectBounds | 'figure'} [boundary]
  * boundary the pad can move within
+ * @interface
+ * @group Misc Shapes
  */
 /* eslint-enable max-len */
 export type OBJ_PolylinePadSingle = {
@@ -47,6 +49,7 @@ export type OBJ_PolylinePadSingle = {
 /**
   * @extends OBJ_PolylinePadSingle
   * @extends OBJ_PolylineCustomization
+ * @group Misc Shapes
  */
 export type OBJ_PolylinePad = {};
 
@@ -137,6 +140,8 @@ export type OBJ_PolylinePad = {};
  *     show: [2],                   // Only show angle annotation for angle 2
  *   },
  * });
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_PolylineCustomization = {
   show?: Array<number>;
@@ -152,6 +157,8 @@ export type OBJ_PolylineCustomization = {
  * @property {null | number} [minAngle]
  * @property {null | number} [maxAngle]
  * @property {null | number} [minSide]
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_ValidShapeHideThresholds = {
   minAngle?: number | null | undefined;
@@ -182,6 +189,8 @@ export type OBJ_ValidShapeHideThresholds = {
  *
  * @property {'triangle'} [shape]
  * @property {OBJ_ValidShapeHideThresholds} [hide]
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_ValidShape = {
   shape?: 'triangle';
@@ -191,12 +200,16 @@ export type OBJ_ValidShape = {
 /**
  * @extends COL_Angle
  * @extends OBJ_PolylineCustomization
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_PolylineAngle = {}
 
 /**
  * @extends COL_Line
  * @extends OBJ_PolylineCustomization
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_PolylineSide = {}
 
@@ -246,6 +259,8 @@ export type OBJ_PolylineSide = {}
  * points are updated the shape will be checked to ensure consistency with
  * displayed labels of angles and sides.
  * @property {OBJ_Font} [font] default font to use for labels
+ * @interface
+ * @group 2D Shape Collections
  */
 /* eslint-enable max-len */
 export type COL_Polyline = {
@@ -343,6 +358,8 @@ function processArray(
  * points are updated. No payload is passed to subscriber.
  *
  * @typedef SUB_PolylineUpdatePoints
+ * @interface
+ * @group Misc Shapes
  */
 export type SUB_PolylineUpdatePoints = [];
 
@@ -492,6 +509,7 @@ export type SUB_PolylineUpdatePoints = [];
  *     isMovable: true,
  *   },
  * });
+ * @group 2D Shape Collections
  */
 /* eslint-enable max-len */
 export default class CollectionsPolyline extends FigureElementCollection {

@@ -145,6 +145,8 @@ import type { OBJ_LineArrows, TypeArrowHead } from '../geometries/arrow';
  *     { along: 'y', num: 5, step: 0.4 },
  *   ],
  * });
+ * @interface
+ * @group 2D Shape Primitives
  */
 /* eslint-enable max-len */
 export type OBJ_Generic = {
@@ -327,6 +329,8 @@ export type OBJ_Generic = {
  *     end: 'barb',
  *   },
  * });
+ * @interface
+ * @group 2D Shape Primitives
  */
 export type OBJ_Polyline = {
   points?: Array<TypeParsablePoint> | Array<Point>,
@@ -379,6 +383,8 @@ export type OBJ_Polyline = {
  * triangle primitives to draw the line (`false`)
  * @property {boolean} [lineNum] Number of line primitives to use when
  * `linePrimitivs`: `true` (`2`)
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_LineStyle = {
   widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
@@ -459,6 +465,8 @@ export type OBJ_LineStyle = {
  *   direction: -1,
  *   rotation: Math.PI / 2,
  * });
+ * @interface
+ * @group 2D Shape Primitives
  */
 export type OBJ_Polygon = {
   sides?: number,
@@ -559,6 +567,8 @@ export type OBJ_Polygon_Defined = {
  *     },
  *   ],
  * });
+ * @interface
+ * @group 2D Shape Primitives
  */
 export type OBJ_Star = {
   sides?: number,
@@ -645,6 +655,8 @@ export type OBJ_Star_Defined = {
  *     step: Math.PI / 2 / 3
  *   },
  * });
+ * @interface
+ * @group 2D Shape Primitives
  */
 export type OBJ_Rectangle = {
   width?: number,
@@ -734,6 +746,8 @@ export type OBJ_Rectangle_Defined = {
  *     { along: 'y', step: 0.15, num: 5 },
  *   ]
  * });
+ * @interface
+ * @group 2D Shape Primitives
  */
 export type OBJ_Ellipse = {
   width?: number,
@@ -801,6 +815,8 @@ export type OBJ_Ellipse = {
  *   sides: 100,
  *   line: { width: 0.05, dash: [0.3, 0.1, 0.1, 0.1] },
  * });
+ * @interface
+ * @group 2D Shape Primitives
  */
 export type OBJ_Arc = {
   radius?: number,
@@ -816,6 +832,8 @@ export type OBJ_Arc = {
 /**
  * @property {'s1' | 's2' | 's3'} [side] ('s1')
  * @property {number} [angle] (0)
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_TriangleSideRotationAlignment = {
   side?: 's1' | 's2' | 's3',
@@ -947,6 +965,8 @@ export type OBJ_TriangleSideRotationAlignment = {
  *     step: Math.PI / 6,
  *   },
  * });
+ * @interface
+ * @group 2D Shape Primitives
  */
 export type OBJ_Triangle = {
   width?: number,
@@ -1051,6 +1071,8 @@ export type OBJ_Triangle = {
  *     end: 'barb',
  *   },
  * });
+ * @interface
+ * @group 2D Shape Primitives
  */
 export type OBJ_Line = {
   p1?: TypeParsablePoint,
@@ -1149,6 +1171,8 @@ export type OBJ_Line = {
  *     { along: 'y', num: 1, step: 0.8},
  *   ],
  * });
+ * @interface
+ * @group 2D Shape Primitives
  */
 export type OBJ_Grid = {
   bounds?: TypeParsableRect,
@@ -1268,6 +1292,8 @@ export type OBJ_Grid = {
  *     original: false,
  *   },
  * });
+ * @interface
+ * @group 2D Shape Primitives
  */
 export type OBJ_Arrow = {
   head?: TypeArrowHead,

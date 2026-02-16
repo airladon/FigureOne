@@ -32,6 +32,8 @@ import type { OBJ_FormattedText } from './Text';
  * @property {boolean} [fontColorIsLineColor] use line color as font color
  * @property {OBJ_TextLines | 'string'} [text] custom text
  * @property {TypeParsablePoint} [position] position of the trace sample
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_PlotLegendCustomTrace = {
   font?: OBJ_Font;
@@ -52,6 +54,8 @@ export type OBJ_PlotLegendCustomTrace = {
  * or the name of the trace. See examples in {@link CollectionsPlotLegend} for use.
  *
  * @property {OBJ_PlotLegendCustomTrace} [_arrayIndexOrName]
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_PlotLegendCustom = {
   [_arrayIndexOrName: string]: OBJ_PlotLegendCustomTrace;
@@ -87,6 +91,8 @@ export type OBJ_PlotLegendCustom = {
  * @property {Array<COL_Trace>} [traces] the traces from the plot that this
  * legend will display. This is used by {@link CollectionsPlot} and should not be
  * used by the user.
+ * @interface
+ * @group Misc Shapes
  */
 export type COL_PlotLegend = {
   position?: TypeParsablePoint;
@@ -260,6 +266,7 @@ export type COL_PlotLegend = {
  *     }
  *   },
  * });
+ * @group Misc Shapes
  */
 class CollectionsPlotLegend extends FigureElementCollection {
   // Figure elements

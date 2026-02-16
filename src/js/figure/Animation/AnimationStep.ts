@@ -38,6 +38,8 @@ import type { AnimationStartTime } from './AnimationManager';
  * When the animation step is created from an element in a figure (using
  * `element.animations` or `element.animations.new()`), then the
  * animation step will automatically inherit the figure's TimeKeeper.
+ * @interface
+ * @group Misc Animation
  */
 export type OBJ_AnimationStep = {
   onFinish?: ((cancelled: boolean) => void) | null;
@@ -65,6 +67,7 @@ export type OBJ_AnimationStep = {
  * animation manager when it is finished (`true`)
  * @property {number} [precision] precision to do calculations to (`8`)
  * @property {'animating' | 'waitingToStart' | 'idle' | 'finished'} state
+ * @group Misc Animation
  */
 export default class AnimationStep {
   startTime: number | null | undefined;

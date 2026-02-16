@@ -48,6 +48,8 @@ import type { EQN_Equation, Equation } from '../Equation/Equation';
  * @property {OBJ_Font} [font] font to use
  * @property {number} [scale] size of the label
  * @property {TypeColor} [color]
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_ButtonLabel = {
   text: null | string | Array<string> | Equation | EQN_Equation;
@@ -64,6 +66,8 @@ export type OBJ_ButtonLabel = {
  * @property {TypeColor} [colorLabel]
  * @property {string} [label]
  * @see {@link COL_Button}
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_ButtonColorState = {
   colorLine?: TypeColor;
@@ -82,6 +86,8 @@ export type OBJ_ButtonColorState = {
  * @property {TypeColor} [colorLabel]
  * @property {string} [label]
  * @see {@link COL_Button}
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_ButtonState = {
   colorLine?: TypeColor;
@@ -109,6 +115,8 @@ export type OBJ_ButtonState = {
  * @property {Array<OBJ_ButtonState | string>} [states]
  *
  * @extends OBJ_Collection
+ * @interface
+ * @group 2D Shape Collections
  */
 export type COL_Button = {
   width?: number;
@@ -198,6 +206,7 @@ class ButtonLabel extends EquationLabel {
  * button.notifications.add('touch', (index) => {
  *   console.log(index);
  * });
+ * @group 2D Shape Collections
  */
 /* eslint-enable max-len */
 class CollectionsButton extends FigureElementCollection {

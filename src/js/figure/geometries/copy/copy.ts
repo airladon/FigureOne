@@ -170,6 +170,8 @@ import {
  *     },
  *   ],
  * });
+ * @interface
+ * @group Misc Shapes
  */
 export type CPY_Step = {
   to?: TypeParsablePoint | TypeParsableTransform

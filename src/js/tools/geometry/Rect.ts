@@ -14,6 +14,7 @@ import type { TypeParsableLine } from './Line';
  *
  * // define a rect centered at origin with width 4 and height 2
  * const r = new Rect(-2, -1, 4, 2);
+ * @group Geometry
  */
 class Rect {
   left: number;
@@ -194,6 +195,7 @@ class Rect {
  *   state: [number, number, number, number],
  * }
  * ```
+ * @group Misc Geometry
  */
 type TypeF1DefRect = {
   f1Type: 'rect',
@@ -214,6 +216,7 @@ type TypeF1DefRect = {
  * const r1 = Fig.getRect([-2, -1, 4, 2]);
  * const r2 = new Fig.Rect(-2, -1, 4, 2);
  * const r3 = Fig.getRect('[-2, -1, 4, 2]');
+ * @group Geometry
  */
 export type TypeParsableRect = [number, number, number, number]
                                | Rect
@@ -267,6 +270,7 @@ function parseRect<T>(rIn: TypeParsableRect, onFail?: T): Rect | T | null {
  * Convert a parsable rectangle definition to a {@link Rect}.
  * @param {TypeParsableRect} r parsable rectangle definition
  * @return {Rect} rectangle object
+ * @group Misc Geometry
  */
 function getRect(r: TypeParsableRect): Rect {
   let parsedRect = parseRect(r);

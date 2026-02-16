@@ -85,6 +85,7 @@ function calcAuto(auto: [number, number]) {
  * `'bottom'`, `'top'` and `'center'` are only for x axes.
  *
  * `'left'`, `'right'` and `'center'` are only for y axes.
+ * @group Misc Shapes
  */
 export type TypeTickLocation = 'bottom' | 'left' | 'right' | 'left' | 'center';
 
@@ -111,6 +112,8 @@ export type TypeLabelLocation = 'bottom' | 'left' | 'right' | 'left';
  * @see
  *
  * {@link COL_Axis}
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_LabelsCallbackParams = {
   values: Array<number>;
@@ -127,6 +130,8 @@ export type OBJ_LabelsCallbackParams = {
  * @property {TypeColor} [color]
  * @property {OBJ_LineArrows | TypeArrowHead} [arrow]
  * @property {number} [arrowExt] extension to line length for arrow
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_AxisLineStyle = {
   width?: number;
@@ -151,6 +156,8 @@ export type OBJ_AxisLineStyle = {
  * @see
  *
  * {@link COL_Axis}
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_AxisTicks = {
   length?: number;
@@ -173,6 +180,8 @@ export type OBJ_AxisTicks_Fixed = {
 /**
  * @property {Array<number>} values values to offset
  * @property {TypeParsablePoint} offset position offset to apply to values
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_ValuesOffset = {
   values: Array<number>;
@@ -219,6 +228,8 @@ export type OBJ_ValuesOffset = {
  * <a href="#drawing-boilerplate">boilerplate</a>.
  *
  * For more examples see {@link OBJ_Axis}.
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_AxisLabels = {
   precision?: number;
@@ -263,6 +274,8 @@ export type OBJ_AxisLabels_Fixed = {
  * @property {TypeParsablePoint} [offset] title offset from default location
  *
  * @extends {@link OBJ_TextLines}
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_AxisTitle = OBJ_FormattedText & {
   rotation?: number;
@@ -332,6 +345,8 @@ export type OBJ_AxisTitle = OBJ_FormattedText & {
  * zooming or panning.
  *
  * @extends OBJ_Collection
+ * @interface
+ * @group 2D Shape Collections
  */
 export type COL_Axis = {
   axis?: 'x' | 'y';
@@ -484,6 +499,7 @@ export type COL_Axis = {
  *   },
  * });
  *
+ * @group 2D Shape Collections
  */
 class CollectionsAxis extends FigureElementCollection {
   // Figure elements

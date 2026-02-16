@@ -58,6 +58,8 @@ const FIGURE1DEBUG = false;
  * @property {Transform} figureToPixel
  * @property {Transform} pixelToGL
  * @property {Transform} glToPixel
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_SpaceTransforms = {
   glToFigure: Transform;
@@ -102,6 +104,8 @@ export type OBJ_FigureForElement = {
   * @property {number} [length] default shape primary dimension
   * @property {TypeColor} [backgroundColor] background color for the figure.
   * Use [r, g, b, 1] for opaque and [0, 0, 0, 0] for transparent.
+ * @interface
+ * @group Figure
  */
 export type OBJ_Figure = {
   htmlId?: string;
@@ -234,6 +238,7 @@ export type OBJ_Figure = {
  *   sides: 6,
  * });
  * figure.add('hexagon', hex);
+ * @group Figure
  */
 class Figure {
   htmlId!: string;

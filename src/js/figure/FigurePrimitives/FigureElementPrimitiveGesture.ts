@@ -26,6 +26,8 @@ import type { TypeColor } from '../../tools/types';
  * @property {null | TypeParsablePoint} [position] zoom around a fixed point (instead of the
  * mouse of pinch location) - leave undefined or use `null` to instead zoom
  * around mouse or pinch location (`null`)
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_ZoomOptions = {
   min?: null | number;
@@ -41,6 +43,8 @@ export type OBJ_ZoomOptions = {
  * @property {number} mag zoom magnification (`last zoom`)
  * @property {TypeParsablePoint} position zoom around this position (`[0, 0]`)
  * @property {TypeParsablePoint} offset use this pan offset
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_ManualZoom = {
   mag?: number;
@@ -55,6 +59,8 @@ export type OBJ_ManualZoom = {
  * @property {Point} position zoom position
  * @property {number} distance distance between pinch touches (in pixels)
  * @property {number} angle delta angle from original pinch angle
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_ZoomValues = {
   mag: number;
@@ -70,6 +76,8 @@ export type OBJ_ZoomValues = {
  * @property {Point} offset pan offset
  * @property {OBJ_ZoomValues} last last zoom values
  * @property {OBJ_ZoomValues} current current zoom values
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_CurrentZoom = {
   delta: number;
@@ -104,6 +112,8 @@ export type OBJ_CurrentPan = {
  * @property {boolean} [momentum] enable pan momentum for drag panning. NB,
  * mouse wheel panning mamemntum cannot be controlled and will be browser
  * dependent. (`true`)
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_PanOptions = {
   left?: null | number;
@@ -126,6 +136,8 @@ export type OBJ_PanOptions = {
  * @property {number} [angle] (pinch zoom only) pinch angle delta to start of
  * pinch
  * @property {number} [distance] (pinch zoom only) distance between pinch points
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_ZoomInstant = {
   mag: number;
@@ -143,6 +155,8 @@ export type OBJ_ZoomInstant = {
  @property {number} mag current zoom magnification
  @property {number} offset pan offset needed to keep the zoom position at a
  * fixed location
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_Zoom = {
   last: OBJ_ZoomInstant;
@@ -174,6 +188,8 @@ export type OBJ_Zoom = {
  * rectangle (`'middle'`)
  *
  * @extends OBJ_Generic
+ * @interface
+ * @group Interactivity
  */
 export type OBJ_Gesture = {
   zoom?: OBJ_ZoomOptions | boolean;
@@ -321,6 +337,7 @@ export type OBJ_Gesture = {
  * gesture.notifications.add(
  *   'zoom', (mag, offset) => console.log('Zoom: ', mag, offset.x, offset.y),
  * );
+ * @group Interactivity
  */
 export default class FigureElementPrimitiveGesture extends FigureElementPrimitive {
   zoom: {

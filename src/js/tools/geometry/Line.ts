@@ -29,6 +29,8 @@ import { roundNum } from '../math';
  * @property {TypeParsablePoint | number} [direction] direction vector of line
  * from p1
  * @property {0 | 1 | 2} [ends]
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_LineDefinition = {
   p1?: TypeParsablePoint,
@@ -46,6 +48,7 @@ export type OBJ_LineDefinition = {
  * points of the line and the number of finite ends.
  *
  * `{ f1Type: 'l', state: [[number, number, number], [number, number, number], 2 | 1 | 0] }`
+ * @group Misc Geometry
  */
 type TypeF1DefLine = {
   f1Type: 'l',
@@ -59,6 +62,8 @@ type TypeF1DefLine = {
  * there is no intersection
  * @property {boolean} collinear `true` if the lines are collinear
  * @property {boolean} onLines `true` if the intersection point is on both lines
+ * @interface
+ * @group Misc Geometry
  */
 export type OBJ_LineIntersect = {
   intersect?: Point,
@@ -90,6 +95,7 @@ export type OBJ_LineIntersect = {
  * l4 = Fig.getLine({ p1: [0, 0], length: 2, angle: 0 });
  * l5 = Fig.getLine({ p1: [0, 0], length: 2, theta: Math.PI / 2, phi: 0 });
  * l6 = Fig.getLine({ p1: [0, 0], p2: [2, 0] });
+ * @group Geometry
  */
 export type TypeParsableLine = [TypeParsablePoint, TypeParsablePoint, 2 | 1 | 0]
                                 | [TypeParsablePoint, TypeParsablePoint]
@@ -170,6 +176,7 @@ function parseLine(lIn: TypeParsableLine): Line {
  * Convert a parsable line definition to a {@link Line}.
  * @param {TypeParsableLine} l parsable line definition
  * @return {Line} `Line` object
+ * @group Misc Geometry
  */
 function getLine(l: TypeParsableLine): Line {
   return parseLine(l);
@@ -195,6 +202,7 @@ function getLine(l: TypeParsableLine): Line {
  *
  * // find the intersect with another line
  * const i = l.intersectsWith([[0.5, 0.5], [0.5, -0.5]]);
+ * @group Geometry
  */
 class Line {
   p1: Point;

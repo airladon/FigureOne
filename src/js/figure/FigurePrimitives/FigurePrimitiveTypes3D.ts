@@ -18,6 +18,8 @@ import type {
  * (if defined) and texture coordinates (if defined) will also be made.
  * @property {TypeGLBufferUsage} [usage] use `'DYNAMIC'` if the shape's vertices
  * will be updated very frequently (`'STATIC'`)
+ * @interface
+ * @group 3D Shape Primitives
  */
 export type OBJ_Generic3All = {
   light?: 'directional' | 'point' | 'ambient' | null,
@@ -125,6 +127,8 @@ export type OBJ_Generic3All = {
  *     duration: null,
  *   })
  *   .start();
+ * @interface
+ * @group 3D Shape Primitives
  */
 
 export type OBJ_Generic3 = {
@@ -199,6 +203,8 @@ export type OBJ_Generic3 = {
  *   ],
  *   transform: ['r', Math.PI / 2, 1, 0, 0],
  * });
+ * @interface
+ * @group 3D Shape Primitives
  */
 export type OBJ_Sphere = {
   sides?: number,
@@ -257,6 +263,8 @@ export type OBJ_Sphere = {
  *   lines: true,
  *   color: [1, 0, 0, 1],
  * });
+ * @interface
+ * @group 3D Shape Primitives
  */
 export type OBJ_Cube = {
   side?: number,
@@ -352,6 +360,8 @@ export type OBJ_Cube = {
  *     color: [0, 0, 1, 1],
  *   },
  * ]);
+ * @interface
+ * @group 3D Shape Primitives
  */
 export type OBJ_Cylinder = {
   sides?: number,
@@ -442,6 +452,8 @@ export type OBJ_Cylinder = {
  *     ],
  *   },
  * );
+ * @interface
+ * @group 3D Shape Primitives
  */
 export type OBJ_Line3 = {
   sides?: number,
@@ -516,6 +528,8 @@ export type OBJ_Line3 = {
  *   line: [[0, 0, 0], [0, 0.5, 0]],
  *   lines: true,
  * });
+ * @interface
+ * @group 3D Shape Primitives
  */
 export type OBJ_Cone = {
   sides?: number,
@@ -592,6 +606,8 @@ export type OBJ_Cone = {
  *     transform: ['r', Math.PI / 2, 0, 1, 0],
  *   },
  * );
+ * @interface
+ * @group 3D Shape Primitives
  */
 export type OBJ_Prism = {
   base?: Array<TypeParsablePoint>,
@@ -742,6 +758,8 @@ export type OBJ_Prism = {
  *   color: [1, 0, 0, 1],
  *   sides: 30,
  * });
+ * @interface
+ * @group 3D Shape Primitives
  */
 export type OBJ_Revolve = {
   sides?: number,
@@ -927,6 +945,8 @@ export type OBJ_Revolve = {
  *   points,
  *   color: [1, 0, 0, 1],
  * });
+ * @interface
+ * @group 3D Shape Primitives
  */
 export type OBJ_Surface = {
   points?: Array<Array<TypeParsablePoint>>,
@@ -1086,6 +1106,8 @@ export type OBJ_Surface = {
  *   height: 0.1,
  * });
 
+ * @interface
+ * @group Interactivity
  */
 export type OBJ_CameraControl = {
   left?: number,

@@ -46,6 +46,8 @@ import type { AnimationStartTime } from '../../AnimationManager';
  * to where `null` is unlimited (`null`)
  *
  * @see {@link RotationAnimationStep} for description and examples
+ * @interface
+ * @group Misc Animation
  */
 export type OBJ_RotationAnimationStep = {
   start?: number;      // default is element transform
@@ -104,6 +106,7 @@ export type OBJ_RotationAnimationStep = {
  *   .then(step1)
  *   .then(step2)
  *   .start();
+ * @group Animation
  */
 export default class RotationAnimationStep extends ElementAnimationStep {
   rotation: {

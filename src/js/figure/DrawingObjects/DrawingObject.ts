@@ -63,6 +63,7 @@ import type WebGLInstance from '../webgl/webgl';
  * closed borders. A border defines where a shape can be touched, or how it
  * bounces of figure boundaries
  * @see {@link FigureElementPrimitive}
+ * @group Misc Figure Element
  */
 class DrawingObject {
   // numPoints: number;           // Number of primative vertices

@@ -33,6 +33,8 @@ import type { Point } from '../geometry/Point';
  * the edes of the faces will be returned. If `false`, then points
  * representing two triangles per face and an
  * associated normal for each point will be returned.
+ * @interface
+ * @group Misc Geometry Creation
  */
 export type OBJ_CylinderPoints = {
   sides?: number,

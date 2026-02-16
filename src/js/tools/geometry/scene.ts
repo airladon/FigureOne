@@ -33,6 +33,8 @@ import type { Type3DMatrix } from '../m3';
   * @property {number} [fieldOfView]
   * @property {number} [near]
   * @property {number} [far]
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_Projection = {
   style?: 'orthographic' | 'perspective' | '2D',
@@ -56,6 +58,8 @@ export type OBJ_CameraDefined = {
  * @property {TypeParsablePoint} [position]
  * @property {TypeParsablePoint} [lookAt]
  * @property {TypeParsablePoint} [up]
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_Camera = {
   position?: TypeParsablePoint,
@@ -67,6 +71,8 @@ export type OBJ_Camera = {
  * @property {TypeParsablePoint} [directional]
  * @property {number} [ambient]
  * @property {TypeParsablePoint} [point]
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_Light = {
   directional?: TypeParsablePoint,
@@ -90,6 +96,8 @@ export type OBJ_LightDefined = {
  *
  * For 3D figures, a camera, lighting and the near/far clipping planes also
  * need definition.
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_Scene = {
   style?: '2D' | 'orthographic' | 'perspective',
@@ -121,6 +129,8 @@ export type OBJ_Scene = {
   * @property {number} [right]
   * @property {number} [bottom]
   * @property {number} [top]
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_2DScene = {
   left?: number,
@@ -136,6 +146,8 @@ export type OBJ_2DScene = {
   * @property {number} [top]
   * @property {number} [near]
   * @property {number} [far]
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_OrthographicScene = {
   left?: number,
@@ -151,6 +163,8 @@ export type OBJ_OrthographicScene = {
   * @property {fieldOfView} [number]
   * @property {near} [number]
   * @property {far} [number]
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_PerspectiveScene = {
   aspectRatio?: number,
@@ -188,6 +202,7 @@ export type OBJ_SceneDefined = {
   *
   * @param {OBJ_Scene} options scene definition options
   * @param {null | (() => void)} onUpdate callback if scene is updated
+  * @group Misc Shapes
   */
 export default class Scene {
   style!: '2D' | 'orthographic' | 'perspective';

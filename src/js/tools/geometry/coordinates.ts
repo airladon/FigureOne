@@ -9,6 +9,7 @@ import { Point } from './Point';
  * const p = polarToRect(Math.sqrt(2), Math.PI / 4);
  * console.log(p);
  * // Point {x: 1, y: 1)
+ * @group 2D Geometry Tools
  */
 function polarToRect(mag: number, angle: number, theta: number | null = null) {
   if (theta === null) {
@@ -32,6 +33,7 @@ function polarToRect(mag: number, angle: number, theta: number | null = null) {
 * const p = rectToPolar(0, 1);
 * console.log(p);
 * // {mag: 1, angle: 1.5707963267948966}
+ * @group 2D Geometry Tools
  */
 function rectToPolar(x: number | Point, y: number = 0, z: number = 0): {
   angle: number, mag: number, phi: number, r: number, theta: number,

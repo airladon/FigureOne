@@ -78,6 +78,7 @@ export type TypeLabelSubLocation = 'top' | 'left' | 'bottom' | 'right';
 
 /**
  * Equation label
+ * @group Misc Equation
  */
 export default class EquationLabel {
   eqn: Equation;

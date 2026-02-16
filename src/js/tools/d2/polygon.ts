@@ -21,6 +21,7 @@ import type { TypeParsableTransform } from '../geometry/Transform';
  * the interlaced x/y/z components of points that define triangles that can draw
  * the polygon. `2` returns just x/y components and `3` returns x/y/z
  * components.
+ * @group Misc Geometry Creation
  */
 export interface OBJ_PolygonPoints {
   center?: TypeParsablePoint;
@@ -40,6 +41,7 @@ export interface OBJ_PolygonPoints {
  * corner
  *
  * @extends OBJ_PolygonPoints
+ * @group Misc Geometry Creation
  */
 export interface OBJ_PolygonLinePoints extends OBJ_PolygonPoints {
   innerRadius?: number;
@@ -122,6 +124,7 @@ function processOptions(options: OBJ_PolygonPoints): [
  * Can return either:
  * - Array<{@link Point}> - corners of a polygon
  * - Array<`number`> - interlaced points of triangles used to a polygon fill
+ * @group Geometry Creation
  */
 function polygon(options: OBJ_PolygonPoints): Point[] | number[] {
   const [
@@ -154,6 +157,7 @@ function polygon(options: OBJ_PolygonPoints): Point[] | number[] {
  * - Array<{@link Point}> - [inner corner 0, outer corner 0, inner corner 1,
  *   outer corner 1, inner corner 2...]
  * - Array<`number`> - interlaced points of triangles used to draw a polygon line
+ * @group Geometry Creation
  */
 function polygonLine(options: OBJ_PolygonLinePoints): Point[] | number[] {
   const [

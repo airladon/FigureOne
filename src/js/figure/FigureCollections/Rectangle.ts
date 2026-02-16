@@ -35,6 +35,8 @@ import type { OBJ_FormattedText } from './Text';
  * @property {FigureElement} [target] target element to surround (`this`)
  * @property {TypeParsableBuffer} [space] space between rectangle and element (`0`)
  * @extends OBJ_CustomAnimationStep
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_SurroundAnimationStep = {
   start?: number;
@@ -43,6 +45,8 @@ export type OBJ_SurroundAnimationStep = {
 
 /**
  * Button colors when clicked.
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_ButtonColor = {
   line?: TypeColor;
@@ -74,6 +78,8 @@ export type OBJ_ButtonColor = {
  * make the rectangle behave like a button when clicked. `TypeColor` to
  * make fill, line and label the same color when clicked or `OBJ_ButtonColor`
  * to specify click colors for each (`false`)
+ * @interface
+ * @group 2D Shape Collections
  */
 export type COL_Rectangle = {
   width?: number;
@@ -215,6 +221,7 @@ export type COL_Rectangle = {
  *     },
  *   },
  * ]);
+ * @group 2D Shape Collections
  */
 /* eslint-enable max-len */
 class CollectionsRectangle extends FigureElementCollection {

@@ -1076,6 +1076,8 @@ class ObjectTracker {
  * @property {string | function(): void} callback callback to use when
  * subscription is published
  * @property {number} num number of notifications
+ * @interface
+ * @group Misc Figure Element
  */
  type OBJ_Subscriber = {
    callback: string | (() => void),
@@ -1087,6 +1089,8 @@ class ObjectTracker {
  *
  * @property {OBJ_Subscriber} [_id] each key in this object is a unique
  * identifier associated with a subscriber callback.
+ * @interface
+ * @group Misc Figure Element
  */
  type OBJ_Subscribers = {
    [id: string]: OBJ_Subscriber,
@@ -1097,6 +1101,7 @@ class ObjectTracker {
  *
  * @property {OBJ_Subscribers} subscribers
  * @property {FunctionMap} fnMap
+ * @group Misc Figure Element
  */
 class Notification {
   fnMap: FunctionMap;
@@ -1201,6 +1206,8 @@ class Notification {
  *
  * @property {Notification} [_eventName] each key in this object is a
  * unique notification name associated with an event.
+ * @interface
+ * @group Misc Figure Element
  */
  type OBJ_Notifications = {
    [notificationName: string]: Notification,
@@ -1246,6 +1253,7 @@ class Notification {
  * ball1.animations.new()
  *   .position({ target: [1, 0], duration: 2 })
  *   .start();
+ * @group Misc Figure Element
  */
 class NotificationManager {
   fnMap: FunctionMap;

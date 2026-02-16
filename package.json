@@ -17,7 +17,8 @@
     "jest-perf-debug": "node --inspect-brk=0.0.0.0 node_modules/.bin/jest --runInBand --config jest.perf.config.js",
     "lint": "eslint src",
     "flowcopysource": "flow-copy-source src package",
-    "jest-debug": "node --inspect-brk=0.0.0.0 node_modules/.bin/jest --runInBand"
+    "jest-debug": "node --inspect-brk=0.0.0.0 node_modules/.bin/jest --runInBand",
+    "docs:typedoc": "bash generate_docs_typedoc.sh"
   },
   "keywords": [
     "interactive",
@@ -56,6 +57,8 @@
     "http-server": "^13.0.2",
     "jest": "^27.2.1",
     "regenerator-runtime": "^0.13.9",
+    "typedoc": "^0.28.17",
+    "typedoc-plugin-mdn-links": "^5.1.1",
     "webpack": "^5.58.2",
     "webpack-cli": "^4.8.0",
     "whatwg-fetch": "^3.6.2",

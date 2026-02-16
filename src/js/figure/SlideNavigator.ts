@@ -27,6 +27,7 @@ import type { OBJ_FormattedText } from './FigureCollections/Text';
  * Last slide shown
  *
  * `'next'` | `'prev'` | number
+ * @group Slide Navigator
  */
 export type TypeSlideFrom = 'next' | 'prev' | number;
 
@@ -36,6 +37,7 @@ export type TypeSlideFrom = 'next' | 'prev' | number;
  * When using {@link Recorder}, a string from a {@link FunctionMap} can be
  * used, as long as the function the string maps to allows for the same
  * parameters as above.
+ * @group Slide Navigator
  */
 export type TypeSlideLeaveStateCallback = string | ((currentIndex: number, nextIndex: number) => void);
 
@@ -45,6 +47,7 @@ export type TypeSlideLeaveStateCallback = string | ((currentIndex: number, nextI
  * When using {@link Recorder}, a string from a {@link FunctionMap} can be
  * used, as long as the function the string maps to allows for the same
  * parameters as above.
+ * @group Slide Navigator
  */
 export type TypeSlideStateCallback = string | ((from: TypeSlideFrom, index: number) => void);
 
@@ -59,6 +62,7 @@ export type TypeSlideStateCallback = string | ((from: TypeSlideFrom, index: numb
  *
  * Important note: the `done` parameter MUST be called at the end of the
  * transition to allow the slide to progress to steady state.
+ * @group Slide Navigator
  */
 export type TypeSlideTransitionCallback = string | ((done: () => void, index: number, from: TypeSlideFrom) => void);
 
@@ -126,6 +130,8 @@ export type TypeSlideTransitionCallback = string | ((done: () => void, index: nu
  * use `show: false` in the animation step definition, and for `in` steps use
  * `show: true`.
  *
+ * @interface
+ * @group Misc SlideNavigator
  */
 export type OBJ_AnimationDefinition = Record<string, any>;
 
@@ -246,6 +252,7 @@ export type OBJ_AnimationDefinition = Record<string, any>;
  *     ],
  *   },
  * ]);
+ * @group Slide Navigator
  */
 export type TypeTransitionDefinition = TypeSlideTransitionCallback | OBJ_AnimationDefinition | Array<OBJ_AnimationDefinition | Array<OBJ_AnimationDefinition>>;
 /* eslint-enable max-len */
@@ -270,6 +277,7 @@ export type TypeTransitionDefinition = TypeSlideTransitionCallback | OBJ_Animati
  *
  * Use `number` for number of seconds, or use string with format 'm:s.s' (for
  * example, '1:23.5' would define 1 minute, 23.5 seconds)
+ * @group Interactive Video
  */
 export type TypeRecorderTime = string | number;
 
@@ -436,6 +444,8 @@ export type TypeRecorderTime = string | number;
  * start.
  * @property {boolean} addReference recorder only `true` will add a new
  * reference state based on the current state
+ * @interface
+ * @group Slide Navigator
  */
 export type OBJ_SlideNavigatorSlide = {
   text?: OBJ_FormattedText;
@@ -466,6 +476,8 @@ export type OBJ_SlideNavigatorSlide = {
 
 /**
  * Default equation animation properties.
+ * @interface
+ * @group Slide Navigator
  */
 export type OBJ_EquationDefaults = {
   duration?: number;
@@ -508,6 +520,8 @@ export type OBJ_EquationDefaults = {
  * @property {null | string | FigureElementCollection} [text]
  * @property {Equation | string | Array<string | Equation>} [equation]
  * @property {OBJ_EquationDefaults} [equationDefaults]
+ * @interface
+ * @group Slide Navigator
  */
 export type OBJ_SlideNavigator = {
   collection: Figure | FigureElementCollection;
@@ -552,6 +566,7 @@ export type OBJ_SlideNavigator = {
  * @property {boolean} inTransition `true` if slide current transitioning
  *
  * @see {@link CollectionsSlideNavigator} for examples.
+ * @group Slide Navigator
  */
 export default class SlideNavigator {
   currentSlideIndex!: number;

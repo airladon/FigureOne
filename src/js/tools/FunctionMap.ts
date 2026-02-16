@@ -105,6 +105,7 @@ class GlobalFunctionMap extends GeneralFunctionMap {
  * // Add a console function to a FunctionMap and execute it with a parameter
  * figure.fnMap.add('toConsole', s => console.log(s));
  * figure.fnMap.exec('toConsole', 'hello');
+ * @group Interactive Video
  */
 class FunctionMap extends GeneralFunctionMap {
   global: GlobalFunctionMap;

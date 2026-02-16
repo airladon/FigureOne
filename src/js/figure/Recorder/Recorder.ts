@@ -228,6 +228,7 @@ function getMostRecentForTime(
  * 'timeUpdate' notification
  * @property {NotificationManager} notifications - use to subscribe to
  * notifications
+ * @group Interactive Video
  */
 class Recorder {
   states!: ObjectTracker;

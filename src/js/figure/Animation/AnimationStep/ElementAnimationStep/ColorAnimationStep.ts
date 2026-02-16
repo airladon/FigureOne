@@ -20,6 +20,8 @@ import type { AnimationStartTime } from '../../AnimationManager';
  * element's `dimColor`, and `undim` to animate to element's `defaultColor`
  * @property {Array<number>} [delta]
  *
+ * @interface
+ * @group Misc Animation
  */
 export type OBJ_ColorAnimationStep = {
   start?: TypeColor;      // default is element transform
@@ -93,6 +95,7 @@ const subtractColors = (color1: TypeColor, color2: TypeColor) => color1.map((c: 
  *   .then(step1)
  *   .then(step2)
  *   .start();
+ * @group Animation
  */
 export class ColorAnimationStep extends ElementAnimationStep {
   color: {
@@ -263,6 +266,7 @@ export class ColorAnimationStep extends ElementAnimationStep {
  *   .undim(1)
  *   .then(step2)
  *   .start();
+ * @group Animation
  */
 export class DimAnimationStep extends ColorAnimationStep {
   /**
@@ -331,6 +335,7 @@ export function dim(
  *   .dim(1)
  *   .then(step2)
  *   .start();
+ * @group Animation
  */
 export class UndimAnimationStep extends ColorAnimationStep {
   /**

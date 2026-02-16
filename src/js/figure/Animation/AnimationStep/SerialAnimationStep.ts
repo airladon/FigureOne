@@ -10,6 +10,8 @@ import type { AnimationStartTime } from '../AnimationManager';
  *
  * @extends OBJ_AnimationStep
  * @property {Array<AnimationStep>} [steps] animation steps to execute in series
+ * @interface
+ * @group Misc Animation
  */
 export type OBJ_SerialAnimationStep = {
   steps?: Array<AnimationStep>;
@@ -60,6 +62,7 @@ export type OBJ_SerialAnimationStep = {
  *   .rotation({ target: 0, duration: 1, direction: -1, progression: 'easein' })
  *   .position({ target: [1, 0], duration: 2, progression: 'easeout' })
  *   .start();
+ * @group Animation
  */
 export class SerialAnimationStep extends AnimationStep {
   steps: Array<AnimationStep>;

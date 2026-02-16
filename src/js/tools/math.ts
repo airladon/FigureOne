@@ -39,6 +39,7 @@ interface TypeRoundObject {
  * @param {number | Array<number>} arrayOrValue - Value or array of values to be rounded
  * @param {number} precision - Number of decimal places to round to
  * @returns {number | Array<number>} Rounded value or array of values
+ * @group Math Tools
  */
 function round<T extends number
 | TypeRoundObject
@@ -327,6 +328,7 @@ function sinusoidAbs(
  * @param stop - Range stop
  * @param step - Range step
  * @returns {Array<number>} Range of numbers in an array
+ * @group Math Tools
  */
 function range(start: number, stop: number, step: number = 1, precision: number = 8): number[] {
   const out: number[] = [];
@@ -351,6 +353,7 @@ function range(start: number, stop: number, step: number = 1, precision: number 
 /**
  * Return a -1 or 1 randomly
  * @return {number} -1 or 1
+ * @group Math Tools
  */
 function randSign(): number {
   return Math.random() > 0.5 ? 1 : -1;
@@ -359,6 +362,7 @@ function randSign(): number {
 /**
  * Return a true or false randomly
  * @return {boolean}
+ * @group Math Tools
  */
 function randBool(): boolean {
   return Math.random() > 0.5;
@@ -375,6 +379,7 @@ function randBool(): boolean {
  * Use `sign` to also return a random sign (negative or positive);
  *
  * @return {number} random integer
+ * @group Math Tools
  */
 function randInt(minOrMax: number, max: number | null = null, sign: boolean = false): number {
   let r = 0;
@@ -401,6 +406,7 @@ function randInt(minOrMax: number, max: number | null = null, sign: boolean = fa
  * Use `sign` to also return a random sign (negative or positive);
  *
  * @return {number} random number
+ * @group Math Tools
  */
 function rand(minOrMax: number, max: number | null = null, plusOrMinus: boolean = false): number {
   let r = 0;
@@ -418,6 +424,7 @@ function rand(minOrMax: number, max: number | null = null, plusOrMinus: boolean 
 
 /**
  * Get a random element from an array.
+ * @group Math Tools
  */
 function randElement<T>(inputArray: Array<T>): T {
   const index = randInt(inputArray.length);
@@ -426,6 +433,7 @@ function randElement<T>(inputArray: Array<T>): T {
 
 /**
  * Remove and return random element from an array.
+ * @group Math Tools
  */
 function removeRandElement<T>(inputArray: Array<T>): T {
   const index = rand(inputArray.length);
@@ -434,6 +442,7 @@ function removeRandElement<T>(inputArray: Array<T>): T {
 
 /**
  * Get a number of random elements from an array.
+ * @group Math Tools
  */
 function randElements<T>(num: number, inputArray: Array<T>): Array<T> {
   const possibleIndeces = range(0, inputArray.length - 1, 1);

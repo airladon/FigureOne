@@ -10,6 +10,8 @@ import type { AnimationStartTime } from '../AnimationManager';
  * Parallel animation step options object
  * @extends OBJ_AnimationStep
  * @property {Array<AnimationStep>} steps animation steps to perform in parallel
+ * @interface
+ * @group Misc Animation
  */
 export type OBJ_ParallelAnimationStep = {
   steps?: Array<AnimationStep>;
@@ -49,6 +51,7 @@ export type OBJ_ParallelAnimationStep = {
  *     p.animations.rotation({ target: Math.PI, duration: 4 }),
  *   ])
  *   .start();
+ * @group Animation
  */
 // Animations get started from a parent, but finish themselves
 export class ParallelAnimationStep extends AnimationStep {

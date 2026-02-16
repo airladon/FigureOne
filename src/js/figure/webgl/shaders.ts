@@ -57,6 +57,8 @@ import { joinObjects } from '../../tools/tools';
  * @property {2 | 3} [dimension] (`2`)
  * @property {'vertex' | 'uniform' | 'texture'} [color] (`uniform`)
  * @property {'point' | 'directional' | null} [light] (`null`)
+ * @interface
+ * @group Shaders
  */
 export type OBJ_VertexShader = {
   light?: 'point' | 'directional' | null;
@@ -71,6 +73,7 @@ export type OBJ_VertexShader = {
  * - `string`: an identifier to a built-in shader
  * - {@link OBJ_VertexShader} `| Array<string | number | boolean>`: composing
  *   options for a composable shader
+ * @group Shaders
  */
 export type TypeVertexShader = string
   | { src: string; vars?: Array<string> }
@@ -116,6 +119,8 @@ export type TypeVertexShader = string
  * @property {2 | 3} [dimension] (`2`)
  * @property {'vertex' | 'uniform' | 'texture'} [color] (`uniform`)
  * @property {'point' | 'directional' | null} [light] (`null`)
+ * @interface
+ * @group Shaders
  */
 export type OBJ_FragmentShader = {
   light?: 'point' | 'directional' | null;
@@ -129,6 +134,7 @@ export type OBJ_FragmentShader = {
  * - `string`: an identifier to a built-in shader
  * - {@link OBJ_VertexShader} `| Array<string | number | boolean>`: composing
  *   options for a composable shader
+ * @group Shaders
  */
 export type TypeFragmentShader = string
   | { src: string; vars?: Array<string> }

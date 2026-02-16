@@ -16,6 +16,7 @@ import type { TypeParsableLine } from './Line';
  *   state: [[number, number, number], [number, number, number]],
  * }
  * ```
+ * @group Misc Geometry
  */
 export type TypeF1DefPlane = {
   f1Type: 'pl',
@@ -41,6 +42,7 @@ export type TypeF1DefPlane = {
  * p1 = new Fig.Plane([0, 0, 0], [0, 1, 0]);
  * p2 = Fig.getPlane([[0, 0, 0], [0, 1, 0]]);
  * p3 = Fig.getPlane([[0, 0, 0], [1, 0, 0], [0, 0, 1]]);
+ * @group Geometry
  */
 export type TypeParsablePlane = [TypeParsablePoint, TypeParsablePoint]
                 | [TypeParsablePoint, TypeParsablePoint, TypeParsablePoint] |
@@ -87,6 +89,7 @@ function parsePlane(pIn: TypeParsablePlane): Plane {
 /**
  * Chech if input parameter can be parsed as a {@link Plane}.
  * @return {boolean}
+ * @group Misc Geometry
  */
 function isParsablePlane(pIn: any): boolean {
   try {
@@ -100,6 +103,7 @@ function isParsablePlane(pIn: any): boolean {
 /**
  * Parse a {@link TypeParsablePoint} and return a {@link Point}.
  * @return {Point}
+ * @group Misc Geometry
  */
 function getPlane(p: TypeParsablePlane): Plane {
   return parsePlane(p);
@@ -127,6 +131,7 @@ function getPlane(p: TypeParsablePlane): Plane {
  *
  * // find the intersect with a line
  * const i = lineIntersect([[0, -0.5, 0], [0, 0.5, 0]])
+ * @group Geometry
  */
 class Plane {
   p: Point;  // Point on plane
@@ -424,6 +429,7 @@ class Plane {
  * @param {TypeParsablePoint | [TypeParsablePoint, TypeParsablePoint, TypeParsablePoint]} p1OrPoints
  * @param {TypeParsablePoint} p2
  * @param {TypeParsablePoint} p3
+ * @group Misc Geometry
  */
 function getNormal(
   p1OrPoints: TypeParsablePoint | [TypeParsablePoint, TypeParsablePoint, TypeParsablePoint],

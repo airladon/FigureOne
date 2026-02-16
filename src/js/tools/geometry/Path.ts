@@ -63,6 +63,8 @@ function linearPath(
  * @property {number} offset
  * @property {number} angle (`Math.PI / 2`)
  * @property {'positive' | 'negative' | 'up' | 'left' | 'down' | 'right'} direction
+ * @interface
+ * @group Misc Geometry
  */
 export type OBJ_QuadraticBezier = {
   // path: '(Point, Point, number) => Point';

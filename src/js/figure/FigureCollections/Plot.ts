@@ -38,6 +38,8 @@ import type FigureCollections from './FigureCollections';
  * @property {number} [right]
  * @property {number} [top]
  * @property {number} [bottom]
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_GestureArea = {
   left?: number;
@@ -55,6 +57,8 @@ export type OBJ_GestureArea = {
  * @property {OBJ_CurvedCorner} [corner] define if need curved corners
  * @property {number} [space] space between plot, labels and title and frame
  * boundary
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_PlotFrame = {
   line?: OBJ_LineStyleSimple;
@@ -75,6 +79,8 @@ export type OBJ_PlotFrame = {
   * (`null`)
   * @property {null | number} [max] maximum zoom where `null` is no limit
   * (`null`)
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_PlotZoomOptions = {
   axis?: 'x' | 'y' | 'xy';
@@ -92,6 +98,8 @@ export type OBJ_PlotZoomOptions = {
   * @property {boolean} [wheel] enable mouse wheel to pan (`true`)
   * @property {boolean} [momentum] enable panning momentum (`true`)
   * @property {number} [maxVelocity] maximum panning velocity (`10`)
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_PlotPanOptions = {
   axis: 'x' | 'y' | 'xy';
@@ -110,6 +118,8 @@ export type OBJ_PlotPanOptions = {
  * @extends {COL_Axis}
  *
  * @property {OBJ_PlotAxis} [location]
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_PlotAxis = {
   location?: 'left' | 'right' | 'top' | 'bottom';
@@ -121,6 +131,8 @@ export type OBJ_PlotAxis = {
  * @property {number} [right]
  * @property {number} [top]
  * @property {number} [bottom]
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_PlotAreaLabelBuffer = {
   left?: number;
@@ -142,6 +154,8 @@ export type OBJ_PlotAreaLabelBufferFixed = {
  * {@link OBJ_TextLines}` & { offset: `{@link TypeParsablePoint}` }`
  *
  * Use `offset` to adjust the location of the title.
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_PlotTitle = OBJ_FormattedText & { offset: TypeParsablePoint };
 
@@ -209,6 +223,8 @@ export type OBJ_PlotTitle = OBJ_FormattedText & { offset: TypeParsablePoint };
  * by default. Use this property to extend the gesture area beyond the plot
  * area. This is useful for the user to zoom in on areas on the edge of the
  * plot area.
+ * @interface
+ * @group 2D Shape Collections
  */
 export type COL_Plot = {
   width?: number;
@@ -499,6 +515,7 @@ function cleanTraces(
  * // Initialize by zooming in by a magnification factor of 10
  * plot.zoomValue([1.8333, 0.06672], 10);
  *
+ * @group 2D Shape Collections
  */
 class CollectionsPlot extends FigureElementCollection {
   // Figure elements

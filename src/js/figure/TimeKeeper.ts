@@ -14,6 +14,7 @@
  *
  * `'prevFrame'` is the time of the last animation frame
  * @typedef {'now' | 'nextFrame' | 'prevFrame' | 'syncNow'} TypeWhen
+ * @group Misc Animation
  */
 export type TypeWhen = 'now' | 'nextFrame' | 'prevFrame' | 'syncNow';
 
@@ -46,6 +47,7 @@ export type TypeWhen = 'now' | 'nextFrame' | 'prevFrame' | 'syncNow';
  * animations being started where it is desired they all have precisely the
  * same start time). See `getWhen` method for information on how to retrieve a
  * synchronized time
+ * @group Misc Figure Element
  */
 class TimeKeeper {
   // Method for requesting the next animation frame

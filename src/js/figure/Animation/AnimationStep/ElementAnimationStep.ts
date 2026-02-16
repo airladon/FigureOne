@@ -21,6 +21,7 @@ import type { AnimationStartTime } from '../AnimationManager';
  *
  * @param {number} percent percentage of duration
  * @return {number} percent of animation complete
+ * @group Misc Animation
  */
 export type AnimationProgression = (percent: number) => number;
 
@@ -32,6 +33,8 @@ export type AnimationProgression = (percent: number) => number;
  * @property {'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression} [progression]
  * how the animation progresses - defaults to `linear` for color, opacity and
  * custom animations and `easeinout` for others
+ * @interface
+ * @group Misc Animation
  */
 export type OBJ_ElementAnimationStep = {
   element?: FigureElement; // Can't use FigureElement as importing it makes a loop
@@ -45,6 +48,7 @@ export type OBJ_ElementAnimationStep = {
  * Default values for the animation step will then come from this element.
  *
  * @extends AnimationStep
+ * @group Misc Animation
  */
 export default class ElementAnimationStep extends AnimationStep {
   type: 'transform' | 'color' | 'custom' | 'position' | 'setPosition' | 'opacity';

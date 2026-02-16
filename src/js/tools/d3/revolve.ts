@@ -125,6 +125,8 @@ Which means the normals for vertex a1 will be:
  * the edes of the faces will be returned. If `false`, then points
  * representing two triangles per face and an
  * associated normal for each point will be returned.
+ * @interface
+ * @group Misc Geometry Creation
  */
 export type OBJ_RevolvePoints = {
   sides?: number,
@@ -204,6 +206,7 @@ function getLathePoints(o: OBJ_RevolveDefined) {
  * @param {OBJ_Revolve} options
  * @return {[Array<Point>, Array<Point>]} an array of points and normals. If
  * the points represent lines, then the array of normals will be empty.
+ * @group Geometry Creation
  */
 function revolve(options: OBJ_RevolvePoints): [Point[]] | [Point[], Point[]] {
   const o = joinObjects(

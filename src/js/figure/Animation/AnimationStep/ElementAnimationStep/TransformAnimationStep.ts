@@ -55,6 +55,8 @@ import type { AnimationStartTime } from '../../AnimationManager';
  * @property {'0to360' | '-180to180' | null} [clipRotationTo]
  * @property {number | null} [maxDuration] maximum duration to clip animation
  * to where `null` is unlimited (`null`)
+ * @interface
+ * @group Misc Animation
  */
 export type OBJ_TransformAnimationStep = {
   start?: Transform;      // default is element transform
@@ -158,6 +160,7 @@ export type OBJ_TransformAnimationStep = {
  *   .then(step1)
  *   .then(step2)
  *   .start();
+ * @group Animation
  */
 export default class TransformAnimationStep extends ElementAnimationStep {
   transform: {

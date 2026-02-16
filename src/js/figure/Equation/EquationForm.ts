@@ -19,6 +19,7 @@ import { Elements } from './Elements/Element';
  * Where `number` is a percentage of the width from the left. So
  * `0` would be equivalent to `'left'`, 0.5 equivalent to
  * `'center'` and 1 equivalent to `'right'`.
+ * @group Misc Shapes
  */
 export type TypeHAlign = 'left' | 'right' | 'center' | number;
 
@@ -30,6 +31,7 @@ export type TypeHAlign = 'left' | 'right' | 'center' | number;
  * Where `number` is a percentage of the width from the left. So
  * `0` would be equivalent to `'left'`, 0.5 equivalent to
  * `'center'` and 1 equivalent to `'right'`.
+ * @group Misc Shapes
  */
 export type TypeVAlign = 'top' | 'bottom' | 'middle' | 'baseline' | number;
 

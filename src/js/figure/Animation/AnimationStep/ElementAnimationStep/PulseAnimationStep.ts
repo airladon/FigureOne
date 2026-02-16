@@ -46,6 +46,8 @@ import type { FigureElement } from '../../../Element';
  * used (`null`)
  * @property {TypeWhen} [when] when to start the pulse (`'syncNow'`)
  *
+ * @interface
+ * @group Misc Animation
  */
 export type OBJ_PulseAnimationStep = {
   // scale: ?number;
@@ -119,6 +121,7 @@ export type OBJ_PulseAnimationStep = {
  *   .then(step1)
  *   .then(step2)
  *   .start();
+ * @group Animation
  */
 export default class PulseAnimationStep extends ElementAnimationStep {
   // scale: number;

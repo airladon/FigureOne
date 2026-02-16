@@ -82,6 +82,8 @@ import type FigureCollections from './FigureCollections';
  * To test examples below, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>.
  *
+ * @interface
+ * @group Misc Shapes
  */
 export type COL_Trace = {
   points: Array<TypeParsablePoint>;
@@ -207,6 +209,7 @@ export type COL_Trace = {
  *   ],
  *   legend: true,
  * });
+ * @group Misc Shapes
  */
 class CollectionsTrace extends FigureElementCollection {
   // Figure elements

@@ -31,6 +31,8 @@ import type { Point } from '../geometry/Point';
  * the edes of the faces will be returned. If `false`, then points
  * representing two triangles per face and an
  * associated normal for each point will be returned.
+ * @interface
+ * @group Misc Geometry Creation
  */
 export type OBJ_ConePoints = {
   sides?: number,
@@ -67,6 +69,7 @@ type ConeOptionsDefined = {
  * @property {OBJ_CubePoints} options cone options
  * @return {[Array<Point>, Array<Point>]} an array of points and normals. If
  * the points represent lines, then the array of normals will be empty.
+ * @group Geometry Creation
  */
 export default function cone(options: OBJ_ConePoints): [Point[]] | [Point[], Point[]] {
   const defaults: ConeOptionsDefined = {

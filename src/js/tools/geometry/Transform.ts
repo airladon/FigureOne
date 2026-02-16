@@ -23,6 +23,8 @@ import type { OBJ_TranslationPath } from './Path';
  * @property {TypeParsablePoint} [right]
  * @property {TypeParsablePoint} [top]
  * @property {TypeParsablePoint} [normal]
+ * @interface
+ * @group Misc Geometry
  */
 export type TypeBasisObjectDefinition = {
   i?: TypeParsablePoint,
@@ -42,6 +44,7 @@ export type TypeBasisObjectDefinition = {
  * vector.
  *
  * `['r', number, number, number, number]`
+ * @group Misc Geometry
  */
 export type TypeTransformRotation = ['r', number, number, number, number];
 
@@ -53,6 +56,7 @@ export type TypeTransformRotation = ['r', number, number, number, number];
  * to the plane formed by [1, 0, 0] and `d`
  *
  * `['d', number, number, number]`
+ * @group Misc Geometry
  */
 export type TypeTransformDirection = ['d', number, number, number];
 
@@ -61,6 +65,7 @@ export type TypeTransformDirection = ['d', number, number, number];
  * translation.
  *
  * `['t', number, number, number]`
+ * @group Misc Geometry
  */
 export type TypeTransformTranslation = ['t', number, number, number];
 
@@ -70,6 +75,7 @@ export type TypeTransformTranslation = ['t', number, number, number];
  * three numbers defines each xyz component.
  *
  * `['s', number, number, number] | ['s', number, number] | ['s', number]`
+ * @group Misc Geometry
  */
 export type TypeTransformScale = ['s', number, number, number];
 
@@ -78,6 +84,7 @@ export type TypeTransformScale = ['s', number, number, number];
  * Custom transform component defined by a 4x4 matrix.
  *
  * `['c', number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number]`
+ * @group Misc Geometry
  */
 export type TypeTransformCustom = ['c', number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number];
 
@@ -86,6 +93,7 @@ export type TypeTransformCustom = ['c', number, number, number, number, number, 
  * from the standard basis: i: (1, 0, 0), j: (0, 1, 0), k: (0, 0, 1).
  *
  * `['b', number, number, number, number, number, number, number, number, number]`
+ * @group Misc Geometry
  */
 export type TypeTransformBasis = ['b', number, number, number, number, number, number, number, number, number];
 
@@ -94,6 +102,7 @@ export type TypeTransformBasis = ['b', number, number, number, number, number, n
  * initial basis.
  *
  * `['bb', number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number]`
+ * @group Misc Geometry
  */
 export type TypeTransformBasisToBasis = ['bb', number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number];
 
@@ -108,6 +117,7 @@ export type TypeTransformBasisToBasis = ['bb', number, number, number, number, n
  * order.
  *
  * ` ['b', `{@link TypeBasisObjectDefinition}`] | ` {@link TypeTransformBasis}
+ * @group Misc Geometry
  */
 export type TypeTransformBasisUserDefinition = ['b', TypeBasisObjectDefinition] | TypeTransformBasis;
 
@@ -125,6 +135,7 @@ export type TypeTransformBasisUserDefinition = ['b', TypeBasisObjectDefinition] 
  * and the second object or nin numbers define the basis to move to.
  *
  * ` ['bb', `{@link TypeBasisObjectDefinition}`, `{@link TypeBasisObjectDefinition}`] | ` {@link TypeTransformBasisToBasis}
+ * @group Misc Geometry
  */
 export type TypeTransformBasisToBasisUserDefinition = ['bb', TypeBasisObjectDefinition, TypeBasisObjectDefinition] | TypeTransformBasisToBasis;
 
@@ -133,6 +144,7 @@ export type TypeTransformBasisToBasisUserDefinition = ['bb', TypeBasisObjectDefi
  * Transform Component.
  *
  * {@link TypeTransformRotation} | {@link TypeTransformDirection} | {@link TypeTransformTranslation} | {@link TypeTransformScale} | {@link TypeTransformCustom} | {@link TypeTransformBasis} | {@link TypeTransformBasisToBasis}
+ * @group Misc Geometry
 */
 export type TypeTransformComponent = TypeTransformRotation
    | TypeTransformDirection | TypeTransformTranslation
@@ -144,6 +156,7 @@ export type TypeTransformComponent = TypeTransformRotation
  * Transform component defined by a user.
  *
  * {@link TypeTransformRotation} | {@link TypeTransformDirection} | {@link TypeTransformTranslation} | {@link TypeTransformScale} | {@link TypeTransformCustom} | {@link TypeTransformBasisUserDefinition} | {@link TypeTransformBasisToBasisUserDefinition}
+ * @group Misc Geometry
 */
 export type TypeTransformComponentUserDefinition = TypeTransformRotation
   | TypeTransformDirection | TypeTransformTranslation
@@ -156,6 +169,7 @@ export type TypeTransformComponentUserDefinition = TypeTransformRotation
  *
  *
  * `Array<`{@link TypeTransformComponent}`>`
+ * @group Misc Geometry
  */
 export type TypeTransformDefinition = Array<TypeTransformComponent>
 
@@ -163,6 +177,7 @@ export type TypeTransformDefinition = Array<TypeTransformComponent>
  * Transform array user definition.
  *
  * `Array<`{@link TypeTransformComponent}` | `{@link TypeTransformBasisUserDefinition}` | `{@link TypeTransformBasisToBasisUserDefinition}`>`
+ * @group Misc Geometry
  */
 export type TypeTransformUserDefinition = Array<TypeTransformComponentUserDefinition>;
 
@@ -177,6 +192,7 @@ export type TypeTransformUserDefinition = Array<TypeTransformComponentUserDefini
  * }
  * ```
  * @see {@link TypeTransformDefinition}
+ * @group Misc Geometry
  */
 export type TypeF1DefTransform = {
   f1Type: 'tf',
@@ -202,6 +218,7 @@ export type TypeTransformComponentName = 't' | 's' | 'b' | 'bb' | 'c' | 'd' | 'r
  * const t3 = Fig.getTransform([['s', 2], ['r', Math.PI / 2], ['t', 1, 1]]);
  *
  * @see See {@link Transform} for a summary of transfom components available.
+ * @group Geometry
  */
 export type TypeParsableTransform = TypeTransformUserDefinition | TypeTransformComponentUserDefinition | Transform | TypeF1DefTransform;
 
@@ -334,6 +351,7 @@ function makeTransformComponent(
  * ```
  *
  * @see See {@link TypeParsableTransform} for the different ways to define a transform.
+ * @group Geometry
  */
 class Transform {
   def: TypeTransformDefinition;
@@ -1307,6 +1325,7 @@ class Transform {
  * @see {@link TypeParsableTransform}
  * @param {any} value
  * @return {boolean}
+ * @group Misc Geometry
  */
 function isParsableTransform(value: any): boolean {
   if (value instanceof Transform) {
@@ -1441,6 +1460,7 @@ function getMatrix(matrixOrTransform: TypeParsableTransform | Type3DMatrix): Typ
  * Convert a parsable transform definition to a Transform.
  * @param {TypeParsableTransform} t
  * @return {Transform}
+ * @group Misc Geometry
  */
 function getTransform(t: TypeParsableTransform): Transform {
   let parsedTransform = parseTransform(t);
@@ -1538,6 +1558,7 @@ function directionToAxisAngle(
  * @param {TypeParsablePoint} toVector
  * @param {TypeParsablePoint | null} axisIfCollinear
  * @return {{axis: Point, angle: number}}
+ * @group Misc Geometry
  */
 function angleFromVectors(
   fromVector: TypeParsablePoint | TypeTransformDirection,

@@ -176,6 +176,7 @@ function setupPulse(element: FigureElement, options: Record<string, any>) {
  * Built in figure primitives.
  *
  * Including simple shapes, grid and text.
+ * @group Misc Figure Element
  */
 export default class FigurePrimitives {
   webgl: Array<WebGLInstance>;

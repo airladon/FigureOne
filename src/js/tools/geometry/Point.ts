@@ -32,6 +32,7 @@ type TypeF1DefPoint = {
  * p3 = '[2, 3]';
  * p4 = { f1Type: 'p', state: [2, 3] };
  * p5 = [2, 3, 0];
+ * @group Geometry
  */
 export type TypeParsablePoint =
   | Type2Components
@@ -95,6 +96,7 @@ function parsePoint(pIn: TypeParsablePoint): Point {
 
 /**
  * Test is a point is parsable
+ * @group Misc Geometry
  */
 function isParsablePoint(pIn: any): boolean {
   try {
@@ -108,6 +110,7 @@ function isParsablePoint(pIn: any): boolean {
 /**
  * Parse a {@link TypeParsablePoint} and return a {@link Point}.
  * @return {Point}
+ * @group Misc Geometry
  */
 function getPoint(p: TypeParsablePoint): Point {
   let parsedPoint = parsePoint(p);
@@ -121,6 +124,7 @@ function getPoint(p: TypeParsablePoint): Point {
  * Parse an array of parsable point definitions ({@link TypeParsablePoint})
  * returning an array of points.
  * @return {Array<Point>}
+ * @group Misc Geometry
  */
 function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<Point> {
   if (Array.isArray(points)) {
@@ -141,6 +145,7 @@ function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<
  * Scale can either be defined as a {@link TypeParsablePoint} or a `number` if
  * the x and y scale is equal.
  * @return {Point} x and y scale
+ * @group Misc Geometry
  */
 function getScale(s: TypeParsablePoint | number) {
   let parsedPoint: Point;
@@ -174,6 +179,7 @@ function getScale(s: TypeParsablePoint | number) {
  *
  * // add to another point (3, 1) which will result in (3, 3)
  * const q = p.add(3, 1);
+ * @group Geometry
  */
 class Point {
   x!: number;

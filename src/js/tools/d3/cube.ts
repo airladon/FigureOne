@@ -21,6 +21,8 @@ import type { TypeParsableTransform } from '../geometry/Transform';
  * the 12 edges of the cube will be returned. If `false`, then points
  * representing two triangles per face (12 triangles, 36 points) and an
  * associated normal for each point will be returned. (`false`)
+ * @interface
+ * @group Misc Geometry Creation
  */
 export type OBJ_CubePoints = {
   side?: number,
@@ -76,6 +78,7 @@ function toLines(
  * @property {OBJ_CubePoints} options cube options
  * @return {[Array<Point>, Array<Point>]} an array of points and normals. If
  * the points represent lines, then the array of normals will be empty.
+ * @group Geometry Creation
  */
 type CubeOptionsDefined = {
   side: number,

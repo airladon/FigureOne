@@ -20,6 +20,7 @@ function deg(angle: number): number {
  * const d3 = minAngleDiff(0.1, -0.1);
  * console.log(d3);
  * // 0.2
+ * @group 2D Geometry Tools
  */
 function minAngleDiff(angle1: number, angle2: number): number {
   if (angle1 === angle2) {
@@ -45,6 +46,7 @@ function minAngleDiff(angle1: number, angle2: number): number {
  * const a3 = clipAngle(-Math.PI / 4 * 10, null);
  * console.log(a3);
  * // -1.5707963267948966
+ * @group 2D Geometry Tools
  */
 function clipAngle(
   angleToClip: number,
@@ -84,6 +86,7 @@ function clipAngle(
 
 /**
  * Normalize angle to between 0 and 2π.
+ * @group 2D Geometry Tools
  */
 function normAngle(angle: number): number {
   return clipAngle(angle, '0to360');
@@ -111,6 +114,7 @@ function normAngleTo90(angle: number): number {
  * - -1: negative direction (CW in 2D)
  * - 2: not through zero
  * - null: returns numerical delta angle
+ * @group Misc Shapes
  */
 export type TypeRotationDirection = 0 | 1 | 2 | -1 | null;
 
@@ -121,6 +125,7 @@ export type TypeRotationDirection = 0 | 1 | 2 | -1 | null;
 // 3 is numerical
 /**
  * Get angle delta based on direction
+ * @group 2D Geometry Tools
  */
 function getDeltaAngle(
   startAngle: number,
@@ -164,6 +169,7 @@ function getDeltaAngle(
 /**
  * Get delta angle of a Point where the x, y, z components are rotations
  * around the x, y, and z axes.
+ * @group 2D Geometry Tools
  */
 function getDeltaAngle3D(
   startAngle: Point,
@@ -200,6 +206,7 @@ function getDeltaAngle3D(
  * const p2 = threePointAngle(getPoint([0, 1]), getPoint([0, 0]), getPoint([1, 0]));
  * console.log(p2);
  * // 4.71238898038469
+ * @group 2D Geometry Tools
  */
 function threePointAngle(p2: Point, p1: Point, p3: Point): number {
   const r12 = p2.sub(p1);
@@ -229,6 +236,7 @@ function threePointAngle(p2: Point, p1: Point, p3: Point): number {
  * const p2 = threePointAngleMin(getPoint([0, 1]), getPoint([0, 0]), getPoint([1, 0]));
  * console.log(p2);
  * // -1.5707963267948966
+ * @group 2D Geometry Tools
  */
 function threePointAngleMin(p2: Point, p1: Point, p3: Point): number {
   const a12 = clipAngle(Math.atan2(p2.y - p1.y, p2.x - p1.x), '0to360');

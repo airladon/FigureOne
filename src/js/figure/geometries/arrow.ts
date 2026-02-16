@@ -47,6 +47,8 @@ export type TypeArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'p
  * @property {'start' | 'mid'} [align] define which part of
  * the arrow is aligned at (0, 0) in draw space (`'start'`)
  *
+ * @interface
+ * @group Misc Shapes
  * @example
  * // Line with triangle arrows on both ends
  * figure.add({
@@ -155,6 +157,8 @@ export type OBJ_LineArrow = {
  * extend the tail beyond the boundaries of the head
  * @property {'start' | 'mid'} [align] define which part of
  * the arrow is aligned at (0, 0) in draw space (`'start'`)
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_LineArrows = {
   start: OBJ_LineArrow | TypeArrowHead;

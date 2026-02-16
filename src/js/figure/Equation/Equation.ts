@@ -51,6 +51,8 @@ import type { TypeText } from '../FigurePrimitives/FigurePrimitiveTypes';
  * be updated.
  *
  * @property {string | FigureElement} [_elementName]
+ * @interface
+ * @group Misc Equation
  */
 export type EQN_UpdateElementText = {
   [elementName: string]: string | FigureElement;
@@ -61,6 +63,8 @@ export type EQN_UpdateElementText = {
  * are the values to set the properties to.
  *
  * @property {any} [_propertyName]
+ * @interface
+ * @group Misc Figure Element
  */
 export type OBJ_ElementPropertyMod = {
   [propertyName: string]: any;
@@ -71,6 +75,8 @@ export type OBJ_ElementPropertyMod = {
  * describing which element properties to modify after creation.
  *
  * @property {OBJ_ElementPropertyMod} [_elementName]
+ * @interface
+ * @group Misc Figure Element
  */
 export type OBJ_ElementMods = {
   [elementName: string]: OBJ_ElementPropertyMod;
@@ -94,6 +100,8 @@ export type OBJ_ElementMods = {
  * @property {TypeBorder | 'border' | number | 'rect' | 'draw' | 'buffer'} [touchBorder]
  * set the element's touch border
  * @property {OBJ_ElementMods} [mods]
+ * @interface
+ * @group Equations
  */
 export type EQN_TextElement = string | {
     text?: string;
@@ -131,6 +139,7 @@ export type EQN_TextElement = string | {
  * - {@link EQN_SquareBracketSymbol}
  * - {@link EQN_LineSymbol}
  * - {@link EQN_RadicalSymbol}
+ * @group Equations
  */
 export type TypeEquationElement = string
   | FigureElementPrimitive
@@ -158,6 +167,8 @@ export type TypeEquationElement = string
  * @see {@link Equation}
  *
  * @property {TypeEquationElement} [_elementName]
+ * @interface
+ * @group Equations
  */
 export type EQN_EquationElements = {
   [elementName: string]: TypeEquationElement;
@@ -304,6 +315,8 @@ export type EQN_EquationElements = {
  *     },
  *   },
  * ]);
+ * @interface
+ * @group Equations
  */
 type EQN_FormAlignment = {
   fixTo: FigureElement | TypeParsablePoint | string;
@@ -319,6 +332,8 @@ type EQN_FormAlignment = {
  * @property {'up' | 'down'} [direction] - curve only - element should move
  * through an up or down curve
  * @property {number} [mag] - the magnitude of the curve
+ * @interface
+ * @group Equations
  */
 type EQN_TranslationStyle = {
   style: 'curved' | 'linear';
@@ -335,6 +350,8 @@ type EQN_TranslationStyle = {
  * @see {@link EQN_TranslationStyle}, {@link EQN_FormObjectDefinition}, {@link EQN_FromForm}.
  *
  * @property {EQN_TranslationStyle} [_elementName]
+ * @interface
+ * @group Misc Equation
  */
 export type EQN_TranslationStyles = {
   [elementName: string]: EQN_TranslationStyle;
@@ -389,6 +406,8 @@ export type EQN_TranslationStyles = {
  * or when `showForm` is used
  * @property {OBJ_ElementMods} [elementMods] properties to set in the equation element
  * (@FigureElementPrimitive) when this form is shown
+ * @interface
+ * @group Equations
  */
 export type EQN_FromForm = {
   onTransition?: null | string | (() => void);
@@ -411,6 +430,8 @@ export type EQN_FromForm = {
  * @property {EQN_FromForm} [_formName]
  *
  * @see {@link EQN_FromForm}, {@link EQN_FormObjectDefinition}
+ * @interface
+ * @group Equations
  */
 export type EQN_FromForms = {
   [formName: string]: EQN_FromForm;
@@ -544,6 +565,8 @@ export type EQN_FromForms = {
  *     },
  *   },
  * });
+ * @interface
+ * @group Equations
  */
 type EQN_FormObjectDefinition = {
   content: TypeEquationPhrase;
@@ -568,6 +591,7 @@ type EQN_FormObjectDefinition = {
  * * an equation phrase {@link TypeEquationPhrase}
  *
  * @type {TypeEquationPhrase | EQN_FormObjectDefinition}
+ * @group Equations
  */
 type TypeEquationForm = TypeEquationPhrase
                         | EQN_FormObjectDefinition
@@ -577,6 +601,8 @@ type TypeEquationForm = TypeEquationPhrase
  * is a form defintion {@link TypeEquationForm}
  *
  * @property {TypeEquationForm} [_formName]
+ * @interface
+ * @group Equations
  */
 export type EQN_Forms = {
   [formName: string]: TypeEquationForm;
@@ -591,6 +617,8 @@ export type EQN_Forms = {
  * The default values in the pulse object are are:
  * * `duration`: 1s
  * * `scale`: 1.1
+ * @interface
+ * @group Equations
  */
 type EQN_FormRestart = {
   moveFrom?: Point | FigureElementCollection | null;
@@ -615,6 +643,8 @@ type EQN_FormRestart = {
  * @extends EQN_EquationGoToForm
  *
  * @see {@link Equation}, {@link NextFormAnimationStep}
+ * @interface
+ * @group Misc Equation
  */
 export type OBJ_NextFormAnimationStep = {
 } & OBJ_TriggerAnimationStep;
@@ -641,6 +671,8 @@ export type OBJ_NextFormAnimationStep = {
  * form will be used
  *
  * @see {@link Equation}
+ * @interface
+ * @group Misc Equation
  */
 export type OBJ_GoToFormAnimationStep = {
   start?: string;
@@ -652,6 +684,8 @@ export type OBJ_GoToFormAnimationStep = {
  * Default form values applied to all forms
  *
  * @see {@link EQN_FormObjectDefinition}
+ * @interface
+ * @group Equations
  */
 export type EQN_FormDefaults = {
   alignment?: EQN_FormAlignment;
@@ -693,6 +727,8 @@ export type EQN_FormDefaults = {
  * @property {TypeParsablePoint} [position] position will override first
  * translation element of transform
  * @property {Transform} [transform]
+ * @interface
+ * @group Equations
  */
 export type EQN_Equation = {
   color?: TypeColor;
@@ -768,6 +804,8 @@ export type EQN_Equation = {
  * behavior for if currently animating between forms. Default:
  * `skipToTarget: true`, `cancelGoTo: true`
  * @property {?() => void} [callback] - call when goto finished
+ * @interface
+ * @group Misc Equation
  */
 type EQN_EquationGoToForm = {
   name?: string;
@@ -830,6 +868,7 @@ type EQN_EquationGoToForm = {
  *   .delay(1)
  *   .nextForm({ animate: 'move', duration: 1 })
  *   .start();
+ * @group Misc Equation
  */
 // eslint-disable-next-line no-unused-vars
 class NextFormAnimationStep extends TriggerAnimationStep {
@@ -875,6 +914,7 @@ class NextFormAnimationStep extends TriggerAnimationStep {
  *   .delay(1)
  *   .goToForm({ target: '2', animate: 'move' })
  *   .start();
+ * @group Misc Equation
  */
 // eslint-disable-next-line no-unused-vars
 class GoToFormAnimationStep extends TriggerAnimationStep {
@@ -935,6 +975,7 @@ class GoToFormAnimationStep extends TriggerAnimationStep {
  * });
  * figure.add('eqn', eqn);
  * eqn.showForm('1');
+ * @group Equations
  */
 export class Equation extends FigureElementCollection {
   /**

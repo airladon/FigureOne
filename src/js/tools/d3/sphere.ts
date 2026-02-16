@@ -27,6 +27,8 @@ import * as m3 from '../m3';
  * the edes of the faces will be returned. If `false`, then points
  * representing two triangles per face and an
  * associated normal for each point will be returned.
+ * @interface
+ * @group Misc Geometry Creation
  */
 export type OBJ_SpherePoints = {
   sides?: number,
@@ -50,6 +52,7 @@ export type OBJ_SpherePoints = {
  * @property {OBJ_CubePoints} options sphere options
  * @return {[Array<Point>, Array<Point>]} an array of points and normals. If
  * the points represent lines, then the array of normals will be empty.
+ * @group Geometry Creation
  */
 type SphereOptionsDefined = {
   sides: number,

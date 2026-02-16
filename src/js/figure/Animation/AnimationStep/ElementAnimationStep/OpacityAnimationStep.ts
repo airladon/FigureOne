@@ -22,6 +22,8 @@ import type { AnimationStartTime } from '../../AnimationManager';
  * @property {null | 'in' | 'out'} dissolve will override target opacity if not
  * `null` (`null`)
  * @property {boolean} dissolveFromCurrent (`false`)
+ * @interface
+ * @group Misc Animation
  */
 export type OBJ_OpacityAnimationStep = {
   start?: number;      // default is element transform
@@ -107,6 +109,7 @@ export type OBJ_OpacityAnimationStep = {
  *   .then(step3)
  *   .then(step4)
  *   .start();
+ * @group Animation
  */
 export class OpacityAnimationStep extends ElementAnimationStep {
   opacity: {
@@ -300,6 +303,7 @@ export class OpacityAnimationStep extends ElementAnimationStep {
  *   .dissolveOut(1)
  *   .then(step2)
  *   .start();
+ * @group Animation
  */
 export class DissolveInAnimationStep extends OpacityAnimationStep {
   /**
@@ -365,6 +369,7 @@ export function dissolveIn(
  *   .dissolveIn(1)
  *   .then(step2)
  *   .start();
+ * @group Animation
  */
 export class DissolveOutAnimationStep extends OpacityAnimationStep {
   /**

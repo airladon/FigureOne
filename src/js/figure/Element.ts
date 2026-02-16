@@ -49,6 +49,8 @@ const FIGURE1DEBUG = false;
 
 /**
  * Add element Object
+ * @interface
+ * @group Misc Figure Element
  */
 export type OBJ_AddElement = {
   path?: string,
@@ -86,6 +88,8 @@ export type OBJ_AddElement = {
  * @property {TypeParsableTransform} transform
  * @property {Array<number>} color
  * @property {boolean} isShown
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_Scenario = {
   position?: TypeParsablePoint,
@@ -118,6 +122,7 @@ export type OBJ_Scenario = {
  * - `['description', 'diagram.lines.lineC', 'diagram.lines.lineD']`
  * - `['description', { diagram: ['lines.lineC', 'lines.lineD'] }]`
  * - `['description', { 'diagram.lines': ['lineC', 'lineD'] }]`
+ * @group Misc Figure Element
  */
 export type TypeElementPath = string
                               | { [name: string]: TypeElementPath }
@@ -267,6 +272,8 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
  *   min: 0.9,
  *   num: 7,
  * });
+ * @interface
+ * @group Misc Animation
  */
 export type OBJ_Pulse = {
   duration?: number,
@@ -300,6 +307,8 @@ export type OBJ_Pulse = {
  * if bouncing of boundary
  * @property {?(string | ((boolean) => void))} callback called each frame of
  * free movement
+ * @interface
+ * @group Interactivity
  */
 type OBJ_ElementMoveFreely = {
   zeroVelocityThreshold: number,  // Velocity considered 0
@@ -364,6 +373,8 @@ Rotation can only happen with some rotation transform elements:
  * @property {OBJ_ElementMoveFreely} freely free movement parameters - use
  * false for disabling free movement after touch up
  * @property {FigureElement | null | string} element
+ * @interface
+ * @group Interactivity
  */
 export type OBJ_ElementMove = {
   type?: 'rotation' | 'translation' | 'position' | 'scale' | 'scaleX' | 'scaleY' | 'scaleZ',
@@ -431,6 +442,8 @@ type OBJ_ElementMoveFixed = {
  *
  * @property {OBJ_Scenario} _scenarioName where scenarioName can be any
  * string that names the scenario
+ * @interface
+ * @group Misc Figure Element
  */
 export type OBJ_Scenarios = {
   [_scenarioName: string]: OBJ_Scenario,
@@ -438,6 +451,7 @@ export type OBJ_Scenarios = {
 
 /**
  * Element movement state
+ * @group Misc Figure Element
  */
 type ElementMovementState = {
   previousTime: number | null,
@@ -451,6 +465,7 @@ type ElementMovementState = {
 
 /**
  * Element pulse state
+ * @group Misc Figure Element
  */
 type ElementPulseState = {
   startTime: number | null,
@@ -458,6 +473,7 @@ type ElementPulseState = {
 
 /**
  * Element state
+ * @group Misc Figure Element
  */
 type ElementState = {
   isBeingMoved: boolean,
@@ -553,6 +569,7 @@ type ElementState = {
  * object like strings, numbers, booleans and nested arrays or objects
  * containing these. Functions should not be put in here - use string
  * identifiers to `fnMap` if functions are needed.
+ * @group Figure Elements
  */
 class FigureElement {
   transform: Transform;
@@ -3952,6 +3969,7 @@ class FigureElement {
  *
  * @class
  * @extends FigureElement
+ * @group Figure Elements
  */
 class FigureElementPrimitive extends FigureElement {
   drawingObject: DrawingObject;
@@ -4457,6 +4475,8 @@ class FigureElementPrimitive extends FigureElement {
  * @property {FigureElement | null} [parent] parent of collection
  * @property {TypeBorder | 'children' | 'rect' | number} [border]
  * @property {TypeBorder | 'border' | number | 'rect'} [touchBorder]
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_FigureElementCollection = {
   transform?: TypeParsableTransform;
@@ -4482,6 +4502,7 @@ export type OBJ_FigureElementCollection = {
  *
  * @class
  * @extends FigureElement
+ * @group Figure Elements
  */
 class FigureElementCollection extends FigureElement {
   elements: Record<string, FigureElement>;

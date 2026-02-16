@@ -34,6 +34,8 @@ import type { TypeColor } from '../../../../tools/types';
  * @property {TypeParsableTransform} [transform]
  * @property {TypeColor} [color]
  * @property {number} [opacity]
+ * @interface
+ * @group Misc Animation
  */
 export type OBJ_ScenarioVelocity = {
   position?: TypeParsablePoint | number;
@@ -70,6 +72,8 @@ export type OBJ_ScenarioVelocity = {
  * @property {'0to360' | '-180to180' | null} [clipRotationTo]
  * @property {'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression} [progression]
  * (`'easeinout'`)
+ * @interface
+ * @group Misc Animation
  */
 export type OBJ_ScenarioAnimationStep = {
   start?: string | OBJ_Scenario;
@@ -109,6 +113,8 @@ export type OBJ_ScenarioAnimationStep = {
  * @property {'0to360' | '-180to180' | null} [clipRotationTo]
  * @property {'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression} [progression]
  * (`'easeinout'`)
+ * @interface
+ * @group Misc Animation
  */
 export type OBJ_ScenariosAnimationStep = {
   target?: string;
@@ -180,6 +186,7 @@ export type OBJ_ScenariosAnimationStep = {
  *   .then(step1)
  *   .then(step2)
  *   .start();
+ * @group Animation
  */
 export default class ScenarioAnimationStep extends ParallelAnimationStep {
   override element: FigureElement | null | undefined;

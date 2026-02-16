@@ -160,6 +160,8 @@ function comparePoints(
  * Buffer for rectangle, where `left`, `bottom`, `right` and `top` are
  * the buffer values for a rectangle's left, bottom, right and top sides
  * respectively.
+ * @interface
+ * @group Misc Geometry
  */
 export type OBJ_Buffer = {
   left: number,
@@ -179,6 +181,7 @@ export type OBJ_Buffer = {
  *   object definition where default values are `0`.
  *
  * Can use {@link getBuffer} to convert the parsable buffer into
+ * @group Misc Geometry
  */
 export type TypeParsableBuffer = number
   | [number, number]
@@ -193,6 +196,7 @@ export type TypeParsableBuffer = number
 /**
  * Convert a parsable buffer into a buffer.
  * @return {OBJ_Buffer}
+ * @group Misc Geometry
  */
 function getBuffer(buffer: TypeParsableBuffer): OBJ_Buffer {
   let left: number;
@@ -440,6 +444,7 @@ function quadBezierPoints(p0: Point, p1: Point, p2: Point, sides: number) {
  * const center = getTriangleCenter([0, 0], [1, 0], [0, 1]);
  * console.log(center);
  * // Point {x: 0.3333333333333333, y: 0.3333333333333333}
+ * @group 2D Geometry Tools
  */
 function getTriangleCenter(
   p1: TypeParsablePoint,
@@ -462,6 +467,7 @@ function getTriangleCenter(
  * If a border is not contigous, but rather is several "islands" of contigous,
  * closed borders, then an array of point arrays can be used, where each point
  * array is one island.
+ * @group Misc Geometry
  */
 export type TypeParsableBorder = Array<TypeParsablePoint> | Array<Array<TypeParsablePoint>>;
 
@@ -471,6 +477,7 @@ export type TypeParsableBorder = Array<TypeParsablePoint> | Array<Array<TypePars
  * borders.
  *
  * `TypeBorder = Array<Array<Point>>`
+ * @group Misc Geometry
  */
 export type TypeBorder = Array<Array<Point>>;
 
@@ -531,6 +538,8 @@ function getPositionInRect(
  *
  * One component must be a function that takes in two components
  * (x, y), (x, z), or (y, z) and outputs the third (z, y or x repsectively).
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_SurfaceGrid = {
   x: ((a: number, b: number) => number) | [number, number, number],
@@ -587,6 +596,7 @@ export type OBJ_SurfaceGrid = {
  *   },
  *   { make: 'cameraControl', axis: [0, 0, 1] },
  * ]);
+ * @group Misc Shapes
  */
 function surfaceGrid(components: OBJ_SurfaceGrid) {
   const surfacePoints: Point[][] = [];

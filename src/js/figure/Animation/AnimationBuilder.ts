@@ -23,6 +23,8 @@ import type { TypeColor } from '../../tools/types';
  * Animation builder options object
  * @extends OBJ_SerialAnimationStep
  * @property {FigureElement} [element]
+ * @interface
+ * @group Misc Animation
  */
 export type OBJ_AnimationBuilder = {
   element?: FigureElement;
@@ -48,6 +50,7 @@ export type OBJ_AnimationBuilder = {
  *   .delay(1)
  *   .rotation({ target: Math.PI, duration: 2 })
  *   .start();
+ * @group Animation
  */
 export default class AnimationBuilder extends animation.SerialAnimationStep {
   /**

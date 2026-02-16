@@ -46,6 +46,8 @@ import type FigureCollections from './FigureCollections';
  * @property {number} [duration] pulse duration in seconds
  * @property {number} [frequency] pulse frequency in pulses per second
  * @property {TypeWhen} [when] when to start the pulse (`'nextFrame'`)
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_PulseWidth = {
   line?: number;
@@ -113,6 +115,8 @@ export type OBJ_PulseWidth = {
  * @property {number} [scale] size of the label
  * @property {TypeColor} [color]
  * @property {OBJ_Font} [font] default font for label
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_LineLabel = {
   text: null | string | Array<string> | Equation | EQN_Equation;
@@ -143,6 +147,8 @@ export type OBJ_LineLabel = {
  * @property {boolean} [includeLabelInTouchBoundary] `true` to include the
  * line's label in the touch boundary for `'centerTranslateEndRotation'`
  * ('false`)
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_LineMove = {
   // movable?: boolean,
@@ -157,6 +163,8 @@ export type OBJ_LineMove = {
  * @extends OBJ_LineMove
  *
  * @property {boolean} [movable] `true` to make movable (`true`)
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_MovableLine = {
   movable?: boolean;
@@ -222,6 +230,8 @@ export type OBJ_MovableLine = {
  * @property {OBJ_PulseWidth} [pulseWidth] default options for pulseWidth pulse
  * @property {OBJ_Pulse} [pulse] default options for normal pulse
  * @property {OBJ_LineMove} [move] line move options
+ * @interface
+ * @group 2D Shape Collections
  */
 export type COL_Line = {
   p1?: TypeParsablePoint;
@@ -345,6 +355,8 @@ function getLineFromOptions(options: {
  * @property {number} [start] line length to grow from (`current length`)
  * @property {number} [target] line length to grow to (`current length`)
  * @extends OBJ_CustomAnimationStep
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_LengthAnimationStep = {
   start?: number;
@@ -364,6 +376,8 @@ export type OBJ_LengthAnimationStep = {
  * @property {number} [duration] pulse duration in seconds
  * @property {number} [frequency] pulse frequency in pulses per second
  * @extends OBJ_TriggerAnimationStep
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_PulseWidthAnimationStep = {
   line?: number;
@@ -494,6 +508,7 @@ export type OBJ_PulseWidthAnimationStep = {
  * l.setMovable({ type: 'centerTranslateEndRotation'})
  * l.setAutoUpdate();
  *
+ * @group 2D Shape Collections
  */
 export default class CollectionsLine extends FigureElementCollection {
   // Figure elements

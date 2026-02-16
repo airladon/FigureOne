@@ -17,6 +17,8 @@ import type { AnimationStartTime } from '../AnimationManager';
  * animation frame
  * @property {number} [startPercent] percent to start animation at (`0`)
  * @property {'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression} [progression]
+ * @interface
+ * @group Misc Animation
  */
 export type OBJ_CustomAnimationStep = {
   callback?: string | ((percent: number) => void);
@@ -81,6 +83,7 @@ export type OBJ_CustomAnimationStep = {
  *     duration: null,
  *   })
  *   .start();
+ * @group Animation
  */
 export class CustomAnimationStep extends AnimationStep {
   callback: ((percent: number) => void) | null;

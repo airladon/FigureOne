@@ -19,6 +19,7 @@ export type OBJ_LoadFontOptions = {
  * - `fontsLoaded`: published when all fonts have been loaded or timed out
  * - `fontLoaded`: published after each font is loaded
  * - `fontUnavailable`: published when loading a font has timed out
+ * @group Text
  */
 export default class FontManager {
   fonts!: Record<string, any>;

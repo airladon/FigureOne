@@ -65,6 +65,7 @@ import type { OBJ_FormattedText } from './Text';
  * Built in figure collections.
  *
  * Provides advanced primitives the specific methods, animations and interactivity.
+ * @group Misc Shapes
  */
 export default class FigureCollections {
   webgl: Array<WebGLInstance>;

@@ -625,6 +625,7 @@ class TextObject extends DrawingObject {
 
 /**
  * FigureElementPrimitive that handles drawing text on a 2D canvas.
+ * @group Misc Text
  */
 export default class FigureElementPrimitive2DText extends FigureElementPrimitive {
   override drawingObject!: TextObject;

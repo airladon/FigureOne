@@ -20,6 +20,8 @@ import type { AnimationStartTime } from '../AnimationManager';
  * callback - if the `callback` is a string then this element's
  * {@link FunctionMap} will be searched for the corresponding function
  *
+ * @interface
+ * @group Misc Animation
  */
 export type OBJ_TriggerAnimationStep = {
   callback?: Function;      // default is element transform
@@ -86,6 +88,7 @@ export type OBJ_TriggerAnimationStep = {
  *   .position({ target: [0, 0], duration: 2 })
  *   .then(step2)
  *   .start();
+ * @group Animation
  */
 export class TriggerAnimationStep extends AnimationStep {
   callback: (string | Function) | null;

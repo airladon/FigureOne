@@ -1,0 +1,4 @@
+/* Hide trailing "/" on the last breadcrumb item */
+.tsd-breadcrumb li:last-child:after {
+    content: none;
+}

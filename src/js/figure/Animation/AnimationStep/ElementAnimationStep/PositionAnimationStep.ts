@@ -34,6 +34,8 @@ import type { AnimationStartTime } from '../../AnimationManager';
  * to where `null` is unlimited (`null`)
  *
  * @see {@link PositionAnimationStep} for description and examples
+ * @interface
+ * @group Misc Animation
  */
 export type OBJ_PositionAnimationStep = {
   start?: Point;      // default is element transform
@@ -112,6 +114,7 @@ export type OBJ_PositionAnimationStep = {
  *   .then(step1)
  *   .then(step2)
  *   .start();
+ * @group Animation
  */
 export default class PositionAnimationStep extends ElementAnimationStep {
   position: {

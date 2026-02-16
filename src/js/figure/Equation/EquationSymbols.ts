@@ -65,6 +65,8 @@ import type {
  * properties on the {@link FigureElementPrimitive}, and could therefore also
  * be set in `mods`. However, as these are commonly used, they are included in
  * the root object for convenience.
+ * @interface
+ * @group Equation Symbols
  */
 export type EQN_Symbol = {
   color?: TypeColor;
@@ -141,6 +143,8 @@ export type EQN_Symbol = {
  *       form1: { frac: ['a', { vinculum: { lineWidth: 0.004 } }, 'b'] },
  *   },
  * });
+ * @interface
+ * @group Equation Symbols
  */
 export type EQN_VinculumSymbol = {
   symbol: 'vinculum';
@@ -236,6 +240,8 @@ export type EQN_VinculumSymbol = {
  *     form1: { box: ['a', { box: { lineWidth: 0.004 } }, true, 0.1] },
  *   },
  * });
+ * @interface
+ * @group Equation Symbols
  */
 export type EQN_BoxSymbol = {
   symbol: 'box';
@@ -358,6 +364,8 @@ export type EQN_BoxSymbol = {
  *     },
  *   },
  * });
+ * @interface
+ * @group Equation Symbols
  */
 export type EQN_ArrowSymbol = {
   symbol: 'arrow';
@@ -459,6 +467,8 @@ export type EQN_ArrowSymbol = {
  *     form1: { sumOf: [{ sum: { lineWidth: 0.01 } }, 'a', 'a = 0', 'n'] },
  *   },
  * });
+ * @interface
+ * @group Equation Symbols
  */
 export type EQN_SumSymbol ={
   symbol: 'sum';
@@ -563,6 +573,8 @@ export type EQN_SumSymbol ={
  *     form1: { prodOf: [{ prod: { lineWidth: 0.01 } }, 'a', 'a = 0', 'n'] },
  *   },
  * });
+ * @interface
+ * @group Equation Symbols
  */
 export type EQN_ProdSymbol = {
   symbol: 'prod';
@@ -704,6 +716,8 @@ export type EQN_ProdSymbol = {
  *     form1: { int: [{ int: { serif: false } }, 'x dx', 'a', 'b'] },
  *   },
  * });
+ * @interface
+ * @group Equation Symbols
  */
 export type EQN_IntegralSymbol = {
   symbol: 'int';
@@ -823,6 +837,8 @@ export type EQN_IntegralSymbol = {
  *     form1: { root: [{ radical: { lineWidth: 0.005 } }, 'a', false, 0.05] },
  *   },
  * });
+ * @interface
+ * @group Equation Symbols
  */
 export type EQN_RadicalSymbol = {
   symbol: 'radical';
@@ -938,6 +954,8 @@ export type EQN_RadicalSymbol = {
  *     form1: { box: ['abc', { division: { lineWidth: 0.005 } }] },
  *   },
  * });
+ * @interface
+ * @group Equation Symbols
  */
 export type EQN_DivisionSymbol = {
   symbol: 'division';
@@ -1086,6 +1104,8 @@ export type EQN_DivisionSymbol = {
  *     form1: { strike: ['ABC', { strike: { style: 'forward' } }] },
  *   },
  * });
+ * @interface
+ * @group Equation Symbols
  */
 export type EQN_StrikeSymbol = {
   symbol: 'strike';
@@ -1174,6 +1194,8 @@ export type EQN_StrikeSymbol = {
  *     },
  *   },
  * });
+ * @interface
+ * @group Equation Symbols
  */
 export type EQN_BracketSymbol = {
   symbol: 'bracket';
@@ -1254,6 +1276,8 @@ export type EQN_BracketSymbol = {
  *     },
  *   },
  * });
+ * @interface
+ * @group Equation Symbols
  */
 export type EQN_AngleBracketSymbol = {
   symbol: 'angleBracket';
@@ -1356,6 +1380,8 @@ export type EQN_AngleBracketSymbol = {
  *     },
  *   },
  * });
+ * @interface
+ * @group Equation Symbols
  */
 export type EQN_BraceSymbol = {
   symbol: 'brace';
@@ -1465,6 +1491,8 @@ export type EQN_BraceSymbol = {
  *     form1: { bar: ['a', { bar: { side: 'top' } }, false, 0.05, 0.03] },
  *   },
  * });
+ * @interface
+ * @group Equation Symbols
  */
 export type EQN_BarSymbol = {
   symbol: 'bar';
@@ -1555,6 +1583,8 @@ export type EQN_BarSymbol = {
  *     },
  *   },
  * });
+ * @interface
+ * @group Equation Symbols
  */
 export type EQN_SquareBracketSymbol = {
   symbol: 'squareBracket';
@@ -1642,6 +1672,8 @@ export type EQN_SquareBracketSymbol = {
  *   },
  * });
  *
+ * @interface
+ * @group Equation Symbols
  */
 export type EQN_LineSymbol = {
   width?: number;

@@ -22,6 +22,7 @@ import type { TypeVertexShader, TypeFragmentShader } from '../webgl/shaders';
  * - `'POINTS'`: LINES
  *
  * `'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'`
+ * @group Shaders
  */
 export type TypeGLPrimitive = 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES';
 
@@ -34,6 +35,8 @@ export type TypeGLPrimitive = 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'
  * @property {number} [width] line width
  * @property {TypeDash} [dash] select solid or dashed line
  * @property {TypeColor} [color] line color
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_LineStyleSimple = {
   widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' | number,
@@ -128,6 +131,8 @@ export type OBJ_LineStyleSimple_Defined = {
  *   .delay(1)
  *   .rotation({ target: Math.PI * 1.999, direction: 1, duration: 5 })
  *   .start();
+ * @interface
+ * @group 2D Shape Collections
  */
 export type OBJ_Collection = {
   transform?: TypeParsableTransform,
@@ -216,6 +221,8 @@ export type OBJ_Collection = {
  * callback can be used to execute code after the texture is loaded. At a
  * minimum, any custom function here should include a call to animate the next
  * frame (`figure.animateNextFrame`)
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_Texture = {
   src?: string,
@@ -234,6 +241,8 @@ export type OBJ_Texture = {
  * @property {number} [scale] scale to pulse
  * @property {number} [duration] duration to pulse
  * @property {number} [frequency] frequency to pulse where 0
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_PulseScale = {
   duration?: number,
@@ -252,6 +261,8 @@ export type OBJ_PulseScale = {
  * @property {number} [stride] (`0`)
  * @property {number} [offset] (`0`)
  * @property {TypeGLBufferUsage} [usage] (`'STATIC'`)
+ * @interface
+ * @group Shaders
  */
 export type OBJ_GLAttribute = {
   name: string,
@@ -277,6 +288,8 @@ export type OBJ_GLAttribute = {
  *
  * @property {Array<number>} data array of values
  * @property {TypeGLBufferUsage} [usage] (`'STATIC'`)
+ * @interface
+ * @group Shaders
  */
 export type OBJ_GLVertexBuffer = {
   data: Array<number>,
@@ -288,6 +301,8 @@ export type OBJ_GLVertexBuffer = {
  * @property {string} name name of uniform in shader
  * @property {1 | 2 | 3 | 4} length
  * @property {TypeGLUniform} type
+ * @interface
+ * @group Shaders
  */
 export type OBJ_GLUniform = {
   name: string,
@@ -304,6 +319,8 @@ export type OBJ_GLUniform = {
  * FunctionMap is used.
  * @property {string} [colorSeed] use a unique string to reset color generation
  * of unique colors used for touch determination (debug only) (`'default'`)
+ * @interface
+ * @group Interactivity
  */
 export type OBJ_Touch = {
   onClick?: string | ((p: Point, el: FigureElement) => void),
@@ -338,6 +355,8 @@ export type OBJ_Touch = {
  * @property {Scene} [scene] Give the element a custom scene that is independant
  * of the figure scene. For example, use this to create a 3D object in a 2D
  * figure.
+ * @interface
+ * @group 2D Shape Primitives
  */
 export type OBJ_FigurePrimitive = {
   name?: string,
@@ -359,6 +378,8 @@ export type OBJ_FigurePrimitive = {
  * 0 and 255 (`false`)
  * @property {3 | 4} [size] if `3`, then color data is RGB, if `4` then color
  * data is RGBA
+ * @interface
+ * @group Shaders
  */
 export type OBJ_GLColorData = {
   data: Array<number>,
@@ -375,6 +396,7 @@ export type OBJ_GLColorData = {
  * '2d': text drawn on a '2d' html canvas. Text will always be ontop of the
  * webgl canvas. Use when text must be displayed a large dynamic range of
  * scales, or text needs to be always on top.
+ * @group Misc Text
  */
 export type TypeText = 'gl' | '2d';
 
@@ -582,6 +604,8 @@ export type TypeText = 'gl' | '2d';
  *     },
  *   ],
  * });
+ * @interface
+ * @group Shaders
  */
 export type OBJ_GenericGL = {
   glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
@@ -612,6 +636,8 @@ export type OBJ_GenericGL = {
  * indeces.
  * @property {'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'} [glPrimitive]
  * glPrimitive is the same for all point arrays (`'TRIANGLES'`)
+ * @interface
+ * @group Morphing
  */
 export type OBJ_Morph = {
   name?: string,
@@ -628,6 +654,8 @@ export type OBJ_Morph = {
  * @property {number} [width]
  * @property {number} [descent]
  * @property {number} [ascent]
+ * @interface
+ * @group Misc Text
  */
 export type OBJ_TextAdjustments = {
   width?: number,
@@ -774,6 +802,8 @@ export type OBJ_Text_Fixed = {
  * borders of the text
  * @property {TypeColor} [color] text color (will be overriden by a font color
  * if it is specified)
+ * @interface
+ * @group Misc Text
  */
 export type OBJ_SetText = {
   text?: string | Array<string>,

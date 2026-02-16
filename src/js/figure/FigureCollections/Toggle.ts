@@ -54,6 +54,8 @@ import type {
  * toggle
  * @property {number} [scale] size of the label
  * @property {TypeColor} [color]
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_ToggleLabel = {
   text: null | string | Array<string> | Equation | EQN_Equation;
@@ -69,6 +71,8 @@ export type OBJ_ToggleLabel = {
  * @property {width} [number] border width
  * @property {color} [TypeColor] border color
  * @see {@link OBJ_Toggle}
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_ToggleBorder = {
   width?: number;
@@ -96,6 +100,8 @@ export type OBJ_ToggleBorder = {
  * @property {OBJ_ToggleLabel} [label]
 
  * @extends OBJ_Collection
+ * @interface
+ * @group 2D Shape Collections
  */
 export type COL_Toggle = {
   width?: number;
@@ -187,6 +193,7 @@ class ToggleLabel extends EquationLabel {
  * toggle.notifications.add('toggle', (state) => {
  *   state ? console.log('on') : console.log('off');
  * });
+ * @group 2D Shape Collections
  */
 /* eslint-enable max-len */
 class CollectionsToggle extends FigureElementCollection {

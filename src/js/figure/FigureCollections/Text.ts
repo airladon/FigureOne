@@ -36,6 +36,8 @@ import type {
  * previous line to baseline of this line
  * @property {number} [baselineSpace] line specific separation from baseline of
  * this previous line to baseline of this line
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_TextLineDefinition = {
   text: string;
@@ -65,6 +67,8 @@ export type OBJ_TextLineDefinition = {
  * @property {TypeEquationPhrase} [eqn] use this to replace the text with an
  * equation defined by an equation phrase - when using eqn the `font` property
  * will be ignored
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_TextModifiersDefinition = {
   text?: string;
@@ -236,6 +240,8 @@ export type OBJ_TextModifiersDefinition = {
  *   },
  *   xAlign: 'center',
  * });
+ * @interface
+ * @group Text
  */
 /* eslint-enable max-len */
 export type OBJ_FormattedText = {

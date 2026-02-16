@@ -68,6 +68,7 @@ const FIGURE1DEBUG = false;
  *
  * `null` will result in `'nextFrame'` being used
  * @typedef {TypeWhen | number | null} AnimationStartTime
+ * @group Misc Animation
  */
 export type AnimationStartTime = TypeWhen | number | null;
 
@@ -78,6 +79,8 @@ export type AnimationStartTime = TypeWhen | number | null;
  * all animations associated with this animation manager will start (`null`)
  * @property {AnimationStartTime} startTime when to
  * start the animation
+ * @interface
+ * @group Misc Animation
  */
 export type OBJ_AnimationStart = {
   name?: string;
@@ -201,6 +204,7 @@ export type TypeAnimationManagerInputOptions = {
  *     p.animations.rotation({ target: Math.PI, duration: 2 })
  *   ])
  *   .start();
+ * @group Animation
  */
 export default class AnimationManager {
   element: FigureElement | null | undefined;

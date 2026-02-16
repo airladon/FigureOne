@@ -12,6 +12,8 @@ import { revolve } from './revolve';
  * `'start'` is `p1` and `'end'` is `p2` (`'end'`)
  * @property {number} [width] width of arrow (line width * 2.5)
  * @property {number} [length] length of arrow (arrow width * 3)
+ * @interface
+ * @group Misc Geometry Creation
  */
 export type OBJ_Line3Arrow = {
   ends?: 'start' | 'end' | 'all',
@@ -42,6 +44,8 @@ export type OBJ_Line3Arrow = {
  * the edes of the faces will be returned. If `false`, then points
  * representing two triangles per face and an
  * associated normal for each point will be returned.
+ * @interface
+ * @group Misc Geometry Creation
  */
 export type OBJ_Line3Points = {
   p1?: TypeParsablePoint,
@@ -68,6 +72,7 @@ export type OBJ_Line3Points = {
  * @property {OBJ_Line3Points} options line options
  * @return {[Array<Point>, Array<Point>]} an array of points and normals. If
  * the points represent lines, then the array of normals will be empty.
+ * @group Geometry Creation
  */
 type Line3OptionsDefined = {
   p1: TypeParsablePoint,

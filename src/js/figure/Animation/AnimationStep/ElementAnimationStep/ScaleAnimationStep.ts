@@ -22,6 +22,8 @@ import type { AnimationStartTime } from '../../AnimationManager';
  * overrides `duration` - `null` to use `duration` (`null`)
  * @property {number | null} [maxDuration] maximum duration to clip animation
  * to where `null` is unlimited (`null`)
+ * @interface
+ * @group Misc Animation
  */
 export type OBJ_ScaleAnimationStep = {
   start?: Point | number;      // default is element transform
@@ -77,6 +79,7 @@ export type OBJ_ScaleAnimationStep = {
  *   .then(step1)
  *   .then(step2)
  *   .start();
+ * @group Animation
  */
 export default class ScaleAnimationStep extends ElementAnimationStep {
   scale: {

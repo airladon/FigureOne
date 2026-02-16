@@ -25,6 +25,8 @@ import { getRectangleBorder, rectangleBorderToTris } from '../geometries/rectang
  * @property {width} [number] border width
  * @property {color} [TypeColor] border color
  * @see {@link OBJ_Slider}
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_SliderBorder = {
   width?: number;
@@ -37,6 +39,8 @@ export type OBJ_SliderBorder = {
  * @property {'polygon' | 'rectangle'} [style]
  * @property {number} [width] width of 'rectangle'
  * @see {@link OBJ_Slider}
+ * @interface
+ * @group Misc Shapes
  */
 export type OBJ_SliderMarker = {
   width?: number;
@@ -65,6 +69,8 @@ export type OBJ_SliderMarker = {
  * @property {OBJ_SliderBorder} [barBorder] border around bar
  * (defaults to off - width = 0)
  * @extends OBJ_Collection
+ * @interface
+ * @group 2D Shape Collections
  */
 export type COL_Slider = {
   width?: number;
@@ -146,6 +152,7 @@ export type COL_Slider = {
  *   colorOn: [0, 0.8, 0, 1],
  *   color: [0, 0, 0, 1],
  * });
+ * @group 2D Shape Collections
  */
 /* eslint-enable max-len */
 class CollectionsSlider extends FigureElementCollection {

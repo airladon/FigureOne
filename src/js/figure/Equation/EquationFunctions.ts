@@ -109,6 +109,7 @@ export function getFigureElement(
  *   .goToForm({ target: 'form3', animate: 'move', delay: 1 })
  *   .goToForm({ target: 'form4', animate: 'move', delay: 1 })
  *   .start();
+ * @group Equations
  */
 export type TypeEquationPhrase =
   string
@@ -220,6 +221,8 @@ export type TypeEquationPhrase =
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
  * eqn.showForm('1');
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_Container = {
   content: TypeEquationPhrase,
@@ -278,6 +281,8 @@ export type EQN_Container = {
  *     },
  *   },
  * ]);
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_Offset = {
   content: TypeEquationPhrase,
@@ -394,6 +399,8 @@ export type EQN_Offset = {
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
  * eqn.showForm('1');
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_Fraction = {
   numerator: TypeEquationPhrase;
@@ -475,6 +482,8 @@ export type EQN_Fraction = {
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
  * eqn.showForm('1');
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_Scale = {
   content: TypeEquationPhrase,
@@ -552,6 +561,8 @@ export type EQN_Scale = {
  *   },
  *   touch: { onClick: e => e.nextForm() },
  * });
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_Color = {
   content: TypeEquationPhrase,
@@ -653,6 +664,8 @@ export type EQN_Color = {
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
+ * @interface
+ * @group Equation Layout
  */
 
 export type EQN_Bracket = {
@@ -789,6 +802,8 @@ export type EQN_Bracket = {
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
  * eqn.showForm('1');
+ * @interface
+ * @group Equation Layout
  */
 
 export type EQN_Root = {
@@ -908,6 +923,8 @@ export type EQN_Root = {
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
  * eqn.showForm('1');
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_Strike = {
   content: TypeEquationPhrase;
@@ -1024,6 +1041,8 @@ export type EQN_Strike = {
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
  * eqn.showForm('1');
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_Box = {
   content: TypeEquationPhrase,
@@ -1074,6 +1093,8 @@ export type EQN_Box = {
  * @see To test examples, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>
  *
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_TouchBox = {
   content: TypeEquationPhrase,
@@ -1203,6 +1224,8 @@ export type EQN_TouchBox = {
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
  * eqn.showForm('1');
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_Bar = {
   content: TypeEquationPhrase;
@@ -1364,6 +1387,8 @@ export type EQN_Bar = {
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
  * eqn.showForm('1');
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_Integral = {
   symbol?: string,
@@ -1511,6 +1536,8 @@ export type EQN_Integral = {
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
  * eqn.showForm('1');
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_SumOf = {
   symbol?: string,
@@ -1642,6 +1669,8 @@ export type EQN_SumOf = {
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
  * eqn.showForm('1');
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_ProdOf = {
   symbol?: string,
@@ -1744,6 +1773,8 @@ export type EQN_ProdOf = {
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
  * eqn.showForm('1');
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_Subscript = {
   content: TypeEquationPhrase;
@@ -1810,6 +1841,8 @@ export type EQN_Subscript = {
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
  * eqn.showForm('1');
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_Superscript = {
   content: TypeEquationPhrase;
@@ -1876,6 +1909,8 @@ export type EQN_Superscript = {
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_SuperscriptSubscript = {
   content: TypeEquationPhrase;
@@ -1983,6 +2018,8 @@ export type EQN_SuperscriptSubscript = {
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
  * eqn.showForm('1');
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_Comment = {
   content: TypeEquationPhrase;
@@ -2082,6 +2119,8 @@ export type EQN_Comment = {
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
  * eqn.showForm('1');
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_StrikeComment = {
   content?: TypeEquationPhrase,
@@ -2160,6 +2199,8 @@ export type EQN_StrikeComment = {
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
  * eqn.showForm('1');
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_Pad = {
   content: TypeEquationPhrase;
@@ -2276,6 +2317,8 @@ export type EQN_Pad = {
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
  * eqn.showForm('1');
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_Matrix = {
   order?: [number, number],
@@ -2326,6 +2369,8 @@ export type EQN_Matrix = {
  *
  * @see {@link EQN_Lines}
  *
+ * @interface
+ * @group Misc Equation
  */
 export type EQN_Line = {
   content: TypeEquationPhrase,
@@ -2433,6 +2478,8 @@ export type EQN_Line = {
  *     delay: 1, target: '1', duration: 1, animate: 'move',
  *   })
  *   .start();
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_Lines = {
   content: Array<TypeEquationPhrase | EQN_Line>,
@@ -2540,6 +2587,8 @@ export type EQN_Lines = {
  *     },
  *   },
  * });
+ * @interface
+ * @group Misc Equation
  */
 export type EQN_Annotation = {
   content: TypeEquationPhrase,
@@ -2610,6 +2659,8 @@ export type EQN_Annotation = {
  *     },
  *   },
  * });
+ * @interface
+ * @group Misc Equation
  */
 export type EQN_EncompassGlyph = {
   symbol?: string,
@@ -2769,6 +2820,8 @@ export type EQN_EncompassGlyph = {
  *     },
  *   },
  * });
+ * @interface
+ * @group Misc Equation
  */
 export type EQN_LeftRightGlyph = {
   symbol?: string,
@@ -2891,6 +2944,8 @@ export type EQN_LeftRightGlyph = {
  *     },
  *   },
  * });
+ * @interface
+ * @group Misc Equation
  */
 export type EQN_TopBottomGlyph = {
   symbol?: string,
@@ -2912,6 +2967,8 @@ export type EQN_TopBottomGlyph = {
  * @property {'left' | 'center' | 'right' | number | string} [xAlign]
  * @property {'bottom' | 'baseline' | 'middle' | 'top' | number | string,} [yAlign]
  * @property {0} [space]
+ * @interface
+ * @group Misc Equation
  */
 export type EQN_LineGlyphAlign = {
   xAlign?: 'left' | 'center' | 'right' | number | string,
@@ -2988,6 +3045,8 @@ export type EQN_LineGlyphAlign = {
  *     },
  *   },
  * });
+ * @interface
+ * @group Misc Equation
  */
 export type EQN_LineGlyph = {
   symbol: string,
@@ -3007,6 +3066,8 @@ export type EQN_LineGlyph = {
  * @property {EQN_TopBottomGlyph} [bottom]
  * @property {EQN_LeftRightGlyph} [left]
  * @property {EQN_LineGlyph} [line]
+ * @interface
+ * @group Misc Equation
  */
 export type EQN_Glyphs = {
   left?: EQN_LeftRightGlyph;
@@ -3173,6 +3234,8 @@ export type EQN_Glyphs = {
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
  * eqn.showForm('1');
+ * @interface
+ * @group Equation Layout
  */
 export type EQN_Annotate = {
   content: TypeEquationPhrase,
@@ -3202,6 +3265,7 @@ export type EQN_Annotate = {
  * Equation Functions.
  *
  * Contains methods for all equation functions.
+ * @group Misc Equation
  */
 export class EquationFunctions {
   // eslint-disable-next-line no-use-before-define

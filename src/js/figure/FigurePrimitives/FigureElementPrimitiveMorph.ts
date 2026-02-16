@@ -152,6 +152,7 @@ import type { OBJ_AnimationStep } from '../Animation/AnimationStep';
    *     .morph({ start: 'cloud', target: 'logo', duration: 2 })
    *     .start();
    * };
+   * @group Morphing
    */
 export default class FigureElementPrimitiveMorph extends FigureElementPrimitive {
   shapeNameMap!: {

@@ -31,6 +31,8 @@ import type { OBJ_FormattedText } from './Text';
  * @property {'arrow' | 'rectangle'} type
  * @extends COL_Rectangle
  * @extends OBJ_Arrow
+ * @interface
+ * @group Misc SlideNavigator
  */
 export type COL_SlideNavigatorButton = {
   type: 'arrow' | 'rectangle';
@@ -38,6 +40,8 @@ export type COL_SlideNavigatorButton = {
 
 /**
  * CollectionsSlideNavigator equation animation defaults
+ * @interface
+ * @group Misc SlideNavigator
  */
 export type COL_SlideNavigatorEqnDefaults = {
   duration?: number;
@@ -66,6 +70,8 @@ export type COL_SlideNavigatorEqnDefaults = {
  * @property {COL_SlideNavigatorEqnDefaults} [equationDefaults] default
  * equation animation options
  * @property {number} [disableOpacity] opacity for previous button when disabled (`0.7`)
+ * @interface
+ * @group Slide Navigator
  */
 export type COL_SlideNavigator = {
   collection?: Figure | FigureElementCollection | string;
@@ -245,6 +251,7 @@ export type COL_SlideNavigator = {
  *   },
  *   { form: '2' },
  * ]);
+ * @group Slide Navigator
  */
 /* eslint-enable max-len */
 class CollectionsSlideNavigator extends FigureElementCollection {

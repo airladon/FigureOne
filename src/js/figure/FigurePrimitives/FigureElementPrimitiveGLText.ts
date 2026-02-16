@@ -16,6 +16,7 @@ import type { OBJ_Text_Fixed, OBJ_SetText } from './FigurePrimitiveTypes';
  * WebGL text is rendered using a texture atlas of fonts - an image
  * with all the glyphs, and a map of the locations, ascent, descent and width
  * of each glyph.
+ * @group Misc Text
  */
 export default class FigureElementPrimitiveGLText extends FigureElementPrimitive {
   text!: Array<string>;
