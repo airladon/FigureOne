@@ -48,6 +48,7 @@
     "./docs/api/tutorials/geometric/geometric.md",
     "./docs/api/tutorials/figure/figure.md",
     "./docs/api/tutorials/draw/draw.md",
+    "./docs/api/tutorials/2d-shape-primitives-api.md",
     "./docs/api/tutorials/text/text.md",
     "./docs/api/tutorials/shapes3d/shapes3d.md",
     "./docs/api/tutorials/collections/collections.md",

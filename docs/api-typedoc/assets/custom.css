@@ -2,3 +2,39 @@
 .tsd-breadcrumb li:last-child:after {
     content: none;
 }
+
+/* API reference property list styling */
+.fo-prop {
+    margin-bottom: 0.5em;
+    line-height: 1.5;
+}
+.fo-prop-name {
+    font-family: var(--md-code-font, Menlo, Monaco, Consolas, monospace);
+    font-weight: bold;
+    font-size: 0.95em;
+}
+.fo-prop-type {
+    color: var(--color-text-aside);
+    font-family: var(--md-code-font, Menlo, Monaco, Consolas, monospace);
+    font-size: 0.875em;
+}
+.fo-prop-type a {
+    color: var(--color-link);
+}
+.fo-prop-opt {
+    color: var(--color-text-aside);
+    font-size: 0.85em;
+    font-style: italic;
+}
+.fo-prop-default {
+    color: var(--color-text-aside);
+    font-size: 0.875em;
+}
+.fo-prop-default code {
+    font-size: inherit;
+}
+.fo-prop-desc {
+    padding-left: 1.5em;
+    color: var(--color-text);
+    font-size: 0.925em;
+}
