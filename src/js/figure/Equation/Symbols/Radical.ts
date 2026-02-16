@@ -5,7 +5,69 @@ import Symbol from './SymbolNew';
 import Bounds from '../Elements/Bounds';
 
 export default class Radical extends Symbol {
+  //   height                      left space                right space
+  //   |                             >|--|<                    >|--|<
+  //   |                              |  |                      |  |
+  //   |                              |  |                      |  |
+  //   |_____________________________ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX____V
+  //   A                             X|  |                      |_______|
+  //   |   startHeight              X |   CCCCCCCCCCCCCCCCCCCCCCC       A
+  //   |   |                       X  |   CCCCCCCCCCCCCCCCCCCCCCC    top space
+  //   |   |    tickHeight        X   |   CCCCCCCCCCCCCCCCCCCCCCC
+  //   |   |    |                X    |   CCCCCCCCCCCCCCCCCCCCCCC
+  //   |   |____V____           X     |   CCCCCCCCCCCCCCCCCCCCCCC
+  //   |   A    |    X         X      |   CCCCCCCCCCCCCCCCCCCCCCC
+  //   |   |    |__X |X       X       |   CCCCCCCCCCCCCCCCCCCCCCC
+  //   |   |    A |  | X     X        |   CCCCCCCCCCCCCCCCCCCCCCC
+  //   |   |      |  |  X   X         |   CCCCCCCCCCCCCCCCCCCCCCC   bottom space
+  //   |   |      |  |   X X          |   CCCCCCCCCCCCCCCCCCCCCCC_______V
+  //   V___V______|__|____X __________|_________________________________|
+  //              |  |    |           |                                 A
+  //              |  |    |           |
+  //        tick >|--|<   |           |
+  //       width  |  |    |           |
+  //              |  |<-->|down width |
+  //              |                   |
+  //              |<------------------|
+  //                     startWidth
+  //
+  //
+  //
+  //  First define bottom line (B), then offset the lines and find intercepts to
+  //  get the top line (T)
+  //         RRRRRRRRRRRRRRRR                  7                          9
+  //         RRRRRRRRRRRRRRRR                    TTTTTTTTTTTTTTTTTTTTTTTTT
+  //         RRRRRRRRRRRRRRRR                   T  BBBBBBBBBBBBBBBBBBBBBBB
+  //         RRRRRRRRRRRRRRRR                  T  B 6                     8
+  //         RRRRRRRRRRRRRRRR                 T  B
+  //         RRRRRRRRRRRRRRRR                T  B
+  //         RRRRRRRRRRRRRRRR               T  B
+  //                        |              T  B
+  //                        |             T  B
+  //            3           |            T  B
+  //            T           |           T  B
+  //           T T          |          T  B
+  //          T   T   lineWidth2      T  B\
+  //         T     T       /|        T  B  \
+  //        T  B    T    /  |       T  B    \
+  //       T  B B    T /    |      T  B      lineWidth
+  //    1 T  B 2 B    T     |     T  B
+  //        B     B    T    |    T  B
+  //        0      B    T   |   T  B
+  //                B    T  |  T  B
+  //                 B    T 5 T  B
+  //                  B    T T  B
+  //                   B    T  B
+  //                    B     B
+  //                     B   B
+  //                      B B
+  //                       B
+  //                       4
+  //
+  // Root aligns with downWidth + tickWidth
+
   // eslint-disable-next-line class-methods-use-this
+  // Get Glyph bounds based on content
   override getPoints(options: Record<string, any>, widthIn: number, heightIn: number): [Array<Point>, number, number, 'STRIP' | 'TRIANGLES' | 'FAN'] {
     const {
       lineWidth, startWidth, tickWidth, tickHeight,

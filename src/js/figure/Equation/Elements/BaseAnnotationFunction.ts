@@ -324,6 +324,63 @@ export default class BaseAnnotationFunction implements ElementInterface {
   }
 
 
+  //                               Top Glyph
+  //                  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+  //                  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG     Encompassing Glyph
+  //                                                      /
+  //                                                    /
+  //        GGG       GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG        GGG
+  //        GGG       GGG                           GGG        GGG
+  //        GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
+  //        GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
+  // Left   GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG   Right
+  // Glyph  GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG   Glyph
+  //        GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
+  //        GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
+  //        GGG       GGG     CCCCCCCCCCCCCCCCC     GGG        GGG
+  //        GGG       GGG                           GGG        GGG
+  //        GGG       GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG        GGG
+  //
+  //
+  //                  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+  //                  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+  //                            Bottom Glyph
+  //
+  //
+  //
+  //
+  // |                          GGGGGGGGGGGGGGGGGGGGGGGG
+  // |                          GGGGGGGGGGGGGGGGGGGGGGGG
+  // |                          GGG                  GGG
+  // |                          GGG                  GGG
+  // |        GGG               GGG   CCCCCCCCCCCC   GGG               GGG
+  // |        GGG               GGG   CCCCCCCCCCCC   GGG               GGG
+  // |        GGG               GGG   CCCCCCCCCCCC   GGG               GGG
+  // |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
+  // |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
+  // |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
+  // |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
+  // |  AAA   GGG   AAA   AAA   GGG   CCCCCCCCCCCC   GGG   AAA   AAA   GGG   AAA
+  // | |   |  GGG  |   | |   |  GGG   CCCCCCCCCCCC   GGG               GGG
+  // | |   |  GGG  |   | |   |  GGG   CCCCCCCCCCCC   GGG               GGG
+  // | |   |  GGG  |   | |   |  GGG   CCCCCCCCCCCC   GGG               GGG
+  // | |   |  |  | |   | |   |  GGG   |              GGG
+  // | |   |  |  | |   | |   |  GGG   |              GGG
+  // | |   |  |  | |   | |   |  GGGGGGGGGGGGGGGGGGGGGGGG
+  // | |   |  |  | |   | |   |  GGGGGGGGGGGGGGGGGGGGGGGG
+  // | |   |  |  | |   | |   |  |  |  |
+  // | |   |  |  | |   | |   |  |  |--|<----  contentEncompassGlyph Space
+  // | |   |  |  | |   | |   |  |
+  // | |   |  |  | |   | |   |--|<----- EncompassGlyphAnnotation Space
+  // | |   |  |  | |   | |
+  // | |   |  |  | |   |-|<----- ContentAnnotationGlyphInsideAnnotation Space
+  // | |   |  |  | |
+  // | |   |  |  |-|<------- GlyphInsideAnnotationGlyph Space
+  // | |   |  |
+  // | |  >|--|<------ GlypgGlyphOutsideAnnotation Space
+  // | |
+  // |-|<------ Outside Space
+
   calcSize(location: Point, scale: number) {
     this.location = location._dup();
     const loc = location._dup();

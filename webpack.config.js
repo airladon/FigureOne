@@ -124,7 +124,7 @@ module.exports = (env) => {
   }
 
   return {
-    entry: './src/index.js',
+    entry: './src/index.ts',
     output: {
       path: buildPath,
       filename: e.output,

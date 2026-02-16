@@ -4,6 +4,53 @@ import {
 import Symbol from './SymbolNew';
 
 export default class Sum extends Symbol {
+  //                   8                                    10
+  //          ---------- 00000000000000000000000000000000000_______________
+  //          A            0000000 9         \      11 000000           *
+  //          |              0000000          \           000           *
+  //          |                0000000         thick2       00  12     *
+  //          |                  0000000  D             13    \       * tipAngle
+  //          |                    0000000                     \    *
+  //          |                  B   0000000       thick1        \*
+  //          |                        0000000    /
+  //          |                          0000000 /
+  //          |                            0000000
+  //          |                              0000000
+  //          |                                000000  -- 7
+  //          |      -------------------------6  000
+  //          |      A                         00|0
+  //       h  |      |                       0000|
+  //          |      |                     0000  |\
+  //          |      |                   0000    | \
+  //          |      | e               0000      |  thick2
+  //          |      |               0000  C     |
+  //          |      |         A   0000          |             0
+  //          |      |           0000            |         1   |____
+  //          |      |         0000       thick3 |           00    A
+  //          |      |       0000        /       |      3  000|    |
+  //          |      |     0000  5      /        |      000000|    |  c
+  //          V      V   000000000000000000000000|00000000000 |    |
+  //          --------  0000000000000000000000000|0000000000__|____V
+  //                 4 |                         |        2|  |
+  //                   |                         |         |  |
+  //                   |                         |         |  |
+  //                   |<----------------------->|         |  |
+  //                   |           a                       |  |
+  //                   |                                   |  |
+  //                   |                                   |  |  b
+  //                   |                              ---->|  |<---
+  //                   |                                      |
+  //                   |                                      |
+  //                   |                  w                   |
+  //                   |<------------------------------------>|
+  //
+  // Linewidths that look good:
+  // height = 0.2, linewWidth = width / 20
+  // height = 0.6, linewWidth = width / 30
+  // height = 1, linewWidth = width / 40
+  // height = 1.4, linewWidth = width / 50
+  // height = 1.8, linewWidth = width / 60
+  // Therefore default lineWidth =  width / (25 * height + 15)
   // eslint-disable-next-line class-methods-use-this
   override getPoints(options: Record<string, any>, widthIn: number, height: number): [Array<Point>, number, number, 'STRIP' | 'TRIANGLES' | 'FAN'] {
     const { sides } = options;
