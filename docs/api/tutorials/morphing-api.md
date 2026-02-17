@@ -281,8 +281,15 @@ This method is useful for including images in morphing effects. It should
 not be used to simply show an image (use a texture with some
 FigureElementPrimitive for this).
 
-@param {OBJ_ImageToShapes} options
-@return {[Array<number>, Array<number>]} [vertices, colors]
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/morph.OBJ_ImageToShapes.html" class="tsd-signature-type">OBJ_ImageToShapes</a></span></span></li>
+</ul>
+
+### Returns
+
+<span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>>]</span> — [vertices, colors]
 
 #### Example 1
 
@@ -414,8 +421,15 @@ The polyline can be closed or open.
 
 This method is useful for morphing between shapes.
 
-@param {OBJ_PolylineToShapes} options
-@return {[Array<number>, Array<number>]} [vertices, colors]
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/morph.OBJ_PolylineToShapes.html" class="tsd-signature-type">OBJ_PolylineToShapes</a></span></span></li>
+</ul>
+
+### Returns
+
+<span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>>]</span> — [vertices, colors]
 
 #### Example 1
 
@@ -547,8 +561,15 @@ containing all vertex colors.</p></div></li>
 
 This method is useful for morphing between shapes.
 
-@param {OBJ_PointsToShapes} options
-@return {[Array<number>, Array<number>]} [vertices, colors]
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/morph.OBJ_PointsToShapes.html" class="tsd-signature-type">OBJ_PointsToShapes</a></span></span></li>
+</ul>
+
+### Returns
+
+<span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>>]</span> — [vertices, colors]
 
 #### Example 1
 
@@ -614,8 +635,15 @@ Generate random points within a polygon.
 
 ![](../apiassets/polygoncloudshapes.gif)
 
-@param {OBJ_PolygonCloudShapes} polygonCloudPoints
-@return {Array<number>} array of interlaced x and y coordinates of vertices
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">polygonCloudPoints</span>: <span class="tsd-signature-type"><a href="../interfaces/morph.OBJ_PolygonCloudShapes.html" class="tsd-signature-type">OBJ_PolygonCloudShapes</a></span></span></li>
+</ul>
+
+### Returns
+
+<span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>></span> — array of interlaced x and y coordinates of vertices
 
 #### Example 1
 
@@ -674,8 +702,15 @@ Generate random points within a circle.
 
 ![](../apiassets/circlecloudshapes.gif)
 
-@param {OBJ_CircleCloudShapes} options
-@return {Array<number>} array of interlaced x and y coordinates of vertices
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/morph.OBJ_CircleCloudShapes.html" class="tsd-signature-type">OBJ_CircleCloudShapes</a></span></span></li>
+</ul>
+
+### Returns
+
+<span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>></span> — array of interlaced x and y coordinates of vertices
 
 #### Example 1
 
@@ -733,8 +768,15 @@ Generate random points within a rectangle.
 
 ![](../apiassets/rectanglecloudshapes.gif)
 
-@param {OBJ_RectangleCloudShapes} options
-@return {Array<number>} array of interlaced x and y coordinates of vertices
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/morph.OBJ_RectangleCloudShapes.html" class="tsd-signature-type">OBJ_RectangleCloudShapes</a></span></span></li>
+</ul>
+
+### Returns
+
+<span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>></span> — array of interlaced x and y coordinates of vertices
 
 #### Example 1
 

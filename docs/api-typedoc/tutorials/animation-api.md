@@ -83,14 +83,18 @@ The `AnimationManager`s on {@link FigureElement}s should be used instead
 of instantiating this class separately, as those on `FigureElements` will
 be automatically processed every animation frame.
 
-@param
-
 ### Properties
 
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">state</span>: <span class="tsd-signature-type">'animating' | 'idle' | 'waitingToStart'</span></span></li>
 <li><span><span class="tsd-kind-parameter">animations</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><AnimationStep></span></span></li>
 <li><span><span class="tsd-kind-parameter">notifications</span>: <span class="tsd-signature-type"><a href="../classes/tools.NotificationManager.html" class="tsd-signature-type">NotificationManager</a></span></span></li>
+</ul>
+
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span></span></li>
 </ul>
 
 #### At its heart the `AnimationManager` is just executing
@@ -208,8 +212,11 @@ time, or non-linear.
 animation. A function to create a custom non-linear progressor can also be
 used.
 
+### Parameters
 
-@param {OBJ_CustomAnimationStep} options
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/Animation_AnimationStep_CustomStep.OBJ_CustomAnimationStep.html" class="tsd-signature-type">OBJ_CustomAnimationStep</a></span></span></li>
+</ul>
 
 #### Move an object through a sine wave of wavelength 1 from
 
@@ -257,7 +264,11 @@ While all animations steps accept a delay property,
 having this step sometimes makes the animation seem
 more readable.
 
-@param {number | OBJ_AnimationStep} delayOrOptions
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">delayOrOptions</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../interfaces/Animation_AnimationStep.OBJ_AnimationStep.html" class="tsd-signature-type">OBJ_AnimationStep</a></span></span></li>
+</ul>
 
 ---
 
@@ -287,7 +298,11 @@ In addition, the {@link DimAnimationStep} and {@link UndimAnimationStep} can
 be used to do the same, which is especially useful when trying to build
 easy to read code in a complex animation.
 
-@param {OBJ_ColorAnimationStep} options
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/Animation_AnimationStep_ElementAnimationStep_ColorAnimationStep.OBJ_ColorAnimationStep.html" class="tsd-signature-type">OBJ_ColorAnimationStep</a></span></span></li>
+</ul>
 
 #### Using duration
 
@@ -344,7 +359,11 @@ Dim color animation step
 
 Animates color of element to the `dimColor` property of {@link FigureElement}
 
-@param {number | OBJ_ElementAnimationStep} durationOrOptions
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">durationOrOptions</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../interfaces/Animation_AnimationStep_ElementAnimationStep.OBJ_ElementAnimationStep.html" class="tsd-signature-type">OBJ_ElementAnimationStep</a></span></span></li>
+</ul>
 
 #### Simple dim
 
@@ -394,7 +413,11 @@ Undim color animation step
 
 Animates color of element to the `defaultColor` property of {@link FigureElement}
 
-@param {number | OBJ_ElementAnimationStep} durationOrOptions
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">durationOrOptions</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../interfaces/Animation_AnimationStep_ElementAnimationStep.OBJ_ElementAnimationStep.html" class="tsd-signature-type">OBJ_ElementAnimationStep</a></span></span></li>
+</ul>
 
 #### Simple undim
 
@@ -464,7 +487,11 @@ The {@link DissolveInAnimationStep} and {@link DissolveOutAnimationStep}
 extend the `OpacityAnimationStep` to make it even more convenient to
 dissolve.
 
-@param {OBJ_OpacityAnimationStep} options
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/Animation_AnimationStep_ElementAnimationStep_OpacityAnimationStep.OBJ_OpacityAnimationStep.html" class="tsd-signature-type">OBJ_OpacityAnimationStep</a></span></span></li>
+</ul>
 
 #### Using numerical values for opacity
 
@@ -537,7 +564,11 @@ Dissolve in animation step
 
 Animates opacity of element to dissolve in.
 
-@param {number | OBJ_ElementAnimationStep} durationOrOptions
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">durationOrOptions</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../interfaces/Animation_AnimationStep_ElementAnimationStep.OBJ_ElementAnimationStep.html" class="tsd-signature-type">OBJ_ElementAnimationStep</a></span></span></li>
+</ul>
 
 #### Simple dissolve in
 
@@ -590,7 +621,11 @@ Dissolve out animation step
 
 Animates opacity of element to dissolve out.
 
-@param {number | OBJ_ElementAnimationStep} durationOrOptions
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">durationOrOptions</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../interfaces/Animation_AnimationStep_ElementAnimationStep.OBJ_ElementAnimationStep.html" class="tsd-signature-type">OBJ_ElementAnimationStep</a></span></span></li>
+</ul>
 
 #### Simple dissolve out
 
@@ -650,9 +685,11 @@ line (`'linear'`) or a quadratic bezier curve (`'curve'`)
 
 For custom paths, the {@link CustomAnimationStep} can be used.
 
+### Parameters
 
-
-@param {OBJ_PositionAnimationStep} options
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/Animation_AnimationStep_ElementAnimationStep_PositionAnimationStep.OBJ_PositionAnimationStep.html" class="tsd-signature-type">OBJ_PositionAnimationStep</a></span></span></li>
+</ul>
 
 #### Using duration
 
@@ -722,7 +759,11 @@ The pulse animation step animates a pulse.
 
 The options are the same as those in the * <a href="#figureelementpulse">pulse</a> method.
 
-@param {OBJ_PulseAnimationStep} options
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/Animation_AnimationStep_ElementAnimationStep_PulseAnimationStep.OBJ_PulseAnimationStep.html" class="tsd-signature-type">OBJ_PulseAnimationStep</a></span></span></li>
+</ul>
 
 #### Scale pulse, rotation pulse and translation pulse
 
@@ -785,8 +826,11 @@ By default, the rotation will start with the element's current rotation.
 
 Use either `delta` or `target` to define it's end point
 
+### Parameters
 
-@param {OBJ_RotationAnimationStep} options
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/Animation_AnimationStep_ElementAnimationStep_RotationAnimationStep.OBJ_RotationAnimationStep.html" class="tsd-signature-type">OBJ_RotationAnimationStep</a></span></span></li>
+</ul>
 
 #### Using duration
 
@@ -844,7 +888,11 @@ Use either `delta` or `target` to define it's end point.
 Scale can be defined as either a point or number. If number,
 both x and y scale terms will be the same.
 
-@param {OBJ_ScaleAnimationStep} options
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/Animation_AnimationStep_ElementAnimationStep_ScaleAnimationStep.OBJ_ScaleAnimationStep.html" class="tsd-signature-type">OBJ_ScaleAnimationStep</a></span></span></li>
+</ul>
 
 #### Using duration
 
@@ -898,7 +946,11 @@ code more readable and reusable.
 By default, the scenario will start with the element's current transform and
 color.
 
-@param {OBJ_ScenarioAnimationStep} options
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/Animation_AnimationStep_ElementAnimationStep_ScenarioAnimationStep.OBJ_ScenarioAnimationStep.html" class="tsd-signature-type">OBJ_ScenarioAnimationStep</a></span></span></li>
+</ul>
 
 #### NOTE - use these scenario definitions for all examples below
 
@@ -981,7 +1033,11 @@ all transform links. `velocity` cannot be 0.
 
 Use either `delta` or `target` to define it's end point of the animation.
 
-@param {OBJ_TransformAnimationStep} options
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/Animation_AnimationStep_ElementAnimationStep_TransformAnimationStep.OBJ_TransformAnimationStep.html" class="tsd-signature-type">OBJ_TransformAnimationStep</a></span></span></li>
+</ul>
 
 #### Using duration
 
@@ -1064,8 +1120,11 @@ Often the {@link AnimationBuilder} class which extends
 `SerialAnimationStep` can be used to create serial animations
 in a more clean way.
 
-@param {Array<AnimationStep> | OBJ_SerialAnimationStep} steps
-animation steps to perform in serial
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">steps</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><AnimationStep> | <a href="../interfaces/Animation_AnimationStep_SerialAnimationStep.OBJ_SerialAnimationStep.html" class="tsd-signature-type">OBJ_SerialAnimationStep</a></span></span><div class="tsd-comment tsd-typography"><p>animation steps to perform in serial</p></div></li>
+</ul>
 
 #### Using a SerialAnimation step can be cumbersome, but
 
@@ -1122,7 +1181,11 @@ A `delay` will delay the triggering of the custom function
 while `duration` will pad time at the end of the trigger before
 the animation step finishes.
 
-@param {OBJ_TriggerAnimationStep | function(): void} options
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/Animation_AnimationStep_TriggerStep.OBJ_TriggerAnimationStep.html" class="tsd-signature-type">OBJ_TriggerAnimationStep</a> | function(): void</span></span></li>
+</ul>
 
 #### Simple trigger
 

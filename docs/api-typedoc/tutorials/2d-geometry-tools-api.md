@@ -24,6 +24,14 @@ group: 2D Geometry Tools
 
 Get center of a triangle
 
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">p1</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">p2</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">p3</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a></span></span></li>
+</ul>
+
 #### Example 1
 
 ```js
@@ -39,6 +47,17 @@ console.log(center);
 ## minAngleDiff
 
 Get the minimum absolute angle difference between two angles
+
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">angle1</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">angle2</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span></li>
+</ul>
+
+### Returns
+
+<span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span>
 
 #### Example 1
 
@@ -64,6 +83,17 @@ console.log(d3);
 Clip and angle between 0 and 2π (`'0to360'`) or -π to π (`'-180to180'`).
 `null` will return the angle between -2π to 2π.
 
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">angleToClip</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">clipTo</span>: <span class="tsd-signature-type">'0to360' | '-180to180' | null | '-360to360' | '-360to0'</span></span></li>
+</ul>
+
+### Returns
+
+<span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span>
+
 #### Example 1
 
 ```js
@@ -88,11 +118,33 @@ console.log(a3);
 
 Normalize angle to between 0 and 2π.
 
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">angle</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span></li>
+</ul>
+
+### Returns
+
+<span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span>
+
 ---
 
 ## getDeltaAngle
 
 Get angle delta based on direction
+
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">startAngle</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">targetAngle</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">rotDirection</span>: <span class="tsd-signature-type"><a href="../types/geometry_angle.TypeRotationDirection.html" class="tsd-signature-type">TypeRotationDirection</a></span> <span class="tsd-signature-symbol">= 0</span></span></li>
+</ul>
+
+### Returns
+
+<span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span>
 
 ---
 
@@ -101,12 +153,36 @@ Get angle delta based on direction
 Get delta angle of a Point where the x, y, z components are rotations
 around the x, y, and z axes.
 
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">startAngle</span>: <span class="tsd-signature-type"><a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">targetAngle</span>: <span class="tsd-signature-type"><a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">rotDirection</span>: <span class="tsd-signature-type"><a href="../types/geometry_angle.TypeRotationDirection.html" class="tsd-signature-type">TypeRotationDirection</a> | [<a href="../types/geometry_angle.TypeRotationDirection.html" class="tsd-signature-type">TypeRotationDirection</a>, <a href="../types/geometry_angle.TypeRotationDirection.html" class="tsd-signature-type">TypeRotationDirection</a>, <a href="../types/geometry_angle.TypeRotationDirection.html" class="tsd-signature-type">TypeRotationDirection</a>]</span> <span class="tsd-signature-symbol">= 0</span></span></li>
+</ul>
+
+### Returns
+
+<span class="tsd-signature-type"><a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a></span>
+
 ---
 
 ## threePointAngle
 
 Returns the angle from the line (p1, p2) to the line (p1, p3) in the positive
 rotation direction and normalized from 0 to Math.PI * 2.
+
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">p2</span>: <span class="tsd-signature-type"><a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">p1</span>: <span class="tsd-signature-type"><a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">p3</span>: <span class="tsd-signature-type"><a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a></span></span></li>
+</ul>
+
+### Returns
+
+<span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span>
 
 #### Example 1
 
@@ -129,6 +205,18 @@ console.log(p2);
 
 Returns the minimum angle from the line (p1, p2) to the line (p1, p3).
 
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">p2</span>: <span class="tsd-signature-type"><a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">p1</span>: <span class="tsd-signature-type"><a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">p3</span>: <span class="tsd-signature-type"><a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a></span></span></li>
+</ul>
+
+### Returns
+
+<span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span>
+
 #### Example 1
 
 ```js
@@ -150,6 +238,14 @@ console.log(p2);
 
 Polar coordinates to cartesian coordinates conversion
 
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">mag</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">angle</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">theta</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | null</span> <span class="tsd-signature-symbol">= null</span></span></li>
+</ul>
+
 #### Example 1
 
 ```js
@@ -164,6 +260,18 @@ console.log(p);
 ## rectToPolar
 
 Cartesian coordinates to polar coordinates conversion
+
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">x</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">y</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0</span></span></li>
+<li><span><span class="tsd-kind-parameter">z</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0</span></span></li>
+</ul>
+
+### Returns
+
+<span class="tsd-signature-type">{ angle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, mag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, phi: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, r: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, theta: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, }</span>
 
 #### Example 1
 

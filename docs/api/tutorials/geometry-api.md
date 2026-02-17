@@ -37,6 +37,16 @@ Can return either:
 - Array<{@link Point}> - corners of a polygon
 - Array<`number`> - interlaced points of triangles used to a polygon fill
 
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/d2_polygon.OBJ_PolygonPoints.html" class="tsd-signature-type">OBJ_PolygonPoints</a></span></span></li>
+</ul>
+
+### Returns
+
+<span class="tsd-signature-type"><a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>[] | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>[]</span>
+
 ---
 
 ## polygonLine
@@ -47,6 +57,16 @@ Can return either:
 - Array<{@link Point}> - [inner corner 0, outer corner 0, inner corner 1,
   outer corner 1, inner corner 2...]
 - Array<`number`> - interlaced points of triangles used to draw a polygon line
+
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/d2_polygon.OBJ_PolygonLinePoints.html" class="tsd-signature-type">OBJ_PolygonLinePoints</a></span></span></li>
+</ul>
+
+### Returns
+
+<span class="tsd-signature-type"><a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>[] | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>[]</span>
 
 ---
 
@@ -64,10 +84,19 @@ for each point will be available.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/d3_cube.OBJ_CubePoints.html" class="tsd-signature-type">OBJ_CubePoints</a></span></span><div class="tsd-comment tsd-typography"><p>cone options
-@return {[Array&lt;Point&gt;, Array&lt;Point&gt;]} an array of points and normals. If
-the points represent lines, then the array of normals will be empty.</p></div></li>
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/d3_cube.OBJ_CubePoints.html" class="tsd-signature-type">OBJ_CubePoints</a></span></span><div class="tsd-comment tsd-typography"><p>cone options</p></div></li>
 </ul>
+
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/d3_cone.OBJ_ConePoints.html" class="tsd-signature-type">OBJ_ConePoints</a></span></span></li>
+</ul>
+
+### Returns
+
+<span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>>]</span> — an array of points and normals. If
+the points represent lines, then the array of normals will be empty.
 
 ---
 
@@ -84,10 +113,13 @@ for each point will be available.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/d3_cube.OBJ_CubePoints.html" class="tsd-signature-type">OBJ_CubePoints</a></span></span><div class="tsd-comment tsd-typography"><p>cube options
-@return {[Array&lt;Point&gt;, Array&lt;Point&gt;]} an array of points and normals. If
-the points represent lines, then the array of normals will be empty.</p></div></li>
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/d3_cube.OBJ_CubePoints.html" class="tsd-signature-type">OBJ_CubePoints</a></span></span><div class="tsd-comment tsd-typography"><p>cube options</p></div></li>
 </ul>
+
+### Returns
+
+<span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>>]</span> — an array of points and normals. If
+the points represent lines, then the array of normals will be empty.
 
 ---
 
@@ -105,10 +137,13 @@ for each point will be available.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/d3_line3.OBJ_Line3Points.html" class="tsd-signature-type">OBJ_Line3Points</a></span></span><div class="tsd-comment tsd-typography"><p>line options
-@return {[Array&lt;Point&gt;, Array&lt;Point&gt;]} an array of points and normals. If
-the points represent lines, then the array of normals will be empty.</p></div></li>
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/d3_line3.OBJ_Line3Points.html" class="tsd-signature-type">OBJ_Line3Points</a></span></span><div class="tsd-comment tsd-typography"><p>line options</p></div></li>
 </ul>
+
+### Returns
+
+<span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>>]</span> — an array of points and normals. If
+the points represent lines, then the array of normals will be empty.
 
 ---
 
@@ -125,10 +160,19 @@ for each point will be available.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/d3_prism.OBJ_PrismPoints.html" class="tsd-signature-type">OBJ_PrismPoints</a></span></span><div class="tsd-comment tsd-typography"><p>cube options
-@return {[Array&lt;Point&gt;, Array&lt;Point&gt;]} an array of points and normals. If
-the points represent lines, then the array of normals will be empty.</p></div></li>
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/d3_prism.OBJ_PrismPoints.html" class="tsd-signature-type">OBJ_PrismPoints</a></span></span><div class="tsd-comment tsd-typography"><p>cube options</p></div></li>
 </ul>
+
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/d3_prism.OBJ_PrismPoints.html" class="tsd-signature-type">OBJ_PrismPoints</a></span></span></li>
+</ul>
+
+### Returns
+
+<span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>>]</span> — an array of points and normals. If
+the points represent lines, then the array of normals will be empty.
 
 ---
 
@@ -155,8 +199,15 @@ in 3D space, there the original (0, 0, [0]) point is translated to
 All profile points must have a y value that is not 0, with the exceptions of
 the ends which can be 0.
 
-@param {OBJ_Revolve} options
-@return {[Array<Point>, Array<Point>]} an array of points and normals. If
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes3D.OBJ_Revolve.html" class="tsd-signature-type">OBJ_Revolve</a></span></span></li>
+</ul>
+
+### Returns
+
+<span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>>]</span> — an array of points and normals. If
 the points represent lines, then the array of normals will be empty.
 
 ---
@@ -175,10 +226,13 @@ for each point will be available.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/d3_cube.OBJ_CubePoints.html" class="tsd-signature-type">OBJ_CubePoints</a></span></span><div class="tsd-comment tsd-typography"><p>sphere options
-@return {[Array&lt;Point&gt;, Array&lt;Point&gt;]} an array of points and normals. If
-the points represent lines, then the array of normals will be empty.</p></div></li>
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/d3_cube.OBJ_CubePoints.html" class="tsd-signature-type">OBJ_CubePoints</a></span></span><div class="tsd-comment tsd-typography"><p>sphere options</p></div></li>
 </ul>
+
+### Returns
+
+<span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>>]</span> — an array of points and normals. If
+the points represent lines, then the array of normals will be empty.
 
 ---
 

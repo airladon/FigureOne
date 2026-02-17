@@ -182,7 +182,6 @@ publish the following events:
 - `resize`: published after a resize event, but before frame drawing
 
 @class
-@param {OBJ_Figure} options
 
 ### Properties
 
@@ -194,6 +193,12 @@ as advanced lines, shapes, equations and plots</p></div></li>
 <li><span><span class="tsd-kind-parameter">notifications</span>: <span class="tsd-signature-type"><a href="../classes/tools.NotificationManager.html" class="tsd-signature-type">NotificationManager</a></span></span><div class="tsd-comment tsd-typography"><p>notification manager for
 element</p></div></li>
 <li><span><span class="tsd-kind-parameter">fonts</span>: <span class="tsd-signature-type">FontManager</span></span><div class="tsd-comment tsd-typography"><p>watches and reports on font availability</p></div></li>
+</ul>
+
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/Figure.OBJ_Figure.html" class="tsd-signature-type">OBJ_Figure</a></span></span></li>
 </ul>
 
 #### Simple html and javascript example to create a figure, and add a

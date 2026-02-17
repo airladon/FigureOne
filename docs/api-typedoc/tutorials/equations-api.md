@@ -540,6 +540,12 @@ Equation includes two additional animation steps in {@link Equation.animations}:
 * {@link GoToFormAnimationStep}
 * {@link NextFormAnimationStep}
 
+### Parameters
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/Equation_Equation.EQN_Equation.html" class="tsd-signature-type">EQN_Equation</a></span></span></li>
+</ul>
+
 #### Create with options definition
 
 ```js
@@ -580,7 +586,6 @@ eqn.showForm('1');
 > To test examples, append them to the
 <a href="#drawing-boilerplate">boilerplate</a>
 
-@param {EQN_Equation} options
 
 ---
 
