@@ -63,9 +63,11 @@ for each point will be available.
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">options</span> <span class="fo-prop-type">(<a href="../interfaces/d3_cube.OBJ_CubePoints.html">OBJ_CubePoints</a>)</span><span class="fo-prop-desc">: cone options
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/d3_cube.OBJ_CubePoints.html" class="tsd-signature-type">OBJ_CubePoints</a></span></span><div class="tsd-comment tsd-typography"><p>cone options
 @return {[Array&lt;Point&gt;, Array&lt;Point&gt;]} an array of points and normals. If
-the points represent lines, then the array of normals will be empty.</span></div>
+the points represent lines, then the array of normals will be empty.</p></div></li>
+</ul>
 
 ---
 
@@ -81,9 +83,11 @@ for each point will be available.
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">options</span> <span class="fo-prop-type">(<a href="../interfaces/d3_cube.OBJ_CubePoints.html">OBJ_CubePoints</a>)</span><span class="fo-prop-desc">: cube options
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/d3_cube.OBJ_CubePoints.html" class="tsd-signature-type">OBJ_CubePoints</a></span></span><div class="tsd-comment tsd-typography"><p>cube options
 @return {[Array&lt;Point&gt;, Array&lt;Point&gt;]} an array of points and normals. If
-the points represent lines, then the array of normals will be empty.</span></div>
+the points represent lines, then the array of normals will be empty.</p></div></li>
+</ul>
 
 ---
 
@@ -100,9 +104,11 @@ for each point will be available.
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">options</span> <span class="fo-prop-type">(<a href="../interfaces/d3_line3.OBJ_Line3Points.html">OBJ_Line3Points</a>)</span><span class="fo-prop-desc">: line options
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/d3_line3.OBJ_Line3Points.html" class="tsd-signature-type">OBJ_Line3Points</a></span></span><div class="tsd-comment tsd-typography"><p>line options
 @return {[Array&lt;Point&gt;, Array&lt;Point&gt;]} an array of points and normals. If
-the points represent lines, then the array of normals will be empty.</span></div>
+the points represent lines, then the array of normals will be empty.</p></div></li>
+</ul>
 
 ---
 
@@ -118,9 +124,11 @@ for each point will be available.
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">options</span> <span class="fo-prop-type">(<a href="../interfaces/d3_prism.OBJ_PrismPoints.html">OBJ_PrismPoints</a>)</span><span class="fo-prop-desc">: cube options
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/d3_prism.OBJ_PrismPoints.html" class="tsd-signature-type">OBJ_PrismPoints</a></span></span><div class="tsd-comment tsd-typography"><p>cube options
 @return {[Array&lt;Point&gt;, Array&lt;Point&gt;]} an array of points and normals. If
-the points represent lines, then the array of normals will be empty.</span></div>
+the points represent lines, then the array of normals will be empty.</p></div></li>
+</ul>
 
 ---
 
@@ -166,9 +174,11 @@ for each point will be available.
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">options</span> <span class="fo-prop-type">(<a href="../interfaces/d3_cube.OBJ_CubePoints.html">OBJ_CubePoints</a>)</span><span class="fo-prop-desc">: sphere options
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type"><a href="../interfaces/d3_cube.OBJ_CubePoints.html" class="tsd-signature-type">OBJ_CubePoints</a></span></span><div class="tsd-comment tsd-typography"><p>sphere options
 @return {[Array&lt;Point&gt;, Array&lt;Point&gt;]} an array of points and normals. If
-the points represent lines, then the array of normals will be empty.</span></div>
+the points represent lines, then the array of normals will be empty.</p></div></li>
+</ul>
 
 ---
 

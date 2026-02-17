@@ -58,19 +58,19 @@ if (fs.existsSync(apiTypedocDir)) {
 }
 
 function linkifyType(typeStr) {
-  // Convert a type string into HTML with links
+  // Convert a type string into HTML with links using TypeDoc classes
   // Handle compound types: Array<Foo>, Foo | Bar, etc.
   // We replace known type names with links
   return typeStr.replace(/\b([A-Z]\w+)\b/g, (match) => {
     if (MDN_TYPES[match]) {
-      return `<a href="${MDN_TYPES[match]}">${match}</a>`;
+      return `<a href="${MDN_TYPES[match]}" class="tsd-signature-type">${match}</a>`;
     }
     if (typeLinks[match]) {
-      return `<a href="${typeLinks[match]}">${match}</a>`;
+      return `<a href="${typeLinks[match]}" class="tsd-signature-type">${match}</a>`;
     }
     return match;
   }).replace(/\b(number|string|boolean)\b/g, (match) => {
-    return `<a href="${MDN_TYPES[match]}">${match}</a>`;
+    return `<a href="${MDN_TYPES[match]}" class="tsd-signature-type">${match}</a>`;
   });
 }
 
@@ -182,7 +182,7 @@ function formatProperty(propStr) {
   // Parse: {Type} [name] description (default)
   // or: {Type} name description
   const m = propStr.match(/^\{([^}]+)\}\s+(\[?\w+\]?)\s*([\s\S]*)/);
-  if (!m) return `<div class="fo-prop">${escapeHtml(propStr)}</div>`;
+  if (!m) return `<li><span>${escapeHtml(propStr)}</span></li>`;
 
   const type = m[1];
   let name = m[2];
@@ -199,30 +199,25 @@ function formatProperty(propStr) {
     desc = desc.substring(0, desc.length - defaultMatch[0].length).trim();
   }
 
-  // Build HTML
-  let html = '<div class="fo-prop">';
-  html += `<span class="fo-prop-name">${escapeHtml(name)}</span> `;
-  html += `<span class="fo-prop-type">(${linkifyType(type)}${optional ? '?' : ''})</span>`;
-
   // Clean up description: remove trailing/leading commas, whitespace
   desc = desc.replace(/^[,\s]+|[,\s]+$/g, '');
 
-  if (desc || defaultVal) {
-    html += '<span class="fo-prop-desc">';
-    if (desc) {
-      // Convert inline `code` in description
-      const descHtml = escapeHtml(desc).replace(/`([^`]+)`/g, '<code>$1</code>');
-      html += ': ' + descHtml;
-    }
-    if (defaultVal) {
-      // Strip backticks from default value (they come from JSDoc `code` markup)
-      const cleanDefault = defaultVal.replace(/`/g, '');
-      html += ` (<code>${escapeHtml(cleanDefault)}</code>)`;
-    }
-    html += '</span>';
+  // Build TypeDoc-style HTML
+  let html = '<li><span>';
+  html += `<span class="tsd-kind-parameter">${escapeHtml(name)}</span>`;
+  html += `: <span class="tsd-signature-type">${linkifyType(type)}${optional ? ' | undefined' : ''}</span>`;
+  if (defaultVal) {
+    const cleanDefault = defaultVal.replace(/`/g, '');
+    html += ` <span class="tsd-signature-symbol">= ${escapeHtml(cleanDefault)}</span>`;
+  }
+  html += '</span>';
+
+  if (desc) {
+    const descHtml = escapeHtml(desc).replace(/`([^`]+)`/g, '<code>$1</code>');
+    html += `<div class="tsd-comment tsd-typography"><p>${descHtml}</p></div>`;
   }
 
-  html += '</div>';
+  html += '</li>';
   return html;
 }
 
@@ -273,10 +268,11 @@ for (const entry of entries) {
 
   if (entry.properties.length > 0) {
     md += '### Properties\n\n';
+    md += '<ul class="tsd-parameter-list">\n';
     for (const prop of entry.properties) {
       md += formatProperty(prop) + '\n';
     }
-    md += '\n';
+    md += '</ul>\n\n';
   }
 
   for (let i = 0; i < entry.examples.length; i++) {

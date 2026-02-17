@@ -53,15 +53,17 @@ recording goes beyond the current duration</li>
 </ul>
 <p>@class</p>
 <h3 id="properties" class="tsd-anchor-link">Properties<a href="#properties" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="fo-prop"><span class="fo-prop-name">state</span> <span class="fo-prop-type">('recording' | 'playing' | 'idle' | 'preparingToPlay' | 'preparingToPause')</span></div>
-<div class="fo-prop"><span class="fo-prop-name">isAudioPlaying</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">duration</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</span><span class="fo-prop-desc">: in seconds</span></div>
-<div class="fo-prop"><span class="fo-prop-name">stateTimeStep</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</span><span class="fo-prop-desc">: in seconds - change this to change the
-duration between recorded seek frames</span></div>
-<div class="fo-prop"><span class="fo-prop-name">timeUpdates</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</span><span class="fo-prop-desc">: in seconds - how often to publish the
-'timeUpdate' notification</span></div>
-<div class="fo-prop"><span class="fo-prop-name">notifications</span> <span class="fo-prop-type">(<a href="../classes/tools.NotificationManager.html">NotificationManager</a>)</span><span class="fo-prop-desc">: - use to subscribe to
-notifications</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">state</span>: <span class="tsd-signature-type">'recording' | 'playing' | 'idle' | 'preparingToPlay' | 'preparingToPause'</span></span></li>
+<li><span><span class="tsd-kind-parameter">isAudioPlaying</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">duration</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>in seconds</p></div></li>
+<li><span><span class="tsd-kind-parameter">stateTimeStep</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>in seconds - change this to change the
+duration between recorded seek frames</p></div></li>
+<li><span><span class="tsd-kind-parameter">timeUpdates</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>in seconds - how often to publish the
+'timeUpdate' notification</p></div></li>
+<li><span><span class="tsd-kind-parameter">notifications</span>: <span class="tsd-signature-type"><a href="../classes/tools.NotificationManager.html" class="tsd-signature-type">NotificationManager</a></span></span><div class="tsd-comment tsd-typography"><p>- use to subscribe to
+notifications</p></div></li>
+</ul>
 <hr>
 <h2 id="typerecordertime" class="tsd-anchor-link">TypeRecorderTime<a href="#typerecordertime" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>Recorder time format.</p>
@@ -90,9 +92,11 @@ customAnimationStep callbacks, or recorder slide definitions (<code>entryState</
 <li>The ability to execute a function within the map</li>
 </ul>
 <h3 id="properties-1" class="tsd-anchor-link">Properties<a href="#properties-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="fo-prop"><span class="fo-prop-name">global</span> <span class="fo-prop-type">(<a href="../classes/FunctionMap.FunctionMap.html">FunctionMap</a>)</span><span class="fo-prop-desc">: global function map</span></div>
-<div class="fo-prop"><span class="fo-prop-name">map</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</span><span class="fo-prop-desc">: local function map where keys are unique identifiers
-and values are the associated functions</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">global</span>: <span class="tsd-signature-type"><a href="../classes/FunctionMap.FunctionMap.html" class="tsd-signature-type">FunctionMap</a></span></span><div class="tsd-comment tsd-typography"><p>global function map</p></div></li>
+<li><span><span class="tsd-kind-parameter">map</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object" class="tsd-signature-type">Object</a></span></span><div class="tsd-comment tsd-typography"><p>local function map where keys are unique identifiers
+and values are the associated functions</p></div></li>
+</ul>
 <h4 id="add-a-console-function-to-a-functionmap-and-execute-it-with-a-parameter" class="tsd-anchor-link">Add a console function to a FunctionMap and execute it with a parameter<a href="#add-a-console-function-to-a-functionmap-and-execute-it-with-a-parameter" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <pre><code class="js"><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-8">fnMap</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">(</span><span class="hl-11">&#39;toConsole&#39;</span><span class="hl-5">, </span><span class="hl-8">s</span><span class="hl-5"> </span><span class="hl-6">=&gt;</span><span class="hl-5"> </span><span class="hl-8">console</span><span class="hl-5">.</span><span class="hl-9">log</span><span class="hl-5">(</span><span class="hl-8">s</span><span class="hl-5">));</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-8">fnMap</span><span class="hl-5">.</span><span class="hl-9">exec</span><span class="hl-5">(</span><span class="hl-11">&#39;toConsole&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;hello&#39;</span><span class="hl-5">);</span>
 </code><button type="button">Copy</button></pre>

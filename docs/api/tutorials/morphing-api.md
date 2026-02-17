@@ -188,16 +188,18 @@ image.onload = () => {
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">name</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</span><span class="fo-prop-desc">: primitive name</span></div>
-<div class="fo-prop"><span class="fo-prop-name">pointArrays</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>>)</span><span class="fo-prop-desc">: point arrays to morph between.
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">name</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a></span></span><div class="tsd-comment tsd-typography"><p>primitive name</p></div></li>
+<li><span><span class="tsd-kind-parameter">pointArrays</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>>></span></span><div class="tsd-comment tsd-typography"><p>point arrays to morph between.
 Each point array is an array of consecutive x, y values of points. For
-example: [x1, y1, x2, y2, x3, y3, ...].</span></div>
-<div class="fo-prop"><span class="fo-prop-name">color</span> <span class="fo-prop-type">(<a href="../types/types.TypeColor.html">TypeColor</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="../types/types.TypeColor.html">TypeColor</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="../types/types.TypeColor.html">TypeColor</a>>>)</span><span class="fo-prop-desc">: colors to
-be assigned to the points</span></div>
-<div class="fo-prop"><span class="fo-prop-name">names</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><String>)</span><span class="fo-prop-desc">: optional names for each point array. Names
+example: [x1, y1, x2, y2, x3, y3, ...].</p></div></li>
+<li><span><span class="tsd-kind-parameter">color</span>: <span class="tsd-signature-type"><a href="../types/types.TypeColor.html" class="tsd-signature-type">TypeColor</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../types/types.TypeColor.html" class="tsd-signature-type">TypeColor</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../types/types.TypeColor.html" class="tsd-signature-type">TypeColor</a>>></span></span><div class="tsd-comment tsd-typography"><p>colors to
+be assigned to the points</p></div></li>
+<li><span><span class="tsd-kind-parameter">names</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><String></span></span><div class="tsd-comment tsd-typography"><p>optional names for each point array. Names
 can be used when using the morph animation step instead of point array
-indeces.</span></div>
-<div class="fo-prop"><span class="fo-prop-name">glPrimitive</span> <span class="fo-prop-type">('TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'?)</span><span class="fo-prop-desc">: glPrimitive is the same for all point arrays (<code>'TRIANGLES'</code>)</span></div>
+indeces.</p></div></li>
+<li><span><span class="tsd-kind-parameter">glPrimitive</span>: <span class="tsd-signature-type">'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES' | undefined</span> <span class="tsd-signature-symbol">= 'TRIANGLES'</span></span><div class="tsd-comment tsd-typography"><p>glPrimitive is the same for all point arrays</p></div></li>
+</ul>
 
 ---
 
@@ -207,50 +209,52 @@ indeces.</span></div>
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">image</span> <span class="fo-prop-type">(Image?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">num</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null?)</span><span class="fo-prop-desc">: maximum number of shapes to return -
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">image</span>: <span class="tsd-signature-type">Image | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">num</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | null | undefined</span> <span class="tsd-signature-symbol">= null</span></span><div class="tsd-comment tsd-typography"><p>maximum number of shapes to return -
 <code>null</code> defaults to the number of pixels (or filtered pixels if a filter is
-used) (<code>null</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">excess</span> <span class="fo-prop-type">('repeatOpaqueOnly' | 'lastOpaque' | 'repeat'?)</span><span class="fo-prop-desc">: if
+used)</p></div></li>
+<li><span><span class="tsd-kind-parameter">excess</span>: <span class="tsd-signature-type">'repeatOpaqueOnly' | 'lastOpaque' | 'repeat' | undefined</span></span><div class="tsd-comment tsd-typography"><p>if
 num is greater than the number of pixels, then either <code>'repeat'</code> the
 shapes from all the pixels again, repeat the shapes from only the opaque
 pixels <code>'repeatOpaqueOnly'</code> or put all execess shapes on the <code>'lastOpaque'</code>
 pixel. Note, repeating pixels that are semitransparent will effectively put
 multiple pixels on top of each other, reducing the transparency of the pixel
-(<code>'repeatOpaqueOnly'</code>).</span></div>
-<div class="fo-prop"><span class="fo-prop-name">filter</span> <span class="fo-prop-type">(function(<a href="../types/types.TypeColor.html">TypeColor</a>, [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]) => <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: filter function with pixel color and pixel position input parameters. Return
+(<code>'repeatOpaqueOnly'</code>).</p></div></li>
+<li><span><span class="tsd-kind-parameter">filter</span>: <span class="tsd-signature-type">function(<a href="../types/types.TypeColor.html" class="tsd-signature-type">TypeColor</a>, [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>]) => <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>filter function with pixel color and pixel position input parameters. Return
 <code>true</code> to keep pixel. Pixel position is (0, 0) in top left corner and
-(pixelsWidth, pixelsHeight) in the bottom right (<code>() =&gt; true</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">distribution</span> <span class="fo-prop-type">('raster' | 'random'?)</span><span class="fo-prop-desc">: Returned shapes are randomly
+(pixelsWidth, pixelsHeight) in the bottom right (<code>() =&gt; true</code>)</p></div></li>
+<li><span><span class="tsd-kind-parameter">distribution</span>: <span class="tsd-signature-type">'raster' | 'random' | undefined</span> <span class="tsd-signature-symbol">= random</span></span><div class="tsd-comment tsd-typography"><p>Returned shapes are randomly
 distributed throughout shape (<code>'random'</code>) or rasterized in order from top
-left to bottom right of image (or filtered image) (<code>random</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">width</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null?)</span><span class="fo-prop-desc">: width to map image pixels to. Width is
-between center of most left to most right pixels</span></div>
-<div class="fo-prop"><span class="fo-prop-name">height</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null?)</span><span class="fo-prop-desc">: height to map image pixels to. Height is
-between center of most bottom to most top pixels</span></div>
-<div class="fo-prop"><span class="fo-prop-name">size</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: shape size to map pixel to. Final points will
+left to bottom right of image (or filtered image)</p></div></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | null | undefined</span></span><div class="tsd-comment tsd-typography"><p>width to map image pixels to. Width is
+between center of most left to most right pixels</p></div></li>
+<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | null | undefined</span></span><div class="tsd-comment tsd-typography"><p>height to map image pixels to. Height is
+between center of most bottom to most top pixels</p></div></li>
+<li><span><span class="tsd-kind-parameter">size</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>shape size to map pixel to. Final points will
 have a width of <code>width + size</code> center of points are used to determine
 <code>width</code> and <code>height</code>. Default shape is a square, and default size
 (if left undefined) is the size needed to make adjacent square shapes
-touch</span></div>
-<div class="fo-prop"><span class="fo-prop-name">position</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span><span class="fo-prop-desc">: position to place shapes at</span></div>
-<div class="fo-prop"><span class="fo-prop-name">xAlign</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationForm.TypeHAlign.html">TypeHAlign</a>?)</span><span class="fo-prop-desc">: align shapes horizontally around <code>position</code></span></div>
-<div class="fo-prop"><span class="fo-prop-name">yAlign</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationForm.TypeVAlign.html">TypeVAlign</a>?)</span><span class="fo-prop-desc">: align shapes vertically around <code>position</code></span></div>
-<div class="fo-prop"><span class="fo-prop-name">align</span> <span class="fo-prop-type">('image' | 'filteredImage'?)</span><span class="fo-prop-desc">: <code>image</code> will align the shapes
+touch</p></div></li>
+<li><span><span class="tsd-kind-parameter">position</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>position to place shapes at</p></div></li>
+<li><span><span class="tsd-kind-parameter">xAlign</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationForm.TypeHAlign.html" class="tsd-signature-type">TypeHAlign</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>align shapes horizontally around <code>position</code></p></div></li>
+<li><span><span class="tsd-kind-parameter">yAlign</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationForm.TypeVAlign.html" class="tsd-signature-type">TypeVAlign</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>align shapes vertically around <code>position</code></p></div></li>
+<li><span><span class="tsd-kind-parameter">align</span>: <span class="tsd-signature-type">'image' | 'filteredImage' | undefined</span></span><div class="tsd-comment tsd-typography"><p><code>image</code> will align the shapes
 as if there were no pixels filtered out. <code>filteredImage</code> will align to only
-the shapes that exist.</span></div>
-<div class="fo-prop"><span class="fo-prop-name">dither</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: Add a random offset to each shape to create a
-dither effect</span></div>
-<div class="fo-prop"><span class="fo-prop-name">shape</span> <span class="fo-prop-type">(function(<a href="../classes/geometry_Point.Point.html">Point</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: By default a square of two triangles is created (six vertices). Use a
+the shapes that exist.</p></div></li>
+<li><span><span class="tsd-kind-parameter">dither</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>Add a random offset to each shape to create a
+dither effect</p></div></li>
+<li><span><span class="tsd-kind-parameter">shape</span>: <span class="tsd-signature-type">function(<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>By default a square of two triangles is created (six vertices). Use a
 <code>number</code> to create a regular polygon with <code>number</code> sides. Use a custom
 function to make a custom shape. The function takes as input the [x, y]
 position of the point to build the shape around, and <code>size</code>. It outputs an
 array of interlaced x and y coordinates of triangle vertices - i.e.:
-[x1, y1, x2, y2, x3, y3, ....]</span></div>
-<div class="fo-prop"><span class="fo-prop-name">makeColors</span> <span class="fo-prop-type">(function(<a href="../types/types.TypeColor.html">TypeColor</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</span><span class="fo-prop-desc">: use this function to customze color mapping. The function takes as input the
+[x1, y1, x2, y2, x3, y3, ....]</p></div></li>
+<li><span><span class="tsd-kind-parameter">makeColors</span>: <span class="tsd-signature-type">function(<a href="../types/types.TypeColor.html" class="tsd-signature-type">TypeColor</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>> | undefined</span></span><div class="tsd-comment tsd-typography"><p>use this function to customze color mapping. The function takes as input the
 pixel's color, and the number of vertices that need to be colored. It
 outputs an array of colors for each vertex - i.e.:
-[r1, b1, g1, a1, r2, g2, b, a2, ...]</span></div>
+[r1, b1, g1, a1, r2, g2, b, a2, ...]</p></div></li>
+</ul>
 
 ---
 
@@ -369,23 +373,25 @@ along a line
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">points</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>>)</span><span class="fo-prop-desc">: array of points representing a
-polyline where each point is a corner in the line</span></div>
-<div class="fo-prop"><span class="fo-prop-name">num</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</span><span class="fo-prop-desc">: number of shapes to distribute along line</span></div>
-<div class="fo-prop"><span class="fo-prop-name">close</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</span><span class="fo-prop-desc">: <code>true</code> closes the polyline</span></div>
-<div class="fo-prop"><span class="fo-prop-name">size</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</span><span class="fo-prop-desc">: size of shape</span></div>
-<div class="fo-prop"><span class="fo-prop-name">shape</span> <span class="fo-prop-type">(function(<a href="../classes/geometry_Point.Point.html">Point</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: By default a square of two triangles is created (six vertices). Use a
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">points</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a>></span></span><div class="tsd-comment tsd-typography"><p>array of points representing a
+polyline where each point is a corner in the line</p></div></li>
+<li><span><span class="tsd-kind-parameter">num</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>number of shapes to distribute along line</p></div></li>
+<li><span><span class="tsd-kind-parameter">close</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span></span><div class="tsd-comment tsd-typography"><p><code>true</code> closes the polyline</p></div></li>
+<li><span><span class="tsd-kind-parameter">size</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>size of shape</p></div></li>
+<li><span><span class="tsd-kind-parameter">shape</span>: <span class="tsd-signature-type">function(<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>By default a square of two triangles is created (six vertices). Use a
 <code>number</code> to create a regular polygon with <code>number</code> sides. Use a custom
 function to make a custom shape. The function takes as input the [x, y]
 position of the point to build the shape around, and <code>size</code>. It outputs an
 array of interlaced x and y coordinates of triangle vertices - i.e.:
-[x1, y1, x2, y2, x3, y3, ....]</span></div>
-<div class="fo-prop"><span class="fo-prop-name">makeColors</span> <span class="fo-prop-type">(function(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="../classes/geometry_Point.Point.html">Point</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>)</span><span class="fo-prop-desc">: function that creates colors for each vertex of the shape.
+[x1, y1, x2, y2, x3, y3, ....]</p></div></li>
+<li><span><span class="tsd-kind-parameter">makeColors</span>: <span class="tsd-signature-type">function(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>></span></span><div class="tsd-comment tsd-typography"><p>function that creates colors for each vertex of the shape.
 Function input parameters are the number of shape vertices to be colored,
 the center point coordinate, the previous polyline point index, the
 cumulative length from the start of the polyline, and the percentLength from
 the start of the polyline. The function must return a single array
-containing all vertex colors.</span></div>
+containing all vertex colors.</p></div></li>
+</ul>
 
 ---
 
@@ -515,19 +521,21 @@ Options obect for {@link pointsToShapes} that creates a shape at each point
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">points</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>>)</span><span class="fo-prop-desc">: array of points to create shapes
-at</span></div>
-<div class="fo-prop"><span class="fo-prop-name">size</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</span><span class="fo-prop-desc">: size of shape</span></div>
-<div class="fo-prop"><span class="fo-prop-name">shape</span> <span class="fo-prop-type">(function(<a href="../classes/geometry_Point.Point.html">Point</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: By default a square of two triangles is created (six vertices). Use a
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">points</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a>></span></span><div class="tsd-comment tsd-typography"><p>array of points to create shapes
+at</p></div></li>
+<li><span><span class="tsd-kind-parameter">size</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>size of shape</p></div></li>
+<li><span><span class="tsd-kind-parameter">shape</span>: <span class="tsd-signature-type">function(<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>By default a square of two triangles is created (six vertices). Use a
 <code>number</code> to create a regular polygon with <code>number</code> sides. Use a custom
 function to make a custom shape. The function takes as input the [x, y]
 position of the point to build the shape around, and <code>size</code>. It outputs an
 array of interlaced x and y coordinates of triangle vertices - i.e.:
-[x1, y1, x2, y2, x3, y3, ....]</span></div>
-<div class="fo-prop"><span class="fo-prop-name">makeColors</span> <span class="fo-prop-type">(function(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="../classes/geometry_Point.Point.html">Point</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>)</span><span class="fo-prop-desc">: function that creates colors for each vertex of the shape.
+[x1, y1, x2, y2, x3, y3, ....]</p></div></li>
+<li><span><span class="tsd-kind-parameter">makeColors</span>: <span class="tsd-signature-type">function(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>></span></span><div class="tsd-comment tsd-typography"><p>function that creates colors for each vertex of the shape.
 Function input parameters are the number of shape vertices to be colored,
 and the position of the shape. The function must return a single array
-containing all vertex colors.</span></div>
+containing all vertex colors.</p></div></li>
+</ul>
 
 ---
 
@@ -582,19 +590,21 @@ Options object to generate shapes at random positions within a polygon.
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">num</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: number of shapes to generate (<code>10</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">size</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: size of each shape (<code>0.01</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">radius</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: radius of polygon (<code>1</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">sides</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: number of polygon sides (<code>4</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">position</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span><span class="fo-prop-desc">: center position of polygon (<code>[0, 0]</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">rotation</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: polygon rotation (first vertex will be along
-the positive x axis) (<code>0</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">shape</span> <span class="fo-prop-type">(function(<a href="../classes/geometry_Point.Point.html">Point</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: By default a square of two triangles is created (six vertices). Use a
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">num</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of shapes to generate</p></div></li>
+<li><span><span class="tsd-kind-parameter">size</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span><div class="tsd-comment tsd-typography"><p>size of each shape</p></div></li>
+<li><span><span class="tsd-kind-parameter">radius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>radius of polygon</p></div></li>
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 4</span></span><div class="tsd-comment tsd-typography"><p>number of polygon sides</p></div></li>
+<li><span><span class="tsd-kind-parameter">position</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= [0, 0]</span></span><div class="tsd-comment tsd-typography"><p>center position of polygon</p></div></li>
+<li><span><span class="tsd-kind-parameter">rotation</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>polygon rotation (first vertex will be along
+the positive x axis)</p></div></li>
+<li><span><span class="tsd-kind-parameter">shape</span>: <span class="tsd-signature-type">function(<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>By default a square of two triangles is created (six vertices). Use a
 <code>number</code> to create a regular polygon with <code>number</code> sides. Use a custom
 function to make a custom shape. The function takes as input the [x, y]
 position of the point to build the shape around, and <code>size</code>. It outputs an
 array of interlaced x and y coordinates of triangle vertices - i.e.:
-[x1, y1, x2, y2, x3, y3, ....]</span></div>
+[x1, y1, x2, y2, x3, y3, ....]</p></div></li>
+</ul>
 
 ---
 
@@ -643,16 +653,18 @@ Options object to generate shapes at random positions within a circle.
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">num</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: number of shapes to generate (<code>10</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">pointSize</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: size of each shape (<code>0.01</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">radius</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: radius of circle (<code>1</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">position</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span><span class="fo-prop-desc">: center position of circle (<code>[0, 0]</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">shape</span> <span class="fo-prop-type">(function(<a href="../classes/geometry_Point.Point.html">Point</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: By default a square of two triangles is created (six vertices). Use a
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">num</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of shapes to generate</p></div></li>
+<li><span><span class="tsd-kind-parameter">pointSize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span><div class="tsd-comment tsd-typography"><p>size of each shape</p></div></li>
+<li><span><span class="tsd-kind-parameter">radius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>radius of circle</p></div></li>
+<li><span><span class="tsd-kind-parameter">position</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= [0, 0]</span></span><div class="tsd-comment tsd-typography"><p>center position of circle</p></div></li>
+<li><span><span class="tsd-kind-parameter">shape</span>: <span class="tsd-signature-type">function(<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>By default a square of two triangles is created (six vertices). Use a
 <code>number</code> to create a regular polygon with <code>number</code> sides. Use a custom
 function to make a custom shape. The function takes as input the [x, y]
 position of the point to build the shape around, and <code>size</code>. It outputs an
 array of interlaced x and y coordinates of triangle vertices - i.e.:
-[x1, y1, x2, y2, x3, y3, ....]</span></div>
+[x1, y1, x2, y2, x3, y3, ....]</p></div></li>
+</ul>
 
 ---
 
@@ -699,17 +711,19 @@ Options object to generate shapes at random positions within a rectangle.
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">maxPoints</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: number of shapes to generate (<code>10</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">pointSize</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: size of each shape (<code>0.01</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">width</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: width of rectangle (<code>1</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">height</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: height of rectangle (<code>1</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">position</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span><span class="fo-prop-desc">: center position of rectangle (<code>[0, 0]</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">shape</span> <span class="fo-prop-type">(function(<a href="../classes/geometry_Point.Point.html">Point</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: By default a square of two triangles is created (six vertices). Use a
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">maxPoints</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of shapes to generate</p></div></li>
+<li><span><span class="tsd-kind-parameter">pointSize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span><div class="tsd-comment tsd-typography"><p>size of each shape</p></div></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>width of rectangle</p></div></li>
+<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>height of rectangle</p></div></li>
+<li><span><span class="tsd-kind-parameter">position</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= [0, 0]</span></span><div class="tsd-comment tsd-typography"><p>center position of rectangle</p></div></li>
+<li><span><span class="tsd-kind-parameter">shape</span>: <span class="tsd-signature-type">function(<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>By default a square of two triangles is created (six vertices). Use a
 <code>number</code> to create a regular polygon with <code>number</code> sides. Use a custom
 function to make a custom shape. The function takes as input the [x, y]
 position of the point to build the shape around, and <code>size</code>. It outputs an
 array of interlaced x and y coordinates of triangle vertices - i.e.:
-[x1, y1, x2, y2, x3, y3, ....]</span></div>
+[x1, y1, x2, y2, x3, y3, ....]</p></div></li>
+</ul>
 
 ---
 

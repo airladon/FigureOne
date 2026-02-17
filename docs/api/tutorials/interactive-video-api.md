@@ -63,15 +63,17 @@ publish the following events:
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">state</span> <span class="fo-prop-type">('recording' | 'playing' | 'idle' | 'preparingToPlay' | 'preparingToPause')</span></div>
-<div class="fo-prop"><span class="fo-prop-name">isAudioPlaying</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">duration</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</span><span class="fo-prop-desc">: in seconds</span></div>
-<div class="fo-prop"><span class="fo-prop-name">stateTimeStep</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</span><span class="fo-prop-desc">: in seconds - change this to change the
-duration between recorded seek frames</span></div>
-<div class="fo-prop"><span class="fo-prop-name">timeUpdates</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</span><span class="fo-prop-desc">: in seconds - how often to publish the
-'timeUpdate' notification</span></div>
-<div class="fo-prop"><span class="fo-prop-name">notifications</span> <span class="fo-prop-type">(<a href="../classes/tools.NotificationManager.html">NotificationManager</a>)</span><span class="fo-prop-desc">: - use to subscribe to
-notifications</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">state</span>: <span class="tsd-signature-type">'recording' | 'playing' | 'idle' | 'preparingToPlay' | 'preparingToPause'</span></span></li>
+<li><span><span class="tsd-kind-parameter">isAudioPlaying</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">duration</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>in seconds</p></div></li>
+<li><span><span class="tsd-kind-parameter">stateTimeStep</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>in seconds - change this to change the
+duration between recorded seek frames</p></div></li>
+<li><span><span class="tsd-kind-parameter">timeUpdates</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>in seconds - how often to publish the
+'timeUpdate' notification</p></div></li>
+<li><span><span class="tsd-kind-parameter">notifications</span>: <span class="tsd-signature-type"><a href="../classes/tools.NotificationManager.html" class="tsd-signature-type">NotificationManager</a></span></span><div class="tsd-comment tsd-typography"><p>- use to subscribe to
+notifications</p></div></li>
+</ul>
 
 ---
 
@@ -111,9 +113,11 @@ The funciton map has:
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">global</span> <span class="fo-prop-type">(<a href="../classes/FunctionMap.FunctionMap.html">FunctionMap</a>)</span><span class="fo-prop-desc">: global function map</span></div>
-<div class="fo-prop"><span class="fo-prop-name">map</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</span><span class="fo-prop-desc">: local function map where keys are unique identifiers
-and values are the associated functions</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">global</span>: <span class="tsd-signature-type"><a href="../classes/FunctionMap.FunctionMap.html" class="tsd-signature-type">FunctionMap</a></span></span><div class="tsd-comment tsd-typography"><p>global function map</p></div></li>
+<li><span><span class="tsd-kind-parameter">map</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object" class="tsd-signature-type">Object</a></span></span><div class="tsd-comment tsd-typography"><p>local function map where keys are unique identifiers
+and values are the associated functions</p></div></li>
+</ul>
 
 #### Add a console function to a FunctionMap and execute it with a parameter
 

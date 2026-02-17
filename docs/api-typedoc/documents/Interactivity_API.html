@@ -18,50 +18,56 @@
 <p>If a figure element is released from moving with some velocity
 then these parameters will define how it continues to move freely</p>
 <h3 id="properties" class="tsd-anchor-link">Properties<a href="#properties" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="fo-prop"><span class="fo-prop-name">zeroVelocityThreshold</span> <span class="fo-prop-type">(TypeTransformValue)</span><span class="fo-prop-desc">: used to overcome
-limitations of floating point numbers not reaching 0</span></div>
-<div class="fo-prop"><span class="fo-prop-name">deceleration</span> <span class="fo-prop-type">(TypeTransformValue)</span><span class="fo-prop-desc">: amount to decelerate in local
-space units per second squared</span></div>
-<div class="fo-prop"><span class="fo-prop-name">bounceLoss</span> <span class="fo-prop-type">(TypeTransformValue)</span><span class="fo-prop-desc">: 0.5 results in 50% velocity loss
-if bouncing of boundary</span></div>
-<div class="fo-prop"><span class="fo-prop-name">callback</span> <span class="fo-prop-type">(?(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | ((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>) => void)))</span><span class="fo-prop-desc">: called each frame of
-free movement</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">zeroVelocityThreshold</span>: <span class="tsd-signature-type">TypeTransformValue</span></span><div class="tsd-comment tsd-typography"><p>used to overcome
+limitations of floating point numbers not reaching 0</p></div></li>
+<li><span><span class="tsd-kind-parameter">deceleration</span>: <span class="tsd-signature-type">TypeTransformValue</span></span><div class="tsd-comment tsd-typography"><p>amount to decelerate in local
+space units per second squared</p></div></li>
+<li><span><span class="tsd-kind-parameter">bounceLoss</span>: <span class="tsd-signature-type">TypeTransformValue</span></span><div class="tsd-comment tsd-typography"><p>0.5 results in 50% velocity loss
+if bouncing of boundary</p></div></li>
+<li><span><span class="tsd-kind-parameter">callback</span>: <span class="tsd-signature-type">?(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a> | ((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a>) => void))</span></span><div class="tsd-comment tsd-typography"><p>called each frame of
+free movement</p></div></li>
+</ul>
 <hr>
 <h2 id="obj_elementmove" class="tsd-anchor-link">OBJ_ElementMove<a href="#obj_elementmove" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>Figure element move parameters</p>
 <h3 id="properties-1" class="tsd-anchor-link">Properties<a href="#properties-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="fo-prop"><span class="fo-prop-name">type</span> <span class="fo-prop-type">(type: 'rotation' | 'translation' | 'position' | 'scale' | 'scaleX' | 'scaleY' | 'scaleZ')</span></div>
-<div class="fo-prop"><span class="fo-prop-name">bounds</span> <span class="fo-prop-type">(<a href="../types/geometry_Bounds.TypeParsableBounds.html">TypeParsableBounds</a>)</span><span class="fo-prop-desc">: rectangle to
-limit movement within</span></div>
-<div class="fo-prop"><span class="fo-prop-name">plane</span> <span class="fo-prop-type">(<a href="../classes/geometry_Plane.Plane.html">Plane</a>)</span><span class="fo-prop-desc">: movement plane</span></div>
-<div class="fo-prop"><span class="fo-prop-name">maxVelocity</span> <span class="fo-prop-type">(TypeTransformValue)</span><span class="fo-prop-desc">: maximum velocity allowed (<code>5</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">freely</span> <span class="fo-prop-type">(OBJ_ElementMoveFreely)</span><span class="fo-prop-desc">: free movement parameters - use
-false for disabling free movement after touch up</span></div>
-<div class="fo-prop"><span class="fo-prop-name">element</span> <span class="fo-prop-type">(<a href="../classes/Element.FigureElement.html">FigureElement</a> | null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">type</span>: <span class="tsd-signature-type">type: 'rotation' | 'translation' | 'position' | 'scale' | 'scaleX' | 'scaleY' | 'scaleZ'</span></span></li>
+<li><span><span class="tsd-kind-parameter">bounds</span>: <span class="tsd-signature-type"><a href="../types/geometry_Bounds.TypeParsableBounds.html" class="tsd-signature-type">TypeParsableBounds</a></span></span><div class="tsd-comment tsd-typography"><p>rectangle to
+limit movement within</p></div></li>
+<li><span><span class="tsd-kind-parameter">plane</span>: <span class="tsd-signature-type"><a href="../classes/geometry_Plane.Plane.html" class="tsd-signature-type">Plane</a></span></span><div class="tsd-comment tsd-typography"><p>movement plane</p></div></li>
+<li><span><span class="tsd-kind-parameter">maxVelocity</span>: <span class="tsd-signature-type">TypeTransformValue</span> <span class="tsd-signature-symbol">= 5</span></span><div class="tsd-comment tsd-typography"><p>maximum velocity allowed</p></div></li>
+<li><span><span class="tsd-kind-parameter">freely</span>: <span class="tsd-signature-type">OBJ_ElementMoveFreely</span></span><div class="tsd-comment tsd-typography"><p>free movement parameters - use
+false for disabling free movement after touch up</p></div></li>
+<li><span><span class="tsd-kind-parameter">element</span>: <span class="tsd-signature-type"><a href="../classes/Element.FigureElement.html" class="tsd-signature-type">FigureElement</a> | null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a></span></span></li>
+</ul>
 <hr>
 <h2 id="obj_gesture" class="tsd-anchor-link">OBJ_Gesture<a href="#obj_gesture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p><em>Extends  OBJ_Generic</em></p>
 <h3 id="properties-2" class="tsd-anchor-link">Properties<a href="#properties-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="fo-prop"><span class="fo-prop-name">zoom</span> <span class="fo-prop-type">(<a href="../interfaces/FigurePrimitives_FigureElementPrimitiveGesture.OBJ_ZoomOptions.html">OBJ_ZoomOptions</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: zoom options - if not <code>false</code>
-then zoom will be enabled (<code>false</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">pan</span> <span class="fo-prop-type">(<a href="../interfaces/FigurePrimitives_FigureElementPrimitiveGesture.OBJ_PanOptions.html">OBJ_PanOptions</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: pan options - if not <code>false</code> then
-pan will be enabled (<code>false</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">onlyWhenTouched</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: (mouse wheel zoom/pan and pinch zoom)
-only notify when element gesture rectangle is being touched (<code>true</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">back</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: if <code>true</code> 3D shape interactivity will be
-prioritized (<code>true</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">width</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: width of rectangle - defaults to full scene width</span></div>
-<div class="fo-prop"><span class="fo-prop-name">height</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: height of rectangle - defaults to full scene
-height</span></div>
-<div class="fo-prop"><span class="fo-prop-name">scene</span> <span class="fo-prop-type">(<a href="../interfaces/geometry_scene.OBJ_Scene.html">OBJ_Scene</a> | Scene?)</span><span class="fo-prop-desc">: define if gesture should be an
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">zoom</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigureElementPrimitiveGesture.OBJ_ZoomOptions.html" class="tsd-signature-type">OBJ_ZoomOptions</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>zoom options - if not <code>false</code>
+then zoom will be enabled</p></div></li>
+<li><span><span class="tsd-kind-parameter">pan</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigureElementPrimitiveGesture.OBJ_PanOptions.html" class="tsd-signature-type">OBJ_PanOptions</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>pan options - if not <code>false</code> then
+pan will be enabled</p></div></li>
+<li><span><span class="tsd-kind-parameter">onlyWhenTouched</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p>(mouse wheel zoom/pan and pinch zoom)
+only notify when element gesture rectangle is being touched</p></div></li>
+<li><span><span class="tsd-kind-parameter">back</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> 3D shape interactivity will be
+prioritized</p></div></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>width of rectangle - defaults to full scene width</p></div></li>
+<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>height of rectangle - defaults to full scene
+height</p></div></li>
+<li><span><span class="tsd-kind-parameter">scene</span>: <span class="tsd-signature-type"><a href="../interfaces/geometry_scene.OBJ_Scene.html" class="tsd-signature-type">OBJ_Scene</a> | Scene | undefined</span></span><div class="tsd-comment tsd-typography"><p>define if gesture should be an
 independeant scene (like if the gestures are being used to change the
-default figure scene) - defaults to Figure scene</span></div>
-<div class="fo-prop"><span class="fo-prop-name">changeScene</span> <span class="fo-prop-type">(<a href="../interfaces/geometry_scene.OBJ_Scene.html">OBJ_Scene</a>?)</span><span class="fo-prop-desc">: if defined, this scene will be
-automatically updated with any pan and zoom events</span></div>
-<div class="fo-prop"><span class="fo-prop-name">xAlign</span> <span class="fo-prop-type">('left' | 'center' | 'right' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: x alignment of
-rectangle (<code>'center'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">yAlign</span> <span class="fo-prop-type">('bottom' | 'middle' | 'top' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: y alignment of
-rectangle (<code>'middle'</code>)</span></div>
+default figure scene) - defaults to Figure scene</p></div></li>
+<li><span><span class="tsd-kind-parameter">changeScene</span>: <span class="tsd-signature-type"><a href="../interfaces/geometry_scene.OBJ_Scene.html" class="tsd-signature-type">OBJ_Scene</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>if defined, this scene will be
+automatically updated with any pan and zoom events</p></div></li>
+<li><span><span class="tsd-kind-parameter">xAlign</span>: <span class="tsd-signature-type">'left' | 'center' | 'right' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 'center'</span></span><div class="tsd-comment tsd-typography"><p>x alignment of
+rectangle</p></div></li>
+<li><span><span class="tsd-kind-parameter">yAlign</span>: <span class="tsd-signature-type">'bottom' | 'middle' | 'top' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 'middle'</span></span><div class="tsd-comment tsd-typography"><p>y alignment of
+rectangle</p></div></li>
+</ul>
 <hr>
 <h2 id="figureelementprimitivegesture" class="tsd-anchor-link">FigureElementPrimitiveGesture<a href="#figureelementprimitivegesture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>Gesture rectangle.</p>
@@ -149,12 +155,14 @@ a duplicate scene.</p>
 <h2 id="obj_touch" class="tsd-anchor-link">OBJ_Touch<a href="#obj_touch" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>Touch options for a FigureElement.</p>
 <h3 id="properties-3" class="tsd-anchor-link">Properties<a href="#properties-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="fo-prop"><span class="fo-prop-name">enable</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: <code>true</code> to enable touch (<code>true</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">onClick</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | ((<a href="../classes/geometry_Point.Point.html">Point</a>, <a href="../classes/Element.FigureElement.html">FigureElement</a>) => void)?)</span><span class="fo-prop-desc">: function to
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">enable</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>true</code> to enable touch</p></div></li>
+<li><span><span class="tsd-kind-parameter">onClick</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a> | ((<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>, <a href="../classes/Element.FigureElement.html" class="tsd-signature-type">FigureElement</a>) => void) | undefined</span></span><div class="tsd-comment tsd-typography"><p>function to
 execute when element is touched. If string, then a function from the
-FunctionMap is used.</span></div>
-<div class="fo-prop"><span class="fo-prop-name">colorSeed</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</span><span class="fo-prop-desc">: use a unique string to reset color generation
-of unique colors used for touch determination (debug only) (<code>'default'</code>)</span></div>
+FunctionMap is used.</p></div></li>
+<li><span><span class="tsd-kind-parameter">colorSeed</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a> | undefined</span> <span class="tsd-signature-symbol">= 'default'</span></span><div class="tsd-comment tsd-typography"><p>use a unique string to reset color generation
+of unique colors used for touch determination (debug only)</p></div></li>
+</ul>
 <hr>
 <h2 id="obj_cameracontrol" class="tsd-anchor-link">OBJ_CameraControl<a href="#obj_cameracontrol" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>Camera control definition object that extends
@@ -182,30 +190,32 @@ A higher sensitivity value will result in more rotation for the same user
 movement. If only azimuthal or elevation rotation is desired set
 <code>ySensitivity</code> or <code>xSensitivity</code> to 0 respectively.</p>
 <h3 id="properties-4" class="tsd-anchor-link">Properties<a href="#properties-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="fo-prop"><span class="fo-prop-name">left</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: screen left position to place the control
-rectangle. 0 is the left edge, while 1 is the right edge (<code>0</code>).</span></div>
-<div class="fo-prop"><span class="fo-prop-name">bottom</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: screen bottom position to place the control
-rectangle. 0 is the bottom edge, while 1 is the top edge (<code>0</code>).</span></div>
-<div class="fo-prop"><span class="fo-prop-name">width</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: width of control rectangle. 1 is the full
-width of the drawing canvas (<code>1</code>).</span></div>
-<div class="fo-prop"><span class="fo-prop-name">height</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: height of control rectangle. 1 is the full
-height of the drawing canvas (<code>1</code>).</span></div>
-<div class="fo-prop"><span class="fo-prop-name">axis</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span><span class="fo-prop-desc">: Axis to keep vertical as camera is
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">left</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>screen left position to place the control
+rectangle. 0 is the left edge, while 1 is the right edge (<code>0</code>).</p></div></li>
+<li><span><span class="tsd-kind-parameter">bottom</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>screen bottom position to place the control
+rectangle. 0 is the bottom edge, while 1 is the top edge (<code>0</code>).</p></div></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>width of control rectangle. 1 is the full
+width of the drawing canvas (<code>1</code>).</p></div></li>
+<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>height of control rectangle. 1 is the full
+height of the drawing canvas (<code>1</code>).</p></div></li>
+<li><span><span class="tsd-kind-parameter">axis</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= [0, 1, 0]</span></span><div class="tsd-comment tsd-typography"><p>Axis to keep vertical as camera is
 rotated. The axis vector and scene.camera.up vector should be in the same
-plane (<code>[0, 1, 0]</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">controlScene</span> <span class="fo-prop-type">(Scene | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</span><span class="fo-prop-desc">: Use this to control a scene that is not
-the default Figure scene.</span></div>
-<div class="fo-prop"><span class="fo-prop-name">sensitivity</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: sensitivity of camera position relative to
+plane</p></div></li>
+<li><span><span class="tsd-kind-parameter">controlScene</span>: <span class="tsd-signature-type">Scene | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>Use this to control a scene that is not
+the default Figure scene.</p></div></li>
+<li><span><span class="tsd-kind-parameter">sensitivity</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 5</span></span><div class="tsd-comment tsd-typography"><p>sensitivity of camera position relative to
 user movement where larger numbers result in more rotation for the same
-movement (<code>5</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">xSensitivity</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: sensitivity to a horizontal user movement.
-Setting this to 0 will mean the scene doesn't not rotate aziumthally (<code>1</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">ySensitivity</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: sensitivity to a vertical user movement.
-Setting this to 0 will mean the elevation does not change (<code>1</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">back</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: if <code>true</code> then all 2D and 3D objects that can be
+movement</p></div></li>
+<li><span><span class="tsd-kind-parameter">xSensitivity</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>sensitivity to a horizontal user movement.
+Setting this to 0 will mean the scene doesn't not rotate aziumthally</p></div></li>
+<li><span><span class="tsd-kind-parameter">ySensitivity</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>sensitivity to a vertical user movement.
+Setting this to 0 will mean the elevation does not change</p></div></li>
+<li><span><span class="tsd-kind-parameter">back</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> then all 2D and 3D objects that can be
 touched will be touched before the camera control, regardless of where it is
 on the drawing stack. This should be used everytime 3D objects need priority
-over the camera control (<code>true</code>)</span></div>
+over the camera control</p></div></li>
+</ul>
 <h4 id="add-a-camera-control-that-will-cover-the-whole-screen" class="tsd-anchor-link">Add a camera control that will cover the whole screen<a href="#add-a-camera-control-that-will-cover-the-whole-screen" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <pre><code class="js"><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">([</span><br/><span class="hl-5">  {</span><br/><span class="hl-5">    </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;cylinder&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-8">radius:</span><span class="hl-5"> </span><span class="hl-12">0.01</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">],</span><br/><span class="hl-5">    </span><span class="hl-8">line:</span><span class="hl-5"> [[-</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">], [</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">]],</span><br/><span class="hl-5">  },</span><br/><span class="hl-5">  {</span><br/><span class="hl-5">    </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;cylinder&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-8">radius:</span><span class="hl-5"> </span><span class="hl-12">0.01</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">],</span><br/><span class="hl-5">    </span><span class="hl-8">line:</span><span class="hl-5"> [[</span><span class="hl-12">0</span><span class="hl-5">, -</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">], [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">]],</span><br/><span class="hl-5">  },</span><br/><span class="hl-5">  {</span><br/><span class="hl-5">    </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;cylinder&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-8">radius:</span><span class="hl-5"> </span><span class="hl-12">0.01</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">],</span><br/><span class="hl-5">    </span><span class="hl-8">line:</span><span class="hl-5"> [[</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, -</span><span class="hl-12">1</span><span class="hl-5">], [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">]],</span><br/><span class="hl-5">  },</span><br/><span class="hl-5">  {</span><br/><span class="hl-5">    </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;grid&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-8">bounds:</span><span class="hl-5"> [-</span><span class="hl-12">0.8</span><span class="hl-5">, -</span><span class="hl-12">0.8</span><span class="hl-5">, </span><span class="hl-12">1.6</span><span class="hl-5">, </span><span class="hl-12">1.6</span><span class="hl-5">],</span><br/><span class="hl-5">    </span><span class="hl-8">xStep:</span><span class="hl-5"> </span><span class="hl-12">0.05</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-8">yStep:</span><span class="hl-5"> </span><span class="hl-12">0.05</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-8">line:</span><span class="hl-5"> { </span><span class="hl-8">width:</span><span class="hl-5"> </span><span class="hl-12">0.002</span><span class="hl-5"> },</span><br/><span class="hl-5">    </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">0.7</span><span class="hl-5">, </span><span class="hl-12">0.7</span><span class="hl-5">, </span><span class="hl-12">0.7</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">],</span><br/><span class="hl-5">    </span><span class="hl-8">transform:</span><span class="hl-5"> [</span><span class="hl-11">&#39;r&#39;</span><span class="hl-5">, </span><span class="hl-8">Math</span><span class="hl-5">.</span><span class="hl-7">PI</span><span class="hl-5"> / </span><span class="hl-12">2</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">],</span><br/><span class="hl-5">  },</span><br/><span class="hl-5">]);</span><br/><br/><span class="hl-10">// Add camera control</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;cameraControl&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">});</span>
 </code><button type="button">Copy</button></pre>
@@ -219,10 +229,12 @@ over the camera control (<code>true</code>)</span></div>
 <p>Range bounds object definition.</p>
 <p>A range bounds defines a minimum and maximum value.</p>
 <h3 id="properties-5" class="tsd-anchor-link">Properties<a href="#properties-5" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="fo-prop"><span class="fo-prop-name">min</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null?)</span><span class="fo-prop-desc">: minimum value boundary, null for unbounded (<code>null</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">max</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null?)</span><span class="fo-prop-desc">: maximum value boundary, null for unbounded (<code>null</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">precision</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: precision with which to calculate boundary
-<code>intersect</code> and <code>contains</code> (<code>8</code>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">min</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | null | undefined</span> <span class="tsd-signature-symbol">= null</span></span><div class="tsd-comment tsd-typography"><p>minimum value boundary, null for unbounded</p></div></li>
+<li><span><span class="tsd-kind-parameter">max</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | null | undefined</span> <span class="tsd-signature-symbol">= null</span></span><div class="tsd-comment tsd-typography"><p>maximum value boundary, null for unbounded</p></div></li>
+<li><span><span class="tsd-kind-parameter">precision</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 8</span></span><div class="tsd-comment tsd-typography"><p>precision with which to calculate boundary
+<code>intersect</code> and <code>contains</code></p></div></li>
+</ul>
 <hr>
 <h2 id="obj_rectbounds" class="tsd-anchor-link">OBJ_RectBounds<a href="#obj_rectbounds" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>A RectBounds is a rectangle bounds around a point in a plane.</p>
@@ -244,23 +256,27 @@ over the camera control (<code>true</code>)</span></div>
 <p>By default the rectangle will be in the XY plane (+z normal) with a
 rightDirection vector along the +x axis.</p>
 <h3 id="properties-6" class="tsd-anchor-link">Properties<a href="#properties-6" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="fo-prop"><span class="fo-prop-name">position</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">normal</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">rightDirection</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">topDirection</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">left</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">right</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">top</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">bottom</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">precision</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: precision with which to calculate boundary
-<code>intersect</code> and <code>contains</code> (<code>8</code>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">position</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">normal</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">rightDirection</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">topDirection</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">left</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">right</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">top</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">bottom</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">precision</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 8</span></span><div class="tsd-comment tsd-typography"><p>precision with which to calculate boundary
+<code>intersect</code> and <code>contains</code></p></div></li>
+</ul>
 <hr>
 <h2 id="obj_linebounds" class="tsd-anchor-link">OBJ_LineBounds<a href="#obj_linebounds" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>A line bounds defines a line boundary.</p>
 <h3 id="properties-7" class="tsd-anchor-link">Properties<a href="#properties-7" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="fo-prop"><span class="fo-prop-name">line</span> <span class="fo-prop-type">(<a href="../types/geometry_Line.TypeParsableLine.html">TypeParsableLine</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">precision</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: precision with which to calculate boundary
-<code>intersect</code> and <code>contains</code> (<code>8</code>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">line</span>: <span class="tsd-signature-type"><a href="../types/geometry_Line.TypeParsableLine.html" class="tsd-signature-type">TypeParsableLine</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">precision</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 8</span></span><div class="tsd-comment tsd-typography"><p>precision with which to calculate boundary
+<code>intersect</code> and <code>contains</code></p></div></li>
+</ul>
 <hr>
 <h2 id="typeparsablebounds" class="tsd-anchor-link">TypeParsableBounds<a href="#typeparsablebounds" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>Parsable bounds definition.</p>

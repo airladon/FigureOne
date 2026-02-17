@@ -2,12 +2,12 @@
 <p><a href="https://github.com/airladon/FigureOne">FigureOne</a> is a JavaScript library that makes it easy to create, animate and interact with shapes, text and equations in a browser. FigureOne can be used to create animated and interactive diagrams, slide shows and video like experiences.</p>
 <h5 id="shape" class="tsd-anchor-link">Shape<a href="#shape" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h5>
 <p>In FigureOne, shapes are typically formed from multiple triangles.</p>
-<p style="text-align: center"><img src="../media/triangles.png"></p>
+<p style="text-align: center"><img src="./tutorials/triangles.png"></p>
 <p>Thus, in FigureOne a shape is a collection points that describe the vertices each triangle in a shape.</p>
 <h5 id="transform" class="tsd-anchor-link">Transform<a href="#transform" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h5>
 <p>A <em>transform</em> describes a spatial change, for example a translation or rotation.</p>
 <p>Mathematically, a transform is a 4x4 matrix that when mulitiplied with a point creates a new point that undergoes the transform. For example:</p>
-<p style="text-align: center"><img src="../media/transform.png"></p>
+<p style="text-align: center"><img src="./tutorials/transform.png"></p>
 <p>All transforms in FigureOne create such a matrix, and can be used to transform points.</p>
 <p>Transforms can be chained together, so a <em>rotation transform</em> can be chained with a <em>translation transform</em> to both rotate and translate. Transform chains can be arbitrarily long, and include multiple transforms of the same type.</p>
 <p>In the language of FigureOne, a  Transform is made up of a series of <em>transform components</em> where each component is a single transform step (like a rotation or translation).</p>
@@ -38,12 +38,12 @@
 </ul>
 <p>Each  FigureElement has a  Transform that transforms an element in space (e.g. rotates, translates, scales etc) when it is time to draw the element. In the case of a  FigureElementPrimitive, the shape or text will be transformed. In the case of a  FigureElementCollection, all the figure elements it contains will have their transforms cascaded with the collection's transform.</p>
 <p>This means there is a heierachy of  FigureElement objects, where the parent transform is combined with  (cascaded with) the child transform. Therefore collections can be thought of as modular building blocks of a more complex figure.</p>
-<p style="text-align: center"><img src="../media/transformcascades.png"></p>
+<p style="text-align: center"><img src="./tutorials/transformcascades.png"></p>
 <h5 id="example" class="tsd-anchor-link">Example<a href="#example" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h5>
 <p>As an example, let's say we want to create a labeled line where the line and label both rotate together.</p>
-<p style="text-align: center"><img src="../media/ex1.png"></p>
+<p style="text-align: center"><img src="./tutorials/ex1.png"></p>
 <p>To create this, we could use a line and text primitive within a collection:</p>
-<p style="text-align: center"><img src="../media/ex1-hierarchy.png"></p>
+<p style="text-align: center"><img src="./tutorials/ex1-hierarchy.png"></p>
 <p>To rotate both label and line in tandem, we simply need to rotate the collection.</p>
 <h5 id="code" class="tsd-anchor-link">Code<a href="#code" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h5>
 <p>Let's see the code for the example above. Two files, <code>index.html</code> and <code>index.js</code> should be in the same folder.</p>
@@ -54,9 +54,9 @@
 </code><button type="button">Copy</button></pre>
 
 <p>This code positions text relative to the middle of a line of length 2.</p>
-<p style="text-align: center"><img src="../media/ex1-collection.png"></p>
+<p style="text-align: center"><img src="./tutorials/ex1-collection.png"></p>
 <p>It then positions the collection so the line end is in the middle of the figure.</p>
-<p style="text-align: center"><img src="../media/ex1-figure.png"></p>
+<p style="text-align: center"><img src="./tutorials/ex1-figure.png"></p>
 <h4 id="coordinate-spaces" class="tsd-anchor-link">Coordinate spaces<a href="#coordinate-spaces" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <p>FigureOne renders shapes in <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API">WebGL</a>, text with the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">HTML Canvas API</a> and can even manipulate html elements as figure elements. As WebGL is used most in FigureOne, it will be used as an example to introduce coorindate spaces and why they matter.</p>
 <p>WebGL is rendered in a html <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas">canvas</a> element.</p>

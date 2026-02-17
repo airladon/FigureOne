@@ -1,6 +1,6 @@
 ---
 title: Equation Symbols API
-group: Equations
+group: Equation Symbols
 ---
 
 # Equation Symbols API Reference
@@ -58,13 +58,15 @@ Vinculum symbol used in fractions ({@link EQN_Fraction} equation function).
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">('vinculum')</span></div>
-<div class="fo-prop"><span class="fo-prop-name">lineWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.01</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">draw</span> <span class="fo-prop-type">('static' | 'dynamic'?)</span><span class="fo-prop-desc">: <code>'dynamic'</code> updates vertices on
-resize, <code>'static'</code> only changes scale transform (<code>'dynamic'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">staticWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | 'first'?)</span><span class="fo-prop-desc">: used when <code>draw</code>=<code>static</code>.
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'vinculum'</span></span></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= 'dynamic'</span></span><div class="tsd-comment tsd-typography"><p><code>'dynamic'</code> updates vertices on
+resize, <code>'static'</code> only changes scale transform</p></div></li>
+<li><span><span class="tsd-kind-parameter">staticWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets width of static symbol - <code>'first'</code> calculates and sets width
-based on first use (<code>'first'</code>)</span></div>
+based on first use</p></div></li>
+</ul>
 
 #### Define as element
 
@@ -152,19 +154,21 @@ Box equation symbol used in {@link EQN_Box} and as a
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">('box')</span></div>
-<div class="fo-prop"><span class="fo-prop-name">lineWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.01</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fill</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc"> (<code>false</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">width</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: force width instead of auto calculation</span></div>
-<div class="fo-prop"><span class="fo-prop-name">height</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: force height instead of auto calculation</span></div>
-<div class="fo-prop"><span class="fo-prop-name">draw</span> <span class="fo-prop-type">('static' | 'dynamic'?)</span><span class="fo-prop-desc">: <code>'dynamic'</code> updates vertices on
-resize, <code>'static'</code> only changes scale transform (<code>dynamic</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">staticWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | 'first'?)</span><span class="fo-prop-desc">: used when <code>draw</code>=<code>static</code>.
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'box'</span></span></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">fill</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>force width instead of auto calculation</p></div></li>
+<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>force height instead of auto calculation</p></div></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'dynamic'</code> updates vertices on
+resize, <code>'static'</code> only changes scale transform</p></div></li>
+<li><span><span class="tsd-kind-parameter">staticWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets width of static symbol - <code>'first'</code> calculates and sets width
-based on first use</span></div>
-<div class="fo-prop"><span class="fo-prop-name">staticHeight</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | 'first'?)</span><span class="fo-prop-desc">: used when <code>draw</code>=<code>static</code>.
+based on first use</p></div></li>
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
-based on first use</span></div>
+based on first use</p></div></li>
+</ul>
 
 #### Define in element
 
@@ -272,17 +276,19 @@ arrow will only work with {@link EQN_Bar} (top and bottom sides),
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">('arrow')</span></div>
-<div class="fo-prop"><span class="fo-prop-name">direction</span> <span class="fo-prop-type">('up' | 'down' | 'left' | 'right'?)</span><span class="fo-prop-desc"> (<code>'right'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">lineWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.01</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">arrowWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.01</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">arrowHeight</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.04</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">lineWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.01</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">draw</span> <span class="fo-prop-type">('static' | 'dynamic'?)</span><span class="fo-prop-desc">: <code>'dynamic'</code> updates vertices on
-resize, <code>'static'</code> only changes scale transform (<code>dynamic</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">staticHeight</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | 'first'?)</span><span class="fo-prop-desc">: used when <code>draw</code>=<code>static</code>.
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'arrow'</span></span></li>
+<li><span><span class="tsd-kind-parameter">direction</span>: <span class="tsd-signature-type">'up' | 'down' | 'left' | 'right' | undefined</span> <span class="tsd-signature-symbol">= 'right'</span></span></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">arrowWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">arrowHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.04</span></span></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'dynamic'</code> updates vertices on
+resize, <code>'static'</code> only changes scale transform</p></div></li>
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
-based on first use (<code>'first'</code>)</span></div>
+based on first use</p></div></li>
+</ul>
 
 #### Define in element
 
@@ -387,14 +393,16 @@ Sum equation symbol used with the {@link EQN_SumOf} equation function.
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">('sum')</span></div>
-<div class="fo-prop"><span class="fo-prop-name">lineWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: (<code>height * 0.88 / (25 * height + 15)</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">sides</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: number of sides that make up serif curve (<code>5</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">draw</span> <span class="fo-prop-type">('static' | 'dynamic'?)</span><span class="fo-prop-desc">: <code>'static'</code> updates vertices on
-resize, <code>'static'</code> only changes scale transform (<code>dynamic</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">staticHeight</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | 'first'?)</span><span class="fo-prop-desc">: used when <code>draw</code>=<code>static</code>.
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'sum'</span></span></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>(<code>height * 0.88 / (25 * height + 15)</code>)</p></div></li>
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 5</span></span><div class="tsd-comment tsd-typography"><p>number of sides that make up serif curve</p></div></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+resize, <code>'static'</code> only changes scale transform</p></div></li>
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
-based on first use (<code>'first'</code>)</span></div>
+based on first use</p></div></li>
+</ul>
 
 #### Define in element
 
@@ -497,14 +505,16 @@ Product equation symbol used with the {@link EQN_ProdOf} equation function.
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">('prod')</span></div>
-<div class="fo-prop"><span class="fo-prop-name">lineWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>related to height</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">sides</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: number of sides that make up serif curve (<code>5</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">draw</span> <span class="fo-prop-type">('static' | 'dynamic'?)</span><span class="fo-prop-desc">: <code>'static'</code> updates vertices on
-resize, <code>'static'</code> only changes scale transform (<code>dynamic</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">staticHeight</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | 'first'?)</span><span class="fo-prop-desc">: used when <code>draw</code>=<code>static</code>.
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'prod'</span></span></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= related to height</span></span></li>
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 5</span></span><div class="tsd-comment tsd-typography"><p>number of sides that make up serif curve</p></div></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+resize, <code>'static'</code> only changes scale transform</p></div></li>
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
-based on first use (<code>'first'</code>)</span></div>
+based on first use</p></div></li>
+</ul>
 
 #### Define in element
 
@@ -612,21 +622,23 @@ function.
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">('int')</span></div>
-<div class="fo-prop"><span class="fo-prop-name">lineWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>related to height</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">sides</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: number of sides that make up s curve (<code>30</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">num</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: number of integral symbols (<code>1</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">type</span> <span class="fo-prop-type">('line' | 'generic'?)</span><span class="fo-prop-desc">: <code>line</code> draws a circle through the
- symbols denoting a line integral (<code>generic</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">tipWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: width of s curve tip (<code>related to lineWidth</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">serif</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: <code>false</code> to remove serifs (<code>true</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">serifSides</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: number of sides in serif circles (<code>10</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">lineIntegralSides</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: number of sides in line integral circle (<code>20</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">draw</span> <span class="fo-prop-type">('static' | 'dynamic'?)</span><span class="fo-prop-desc">: <code>'static'</code> updates vertices on
-resize, <code>'static'</code> only changes scale transform (<code>dynamic</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">staticHeight</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | 'first'?)</span><span class="fo-prop-desc">: used when <code>draw</code>=<code>static</code>.
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'int'</span></span></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= related to height</span></span></li>
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 30</span></span><div class="tsd-comment tsd-typography"><p>number of sides that make up s curve</p></div></li>
+<li><span><span class="tsd-kind-parameter">num</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>number of integral symbols</p></div></li>
+<li><span><span class="tsd-kind-parameter">type</span>: <span class="tsd-signature-type">'line' | 'generic' | undefined</span> <span class="tsd-signature-symbol">= generic</span></span><div class="tsd-comment tsd-typography"><p><code>line</code> draws a circle through the
+ symbols denoting a line integral</p></div></li>
+<li><span><span class="tsd-kind-parameter">tipWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= related to lineWidth</span></span><div class="tsd-comment tsd-typography"><p>width of s curve tip</p></div></li>
+<li><span><span class="tsd-kind-parameter">serif</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>false</code> to remove serifs</p></div></li>
+<li><span><span class="tsd-kind-parameter">serifSides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of sides in serif circles</p></div></li>
+<li><span><span class="tsd-kind-parameter">lineIntegralSides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 20</span></span><div class="tsd-comment tsd-typography"><p>number of sides in line integral circle</p></div></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+resize, <code>'static'</code> only changes scale transform</p></div></li>
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
-based on first use (<code>'first'</code>)</span></div>
+based on first use</p></div></li>
+</ul>
 
 #### Define in element
 
@@ -750,29 +762,31 @@ it will not be needed, but for edge case equation layouts it may be useful.
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">('radical')</span></div>
-<div class="fo-prop"><span class="fo-prop-name">lineWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.01</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">width</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: force width of content area (<code>normally defined by content size</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">height</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: force height of content area (<code>normally defined by content size</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">startWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.5</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">startHeight</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.5</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">maxStartWidth</span> <span class="fo-prop-type">(?<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.15</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">maxStartHeight</span> <span class="fo-prop-type">(?<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.15</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">tickHeight</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">tickWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">downWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">proportionalToHeight</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: <code>true</code> makes <code>startHeight</code>,
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'radical'</span></span></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= normally defined by content size</span></span><div class="tsd-comment tsd-typography"><p>force width of content area</p></div></li>
+<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= normally defined by content size</span></span><div class="tsd-comment tsd-typography"><p>force height of content area</p></div></li>
+<li><span><span class="tsd-kind-parameter">startWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.5</span></span></li>
+<li><span><span class="tsd-kind-parameter">startHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.5</span></span></li>
+<li><span><span class="tsd-kind-parameter">maxStartWidth</span>: <span class="tsd-signature-type">?<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.15</span></span></li>
+<li><span><span class="tsd-kind-parameter">maxStartHeight</span>: <span class="tsd-signature-type">?<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.15</span></span></li>
+<li><span><span class="tsd-kind-parameter">tickHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">tickWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">downWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">proportionalToHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>true</code> makes <code>startHeight</code>,
 <code>startWidth</code>, <code>tickHeight</code>, <code>tickWidth</code>, and <code>downWidth</code> a percentage of
-height instead of absolute (<code>true</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">lineWidth2</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: lineWidth of down stroke (<code>2 x lineWidth</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">draw</span> <span class="fo-prop-type">('static' | 'dynamic'?)</span><span class="fo-prop-desc">: <code>'static'</code> updates vertices on
-resize, <code>'static'</code> only changes scale transform (<code>dynamic</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">staticHeight</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | 'first'?)</span><span class="fo-prop-desc">: used when <code>draw</code>=<code>static</code>.
+height instead of absolute</p></div></li>
+<li><span><span class="tsd-kind-parameter">lineWidth2</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 2 x lineWidth</span></span><div class="tsd-comment tsd-typography"><p>lineWidth of down stroke</p></div></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+resize, <code>'static'</code> only changes scale transform</p></div></li>
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
-based on first use (<code>'first'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">staticWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | 'first'?)</span><span class="fo-prop-desc">: used when <code>draw</code>=<code>static</code>.
+based on first use</p></div></li>
+<li><span><span class="tsd-kind-parameter">staticWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets width of static symbol - <code>'first'</code> calculates and sets width
-based on first use (<code>'first'</code>)</span></div>
+based on first use</p></div></li>
+</ul>
 
 #### Define in element
 
@@ -867,20 +881,22 @@ equation layouts it may be useful.
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">('division')</span></div>
-<div class="fo-prop"><span class="fo-prop-name">lineWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.01</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">width</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: force width of content area (<code>normally defined by content size</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">height</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: force height of content area (<code>normally defined by content size</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">bendWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">sides</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>10</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">draw</span> <span class="fo-prop-type">('static' | 'dynamic'?)</span><span class="fo-prop-desc">: <code>'static'</code> updates vertices on
-resize, <code>'static'</code> only changes scale transform (<code>dynamic</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">staticHeight</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | 'first'?)</span><span class="fo-prop-desc">: used when <code>draw</code>=<code>static</code>.
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'division'</span></span></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= normally defined by content size</span></span><div class="tsd-comment tsd-typography"><p>force width of content area</p></div></li>
+<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= normally defined by content size</span></span><div class="tsd-comment tsd-typography"><p>force height of content area</p></div></li>
+<li><span><span class="tsd-kind-parameter">bendWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span></li>
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 10</span></span></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+resize, <code>'static'</code> only changes scale transform</p></div></li>
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
-based on first use (<code>'first'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">staticWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | 'first'?)</span><span class="fo-prop-desc">: used when <code>draw</code>=<code>static</code>.
+based on first use</p></div></li>
+<li><span><span class="tsd-kind-parameter">staticWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets width of static symbol - <code>'first'</code> calculates and sets width
-based on first use (<code>'first'</code>)</span></div>
+based on first use</p></div></li>
+</ul>
 
 #### Define in element
 
@@ -979,21 +995,23 @@ Four styles of strike symbol are available:
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">('strike')</span></div>
-<div class="fo-prop"><span class="fo-prop-name">style</span> <span class="fo-prop-type">('cross' | 'forward' | 'back' | 'horizontal'?)</span><span class="fo-prop-desc"> (<code>'cross'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">lineWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.015</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">width</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: force width of strike (<code>normally defined by
-content size</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">height</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: force height of strike (<code>normally defined by
-content size</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">draw</span> <span class="fo-prop-type">('static' | 'dynamic'?)</span><span class="fo-prop-desc">: <code>'static'</code> updates vertices on
-resize, <code>'static'</code> only changes scale transform (<code>dynamic</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">staticHeight</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | 'first'?)</span><span class="fo-prop-desc">: used when <code>draw</code>=<code>static</code>.
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'strike'</span></span></li>
+<li><span><span class="tsd-kind-parameter">style</span>: <span class="tsd-signature-type">'cross' | 'forward' | 'back' | 'horizontal' | undefined</span> <span class="tsd-signature-symbol">= 'cross'</span></span></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.015</span></span></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= normally defined by
+content size</span></span><div class="tsd-comment tsd-typography"><p>force width of strike</p></div></li>
+<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= normally defined by
+content size</span></span><div class="tsd-comment tsd-typography"><p>force height of strike</p></div></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+resize, <code>'static'</code> only changes scale transform</p></div></li>
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
-based on first use (<code>'first'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">staticWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | 'first'?)</span><span class="fo-prop-desc">: used when <code>draw</code>=<code>static</code>.
+based on first use</p></div></li>
+<li><span><span class="tsd-kind-parameter">staticWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets width of static symbol - <code>'first'</code> calculates and sets width
-based on first use (<code>'first'</code>)</span></div>
+based on first use</p></div></li>
+</ul>
 
 #### Define in element
 
@@ -1128,18 +1146,20 @@ Bracket equation symbol used in {@link EQN_Bracket}, {@link EQN_Bar},
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">('bracket')</span></div>
-<div class="fo-prop"><span class="fo-prop-name">side</span> <span class="fo-prop-type">('left' | 'right' | 'top' | 'bottom'?)</span><span class="fo-prop-desc">: how to orient the
-bracket (<code>'left'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">sides</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: number of sides in bracket curve (<code>10</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">lineWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>depends on height</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">tipWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>depends on lineWidth</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">width</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: force width bracket (<code>normally depends on height</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">draw</span> <span class="fo-prop-type">('static' | 'dynamic'?)</span><span class="fo-prop-desc">: <code>'static'</code> updates vertices on
-resize, <code>'static'</code> only changes scale transform (<code>dynamic</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">staticHeight</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | 'first'?)</span><span class="fo-prop-desc">: used when <code>draw</code>=<code>static</code>.
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'bracket'</span></span></li>
+<li><span><span class="tsd-kind-parameter">side</span>: <span class="tsd-signature-type">'left' | 'right' | 'top' | 'bottom' | undefined</span> <span class="tsd-signature-symbol">= 'left'</span></span><div class="tsd-comment tsd-typography"><p>how to orient the
+bracket</p></div></li>
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of sides in bracket curve</p></div></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= depends on height</span></span></li>
+<li><span><span class="tsd-kind-parameter">tipWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= depends on lineWidth</span></span></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= normally depends on height</span></span><div class="tsd-comment tsd-typography"><p>force width bracket</p></div></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+resize, <code>'static'</code> only changes scale transform</p></div></li>
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
-based on first use (<code>'first'</code>)</span></div>
+based on first use</p></div></li>
+</ul>
 
 #### Define in element
 
@@ -1208,16 +1228,18 @@ Angle bracket equation symbol used in {@link EQN_Bracket}, {@link EQN_Bar},
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">('angleBracket')</span></div>
-<div class="fo-prop"><span class="fo-prop-name">side</span> <span class="fo-prop-type">('left' | 'right' | 'top' | 'bottom'?)</span><span class="fo-prop-desc">: how to orient the
-angle bracket (<code>'left'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">lineWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>depends on height</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">width</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: force width bracket (<code>normally depends on height</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">draw</span> <span class="fo-prop-type">('static' | 'dynamic'?)</span><span class="fo-prop-desc">: <code>'static'</code> updates vertices on
-resize, <code>'static'</code> only changes scale transform (<code>dynamic</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">staticHeight</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | 'first'?)</span><span class="fo-prop-desc">: used when <code>draw</code>=<code>static</code>.
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'angleBracket'</span></span></li>
+<li><span><span class="tsd-kind-parameter">side</span>: <span class="tsd-signature-type">'left' | 'right' | 'top' | 'bottom' | undefined</span> <span class="tsd-signature-symbol">= 'left'</span></span><div class="tsd-comment tsd-typography"><p>how to orient the
+angle bracket</p></div></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= depends on height</span></span></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= normally depends on height</span></span><div class="tsd-comment tsd-typography"><p>force width bracket</p></div></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+resize, <code>'static'</code> only changes scale transform</p></div></li>
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
-based on first use (<code>'first'</code>)</span></div>
+based on first use</p></div></li>
+</ul>
 
 #### Define in element
 
@@ -1308,18 +1330,20 @@ Brace equation symbol used in {@link EQN_Bracket}, {@link EQN_Bar},
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">('brace')</span></div>
-<div class="fo-prop"><span class="fo-prop-name">side</span> <span class="fo-prop-type">('left' | 'right' | 'top' | 'bottom'?)</span><span class="fo-prop-desc">: how to orient the
-brace (<code>'left'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">lineWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>depends on height</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">tipWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>depends on lineWidth</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">width</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: force width bracket (<code>normally depends on height</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">sides</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: number of sides in curved sections (<code>10</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">draw</span> <span class="fo-prop-type">('static' | 'dynamic'?)</span><span class="fo-prop-desc">: <code>'static'</code> updates vertices on
-resize, <code>'static'</code> only changes scale transform (<code>dynamic</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">staticHeight</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | 'first'?)</span><span class="fo-prop-desc">: used when <code>draw</code>=<code>static</code>.
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'brace'</span></span></li>
+<li><span><span class="tsd-kind-parameter">side</span>: <span class="tsd-signature-type">'left' | 'right' | 'top' | 'bottom' | undefined</span> <span class="tsd-signature-symbol">= 'left'</span></span><div class="tsd-comment tsd-typography"><p>how to orient the
+brace</p></div></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= depends on height</span></span></li>
+<li><span><span class="tsd-kind-parameter">tipWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= depends on lineWidth</span></span></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= normally depends on height</span></span><div class="tsd-comment tsd-typography"><p>force width bracket</p></div></li>
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of sides in curved sections</p></div></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+resize, <code>'static'</code> only changes scale transform</p></div></li>
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
-based on first use (<code>'first'</code>)</span></div>
+based on first use</p></div></li>
+</ul>
 
 #### Define in element
 
@@ -1396,15 +1420,17 @@ arrow will only work with {@link EQN_Bar} (top and bottom sides),
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">('bar')</span></div>
-<div class="fo-prop"><span class="fo-prop-name">side</span> <span class="fo-prop-type">('left' | 'right' | 'top' | 'bottom'?)</span><span class="fo-prop-desc">: how to orient the
-bar (<code>'left'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">lineWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.01</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">draw</span> <span class="fo-prop-type">('static' | 'dynamic'?)</span><span class="fo-prop-desc">: <code>'static'</code> updates vertices on
-resize, <code>'static'</code> only changes scale transform (<code>dynamic</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">staticHeight</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | 'first'?)</span><span class="fo-prop-desc">: used when <code>draw</code>=<code>static</code>.
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'bar'</span></span></li>
+<li><span><span class="tsd-kind-parameter">side</span>: <span class="tsd-signature-type">'left' | 'right' | 'top' | 'bottom' | undefined</span> <span class="tsd-signature-symbol">= 'left'</span></span><div class="tsd-comment tsd-typography"><p>how to orient the
+bar</p></div></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+resize, <code>'static'</code> only changes scale transform</p></div></li>
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
-based on first use (<code>'first'</code>)</span></div>
+based on first use</p></div></li>
+</ul>
 
 #### Define in element
 
@@ -1508,19 +1534,21 @@ Square bracket equation symbol used in {@link EQN_Bracket}, {@link EQN_Bar},
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">('squareBracket')</span></div>
-<div class="fo-prop"><span class="fo-prop-name">side</span> <span class="fo-prop-type">('left' | 'right' | 'top' | 'bottom'?)</span><span class="fo-prop-desc">: how to orient the
-square bracket (<code>'left'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">lineWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.01</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">tipWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.01</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">width</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>depends on lineWidth</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">radius</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: optional curved corner radius (<code>0</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">sides</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: number of sides in curve (<code>5</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">draw</span> <span class="fo-prop-type">('static' | 'dynamic'?)</span><span class="fo-prop-desc">: <code>'static'</code> updates vertices on
-resize, <code>'static'</code> only changes scale transform (<code>dynamic</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">staticHeight</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | 'first'?)</span><span class="fo-prop-desc">: used when <code>draw</code>=<code>static</code>.
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'squareBracket'</span></span></li>
+<li><span><span class="tsd-kind-parameter">side</span>: <span class="tsd-signature-type">'left' | 'right' | 'top' | 'bottom' | undefined</span> <span class="tsd-signature-symbol">= 'left'</span></span><div class="tsd-comment tsd-typography"><p>how to orient the
+square bracket</p></div></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">tipWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= depends on lineWidth</span></span></li>
+<li><span><span class="tsd-kind-parameter">radius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>optional curved corner radius</p></div></li>
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 5</span></span><div class="tsd-comment tsd-typography"><p>number of sides in curve</p></div></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+resize, <code>'static'</code> only changes scale transform</p></div></li>
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
-based on first use (<code>'first'</code>)</span></div>
+based on first use</p></div></li>
+</ul>
 
 #### Define in element
 
@@ -1572,10 +1600,12 @@ The line can be solid or dashed, and have arrows on either or both ends.
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">width</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: line width</span></div>
-<div class="fo-prop"><span class="fo-prop-name">dash</span> <span class="fo-prop-type">(<a href="../types/types.TypeDash.html">TypeDash</a>?)</span><span class="fo-prop-desc">: dash style of line</span></div>
-<div class="fo-prop"><span class="fo-prop-name">arrow</span> <span class="fo-prop-type">(<a href="../interfaces/geometries_arrow.OBJ_LineArrows.html">OBJ_LineArrows</a>?)</span><span class="fo-prop-desc">: arrow styles of line where start is
-toward the content</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>line width</p></div></li>
+<li><span><span class="tsd-kind-parameter">dash</span>: <span class="tsd-signature-type"><a href="../types/types.TypeDash.html" class="tsd-signature-type">TypeDash</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>dash style of line</p></div></li>
+<li><span><span class="tsd-kind-parameter">arrow</span>: <span class="tsd-signature-type"><a href="../interfaces/geometries_arrow.OBJ_LineArrows.html" class="tsd-signature-type">OBJ_LineArrows</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>arrow styles of line where start is
+toward the content</p></div></li>
+</ul>
 
 #### Define in element
 

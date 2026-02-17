@@ -63,37 +63,39 @@ changed
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">name</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</span><span class="fo-prop-desc">: reference name of element</span></div>
-<div class="fo-prop"><span class="fo-prop-name">isShown</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</span><span class="fo-prop-desc">: if <code>false</code> then element will not be processed on
-next draw</span></div>
-<div class="fo-prop"><span class="fo-prop-name">transform</span> <span class="fo-prop-type">(<a href="../classes/geometry_Transform.Transform.html">Transform</a>)</span><span class="fo-prop-desc">: transform to apply element</span></div>
-<div class="fo-prop"><span class="fo-prop-name">lastDrawTransform</span> <span class="fo-prop-type">(<a href="../classes/geometry_Transform.Transform.html">Transform</a>)</span><span class="fo-prop-desc">: transform last used for drawing -
-includes cascade or all parent transforms</span></div>
-<div class="fo-prop"><span class="fo-prop-name">parent</span> <span class="fo-prop-type">(<a href="../classes/Element.FigureElement.html">FigureElement</a> | null)</span><span class="fo-prop-desc">: parent figure element - <code>null</code> if
-at top level of figure</span></div>
-<div class="fo-prop"><span class="fo-prop-name">isTouchable</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</span><span class="fo-prop-desc">: must be <code>true</code> to move or execute <code>onClick</code></span></div>
-<div class="fo-prop"><span class="fo-prop-name">isMovable</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</span><span class="fo-prop-desc">: must be <code>true</code> to move</span></div>
-<div class="fo-prop"><span class="fo-prop-name">onClick</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | () => void)</span><span class="fo-prop-desc">: callback if touched or clicked</span></div>
-<div class="fo-prop"><span class="fo-prop-name">color</span> <span class="fo-prop-type">([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>])</span><span class="fo-prop-desc">: element's current
-color defined as red, green, blue, alpha with range 0 to 1</span></div>
-<div class="fo-prop"><span class="fo-prop-name">dimColor</span> <span class="fo-prop-type">([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>])</span><span class="fo-prop-desc">: color to use when
-dimming element</span></div>
-<div class="fo-prop"><span class="fo-prop-name">defaultColor</span> <span class="fo-prop-type">([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>])</span><span class="fo-prop-desc">: color to go to
-when undimming element</span></div>
-<div class="fo-prop"><span class="fo-prop-name">opacity</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</span><span class="fo-prop-desc">: number between 0 and 1 that is multiplied with
-<code>color</code> alpha channel to get final opacity</span></div>
-<div class="fo-prop"><span class="fo-prop-name">move</span> <span class="fo-prop-type">(<a href="../interfaces/Element.OBJ_ElementMove.html">OBJ_ElementMove</a>)</span><span class="fo-prop-desc">: movement parameters</span></div>
-<div class="fo-prop"><span class="fo-prop-name">scenarios</span> <span class="fo-prop-type">(<a href="../interfaces/Element.OBJ_Scenarios.html">OBJ_Scenarios</a>)</span><span class="fo-prop-desc">: scenario presets</span></div>
-<div class="fo-prop"><span class="fo-prop-name">state</span> <span class="fo-prop-type">(ElementState)</span><span class="fo-prop-desc">: current state of element</span></div>
-<div class="fo-prop"><span class="fo-prop-name">animations</span> <span class="fo-prop-type">(AnimationManager)</span><span class="fo-prop-desc">: element animation manager</span></div>
-<div class="fo-prop"><span class="fo-prop-name">notifications</span> <span class="fo-prop-type">(<a href="../classes/tools.NotificationManager.html">NotificationManager</a>)</span><span class="fo-prop-desc">: notification manager for
-element</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fnMap</span> <span class="fo-prop-type">(<a href="../classes/FunctionMap.FunctionMap.html">FunctionMap</a>)</span><span class="fo-prop-desc">: function map for use with {@link Recorder}</span></div>
-<div class="fo-prop"><span class="fo-prop-name">customState</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</span><span class="fo-prop-desc">: put any custom state information that needs
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">name</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a></span></span><div class="tsd-comment tsd-typography"><p>reference name of element</p></div></li>
+<li><span><span class="tsd-kind-parameter">isShown</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span></span><div class="tsd-comment tsd-typography"><p>if <code>false</code> then element will not be processed on
+next draw</p></div></li>
+<li><span><span class="tsd-kind-parameter">transform</span>: <span class="tsd-signature-type"><a href="../classes/geometry_Transform.Transform.html" class="tsd-signature-type">Transform</a></span></span><div class="tsd-comment tsd-typography"><p>transform to apply element</p></div></li>
+<li><span><span class="tsd-kind-parameter">lastDrawTransform</span>: <span class="tsd-signature-type"><a href="../classes/geometry_Transform.Transform.html" class="tsd-signature-type">Transform</a></span></span><div class="tsd-comment tsd-typography"><p>transform last used for drawing -
+includes cascade or all parent transforms</p></div></li>
+<li><span><span class="tsd-kind-parameter">parent</span>: <span class="tsd-signature-type"><a href="../classes/Element.FigureElement.html" class="tsd-signature-type">FigureElement</a> | null</span></span><div class="tsd-comment tsd-typography"><p>parent figure element - <code>null</code> if
+at top level of figure</p></div></li>
+<li><span><span class="tsd-kind-parameter">isTouchable</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span></span><div class="tsd-comment tsd-typography"><p>must be <code>true</code> to move or execute <code>onClick</code></p></div></li>
+<li><span><span class="tsd-kind-parameter">isMovable</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span></span><div class="tsd-comment tsd-typography"><p>must be <code>true</code> to move</p></div></li>
+<li><span><span class="tsd-kind-parameter">onClick</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a> | () => void</span></span><div class="tsd-comment tsd-typography"><p>callback if touched or clicked</p></div></li>
+<li><span><span class="tsd-kind-parameter">color</span>: <span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>]</span></span><div class="tsd-comment tsd-typography"><p>element's current
+color defined as red, green, blue, alpha with range 0 to 1</p></div></li>
+<li><span><span class="tsd-kind-parameter">dimColor</span>: <span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>]</span></span><div class="tsd-comment tsd-typography"><p>color to use when
+dimming element</p></div></li>
+<li><span><span class="tsd-kind-parameter">defaultColor</span>: <span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>]</span></span><div class="tsd-comment tsd-typography"><p>color to go to
+when undimming element</p></div></li>
+<li><span><span class="tsd-kind-parameter">opacity</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>number between 0 and 1 that is multiplied with
+<code>color</code> alpha channel to get final opacity</p></div></li>
+<li><span><span class="tsd-kind-parameter">move</span>: <span class="tsd-signature-type"><a href="../interfaces/Element.OBJ_ElementMove.html" class="tsd-signature-type">OBJ_ElementMove</a></span></span><div class="tsd-comment tsd-typography"><p>movement parameters</p></div></li>
+<li><span><span class="tsd-kind-parameter">scenarios</span>: <span class="tsd-signature-type"><a href="../interfaces/Element.OBJ_Scenarios.html" class="tsd-signature-type">OBJ_Scenarios</a></span></span><div class="tsd-comment tsd-typography"><p>scenario presets</p></div></li>
+<li><span><span class="tsd-kind-parameter">state</span>: <span class="tsd-signature-type">ElementState</span></span><div class="tsd-comment tsd-typography"><p>current state of element</p></div></li>
+<li><span><span class="tsd-kind-parameter">animations</span>: <span class="tsd-signature-type">AnimationManager</span></span><div class="tsd-comment tsd-typography"><p>element animation manager</p></div></li>
+<li><span><span class="tsd-kind-parameter">notifications</span>: <span class="tsd-signature-type"><a href="../classes/tools.NotificationManager.html" class="tsd-signature-type">NotificationManager</a></span></span><div class="tsd-comment tsd-typography"><p>notification manager for
+element</p></div></li>
+<li><span><span class="tsd-kind-parameter">fnMap</span>: <span class="tsd-signature-type"><a href="../classes/FunctionMap.FunctionMap.html" class="tsd-signature-type">FunctionMap</a></span></span><div class="tsd-comment tsd-typography"><p>function map for use with {@link Recorder}</p></div></li>
+<li><span><span class="tsd-kind-parameter">customState</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object" class="tsd-signature-type">Object</a></span></span><div class="tsd-comment tsd-typography"><p>put any custom state information that needs
 to be captured with recorder here - only stringify-able values can go in this
 object like strings, numbers, booleans and nested arrays or objects
 containing these. Functions should not be put in here - use string
-identifiers to <code>fnMap</code> if functions are needed.</span></div>
+identifiers to <code>fnMap</code> if functions are needed.</p></div></li>
+</ul>
 
 ---
 
@@ -132,18 +134,20 @@ Figure options object
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">htmlId</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</span><span class="fo-prop-desc">: HTML <code>div</code> tag <code>id</code> to tie figure to (<code>"figureOneContainer"</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">scene</span> <span class="fo-prop-type">(<a href="../interfaces/geometry_scene.OBJ_Scene.html">OBJ_Scene</a> | <a href="../types/geometry_Rect.TypeParsableRect.html">TypeParsableRect</a>?)</span><span class="fo-prop-desc">: define 2D or 3D scene. 3D
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">htmlId</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a> | undefined</span> <span class="tsd-signature-symbol">= "figureOneContainer"</span></span><div class="tsd-comment tsd-typography"><p>HTML <code>div</code> tag <code>id</code> to tie figure to</p></div></li>
+<li><span><span class="tsd-kind-parameter">scene</span>: <span class="tsd-signature-type"><a href="../interfaces/geometry_scene.OBJ_Scene.html" class="tsd-signature-type">OBJ_Scene</a> | <a href="../types/geometry_Rect.TypeParsableRect.html" class="tsd-signature-type">TypeParsableRect</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>define 2D or 3D scene. 3D
 can be orthographic or perspective projection, and include camera position
 and lighting definition. A 2D scene can be defined using <code>left</code>, <code>right</code>,
-<code>bottom</code> and <code>top</code>, or the short hand rectangle definition.</span></div>
-<div class="fo-prop"><span class="fo-prop-name">color</span> <span class="fo-prop-type">(<a href="../types/types.TypeColor.html">TypeColor</a>?)</span><span class="fo-prop-desc">: default shape color (<code>[0, 0, 0, 1]</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">font</span> <span class="fo-prop-type">(<a href="../interfaces/types.OBJ_Font.html">OBJ_Font</a>?)</span><span class="fo-prop-desc">: default shape font (<code>{ family: 'Helvetica,
-size: 0.2, style: 'normal', weight: 'normal' }</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">lineWidth</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: default shape line width</span></div>
-<div class="fo-prop"><span class="fo-prop-name">length</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: default shape primary dimension</span></div>
-<div class="fo-prop"><span class="fo-prop-name">backgroundColor</span> <span class="fo-prop-type">(<a href="../types/types.TypeColor.html">TypeColor</a>?)</span><span class="fo-prop-desc">: background color for the figure.
-Use [r, g, b, 1] for opaque and [0, 0, 0, 0] for transparent.</span></div>
+<code>bottom</code> and <code>top</code>, or the short hand rectangle definition.</p></div></li>
+<li><span><span class="tsd-kind-parameter">color</span>: <span class="tsd-signature-type"><a href="../types/types.TypeColor.html" class="tsd-signature-type">TypeColor</a> | undefined</span> <span class="tsd-signature-symbol">= [0, 0, 0, 1]</span></span><div class="tsd-comment tsd-typography"><p>default shape color</p></div></li>
+<li><span><span class="tsd-kind-parameter">font</span>: <span class="tsd-signature-type"><a href="../interfaces/types.OBJ_Font.html" class="tsd-signature-type">OBJ_Font</a> | undefined</span> <span class="tsd-signature-symbol">= { family: 'Helvetica,
+size: 0.2, style: 'normal', weight: 'normal' }</span></span><div class="tsd-comment tsd-typography"><p>default shape font</p></div></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>default shape line width</p></div></li>
+<li><span><span class="tsd-kind-parameter">length</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>default shape primary dimension</p></div></li>
+<li><span><span class="tsd-kind-parameter">backgroundColor</span>: <span class="tsd-signature-type"><a href="../types/types.TypeColor.html" class="tsd-signature-type">TypeColor</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>background color for the figure.
+Use [r, g, b, 1] for opaque and [0, 0, 0, 0] for transparent.</p></div></li>
+</ul>
 
 ---
 
@@ -182,13 +186,15 @@ publish the following events:
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">primitives</span> <span class="fo-prop-type">(FigurePrimitives)</span><span class="fo-prop-desc">: create figure primitives such
-as shapes, lines and grids</span></div>
-<div class="fo-prop"><span class="fo-prop-name">collections</span> <span class="fo-prop-type">(FigureCollections)</span><span class="fo-prop-desc">: create figure collections such
-as advanced lines, shapes, equations and plots</span></div>
-<div class="fo-prop"><span class="fo-prop-name">notifications</span> <span class="fo-prop-type">(<a href="../classes/tools.NotificationManager.html">NotificationManager</a>)</span><span class="fo-prop-desc">: notification manager for
-element</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fonts</span> <span class="fo-prop-type">(FontManager)</span><span class="fo-prop-desc">: watches and reports on font availability</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">primitives</span>: <span class="tsd-signature-type">FigurePrimitives</span></span><div class="tsd-comment tsd-typography"><p>create figure primitives such
+as shapes, lines and grids</p></div></li>
+<li><span><span class="tsd-kind-parameter">collections</span>: <span class="tsd-signature-type">FigureCollections</span></span><div class="tsd-comment tsd-typography"><p>create figure collections such
+as advanced lines, shapes, equations and plots</p></div></li>
+<li><span><span class="tsd-kind-parameter">notifications</span>: <span class="tsd-signature-type"><a href="../classes/tools.NotificationManager.html" class="tsd-signature-type">NotificationManager</a></span></span><div class="tsd-comment tsd-typography"><p>notification manager for
+element</p></div></li>
+<li><span><span class="tsd-kind-parameter">fonts</span>: <span class="tsd-signature-type">FontManager</span></span><div class="tsd-comment tsd-typography"><p>watches and reports on font availability</p></div></li>
+</ul>
 
 #### Simple html and javascript example to create a figure, and add a
 

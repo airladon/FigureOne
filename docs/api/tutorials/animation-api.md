@@ -87,9 +87,11 @@ be automatically processed every animation frame.
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">state</span> <span class="fo-prop-type">('animating' | 'idle' | 'waitingToStart')</span></div>
-<div class="fo-prop"><span class="fo-prop-name">animations</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><AnimationStep>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">notifications</span> <span class="fo-prop-type">(<a href="../classes/tools.NotificationManager.html">NotificationManager</a>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">state</span>: <span class="tsd-signature-type">'animating' | 'idle' | 'waitingToStart'</span></span></li>
+<li><span><span class="tsd-kind-parameter">animations</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><AnimationStep></span></span></li>
+<li><span><span class="tsd-kind-parameter">notifications</span>: <span class="tsd-signature-type"><a href="../classes/tools.NotificationManager.html" class="tsd-signature-type">NotificationManager</a></span></span></li>
+</ul>
 
 #### At its heart the `AnimationManager` is just executing
 

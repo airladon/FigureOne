@@ -41,14 +41,16 @@ where the mapping between the two are:</p>
 <h2 id="obj_glattribute" class="tsd-anchor-link">OBJ_GLAttribute<a href="#obj_glattribute" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>GL buffer.</p>
 <h3 id="properties" class="tsd-anchor-link">Properties<a href="#properties" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="fo-prop"><span class="fo-prop-name">name</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</span><span class="fo-prop-desc">: name of attribute in shader</span></div>
-<div class="fo-prop"><span class="fo-prop-name">data</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>)</span><span class="fo-prop-desc">: array of values</span></div>
-<div class="fo-prop"><span class="fo-prop-name">size</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: number of values per attribute (<code>2</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">type</span> <span class="fo-prop-type">(<a href="../types/DrawingObjects_GLObject_GLObject.TypeGLBufferType.html">TypeGLBufferType</a>?)</span><span class="fo-prop-desc"> (<code>'FLOAT'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">normalize</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc"> (<code>false</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">stride</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">offset</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">usage</span> <span class="fo-prop-type">(<a href="../types/DrawingObjects_GLObject_GLObject.TypeGLBufferUsage.html">TypeGLBufferUsage</a>?)</span><span class="fo-prop-desc"> (<code>'STATIC'</code>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">name</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a></span></span><div class="tsd-comment tsd-typography"><p>name of attribute in shader</p></div></li>
+<li><span><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>></span></span><div class="tsd-comment tsd-typography"><p>array of values</p></div></li>
+<li><span><span class="tsd-kind-parameter">size</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 2</span></span><div class="tsd-comment tsd-typography"><p>number of values per attribute</p></div></li>
+<li><span><span class="tsd-kind-parameter">type</span>: <span class="tsd-signature-type"><a href="../types/DrawingObjects_GLObject_GLObject.TypeGLBufferType.html" class="tsd-signature-type">TypeGLBufferType</a> | undefined</span> <span class="tsd-signature-symbol">= 'FLOAT'</span></span></li>
+<li><span><span class="tsd-kind-parameter">normalize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span></li>
+<li><span><span class="tsd-kind-parameter">stride</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span></li>
+<li><span><span class="tsd-kind-parameter">offset</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span></li>
+<li><span><span class="tsd-kind-parameter">usage</span>: <span class="tsd-signature-type"><a href="../types/DrawingObjects_GLObject_GLObject.TypeGLBufferUsage.html" class="tsd-signature-type">TypeGLBufferUsage</a> | undefined</span> <span class="tsd-signature-symbol">= 'STATIC'</span></span></li>
+</ul>
 <hr>
 <h2 id="obj_glvertexbuffer" class="tsd-anchor-link">OBJ_GLVertexBuffer<a href="#obj_glvertexbuffer" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>GL vertex - associated with attribute 'a_vertex' in shader.</p>
@@ -62,24 +64,30 @@ where the mapping between the two are:</p>
 <li>offset: 0</li>
 </ul>
 <h3 id="properties-1" class="tsd-anchor-link">Properties<a href="#properties-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="fo-prop"><span class="fo-prop-name">data</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>)</span><span class="fo-prop-desc">: array of values</span></div>
-<div class="fo-prop"><span class="fo-prop-name">usage</span> <span class="fo-prop-type">(<a href="../types/DrawingObjects_GLObject_GLObject.TypeGLBufferUsage.html">TypeGLBufferUsage</a>?)</span><span class="fo-prop-desc"> (<code>'STATIC'</code>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>></span></span><div class="tsd-comment tsd-typography"><p>array of values</p></div></li>
+<li><span><span class="tsd-kind-parameter">usage</span>: <span class="tsd-signature-type"><a href="../types/DrawingObjects_GLObject_GLObject.TypeGLBufferUsage.html" class="tsd-signature-type">TypeGLBufferUsage</a> | undefined</span> <span class="tsd-signature-symbol">= 'STATIC'</span></span></li>
+</ul>
 <hr>
 <h2 id="obj_gluniform" class="tsd-anchor-link">OBJ_GLUniform<a href="#obj_gluniform" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>GL Uniform</p>
 <h3 id="properties-2" class="tsd-anchor-link">Properties<a href="#properties-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="fo-prop"><span class="fo-prop-name">name</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</span><span class="fo-prop-desc">: name of uniform in shader</span></div>
-<div class="fo-prop"><span class="fo-prop-name">length</span> <span class="fo-prop-type">(1 | 2 | 3 | 4)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">type</span> <span class="fo-prop-type">(<a href="../types/DrawingObjects_GLObject_GLObject.TypeGLUniform.html">TypeGLUniform</a>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">name</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a></span></span><div class="tsd-comment tsd-typography"><p>name of uniform in shader</p></div></li>
+<li><span><span class="tsd-kind-parameter">length</span>: <span class="tsd-signature-type">1 | 2 | 3 | 4</span></span></li>
+<li><span><span class="tsd-kind-parameter">type</span>: <span class="tsd-signature-type"><a href="../types/DrawingObjects_GLObject_GLObject.TypeGLUniform.html" class="tsd-signature-type">TypeGLUniform</a></span></span></li>
+</ul>
 <hr>
 <h2 id="obj_glcolordata" class="tsd-anchor-link">OBJ_GLColorData<a href="#obj_glcolordata" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>Color definition for a gl primitive.</p>
 <h3 id="properties-3" class="tsd-anchor-link">Properties<a href="#properties-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="fo-prop"><span class="fo-prop-name">data</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>)</span><span class="fo-prop-desc">: color data</span></div>
-<div class="fo-prop"><span class="fo-prop-name">normalize</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: if <code>true</code>, then color data values are between
-0 and 255 (<code>false</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">size</span> <span class="fo-prop-type">(3 | 4?)</span><span class="fo-prop-desc">: if <code>3</code>, then color data is RGB, if <code>4</code> then color
-data is RGBA</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>></span></span><div class="tsd-comment tsd-typography"><p>color data</p></div></li>
+<li><span><span class="tsd-kind-parameter">normalize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code>, then color data values are between
+0 and 255</p></div></li>
+<li><span><span class="tsd-kind-parameter">size</span>: <span class="tsd-signature-type">3 | 4 | undefined</span></span><div class="tsd-comment tsd-typography"><p>if <code>3</code>, then color data is RGB, if <code>4</code> then color
+data is RGBA</p></div></li>
+</ul>
 <hr>
 <h2 id="obj_genericgl" class="tsd-anchor-link">OBJ_GenericGL<a href="#obj_genericgl" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>DiagramElementPrimitive with low level WegGL drawing object.</p>
@@ -135,21 +143,23 @@ draw the primitive. See  OBJ_VertexShader and
 OBJ_FragmentShader for names of attributes and uniforms used in the
 shaders, and when they are used.</p>
 <h3 id="properties-4" class="tsd-anchor-link">Properties<a href="#properties-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="fo-prop"><span class="fo-prop-name">glPrimitive</span> <span class="fo-prop-type">(<a href="../types/FigurePrimitives_FigurePrimitiveTypes.TypeGLPrimitive.html">TypeGLPrimitive</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">vertexShader</span> <span class="fo-prop-type">(<a href="../types/webgl_shaders.TypeVertexShader.html">TypeVertexShader</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fragmentShader</span> <span class="fo-prop-type">(<a href="../types/webgl_shaders.TypeFragmentShader.html">TypeFragmentShader</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">attributes</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLAttribute.html">OBJ_GLAttribute</a>>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">uniforms</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLUniform.html">OBJ_GLUniform</a>>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">texture</span> <span class="fo-prop-type">(<a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_Texture.html">OBJ_Texture</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">dimension</span> <span class="fo-prop-type">(2 | 3?)</span><span class="fo-prop-desc">: default value for `dimension in vertex shader
-if vertex shader is undefined (<code>2</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">light</span> <span class="fo-prop-type">('point' | 'directional' | null?)</span><span class="fo-prop-desc">: default value for <code>light</code>
-in vertex and fragment shader if shaders are not otherwise defined (<code>null</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">colors</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | <a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLColorData.html">OBJ_GLColorData</a>?)</span><span class="fo-prop-desc">: default value for
-<code>light</code> in vertex and fragment shader if shaders are not otherwise defined (<code>uniform</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">vertices</span> <span class="fo-prop-type">(<a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLVertexBuffer.html">OBJ_GLVertexBuffer</a>?)</span><span class="fo-prop-desc">: create a <code>a_vertex</code> attribute for
-vertex coordinates</span></div>
-<div class="fo-prop"><span class="fo-prop-name">normals</span> <span class="fo-prop-type">(<a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLVertexBuffer.html">OBJ_GLVertexBuffer</a>?)</span><span class="fo-prop-desc">: create a <code>a_normal</code> attribute</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">glPrimitive</span>: <span class="tsd-signature-type"><a href="../types/FigurePrimitives_FigurePrimitiveTypes.TypeGLPrimitive.html" class="tsd-signature-type">TypeGLPrimitive</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">vertexShader</span>: <span class="tsd-signature-type"><a href="../types/webgl_shaders.TypeVertexShader.html" class="tsd-signature-type">TypeVertexShader</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">fragmentShader</span>: <span class="tsd-signature-type"><a href="../types/webgl_shaders.TypeFragmentShader.html" class="tsd-signature-type">TypeFragmentShader</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">attributes</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLAttribute.html" class="tsd-signature-type">OBJ_GLAttribute</a>> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">uniforms</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLUniform.html" class="tsd-signature-type">OBJ_GLUniform</a>> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">texture</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_Texture.html" class="tsd-signature-type">OBJ_Texture</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">dimension</span>: <span class="tsd-signature-type">2 | 3 | undefined</span> <span class="tsd-signature-symbol">= 2</span></span><div class="tsd-comment tsd-typography"><p>default value for `dimension in vertex shader
+if vertex shader is undefined</p></div></li>
+<li><span><span class="tsd-kind-parameter">light</span>: <span class="tsd-signature-type">'point' | 'directional' | null | undefined</span> <span class="tsd-signature-symbol">= null</span></span><div class="tsd-comment tsd-typography"><p>default value for <code>light</code>
+in vertex and fragment shader if shaders are not otherwise defined</p></div></li>
+<li><span><span class="tsd-kind-parameter">colors</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>> | <a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLColorData.html" class="tsd-signature-type">OBJ_GLColorData</a> | undefined</span> <span class="tsd-signature-symbol">= uniform</span></span><div class="tsd-comment tsd-typography"><p>default value for
+<code>light</code> in vertex and fragment shader if shaders are not otherwise defined</p></div></li>
+<li><span><span class="tsd-kind-parameter">vertices</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLVertexBuffer.html" class="tsd-signature-type">OBJ_GLVertexBuffer</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>create a <code>a_vertex</code> attribute for
+vertex coordinates</p></div></li>
+<li><span><span class="tsd-kind-parameter">normals</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLVertexBuffer.html" class="tsd-signature-type">OBJ_GLVertexBuffer</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>create a <code>a_normal</code> attribute</p></div></li>
+</ul>
 <h4 id="default-options-are-2d-uniform-color-triangles" class="tsd-anchor-link">Default options are 2D, uniform color, TRIANGLES.<a href="#default-options-are-2d-uniform-color-triangles" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <pre><code class="js"><span class="hl-10">// Create two red triangles (6 vertices, 12 values)</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;gl&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">vertices:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">],</span><br/><span class="hl-5">  </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">],</span><br/><span class="hl-5">});</span>
 </code><button type="button">Copy</button></pre>
@@ -231,9 +241,11 @@ to fragment shader used when <code>light = 'directional'</code> or <code>light =
 to fragment shader used when <code>light = 'point'</code></li>
 </ul>
 <h3 id="properties-5" class="tsd-anchor-link">Properties<a href="#properties-5" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="fo-prop"><span class="fo-prop-name">dimension</span> <span class="fo-prop-type">(2 | 3?)</span><span class="fo-prop-desc"> (<code>2</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">color</span> <span class="fo-prop-type">('vertex' | 'uniform' | 'texture'?)</span><span class="fo-prop-desc"> (<code>uniform</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">light</span> <span class="fo-prop-type">('point' | 'directional' | null?)</span><span class="fo-prop-desc"> (<code>null</code>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">dimension</span>: <span class="tsd-signature-type">2 | 3 | undefined</span> <span class="tsd-signature-symbol">= 2</span></span></li>
+<li><span><span class="tsd-kind-parameter">color</span>: <span class="tsd-signature-type">'vertex' | 'uniform' | 'texture' | undefined</span> <span class="tsd-signature-symbol">= uniform</span></span></li>
+<li><span><span class="tsd-kind-parameter">light</span>: <span class="tsd-signature-type">'point' | 'directional' | null | undefined</span> <span class="tsd-signature-symbol">= null</span></span></li>
+</ul>
 <hr>
 <h2 id="typevertexshader" class="tsd-anchor-link">TypeVertexShader<a href="#typevertexshader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>A vertex shader can be defined with either:</p>
@@ -279,9 +291,11 @@ composition for the other.</p>
 from vertex shader used when <code>light = 'point'</code></li>
 </ul>
 <h3 id="properties-6" class="tsd-anchor-link">Properties<a href="#properties-6" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="fo-prop"><span class="fo-prop-name">dimension</span> <span class="fo-prop-type">(2 | 3?)</span><span class="fo-prop-desc"> (<code>2</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">color</span> <span class="fo-prop-type">('vertex' | 'uniform' | 'texture'?)</span><span class="fo-prop-desc"> (<code>uniform</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">light</span> <span class="fo-prop-type">('point' | 'directional' | null?)</span><span class="fo-prop-desc"> (<code>null</code>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">dimension</span>: <span class="tsd-signature-type">2 | 3 | undefined</span> <span class="tsd-signature-symbol">= 2</span></span></li>
+<li><span><span class="tsd-kind-parameter">color</span>: <span class="tsd-signature-type">'vertex' | 'uniform' | 'texture' | undefined</span> <span class="tsd-signature-symbol">= uniform</span></span></li>
+<li><span><span class="tsd-kind-parameter">light</span>: <span class="tsd-signature-type">'point' | 'directional' | null | undefined</span> <span class="tsd-signature-symbol">= null</span></span></li>
+</ul>
 <hr>
 <h2 id="typefragmentshader" class="tsd-anchor-link">TypeFragmentShader<a href="#typefragmentshader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>A fragment shader can be defined with either:</p>

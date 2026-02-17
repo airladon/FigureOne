@@ -1,6 +1,6 @@
 ---
 title: Equation Layout API
-group: Equations
+group: Equation Layout
 ---
 
 # Equation Layout API Reference
@@ -46,19 +46,21 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">width</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>null</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">inSize</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc"> (<code>true</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">descent</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>null</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">ascent</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>null</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">xAlign</span> <span class="fo-prop-type">('left' | 'center' | 'right' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>'center'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">yAlign</span> <span class="fo-prop-type">('bottom' | 'middle' | 'top' | 'baseline' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>'baseline'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fit</span> <span class="fo-prop-type">('width' | 'height' | 'contain'?)</span><span class="fo-prop-desc">: - fit width,
-ascent and descent to either match width, height or fully contain the content (<code>null</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">scale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: - (<code>1</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fullContentBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: - (<code>false</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">showContent</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: - if <code>false</code>, a container will be created
-around the content, but the content will not be shown (<code>true</code>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= null</span></span></li>
+<li><span><span class="tsd-kind-parameter">inSize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span></li>
+<li><span><span class="tsd-kind-parameter">descent</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= null</span></span></li>
+<li><span><span class="tsd-kind-parameter">ascent</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= null</span></span></li>
+<li><span><span class="tsd-kind-parameter">xAlign</span>: <span class="tsd-signature-type">'left' | 'center' | 'right' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 'center'</span></span></li>
+<li><span><span class="tsd-kind-parameter">yAlign</span>: <span class="tsd-signature-type">'bottom' | 'middle' | 'top' | 'baseline' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 'baseline'</span></span></li>
+<li><span><span class="tsd-kind-parameter">fit</span>: <span class="tsd-signature-type">'width' | 'height' | 'contain' | undefined</span> <span class="tsd-signature-symbol">= null</span></span><div class="tsd-comment tsd-typography"><p>- fit width,
+ascent and descent to either match width, height or fully contain the content</p></div></li>
+<li><span><span class="tsd-kind-parameter">scale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>-</p></div></li>
+<li><span><span class="tsd-kind-parameter">fullContentBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>-</p></div></li>
+<li><span><span class="tsd-kind-parameter">showContent</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p>- if <code>false</code>, a container will be created
+around the content, but the content will not be shown</p></div></li>
+</ul>
 
 #### Example showing the difference between with and without container
 
@@ -132,9 +134,11 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">offset</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span><span class="fo-prop-desc"> (<code>[0, 0]</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fullContentBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: - (<code>false</code>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">offset</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= [0, 0]</span></span></li>
+<li><span><span class="tsd-kind-parameter">fullContentBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>-</p></div></li>
+</ul>
 
 #### Example 1
 
@@ -172,16 +176,18 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">numerator</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</span><span class="fo-prop-desc">: - Vinculum symbol</span></div>
-<div class="fo-prop"><span class="fo-prop-name">denominator</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">scale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>1</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">numeratorSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.05</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">denominatorSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0.05</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">overhang</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: Vinculum extends beyond the content
-horizontally by the this amount (<code>0.05</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">offsetY</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: Offset fraction in y (<code>0.07</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fullContentBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: Use full bounds with content (<code>false</code>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">numerator</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a></span></span><div class="tsd-comment tsd-typography"><p>- Vinculum symbol</p></div></li>
+<li><span><span class="tsd-kind-parameter">denominator</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">scale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span></li>
+<li><span><span class="tsd-kind-parameter">numeratorSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.05</span></span></li>
+<li><span><span class="tsd-kind-parameter">denominatorSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.05</span></span></li>
+<li><span><span class="tsd-kind-parameter">overhang</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.05</span></span><div class="tsd-comment tsd-typography"><p>Vinculum extends beyond the content
+horizontally by the this amount</p></div></li>
+<li><span><span class="tsd-kind-parameter">offsetY</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.07</span></span><div class="tsd-comment tsd-typography"><p>Offset fraction in y</p></div></li>
+<li><span><span class="tsd-kind-parameter">fullContentBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>Use full bounds with content</p></div></li>
+</ul>
 
 #### Simple
 
@@ -287,9 +293,11 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">scale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: - (<code>1</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fullContentBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: Use full bounds with content (<code>false</code>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">scale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>-</p></div></li>
+<li><span><span class="tsd-kind-parameter">fullContentBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>Use full bounds with content</p></div></li>
+</ul>
 
 #### Simple
 
@@ -352,9 +360,11 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">color</span> <span class="fo-prop-type">(<a href="../types/types.TypeColor.html">TypeColor</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fullContentBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: Use full bounds with content (<code>false</code>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">color</span>: <span class="tsd-signature-type"><a href="../types/types.TypeColor.html" class="tsd-signature-type">TypeColor</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">fullContentBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>Use full bounds with content</p></div></li>
+</ul>
 
 #### Simple Array Definition
 
@@ -440,28 +450,30 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">left</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</span><span class="fo-prop-desc">: left bracket symbol</span></div>
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">right</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</span><span class="fo-prop-desc">: right bracket symbol</span></div>
-<div class="fo-prop"><span class="fo-prop-name">inSize</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: <code>false</code> excludes bracket symbols from
-size of resulting phrase (<code>true</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">insideSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space between brackets and content (<code>0.03</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">outsideSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space between brackets and neighboring
-phrases (<code>0.03</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">topSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: how far the brackets extend above the content (<code>0.05</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">bottomSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: how far the brackets extend below the
-content (<code>0.05</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">minContentHeight</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: if content height is less than this,
-then this number will be used when sizing the brackets (unless it is <code>null</code>) (<code>null</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">minContentDescent</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: if content descent is less than this,
-then this number will be used when sizing the brackets (unless it is <code>null</code>) (<code>null</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">height</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: force height of brackets (<code>null</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">descent</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: force descent of brackets (<code>null</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fullContentBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: use full bounds of content,
-overriding any <code>inSize=false</code> properties in the content (<code>false</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">useFullBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: make the bounds of this phrase equal to
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">left</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>left bracket symbol</p></div></li>
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">right</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>right bracket symbol</p></div></li>
+<li><span><span class="tsd-kind-parameter">inSize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>false</code> excludes bracket symbols from
+size of resulting phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">insideSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.03</span></span><div class="tsd-comment tsd-typography"><p>space between brackets and content</p></div></li>
+<li><span><span class="tsd-kind-parameter">outsideSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.03</span></span><div class="tsd-comment tsd-typography"><p>space between brackets and neighboring
+phrases</p></div></li>
+<li><span><span class="tsd-kind-parameter">topSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.05</span></span><div class="tsd-comment tsd-typography"><p>how far the brackets extend above the content</p></div></li>
+<li><span><span class="tsd-kind-parameter">bottomSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.05</span></span><div class="tsd-comment tsd-typography"><p>how far the brackets extend below the
+content</p></div></li>
+<li><span><span class="tsd-kind-parameter">minContentHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= null</span></span><div class="tsd-comment tsd-typography"><p>if content height is less than this,
+then this number will be used when sizing the brackets (unless it is <code>null</code>)</p></div></li>
+<li><span><span class="tsd-kind-parameter">minContentDescent</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= null</span></span><div class="tsd-comment tsd-typography"><p>if content descent is less than this,
+then this number will be used when sizing the brackets (unless it is <code>null</code>)</p></div></li>
+<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= null</span></span><div class="tsd-comment tsd-typography"><p>force height of brackets</p></div></li>
+<li><span><span class="tsd-kind-parameter">descent</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= null</span></span><div class="tsd-comment tsd-typography"><p>force descent of brackets</p></div></li>
+<li><span><span class="tsd-kind-parameter">fullContentBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>use full bounds of content,
+overriding any <code>inSize=false</code> properties in the content</p></div></li>
+<li><span><span class="tsd-kind-parameter">useFullBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>make the bounds of this phrase equal to
 the full bounds of the content even if <code>fullContentBounds=false</code> and the
-brackets only surround a portion of the content (<code>false</code>)</span></div>
+brackets only surround a portion of the content</p></div></li>
+</ul>
 
 #### Simple
 
@@ -531,26 +543,28 @@ Options can be an object, or an array in the property order below.
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</span><span class="fo-prop-desc">: radical symbol</span></div>
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">inSize</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: <code>false</code> excludes radical symbol and root (if
-defined) from size of resulting phrase (<code>true</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">space</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: (<code>0.02</code>) default space between content and
-radical symbol in left, right, top and bottom directions.</span></div>
-<div class="fo-prop"><span class="fo-prop-name">topSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space between content top and radical symbol
-horiztonal line (<code>space</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">rightSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: radical symbol overhang of content on right (<code>space</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">bottomSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: radical symbol descent below content (<code>space</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">leftSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space between radical symbol up stroke and
-content (<code>space</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">root</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>?)</span><span class="fo-prop-desc">: custom root</span></div>
-<div class="fo-prop"><span class="fo-prop-name">rootOffset</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: custom root offset (<code>[0, 0.06]</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">rootScale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: custom root scale (<code>0.6</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fullContentBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: use full bounds of content,
-overriding any <code>inSize=false</code> properties in the content (<code>false</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">useFullBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: make the bounds of this phrase equal to
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a></span></span><div class="tsd-comment tsd-typography"><p>radical symbol</p></div></li>
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">inSize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>false</code> excludes radical symbol and root (if
+defined) from size of resulting phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">space</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>(<code>0.02</code>) default space between content and
+radical symbol in left, right, top and bottom directions.</p></div></li>
+<li><span><span class="tsd-kind-parameter">topSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= space</span></span><div class="tsd-comment tsd-typography"><p>space between content top and radical symbol
+horiztonal line</p></div></li>
+<li><span><span class="tsd-kind-parameter">rightSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= space</span></span><div class="tsd-comment tsd-typography"><p>radical symbol overhang of content on right</p></div></li>
+<li><span><span class="tsd-kind-parameter">bottomSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= space</span></span><div class="tsd-comment tsd-typography"><p>radical symbol descent below content</p></div></li>
+<li><span><span class="tsd-kind-parameter">leftSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= space</span></span><div class="tsd-comment tsd-typography"><p>space between radical symbol up stroke and
+content</p></div></li>
+<li><span><span class="tsd-kind-parameter">root</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>custom root</p></div></li>
+<li><span><span class="tsd-kind-parameter">rootOffset</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= [0, 0.06]</span></span><div class="tsd-comment tsd-typography"><p>custom root offset</p></div></li>
+<li><span><span class="tsd-kind-parameter">rootScale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.6</span></span><div class="tsd-comment tsd-typography"><p>custom root scale</p></div></li>
+<li><span><span class="tsd-kind-parameter">fullContentBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>use full bounds of content,
+overriding any <code>inSize=false</code> properties in the content</p></div></li>
+<li><span><span class="tsd-kind-parameter">useFullBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>make the bounds of this phrase equal to
 the full bounds of the content even if <code>fullContentBounds=false</code> and the
-brackets only surround a portion of the content (<code>false</code>)</span></div>
+brackets only surround a portion of the content</p></div></li>
+</ul>
 
 #### Simple
 
@@ -646,25 +660,27 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">inSize</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: <code>false</code> excludes strike symbol from size of
-resulting phrase (<code>false</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">space</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: amount the strike symbol overhangs the content on
-the left, right, bottom and top sides (<code>0.02</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">topSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: use when top overhang between content and
- strike should be different thant <code>space</code> property (<code>space</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">rightSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: use when right overhang between content and
- strike should be different thant <code>space</code> property (<code>space</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">bottomSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: use when bottom overhang between content and
- strike should be different thant <code>space</code> property (<code>space</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">leftSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: use when left overhang between content and
- strike should be different thant <code>space</code> property (<code>space</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fullContentBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: use full bounds of content,
-overriding any <code>inSize=false</code> properties in the content (<code>false</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">useFullBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: make the bounds of this phrase equal to
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">inSize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p><code>false</code> excludes strike symbol from size of
+resulting phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">space</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.02</span></span><div class="tsd-comment tsd-typography"><p>amount the strike symbol overhangs the content on
+the left, right, bottom and top sides</p></div></li>
+<li><span><span class="tsd-kind-parameter">topSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= space</span></span><div class="tsd-comment tsd-typography"><p>use when top overhang between content and
+ strike should be different thant <code>space</code> property</p></div></li>
+<li><span><span class="tsd-kind-parameter">rightSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= space</span></span><div class="tsd-comment tsd-typography"><p>use when right overhang between content and
+ strike should be different thant <code>space</code> property</p></div></li>
+<li><span><span class="tsd-kind-parameter">bottomSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= space</span></span><div class="tsd-comment tsd-typography"><p>use when bottom overhang between content and
+ strike should be different thant <code>space</code> property</p></div></li>
+<li><span><span class="tsd-kind-parameter">leftSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= space</span></span><div class="tsd-comment tsd-typography"><p>use when left overhang between content and
+ strike should be different thant <code>space</code> property</p></div></li>
+<li><span><span class="tsd-kind-parameter">fullContentBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>use full bounds of content,
+overriding any <code>inSize=false</code> properties in the content</p></div></li>
+<li><span><span class="tsd-kind-parameter">useFullBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>make the bounds of this phrase equal to
 the full bounds of the content even if <code>fullContentBounds=false</code> and the
-brackets only surround a portion of the content (<code>false</code>)</span></div>
+brackets only surround a portion of the content</p></div></li>
+</ul>
 
 #### Simple
 
@@ -743,25 +759,27 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">inSize</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: <code>false</code> excludes box symbol from size of
-resulting phrase (<code>false</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">space</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space between box symbol and content on
-the left, right, bottom and top sides (<code>0</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">topSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: use when top space between content and
- box should be different thant <code>space</code> property (<code>space</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">rightSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: use when right space between content and
- box should be different thant <code>space</code> property (<code>space</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">bottomSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: use when bottom space between content and
- box should be different thant <code>space</code> property (<code>space</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">leftSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: use when left space between content and
- box should be different thant <code>space</code> property (<code>space</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fullContentBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: use full bounds of content,
-overriding any <code>inSize=false</code> properties in the content (<code>false</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">useFullBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: make the bounds of this phrase equal to
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">inSize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p><code>false</code> excludes box symbol from size of
+resulting phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">space</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>space between box symbol and content on
+the left, right, bottom and top sides</p></div></li>
+<li><span><span class="tsd-kind-parameter">topSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= space</span></span><div class="tsd-comment tsd-typography"><p>use when top space between content and
+ box should be different thant <code>space</code> property</p></div></li>
+<li><span><span class="tsd-kind-parameter">rightSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= space</span></span><div class="tsd-comment tsd-typography"><p>use when right space between content and
+ box should be different thant <code>space</code> property</p></div></li>
+<li><span><span class="tsd-kind-parameter">bottomSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= space</span></span><div class="tsd-comment tsd-typography"><p>use when bottom space between content and
+ box should be different thant <code>space</code> property</p></div></li>
+<li><span><span class="tsd-kind-parameter">leftSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= space</span></span><div class="tsd-comment tsd-typography"><p>use when left space between content and
+ box should be different thant <code>space</code> property</p></div></li>
+<li><span><span class="tsd-kind-parameter">fullContentBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>use full bounds of content,
+overriding any <code>inSize=false</code> properties in the content</p></div></li>
+<li><span><span class="tsd-kind-parameter">useFullBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>make the bounds of this phrase equal to
 the full bounds of the content even if <code>fullContentBounds=false</code> and the
-brackets only surround a portion of the content (<code>false</code>)</span></div>
+brackets only surround a portion of the content</p></div></li>
+</ul>
 
 #### Simple
 
@@ -841,18 +859,20 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">space</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space between box symbol and content on
-the left, right, bottom and top sides (<code>0</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">topSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: use when top space between content and
- box should be different thant <code>space</code> property (<code>space</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">rightSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: use when right space between content and
- box should be different thant <code>space</code> property (<code>space</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">bottomSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: use when bottom space between content and
- box should be different thant <code>space</code> property (<code>space</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">leftSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: use when left space between content and
- box should be different thant <code>space</code> property (<code>space</code>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">space</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>space between box symbol and content on
+the left, right, bottom and top sides</p></div></li>
+<li><span><span class="tsd-kind-parameter">topSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= space</span></span><div class="tsd-comment tsd-typography"><p>use when top space between content and
+ box should be different thant <code>space</code> property</p></div></li>
+<li><span><span class="tsd-kind-parameter">rightSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= space</span></span><div class="tsd-comment tsd-typography"><p>use when right space between content and
+ box should be different thant <code>space</code> property</p></div></li>
+<li><span><span class="tsd-kind-parameter">bottomSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= space</span></span><div class="tsd-comment tsd-typography"><p>use when bottom space between content and
+ box should be different thant <code>space</code> property</p></div></li>
+<li><span><span class="tsd-kind-parameter">leftSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= space</span></span><div class="tsd-comment tsd-typography"><p>use when left space between content and
+ box should be different thant <code>space</code> property</p></div></li>
+</ul>
 
 > To test examples, append them to the
 <a href="#drawing-boilerplate">boilerplate</a>
@@ -880,33 +900,35 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">inSize</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: <code>false</code> excludes box symbol from size of
-resulting phrase (<code>true</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">space</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space between content and the symbol (<code>0.03</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">overhang</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: amount symbol extends beyond content (<code>0</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">length</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: total length of symbol (<code>overrides overhang</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">left</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: amount symbol extends beyond content to the left (<code>overrides overhang and length, and only for side 'top' or 'bottom'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">right</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: amount symbol extends beyond content to the right (<code>overrides overhang and length, and only for side 'top' or 'bottom'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">top</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: amount symbol extends beyond content to the top (<code>overrides overhang and length, and only for side 'left' or 'right'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">bottom</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: amount symbol extends beyond content to the
-bottom (<code>overrides overhang and length, and only for side 'left' or
-'right'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">side</span> <span class="fo-prop-type">('left' | 'right' | 'top' | 'bottom'?)</span><span class="fo-prop-desc"> (<code>top</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">minContentHeight</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: custom min content height for auto
-symbol sizing when side is <code>'top'</code> or <code>'bottom'</code></span></div>
-<div class="fo-prop"><span class="fo-prop-name">minContentDescent</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: custom min content descent for auto
-symbol sizing when side is <code>'top'</code> or <code>'bottom'</code></span></div>
-<div class="fo-prop"><span class="fo-prop-name">minContentAscent</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: custom min content ascent for auto
-symbol sizing when side is <code>'top'</code> or <code>'bottom'</code></span></div>
-<div class="fo-prop"><span class="fo-prop-name">descent</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: force descent of symbol when side is <code>'top'</code> or
-<code>'bottom'</code> - height is forced with <code>length</code> property</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fullContentBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: use full bounds of content,
-overriding any <code>inSize=false</code> properties in the content (<code>false</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">useFullBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: make the bounds of this phrase equal to
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">inSize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>false</code> excludes box symbol from size of
+resulting phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">space</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.03</span></span><div class="tsd-comment tsd-typography"><p>space between content and the symbol</p></div></li>
+<li><span><span class="tsd-kind-parameter">overhang</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>amount symbol extends beyond content</p></div></li>
+<li><span><span class="tsd-kind-parameter">length</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= overrides overhang</span></span><div class="tsd-comment tsd-typography"><p>total length of symbol</p></div></li>
+<li><span><span class="tsd-kind-parameter">left</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= overrides overhang and length, and only for side 'top' or 'bottom'</span></span><div class="tsd-comment tsd-typography"><p>amount symbol extends beyond content to the left</p></div></li>
+<li><span><span class="tsd-kind-parameter">right</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= overrides overhang and length, and only for side 'top' or 'bottom'</span></span><div class="tsd-comment tsd-typography"><p>amount symbol extends beyond content to the right</p></div></li>
+<li><span><span class="tsd-kind-parameter">top</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= overrides overhang and length, and only for side 'left' or 'right'</span></span><div class="tsd-comment tsd-typography"><p>amount symbol extends beyond content to the top</p></div></li>
+<li><span><span class="tsd-kind-parameter">bottom</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= overrides overhang and length, and only for side 'left' or
+'right'</span></span><div class="tsd-comment tsd-typography"><p>amount symbol extends beyond content to the
+bottom</p></div></li>
+<li><span><span class="tsd-kind-parameter">side</span>: <span class="tsd-signature-type">'left' | 'right' | 'top' | 'bottom' | undefined</span> <span class="tsd-signature-symbol">= top</span></span></li>
+<li><span><span class="tsd-kind-parameter">minContentHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>custom min content height for auto
+symbol sizing when side is <code>'top'</code> or <code>'bottom'</code></p></div></li>
+<li><span><span class="tsd-kind-parameter">minContentDescent</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>custom min content descent for auto
+symbol sizing when side is <code>'top'</code> or <code>'bottom'</code></p></div></li>
+<li><span><span class="tsd-kind-parameter">minContentAscent</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>custom min content ascent for auto
+symbol sizing when side is <code>'top'</code> or <code>'bottom'</code></p></div></li>
+<li><span><span class="tsd-kind-parameter">descent</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>force descent of symbol when side is <code>'top'</code> or
+<code>'bottom'</code> - height is forced with <code>length</code> property</p></div></li>
+<li><span><span class="tsd-kind-parameter">fullContentBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>use full bounds of content,
+overriding any <code>inSize=false</code> properties in the content</p></div></li>
+<li><span><span class="tsd-kind-parameter">useFullBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>make the bounds of this phrase equal to
 the full bounds of the content even if <code>fullContentBounds=false</code> and the
-brackets only surround a portion of the content (<code>false</code>)</span></div>
+brackets only surround a portion of the content</p></div></li>
+</ul>
 
 #### Simple
 
@@ -992,54 +1014,56 @@ Options can be an object, or an array in the property order below.
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">from</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>?)</span><span class="fo-prop-desc">: bottom limit</span></div>
-<div class="fo-prop"><span class="fo-prop-name">to</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>?)</span><span class="fo-prop-desc">: top limit</span></div>
-<div class="fo-prop"><span class="fo-prop-name">inSize</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: <code>false</code> excludes box symbol from size of
-resulting phrase (<code>true</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">space</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: horizontal space between symbol and content (<code>0.05</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">topSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space between content top and symbol top (<code>0.1</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">bottomSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space between content bottom and symbol bottom (<code>0.1</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">height</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: force height of symbol</span></div>
-<div class="fo-prop"><span class="fo-prop-name">yOffset</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: y offset of symbol (<code>0</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">scale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: content scale (<code>1</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fromScale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: scale of *from* (bottom) limit (<code>0.5</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">toScale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: scale of *to* (top) limit (<code>0.5</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fromOffset</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span><span class="fo-prop-desc">: from limit offest (<code> side:
-[0, 0], topBottom: [0, -0.04], topBottomCenter: [0, -0.04]</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">toOffset</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span><span class="fo-prop-desc">: to limit offest (<code>side: [0, 0]
-topBottom: [0, 0.04], topBottomCenter: [0, 0.04]</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">limitsPosition</span> <span class="fo-prop-type">('side' | 'topBottom' | 'topBottomCenter'?)</span><span class="fo-prop-desc">: limits
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">from</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>bottom limit</p></div></li>
+<li><span><span class="tsd-kind-parameter">to</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>top limit</p></div></li>
+<li><span><span class="tsd-kind-parameter">inSize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>false</code> excludes box symbol from size of
+resulting phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">space</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.05</span></span><div class="tsd-comment tsd-typography"><p>horizontal space between symbol and content</p></div></li>
+<li><span><span class="tsd-kind-parameter">topSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.1</span></span><div class="tsd-comment tsd-typography"><p>space between content top and symbol top</p></div></li>
+<li><span><span class="tsd-kind-parameter">bottomSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.1</span></span><div class="tsd-comment tsd-typography"><p>space between content bottom and symbol bottom</p></div></li>
+<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>force height of symbol</p></div></li>
+<li><span><span class="tsd-kind-parameter">yOffset</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>y offset of symbol</p></div></li>
+<li><span><span class="tsd-kind-parameter">scale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>content scale</p></div></li>
+<li><span><span class="tsd-kind-parameter">fromScale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.5</span></span><div class="tsd-comment tsd-typography"><p>scale of *from* (bottom) limit</p></div></li>
+<li><span><span class="tsd-kind-parameter">toScale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.5</span></span><div class="tsd-comment tsd-typography"><p>scale of *to* (top) limit</p></div></li>
+<li><span><span class="tsd-kind-parameter">fromOffset</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">=  side:
+[0, 0], topBottom: [0, -0.04], topBottomCenter: [0, -0.04]</span></span><div class="tsd-comment tsd-typography"><p>from limit offest</p></div></li>
+<li><span><span class="tsd-kind-parameter">toOffset</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= side: [0, 0]
+topBottom: [0, 0.04], topBottomCenter: [0, 0.04]</span></span><div class="tsd-comment tsd-typography"><p>to limit offest</p></div></li>
+<li><span><span class="tsd-kind-parameter">limitsPosition</span>: <span class="tsd-signature-type">'side' | 'topBottom' | 'topBottomCenter' | undefined</span> <span class="tsd-signature-symbol">= 'side'</span></span><div class="tsd-comment tsd-typography"><p>limits
 relative to symbol. <code>side</code> is to the right of the symbol ends, <code>topBottom</code>
 is above and below the symbol ends and <code>topBottomCenter</code> is above and below
-the integral mid point (<code>'side'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">limitsAroundContent</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: <code>false</code> means content left is
-aligned with furthest right of limits</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fromXPosition</span> <span class="fo-prop-type">('left' | 'center' | 'right' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: x position
-of limit relative to the symbol (<code>side: 0.5, topBottom: 0.1,
-topBottomCenter: 'center'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fromYPositio</span> <span class="fo-prop-type">('bottom' | 'top' | 'middle' | 'baseline' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: y position of the limit relavite to the symbol (<code>'bottom'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fromXAlign</span> <span class="fo-prop-type">('left' | 'center' | 'right' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: limit x
-alignment (<code>side: 'left', topBottom: center,
-topBottomCenter: 'center'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fromYAlign</span> <span class="fo-prop-type">('bottom' | 'top' | 'middle' | 'baseline' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: limit y alignment (<code>side: 'middle', topBottom: 'top',
-topBottomCenter: 'top'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">toXPosition</span> <span class="fo-prop-type">('left' | 'center' | 'right' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: x position
-of limit relative to the symbol (<code>side: 'right', topBottom: 0.9,
-topBottomCenter: 'center'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">toYPosition</span> <span class="fo-prop-type">('bottom' | 'top' | 'middle' | 'baseline' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: y position of the limit relavite to the symbol (<code>side: 'top',
-topBottom: top, topBottomCenter: 'top'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">toXAlign</span> <span class="fo-prop-type">('left' | 'center' | 'right' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: limit x
-alignment (<code>side: 'left', topBottom: center,
-topBottomCenter: 'center'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">toYAlign</span> <span class="fo-prop-type">('bottom' | 'top' | 'middle' | 'baseline' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: limit y alignment (<code>side: 'middle', topBottom: bottom,
-topBottomCenter: 'bottom'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fullContentBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: use full bounds of content,
-overriding any <code>inSize=false</code> properties in the content (<code>false</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">useFullBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: make the bounds of this phrase equal to
+the integral mid point</p></div></li>
+<li><span><span class="tsd-kind-parameter">limitsAroundContent</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p><code>false</code> means content left is
+aligned with furthest right of limits</p></div></li>
+<li><span><span class="tsd-kind-parameter">fromXPosition</span>: <span class="tsd-signature-type">'left' | 'center' | 'right' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= side: 0.5, topBottom: 0.1,
+topBottomCenter: 'center'</span></span><div class="tsd-comment tsd-typography"><p>x position
+of limit relative to the symbol</p></div></li>
+<li><span><span class="tsd-kind-parameter">fromYPositio</span>: <span class="tsd-signature-type">'bottom' | 'top' | 'middle' | 'baseline' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 'bottom'</span></span><div class="tsd-comment tsd-typography"><p>y position of the limit relavite to the symbol</p></div></li>
+<li><span><span class="tsd-kind-parameter">fromXAlign</span>: <span class="tsd-signature-type">'left' | 'center' | 'right' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= side: 'left', topBottom: center,
+topBottomCenter: 'center'</span></span><div class="tsd-comment tsd-typography"><p>limit x
+alignment</p></div></li>
+<li><span><span class="tsd-kind-parameter">fromYAlign</span>: <span class="tsd-signature-type">'bottom' | 'top' | 'middle' | 'baseline' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= side: 'middle', topBottom: 'top',
+topBottomCenter: 'top'</span></span><div class="tsd-comment tsd-typography"><p>limit y alignment</p></div></li>
+<li><span><span class="tsd-kind-parameter">toXPosition</span>: <span class="tsd-signature-type">'left' | 'center' | 'right' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= side: 'right', topBottom: 0.9,
+topBottomCenter: 'center'</span></span><div class="tsd-comment tsd-typography"><p>x position
+of limit relative to the symbol</p></div></li>
+<li><span><span class="tsd-kind-parameter">toYPosition</span>: <span class="tsd-signature-type">'bottom' | 'top' | 'middle' | 'baseline' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= side: 'top',
+topBottom: top, topBottomCenter: 'top'</span></span><div class="tsd-comment tsd-typography"><p>y position of the limit relavite to the symbol</p></div></li>
+<li><span><span class="tsd-kind-parameter">toXAlign</span>: <span class="tsd-signature-type">'left' | 'center' | 'right' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= side: 'left', topBottom: center,
+topBottomCenter: 'center'</span></span><div class="tsd-comment tsd-typography"><p>limit x
+alignment</p></div></li>
+<li><span><span class="tsd-kind-parameter">toYAlign</span>: <span class="tsd-signature-type">'bottom' | 'top' | 'middle' | 'baseline' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= side: 'middle', topBottom: bottom,
+topBottomCenter: 'bottom'</span></span><div class="tsd-comment tsd-typography"><p>limit y alignment</p></div></li>
+<li><span><span class="tsd-kind-parameter">fullContentBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>use full bounds of content,
+overriding any <code>inSize=false</code> properties in the content</p></div></li>
+<li><span><span class="tsd-kind-parameter">useFullBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>make the bounds of this phrase equal to
 the full bounds of the content even if <code>fullContentBounds=false</code> and the
-brackets only surround a portion of the content (<code>false</code>)</span></div>
+brackets only surround a portion of the content</p></div></li>
+</ul>
 
 #### Simple
 
@@ -1119,29 +1143,31 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">from</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">to</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">inSize</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: <code>false</code> excludes sum of operator from size of
-resulting phrase (<code>true</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">space</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: horiztonaly space between symbol and content (<code>0.1</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">topSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space symbol extends above content top (<code>0.07</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">bottomSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space symbol extends below content bottom (<code>0.07</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">height</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: force height of symbol overwriting <code>topSpace</code></span></div>
-<div class="fo-prop"><span class="fo-prop-name">yOffset</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: offset of symbol in y (<code>0</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">scale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: content scale (<code>1</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fromScale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: scale of *from* phrase (<code>0.5</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">toScale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: scale of *to* phrase (<code>0.5</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fromSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space between symbol and <code>from</code> phrase (<code>0.04</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">toSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space between symbol and <code>to</code> phrase (<code>0.04</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fromOffset</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span><span class="fo-prop-desc">: offset of <code>from</code> phrase (<code>[0, 0]</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">toOffset</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span><span class="fo-prop-desc">: offset of <code>to</code> phrase (<code>[0, 0]</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fullContentBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: use full bounds of content,
-overriding any <code>inSize=false</code> properties in the content (<code>false</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">useFullBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: make the bounds of this phrase equal to
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">from</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">to</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">inSize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>false</code> excludes sum of operator from size of
+resulting phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">space</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.1</span></span><div class="tsd-comment tsd-typography"><p>horiztonaly space between symbol and content</p></div></li>
+<li><span><span class="tsd-kind-parameter">topSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.07</span></span><div class="tsd-comment tsd-typography"><p>space symbol extends above content top</p></div></li>
+<li><span><span class="tsd-kind-parameter">bottomSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.07</span></span><div class="tsd-comment tsd-typography"><p>space symbol extends below content bottom</p></div></li>
+<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>force height of symbol overwriting <code>topSpace</code></p></div></li>
+<li><span><span class="tsd-kind-parameter">yOffset</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>offset of symbol in y</p></div></li>
+<li><span><span class="tsd-kind-parameter">scale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>content scale</p></div></li>
+<li><span><span class="tsd-kind-parameter">fromScale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.5</span></span><div class="tsd-comment tsd-typography"><p>scale of *from* phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">toScale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.5</span></span><div class="tsd-comment tsd-typography"><p>scale of *to* phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">fromSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.04</span></span><div class="tsd-comment tsd-typography"><p>space between symbol and <code>from</code> phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">toSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.04</span></span><div class="tsd-comment tsd-typography"><p>space between symbol and <code>to</code> phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">fromOffset</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= [0, 0]</span></span><div class="tsd-comment tsd-typography"><p>offset of <code>from</code> phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">toOffset</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= [0, 0]</span></span><div class="tsd-comment tsd-typography"><p>offset of <code>to</code> phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">fullContentBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>use full bounds of content,
+overriding any <code>inSize=false</code> properties in the content</p></div></li>
+<li><span><span class="tsd-kind-parameter">useFullBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>make the bounds of this phrase equal to
 the full bounds of the content even if <code>fullContentBounds=false</code> and the
-brackets only surround a portion of the content (<code>false</code>)</span></div>
+brackets only surround a portion of the content</p></div></li>
+</ul>
 
 #### Simple
 
@@ -1217,29 +1243,31 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">from</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">to</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>?)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">inSize</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: <code>false</code> excludes product of operator from size of
-resulting phrase (<code>true</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">space</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: horiztonaly space between symbol and content (<code>0.1</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">topSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space symbol extends above content top (<code>0.07</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">bottomSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space symbol extends below content bottom (<code>0.07</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">height</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: force height of symbol overwriting <code>topSpace</code></span></div>
-<div class="fo-prop"><span class="fo-prop-name">yOffset</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: offset of symbol in y (<code>0</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">scale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: content scale (<code>1</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fromScale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: scale of *from* phrase (<code>0.5</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">toScale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: scale of *to* phrase (<code>0.5</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fromSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space between symbol and <code>from</code> phrase (<code>0.04</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">toSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space between symbol and <code>to</code> phrase (<code>0.04</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fromOffset</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span><span class="fo-prop-desc">: offset of <code>from</code> phrase (<code>[0, 0]</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">toOffset</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span><span class="fo-prop-desc">: offset of <code>to</code> phrase (<code>[0, 0]</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fullContentBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: use full bounds of content,
-overriding any <code>inSize=false</code> properties in the content (<code>false</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">useFullBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: make the bounds of this phrase equal to
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">from</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">to</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">inSize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>false</code> excludes product of operator from size of
+resulting phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">space</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.1</span></span><div class="tsd-comment tsd-typography"><p>horiztonaly space between symbol and content</p></div></li>
+<li><span><span class="tsd-kind-parameter">topSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.07</span></span><div class="tsd-comment tsd-typography"><p>space symbol extends above content top</p></div></li>
+<li><span><span class="tsd-kind-parameter">bottomSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.07</span></span><div class="tsd-comment tsd-typography"><p>space symbol extends below content bottom</p></div></li>
+<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>force height of symbol overwriting <code>topSpace</code></p></div></li>
+<li><span><span class="tsd-kind-parameter">yOffset</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>offset of symbol in y</p></div></li>
+<li><span><span class="tsd-kind-parameter">scale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>content scale</p></div></li>
+<li><span><span class="tsd-kind-parameter">fromScale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.5</span></span><div class="tsd-comment tsd-typography"><p>scale of *from* phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">toScale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.5</span></span><div class="tsd-comment tsd-typography"><p>scale of *to* phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">fromSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.04</span></span><div class="tsd-comment tsd-typography"><p>space between symbol and <code>from</code> phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">toSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.04</span></span><div class="tsd-comment tsd-typography"><p>space between symbol and <code>to</code> phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">fromOffset</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= [0, 0]</span></span><div class="tsd-comment tsd-typography"><p>offset of <code>from</code> phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">toOffset</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= [0, 0]</span></span><div class="tsd-comment tsd-typography"><p>offset of <code>to</code> phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">fullContentBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>use full bounds of content,
+overriding any <code>inSize=false</code> properties in the content</p></div></li>
+<li><span><span class="tsd-kind-parameter">useFullBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>make the bounds of this phrase equal to
 the full bounds of the content even if <code>fullContentBounds=false</code> and the
-brackets only surround a portion of the content (<code>false</code>)</span></div>
+brackets only surround a portion of the content</p></div></li>
+</ul>
 
 #### Simple
 
@@ -1312,12 +1340,14 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">subscript</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">scale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: scale of subscript (<code>0.5</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">offset</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span><span class="fo-prop-desc">: offset of subscript (<code>[0, 0]</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">inSize</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: <code>true</code> excludes subscript from size of
-resulting phrase (<code>true</code>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">subscript</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">scale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.5</span></span><div class="tsd-comment tsd-typography"><p>scale of subscript</p></div></li>
+<li><span><span class="tsd-kind-parameter">offset</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= [0, 0]</span></span><div class="tsd-comment tsd-typography"><p>offset of subscript</p></div></li>
+<li><span><span class="tsd-kind-parameter">inSize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>true</code> excludes subscript from size of
+resulting phrase</p></div></li>
+</ul>
 
 #### Simple
 
@@ -1382,12 +1412,14 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">superscript</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">scale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: scale of superscript (<code>0.5</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">offset</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span><span class="fo-prop-desc">: offset of superscript (<code>[0, 0]</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">inSize</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: <code>true</code> excludes superscript from size of
-resulting phrase (<code>true</code>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">superscript</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">scale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.5</span></span><div class="tsd-comment tsd-typography"><p>scale of superscript</p></div></li>
+<li><span><span class="tsd-kind-parameter">offset</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= [0, 0]</span></span><div class="tsd-comment tsd-typography"><p>offset of superscript</p></div></li>
+<li><span><span class="tsd-kind-parameter">inSize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>true</code> excludes superscript from size of
+resulting phrase</p></div></li>
+</ul>
 
 #### Simple
 
@@ -1444,14 +1476,16 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">superscript</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">subscript</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">scale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: scale of superscript (<code>0.5</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">superscriptOffset</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span><span class="fo-prop-desc">: offset of superscript (<code>[0, 0]</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">subscriptOffset</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span><span class="fo-prop-desc">: offset of subscript (<code>[0, 0]</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">inSize</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: <code>true</code> excludes superscript from size of
-resulting phrase (<code>true</code>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">superscript</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">subscript</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">scale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.5</span></span><div class="tsd-comment tsd-typography"><p>scale of superscript</p></div></li>
+<li><span><span class="tsd-kind-parameter">superscriptOffset</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= [0, 0]</span></span><div class="tsd-comment tsd-typography"><p>offset of superscript</p></div></li>
+<li><span><span class="tsd-kind-parameter">subscriptOffset</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= [0, 0]</span></span><div class="tsd-comment tsd-typography"><p>offset of subscript</p></div></li>
+<li><span><span class="tsd-kind-parameter">inSize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>true</code> excludes superscript from size of
+resulting phrase</p></div></li>
+</ul>
 
 #### Simple
 
@@ -1509,23 +1543,25 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">comment</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</span><span class="fo-prop-desc">: optional symbol between content and comment</span></div>
-<div class="fo-prop"><span class="fo-prop-name">contentSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space from content to symbol (<code>0.03</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">commentSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space from symbol to comment (<code>0.03</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">contentLineSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space between a line symbol and
-content (<code>0.03</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">commentLineSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space between a line symbol and
-comment (<code>0.03</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">scale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: comment scale (<code>0.6</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">inSize</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: <code>false</code> excludes the symbol and comment from
-thre resulting size of the equation phrase (<code>true</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fullContentBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: use full bounds of content,
-overriding any <code>inSize=false</code> properties in the content (<code>false</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">useFullBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: make the bounds of this phrase equal to
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">comment</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>optional symbol between content and comment</p></div></li>
+<li><span><span class="tsd-kind-parameter">contentSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.03</span></span><div class="tsd-comment tsd-typography"><p>space from content to symbol</p></div></li>
+<li><span><span class="tsd-kind-parameter">commentSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.03</span></span><div class="tsd-comment tsd-typography"><p>space from symbol to comment</p></div></li>
+<li><span><span class="tsd-kind-parameter">contentLineSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.03</span></span><div class="tsd-comment tsd-typography"><p>space between a line symbol and
+content</p></div></li>
+<li><span><span class="tsd-kind-parameter">commentLineSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.03</span></span><div class="tsd-comment tsd-typography"><p>space between a line symbol and
+comment</p></div></li>
+<li><span><span class="tsd-kind-parameter">scale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.6</span></span><div class="tsd-comment tsd-typography"><p>comment scale</p></div></li>
+<li><span><span class="tsd-kind-parameter">inSize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>false</code> excludes the symbol and comment from
+thre resulting size of the equation phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">fullContentBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>use full bounds of content,
+overriding any <code>inSize=false</code> properties in the content</p></div></li>
+<li><span><span class="tsd-kind-parameter">useFullBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>make the bounds of this phrase equal to
 the full bounds of the content even if <code>fullContentBounds=false</code> and the
-brackets only surround a portion of the content (<code>false</code>)</span></div>
+brackets only surround a portion of the content</p></div></li>
+</ul>
 
 #### Simple
 
@@ -1608,15 +1644,17 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">symbol</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</span><span class="fo-prop-desc">: strike symbol</span></div>
-<div class="fo-prop"><span class="fo-prop-name">comment</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">inSize</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: <code>false</code> excludes the symbol and comment from
-thre resulting size of the equation phrase (<code>true</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">space</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: top, right, bottom and left extension of symbol
-beyond content (<code>0.03</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">scale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: comment scale (<code>0.6</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">commentSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: space from symbol to comment (<code>0.03</code>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a></span></span><div class="tsd-comment tsd-typography"><p>strike symbol</p></div></li>
+<li><span><span class="tsd-kind-parameter">comment</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">inSize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>false</code> excludes the symbol and comment from
+thre resulting size of the equation phrase</p></div></li>
+<li><span><span class="tsd-kind-parameter">space</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.03</span></span><div class="tsd-comment tsd-typography"><p>top, right, bottom and left extension of symbol
+beyond content</p></div></li>
+<li><span><span class="tsd-kind-parameter">scale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.6</span></span><div class="tsd-comment tsd-typography"><p>comment scale</p></div></li>
+<li><span><span class="tsd-kind-parameter">commentSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.03</span></span><div class="tsd-comment tsd-typography"><p>space from symbol to comment</p></div></li>
+</ul>
 
 #### Simple
 
@@ -1692,11 +1730,13 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">top</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">right</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">bottom</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">left</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc"> (<code>0</code>)</span></div>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">top</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span></li>
+<li><span><span class="tsd-kind-parameter">right</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span></li>
+<li><span><span class="tsd-kind-parameter">bottom</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span></li>
+<li><span><span class="tsd-kind-parameter">left</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span></li>
+</ul>
 
 #### Simple
 
@@ -1759,26 +1799,28 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">order</span> <span class="fo-prop-type">([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]?)</span><span class="fo-prop-desc"> (<code>[1, length-of-content]</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">left</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</span><span class="fo-prop-desc">: left bracket symbol</span></div>
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>>?)</span><span class="fo-prop-desc">: Array of equation phrases
-where each element is a matrix element</span></div>
-<div class="fo-prop"><span class="fo-prop-name">right</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</span><span class="fo-prop-desc">: right bracket symbol</span></div>
-<div class="fo-prop"><span class="fo-prop-name">scale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: scale of matrix elements (<code>0.7</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fit</span> <span class="fo-prop-type">('max' | 'min' | <a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span><span class="fo-prop-desc">: cell size -
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">order</span>: <span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>] | undefined</span> <span class="tsd-signature-symbol">= [1, length-of-content]</span></span></li>
+<li><span><span class="tsd-kind-parameter">left</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>left bracket symbol</p></div></li>
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a>> | undefined</span></span><div class="tsd-comment tsd-typography"><p>Array of equation phrases
+where each element is a matrix element</p></div></li>
+<li><span><span class="tsd-kind-parameter">right</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>right bracket symbol</p></div></li>
+<li><span><span class="tsd-kind-parameter">scale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.7</span></span><div class="tsd-comment tsd-typography"><p>scale of matrix elements</p></div></li>
+<li><span><span class="tsd-kind-parameter">fit</span>: <span class="tsd-signature-type">'max' | 'min' | <a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= 'min'</span></span><div class="tsd-comment tsd-typography"><p>cell size -
 <code>min</code> each cell is a rectangle with width equal to largest width in its
 column, and height equal to largest height in its row - <code>max</code>
 all cells are a square with dimension equal to the largest dimension of the
 largest cell - <code>point</code> all cells are a rectangle with width as point.x and
 height as point.y - note - <code>max</code> and <code>point</code> only work with
-<code>yAlign</code>=<code>'middle'</code> (<code>'min'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">space</span> <span class="fo-prop-type">(<a href="../types/geometry_Point.TypeParsablePoint.html">TypeParsablePoint</a>?)</span><span class="fo-prop-desc">: space between each cell (<code>[0.05, 0.05]</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">yAlign</span> <span class="fo-prop-type">('baseline' | 'middle'?)</span><span class="fo-prop-desc">: align cells in a row with the
-text baseline, or middle of the cell (<code>baseline</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">brac</span> <span class="fo-prop-type">(<a href="../interfaces/Equation_EquationFunctions.EQN_Bracket.html">EQN_Bracket</a>?)</span><span class="fo-prop-desc">: bracket options not including
-the symbols (<code>{}</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fullContentBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: use full bounds of content,
-overriding any <code>inSize=false</code> properties in the content (<code>false</code>)</span></div>
+<code>yAlign</code>=<code>'middle'</code></p></div></li>
+<li><span><span class="tsd-kind-parameter">space</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= [0.05, 0.05]</span></span><div class="tsd-comment tsd-typography"><p>space between each cell</p></div></li>
+<li><span><span class="tsd-kind-parameter">yAlign</span>: <span class="tsd-signature-type">'baseline' | 'middle' | undefined</span> <span class="tsd-signature-symbol">= baseline</span></span><div class="tsd-comment tsd-typography"><p>align cells in a row with the
+text baseline, or middle of the cell</p></div></li>
+<li><span><span class="tsd-kind-parameter">brac</span>: <span class="tsd-signature-type"><a href="../interfaces/Equation_EquationFunctions.EQN_Bracket.html" class="tsd-signature-type">EQN_Bracket</a> | undefined</span> <span class="tsd-signature-symbol">= {}</span></span><div class="tsd-comment tsd-typography"><p>bracket options not including
+the symbols</p></div></li>
+<li><span><span class="tsd-kind-parameter">fullContentBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>use full bounds of content,
+overriding any <code>inSize=false</code> properties in the content</p></div></li>
+</ul>
 
 #### Simple
 
@@ -1888,20 +1930,22 @@ or as the space between line baselines.
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="../interfaces/Equation_EquationFunctions.EQN_Line.html">EQN_Line</a> | <a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>>)</span><span class="fo-prop-desc">: Array of equation
-phrases or equation line objects</span></div>
-<div class="fo-prop"><span class="fo-prop-name">justify</span> <span class="fo-prop-type">('left' | 'center' | 'right' | 'element'?)</span><span class="fo-prop-desc">: how to align
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../interfaces/Equation_EquationFunctions.EQN_Line.html" class="tsd-signature-type">EQN_Line</a> | <a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a>></span></span><div class="tsd-comment tsd-typography"><p>Array of equation
+phrases or equation line objects</p></div></li>
+<li><span><span class="tsd-kind-parameter">justify</span>: <span class="tsd-signature-type">'left' | 'center' | 'right' | 'element' | undefined</span> <span class="tsd-signature-symbol">= 'left'</span></span><div class="tsd-comment tsd-typography"><p>how to align
 the lines in x. Use 'element' to align the lines with a specific element
-from each line (that is defined with the <code>justify</code> property in each line) (<code>'left'</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">baselineSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null?)</span><span class="fo-prop-desc">: default space between baselines
-of lines. If not <code>null</code> then will override <code>space</code> (<code>null</code>).</span></div>
-<div class="fo-prop"><span class="fo-prop-name">space</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: default space between descent of one line and
-ascent of the next line (<code>0</code>).</span></div>
-<div class="fo-prop"><span class="fo-prop-name">yAlign</span> <span class="fo-prop-type">('bottom' | 'middle' | 'top' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: How to align the
+from each line (that is defined with the <code>justify</code> property in each line)</p></div></li>
+<li><span><span class="tsd-kind-parameter">baselineSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | null | undefined</span></span><div class="tsd-comment tsd-typography"><p>default space between baselines
+of lines. If not <code>null</code> then will override <code>space</code> (<code>null</code>).</p></div></li>
+<li><span><span class="tsd-kind-parameter">space</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>default space between descent of one line and
+ascent of the next line (<code>0</code>).</p></div></li>
+<li><span><span class="tsd-kind-parameter">yAlign</span>: <span class="tsd-signature-type">'bottom' | 'middle' | 'top' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>How to align the
 lines in y. <code>number</code> can be any line index, and it will align the baseline
-of that line. So, using <code>0</code> will align the first line's baseline. (<code>0</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fullContentBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: use full bounds of content,
-overriding any <code>inSize=false</code> properties in the content (<code>false</code>)</span></div>
+of that line. So, using <code>0</code> will align the first line's baseline.</p></div></li>
+<li><span><span class="tsd-kind-parameter">fullContentBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>use full bounds of content,
+overriding any <code>inSize=false</code> properties in the content</p></div></li>
+</ul>
 
 #### Two lines, array definition
 
@@ -2026,28 +2070,30 @@ Options can *only* be an object.
 
 ### Properties
 
-<div class="fo-prop"><span class="fo-prop-name">content</span> <span class="fo-prop-type">(<a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html">TypeEquationPhrase</a>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">annotation</span> <span class="fo-prop-type">(<a href="../interfaces/Equation_EquationFunctions.EQN_Annotation.html">EQN_Annotation</a>?)</span><span class="fo-prop-desc">: use for just one annotation</span></div>
-<div class="fo-prop"><span class="fo-prop-name">annotations</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a><<a href="../interfaces/Equation_EquationFunctions.EQN_Annotation.html">EQN_Annotation</a>>?)</span><span class="fo-prop-desc">: use for multiple annotations</span></div>
-<div class="fo-prop"><span class="fo-prop-name">inSize</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: <code>true</code> means resulting size includes
-annotations (<code>true</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">space</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: extend resulting equation phrase size by space on
-top, right, bottom and left sides (<code>0</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">topSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: extend resulting equation phrase size by space
-on top</span></div>
-<div class="fo-prop"><span class="fo-prop-name">bottomSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: extend resulting equation phrase size by
-space on bottom</span></div>
-<div class="fo-prop"><span class="fo-prop-name">leftSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: extend resulting equation phrase size by space
-on left</span></div>
-<div class="fo-prop"><span class="fo-prop-name">rightSpace</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: extend resulting equation phrase size by
-space on right</span></div>
-<div class="fo-prop"><span class="fo-prop-name">contentScale</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</span><span class="fo-prop-desc">: scale content (<code>1</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">glyphs</span> <span class="fo-prop-type">(<a href="../interfaces/Equation_EquationFunctions.EQN_Glyphs.html">EQN_Glyphs</a>?)</span><span class="fo-prop-desc">: glyphs to annotate content with</span></div>
-<div class="fo-prop"><span class="fo-prop-name">fullContentBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: use full bounds of content,
-overriding any <code>inSize=false</code> properties in the content (<code>false</code>)</span></div>
-<div class="fo-prop"><span class="fo-prop-name">useFullBounds</span> <span class="fo-prop-type">(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</span><span class="fo-prop-desc">: make the bounds of this phrase equal to
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">annotation</span>: <span class="tsd-signature-type"><a href="../interfaces/Equation_EquationFunctions.EQN_Annotation.html" class="tsd-signature-type">EQN_Annotation</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>use for just one annotation</p></div></li>
+<li><span><span class="tsd-kind-parameter">annotations</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../interfaces/Equation_EquationFunctions.EQN_Annotation.html" class="tsd-signature-type">EQN_Annotation</a>> | undefined</span></span><div class="tsd-comment tsd-typography"><p>use for multiple annotations</p></div></li>
+<li><span><span class="tsd-kind-parameter">inSize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>true</code> means resulting size includes
+annotations</p></div></li>
+<li><span><span class="tsd-kind-parameter">space</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>extend resulting equation phrase size by space on
+top, right, bottom and left sides</p></div></li>
+<li><span><span class="tsd-kind-parameter">topSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>extend resulting equation phrase size by space
+on top</p></div></li>
+<li><span><span class="tsd-kind-parameter">bottomSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>extend resulting equation phrase size by
+space on bottom</p></div></li>
+<li><span><span class="tsd-kind-parameter">leftSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>extend resulting equation phrase size by space
+on left</p></div></li>
+<li><span><span class="tsd-kind-parameter">rightSpace</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>extend resulting equation phrase size by
+space on right</p></div></li>
+<li><span><span class="tsd-kind-parameter">contentScale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>scale content</p></div></li>
+<li><span><span class="tsd-kind-parameter">glyphs</span>: <span class="tsd-signature-type"><a href="../interfaces/Equation_EquationFunctions.EQN_Glyphs.html" class="tsd-signature-type">EQN_Glyphs</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>glyphs to annotate content with</p></div></li>
+<li><span><span class="tsd-kind-parameter">fullContentBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>use full bounds of content,
+overriding any <code>inSize=false</code> properties in the content</p></div></li>
+<li><span><span class="tsd-kind-parameter">useFullBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>make the bounds of this phrase equal to
 the full bounds of the content even if <code>fullContentBounds=false</code> and the
-brackets only surround a portion of the content (<code>false</code>)</span></div>
+brackets only surround a portion of the content</p></div></li>
+</ul>
 
 #### Some different annotation examples
 
