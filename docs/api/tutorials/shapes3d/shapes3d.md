@@ -41,7 +41,7 @@ While {@link Point}, {@link Line} and {@link Rect} are used to define most geome
 
 A plane is defined as a position and a normal vector to the plane.
 
-![](./tutorials/shapes3d/plane.png)
+![](./plane.png)
 
 ```js
 // Create an XZ plane at [0, 0, 0] (the normal is thus along the y axis)
@@ -97,7 +97,7 @@ The camera is the observer of the scene. `Scene.camera` defines how we are looki
 * `lookAt` - where the camera is looking at
 * `up` - which direction is up for the camera
 
-![](./tutorials/shapes3d/camera.png)
+![](./camera.png)
 
 ##### Projection
 
@@ -141,7 +141,7 @@ c2.scene = new Fig.Scene({
   fieldOfView: 1.7,
 }); -->
 
-![](./tutorials/shapes3d/projection.png)
+![](./projection.png)
 
 
 ##### Orthographic Projection
@@ -149,7 +149,7 @@ Depending on the style of projection, the expanse of space to be captured in the
 
 For orthographic projection, adding `near` and `far` to `left`, `right`, `bottom`, and `top` creates a rectangular prism in front of the camera. Any shapes (or portions of shapes) within this prism will be shown. The property names are relative to the camera. `camera.lookAt` will be a normal to the near and far sides of the prism. `camera.up` will orient the the `top` of the prism. `camera.position` and `near` will then position the prism while `far` will give it depth.
 
-![](./tutorials/shapes3d/orthographic.jpg)
+![](./orthographic.jpg)
 
 ##### Perspective Projection
 
@@ -160,23 +160,23 @@ These same properties cannot be used for perspective projection because size cha
 * `near`: the closest visible point to the camera
 * `far`: the furthest visible point to the camera
 
-![](./tutorials/shapes3d/perspective.jpg)
+![](./perspective.jpg)
 
 ##### Light
 
 Light is an important factor in vizualizing 3D. If all surfaces of an object are illuminated equally (no lighting modifier, or ambient light), then different faces or curvature of the surface will be indistinguishable. The image will look flat.
 
-![](./tutorials/shapes3d/lightvsnolight.png)
+![](./lightvsnolight.png)
 
 FigureOne lighting is a color modifier based on the amount of light reflected from a surface. If all light is reflected from a surface, then the surface color will be the original color. If only a portion of light is reflected from the surface, then the surface color will be a darker form of the original color.
 
 The amount of light reflected from a surface is a function of the direction of the light relative to the surface, and whether the surface faces the light source or not. The direction the surface faces is the direction of its normal.
 
-![](./tutorials/shapes3d/lightincidence.png)
+![](./lightincidence.png)
 
 If **L** is the normalized light incidence vector and **n** is the normalized surface normal, then the color modifier *m* is given by:
 
-![](./tutorials/shapes3d/lighteqn.png)
+![](./lighteqn.png)
 
 Where *m* will be a value between 0 (no light) and 1 (full light), and *a* is the ambient light (also between 0 and 1) and is the minimum amount of light that each surface will reflect.
 
@@ -194,7 +194,7 @@ FigureOne provides four simple lighting options:
 * *directional light*: All surfaces of a shape use the same light incidence vector **L**. This is similar to a plane  of light coming from a single direction. The direciton light vector definition points toward the light source.
 * *point light*: All surfaces of a shape use a **L** equal to the vector between the point source and the surface position.
 
-![](./tutorials/shapes3d/light.png)
+![](./light.png)
 
 As an example, let's create a cube with directional lighting. The light source will be predominantly from the x direction, and so the +x face of the cube will be brightest.
 
@@ -218,7 +218,7 @@ figure.add(
 );
 ```
 
-![](./tutorials/shapes3d/cube.png)
+![](./cube.png)
 
 
 #### Rotation
@@ -253,7 +253,7 @@ cube.animations.new()
   .start();
 ```
 
-![](./tutorials/shapes3d/rotation.gif)
+![](./rotation.gif)
 
 
 #### <a id="shapes3d-boilerplate"></a> 3D Shape Primitives Boilerplate

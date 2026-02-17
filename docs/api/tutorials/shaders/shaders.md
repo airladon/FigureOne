@@ -11,11 +11,11 @@ It is not in the scope of this API reference to explain what WebGL is, and how t
 
 For more detailed information on how to create a FigureOne {@link OBJ_GenericGL}, and customize shaders and buffers see [this tutorial](https://github.com/airladon/FigureOne/tree/main/docs/tutorials/19%20-%20Performance%20Optimization).
 
-![](../tutorials/19%20-%20Performance%20Optimization/08%20custom%20shader/example.gif)
+![](../../../tutorials/19%20-%20Performance%20Optimization/08%20custom%20shader/example.gif)
 
 Another example of a {@link OBJ_GenericGL} in action is from the FigureOne examples [here](https://github.com/airladon/FigureOne/tree/main/docs/examples/Electric%20Field/).
 
-![](../examples/Electric%20Field/example.gif)
+![](../../../examples/Electric%20Field/example.gif)
 
 
 

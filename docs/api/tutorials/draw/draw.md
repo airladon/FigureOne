@@ -92,7 +92,7 @@ To use the generic method however, it is important to understand how WebGL uses 
 
 Any shape approximated with triangles. For instance, the figure below shows a rectangle broken into two triangles with vertices labeled.
 
-<p style="text-align: center"><img src="./tutorials/draw/rect.png"></p>
+<p style="text-align: center"><img src="./rect.png"></p>
 
 To draw this shape, you would need to draw the two triangles, which means drawing 6 vertices:
 * 1, 2, 3
@@ -136,7 +136,7 @@ This method works well for continuous shapes, but will not work for shapes that 
 
 A good example of a shape that works with `'STRIP'` is below. The vertices are labeled in the order they would be defined.
 
-<p style="text-align: center"><img src="./tutorials/draw/strip.png"></p>
+<p style="text-align: center"><img src="./strip.png"></p>
 
 ##### drawType: 'FAN'
 
@@ -159,11 +159,11 @@ figure.add({
 
 This method works for any shape that can be broken into triangles that all share a common point. For example:
 
-<p style="text-align: center"><img src="./tutorials/draw/fan.png"></p>
+<p style="text-align: center"><img src="./fan.png"></p>
 
 Note, `'STRIP'` can create any shape `'FAN'` can, but it can be a little more involved. For instance, the shape above would need to duplicate one of the vertices to fully fill it:
 
-<p style="text-align: center"><img src="./tutorials/draw/strip-fan.png"></p>
+<p style="text-align: center"><img src="./strip-fan.png"></p>
 
 ##### drawType: 'LINES'
 

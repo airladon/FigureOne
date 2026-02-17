@@ -15,7 +15,7 @@
 <h5 id="plane" class="tsd-anchor-link">Plane<a href="#plane" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h5>
 <p>While  Point,  Line and  Rect are used to define most geometries in two dimensions, a  Plane is required for some three dimensional definitions.</p>
 <p>A plane is defined as a position and a normal vector to the plane.</p>
-<p><img src="./tutorials/shapes3d/plane.png" alt=""></p>
+<p><img src="../media/plane.png" alt=""></p>
 <pre><code class="js"><span class="hl-10">// Create an XZ plane at [0, 0, 0] (the normal is thus along the y axis)</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">p</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">Plane</span><span class="hl-5">([</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">], [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">]);</span>
 </code><button type="button">Copy</button></pre>
 
@@ -64,7 +64,7 @@
 <li><code>lookAt</code> - where the camera is looking at</li>
 <li><code>up</code> - which direction is up for the camera</li>
 </ul>
-<p><img src="./tutorials/shapes3d/camera.png" alt=""></p>
+<p><img src="../media/camera.png" alt=""></p>
 <h5 id="projection" class="tsd-anchor-link">Projection<a href="#projection" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h5>
 <p>Setting up the camera defines how we are looking at the 3D space. We then need to project what we are looking at into two dimensions for the screen.</p>
 <p>In three dimensions, some objects will be closer to the camera and others further away.</p>
@@ -103,11 +103,11 @@ c2.scene = new Fig.Scene({
   aspectRatio: 2,
   fieldOfView: 1.7,
 }); -->
-<p><img src="./tutorials/shapes3d/projection.png" alt=""></p>
+<p><img src="../media/projection.png" alt=""></p>
 <h5 id="orthographic-projection" class="tsd-anchor-link">Orthographic Projection<a href="#orthographic-projection" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h5>
 <p>Depending on the style of projection, the expanse of space to be captured in the projection can be defined.</p>
 <p>For orthographic projection, adding <code>near</code> and <code>far</code> to <code>left</code>, <code>right</code>, <code>bottom</code>, and <code>top</code> creates a rectangular prism in front of the camera. Any shapes (or portions of shapes) within this prism will be shown. The property names are relative to the camera. <code>camera.lookAt</code> will be a normal to the near and far sides of the prism. <code>camera.up</code> will orient the the <code>top</code> of the prism. <code>camera.position</code> and <code>near</code> will then position the prism while <code>far</code> will give it depth.</p>
-<p><img src="./tutorials/shapes3d/orthographic.jpg" alt=""></p>
+<p><img src="../media/orthographic.jpg" alt=""></p>
 <h5 id="perspective-projection" class="tsd-anchor-link">Perspective Projection<a href="#perspective-projection" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h5>
 <p>These same properties cannot be used for perspective projection because size changes with distance from camera. For example the width <code>left</code> and <code>right</code> will be different closer to the camera compared with further away. Therefore, a frustum is used to define visible space with the properties:</p>
 <ul>
@@ -116,15 +116,15 @@ c2.scene = new Fig.Scene({
 <li><code>near</code>: the closest visible point to the camera</li>
 <li><code>far</code>: the furthest visible point to the camera</li>
 </ul>
-<p><img src="./tutorials/shapes3d/perspective.jpg" alt=""></p>
+<p><img src="../media/perspective.jpg" alt=""></p>
 <h5 id="light" class="tsd-anchor-link">Light<a href="#light" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h5>
 <p>Light is an important factor in vizualizing 3D. If all surfaces of an object are illuminated equally (no lighting modifier, or ambient light), then different faces or curvature of the surface will be indistinguishable. The image will look flat.</p>
-<p><img src="./tutorials/shapes3d/lightvsnolight.png" alt=""></p>
+<p><img src="../media/lightvsnolight.png" alt=""></p>
 <p>FigureOne lighting is a color modifier based on the amount of light reflected from a surface. If all light is reflected from a surface, then the surface color will be the original color. If only a portion of light is reflected from the surface, then the surface color will be a darker form of the original color.</p>
 <p>The amount of light reflected from a surface is a function of the direction of the light relative to the surface, and whether the surface faces the light source or not. The direction the surface faces is the direction of its normal.</p>
-<p><img src="./tutorials/shapes3d/lightincidence.png" alt=""></p>
+<p><img src="../media/lightincidence.png" alt=""></p>
 <p>If <strong>L</strong> is the normalized light incidence vector and <strong>n</strong> is the normalized surface normal, then the color modifier <em>m</em> is given by:</p>
-<p><img src="./tutorials/shapes3d/lighteqn.png" alt=""></p>
+<p><img src="../media/lighteqn.png" alt=""></p>
 <p>Where <em>m</em> will be a value between 0 (no light) and 1 (full light), and <em>a</em> is the ambient light (also between 0 and 1) and is the minimum amount of light that each surface will reflect.</p>
 <p>The goal of FigureOne lighting is to provide simple lighting options that can easily show the curvature of a 3D object. It is not realistic:</p>
 <ul>
@@ -140,12 +140,12 @@ c2.scene = new Fig.Scene({
 <li><em>directional light</em>: All surfaces of a shape use the same light incidence vector <strong>L</strong>. This is similar to a plane  of light coming from a single direction. The direciton light vector definition points toward the light source.</li>
 <li><em>point light</em>: All surfaces of a shape use a <strong>L</strong> equal to the vector between the point source and the surface position.</li>
 </ul>
-<p><img src="./tutorials/shapes3d/light.png" alt=""></p>
+<p><img src="../media/light.png" alt=""></p>
 <p>As an example, let's create a cube with directional lighting. The light source will be predominantly from the x direction, and so the +x face of the cube will be brightest.</p>
 <pre><code class="js"><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">figure</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">Figure</span><span class="hl-5">();</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-8">scene</span><span class="hl-5">.</span><span class="hl-9">setProjection</span><span class="hl-5">({ </span><span class="hl-8">style:</span><span class="hl-5"> </span><span class="hl-11">&#39;orthographic&#39;</span><span class="hl-5"> });</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-8">scene</span><span class="hl-5">.</span><span class="hl-9">setCamera</span><span class="hl-5">({ </span><span class="hl-8">position:</span><span class="hl-5"> [</span><span class="hl-12">2</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">], </span><span class="hl-8">up:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">] });</span><br/><span class="hl-10">// Setup the direction of directional light. Note, this vector describes where</span><br/><span class="hl-10">// the light is coming from.</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-8">scene</span><span class="hl-5">.</span><span class="hl-9">setLight</span><span class="hl-5">({ </span><span class="hl-8">directional:</span><span class="hl-5"> [</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, -</span><span class="hl-12">0.1</span><span class="hl-5">] });</span><br/><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">(</span><br/><span class="hl-5">  {</span><br/><span class="hl-5">    </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;cube&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">],</span><br/><span class="hl-5">    </span><span class="hl-8">side:</span><span class="hl-5"> </span><span class="hl-12">0.5</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-10">// Note: &#39;directional&#39; is the default value, and so when using direcitonal</span><br/><span class="hl-5">    </span><span class="hl-10">// light this line is not required. It is here for example only.</span><br/><span class="hl-5">    </span><span class="hl-8">light:</span><span class="hl-5"> </span><span class="hl-11">&#39;directional&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  },</span><br/><span class="hl-5">);</span>
 </code><button type="button">Copy</button></pre>
 
-<p><img src="./tutorials/shapes3d/cube.png" alt=""></p>
+<p><img src="../media/cube.png" alt=""></p>
 <h4 id="rotation" class="tsd-anchor-link">Rotation<a href="#rotation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <p>The only information needed for a 2D rotation is the magnitude of rotation and direction. The rotation axis is always along the z axis.</p>
 <p>In three dimensions, a rotation can be around any arbitrary axis, and therefore 4 numbers are required. The rotation, and the x, y, and z components of the axis vector.</p>
@@ -157,7 +157,7 @@ c2.scene = new Fig.Scene({
 <pre><code class="js"><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">cube</span><span class="hl-5"> = </span><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;cube&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">side:</span><span class="hl-5"> </span><span class="hl-12">0.5</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">],</span><br/><span class="hl-5">  </span><span class="hl-10">// Set the transform so the rotation is arount the x axis</span><br/><span class="hl-5">  </span><span class="hl-8">transform:</span><span class="hl-5"> [</span><span class="hl-11">&#39;r&#39;</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">],</span><br/><span class="hl-5">});</span><br/><br/><span class="hl-10">// Animate rotation around the x axis</span><br/><span class="hl-8">cube</span><span class="hl-5">.</span><span class="hl-8">animations</span><span class="hl-5">.</span><span class="hl-9">new</span><span class="hl-5">()</span><br/><span class="hl-5">  .</span><span class="hl-9">rotation</span><span class="hl-5">({ </span><span class="hl-8">velocity:</span><span class="hl-5"> </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-8">duration:</span><span class="hl-5"> </span><span class="hl-6">null</span><span class="hl-5"> })</span><br/><span class="hl-5">  .</span><span class="hl-9">start</span><span class="hl-5">();</span>
 </code><button type="button">Copy</button></pre>
 
-<p><img src="./tutorials/shapes3d/rotation.gif" alt=""></p>
+<p><img src="../media/rotation.gif" alt=""></p>
 <h4 id="3d-shape-primitives-boilerplate" class="tsd-anchor-link"><a id="shapes3d-boilerplate"></a> 3D Shape Primitives Boilerplate<a href="#3d-shape-primitives-boilerplate" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <p>To test examples within the '3D Shape Primitives' section of the API reference create an <code>index.html</code> file and <code>index.js</code> file.</p>
 <p>All examples are snippets which can be appended to the end of the <code>index.js</code> file.</p>

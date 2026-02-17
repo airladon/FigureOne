@@ -11,7 +11,7 @@ group: Introduction
 
 In FigureOne, shapes are typically formed from multiple triangles.
 
-<p style="text-align: center"><img src="./tutorials/triangles.png"></p>
+<p style="text-align: center"><img src="./triangles.png"></p>
 
 Thus, in FigureOne a shape is a collection points that describe the vertices each triangle in a shape.
 
@@ -21,7 +21,7 @@ A *transform* describes a spatial change, for example a translation or rotation.
 
 Mathematically, a transform is a 4x4 matrix that when mulitiplied with a point creates a new point that undergoes the transform. For example:
 
-<p style="text-align: center"><img src="./tutorials/transform.png"></p>
+<p style="text-align: center"><img src="./transform.png"></p>
 
 All transforms in FigureOne create such a matrix, and can be used to transform points.
 
@@ -71,18 +71,18 @@ Each {@link FigureElement} has a {@link Transform} that transforms an element in
 
 This means there is a heierachy of {@link FigureElement} objects, where the parent transform is combined with  (cascaded with) the child transform. Therefore collections can be thought of as modular building blocks of a more complex figure.
 
-<p style="text-align: center"><img src="./tutorials/transformcascades.png"></p>
+<p style="text-align: center"><img src="./transformcascades.png"></p>
 
 
 ##### Example
 
 As an example, let's say we want to create a labeled line where the line and label both rotate together.
 
-<p style="text-align: center"><img src="./tutorials/ex1.png"></p>
+<p style="text-align: center"><img src="./ex1.png"></p>
 
 To create this, we could use a line and text primitive within a collection:
 
-<p style="text-align: center"><img src="./tutorials/ex1-hierarchy.png"></p>
+<p style="text-align: center"><img src="./ex1-hierarchy.png"></p>
 
 To rotate both label and line in tandem, we simply need to rotate the collection.
 
@@ -144,11 +144,11 @@ figure.add(
 
 This code positions text relative to the middle of a line of length 2.
 
-<p style="text-align: center"><img src="./tutorials/ex1-collection.png"></p>
+<p style="text-align: center"><img src="./ex1-collection.png"></p>
 
 It then positions the collection so the line end is in the middle of the figure.
 
-<p style="text-align: center"><img src="./tutorials/ex1-figure.png"></p>
+<p style="text-align: center"><img src="./ex1-figure.png"></p>
 
 
 

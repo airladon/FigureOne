@@ -14,7 +14,7 @@ The evolution of this is interactive video, enabled by the <a href="#recorder">R
 
 As such, the animation in FigureOne can be overlaid with audio to create a video like experience. Except in this case, content on the screen can be just as rich and interactive as that created normally with FigureOne.
 
-![](./tutorials/recorder/ivid.gif)
+![](./ivid.gif)
 #### State, Seeking and Pausing
 
 Video seeking and pausing is enabled by recording and setting figure state.

@@ -46,7 +46,7 @@ const hex = figure.add({
 hex.setTouchable({ onClick: () => console.log('Touched!')});
 ```
 
-<p style="text-align: center"><img src="./tutorials/interactive/touched.gif"></p>
+<p style="text-align: center"><img src="./touched.gif"></p>
 
 Sometimes touching small elements can be challenging with a finger. Therefore it is useful to set how much of the area around an element can also trigger a touch event. To do so, borders and touch borders of elements can be defined.
 
@@ -88,7 +88,7 @@ figure.add(
 figure.showTouchBorders();
 ```
 
-<p style="text-align: center"><img src="./tutorials/interactive/touchborder.png"></p>
+<p style="text-align: center"><img src="./touchborder.png"></p>
 
 ##### Three Dimensions
 
@@ -120,7 +120,7 @@ figure.add({
 figure.showTouchable();
 ```
 
-<p style="text-align: center"><img src="./tutorials/interactive/touchable.png"></p>
+<p style="text-align: center"><img src="./touchable.png"></p>
 
 #### Move Interactivity
 
@@ -141,7 +141,7 @@ figure.add(
 );
 ```
 
-<p style="text-align: center"><img src="./tutorials/interactive/move.gif"></p>
+<p style="text-align: center"><img src="./move.gif"></p>
 
 By default, element movement will be translation. {@link OBJ_ElementMove} options can be used to make movement a rotation or scaling and add bounds to movement.
 
@@ -171,7 +171,7 @@ figure.add(
 );
 ```
 
-<p style="text-align: center"><img src="./tutorials/interactive/freemovement.gif"></p>
+<p style="text-align: center"><img src="./freemovement.gif"></p>
 
 
 
@@ -221,7 +221,7 @@ figure.add({
   },
 });
 ```
-![](./tutorials/shapes3d/xztranslate.gif)
+![](../shapes3d/xztranslate.gif)
 
 
 #### Camera Interactivity
@@ -245,4 +245,4 @@ figure.add([
 ]);
 ```
 
-![](./tutorials/shapes3d/cameracontrol.gif)
+![](../shapes3d/cameracontrol.gif)

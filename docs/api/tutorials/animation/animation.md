@@ -28,7 +28,7 @@ p.animations.new()
   .start();
 ```
 
-<p style="text-align: center"><img src="./tutorials/animation/ex1.gif"></p>
+<p style="text-align: center"><img src="./ex1.gif"></p>
 
 
 A more convenient way to chain animation steps in series is to create them inline. The <a href="#animationmanagernew">animations.new</a> method returns an {@link AnimationBuilder} that allows for inline step creation.
@@ -58,7 +58,7 @@ p.animations.new()
   .start();
 ```
 
-<p style="text-align: center"><img src="./tutorials/animation/ex2.gif"></p>
+<p style="text-align: center"><img src="./ex2.gif"></p>
 
 
 Multiple animations can be added to a single element, but if they modify the same property of the element, then the latter one will overwrite the earlier on each animation frame. In the next example, both animations animate different parts of the element's transform and so will happen in parallel.
@@ -75,7 +75,7 @@ p.animations.new()
   .start();
 ```
 
-<p style="text-align: center"><img src="./tutorials/animation/ex3.gif"></p>
+<p style="text-align: center"><img src="./ex3.gif"></p>
 
 While this is one way to do a parallel animation, a more convenient way (especially when dealing with many steps) is to use a parallel animation step:
 
@@ -89,7 +89,7 @@ p.animations.new()
   .start();
 ```
 
-<p style="text-align: center"><img src="./tutorials/animation/ex4.gif"></p>
+<p style="text-align: center"><img src="./ex4.gif"></p>
 
 Callbacks can be defined when animations finish
 ```javascript
@@ -102,7 +102,7 @@ p.animations.new()
   .start();
 ```
 
-<p style="text-align: center"><img src="./tutorials/animation/ex5.gif"></p>
+<p style="text-align: center"><img src="./ex5.gif"></p>
 
 #### Stopping animations
 

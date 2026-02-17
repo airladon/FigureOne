@@ -5,7 +5,7 @@ group: Morphing
 # Morphing
 A shape morphs when its vertices change relative to each other. For example, a square would morph into a circle.
 
-![](./tutorials/morph/squarecircle.gif)
+![](./squarecircle.gif)
 
 ### Morph using *updatePoints*
 
@@ -39,7 +39,7 @@ line.animations.new()
   .start();
 ```
 
-![](./tutorials/morph/linetowave.gif)
+![](./linetowave.gif)
 
 This works fine, even on low end clients. For example, a low end 2016 Chromebook can render this at over 40 frames per second. This example is a polyline of 1600 points, resulting in 6400 vertices, and you can do a lot with that.
 
@@ -81,7 +81,7 @@ tri.animations.new()
   .start();
 ```
 
-![](./tutorials/morph/simplemorph.gif)
+![](./simplemorph.gif)
 
 The `points` property defines the different vertex configurations. The first array of points, representing the first vertex configuration is `[0, 0, 0.5, 0, 0.5, 0.5]` which defines three points `[0, 0]`, `[0.5, 0]`,  and `[0.5, 0.5]`. 
 
@@ -122,7 +122,7 @@ m.animations.new()
   .start();
 ```
 
-![](./tutorials/morph/linetowave.gif)
+![](./linetowave.gif)
 
 Instead of morphing a polyline as before, we are now morphing a series of shapes distributed along a polyline. In this case the shapes are hexagons. If the shapes have more sides, the curves will look more natural for thicker lines. For this line thickness, hexagons are a good trade-off. For thinner lines, squares could be used, and for thicker lines polygons with more sides would be required.
 
@@ -167,7 +167,7 @@ line.animations.new()
   .start();
 ```
 
-![](./tutorials/morph/widthchange.gif)
+![](./widthchange.gif)
 
 Compare this to a string of points that has no width change:
 
@@ -189,7 +189,7 @@ line.animations.new()
   .start();
 ```
 
-![](./tutorials/morph/nowidthchange.gif)
+![](./nowidthchange.gif)
 
 
 ### Trade-offs
@@ -266,7 +266,7 @@ headphonesImage.onload = loaded.bind(this);
 };
 ```
 
-![](./tutorials/morph/imagemorph.gif)
+![](./imagemorph.gif)
 
 The mic image has 31,720 pixels, which we are reducing to 17,516 pixels by filtering out the completely transparent pixels (we are keeping semi-transparent pixels as they make the transitions from opaque pixels to transparent pixels look more natural). This means that even though these images are relatively small, we are still creating 105,096 vertices.
 
@@ -328,6 +328,6 @@ headphonesImage.onload = loaded.bind(this);
 
 ```
 
-![](./tutorials/morph/randomsample.gif)
+![](./randomsample.gif)
 
 

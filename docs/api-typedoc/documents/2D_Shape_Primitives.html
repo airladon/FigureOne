@@ -45,7 +45,7 @@
 <p>While there are several built-in shapes such as polygons, rectangles and polylines in FigureOne, there is also a 'generic' method that will allow creation of any shape. In fact, all the built in shapes use this generic method themselves.</p>
 <p>To use the generic method however, it is important to understand how WebGL uses triangles to create shapes.</p>
 <p>Any shape approximated with triangles. For instance, the figure below shows a rectangle broken into two triangles with vertices labeled.</p>
-<p style="text-align: center"><img src="./tutorials/draw/rect.png"></p>
+<p style="text-align: center"><img src="../media/rect.png"></p>
 <p>To draw this shape, you would need to draw the two triangles, which means drawing 6 vertices:</p>
 <ul>
 <li>1, 2, 3</li>
@@ -64,7 +64,7 @@
 
 <p>This method works well for continuous shapes, but will not work for shapes that have gaps.</p>
 <p>A good example of a shape that works with <code>'STRIP'</code> is below. The vertices are labeled in the order they would be defined.</p>
-<p style="text-align: center"><img src="./tutorials/draw/strip.png"></p>
+<p style="text-align: center"><img src="../media/strip.png"></p>
 <h5 id="drawtype-fan" class="tsd-anchor-link">drawType: 'FAN'<a href="#drawtype-fan" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h5>
 <p>A fan starts with one point. The next two points create the first triangle, and then every subsequent point uses the first and last point to create the next triangle.</p>
 <p>Therefore, to draw the same rectangle we would draw the first point 1, then complete the first triangle with 2 and 3. Then we would draw point 4 to make the second triangle with points 1 and 3.</p>
@@ -72,9 +72,9 @@
 </code><button type="button">Copy</button></pre>
 
 <p>This method works for any shape that can be broken into triangles that all share a common point. For example:</p>
-<p style="text-align: center"><img src="./tutorials/draw/fan.png"></p>
+<p style="text-align: center"><img src="../media/fan.png"></p>
 <p>Note, <code>'STRIP'</code> can create any shape <code>'FAN'</code> can, but it can be a little more involved. For instance, the shape above would need to duplicate one of the vertices to fully fill it:</p>
-<p style="text-align: center"><img src="./tutorials/draw/strip-fan.png"></p>
+<p style="text-align: center"><img src="../media/strip-fan.png"></p>
 <h5 id="drawtype-lines" class="tsd-anchor-link">drawType: 'LINES'<a href="#drawtype-lines" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h5>
 <p><code>'LINES'</code> is the final style that WebGL accepts for drawing primitives. In this case vertex pairs are used to create lines.</p>
 <p>This is not useful for drawing filled shapes, but is useful for drawing thin outlines.</p>

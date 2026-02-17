@@ -18,7 +18,7 @@ This guide will cover plain and formatted text. <a href="#equations"> Thissectio
 
 The most simple way to create text is with the `'text'` primitive (with options {@link OBJ_Text}).
 
-<p style="text-align: center"><img src="./tutorials/text/text.png"></p>
+<p style="text-align: center"><img src="./text.png"></p>
 
 ```javascript
 figure.add(
@@ -46,7 +46,7 @@ figure.add(
 );
 ```
 
-<p style="text-align: center"><img src="./tutorials/text/textoptions.png"></p>
+<p style="text-align: center"><img src="./textoptions.png"></p>
 
 
 The text primitive can also be used to create many different strings of text at different locations. All strings will share the same alignment and font options.
@@ -65,7 +65,7 @@ figure.add(
 );
 ```
 
-<p style="text-align: center"><img src="./tutorials/text/textmulti.png"></p>
+<p style="text-align: center"><img src="./textmulti.png"></p>
 
 To update text, use the `setText` method on the created element. The below example updates the text everytime the text is touched.
 
@@ -83,7 +83,7 @@ figure.add({
 });
 ```
 
-<p style="text-align: center"><img src="./tutorials/text/texttouch.gif"></p>
+<p style="text-align: center"><img src="./texttouch.gif"></p>
 
 ### Formatted Text
 
@@ -101,7 +101,7 @@ figure.add({
   text: ['First line', 'This is line two', 'Third line'],
 });
 ```
-<p style="text-align: center"><img src="./tutorials/text/ftextlines.png"></p>
+<p style="text-align: center"><img src="./ftextlines.png"></p>
 
 Each line can have individual formatting by using a line definition object instead of a string.
 
@@ -115,7 +115,7 @@ figure.add({
   ],
 });
 ```
-<p style="text-align: center"><img src="./tutorials/text/ftextlinesdef.png"></p>
+<p style="text-align: center"><img src="./ftextlinesdef.png"></p>
 
 Strings withing lines can be formatted by surrounding the string with `'|'` characters and then defining the modification with the `modifiers` property. Any string within `'|'` characters will become a unique identifier that is referenced in the `modifiers` property. If more than one strings share the same unique identifier, then the will all be modified the same.
 
@@ -133,7 +133,7 @@ figure.add({
   },
 });
 ```
-<p style="text-align: center"><img src="./tutorials/text/ftextmods.png"></p>
+<p style="text-align: center"><img src="./ftextmods.png"></p>
 
 
 Modifiers can also be used to define specific portions of text that are interactive.
@@ -164,7 +164,7 @@ igure.add({
   },
 });
 ```
-<p style="text-align: center"><img src="./tutorials/text/ftexttouch.gif"></p>
+<p style="text-align: center"><img src="./ftexttouch.gif"></p>
 
 
 Modifiers can also be used to embed equations into the text. An equation phrase ({@link TypeEquationPhrase}) is used to define the equation, and if necessary, the `elements` property can be used to customize elements within the equation.
@@ -188,7 +188,7 @@ figure.add({
 });
 ```
 
-<p style="text-align: center"><img src="./tutorials/text/ftexteqn.png"></p>
+<p style="text-align: center"><img src="./ftexteqn.png"></p>
 
 If formatted text is not sufficent, then use {@link Equation} for full typesetting customization.
 
@@ -204,7 +204,7 @@ WebGL with a texture atlas is very fast at drawing text, but because the text co
 
 An example atlas is below:
 
-<p style="text-align: center"><img src="./tutorials/text/atlas.png"></p>
+<p style="text-align: center"><img src="./atlas.png"></p>
 
 
 The main advantage of using WebGL rendered text is the text is on the same canvas as all the shapes. This means the draw order of shapes and text is respected and it is easy to chose which text should be infront of shapes and which text should be behind shapes.
@@ -286,7 +286,7 @@ figure.add({
 });
 ```
 
-<p style="text-align: center"><img src="./tutorials/text/font.png"></p>
+<p style="text-align: center"><img src="./font.png"></p>
 
 ### Web Fonts
 

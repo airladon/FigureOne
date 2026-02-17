@@ -57,7 +57,7 @@ figure.add('equation', equation);
 equation.showForm('b');
 ```
 
-![](./tutorials/equation/simple.png)
+![](./simple.png)
 
 #### Symbols and Equation Functions
 
@@ -89,7 +89,7 @@ Finally, we can display the form:
 equation.showForm('b');
 ```
 
-![](./tutorials/equation/fraction.png)
+![](./fraction.png)
 
 Combine all the steps above gives:
 ```javascript
@@ -126,7 +126,7 @@ equation.goToForm({
 });
 ```
 
-![](./tutorials/equation/linear.gif)
+![](./linear.gif)
 
 The animation can be improved by moving the terms of the equation in curves instead of linearly. To do this we can use the object definition of a form that also defines translation animation properties:
 
@@ -150,7 +150,7 @@ equation.goToForm({
 });
 ```
 
-![](./tutorials/equation/curved.gif)
+![](./curved.gif)
 
 
 #### Object Definition
@@ -198,7 +198,7 @@ const c = figure.getElement('equation.c');
 c.pulse({ scale: 2, yAlign: 'top' });
 ```
 
-![](./tutorials/equation/pulse.gif)
+![](./pulse.gif)
 
 An element can be touched:
 ```javascript
@@ -206,14 +206,14 @@ c.setTouchable();
 c.onClick = () => { console.log('c was touched') }
 ```
 
-![](./tutorials/equation/touch.gif)
+![](./touch.gif)
 
 And the equation can be moved:
 ```javascript
 equation.setMovable();
 ```
 
-![](./tutorials/equation/move.gif)
+![](./move.gif)
 
 #### Managing Equations
 
@@ -242,7 +242,7 @@ const equation = figure.add({
 
 Elements 'a' and 'b' are defined inline. 'c' is still defined in the `elements` as it has a color customization. Its definition is shorter however, as the `text` property is not required if the text is the same as the unique identifier.
 
-![](./tutorials/equation/inline.png)
+![](./inline.png)
 
 Elements defined inline can be used in other forms:
 
@@ -267,7 +267,7 @@ eqn.goToForm({
 });
 ```
 
-![](./tutorials/equation/simple.gif)
+![](./simple.gif)
 
 Even symbols can be defined inline:
 ```javascript
@@ -297,7 +297,7 @@ figure.add({
 });
 ```
 
-![](./tutorials/equation/valid_key.png)
+![](./valid_key.png)
 
 Underscores can also be used to give inline symbol definitions unqiue identifiers. In this case, the text before the underscore is the unique identifier, and the text after defines the symbol.
 ```javascript
@@ -316,7 +316,7 @@ eqn.goToForm({
 });
 ```
 
-![](./tutorials/equation/reuse_symbol.gif)
+![](./reuse_symbol.gif)
 
 ##### Function Definitions
 
@@ -381,7 +381,7 @@ The above example also uses a *form series*. A form series allows animation betw
 <a href="#equationnextform">equation.nextForm</a> and <a href="#equationprevform">equation.prevForm</a> methods.
 
 
-![](./tutorials/equation/readability.gif)
+![](./readability.gif)
 
 ##### Phrases
 
@@ -417,7 +417,7 @@ figure.add({
 });
 ```
 
-![](./tutorials/equation/phrases.gif)
+![](./phrases.gif)
 
 #### Element interaction
 
