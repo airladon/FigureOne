@@ -1,6 +1,5 @@
 {
-    "extends": ["plugin:flowtype/recommended", 
-                "plugin:jest/recommended",
+    "extends": ["plugin:jest/recommended",
                 "plugin:react/recommended",
                 "airbnb-base"],
     "rules": {
@@ -73,14 +72,10 @@
         ]
       },
     "plugins": [
-      "flowtype",
       "jest",
       "react"],
 
     "settings": {
-      "flowtype": {
-        "onlyFilesWithFlowAnnotation": true
-      },
       "import/resolver": {
         "node": {
           "extensions": [".js",".jsx"]
