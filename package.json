@@ -3,6 +3,7 @@
   "version": "0.15.10",
   "description": "Draw, animate and interact with shapes, text, plots and equations in Javascript. Create interactive slide shows, and interactive videos.",
   "main": "index.js",
+  "types": "types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/airladon/figureone.git"
@@ -10,6 +11,8 @@
   "scripts": {
     "browser": "./browser.sh",
     "webpack": "webpack",
+    "build:types": "tsc --project tsconfig.build.json",
+    "build": "webpack && npm run build:types",
     "flow": "flow",
     "tsc": "tsc --noEmit",
     "jest": "jest",
