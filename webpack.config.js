@@ -39,7 +39,7 @@ const envConfig = {
     shortName: 'dev',
     uglify: false,
     webpackMode: 'development',
-    devtool: 'source-map',
+    devtool: false,
     uglifySourceMap: false,
     output: 'index.js',
     workerPath: '/package/',
