@@ -1,0 +1,8 @@
+---
+title: 2D Shape Collections
+group: 2D Shape Collections
+---
+# 2D Shape Collections
+FigureOne provides a number of collections shapes that combine simple shapes into more complex objects.
+
+Collections shapes are {@link FigureElementCollection}s that manage a number of {@link FigureElement}s, and may provide methods to dynamically update and change the shapes, additional animation steps specific to to shape, and additional ways to interact with the shape.

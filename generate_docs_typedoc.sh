@@ -1,5 +1,9 @@
 #!/bin/bash
-npx typedoc
+if [ "$1" = "prod" ]; then
+  npx typedoc --gitRevision "$(git rev-parse HEAD)"
+else
+  npx typedoc --gitRevision main
+fi
 cp -r docs/api/apiassets docs/api-typedoc/apiassets
 cp -r docs/api/tutorials docs/api-typedoc/tutorials
 
