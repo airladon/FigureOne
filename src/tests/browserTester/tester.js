@@ -94,7 +94,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
   lastTime = -1;
 
   async function mouseWheelZoom(deltaIn, positionIn) {
-    page.evaluate(([delta, position]) => {
+    await page.evaluate(([delta, position]) => {
       const figureToPixelMatrix = figure.elements.spaceTransformMatrix('figure', 'pixel');
       const positionPixel = Fig.getPoint(position).transformBy(figureToPixelMatrix);
       const positionClient = figure.pixelToClient(positionPixel);
@@ -113,7 +113,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
   }
 
   async function mousePan(startIn, stopIn) {
-    page.evaluate(([start, stop]) => {
+    await page.evaluate(([start, stop]) => {
       // const figureToPixelMatrix = figure.elements.spaceTransformMatrix('figure', 'pixel');
       const figToClient = (p) => {
         const figureToPixelMatrix = figure.elements.spaceTransformMatrix('figure', 'pixel');
@@ -141,7 +141,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
   }
 
   async function mouseClick(posIn) {
-    page.evaluate(([pos]) => {
+    await page.evaluate(([pos]) => {
       const figToClient = (p) => {
         const figureToPixelMatrix = figure.elements.spaceTransformMatrix('figure', 'pixel');
         const q = Fig.getPoint(p).transformBy(figureToPixelMatrix);

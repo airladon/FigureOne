@@ -3246,6 +3246,9 @@ class Figure {
   setDrawTimeout(
     timerDurationIn: number = -1,
   ) {
+    if (this.timeKeeper.manual) {
+      return;
+    }
     let timerDuration = timerDurationIn;
     if (timerDuration < 0) {
       timerDuration = this.elements.getNextAnimationFinishTime() as number;
