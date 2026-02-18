@@ -44,7 +44,6 @@ docker_run() {
       -v $HOST_PATH/.eslintrc.json:/opt/app/.eslintrc.json \
       -v $HOST_PATH/.dockerignore:/opt/app/.dockerignore \
       -v $HOST_PATH/.eslintignore:/opt/app/.eslintignore \
-      -v $HOST_PATH/.flowconfig:/opt/app/.flowconfig \
       -v $HOST_PATH/tsconfig.json:/opt/app/tsconfig.json \
       -v $HOST_PATH/tsconfig.build.json:/opt/app/tsconfig.build.json \
       -v $HOST_PATH/.babelrc:/opt/app/.babelrc \
