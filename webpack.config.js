@@ -162,7 +162,7 @@ module.exports = (env) => {
           test: /\.[jt]sx?$/,
           exclude: [
             /(node_modules)/,
-            /\.worker\.js$/,
+            /\.worker\.[jt]s$/,
           ],
           use: {
             loader: 'babel-loader',
@@ -172,7 +172,7 @@ module.exports = (env) => {
           },
         },
         {
-          test: /\.worker\.js$/,
+          test: /\.worker\.[jt]s$/,
           use: [
             {
               loader: 'worker-loader',
@@ -186,7 +186,7 @@ module.exports = (env) => {
             {
               loader: 'babel-loader',
               options: {
-                presets: ['@babel/preset-env'],
+                presets: ['@babel/preset-env', '@babel/preset-typescript'],
               },
             },
           ],
