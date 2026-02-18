@@ -186,7 +186,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
         }
         if (action !== 'delay' && action !== 'mouseWheelZoom' && action !== 'mousePan' && action !== 'mouseClick') {
           await frame(d);
-          await page.evaluate(([t, l]) => {
+          await page.evaluate(async ([t, l]) => {
             if (t != null) {
               if (t.startsWith('touch')) {
                 let loc;
@@ -198,7 +198,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
                   figure.setCursor(loc);
                 }
               } else {
-                eval(t);
+                await eval(t);
               }
             }
           }, [action, location]);
