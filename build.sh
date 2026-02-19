@@ -54,7 +54,7 @@ docker_run() {
       -v $HOST_PATH/jsdoc-conf.json:/opt/app/jsdoc-conf.json \
       -v $HOST_PATH/.eslintignore:/opt/app/.eslintignore \
       -e LOCAL_PROJECT_PATH=$HOST_PATH \
-      --name figureone_dev \
+      --name figureone_build \
       --entrypoint $2 \
       figureone_dev \
       $3 $4 $5 $6 $7 $8 $9
@@ -62,7 +62,7 @@ docker_run() {
     docker run -it --rm \
       -v $HOST_PATH/package:/opt/app/package \
       -v $HOST_PATH/src:/opt/app/src \
-      --name figureone_dev \
+      --name figureone_build \
       --entrypoint $2 \
       figureone_dev
   fi

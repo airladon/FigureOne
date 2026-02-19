@@ -1,6 +1,14 @@
 CMD=''
 PROJECT_PATH=`pwd`
 
+# If container already exists, just exec into it
+if docker ps -a --format '{{.Names}}' | grep -q '^figureone_dev$'; then
+  # Start it if it's stopped
+  docker start figureone_dev 2>/dev/null
+  docker exec -it figureone_dev bash
+  exit 0
+fi
+
 cp containers/figureone/Dockerfile Dockerfile
 docker build -t figureone_dev .
 rm Dockerfile
@@ -13,11 +21,11 @@ docker run -it --rm \
   -v $PROJECT_PATH/webpack.config.js:/opt/app/webpack.config.js \
   -v $PROJECT_PATH/build.sh:/opt/app/build.sh \
   -v $PROJECT_PATH/generate_docs.sh:/opt/app/generate_docs.sh \
+  -v $PROJECT_PATH/generate_docs_typedoc.sh:/opt/app/generate_docs_typedoc.sh \
   -v $PROJECT_PATH/browser.sh:/opt/app/browser.sh \
   -v $PROJECT_PATH/.eslintrc.json:/opt/app/.eslintrc.json \
   -v $PROJECT_PATH/.dockerignore:/opt/app/.dockerignore \
   -v $PROJECT_PATH/.eslintignore:/opt/app/.eslintignore \
-  -v $PROJECT_PATH/.flowconfig:/opt/app/.flowconfig \
   -v $PROJECT_PATH/.babelrc:/opt/app/.babelrc \
   -v $PROJECT_PATH/.git:/opt/app/.git \
   -v $PROJECT_PATH/.gitignore:/opt/app/.gitignore \
@@ -26,7 +34,9 @@ docker run -it --rm \
   -v $PROJECT_PATH/jest.perf.config.js:/opt/app/jest.perf.config.js \
   -v $PROJECT_PATH/README.md:/opt/app/README.md \
   -v $PROJECT_PATH/global.d.ts:/opt/app/global.d.ts \
+  -v $PROJECT_PATH/package.json:/opt/app/package.json \
   -v $PROJECT_PATH/tsconfig.json:/opt/app/tsconfig.json \
+  -v $PROJECT_PATH/tsconfig.build.json:/opt/app/tsconfig.build.json \
   -v $PROJECT_PATH/start_env.sh:/opt/app/start_env.sh \
   -v $PROJECT_PATH/dev.sh:/opt/app/dev.sh \
   -v $PROJECT_PATH/LICENSE:/opt/app/LICENSE \
@@ -45,5 +55,3 @@ docker run -it --rm \
   -p 9229:9229 \
   --name figureone_dev \
   figureone_dev $CMD
-
-# -v $PROJECT_PATH/.dockerignore:/opt/app/.dockerignore \
