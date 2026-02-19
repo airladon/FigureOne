@@ -27,6 +27,15 @@ fi
 # First cleanup package folder
 rm -rf package/*
 
+# Helper to run npm inside the build container
+npm_in_container() {
+  docker run -it --rm \
+    --name figureone_npm \
+    --entrypoint npm \
+    figureone_dev \
+    "$@"
+}
+
 # Run a container while binding the appropriate volumes
 docker_run() {
   echo "${bold}${cyan}" $1 "Starting${reset}"
@@ -66,6 +75,9 @@ docker_run() {
       --entrypoint $2 \
       figureone_dev
   fi
+  if [ $? -ne 0 ]; then
+    FAIL=1
+  fi
 }
 
 FAIL=0
@@ -85,7 +97,7 @@ then
   echo "${bold}${cyan}==================== Version Check =====================${reset}"
   if [ "$1" = "deploy" ];
   then
-    DEPLOYED_VERSION=`npm show figureone version`
+    DEPLOYED_VERSION=`npm_in_container show figureone version`
     CURRENT_VERSION=`cat package.json \
       | grep version \
       | head -1 \
@@ -154,18 +166,23 @@ then
   echo "${bold}${cyan}==================== Deploying =====================${reset}"
   if [ $1 = "deploy" ];
   then
-    DEPLOYED_VERSION=`npm show figureone version`
+    DEPLOYED_VERSION=`npm_in_container show figureone version`
     CURRENT_VERSION=`cat package/package.json \
       | grep version \
       | head -1 \
       | awk -F: '{ print $2 }' \
       | sed 's/[",]//g'`
-    if [ $CURRENT_VERSION != $DEPLOYED_VERSION ];
+    if [ "$CURRENT_VERSION" != "$DEPLOYED_VERSION" ];
     then
-      npm publish package/
+      docker run -it --rm \
+        -v $HOST_PATH/package:/opt/app/package \
+        --name figureone_npm \
+        --entrypoint npm \
+        figureone_dev \
+        publish package/
     else
       echo
-      echo "Version No: " $CURRENT_VERSION " is the same as published version. Change it in containers/build/package.json if you want to deploy."
+      echo "Version No: " $CURRENT_VERSION " is the same as published version. Change it in package.json if you want to deploy."
       echo
       FAIL=1
     fi
