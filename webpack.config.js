@@ -98,7 +98,7 @@ module.exports = (env) => {
 
   let toClean = true;
   let clean = '';
-  if (env !== undefined && env.clean !== undefined && env.clean === 0) {
+  if (env !== undefined && env.clean !== undefined && String(env.clean) === '0') {
     toClean = false;
   }
   if (toClean) {
