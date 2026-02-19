@@ -115,14 +115,6 @@ module.exports = (env) => {
     // uglify,
     clean].filter(elem => elem !== '');
 
-  let externals = {};
-  if (e.shortName === 'prod' || e.shortName === 'stage') {
-    externals = {
-      react: 'React',
-      'react-dom': 'ReactDOM',
-    };
-  }
-
   return {
     entry: './src/index.ts',
     output: {
@@ -133,7 +125,6 @@ module.exports = (env) => {
       libraryTarget: 'umd',
       umdNamedDefine: true,
     },
-    externals,
     optimization: {
       minimize,
       minimizer: [
@@ -154,12 +145,12 @@ module.exports = (env) => {
       ],
     },
     resolve: {
-      extensions: ['.ts', '.tsx', '.js', '.jsx']
+      extensions: ['.ts', '.js']
     },
     module: {
       rules: [
         {
-          test: /\.[jt]sx?$/,
+          test: /\.[jt]s$/,
           exclude: [
             /(node_modules)/,
             /\.worker\.[jt]s$/,
