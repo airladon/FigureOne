@@ -3,6 +3,7 @@
 # MODE=prod
 HOST_PATH=`pwd`
 TESTING=1
+DEPLOY=0
 
 # Setup colors and text formatting
 red=`tput setaf 1`
@@ -12,17 +13,14 @@ yellow=`tput setaf 3`
 bold=`tput bold`
 reset=`tput sgr0`
 
-if [ $1 ];
-then
-  if [ $1 = "skip-test" ];
-  then
+for arg in "$@"; do
+  if [ "$arg" = "skip-test" ] || [ "$arg" = "skip-tests" ]; then
     TESTING=0
   fi
-  if [ $1 = "skip-tests" ];
-  then
-    TESTING=0
+  if [ "$arg" = "deploy" ]; then
+    DEPLOY=1
   fi
-fi
+done
 
 # First cleanup package folder
 rm -rf package/*
@@ -92,11 +90,9 @@ check_status() {
   fi
 }
 
-if [ $1 ];
+if [ $DEPLOY = 1 ];
 then
   echo "${bold}${cyan}==================== Version Check =====================${reset}"
-  if [ "$1" = "deploy" ];
-  then
     DEPLOYED_VERSION=`npm_in_container show figureone version`
     CURRENT_VERSION=`cat package.json \
       | grep version \
@@ -110,8 +106,7 @@ then
       echo
       FAIL=1
     fi
-    check_status "Version Check"
-  fi
+  check_status "Version Check"
 fi
 
 
@@ -161,31 +156,28 @@ cat package.json | \
 check_status "Packaging"
 
 
-if [ $1 ];
+if [ $DEPLOY = 1 ];
 then
   echo "${bold}${cyan}==================== Deploying =====================${reset}"
-  if [ $1 = "deploy" ];
+  DEPLOYED_VERSION=`npm_in_container show figureone version`
+  CURRENT_VERSION=`cat package/package.json \
+    | grep version \
+    | head -1 \
+    | awk -F: '{ print $2 }' \
+    | sed 's/[",]//g'`
+  if [ "$CURRENT_VERSION" != "$DEPLOYED_VERSION" ];
   then
-    DEPLOYED_VERSION=`npm_in_container show figureone version`
-    CURRENT_VERSION=`cat package/package.json \
-      | grep version \
-      | head -1 \
-      | awk -F: '{ print $2 }' \
-      | sed 's/[",]//g'`
-    if [ "$CURRENT_VERSION" != "$DEPLOYED_VERSION" ];
-    then
-      docker run -it --rm \
-        -v $HOST_PATH/package:/opt/app/package \
-        --name figureone_npm \
-        --entrypoint npm \
-        figureone_dev \
-        publish package/
-    else
-      echo
-      echo "Version No: " $CURRENT_VERSION " is the same as published version. Change it in package.json if you want to deploy."
-      echo
-      FAIL=1
-    fi
-    check_status "Deployment"
+    docker run -it --rm \
+      -v $HOST_PATH/package:/opt/app/package \
+      --name figureone_npm \
+      --entrypoint npm \
+      figureone_dev \
+      publish package/
+  else
+    echo
+    echo "Version No: " $CURRENT_VERSION " is the same as published version. Change it in package.json if you want to deploy."
+    echo
+    FAIL=1
   fi
+  check_status "Deployment"
 fi
