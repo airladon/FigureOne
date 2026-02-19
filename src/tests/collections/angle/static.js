@@ -593,7 +593,6 @@ if (typeof process === 'object') {
     }
     Object.keys(move).forEach((name) => {
       const element = figure.getElement(move[name].element);
-      element.move
       const p = element.getPosition('figure');
       move[name].events.forEach((event) => {
         const [action] = event;
