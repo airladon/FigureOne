@@ -153,6 +153,7 @@ cat package.json | \
   sed '/devDependencies/,/}/d' | \
   sed 's/readme",/readme"/' | \
   sed '/^  "scripts/,/}/d' > package/package.json
+cp llms.txt package/llms.txt
 check_status "Packaging"
 
 

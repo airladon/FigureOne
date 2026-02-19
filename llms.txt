@@ -1,0 +1,548 @@
+# FigureOne
+
+FigureOne is a JavaScript library for drawing, animating, and interacting with shapes, text, plots, and equations in a browser using WebGL. Users create a `Figure`, add elements via declarative objects with a `make` property, and control them with animations, interactivity, and slide navigation.
+
+## Quick Start
+
+```html
+<!doctype html>
+<html>
+<body>
+  <div id="figureOneContainer" style="width: 500px; height: 500px; background-color: black;"></div>
+  <script src="https://cdn.jsdelivr.net/npm/figureone@latest/figureone.min.js"></script>
+  <script src="./index.js"></script>
+</body>
+</html>
+```
+
+```js
+const figure = new Fig.Figure();
+figure.add({ make: 'triangle', width: 0.5, height: 0.5, color: [1, 0, 0, 1] });
+```
+
+`Fig` is the global entry point. `new Fig.Figure()` attaches to a div with id `figureOneContainer` by default. Use `{ htmlId: 'customId' }` to override.
+
+Colors are `[r, g, b, a]` with values 0-1. Coordinates default to a scene of `[-1, -1, 2, 2]` (x, y, width, height). Override with `new Fig.Figure({ scene: [-2, -2, 4, 4] })`.
+
+## Core Concepts
+
+- **Figure** — top-level container that manages all elements and rendering
+- **FigureElement** — base class for all drawable objects (primitives and collections)
+- **FigureElementPrimitive** — a single drawable shape (polygon, text, line, etc.)
+- **FigureElementCollection** — a group of elements that transform together
+- **Transform** — position, rotation, and scale applied to elements
+- `figure.add(definition)` returns the created element; `figure.add([...])` returns an array
+- Access child elements: `figure.elements._childName`
+
+## Shape Primitives (`make:` types)
+
+| Type | Description |
+|------|-------------|
+| `polygon` | Regular polygon (use `sides: 100` for circles) |
+| `rectangle` | Rectangle with optional rounded corners |
+| `triangle` | Triangle by width/height or custom points |
+| `ellipse` | Ellipse shape |
+| `arc` | Arc or partial circle |
+| `line` | Straight line between two points |
+| `arrow` | Arrow shape |
+| `star` | Star shape |
+| `polyline` | Connected line segments |
+| `grid` | 2D grid of lines |
+| `text` | WebGL-rendered text |
+| `generic` | Custom 2D vertex geometry |
+| `gl` | Raw WebGL with custom shaders |
+| `html` | HTML element overlay |
+| `collection` | Group of child elements |
+| `cube` | 3D cube (requires orthographic scene) |
+| `sphere` | 3D sphere |
+| `surface` | 3D surface from point grid |
+| `cone` | 3D cone |
+| `cylinder` | 3D cylinder |
+| `prism` | 3D prism |
+| `revolve` | 3D surface of revolution |
+| `cameraControl` | Enables 3D camera rotation via drag |
+
+Shorthand `make: 'polygon'` is equivalent to `make: 'primitives.polygon'`.
+
+### Common Shape Examples
+
+```js
+// Circle (polygon with many sides)
+figure.add({
+  make: 'polygon', sides: 100, radius: 0.3, color: [0, 0, 1, 1],
+});
+
+// Rectangle with rounded corners
+figure.add({
+  make: 'rectangle', width: 0.8, height: 0.4,
+  corner: { radius: 0.05, sides: 10 }, color: [0, 1, 0, 1],
+});
+
+// Line
+figure.add({
+  make: 'line', p1: [-0.5, 0], p2: [0.5, 0],
+  width: 0.02, color: [1, 1, 0, 1],
+});
+
+// Text
+figure.add({
+  make: 'text', text: 'Hello', position: [0, 0],
+  xAlign: 'center', font: { size: 0.2, color: [1, 1, 1, 1] },
+});
+
+// Textured rectangle
+figure.add({
+  make: 'rectangle', width: 1.8, height: 1.2,
+  texture: { src: 'image.jpg', mapTo: [-0.9, -0.6, 1.8, 1.2] },
+});
+```
+
+### Element Properties
+
+All elements accept these common options alongside shape-specific ones:
+
+- `name` — element name for later access via `figure.elements._name`
+- `color` — `[r, g, b, a]`
+- `position` — `[x, y]` shorthand for translation
+- `rotation` — rotation in radians
+
+When `options` is used, shape-specific properties go inside it:
+
+```js
+figure.add({
+  name: 'sq', make: 'primitives.rectangle',
+  options: { width: 0.4, height: 0.4, position: [-0.5, 0.5] },
+});
+```
+
+Otherwise, shape options can be at the top level alongside `make`:
+
+```js
+figure.add({ make: 'rectangle', width: 0.4, height: 0.4, position: [-0.5, 0.5] });
+```
+
+## Collections (`make: 'collections.*'`)
+
+| Type | Description |
+|------|-------------|
+| `collections.plot` | XY plot with traces, axes, legend |
+| `collections.line` | Labelled line with optional arrows |
+| `collections.polyline` | Labelled polyline with side/angle labels |
+| `collections.angle` | Angle marker with label |
+| `collections.axis` | Single axis with ticks and labels |
+| `collections.axis3` | 3D axis |
+| `collections.rectangle` | Rectangle collection with labels |
+| `collections.slideNavigator` | Slide navigation controls |
+| `collections.slider` | Draggable slider |
+| `collections.toggle` | Toggle button |
+| `collections.button` | Button |
+
+Also available as direct shortcuts: `make: 'equation'`, `make: 'ftext'`, `make: 'angle'`, `make: 'oline'`, `make: 'opolyline'`.
+
+## Animation
+
+Animations use a builder chain pattern on `element.animations`:
+
+```js
+element.animations.new()
+  .dissolveIn()                                // fade in
+  .rotation({ target: Math.PI / 4, duration: 1 })  // rotate
+  .position({ target: [0.5, 0], duration: 2 })     // move
+  .start();
+```
+
+### Animation Steps
+
+| Step | Description |
+|------|-------------|
+| `.position(target_or_options)` | Animate position |
+| `.rotation(target_or_options)` | Animate rotation |
+| `.scale(target_or_options)` | Animate scale |
+| `.transform(target_or_options)` | Animate full transform |
+| `.color(target_or_options)` | Animate color |
+| `.opacity(options)` | Animate opacity |
+| `.dissolveIn(duration?)` | Fade in (show + opacity 0→1) |
+| `.dissolveOut(duration?)` | Fade out (opacity 1→0 + hide) |
+| `.dim(options?)` | Dim to 0.3 opacity |
+| `.undim(options?)` | Restore full opacity |
+| `.pulse(scale_or_options)` | Pulse (scale up and back) |
+| `.scenario(options)` | Animate to a named scenario |
+| `.scenarios(options)` | Animate all children to a scenario |
+| `.delay(duration)` | Wait before next step |
+| `.trigger(callback_or_options)` | Run a callback mid-chain |
+| `.whenFinished(callback)` | Run callback when chain completes |
+
+Steps run in **sequence** by default. Use `.inParallel([...])` for simultaneous steps:
+
+```js
+const [s1, s2] = figure.add([
+  { make: 'polygon', sides: 4, radius: 0.2, position: [-0.4, 0], color: [1, 0, 0, 1] },
+  { make: 'polygon', sides: 4, radius: 0.3, position: [0.4, 0], color: [0, 0, 1, 0.5] },
+]);
+
+// Sequential: dissolve in, then rotate and move simultaneously
+s2.animations.new()
+  .dissolveIn()
+  .inParallel([
+    s2.animations.position({ target: [0, 0], duration: 3 }),
+    s2.animations.rotation({ target: Math.PI / 4, duration: 3 }),
+  ])
+  .start();
+```
+
+### Cross-Element Animations
+
+Animate other elements from one animation chain using the `element` property:
+
+```js
+figure.elements.animations.new()
+  .scenarios({ target: 'center', duration: 1 })    // all children to 'center'
+  .scenario({ element: s1, target: 'right', duration: 1 })  // just s1
+  .dissolveIn({ element: s2, duration: 0.5 })
+  .start();
+```
+
+## Equations
+
+Create equations with `make: 'equation'`. Define `elements` (terms and symbols) and `forms` (layouts).
+
+```js
+const eqn = figure.add({
+  make: 'equation',
+  elements: {
+    v: { symbol: 'vinculum' },
+    equals: ' = ',
+  },
+  forms: {
+    1: ['a', 'equals', { frac: ['b', 'v', 'c'] }],
+  },
+});
+```
+
+Elements not defined in `elements` are auto-created from form strings. Use `_` prefix for non-displayed spacing strings: `'_ + '` renders as ` + ` but the element name starts with `_`.
+
+Duplicate elements: append `_N` to create copies — `'b_1'`, `'b_2'` display as `b`.
+
+### Layout Functions
+
+| Function | Syntax | Description |
+|----------|--------|-------------|
+| `frac` | `{ frac: [num, vinculum, denom] }` | Fraction |
+| `sup` | `{ sup: [base, superscript] }` | Superscript |
+| `sub` | `{ sub: [base, subscript] }` | Subscript |
+| `supSub` | `{ supSub: [base, superscript, subscript] }` | Both super and subscript |
+| `brac` | `{ brac: { left, content, right } }` | Brackets around content |
+| `root` | `{ root: [radical_symbol, content] }` | Square root |
+| `annotate` | `{ annotate: { content, annotation: {...} } }` | Annotation relative to content |
+| `topComment` | `{ topComment: [content, comment, symbol] }` | Comment above with symbol |
+| `bottomComment` | `{ bottomComment: { content, comment, symbol } }` | Comment below |
+| `strike` | `{ strike: [content, strike_symbol] }` | Strikethrough |
+| `topStrike` | `{ topStrike: [content, symbol, comment] }` | Strike with top comment |
+| `bottomStrike` | `{ bottomStrike: [content, symbol, comment] }` | Strike with bottom comment |
+| `box` | `{ box: [content, box_symbol, inSize] }` | Box around content |
+| `bar` | `{ bar: [content, bar_symbol] }` | Bar over/under content |
+| `topBar` | `{ topBar: { content, symbol } }` | Bar above content |
+| `bottomBar` | `{ bottomBar: { content, symbol } }` | Bar below content |
+| `matrix` | `{ matrix: { content: [[...], [...]], left, right } }` | Matrix with brackets |
+| `int` | `{ int: { symbol, content, from, to } }` | Integral |
+| `sumOf` | `{ sumOf: { symbol, content, from, to } }` | Summation |
+| `prodOf` | `{ prodOf: { symbol, content, from, to } }` | Product |
+| `scale` | `{ scale: [content, scale_factor] }` | Scale content |
+| `color` | `{ color: [content, [r,g,b,a]] }` | Color content |
+| `container` | `{ container: { content, width, ... } }` | Fixed-size container |
+| `lines` | `{ lines: { content: [...], justify } }` | Multi-line layout |
+
+### Symbols
+
+Define symbols in `elements` with `{ symbol: 'type' }`:
+
+| Symbol | Description |
+|--------|-------------|
+| `vinculum` | Horizontal line for fractions |
+| `bracket` | Round bracket (set `side: 'left'` or `'right'`) |
+| `squareBracket` | Square bracket |
+| `angleBracket` | Angle bracket |
+| `brace` | Curly brace (use with `side: 'top'`, `'bottom'`, `'left'`, `'right'`) |
+| `bar` | Bar line (use with `side`) |
+| `radical` | Square root symbol |
+| `strike` | Strikethrough (`style: 'cross'`, `'forward'`, `'back'`, `'horizontal'`) |
+| `box` | Box outline |
+| `int` | Integral symbol (use `num` for double/triple integrals) |
+| `sum` | Sigma summation |
+| `prod` | Pi product |
+| `arrow` | Arrow (`direction: 'right'`, `'left'`, `'up'`, `'down'`) |
+| `line` | Decorative line |
+
+### Forms and Animation
+
+```js
+const eqn = figure.add({
+  make: 'equation',
+  elements: {
+    v: { symbol: 'vinculum' },
+    equals: ' = ',
+    times: ' \u00D7 ',
+    c: { color: [0, 0, 1, 1] },
+  },
+  formDefaults: { alignment: { fixTo: 'equals' } },
+  forms: {
+    1: ['a', 'equals', { frac: ['b', 'v', 'c'] }],
+    2: {
+      content: ['c', 'times', 'a', 'equals', 'b'],
+      translation: { c: { style: 'curved', direction: 'down', mag: 0.5 } },
+    },
+  },
+});
+
+eqn.showForm('1');
+eqn.goToForm({ form: '2', delay: 1, duration: 1.5, animate: 'move' });
+```
+
+Use `formSeries` to define an ordered list of forms, then navigate with `eqn.nextForm()` and `eqn.prevForm()`.
+
+Use `phrases` to define reusable sub-expressions:
+
+```js
+{
+  make: 'equation',
+  phrases: { Csq: { sup: ['C', '2'] } },
+  forms: { 1: ['a', '_ = ', 'Csq'] },
+}
+```
+
+## Interactivity
+
+### Making Elements Movable
+
+```js
+figure.add({
+  make: 'polygon', sides: 100, radius: 0.2,
+  move: {
+    bounds: { left: -0.8, bottom: -0.8, right: 0.8, top: 0.8 },
+    freely: { deceleration: 0.5 },
+  },
+});
+```
+
+### Touch and Click
+
+```js
+element.setTouchable();
+element.onClick = () => { /* handle click */ };
+// or
+figure.add({
+  make: 'polygon', radius: 0.3, sides: 4,
+  mods: { isTouchable: true, touchBorder: 0.1 },
+});
+```
+
+### Notifications
+
+Elements publish events you can subscribe to:
+
+```js
+ball.notifications.add('setTransform', () => {
+  const p = ball.getPosition().round(1);
+  text.setText({ text: `(${p.x.toFixed(1)}, ${p.y.toFixed(1)})` });
+});
+eqn.notifications.add('onClick', () => nav.nextSlide());
+```
+
+Common notifications: `setTransform`, `onClick`, `animationsFinished`, `setFigure`.
+
+## Scenarios
+
+Scenarios are named presets for position, rotation, scale, and color:
+
+```js
+figure.add({
+  name: 'shape', make: 'polygon', sides: 4, radius: 0.3,
+  mods: {
+    scenarios: {
+      center: { position: [0, 0], scale: [1, 1], color: [1, 0, 0, 1] },
+      right: { position: [1, 0], scale: [2, 1], color: [0, 0, 1, 1] },
+    },
+  },
+});
+
+// Set instantly
+figure.elements._shape.setScenario('center');
+
+// Animate to scenario
+figure.elements._shape.animations.new()
+  .scenario({ target: 'right', duration: 1 })
+  .start();
+
+// Set all children to a scenario
+figure.elements.setScenarios('center');
+```
+
+## SlideNavigator
+
+SlideNavigator manages sequential presentation states with animated transitions.
+
+### Verbose Syntax
+
+```js
+const slides = [
+  {
+    show: [eqn, description],
+    steadyState: () => { eqn.showForm('0'); description.setText({ text: 'Step 1' }); },
+  },
+  {
+    show: [eqn, description],
+    enterState: () => { eqn.showForm('0'); description.setText({ text: 'Step 1' }); },
+    transition: (done) => {
+      eqn.animations.new()
+        .goToForm({ target: '1', animate: 'move' })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => { eqn.showForm('1'); },
+  },
+];
+
+const nav = new Fig.SlideNavigator({ collection: figure.elements, slides });
+nav.goToSlide(0);
+```
+
+Slide lifecycle: `enterState` → `transition(done)` → `steadyState`. Each slide should fully define its state (not depend on previous slides).
+
+### Succinct Equation Syntax
+
+When using equations and text, use shorthand `form` and `text` properties:
+
+```js
+const nav = new Fig.SlideNavigator({
+  collection: figure.elements, equation: eqn, text: description,
+  slides: [
+    { form: '0', text: 'Goal: Rearrange for |a|' },
+    { text: 'Subtract |b| from both sides' },
+    { form: '1' },
+    { text: '|b| cancels on left side' },
+    { form: '2' },
+  ],
+});
+```
+
+If `form` or `text` is the same as the previous slide, it only needs to be defined once.
+
+### Shortcut Animation Syntax
+
+```js
+const nav = figure.addSlideNavigator();
+nav.loadSlides([
+  {
+    showCommon: 'sq1',
+    enterStateCommon: () => { sq1.setPosition([-0.5, 0.5]); },
+  },
+  { transition: { in: 'sq2' } },                                  // dissolve in
+  { transition: { position: 'sq2', target: [0.3, 0.5], duration: 1 } },  // move
+  {
+    transition: [                                                  // sequence
+      { position: 'sq1', target: [-0.3, 0.5], duration: 1 },
+      { rotation: 'sq1', target: Math.PI / 4, duration: 1 },
+    ],
+  },
+  {
+    transition: [                                                  // parallel (nested array)
+      [
+        { rotation: 'sq1', target: 0, duration: 1 },
+        { rotation: 'sq2', target: 0, duration: 1 },
+      ],
+      { out: ['sq1', 'sq2'] },                                    // dissolve out
+    ],
+  },
+]);
+```
+
+## Plots
+
+```js
+// Simple plot
+figure.add({
+  make: 'collections.plot',
+  trace: Fig.range(0, 10, 0.05).map(x => [x, x ** 2]),
+});
+
+// Customized plot with multiple traces and legend
+figure.add({
+  make: 'collections.plot',
+  width: 1, height: 1, position: [-0.5, -0.5],
+  title: { text: 'Distance', offset: [0, 0.1] },
+  x: { title: 'time (s)' },
+  y: { start: 0, stop: 100, title: 'distance (m)' },
+  trace: [
+    { points: data1, name: 'Linear' },
+    { points: data2, name: 'Quadratic', markers: { sides: 4, radius: 0.02 } },
+    {
+      points: data3, name: 'Cubic',
+      markers: { radius: 0.02, sides: 10, line: { width: 0.005 } },
+      line: { dash: [0.04, 0.01] },
+    },
+  ],
+  legend: { font: { size: 0.05 } },
+});
+```
+
+Trace `points` can be `[[x, y], ...]` arrays or `Fig.Point` arrays.
+
+## 3D
+
+Use an orthographic scene for 3D:
+
+```js
+const figure = new Fig.Figure({ scene: { style: 'orthographic' } });
+
+figure.add([
+  { make: 'collections.axis3', start: -0.8, length: 1.6, arrow: { ends: 'all' }, width: 0.01 },
+  { make: 'cube', side: 0.3, color: [1, 0, 0, 1] },
+  { make: 'cameraControl' },
+]);
+```
+
+For surfaces, use `Fig.surfaceGrid()` to generate point grids:
+
+```js
+const points = Fig.surfaceGrid({
+  x: [-0.8, 0.8, 0.02], y: [-0.8, 0.8, 0.02],
+  z: (x, y) => Math.sin(Math.sqrt(x*x + y*y) * 4) * 0.3,
+});
+figure.add({ make: 'surface', points, color: [1, 0, 0, 1], normals: 'curve' });
+```
+
+## Utilities
+
+```js
+Fig.range(start, stop, step)   // Array of numbers: [start, start+step, ..., stop]
+new Fig.Point(x, y)            // 2D/3D point; has .add(), .sub(), .scale(), .round()
+new Fig.Transform()            // Transform builder
+  .translate(x, y)
+  .rotate(angle)
+  .scale(sx, sy)
+Fig.round(value, precision)    // Round to N decimal places
+
+// Color format: [r, g, b, a] with values 0 to 1
+// [1, 0, 0, 1] = red, [0, 0, 1, 0.5] = semi-transparent blue
+```
+
+## Element Methods Reference
+
+```js
+element.show()                    // Make visible
+element.hide()                    // Make invisible
+element.setPosition([x, y])       // Set position
+element.getPosition()             // Get position (returns Point)
+element.setRotation(angle)        // Set rotation in radians
+element.getRotation()             // Get rotation
+element.setScale(x, y)            // Set scale
+element.setColor([r, g, b, a])    // Set color
+element.setOpacity(value)         // Set opacity (0-1)
+element.dim()                     // Dim to 0.3 opacity
+element.undim()                   // Restore full opacity
+element.setScenario('name')       // Jump to named scenario
+element.setTouchable()            // Enable touch
+element.setMovable()              // Enable dragging
+element.pulse({ scale: 1.5 })     // Pulse animation
+element.setText({ text: '...' })  // Update text content (text elements)
+```

@@ -15,7 +15,8 @@
   "files": [
     "index.js",
     "figureone.min.js",
-    "types/"
+    "types/",
+    "llms.txt"
   ],
   "repository": {
     "type": "git",
