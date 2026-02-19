@@ -40,6 +40,7 @@ docker_run() {
   if [ $3 ];
     then
     docker run -it --rm \
+      -v $HOST_PATH/.git:/opt/app/.git \
       -v $HOST_PATH/src:/opt/app/src \
       -v $HOST_PATH/package:/opt/app/package \
       -v $HOST_PATH/docs:/opt/app/docs \
