@@ -6,6 +6,10 @@ const path = require('path');
 // const TerserPlugin = require("terser-webpack-plugin");
 // eslint-disable-next-line import/no-unresolved
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { DefinePlugin } = require('webpack');
+const { execSync } = require('child_process');
+const packageJson = require('./package.json');
+const gitHash = execSync('git rev-parse --short HEAD').toString().trim();
 // eslint-disable-next-line import/no-extraneous-dependencies
 const TerserPlugin = require('terser-webpack-plugin');
 
@@ -113,7 +117,12 @@ module.exports = (env) => {
   // Make the plugin array filtering out those plugins that are null
   const pluginArray = [
     // uglify,
-    clean].filter(elem => elem !== '');
+    clean,
+    new DefinePlugin({
+      __FIGUREONE_VERSION__: JSON.stringify(packageJson.version),
+      __FIGUREONE_GIT_HASH__: JSON.stringify(gitHash),
+    }),
+  ].filter(elem => elem !== '');
 
   return {
     entry: './src/index.ts',

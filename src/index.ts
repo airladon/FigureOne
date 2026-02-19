@@ -96,7 +96,12 @@ const tools = {
  * @global
  * @property {class} {@link Figure}      - Figure Class
  */
+declare const __FIGUREONE_VERSION__: string;
+declare const __FIGUREONE_GIT_HASH__: string;
+
 const Fig = {
+  version: __FIGUREONE_VERSION__,
+  gitHash: __FIGUREONE_GIT_HASH__,
   tools,
   Figure,
   Recorder,
