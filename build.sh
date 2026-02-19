@@ -169,10 +169,14 @@ then
   then
     docker run -it --rm \
       -v $HOST_PATH/package:/opt/app/package \
+      -e NPM_TOKEN=$NPM_TOKEN \
       --name figureone_npm \
-      --entrypoint npm \
+      --entrypoint sh \
       figureone_dev \
-      publish package/
+      -c "echo '//registry.npmjs.org/:_authToken=\${NPM_TOKEN}' > ~/.npmrc && npm publish package/"
+    if [ $? -ne 0 ]; then
+      FAIL=1
+    fi
   else
     echo
     echo "Version No: " $CURRENT_VERSION " is the same as published version. Change it in package.json if you want to deploy."
