@@ -1,5 +1,8 @@
 # Releases
 
+## 1.0.1
+* Add agent support
+
 ## 1.0.0
 * Migrate codebase from Flow to TypeScript
 * Published TypeScript type declarations for public API

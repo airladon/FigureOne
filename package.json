@@ -1,6 +1,6 @@
 {
   "name": "figureone",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Draw, animate and interact with shapes, text, plots and equations in Javascript. Create interactive slide shows, and interactive videos.",
   "main": "index.js",
   "types": "types/index.d.ts",
