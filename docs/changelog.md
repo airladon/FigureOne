@@ -1,5 +1,8 @@
 # Releases
 
+## 1.0.2
+* Improve agent support
+
 ## 1.0.1
 * Add agent support
 
