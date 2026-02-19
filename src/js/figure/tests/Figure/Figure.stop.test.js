@@ -13,9 +13,10 @@ describe('Figure Stop', () => {
   let b;
   let stoppedCallback;
   let preparingToStopCallback;
+  let rafSpy;
   beforeEach(() => {
     jest.useFakeTimers();
-    jest.spyOn(window, 'requestAnimationFrame').mockImplementation(() => {});
+    rafSpy = jest.spyOn(window, 'requestAnimationFrame').mockImplementation(() => {});
     figure = makeFigure();
     figure.timeKeeper.reset();
     figure.add([
@@ -38,7 +39,7 @@ describe('Figure Stop', () => {
     figure.mock.timeStep(0);
   });
   afterEach(() => {
-    window.requestAnimationFrame.mockRestore();
+    rafSpy.mockRestore();
   });
   describe('Animation', () => {
     let state;

@@ -1,5 +1,5 @@
 module.exports = {
-  testURL: 'http://localhost',
+  testEnvironmentOptions: { url: 'http://localhost' },
   testRegex: [
     '/src/js/.*\\.ptest\\.js',
     '/src/tests/.*\\.ptest\\.js',

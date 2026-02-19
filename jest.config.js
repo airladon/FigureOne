@@ -1,5 +1,9 @@
 module.exports = {
-  testURL: 'http://localhost',
+  globals: {
+    __FIGUREONE_VERSION__: '0.0.0-test',
+    __FIGUREONE_GIT_HASH__: 'test',
+  },
+  testEnvironmentOptions: { url: 'http://localhost' },
   testRegex: [
     '/src/js/.*\\.test\\.[jt]sx?$',
     '/src/tests/.*\\.test\\.[jt]sx?$',
@@ -16,5 +20,5 @@ module.exports = {
   testPathIgnorePatterns: ['/node_modules/', '\\.snap$', '<rootDir>/package/', 'package.json'],
   coverageDirectory: './reports',
   testEnvironment: 'jsdom',
-  timers: 'real',
+  setupFiles: ['./jest.setup.js'],
 };

@@ -1,45 +1,45 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Different ways to make an equation All Text in constructor with all options 1`] = `
 FigureElementPrimitive2DText {
-  "_custom": Object {},
+  "_custom": {},
   "afterDrawCallback": null,
   "allowSetColor": "all",
   "angleToDraw": -1,
   "animationFinishedCallback": null,
   "animations": AnimationManager {
     "animationSpeed": 1,
-    "animations": Array [],
-    "customSteps": Array [],
+    "animations": [],
+    "customSteps": [],
     "element": [Circular],
     "finishedCallback": [Function],
     "fnMap": FunctionMap {
       "global": GlobalFunctionMap {
-        "map": Object {},
+        "map": {},
       },
-      "map": Object {},
+      "map": {},
     },
     "notifications": NotificationManager {
       "fnMap": FunctionMap {
         "global": GlobalFunctionMap {
-          "map": Object {},
+          "map": {},
         },
-        "map": Object {},
+        "map": {},
       },
-      "notifications": Object {
+      "notifications": {
         "frame": Notification {
           "fnMap": FunctionMap {
             "global": GlobalFunctionMap {
-              "map": Object {},
+              "map": {},
             },
-            "map": Object {},
+            "map": {},
           },
           "nextId": 1,
-          "order": Array [
+          "order": [
             "0",
           ],
-          "subscribers": Object {
-            "0": Object {
+          "subscribers": {
+            "0": {
               "callback": [Function],
               "num": -1,
             },
@@ -47,28 +47,28 @@ FigureElementPrimitive2DText {
         },
       },
     },
-    "options": Object {
-      "translation": Object {},
+    "options": {
+      "translation": {},
     },
     "recorder": undefined,
     "state": "idle",
     "timeKeeper": TimeKeeper {
       "animateOnFrame": false,
-      "drawQueue": Array [],
+      "drawQueue": [],
       "idCounter": 0,
       "lastDrawTime": null,
-      "lastTime": 3000,
+      "lastTime": 0,
       "manual": false,
-      "nextDrawQueue": Array [],
-      "nowTime": 3000,
+      "nextDrawQueue": [],
+      "nowTime": 0,
       "requestNextAnimationFrame": [MockFunction] {
-        "calls": Array [
-          Array [
+        "calls": [
+          [
             [Function],
           ],
         ],
-        "results": Array [
-          Object {
+        "results": [
+          {
             "type": "return",
             "value": undefined,
           },
@@ -77,7 +77,7 @@ FigureElementPrimitive2DText {
       "speed": 1,
       "syncNowTimeout": 100,
       "timeoutId": null,
-      "timers": Object {},
+      "timers": {},
       "updateSyncNow": true,
     },
   },
@@ -85,30 +85,30 @@ FigureElementPrimitive2DText {
   "border": "draw",
   "cancelSetTransform": false,
   "cannotTouchHole": false,
-  "color": Array [
+  "color": [
     0.95,
     0,
     0,
     1,
   ],
-  "copyTransforms": Array [],
-  "custom": Object {},
-  "customState": Object {},
-  "defaultColor": Array [
+  "copyTransforms": [],
+  "custom": {},
+  "customState": {},
+  "defaultColor": [
     0.95,
     0,
     0,
     1,
   ],
   "dependantTransform": false,
-  "dimColor": Array [
+  "dimColor": [
     0.5,
     0.5,
     0.5,
     1,
   ],
-  "drawBorder": Array [
-    Array [
+  "drawBorder": [
+    [
       Point {
         "_type": "point",
         "x": 0,
@@ -135,8 +135,8 @@ FigureElementPrimitive2DText {
       },
     ],
   ],
-  "drawBorderBuffer": Array [
-    Array [
+  "drawBorderBuffer": [
+    [
       Point {
         "_type": "point",
         "x": 0,
@@ -165,14 +165,14 @@ FigureElementPrimitive2DText {
   ],
   "drawNumber": 0,
   "drawPriority": 1,
-  "drawTransforms": Array [],
+  "drawTransforms": [],
   "drawingObject": TextObject {
-    "adjustments": Object {
+    "adjustments": {
       "ascent": 0,
       "descent": 0,
       "width": 0,
     },
-    "alignedLocation": Array [
+    "alignedLocation": [
       Point {
         "_type": "point",
         "x": 0,
@@ -189,24 +189,24 @@ FigureElementPrimitive2DText {
       "width": 0.1,
     },
     "drawContext2D": DrawContext2D {
-      "canvas": Object {
+      "canvas": {
         "height": 1000,
         "offsetHeight": 500,
         "offsetWidth": 1000,
-        "style": Object {
+        "style": {
           "height": "500px",
           "width": "1000px",
         },
         "width": 2000,
       },
-      "ctx": Object {
-        "canvas": Object {
+      "ctx": {
+        "canvas": {
           "height": 500,
           "width": 1000,
         },
         "clearRect": [Function],
         "fillText": [Function],
-        "filledText": Object {
+        "filledText": {
           "count": 0,
           "text": "",
           "x": null,
@@ -220,7 +220,7 @@ FigureElementPrimitive2DText {
         "textAlign": [Function],
         "textBaseline": [Function],
         "transform": [Function],
-        "transformMatrix": Array [
+        "transformMatrix": [
           1,
           0,
           0,
@@ -235,7 +235,7 @@ FigureElementPrimitive2DText {
     "font": FigureFont {
       "atlasColor": false,
       "atlasSize": null,
-      "color": Array [
+      "color": [
         0.95,
         0,
         0,
@@ -246,198 +246,198 @@ FigureElementPrimitive2DText {
       "glyphs": "mathlatin",
       "id": undefined,
       "letterSpacing": 0,
-      "loadColor": Array [
+      "loadColor": [
         0,
         0,
         0,
         0,
       ],
-      "map": Object {},
+      "map": {},
       "maxAscent": 1.5,
       "maxCount": 1,
       "maxDescent": 0.5,
       "midAscent": 1.1,
       "midDescent": 0.2,
-      "modifiers": Object {},
-      "mods": Object {
-        " ": Object {
+      "modifiers": {},
+      "mods": {
+        " ": {
           "a": 1.1,
           "d": 0.08,
           "w": 1,
         },
-        "$": Object {
+        "$": {
           "a": 1.5,
           "d": 0.2,
           "w": 1,
         },
-        "(": Object {
+        "(": {
           "a": 1.5,
           "d": 0.5,
           "w": 1,
         },
-        ")": Object {
+        ")": {
           "a": 1.5,
           "d": 0.5,
           "w": 1,
         },
-        "*": Object {
+        "*": {
           "a": 1.1,
           "d": 0.08,
           "w": 1,
         },
-        ",": Object {
+        ",": {
           "a": 1.1,
           "d": 0.2,
           "w": 1,
         },
-        "-": Object {
+        "-": {
           "a": 1.1,
           "d": 0.08,
           "w": 1,
         },
-        ":": Object {
+        ":": {
           "a": 1.1,
           "d": 0.08,
           "w": 1,
         },
-        ";": Object {
+        ";": {
           "a": 1.1,
           "d": 0.2,
           "w": 1,
         },
-        "@": Object {
+        "@": {
           "a": 1.5,
           "d": 0.5,
           "w": 1,
         },
-        "Q": Object {
+        "Q": {
           "a": 1.5,
           "d": 0.5,
           "w": 1,
         },
-        "[": Object {
+        "[": {
           "a": 1.5,
           "d": 0.5,
           "w": 1,
         },
-        "]": Object {
+        "]": {
           "a": 1.5,
           "d": 0.5,
           "w": 1,
         },
-        "a": Object {
+        "a": {
           "a": 1.1,
           "d": 0.08,
           "w": 1,
         },
-        "c": Object {
+        "c": {
           "a": 1.1,
           "d": 0.08,
           "w": 1,
         },
-        "e": Object {
+        "e": {
           "a": 1.1,
           "d": 0.08,
           "w": 1,
         },
-        "f": Object {
+        "f": {
           "a": 1.5,
           "d": 0.5,
           "w": 1.3,
         },
-        "g": Object {
+        "g": {
           "a": 1.1,
           "d": 0.5,
           "w": 1,
         },
-        "j": Object {
+        "j": {
           "a": 1.5,
           "d": 0.5,
           "w": 1,
         },
-        "m": Object {
+        "m": {
           "a": 1.1,
           "d": 0.08,
           "w": 1,
         },
-        "n": Object {
+        "n": {
           "a": 1.1,
           "d": 0.08,
           "w": 1,
         },
-        "o": Object {
+        "o": {
           "a": 1.1,
           "d": 0.08,
           "w": 1,
         },
-        "p": Object {
+        "p": {
           "a": 1.1,
           "d": 0.5,
           "w": 1,
         },
-        "q": Object {
+        "q": {
           "a": 1.1,
           "d": 0.5,
           "w": 1,
         },
-        "r": Object {
+        "r": {
           "a": 1.1,
           "d": 0.08,
           "w": 1,
         },
-        "s": Object {
+        "s": {
           "a": 1.1,
           "d": 0.08,
           "w": 1,
         },
-        "u": Object {
+        "u": {
           "a": 1.1,
           "d": 0.08,
           "w": 1,
         },
-        "v": Object {
+        "v": {
           "a": 1.1,
           "d": 0.08,
           "w": 1,
         },
-        "w": Object {
+        "w": {
           "a": 1.1,
           "d": 0.08,
           "w": 1,
         },
-        "x": Object {
+        "x": {
           "a": 1.1,
           "d": 0.08,
           "w": 1,
         },
-        "y": Object {
+        "y": {
           "a": 1.1,
           "d": 0.5,
           "w": 1,
         },
-        "z": Object {
+        "z": {
           "a": 1.1,
           "d": 0.08,
           "w": 1,
         },
-        "{": Object {
+        "{": {
           "a": 1.5,
           "d": 0.5,
           "w": 1,
         },
-        "|": Object {
+        "|": {
           "a": 1.5,
           "d": 0.5,
           "w": 1,
         },
-        "}": Object {
+        "}": {
           "a": 1.5,
           "d": 0.5,
           "w": 1,
         },
       },
       "opacity": 1,
-      "outline": Object {
+      "outline": {
         "fill": true,
         "width": 0,
       },
@@ -450,8 +450,8 @@ FigureElementPrimitive2DText {
       "underline": false,
       "weight": "200",
     },
-    "lastDraw": Array [],
-    "lastDrawTransform": Array [
+    "lastDraw": [],
+    "lastDrawTransform": [
       1,
       0,
       0,
@@ -462,7 +462,7 @@ FigureElementPrimitive2DText {
       0,
       1,
     ],
-    "location": Array [
+    "location": [
       Point {
         "_type": "point",
         "x": 0,
@@ -470,10 +470,10 @@ FigureElementPrimitive2DText {
         "z": 0,
       },
     ],
-    "measure": Object {
+    "measure": {
       "ascent": 0.11,
-      "border": Array [
-        Array [
+      "border": [
+        [
           Point {
             "_type": "point",
             "x": 0,
@@ -507,8 +507,8 @@ FigureElementPrimitive2DText {
       "top": 0.11,
       "width": 0.1,
     },
-    "measurements": Array [
-      Object {
+    "measurements": [
+      {
         "bottom": -0.008,
         "left": 0,
         "right": 0.1,
@@ -516,11 +516,11 @@ FigureElementPrimitive2DText {
       },
     ],
     "scalingFactor": 100,
-    "text": Array [
+    "text": [
       "a",
     ],
-    "textBorder": Array [
-      Array [
+    "textBorder": [
+      [
         Point {
           "_type": "point",
           "x": 0,
@@ -553,30 +553,30 @@ FigureElementPrimitive2DText {
   },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
-      "map": Object {},
+      "map": {},
     },
-    "map": Object {
-      "_elementPulseSettingsTransformMethod": Object {
+    "map": {
+      "_elementPulseSettingsTransformMethod": {
         "fn": [Function],
       },
-      "tools.math.easeinout": Object {
+      "tools.math.easeinout": {
         "fn": [Function],
       },
-      "tools.math.linear": Object {
+      "tools.math.linear": {
         "fn": [Function],
       },
-      "tools.math.sinusoid": Object {
+      "tools.math.sinusoid": {
         "fn": [Function],
       },
-      "tools.math.sinusoidAbs": Object {
+      "tools.math.sinusoidAbs": {
         "fn": [Function],
       },
-      "tools.math.triangle": Object {
+      "tools.math.triangle": {
         "fn": [Function],
       },
     },
   },
-  "frozenPulseTransforms": Array [],
+  "frozenPulseTransforms": [],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -592,28 +592,28 @@ FigureElementPrimitive2DText {
   "lastDrawOpacity": 1,
   "lastDrawPulseTransform": Transform {
     "_type": "transform",
-    "def": Array [
-      Array [
+    "def": [
+      [
         "s",
         1,
         1,
         1,
       ],
-      Array [
+      [
         "r",
         0,
         0,
         0,
         1,
       ],
-      Array [
+      [
         "t",
         0,
         0,
         0,
       ],
     ],
-    "mat": Array [
+    "mat": [
       1,
       0,
       0,
@@ -634,10 +634,10 @@ FigureElementPrimitive2DText {
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
-  "move": Object {
+  "move": {
     "bounds": null,
     "element": null,
-    "freely": Object {
+    "freely": {
       "bounceLoss": 0.5,
       "callback": null,
       "deceleration": 5,
@@ -665,40 +665,40 @@ FigureElementPrimitive2DText {
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
       "global": GlobalFunctionMap {
-        "map": Object {},
+        "map": {},
       },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
+      "map": {
+        "_elementPulseSettingsTransformMethod": {
           "fn": [Function],
         },
-        "tools.math.easeinout": Object {
+        "tools.math.easeinout": {
           "fn": [Function],
         },
-        "tools.math.linear": Object {
+        "tools.math.linear": {
           "fn": [Function],
         },
-        "tools.math.sinusoid": Object {
+        "tools.math.sinusoid": {
           "fn": [Function],
         },
-        "tools.math.sinusoidAbs": Object {
+        "tools.math.sinusoidAbs": {
           "fn": [Function],
         },
-        "tools.math.triangle": Object {
+        "tools.math.triangle": {
           "fn": [Function],
         },
       },
     },
-    "notifications": Object {},
+    "notifications": {},
   },
   "onAdd": null,
   "onClick": null,
   "opacity": 1,
   "parent": null,
-  "parentTransform": Array [
+  "parentTransform": [
     Transform {
       "_type": "transform",
-      "def": Array [],
-      "mat": Array [
+      "def": [],
+      "mat": [
         1,
         0,
         0,
@@ -718,9 +718,9 @@ FigureElementPrimitive2DText {
       ],
     },
   ],
-  "pointsDefinition": Object {},
+  "pointsDefinition": {},
   "pointsToDraw": -1,
-  "pulseDefault": Object {
+  "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
     "done": null,
@@ -736,7 +736,7 @@ FigureElementPrimitive2DText {
     "xAlign": "center",
     "yAlign": "middle",
   },
-  "pulseSettings": Object {
+  "pulseSettings": {
     "A": 1,
     "B": 0.5,
     "C": 0,
@@ -755,12 +755,12 @@ FigureElementPrimitive2DText {
     "transformMethod": "_elementPulseSettingsTransformMethod",
     "type": "scale",
   },
-  "pulseTransforms": Array [],
+  "pulseTransforms": [],
   "recorder": Recorder {
     "audio": null,
     "currentTime": 0,
     "duration": 0,
-    "eventIndex": Object {
+    "eventIndex": {
       "_autoCursor": -1,
       "_autoCursorMove": -1,
       "_autoExec": -1,
@@ -772,60 +772,60 @@ FigureElementPrimitive2DText {
       "touch": -1,
       "touchElement": -1,
     },
-    "events": Object {
-      "_autoCursor": Object {
-        "list": Array [],
+    "events": {
+      "_autoCursor": {
+        "list": [],
         "playbackAction": [Function],
         "setOnSeek": true,
       },
-      "_autoCursorMove": Object {
-        "list": Array [],
+      "_autoCursorMove": {
+        "list": [],
         "playbackAction": [Function],
         "setOnSeek": true,
       },
-      "_autoExec": Object {
-        "list": Array [],
+      "_autoExec": {
+        "list": [],
         "playbackAction": [Function],
         "setOnSeek": true,
       },
-      "_autoTouch": Object {
-        "list": Array [],
+      "_autoTouch": {
+        "list": [],
         "playbackAction": [Function],
         "setOnSeek": true,
       },
-      "_autoTouchElement": Object {
-        "list": Array [],
+      "_autoTouchElement": {
+        "list": [],
         "playbackAction": [Function],
         "setOnSeek": true,
       },
-      "cursor": Object {
-        "list": Array [],
+      "cursor": {
+        "list": [],
         "playbackAction": [Function],
         "setOnSeek": true,
       },
-      "cursorMove": Object {
-        "list": Array [],
+      "cursorMove": {
+        "list": [],
         "playbackAction": [Function],
         "setOnSeek": true,
       },
-      "exec": Object {
-        "list": Array [],
+      "exec": {
+        "list": [],
         "playbackAction": [Function],
         "setOnSeek": true,
       },
-      "touch": Object {
-        "list": Array [],
+      "touch": {
+        "list": [],
         "playbackAction": [Function],
         "setOnSeek": true,
       },
-      "touchElement": Object {
-        "list": Array [],
+      "touchElement": {
+        "list": [],
         "playbackAction": [Function],
         "setOnSeek": true,
       },
     },
-    "eventsCache": Object {},
-    "eventsToPlay": Array [],
+    "eventsCache": {},
+    "eventsToPlay": [],
     "figure": null,
     "isAudioPlaying": false,
     "lastRecordTime": null,
@@ -834,11 +834,11 @@ FigureElementPrimitive2DText {
     "notifications": NotificationManager {
       "fnMap": FunctionMap {
         "global": GlobalFunctionMap {
-          "map": Object {},
+          "map": {},
         },
-        "map": Object {},
+        "map": {},
       },
-      "notifications": Object {},
+      "notifications": {},
     },
     "pauseState": null,
     "precision": 8,
@@ -846,7 +846,7 @@ FigureElementPrimitive2DText {
     "queueSeekTime": 0,
     "reference": "__base",
     "referenceIndex": 0,
-    "settings": Object {
+    "settings": {
       "pause": "freeze",
       "play": "instant",
     },
@@ -855,36 +855,36 @@ FigureElementPrimitive2DText {
     "stateTimeStep": 1,
     "states": ObjectTracker {
       "baseReference": null,
-      "diffs": Array [],
+      "diffs": [],
       "lastReferenceName": "__base",
       "precision": 8,
-      "references": Object {},
+      "references": {},
     },
     "statesCache": ObjectTracker {
       "baseReference": null,
-      "diffs": Array [],
+      "diffs": [],
       "lastReferenceName": "__base",
       "precision": 8,
-      "references": Object {},
+      "references": {},
     },
     "timeKeeper": TimeKeeper {
       "animateOnFrame": false,
       "animationId": undefined,
-      "drawQueue": Array [],
+      "drawQueue": [],
       "idCounter": 0,
       "lastDrawTime": null,
-      "lastTime": 3000,
+      "lastTime": 0,
       "manual": false,
-      "nextDrawQueue": Array [],
-      "nowTime": 3000,
+      "nextDrawQueue": [],
+      "nowTime": 0,
       "requestNextAnimationFrame": [MockFunction] {
-        "calls": Array [
-          Array [
+        "calls": [
+          [
             [Function],
           ],
         ],
-        "results": Array [
-          Object {
+        "results": [
+          {
             "type": "return",
             "value": undefined,
           },
@@ -893,7 +893,7 @@ FigureElementPrimitive2DText {
       "speed": 1,
       "syncNowTimeout": 100,
       "timeoutId": null,
-      "timers": Object {},
+      "timers": {},
       "updateSyncNow": true,
     },
     "timeUpdates": 100,
@@ -903,11 +903,11 @@ FigureElementPrimitive2DText {
     "worker": null,
   },
   "renderedOnNextDraw": false,
-  "scenarios": Object {},
+  "scenarios": {},
   "scene": Scene {
     "aspectRatio": 0,
     "bottom": -1,
-    "camera": Object {
+    "camera": {
       "lookAt": Point {
         "_type": "point",
         "x": 0,
@@ -927,7 +927,7 @@ FigureElementPrimitive2DText {
         "z": 0,
       },
     },
-    "cameraMatrix": Array [
+    "cameraMatrix": [
       1,
       0,
       0,
@@ -981,7 +981,7 @@ FigureElementPrimitive2DText {
     "fieldOfView": 0.47123889803846897,
     "heightFar": 2,
     "heightNear": 2,
-    "inverseViewProjectionMatrix": Array [
+    "inverseViewProjectionMatrix": [
       1,
       0,
       0,
@@ -1000,7 +1000,7 @@ FigureElementPrimitive2DText {
       1,
     ],
     "left": -1,
-    "light": Object {
+    "light": {
       "ambient": 0.4,
       "directional": Point {
         "_type": "point",
@@ -1055,7 +1055,7 @@ FigureElementPrimitive2DText {
       "y": 0,
       "z": 0,
     },
-    "projectionMatrix": Array [
+    "projectionMatrix": [
       1,
       0,
       0,
@@ -1088,7 +1088,7 @@ FigureElementPrimitive2DText {
       "y": 1,
       "z": 0,
     },
-    "viewMatrix": Array [
+    "viewMatrix": [
       1,
       0,
       0,
@@ -1106,7 +1106,7 @@ FigureElementPrimitive2DText {
       0,
       1,
     ],
-    "viewProjectionMatrix": Array [
+    "viewProjectionMatrix": [
       1,
       0,
       0,
@@ -1131,22 +1131,22 @@ FigureElementPrimitive2DText {
   "setPointsFromDefinition": null,
   "setTransformCallback": null,
   "simple": false,
-  "state": Object {
+  "state": {
     "isBeingMoved": false,
     "isChanging": false,
     "isMovingFreely": false,
     "isPulsing": false,
-    "movement": Object {
+    "movement": {
       "previousTime": null,
       "velocity": 0,
     },
     "preparingToStop": false,
-    "pulse": Object {
+    "pulse": {
       "startTime": null,
     },
   },
-  "stateProperties": Array [],
-  "tieToHTML": Object {
+  "stateProperties": [],
+  "tieToHTML": {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
@@ -1162,21 +1162,21 @@ FigureElementPrimitive2DText {
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": undefined,
-    "drawQueue": Array [],
+    "drawQueue": [],
     "idCounter": 0,
     "lastDrawTime": null,
-    "lastTime": 3000,
+    "lastTime": 0,
     "manual": false,
-    "nextDrawQueue": Array [],
-    "nowTime": 3000,
+    "nextDrawQueue": [],
+    "nowTime": 0,
     "requestNextAnimationFrame": [MockFunction] {
-      "calls": Array [
-        Array [
+      "calls": [
+        [
           [Function],
         ],
       ],
-      "results": Array [
-        Object {
+      "results": [
+        {
           "type": "return",
           "value": undefined,
         },
@@ -1185,7 +1185,7 @@ FigureElementPrimitive2DText {
     "speed": 1,
     "syncNowTimeout": 100,
     "timeoutId": null,
-    "timers": Object {},
+    "timers": {},
     "updateSyncNow": true,
   },
   "touchBorder": "buffer",
@@ -1197,28 +1197,28 @@ FigureElementPrimitive2DText {
   },
   "transform": Transform {
     "_type": "transform",
-    "def": Array [
-      Array [
+    "def": [
+      [
         "s",
         0.45,
         0.45,
         1,
       ],
-      Array [
+      [
         "r",
         0,
         0,
         0,
         1,
       ],
-      Array [
+      [
         "t",
         1.865,
         1.9325,
         0,
       ],
     ],
-    "mat": Array [
+    "mat": [
       0.45,
       0,
       0,
@@ -1245,7 +1245,7 @@ FigureElementPrimitive2DText {
 `;
 
 exports[`Different ways to make an equation Separate All Text 1`] = `
-Array [
+[
   0.7,
   0,
   0,
@@ -1266,7 +1266,7 @@ Array [
 `;
 
 exports[`Different ways to make an equation Separate All Text 2`] = `
-Array [
+[
   0.7,
   0,
   0,
@@ -1287,7 +1287,7 @@ Array [
 `;
 
 exports[`Different ways to make an equation Separate All Text 3`] = `
-Array [
+[
   0.14,
   0,
   0,
@@ -1308,7 +1308,7 @@ Array [
 `;
 
 exports[`Different ways to make an equation Separate All Text 4`] = `
-Array [
+[
   0.7,
   0,
   0,

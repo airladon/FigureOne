@@ -323,6 +323,7 @@ describe('Generate Unique ID', () => {
 });
 describe('Is Touch Device', () => {
   test('Simple', () => {
+    delete window.ontouchstart;
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
       value: jest.fn().mockImplementation(query => ({

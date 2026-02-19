@@ -14,10 +14,11 @@ jest.useFakeTimers();
 describe('Element Drawing', () => {
   let figure;
   let a;
+  let rafSpy;
 
   beforeEach(() => {
     jest.useFakeTimers();
-    jest.spyOn(window, 'requestAnimationFrame').mockImplementation(() => {});
+    rafSpy = jest.spyOn(window, 'requestAnimationFrame').mockImplementation(() => {});
     figure = makeFigure();
     figure.add([
       {
@@ -29,7 +30,7 @@ describe('Element Drawing', () => {
     figure.webglLow.gl.uniformMatrix4fv.mockClear();
   });
   afterEach(() => {
-    window.requestAnimationFrame.mockRestore();
+    rafSpy.mockRestore();
   });
   test('Simple', () => {
     a.setPosition(1, 1);

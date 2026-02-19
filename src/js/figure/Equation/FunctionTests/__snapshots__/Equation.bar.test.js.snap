@@ -1,7 +1,7 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Equation Functions - Bar Bar 1`] = `
-Array [
+[
   0.7,
   0,
   0,
@@ -22,7 +22,7 @@ Array [
 `;
 
 exports[`Equation Functions - Bar Bar 2`] = `
-Array [
+[
   0.01,
   0,
   0,

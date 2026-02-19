@@ -1,50 +1,50 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Collection: Line - Animations Shape grow 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.2,
         -0.025,
       ],
-      Array [
+      [
         0.2,
         -0.025,
       ],
-      Array [
+      [
         0.2,
         0.025,
       ],
-      Array [
+      [
         -0.2,
         0.025,
       ],
     ],
   ],
-  "elements": Object {
-    "line": Object {
-      "border": Array [
-        Array [
-          Array [
+  "elements": {
+    "line": {
+      "border": [
+        [
+          [
             -0.2,
             -0.025,
           ],
-          Array [
+          [
             0.2,
             -0.025,
           ],
-          Array [
+          [
             0.2,
             0.025,
           ],
-          Array [
+          [
             -0.2,
             0.025,
           ],
         ],
       ],
-      "points": Array [
+      "points": [
         0,
         0.025,
         0.4,
@@ -58,21 +58,21 @@ Object {
         0.4,
         -0.025,
       ],
-      "touchBorder": Array [
-        Array [
-          Array [
+      "touchBorder": [
+        [
+          [
             -0.2,
             -0.025,
           ],
-          Array [
+          [
             0.2,
             -0.025,
           ],
-          Array [
+          [
             0.2,
             0.025,
           ],
-          Array [
+          [
             -0.2,
             0.025,
           ],
@@ -80,21 +80,21 @@ Object {
       ],
     },
   },
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.2,
         -0.025,
       ],
-      Array [
+      [
         0.2,
         -0.025,
       ],
-      Array [
+      [
         0.2,
         0.025,
       ],
-      Array [
+      [
         -0.2,
         0.025,
       ],
@@ -104,50 +104,50 @@ Object {
 `;
 
 exports[`Collection: Line - Animations Shape lengthAnimation 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.2,
         -0.025,
       ],
-      Array [
+      [
         0.2,
         -0.025,
       ],
-      Array [
+      [
         0.2,
         0.025,
       ],
-      Array [
+      [
         -0.2,
         0.025,
       ],
     ],
   ],
-  "elements": Object {
-    "line": Object {
-      "border": Array [
-        Array [
-          Array [
+  "elements": {
+    "line": {
+      "border": [
+        [
+          [
             -0.2,
             -0.025,
           ],
-          Array [
+          [
             0.2,
             -0.025,
           ],
-          Array [
+          [
             0.2,
             0.025,
           ],
-          Array [
+          [
             -0.2,
             0.025,
           ],
         ],
       ],
-      "points": Array [
+      "points": [
         0,
         0.025,
         0.4,
@@ -161,21 +161,21 @@ Object {
         0.4,
         -0.025,
       ],
-      "touchBorder": Array [
-        Array [
-          Array [
+      "touchBorder": [
+        [
+          [
             -0.2,
             -0.025,
           ],
-          Array [
+          [
             0.2,
             -0.025,
           ],
-          Array [
+          [
             0.2,
             0.025,
           ],
-          Array [
+          [
             -0.2,
             0.025,
           ],
@@ -183,21 +183,21 @@ Object {
       ],
     },
   },
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.2,
         -0.025,
       ],
-      Array [
+      [
         0.2,
         -0.025,
       ],
-      Array [
+      [
         0.2,
         0.025,
       ],
-      Array [
+      [
         -0.2,
         0.025,
       ],
@@ -207,50 +207,50 @@ Object {
 `;
 
 exports[`Collection: Line - Animations Shape lengthAnimationStep 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.2,
         -0.025,
       ],
-      Array [
+      [
         0.2,
         -0.025,
       ],
-      Array [
+      [
         0.2,
         0.025,
       ],
-      Array [
+      [
         -0.2,
         0.025,
       ],
     ],
   ],
-  "elements": Object {
-    "line": Object {
-      "border": Array [
-        Array [
-          Array [
+  "elements": {
+    "line": {
+      "border": [
+        [
+          [
             -0.2,
             -0.025,
           ],
-          Array [
+          [
             0.2,
             -0.025,
           ],
-          Array [
+          [
             0.2,
             0.025,
           ],
-          Array [
+          [
             -0.2,
             0.025,
           ],
         ],
       ],
-      "points": Array [
+      "points": [
         0,
         0.025,
         0.4,
@@ -264,21 +264,21 @@ Object {
         0.4,
         -0.025,
       ],
-      "touchBorder": Array [
-        Array [
-          Array [
+      "touchBorder": [
+        [
+          [
             -0.2,
             -0.025,
           ],
-          Array [
+          [
             0.2,
             -0.025,
           ],
-          Array [
+          [
             0.2,
             0.025,
           ],
-          Array [
+          [
             -0.2,
             0.025,
           ],
@@ -286,21 +286,21 @@ Object {
       ],
     },
   },
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.2,
         -0.025,
       ],
-      Array [
+      [
         0.2,
         -0.025,
       ],
-      Array [
+      [
         0.2,
         0.025,
       ],
-      Array [
+      [
         -0.2,
         0.025,
       ],
@@ -310,104 +310,104 @@ Object {
 `;
 
 exports[`Collection: Line - Animations Shape pulse-defaults 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.15,
         -0.005,
       ],
-      Array [
+      [
         0.15,
         -0.005,
       ],
-      Array [
+      [
         0.15,
         0.005,
       ],
-      Array [
+      [
         -0.15,
         0.005,
       ],
     ],
-    Array [
-      Array [
+    [
+      [
         -0.15,
         0,
       ],
-      Array [
+      [
         -0.14,
         0.03,
       ],
-      Array [
+      [
         -0.2,
         0,
       ],
-      Array [
+      [
         -0.14,
         -0.03,
       ],
     ],
-    Array [
-      Array [
+    [
+      [
         0.15,
         0,
       ],
-      Array [
+      [
         0.14,
         -0.03,
       ],
-      Array [
+      [
         0.2,
         0,
       ],
-      Array [
+      [
         0.14,
         0.03,
       ],
     ],
-    Array [
-      Array [
+    [
+      [
         -0.035,
         0.066,
       ],
-      Array [
+      [
         0.035,
         0.066,
       ],
-      Array [
+      [
         0.035,
         0.148,
       ],
-      Array [
+      [
         -0.035,
         0.148,
       ],
     ],
   ],
-  "elements": Object {
-    "arrow1": Object {
-      "border": Array [
-        Array [
-          Array [
+  "elements": {
+    "arrow1": {
+      "border": [
+        [
+          [
             -0.15,
             0,
           ],
-          Array [
+          [
             -0.14,
             0.03,
           ],
-          Array [
+          [
             -0.2,
             0,
           ],
-          Array [
+          [
             -0.14,
             -0.03,
           ],
         ],
       ],
-      "points": Array [
+      "points": [
         0.05,
         0,
         0.06,
@@ -421,49 +421,49 @@ Object {
         0.06,
         -0.03,
       ],
-      "touchBorder": Array [
-        Array [
-          Array [
+      "touchBorder": [
+        [
+          [
             -0.15,
             0,
           ],
-          Array [
+          [
             -0.14,
             0.03,
           ],
-          Array [
+          [
             -0.2,
             0,
           ],
-          Array [
+          [
             -0.14,
             -0.03,
           ],
         ],
       ],
     },
-    "arrow2": Object {
-      "border": Array [
-        Array [
-          Array [
+    "arrow2": {
+      "border": [
+        [
+          [
             0.15,
             0,
           ],
-          Array [
+          [
             0.14,
             -0.03,
           ],
-          Array [
+          [
             0.2,
             0,
           ],
-          Array [
+          [
             0.14,
             0.03,
           ],
         ],
       ],
-      "points": Array [
+      "points": [
         -0.05,
         0,
         -0.06,
@@ -477,85 +477,85 @@ Object {
         -0.06,
         0.03,
       ],
-      "touchBorder": Array [
-        Array [
-          Array [
+      "touchBorder": [
+        [
+          [
             0.15,
             0,
           ],
-          Array [
+          [
             0.14,
             -0.03,
           ],
-          Array [
+          [
             0.2,
             0,
           ],
-          Array [
+          [
             0.14,
             0.03,
           ],
         ],
       ],
     },
-    "label": Object {
-      "border": Array [
-        Array [
-          Array [
+    "label": {
+      "border": [
+        [
+          [
             -0.035,
             0.066,
           ],
-          Array [
+          [
             0.035,
             0.066,
           ],
-          Array [
+          [
             0.035,
             0.148,
           ],
-          Array [
+          [
             -0.035,
             0.148,
           ],
         ],
       ],
-      "elements": Object {
-        "base": Object {
-          "border": Array [
-            Array [
-              Array [
+      "elements": {
+        "base": {
+          "border": [
+            [
+              [
                 -0.035,
                 0.066,
               ],
-              Array [
+              [
                 0.035,
                 0.066,
               ],
-              Array [
+              [
                 0.035,
                 0.148,
               ],
-              Array [
+              [
                 -0.035,
                 0.148,
               ],
             ],
           ],
-          "touchBorder": Array [
-            Array [
-              Array [
+          "touchBorder": [
+            [
+              [
                 -0.035,
                 0.066,
               ],
-              Array [
+              [
                 0.035,
                 0.066,
               ],
-              Array [
+              [
                 0.035,
                 0.148,
               ],
-              Array [
+              [
                 -0.035,
                 0.148,
               ],
@@ -563,49 +563,49 @@ Object {
           ],
         },
       },
-      "touchBorder": Array [
-        Array [
-          Array [
+      "touchBorder": [
+        [
+          [
             -0.035,
             0.066,
           ],
-          Array [
+          [
             0.035,
             0.066,
           ],
-          Array [
+          [
             0.035,
             0.148,
           ],
-          Array [
+          [
             -0.035,
             0.148,
           ],
         ],
       ],
     },
-    "line": Object {
-      "border": Array [
-        Array [
-          Array [
+    "line": {
+      "border": [
+        [
+          [
             -0.15,
             -0.005,
           ],
-          Array [
+          [
             0.15,
             -0.005,
           ],
-          Array [
+          [
             0.15,
             0.005,
           ],
-          Array [
+          [
             -0.15,
             0.005,
           ],
         ],
       ],
-      "points": Array [
+      "points": [
         0,
         0.005,
         0.3,
@@ -619,21 +619,21 @@ Object {
         0.3,
         -0.005,
       ],
-      "touchBorder": Array [
-        Array [
-          Array [
+      "touchBorder": [
+        [
+          [
             -0.15,
             -0.005,
           ],
-          Array [
+          [
             0.15,
             -0.005,
           ],
-          Array [
+          [
             0.15,
             0.005,
           ],
-          Array [
+          [
             -0.15,
             0.005,
           ],
@@ -641,75 +641,75 @@ Object {
       ],
     },
   },
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.15,
         -0.005,
       ],
-      Array [
+      [
         0.15,
         -0.005,
       ],
-      Array [
+      [
         0.15,
         0.005,
       ],
-      Array [
+      [
         -0.15,
         0.005,
       ],
     ],
-    Array [
-      Array [
+    [
+      [
         -0.15,
         0,
       ],
-      Array [
+      [
         -0.14,
         0.03,
       ],
-      Array [
+      [
         -0.2,
         0,
       ],
-      Array [
+      [
         -0.14,
         -0.03,
       ],
     ],
-    Array [
-      Array [
+    [
+      [
         0.15,
         0,
       ],
-      Array [
+      [
         0.14,
         -0.03,
       ],
-      Array [
+      [
         0.2,
         0,
       ],
-      Array [
+      [
         0.14,
         0.03,
       ],
     ],
-    Array [
-      Array [
+    [
+      [
         -0.035,
         0.066,
       ],
-      Array [
+      [
         0.035,
         0.066,
       ],
-      Array [
+      [
         0.035,
         0.148,
       ],
-      Array [
+      [
         -0.035,
         0.148,
       ],
@@ -719,104 +719,104 @@ Object {
 `;
 
 exports[`Collection: Line - Animations Shape pulseWidth 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.15,
         -0.005,
       ],
-      Array [
+      [
         0.15,
         -0.005,
       ],
-      Array [
+      [
         0.15,
         0.005,
       ],
-      Array [
+      [
         -0.15,
         0.005,
       ],
     ],
-    Array [
-      Array [
+    [
+      [
         -0.15,
         0,
       ],
-      Array [
+      [
         -0.14,
         0.03,
       ],
-      Array [
+      [
         -0.2,
         0,
       ],
-      Array [
+      [
         -0.14,
         -0.03,
       ],
     ],
-    Array [
-      Array [
+    [
+      [
         0.15,
         0,
       ],
-      Array [
+      [
         0.14,
         -0.03,
       ],
-      Array [
+      [
         0.2,
         0,
       ],
-      Array [
+      [
         0.14,
         0.03,
       ],
     ],
-    Array [
-      Array [
+    [
+      [
         -0.035,
         0.066,
       ],
-      Array [
+      [
         0.035,
         0.066,
       ],
-      Array [
+      [
         0.035,
         0.148,
       ],
-      Array [
+      [
         -0.035,
         0.148,
       ],
     ],
   ],
-  "elements": Object {
-    "arrow1": Object {
-      "border": Array [
-        Array [
-          Array [
+  "elements": {
+    "arrow1": {
+      "border": [
+        [
+          [
             -0.15,
             0,
           ],
-          Array [
+          [
             -0.14,
             0.03,
           ],
-          Array [
+          [
             -0.2,
             0,
           ],
-          Array [
+          [
             -0.14,
             -0.03,
           ],
         ],
       ],
-      "points": Array [
+      "points": [
         0.05,
         0,
         0.06,
@@ -830,49 +830,49 @@ Object {
         0.06,
         -0.03,
       ],
-      "touchBorder": Array [
-        Array [
-          Array [
+      "touchBorder": [
+        [
+          [
             -0.15,
             0,
           ],
-          Array [
+          [
             -0.14,
             0.03,
           ],
-          Array [
+          [
             -0.2,
             0,
           ],
-          Array [
+          [
             -0.14,
             -0.03,
           ],
         ],
       ],
     },
-    "arrow2": Object {
-      "border": Array [
-        Array [
-          Array [
+    "arrow2": {
+      "border": [
+        [
+          [
             0.15,
             0,
           ],
-          Array [
+          [
             0.14,
             -0.03,
           ],
-          Array [
+          [
             0.2,
             0,
           ],
-          Array [
+          [
             0.14,
             0.03,
           ],
         ],
       ],
-      "points": Array [
+      "points": [
         -0.05,
         0,
         -0.06,
@@ -886,85 +886,85 @@ Object {
         -0.06,
         0.03,
       ],
-      "touchBorder": Array [
-        Array [
-          Array [
+      "touchBorder": [
+        [
+          [
             0.15,
             0,
           ],
-          Array [
+          [
             0.14,
             -0.03,
           ],
-          Array [
+          [
             0.2,
             0,
           ],
-          Array [
+          [
             0.14,
             0.03,
           ],
         ],
       ],
     },
-    "label": Object {
-      "border": Array [
-        Array [
-          Array [
+    "label": {
+      "border": [
+        [
+          [
             -0.035,
             0.066,
           ],
-          Array [
+          [
             0.035,
             0.066,
           ],
-          Array [
+          [
             0.035,
             0.148,
           ],
-          Array [
+          [
             -0.035,
             0.148,
           ],
         ],
       ],
-      "elements": Object {
-        "base": Object {
-          "border": Array [
-            Array [
-              Array [
+      "elements": {
+        "base": {
+          "border": [
+            [
+              [
                 -0.035,
                 0.066,
               ],
-              Array [
+              [
                 0.035,
                 0.066,
               ],
-              Array [
+              [
                 0.035,
                 0.148,
               ],
-              Array [
+              [
                 -0.035,
                 0.148,
               ],
             ],
           ],
-          "touchBorder": Array [
-            Array [
-              Array [
+          "touchBorder": [
+            [
+              [
                 -0.035,
                 0.066,
               ],
-              Array [
+              [
                 0.035,
                 0.066,
               ],
-              Array [
+              [
                 0.035,
                 0.148,
               ],
-              Array [
+              [
                 -0.035,
                 0.148,
               ],
@@ -972,49 +972,49 @@ Object {
           ],
         },
       },
-      "touchBorder": Array [
-        Array [
-          Array [
+      "touchBorder": [
+        [
+          [
             -0.035,
             0.066,
           ],
-          Array [
+          [
             0.035,
             0.066,
           ],
-          Array [
+          [
             0.035,
             0.148,
           ],
-          Array [
+          [
             -0.035,
             0.148,
           ],
         ],
       ],
     },
-    "line": Object {
-      "border": Array [
-        Array [
-          Array [
+    "line": {
+      "border": [
+        [
+          [
             -0.15,
             -0.005,
           ],
-          Array [
+          [
             0.15,
             -0.005,
           ],
-          Array [
+          [
             0.15,
             0.005,
           ],
-          Array [
+          [
             -0.15,
             0.005,
           ],
         ],
       ],
-      "points": Array [
+      "points": [
         0,
         0.005,
         0.3,
@@ -1028,21 +1028,21 @@ Object {
         0.3,
         -0.005,
       ],
-      "touchBorder": Array [
-        Array [
-          Array [
+      "touchBorder": [
+        [
+          [
             -0.15,
             -0.005,
           ],
-          Array [
+          [
             0.15,
             -0.005,
           ],
-          Array [
+          [
             0.15,
             0.005,
           ],
-          Array [
+          [
             -0.15,
             0.005,
           ],
@@ -1050,75 +1050,75 @@ Object {
       ],
     },
   },
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.15,
         -0.005,
       ],
-      Array [
+      [
         0.15,
         -0.005,
       ],
-      Array [
+      [
         0.15,
         0.005,
       ],
-      Array [
+      [
         -0.15,
         0.005,
       ],
     ],
-    Array [
-      Array [
+    [
+      [
         -0.15,
         0,
       ],
-      Array [
+      [
         -0.14,
         0.03,
       ],
-      Array [
+      [
         -0.2,
         0,
       ],
-      Array [
+      [
         -0.14,
         -0.03,
       ],
     ],
-    Array [
-      Array [
+    [
+      [
         0.15,
         0,
       ],
-      Array [
+      [
         0.14,
         -0.03,
       ],
-      Array [
+      [
         0.2,
         0,
       ],
-      Array [
+      [
         0.14,
         0.03,
       ],
     ],
-    Array [
-      Array [
+    [
+      [
         -0.035,
         0.066,
       ],
-      Array [
+      [
         0.035,
         0.066,
       ],
-      Array [
+      [
         0.035,
         0.148,
       ],
-      Array [
+      [
         -0.035,
         0.148,
       ],

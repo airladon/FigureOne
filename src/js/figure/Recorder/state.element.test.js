@@ -9,16 +9,17 @@ jest.useFakeTimers();
 describe('Figure Element State', () => {
   let elem1;
   let figure;
+  let rafSpy;
   // let now;
   beforeEach(() => {
     jest.useFakeTimers();
-    jest.spyOn(window, 'requestAnimationFrame').mockImplementation(() => {});
+    rafSpy = jest.spyOn(window, 'requestAnimationFrame').mockImplementation(() => {});
     figure = makeFigure();
     elem1 = figure.primitives.polygon();
     figure.elements.add('elem1', elem1);
   });
   afterEach(() => {
-    window.requestAnimationFrame.mockRestore();
+    rafSpy.mockRestore();
   });
   test('Transform Callback', () => {
     const setTransformCallback = jest.fn(() => {});

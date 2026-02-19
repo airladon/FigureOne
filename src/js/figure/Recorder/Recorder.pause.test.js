@@ -21,9 +21,10 @@ describe('Animate To State', () => {
   let playbackStoppedCallback;
   let a;
   let b;
+  let rafSpy;
   beforeEach(() => {
     jest.useFakeTimers();
-    jest.spyOn(window, 'requestAnimationFrame').mockImplementation(() => {});
+    rafSpy = jest.spyOn(window, 'requestAnimationFrame').mockImplementation(() => {});
     figure = makeFigure();
     figure.timeKeeper.reset();
     figure.add([
@@ -55,7 +56,7 @@ describe('Animate To State', () => {
     recorder.stateTimeStep = 1;
   });
   afterEach(() => {
-    window.requestAnimationFrame.mockRestore();
+    rafSpy.mockRestore();
   });
   describe('Animation', () => {
     let states;

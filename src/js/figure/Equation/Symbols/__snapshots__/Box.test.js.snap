@@ -1,9 +1,9 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Equation Symbols - Box Box Dynamic 1`] = `undefined`;
 
 exports[`Equation Symbols - Box Box Dynamic 2`] = `
-Array [
+[
   0,
   0,
   0.01,

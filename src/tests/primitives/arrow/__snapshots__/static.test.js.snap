@@ -1,44 +1,44 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Collection: Arrow - Static Shape bar-align-mid 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.05,
         -0.075,
       ],
-      Array [
+      [
         0,
         -0.075,
       ],
-      Array [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0.05,
         -0.2,
       ],
-      Array [
+      [
         0.05,
         0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         0,
         0.075,
       ],
-      Array [
+      [
         -0.05,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.05,
     -0.075,
     0,
@@ -64,37 +64,37 @@ Object {
     0,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.05,
         -0.075,
       ],
-      Array [
+      [
         0,
         -0.075,
       ],
-      Array [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0.05,
         -0.2,
       ],
-      Array [
+      [
         0.05,
         0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         0,
         0.075,
       ],
-      Array [
+      [
         -0.05,
         0.075,
       ],
@@ -104,44 +104,44 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape bar-align-start 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0,
         -0.075,
       ],
-      Array [
+      [
         0.05,
         -0.075,
       ],
-      Array [
+      [
         0.05,
         -0.2,
       ],
-      Array [
+      [
         0.1,
         -0.2,
       ],
-      Array [
+      [
         0.1,
         0.2,
       ],
-      Array [
+      [
         0.05,
         0.2,
       ],
-      Array [
+      [
         0.05,
         0.075,
       ],
-      Array [
+      [
         0,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0,
     -0.075,
     0.05,
@@ -167,37 +167,37 @@ Object {
     0.05,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0,
         -0.075,
       ],
-      Array [
+      [
         0.05,
         -0.075,
       ],
-      Array [
+      [
         0.05,
         -0.2,
       ],
-      Array [
+      [
         0.1,
         -0.2,
       ],
-      Array [
+      [
         0.1,
         0.2,
       ],
-      Array [
+      [
         0.05,
         0.2,
       ],
-      Array [
+      [
         0.05,
         0.075,
       ],
-      Array [
+      [
         0,
         0.075,
       ],
@@ -207,44 +207,44 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape bar-align-tail 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0,
         -0.075,
       ],
-      Array [
+      [
         0.05,
         -0.075,
       ],
-      Array [
+      [
         0.05,
         -0.2,
       ],
-      Array [
+      [
         0.1,
         -0.2,
       ],
-      Array [
+      [
         0.1,
         0.2,
       ],
-      Array [
+      [
         0.05,
         0.2,
       ],
-      Array [
+      [
         0.05,
         0.075,
       ],
-      Array [
+      [
         0,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0,
     -0.075,
     0.05,
@@ -270,37 +270,37 @@ Object {
     0.05,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0,
         -0.075,
       ],
-      Array [
+      [
         0.05,
         -0.075,
       ],
-      Array [
+      [
         0.05,
         -0.2,
       ],
-      Array [
+      [
         0.1,
         -0.2,
       ],
-      Array [
+      [
         0.1,
         0.2,
       ],
-      Array [
+      [
         0.05,
         0.2,
       ],
-      Array [
+      [
         0.05,
         0.075,
       ],
-      Array [
+      [
         0,
         0.075,
       ],
@@ -310,44 +310,44 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape bar-align-tip 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.1,
         -0.075,
       ],
-      Array [
+      [
         -0.05,
         -0.075,
       ],
-      Array [
+      [
         -0.05,
         -0.2,
       ],
-      Array [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.05,
         0.2,
       ],
-      Array [
+      [
         -0.05,
         0.075,
       ],
-      Array [
+      [
         -0.1,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.1,
     -0.075,
     -0.05,
@@ -373,37 +373,37 @@ Object {
     -0.05,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.1,
         -0.075,
       ],
-      Array [
+      [
         -0.05,
         -0.075,
       ],
-      Array [
+      [
         -0.05,
         -0.2,
       ],
-      Array [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.05,
         0.2,
       ],
-      Array [
+      [
         -0.05,
         0.075,
       ],
-      Array [
+      [
         -0.1,
         0.075,
       ],
@@ -413,28 +413,28 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape bar-dash 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.11,
         -0.21,
       ],
-      Array [
+      [
         0.01,
         -0.21,
       ],
-      Array [
+      [
         0.01,
         0.21,
       ],
-      Array [
+      [
         -0.11,
         0.21,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.1,
     -0.19,
     -0.07,
@@ -760,21 +760,21 @@ Object {
     -0.11,
     -0.19,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.11,
         -0.21,
       ],
-      Array [
+      [
         0.01,
         -0.21,
       ],
-      Array [
+      [
         0.01,
         0.21,
       ],
-      Array [
+      [
         -0.11,
         0.21,
       ],
@@ -784,28 +784,28 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape bar-dash-t0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.11,
         -0.21,
       ],
-      Array [
+      [
         0.01,
         -0.21,
       ],
-      Array [
+      [
         0.01,
         0.21,
       ],
-      Array [
+      [
         -0.11,
         0.21,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.1,
     -0.19,
     -0.07,
@@ -1131,21 +1131,21 @@ Object {
     -0.11,
     -0.19,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.11,
         -0.21,
       ],
-      Array [
+      [
         0.01,
         -0.21,
       ],
-      Array [
+      [
         0.01,
         0.21,
       ],
-      Array [
+      [
         -0.11,
         0.21,
       ],
@@ -1155,28 +1155,28 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape bar-dash-tn 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.11,
         -0.21,
       ],
-      Array [
+      [
         0.01,
         -0.21,
       ],
-      Array [
+      [
         0.01,
         0.21,
       ],
-      Array [
+      [
         -0.11,
         0.21,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.1,
     -0.19,
     -0.07,
@@ -1502,21 +1502,21 @@ Object {
     -0.11,
     -0.19,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.11,
         -0.21,
       ],
-      Array [
+      [
         0.01,
         -0.21,
       ],
-      Array [
+      [
         0.01,
         0.21,
       ],
-      Array [
+      [
         -0.11,
         0.21,
       ],
@@ -1526,44 +1526,44 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape bar-dash-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.11,
         -0.085,
       ],
-      Array [
+      [
         -0.06,
         -0.085,
       ],
-      Array [
+      [
         -0.06,
         -0.21,
       ],
-      Array [
+      [
         0.01,
         -0.21,
       ],
-      Array [
+      [
         0.01,
         0.21,
       ],
-      Array [
+      [
         -0.06,
         0.21,
       ],
-      Array [
+      [
         -0.06,
         0.085,
       ],
-      Array [
+      [
         -0.11,
         0.085,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.1,
     -0.065,
     -0.07,
@@ -1937,37 +1937,37 @@ Object {
     -0.11,
     -0.065,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.11,
         -0.085,
       ],
-      Array [
+      [
         -0.06,
         -0.085,
       ],
-      Array [
+      [
         -0.06,
         -0.21,
       ],
-      Array [
+      [
         0.01,
         -0.21,
       ],
-      Array [
+      [
         0.01,
         0.21,
       ],
-      Array [
+      [
         -0.06,
         0.21,
       ],
-      Array [
+      [
         -0.06,
         0.085,
       ],
-      Array [
+      [
         -0.11,
         0.085,
       ],
@@ -1977,28 +1977,28 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape bar-default 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.1,
         -0.2,
       ],
-      Array [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.1,
         0.2,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.1,
     -0.2,
     0,
@@ -2012,21 +2012,21 @@ Object {
     -0.1,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.1,
         -0.2,
       ],
-      Array [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.1,
         0.2,
       ],
@@ -2036,28 +2036,28 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape bar-define 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.1,
         -0.2,
       ],
-      Array [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.1,
         0.2,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.1,
     -0.2,
     0,
@@ -2071,21 +2071,21 @@ Object {
     -0.1,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.1,
         -0.2,
       ],
-      Array [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.1,
         0.2,
       ],
@@ -2095,28 +2095,28 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape bar-t0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.1,
         -0.2,
       ],
-      Array [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.1,
         0.2,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.1,
     -0.2,
     0,
@@ -2130,21 +2130,21 @@ Object {
     -0.1,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.1,
         -0.2,
       ],
-      Array [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.1,
         0.2,
       ],
@@ -2154,28 +2154,28 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape bar-tn 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.1,
         -0.2,
       ],
-      Array [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.1,
         0.2,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.1,
     -0.2,
     0,
@@ -2189,21 +2189,21 @@ Object {
     -0.1,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.1,
         -0.2,
       ],
-      Array [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.1,
         0.2,
       ],
@@ -2213,44 +2213,44 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape bar-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.1,
         -0.075,
       ],
-      Array [
+      [
         -0.05,
         -0.075,
       ],
-      Array [
+      [
         -0.05,
         -0.2,
       ],
-      Array [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.05,
         0.2,
       ],
-      Array [
+      [
         -0.05,
         0.075,
       ],
-      Array [
+      [
         -0.1,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.1,
     -0.075,
     -0.05,
@@ -2276,37 +2276,37 @@ Object {
     -0.05,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.1,
         -0.075,
       ],
-      Array [
+      [
         -0.05,
         -0.075,
       ],
-      Array [
+      [
         -0.05,
         -0.2,
       ],
-      Array [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.05,
         0.2,
       ],
-      Array [
+      [
         -0.05,
         0.075,
       ],
-      Array [
+      [
         -0.1,
         0.075,
       ],
@@ -2316,40 +2316,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-align-mid 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.15,
         -0.075,
       ],
-      Array [
+      [
         -0.106,
         -0.075,
       ],
-      Array [
+      [
         -0.2,
         -0.2,
       ],
-      Array [
+      [
         0.2,
         0,
       ],
-      Array [
+      [
         -0.2,
         0.2,
       ],
-      Array [
+      [
         -0.106,
         0.075,
       ],
-      Array [
+      [
         -0.15,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.15,
     -0.075,
     -0.106,
@@ -2381,33 +2381,33 @@ Object {
     -0.2,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.15,
         -0.075,
       ],
-      Array [
+      [
         -0.106,
         -0.075,
       ],
-      Array [
+      [
         -0.2,
         -0.2,
       ],
-      Array [
+      [
         0.2,
         0,
       ],
-      Array [
+      [
         -0.2,
         0.2,
       ],
-      Array [
+      [
         -0.106,
         0.075,
       ],
-      Array [
+      [
         -0.15,
         0.075,
       ],
@@ -2417,40 +2417,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-align-start 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.05,
         -0.075,
       ],
-      Array [
+      [
         0.094,
         -0.075,
       ],
-      Array [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0.4,
         0,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         0.094,
         0.075,
       ],
-      Array [
+      [
         0.05,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0.05,
     -0.075,
     0.094,
@@ -2482,33 +2482,33 @@ Object {
     0,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.05,
         -0.075,
       ],
-      Array [
+      [
         0.094,
         -0.075,
       ],
-      Array [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0.4,
         0,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         0.094,
         0.075,
       ],
-      Array [
+      [
         0.05,
         0.075,
       ],
@@ -2518,40 +2518,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-align-tail 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0,
         -0.075,
       ],
-      Array [
+      [
         0.044,
         -0.075,
       ],
-      Array [
+      [
         -0.05,
         -0.2,
       ],
-      Array [
+      [
         0.35,
         0,
       ],
-      Array [
+      [
         -0.05,
         0.2,
       ],
-      Array [
+      [
         0.044,
         0.075,
       ],
-      Array [
+      [
         0,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0,
     -0.075,
     0.044,
@@ -2583,33 +2583,33 @@ Object {
     -0.05,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0,
         -0.075,
       ],
-      Array [
+      [
         0.044,
         -0.075,
       ],
-      Array [
+      [
         -0.05,
         -0.2,
       ],
-      Array [
+      [
         0.35,
         0,
       ],
-      Array [
+      [
         -0.05,
         0.2,
       ],
-      Array [
+      [
         0.044,
         0.075,
       ],
-      Array [
+      [
         0,
         0.075,
       ],
@@ -2619,40 +2619,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-align-tip 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.35,
         -0.075,
       ],
-      Array [
+      [
         -0.306,
         -0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
-      Array [
+      [
         -0.306,
         0.075,
       ],
-      Array [
+      [
         -0.35,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.35,
     -0.075,
     -0.306,
@@ -2684,33 +2684,33 @@ Object {
     -0.4,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.35,
         -0.075,
       ],
-      Array [
+      [
         -0.306,
         -0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
-      Array [
+      [
         -0.306,
         0.075,
       ],
-      Array [
+      [
         -0.35,
         0.075,
       ],
@@ -2720,28 +2720,28 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-dash 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.263,
         0,
       ],
-      Array [
+      [
         -0.433,
         -0.228,
       ],
-      Array [
+      [
         0.022,
         0,
       ],
-      Array [
+      [
         -0.433,
         0.228,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.242,
     -0.006,
     -0.26,
@@ -3217,21 +3217,21 @@ Object {
     -0.261,
     -0.002,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.263,
         0,
       ],
-      Array [
+      [
         -0.433,
         -0.228,
       ],
-      Array [
+      [
         0.022,
         0,
       ],
-      Array [
+      [
         -0.433,
         0.228,
       ],
@@ -3241,40 +3241,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-dash-t0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.41,
         -0.085,
       ],
-      Array [
+      [
         -0.326,
         -0.085,
       ],
-      Array [
+      [
         -0.433,
         -0.228,
       ],
-      Array [
+      [
         0.022,
         0,
       ],
-      Array [
+      [
         -0.433,
         0.228,
       ],
-      Array [
+      [
         -0.326,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         0.085,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.39,
     -0.051,
     -0.39,
@@ -3846,33 +3846,33 @@ Object {
     -0.41,
     -0.075,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.41,
         -0.085,
       ],
-      Array [
+      [
         -0.326,
         -0.085,
       ],
-      Array [
+      [
         -0.433,
         -0.228,
       ],
-      Array [
+      [
         0.022,
         0,
       ],
-      Array [
+      [
         -0.433,
         0.228,
       ],
-      Array [
+      [
         -0.326,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         0.085,
       ],
@@ -3882,40 +3882,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-dash-tn 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.36,
         -0.085,
       ],
-      Array [
+      [
         -0.326,
         -0.085,
       ],
-      Array [
+      [
         -0.433,
         -0.228,
       ],
-      Array [
+      [
         0.022,
         0,
       ],
-      Array [
+      [
         -0.433,
         0.228,
       ],
-      Array [
+      [
         -0.326,
         0.085,
       ],
-      Array [
+      [
         -0.36,
         0.085,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.34,
     -0.071,
     -0.34,
@@ -4463,33 +4463,33 @@ Object {
     -0.36,
     -0.075,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.36,
         -0.085,
       ],
-      Array [
+      [
         -0.326,
         -0.085,
       ],
-      Array [
+      [
         -0.433,
         -0.228,
       ],
-      Array [
+      [
         0.022,
         0,
       ],
-      Array [
+      [
         -0.433,
         0.228,
       ],
-      Array [
+      [
         -0.326,
         0.085,
       ],
-      Array [
+      [
         -0.36,
         0.085,
       ],
@@ -4499,48 +4499,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-dash-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.41,
         -0.085,
       ],
-      Array [
+      [
         -0.226,
         -0.085,
       ],
-      Array [
+      [
         -0.307,
         -0.193,
       ],
-      Array [
+      [
         -0.293,
         -0.207,
       ],
-      Array [
+      [
         0.018,
         0,
       ],
-      Array [
+      [
         -0.293,
         0.207,
       ],
-      Array [
+      [
         -0.307,
         0.193,
       ],
-      Array [
+      [
         -0.226,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         0.085,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.39,
     -0.064,
     -0.39,
@@ -5070,41 +5070,41 @@ Object {
     -0.41,
     -0.075,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.41,
         -0.085,
       ],
-      Array [
+      [
         -0.226,
         -0.085,
       ],
-      Array [
+      [
         -0.307,
         -0.193,
       ],
-      Array [
+      [
         -0.293,
         -0.207,
       ],
-      Array [
+      [
         0.018,
         0,
       ],
-      Array [
+      [
         -0.293,
         0.207,
       ],
-      Array [
+      [
         -0.307,
         0.193,
       ],
-      Array [
+      [
         -0.226,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         0.085,
       ],
@@ -5114,28 +5114,28 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-default 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.25,
         0,
       ],
-      Array [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.25,
     0,
     -0.4,
@@ -5149,21 +5149,21 @@ Object {
     -0.4,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.25,
         0,
       ],
-      Array [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
@@ -5173,28 +5173,28 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-define 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.45,
         0,
       ],
-      Array [
+      [
         -0.6,
         -0.1,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.6,
         0.1,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.45,
     0,
     -0.6,
@@ -5208,21 +5208,21 @@ Object {
     -0.6,
     0.1,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.45,
         0,
       ],
-      Array [
+      [
         -0.6,
         -0.1,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.6,
         0.1,
       ],
@@ -5232,40 +5232,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-inside-t0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.306,
         -0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
-      Array [
+      [
         -0.306,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.35,
     -0.025,
     -0.206,
@@ -5357,33 +5357,33 @@ Object {
     -0.4,
     -0.075,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.306,
         -0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
-      Array [
+      [
         -0.306,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
@@ -5393,40 +5393,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-inside-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.206,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.3,
         0.2,
       ],
-      Array [
+      [
         -0.206,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.35,
     -0.025,
     -0.106,
@@ -5524,33 +5524,33 @@ Object {
     -0.4,
     -0.075,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.206,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.3,
         0.2,
       ],
-      Array [
+      [
         -0.206,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
@@ -5560,28 +5560,28 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-line 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.281,
         0,
       ],
-      Array [
+      [
         -0.484,
         -0.27,
       ],
-      Array [
+      [
         0.056,
         0,
       ],
-      Array [
+      [
         -0.484,
         0.27,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.219,
     0,
     -0.316,
@@ -5631,21 +5631,21 @@ Object {
     -0.281,
     0,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.281,
         0,
       ],
-      Array [
+      [
         -0.484,
         -0.27,
       ],
-      Array [
+      [
         0.056,
         0,
       ],
-      Array [
+      [
         -0.484,
         0.27,
       ],
@@ -5655,40 +5655,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-line-t0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.425,
         -0.1,
       ],
-      Array [
+      [
         -0.356,
         -0.1,
       ],
-      Array [
+      [
         -0.484,
         -0.27,
       ],
-      Array [
+      [
         0.056,
         0,
       ],
-      Array [
+      [
         -0.484,
         0.27,
       ],
-      Array [
+      [
         -0.356,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         0.1,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.375,
     -0.05,
     -0.256,
@@ -5774,33 +5774,33 @@ Object {
     -0.425,
     -0.1,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.425,
         -0.1,
       ],
-      Array [
+      [
         -0.356,
         -0.1,
       ],
-      Array [
+      [
         -0.484,
         -0.27,
       ],
-      Array [
+      [
         0.056,
         0,
       ],
-      Array [
+      [
         -0.484,
         0.27,
       ],
-      Array [
+      [
         -0.356,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         0.1,
       ],
@@ -5810,48 +5810,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-line-tn 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.375,
         -0.1,
       ],
-      Array [
+      [
         -0.325,
         -0.1,
       ],
-      Array [
+      [
         -0.337,
         -0.075,
       ],
-      Array [
+      [
         -0.484,
         -0.27,
       ],
-      Array [
+      [
         0.056,
         0,
       ],
-      Array [
+      [
         -0.484,
         0.27,
       ],
-      Array [
+      [
         -0.337,
         0.075,
       ],
-      Array [
+      [
         -0.325,
         0.1,
       ],
-      Array [
+      [
         -0.375,
         0.1,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.325,
     -0.05,
     -0.256,
@@ -5949,41 +5949,41 @@ Object {
     -0.375,
     -0.1,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.375,
         -0.1,
       ],
-      Array [
+      [
         -0.325,
         -0.1,
       ],
-      Array [
+      [
         -0.337,
         -0.075,
       ],
-      Array [
+      [
         -0.484,
         -0.27,
       ],
-      Array [
+      [
         0.056,
         0,
       ],
-      Array [
+      [
         -0.484,
         0.27,
       ],
-      Array [
+      [
         -0.337,
         0.075,
       ],
-      Array [
+      [
         -0.325,
         0.1,
       ],
-      Array [
+      [
         -0.375,
         0.1,
       ],
@@ -5993,48 +5993,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-line-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.425,
         -0.1,
       ],
-      Array [
+      [
         -0.256,
         -0.1,
       ],
-      Array [
+      [
         -0.317,
         -0.182,
       ],
-      Array [
+      [
         -0.283,
         -0.218,
       ],
-      Array [
+      [
         0.045,
         0,
       ],
-      Array [
+      [
         -0.283,
         0.218,
       ],
-      Array [
+      [
         -0.317,
         0.182,
       ],
-      Array [
+      [
         -0.256,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         0.1,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.375,
     -0.05,
     -0.156,
@@ -6132,41 +6132,41 @@ Object {
     -0.425,
     -0.1,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.425,
         -0.1,
       ],
-      Array [
+      [
         -0.256,
         -0.1,
       ],
-      Array [
+      [
         -0.317,
         -0.182,
       ],
-      Array [
+      [
         -0.283,
         -0.218,
       ],
-      Array [
+      [
         0.045,
         0,
       ],
-      Array [
+      [
         -0.283,
         0.218,
       ],
-      Array [
+      [
         -0.317,
         0.182,
       ],
-      Array [
+      [
         -0.256,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         0.1,
       ],
@@ -6176,48 +6176,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-outside-t0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.25,
         -0.125,
       ],
-      Array [
+      [
         -0.144,
         -0.125,
       ],
-      Array [
+      [
         -0.169,
         -0.075,
       ],
-      Array [
+      [
         -0.367,
         -0.339,
       ],
-      Array [
+      [
         0.312,
         0,
       ],
-      Array [
+      [
         -0.367,
         0.339,
       ],
-      Array [
+      [
         -0.169,
         0.075,
       ],
-      Array [
+      [
         -0.144,
         0.125,
       ],
-      Array [
+      [
         -0.25,
         0.125,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.2,
     -0.075,
     -0.106,
@@ -6315,41 +6315,41 @@ Object {
     -0.25,
     -0.125,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.25,
         -0.125,
       ],
-      Array [
+      [
         -0.144,
         -0.125,
       ],
-      Array [
+      [
         -0.169,
         -0.075,
       ],
-      Array [
+      [
         -0.367,
         -0.339,
       ],
-      Array [
+      [
         0.312,
         0,
       ],
-      Array [
+      [
         -0.367,
         0.339,
       ],
-      Array [
+      [
         -0.169,
         0.075,
       ],
-      Array [
+      [
         -0.144,
         0.125,
       ],
-      Array [
+      [
         -0.25,
         0.125,
       ],
@@ -6359,48 +6359,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-outside-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.45,
         -0.125,
       ],
-      Array [
+      [
         -0.306,
         -0.125,
       ],
-      Array [
+      [
         -0.335,
         -0.163,
       ],
-      Array [
+      [
         -0.265,
         -0.237,
       ],
-      Array [
+      [
         0.09,
         0,
       ],
-      Array [
+      [
         -0.265,
         0.237,
       ],
-      Array [
+      [
         -0.335,
         0.163,
       ],
-      Array [
+      [
         -0.306,
         0.125,
       ],
-      Array [
+      [
         -0.45,
         0.125,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.4,
     -0.075,
     -0.206,
@@ -6498,41 +6498,41 @@ Object {
     -0.45,
     -0.125,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.45,
         -0.125,
       ],
-      Array [
+      [
         -0.306,
         -0.125,
       ],
-      Array [
+      [
         -0.335,
         -0.163,
       ],
-      Array [
+      [
         -0.265,
         -0.237,
       ],
-      Array [
+      [
         0.09,
         0,
       ],
-      Array [
+      [
         -0.265,
         0.237,
       ],
-      Array [
+      [
         -0.335,
         0.163,
       ],
-      Array [
+      [
         -0.306,
         0.125,
       ],
-      Array [
+      [
         -0.45,
         0.125,
       ],
@@ -6542,40 +6542,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-t0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.306,
         -0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
-      Array [
+      [
         -0.306,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.4,
     -0.075,
     -0.306,
@@ -6607,33 +6607,33 @@ Object {
     -0.4,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.306,
         -0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
-      Array [
+      [
         -0.306,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
@@ -6643,40 +6643,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-tn 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.35,
         -0.075,
       ],
-      Array [
+      [
         -0.306,
         -0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
-      Array [
+      [
         -0.306,
         0.075,
       ],
-      Array [
+      [
         -0.35,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.35,
     -0.075,
     -0.306,
@@ -6708,33 +6708,33 @@ Object {
     -0.4,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.35,
         -0.075,
       ],
-      Array [
+      [
         -0.306,
         -0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
-      Array [
+      [
         -0.306,
         0.075,
       ],
-      Array [
+      [
         -0.35,
         0.075,
       ],
@@ -6744,40 +6744,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape barb-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.206,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.3,
         0.2,
       ],
-      Array [
+      [
         -0.206,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.4,
     -0.075,
     -0.206,
@@ -6809,33 +6809,33 @@ Object {
     -0.3,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.206,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.3,
         0.2,
       ],
-      Array [
+      [
         -0.206,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
@@ -6845,92 +6845,92 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape circle 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.01,
         0.062,
       ],
-      Array [
+      [
         -0.038,
         0.118,
       ],
-      Array [
+      [
         -0.082,
         0.162,
       ],
-      Array [
+      [
         -0.138,
         0.19,
       ],
-      Array [
+      [
         -0.2,
         0.2,
       ],
-      Array [
+      [
         -0.262,
         0.19,
       ],
-      Array [
+      [
         -0.318,
         0.162,
       ],
-      Array [
+      [
         -0.362,
         0.118,
       ],
-      Array [
+      [
         -0.39,
         0.062,
       ],
-      Array [
+      [
         -0.4,
         0,
       ],
-      Array [
+      [
         -0.39,
         -0.062,
       ],
-      Array [
+      [
         -0.362,
         -0.118,
       ],
-      Array [
+      [
         -0.318,
         -0.162,
       ],
-      Array [
+      [
         -0.262,
         -0.19,
       ],
-      Array [
+      [
         -0.2,
         -0.2,
       ],
-      Array [
+      [
         -0.138,
         -0.19,
       ],
-      Array [
+      [
         -0.082,
         -0.162,
       ],
-      Array [
+      [
         -0.038,
         -0.118,
       ],
-      Array [
+      [
         -0.01,
         -0.062,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0,
     0,
     0,
@@ -7046,85 +7046,85 @@ Object {
     -0.01,
     -0.062,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.01,
         0.062,
       ],
-      Array [
+      [
         -0.038,
         0.118,
       ],
-      Array [
+      [
         -0.082,
         0.162,
       ],
-      Array [
+      [
         -0.138,
         0.19,
       ],
-      Array [
+      [
         -0.2,
         0.2,
       ],
-      Array [
+      [
         -0.262,
         0.19,
       ],
-      Array [
+      [
         -0.318,
         0.162,
       ],
-      Array [
+      [
         -0.362,
         0.118,
       ],
-      Array [
+      [
         -0.39,
         0.062,
       ],
-      Array [
+      [
         -0.4,
         0,
       ],
-      Array [
+      [
         -0.39,
         -0.062,
       ],
-      Array [
+      [
         -0.362,
         -0.118,
       ],
-      Array [
+      [
         -0.318,
         -0.162,
       ],
-      Array [
+      [
         -0.262,
         -0.19,
       ],
-      Array [
+      [
         -0.2,
         -0.2,
       ],
-      Array [
+      [
         -0.138,
         -0.19,
       ],
-      Array [
+      [
         -0.082,
         -0.162,
       ],
-      Array [
+      [
         -0.038,
         -0.118,
       ],
-      Array [
+      [
         -0.01,
         -0.062,
       ],
@@ -7134,48 +7134,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-align-mid 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.178,
         -0.2,
       ],
-      Array [
+      [
         0.2,
         0,
       ],
-      Array [
+      [
         -0.178,
         0.2,
       ],
-      Array [
+      [
         -0.201,
         0.156,
       ],
-      Array [
+      [
         0.046,
         0.025,
       ],
-      Array [
+      [
         -0.15,
         0.025,
       ],
-      Array [
+      [
         -0.15,
         -0.025,
       ],
-      Array [
+      [
         0.046,
         -0.025,
       ],
-      Array [
+      [
         -0.201,
         -0.156,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.178,
     -0.2,
     0.2,
@@ -7219,41 +7219,41 @@ Object {
     -0.15,
     0.025,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.178,
         -0.2,
       ],
-      Array [
+      [
         0.2,
         0,
       ],
-      Array [
+      [
         -0.178,
         0.2,
       ],
-      Array [
+      [
         -0.201,
         0.156,
       ],
-      Array [
+      [
         0.046,
         0.025,
       ],
-      Array [
+      [
         -0.15,
         0.025,
       ],
-      Array [
+      [
         -0.15,
         -0.025,
       ],
-      Array [
+      [
         0.046,
         -0.025,
       ],
-      Array [
+      [
         -0.201,
         -0.156,
       ],
@@ -7263,48 +7263,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-align-start 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.022,
         -0.2,
       ],
-      Array [
+      [
         0.4,
         0,
       ],
-      Array [
+      [
         0.022,
         0.2,
       ],
-      Array [
+      [
         -0.001,
         0.156,
       ],
-      Array [
+      [
         0.246,
         0.025,
       ],
-      Array [
+      [
         0.05,
         0.025,
       ],
-      Array [
+      [
         0.05,
         -0.025,
       ],
-      Array [
+      [
         0.246,
         -0.025,
       ],
-      Array [
+      [
         -0.001,
         -0.156,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0.022,
     -0.2,
     0.4,
@@ -7348,41 +7348,41 @@ Object {
     0.05,
     0.025,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.022,
         -0.2,
       ],
-      Array [
+      [
         0.4,
         0,
       ],
-      Array [
+      [
         0.022,
         0.2,
       ],
-      Array [
+      [
         -0.001,
         0.156,
       ],
-      Array [
+      [
         0.246,
         0.025,
       ],
-      Array [
+      [
         0.05,
         0.025,
       ],
-      Array [
+      [
         0.05,
         -0.025,
       ],
-      Array [
+      [
         0.246,
         -0.025,
       ],
-      Array [
+      [
         -0.001,
         -0.156,
       ],
@@ -7392,48 +7392,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-align-tail 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.028,
         -0.2,
       ],
-      Array [
+      [
         0.35,
         0,
       ],
-      Array [
+      [
         -0.028,
         0.2,
       ],
-      Array [
+      [
         -0.051,
         0.156,
       ],
-      Array [
+      [
         0.196,
         0.025,
       ],
-      Array [
+      [
         0,
         0.025,
       ],
-      Array [
+      [
         0,
         -0.025,
       ],
-      Array [
+      [
         0.196,
         -0.025,
       ],
-      Array [
+      [
         -0.051,
         -0.156,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.028,
     -0.2,
     0.35,
@@ -7477,41 +7477,41 @@ Object {
     0,
     0.025,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.028,
         -0.2,
       ],
-      Array [
+      [
         0.35,
         0,
       ],
-      Array [
+      [
         -0.028,
         0.2,
       ],
-      Array [
+      [
         -0.051,
         0.156,
       ],
-      Array [
+      [
         0.196,
         0.025,
       ],
-      Array [
+      [
         0,
         0.025,
       ],
-      Array [
+      [
         0,
         -0.025,
       ],
-      Array [
+      [
         0.196,
         -0.025,
       ],
-      Array [
+      [
         -0.051,
         -0.156,
       ],
@@ -7521,48 +7521,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-align-tip 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.378,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.378,
         0.2,
       ],
-      Array [
+      [
         -0.401,
         0.156,
       ],
-      Array [
+      [
         -0.154,
         0.025,
       ],
-      Array [
+      [
         -0.35,
         0.025,
       ],
-      Array [
+      [
         -0.35,
         -0.025,
       ],
-      Array [
+      [
         -0.154,
         -0.025,
       ],
-      Array [
+      [
         -0.401,
         -0.156,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.378,
     -0.2,
     0,
@@ -7606,41 +7606,41 @@ Object {
     -0.35,
     0.025,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.378,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.378,
         0.2,
       ],
-      Array [
+      [
         -0.401,
         0.156,
       ],
-      Array [
+      [
         -0.154,
         0.025,
       ],
-      Array [
+      [
         -0.35,
         0.025,
       ],
-      Array [
+      [
         -0.35,
         -0.025,
       ],
-      Array [
+      [
         -0.154,
         -0.025,
       ],
-      Array [
+      [
         -0.401,
         -0.156,
       ],
@@ -7650,36 +7650,36 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-dash 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.359,
         -0.214,
       ],
-      Array [
+      [
         0.02,
         0,
       ],
-      Array [
+      [
         -0.359,
         0.214,
       ],
-      Array [
+      [
         -0.418,
         0.109,
       ],
-      Array [
+      [
         -0.224,
         0,
       ],
-      Array [
+      [
         -0.418,
         -0.109,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.359,
     -0.173,
     -0.351,
@@ -8113,29 +8113,29 @@ Object {
     -0.364,
     -0.205,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.359,
         -0.214,
       ],
-      Array [
+      [
         0.02,
         0,
       ],
-      Array [
+      [
         -0.359,
         0.214,
       ],
-      Array [
+      [
         -0.418,
         0.109,
       ],
-      Array [
+      [
         -0.224,
         0,
       ],
-      Array [
+      [
         -0.418,
         -0.109,
       ],
@@ -8145,48 +8145,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-dash-t0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.359,
         -0.214,
       ],
-      Array [
+      [
         0.02,
         0,
       ],
-      Array [
+      [
         -0.359,
         0.214,
       ],
-      Array [
+      [
         -0.418,
         0.109,
       ],
-      Array [
+      [
         -0.331,
         0.06,
       ],
-      Array [
+      [
         -0.41,
         0.06,
       ],
-      Array [
+      [
         -0.41,
         -0.06,
       ],
-      Array [
+      [
         -0.331,
         -0.06,
       ],
-      Array [
+      [
         -0.418,
         -0.109,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.36,
     -0.191,
     -0.334,
@@ -8668,41 +8668,41 @@ Object {
     -0.367,
     -0.199,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.359,
         -0.214,
       ],
-      Array [
+      [
         0.02,
         0,
       ],
-      Array [
+      [
         -0.359,
         0.214,
       ],
-      Array [
+      [
         -0.418,
         0.109,
       ],
-      Array [
+      [
         -0.331,
         0.06,
       ],
-      Array [
+      [
         -0.41,
         0.06,
       ],
-      Array [
+      [
         -0.41,
         -0.06,
       ],
-      Array [
+      [
         -0.331,
         -0.06,
       ],
-      Array [
+      [
         -0.418,
         -0.109,
       ],
@@ -8712,48 +8712,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-dash-tn 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.359,
         -0.214,
       ],
-      Array [
+      [
         0.02,
         0,
       ],
-      Array [
+      [
         -0.359,
         0.214,
       ],
-      Array [
+      [
         -0.418,
         0.109,
       ],
-      Array [
+      [
         -0.331,
         0.06,
       ],
-      Array [
+      [
         -0.36,
         0.06,
       ],
-      Array [
+      [
         -0.36,
         -0.06,
       ],
-      Array [
+      [
         -0.331,
         -0.06,
       ],
-      Array [
+      [
         -0.418,
         -0.109,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.36,
     -0.191,
     -0.334,
@@ -9211,41 +9211,41 @@ Object {
     -0.367,
     -0.199,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.359,
         -0.214,
       ],
-      Array [
+      [
         0.02,
         0,
       ],
-      Array [
+      [
         -0.359,
         0.214,
       ],
-      Array [
+      [
         -0.418,
         0.109,
       ],
-      Array [
+      [
         -0.331,
         0.06,
       ],
-      Array [
+      [
         -0.36,
         0.06,
       ],
-      Array [
+      [
         -0.36,
         -0.06,
       ],
-      Array [
+      [
         -0.331,
         -0.06,
       ],
-      Array [
+      [
         -0.418,
         -0.109,
       ],
@@ -9255,48 +9255,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-dash-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.257,
         -0.214,
       ],
-      Array [
+      [
         0.016,
         0,
       ],
-      Array [
+      [
         -0.257,
         0.214,
       ],
-      Array [
+      [
         -0.331,
         0.12,
       ],
-      Array [
+      [
         -0.255,
         0.06,
       ],
-      Array [
+      [
         -0.41,
         0.06,
       ],
-      Array [
+      [
         -0.41,
         -0.06,
       ],
-      Array [
+      [
         -0.255,
         -0.06,
       ],
-      Array [
+      [
         -0.331,
         -0.12,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.265,
     -0.172,
     -0.254,
@@ -9754,41 +9754,41 @@ Object {
     -0.263,
     -0.206,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.257,
         -0.214,
       ],
-      Array [
+      [
         0.016,
         0,
       ],
-      Array [
+      [
         -0.257,
         0.214,
       ],
-      Array [
+      [
         -0.331,
         0.12,
       ],
-      Array [
+      [
         -0.255,
         0.06,
       ],
-      Array [
+      [
         -0.41,
         0.06,
       ],
-      Array [
+      [
         -0.41,
         -0.06,
       ],
-      Array [
+      [
         -0.255,
         -0.06,
       ],
-      Array [
+      [
         -0.331,
         -0.12,
       ],
@@ -9798,36 +9798,36 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-default 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.378,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.378,
         0.2,
       ],
-      Array [
+      [
         -0.401,
         0.156,
       ],
-      Array [
+      [
         -0.107,
         0,
       ],
-      Array [
+      [
         -0.401,
         -0.156,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.378,
     -0.2,
     0,
@@ -9853,29 +9853,29 @@ Object {
     -0.378,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.378,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.378,
         0.2,
       ],
-      Array [
+      [
         -0.401,
         0.156,
       ],
-      Array [
+      [
         -0.107,
         0,
       ],
-      Array [
+      [
         -0.401,
         -0.156,
       ],
@@ -9885,48 +9885,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-inside 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.355,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.355,
         0.2,
       ],
-      Array [
+      [
         -0.404,
         0.113,
       ],
-      Array [
+      [
         -0.293,
         0.05,
       ],
-      Array [
+      [
         -0.35,
         0.05,
       ],
-      Array [
+      [
         -0.35,
         -0.05,
       ],
-      Array [
+      [
         -0.293,
         -0.05,
       ],
-      Array [
+      [
         -0.404,
         -0.113,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.34,
     -0.146,
     -0.082,
@@ -10036,41 +10036,41 @@ Object {
     -0.355,
     -0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.355,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.355,
         0.2,
       ],
-      Array [
+      [
         -0.404,
         0.113,
       ],
-      Array [
+      [
         -0.293,
         0.05,
       ],
-      Array [
+      [
         -0.35,
         0.05,
       ],
-      Array [
+      [
         -0.35,
         -0.05,
       ],
-      Array [
+      [
         -0.293,
         -0.05,
       ],
-      Array [
+      [
         -0.404,
         -0.113,
       ],
@@ -10080,48 +10080,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-inside-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.355,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.355,
         0.2,
       ],
-      Array [
+      [
         -0.404,
         0.113,
       ],
-      Array [
+      [
         -0.293,
         0.05,
       ],
-      Array [
+      [
         -0.4,
         0.05,
       ],
-      Array [
+      [
         -0.4,
         -0.05,
       ],
-      Array [
+      [
         -0.293,
         -0.05,
       ],
-      Array [
+      [
         -0.404,
         -0.113,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.34,
     -0.146,
     -0.082,
@@ -10231,41 +10231,41 @@ Object {
     -0.355,
     -0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.355,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.355,
         0.2,
       ],
-      Array [
+      [
         -0.404,
         0.113,
       ],
-      Array [
+      [
         -0.293,
         0.05,
       ],
-      Array [
+      [
         -0.4,
         0.05,
       ],
-      Array [
+      [
         -0.4,
         -0.05,
       ],
-      Array [
+      [
         -0.293,
         -0.05,
       ],
-      Array [
+      [
         -0.404,
         -0.113,
       ],
@@ -10275,36 +10275,36 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-line 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.365,
         -0.234,
       ],
-      Array [
+      [
         0.051,
         0,
       ],
-      Array [
+      [
         -0.365,
         0.234,
       ],
-      Array [
+      [
         -0.438,
         0.103,
       ],
-      Array [
+      [
         -0.255,
         0,
       ],
-      Array [
+      [
         -0.438,
         -0.103,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.346,
     -0.166,
     -0.051,
@@ -10378,29 +10378,29 @@ Object {
     -0.365,
     -0.234,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.365,
         -0.234,
       ],
-      Array [
+      [
         0.051,
         0,
       ],
-      Array [
+      [
         -0.365,
         0.234,
       ],
-      Array [
+      [
         -0.438,
         0.103,
       ],
-      Array [
+      [
         -0.255,
         0,
       ],
-      Array [
+      [
         -0.438,
         -0.103,
       ],
@@ -10410,48 +10410,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-line-t0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.365,
         -0.234,
       ],
-      Array [
+      [
         0.051,
         0,
       ],
-      Array [
+      [
         -0.365,
         0.234,
       ],
-      Array [
+      [
         -0.438,
         0.103,
       ],
-      Array [
+      [
         -0.388,
         0.075,
       ],
-      Array [
+      [
         -0.425,
         0.075,
       ],
-      Array [
+      [
         -0.425,
         -0.075,
       ],
-      Array [
+      [
         -0.388,
         -0.075,
       ],
-      Array [
+      [
         -0.438,
         -0.103,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.346,
     -0.166,
     -0.051,
@@ -10561,41 +10561,41 @@ Object {
     -0.365,
     -0.234,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.365,
         -0.234,
       ],
-      Array [
+      [
         0.051,
         0,
       ],
-      Array [
+      [
         -0.365,
         0.234,
       ],
-      Array [
+      [
         -0.438,
         0.103,
       ],
-      Array [
+      [
         -0.388,
         0.075,
       ],
-      Array [
+      [
         -0.425,
         0.075,
       ],
-      Array [
+      [
         -0.425,
         -0.075,
       ],
-      Array [
+      [
         -0.388,
         -0.075,
       ],
-      Array [
+      [
         -0.438,
         -0.103,
       ],
@@ -10605,56 +10605,56 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-line-tn 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.365,
         -0.234,
       ],
-      Array [
+      [
         0.051,
         0,
       ],
-      Array [
+      [
         -0.365,
         0.234,
       ],
-      Array [
+      [
         -0.438,
         0.103,
       ],
-      Array [
+      [
         -0.344,
         0.05,
       ],
-      Array [
+      [
         -0.337,
         0.075,
       ],
-      Array [
+      [
         -0.375,
         0.075,
       ],
-      Array [
+      [
         -0.375,
         -0.075,
       ],
-      Array [
+      [
         -0.337,
         -0.075,
       ],
-      Array [
+      [
         -0.344,
         -0.05,
       ],
-      Array [
+      [
         -0.438,
         -0.103,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.346,
     -0.166,
     -0.051,
@@ -10776,49 +10776,49 @@ Object {
     -0.365,
     -0.234,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.365,
         -0.234,
       ],
-      Array [
+      [
         0.051,
         0,
       ],
-      Array [
+      [
         -0.365,
         0.234,
       ],
-      Array [
+      [
         -0.438,
         0.103,
       ],
-      Array [
+      [
         -0.344,
         0.05,
       ],
-      Array [
+      [
         -0.337,
         0.075,
       ],
-      Array [
+      [
         -0.375,
         0.075,
       ],
-      Array [
+      [
         -0.375,
         -0.075,
       ],
-      Array [
+      [
         -0.337,
         -0.075,
       ],
-      Array [
+      [
         -0.344,
         -0.05,
       ],
-      Array [
+      [
         -0.438,
         -0.103,
       ],
@@ -10828,48 +10828,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-line-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.26,
         -0.235,
       ],
-      Array [
+      [
         0.041,
         0,
       ],
-      Array [
+      [
         -0.26,
         0.235,
       ],
-      Array [
+      [
         -0.352,
         0.117,
       ],
-      Array [
+      [
         -0.298,
         0.075,
       ],
-      Array [
+      [
         -0.425,
         0.075,
       ],
-      Array [
+      [
         -0.425,
         -0.075,
       ],
-      Array [
+      [
         -0.298,
         -0.075,
       ],
-      Array [
+      [
         -0.352,
         -0.117,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.251,
     -0.165,
     -0.041,
@@ -10979,41 +10979,41 @@ Object {
     -0.26,
     -0.235,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.26,
         -0.235,
       ],
-      Array [
+      [
         0.041,
         0,
       ],
-      Array [
+      [
         -0.26,
         0.235,
       ],
-      Array [
+      [
         -0.352,
         0.117,
       ],
-      Array [
+      [
         -0.298,
         0.075,
       ],
-      Array [
+      [
         -0.425,
         0.075,
       ],
-      Array [
+      [
         -0.425,
         -0.075,
       ],
-      Array [
+      [
         -0.298,
         -0.075,
       ],
-      Array [
+      [
         -0.352,
         -0.117,
       ],
@@ -11023,56 +11023,56 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-outside 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.371,
         -0.254,
       ],
-      Array [
+      [
         0.082,
         0,
       ],
-      Array [
+      [
         -0.371,
         0.254,
       ],
-      Array [
+      [
         -0.453,
         0.108,
       ],
-      Array [
+      [
         -0.35,
         0.05,
       ],
-      Array [
+      [
         -0.35,
         0.082,
       ],
-      Array [
+      [
         -0.39,
         0.082,
       ],
-      Array [
+      [
         -0.39,
         -0.082,
       ],
-      Array [
+      [
         -0.35,
         -0.082,
       ],
-      Array [
+      [
         -0.35,
         -0.05,
       ],
-      Array [
+      [
         -0.453,
         -0.108,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.355,
     -0.2,
     0,
@@ -11194,49 +11194,49 @@ Object {
     -0.371,
     -0.254,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.371,
         -0.254,
       ],
-      Array [
+      [
         0.082,
         0,
       ],
-      Array [
+      [
         -0.371,
         0.254,
       ],
-      Array [
+      [
         -0.453,
         0.108,
       ],
-      Array [
+      [
         -0.35,
         0.05,
       ],
-      Array [
+      [
         -0.35,
         0.082,
       ],
-      Array [
+      [
         -0.39,
         0.082,
       ],
-      Array [
+      [
         -0.39,
         -0.082,
       ],
-      Array [
+      [
         -0.35,
         -0.082,
       ],
-      Array [
+      [
         -0.35,
         -0.05,
       ],
-      Array [
+      [
         -0.453,
         -0.108,
       ],
@@ -11246,56 +11246,56 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-outside-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.371,
         -0.254,
       ],
-      Array [
+      [
         0.082,
         0,
       ],
-      Array [
+      [
         -0.371,
         0.254,
       ],
-      Array [
+      [
         -0.459,
         0.098,
       ],
-      Array [
+      [
         -0.374,
         0.05,
       ],
-      Array [
+      [
         -0.364,
         0.09,
       ],
-      Array [
+      [
         -0.44,
         0.09,
       ],
-      Array [
+      [
         -0.44,
         -0.09,
       ],
-      Array [
+      [
         -0.364,
         -0.09,
       ],
-      Array [
+      [
         -0.374,
         -0.05,
       ],
-      Array [
+      [
         -0.459,
         -0.098,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.355,
     -0.2,
     0,
@@ -11417,49 +11417,49 @@ Object {
     -0.371,
     -0.254,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.371,
         -0.254,
       ],
-      Array [
+      [
         0.082,
         0,
       ],
-      Array [
+      [
         -0.371,
         0.254,
       ],
-      Array [
+      [
         -0.459,
         0.098,
       ],
-      Array [
+      [
         -0.374,
         0.05,
       ],
-      Array [
+      [
         -0.364,
         0.09,
       ],
-      Array [
+      [
         -0.44,
         0.09,
       ],
-      Array [
+      [
         -0.44,
         -0.09,
       ],
-      Array [
+      [
         -0.364,
         -0.09,
       ],
-      Array [
+      [
         -0.374,
         -0.05,
       ],
-      Array [
+      [
         -0.459,
         -0.098,
       ],
@@ -11469,48 +11469,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-t0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.378,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.378,
         0.2,
       ],
-      Array [
+      [
         -0.401,
         0.156,
       ],
-      Array [
+      [
         -0.154,
         0.025,
       ],
-      Array [
+      [
         -0.4,
         0.025,
       ],
-      Array [
+      [
         -0.4,
         -0.025,
       ],
-      Array [
+      [
         -0.154,
         -0.025,
       ],
-      Array [
+      [
         -0.401,
         -0.156,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.378,
     -0.2,
     0,
@@ -11554,41 +11554,41 @@ Object {
     -0.4,
     0.025,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.378,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.378,
         0.2,
       ],
-      Array [
+      [
         -0.401,
         0.156,
       ],
-      Array [
+      [
         -0.154,
         0.025,
       ],
-      Array [
+      [
         -0.4,
         0.025,
       ],
-      Array [
+      [
         -0.4,
         -0.025,
       ],
-      Array [
+      [
         -0.154,
         -0.025,
       ],
-      Array [
+      [
         -0.401,
         -0.156,
       ],
@@ -11598,48 +11598,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-tn 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.378,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.378,
         0.2,
       ],
-      Array [
+      [
         -0.401,
         0.156,
       ],
-      Array [
+      [
         -0.154,
         0.025,
       ],
-      Array [
+      [
         -0.35,
         0.025,
       ],
-      Array [
+      [
         -0.35,
         -0.025,
       ],
-      Array [
+      [
         -0.154,
         -0.025,
       ],
-      Array [
+      [
         -0.401,
         -0.156,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.378,
     -0.2,
     0,
@@ -11683,41 +11683,41 @@ Object {
     -0.35,
     0.025,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.378,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.378,
         0.2,
       ],
-      Array [
+      [
         -0.401,
         0.156,
       ],
-      Array [
+      [
         -0.154,
         0.025,
       ],
-      Array [
+      [
         -0.35,
         0.025,
       ],
-      Array [
+      [
         -0.35,
         -0.025,
       ],
-      Array [
+      [
         -0.154,
         -0.025,
       ],
-      Array [
+      [
         -0.401,
         -0.156,
       ],
@@ -11727,48 +11727,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape line-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.278,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.278,
         0.2,
       ],
-      Array [
+      [
         -0.307,
         0.159,
       ],
-      Array [
+      [
         -0.12,
         0.025,
       ],
-      Array [
+      [
         -0.4,
         0.025,
       ],
-      Array [
+      [
         -0.4,
         -0.025,
       ],
-      Array [
+      [
         -0.12,
         -0.025,
       ],
-      Array [
+      [
         -0.307,
         -0.159,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.278,
     -0.2,
     0,
@@ -11812,41 +11812,41 @@ Object {
     -0.4,
     0.025,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.278,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.278,
         0.2,
       ],
-      Array [
+      [
         -0.307,
         0.159,
       ],
-      Array [
+      [
         -0.12,
         0.025,
       ],
-      Array [
+      [
         -0.4,
         0.025,
       ],
-      Array [
+      [
         -0.4,
         -0.025,
       ],
-      Array [
+      [
         -0.12,
         -0.025,
       ],
-      Array [
+      [
         -0.307,
         -0.159,
       ],
@@ -11856,48 +11856,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-align-mid 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.157,
         0.075,
       ],
-      Array [
+      [
         -0.2,
         0.075,
       ],
-      Array [
+      [
         -0.2,
         -0.075,
       ],
-      Array [
+      [
         -0.157,
         -0.075,
       ],
-      Array [
+      [
         -0.1,
         -0.173,
       ],
-      Array [
+      [
         0.1,
         -0.173,
       ],
-      Array [
+      [
         0.2,
         0,
       ],
-      Array [
+      [
         0.1,
         0.173,
       ],
-      Array [
+      [
         -0.1,
         0.173,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.157,
     0.075,
     -0.157,
@@ -11947,41 +11947,41 @@ Object {
     -0.1,
     0.173,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.157,
         0.075,
       ],
-      Array [
+      [
         -0.2,
         0.075,
       ],
-      Array [
+      [
         -0.2,
         -0.075,
       ],
-      Array [
+      [
         -0.157,
         -0.075,
       ],
-      Array [
+      [
         -0.1,
         -0.173,
       ],
-      Array [
+      [
         0.1,
         -0.173,
       ],
-      Array [
+      [
         0.2,
         0,
       ],
-      Array [
+      [
         0.1,
         0.173,
       ],
-      Array [
+      [
         -0.1,
         0.173,
       ],
@@ -11991,48 +11991,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-align-start 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.043,
         0.075,
       ],
-      Array [
+      [
         0,
         0.075,
       ],
-      Array [
+      [
         0,
         -0.075,
       ],
-      Array [
+      [
         0.043,
         -0.075,
       ],
-      Array [
+      [
         0.1,
         -0.173,
       ],
-      Array [
+      [
         0.3,
         -0.173,
       ],
-      Array [
+      [
         0.4,
         0,
       ],
-      Array [
+      [
         0.3,
         0.173,
       ],
-      Array [
+      [
         0.1,
         0.173,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0.043,
     0.075,
     0.043,
@@ -12082,41 +12082,41 @@ Object {
     0.1,
     0.173,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.043,
         0.075,
       ],
-      Array [
+      [
         0,
         0.075,
       ],
-      Array [
+      [
         0,
         -0.075,
       ],
-      Array [
+      [
         0.043,
         -0.075,
       ],
-      Array [
+      [
         0.1,
         -0.173,
       ],
-      Array [
+      [
         0.3,
         -0.173,
       ],
-      Array [
+      [
         0.4,
         0,
       ],
-      Array [
+      [
         0.3,
         0.173,
       ],
-      Array [
+      [
         0.1,
         0.173,
       ],
@@ -12126,48 +12126,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-align-tail 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.043,
         0.075,
       ],
-      Array [
+      [
         0,
         0.075,
       ],
-      Array [
+      [
         0,
         -0.075,
       ],
-      Array [
+      [
         0.043,
         -0.075,
       ],
-      Array [
+      [
         0.1,
         -0.173,
       ],
-      Array [
+      [
         0.3,
         -0.173,
       ],
-      Array [
+      [
         0.4,
         0,
       ],
-      Array [
+      [
         0.3,
         0.173,
       ],
-      Array [
+      [
         0.1,
         0.173,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0.043,
     0.075,
     0.043,
@@ -12217,41 +12217,41 @@ Object {
     0.1,
     0.173,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.043,
         0.075,
       ],
-      Array [
+      [
         0,
         0.075,
       ],
-      Array [
+      [
         0,
         -0.075,
       ],
-      Array [
+      [
         0.043,
         -0.075,
       ],
-      Array [
+      [
         0.1,
         -0.173,
       ],
-      Array [
+      [
         0.3,
         -0.173,
       ],
-      Array [
+      [
         0.4,
         0,
       ],
-      Array [
+      [
         0.3,
         0.173,
       ],
-      Array [
+      [
         0.1,
         0.173,
       ],
@@ -12261,48 +12261,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-align-tip 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.357,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.357,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.173,
       ],
-      Array [
+      [
         -0.1,
         -0.173,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.1,
         0.173,
       ],
-      Array [
+      [
         -0.3,
         0.173,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.357,
     0.075,
     -0.357,
@@ -12352,41 +12352,41 @@ Object {
     -0.3,
     0.173,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.357,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.357,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.173,
       ],
-      Array [
+      [
         -0.1,
         -0.173,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.1,
         0.173,
       ],
-      Array [
+      [
         -0.3,
         0.173,
       ],
@@ -12396,36 +12396,36 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-dash 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.012,
         0,
       ],
-      Array [
+      [
         -0.094,
         0.183,
       ],
-      Array [
+      [
         -0.306,
         0.183,
       ],
-      Array [
+      [
         -0.412,
         0,
       ],
-      Array [
+      [
         -0.306,
         -0.183,
       ],
-      Array [
+      [
         -0.094,
         -0.183,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.009,
     -0.005,
     -0.024,
@@ -12787,29 +12787,29 @@ Object {
     0.004,
     -0.014,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.012,
         0,
       ],
-      Array [
+      [
         -0.094,
         0.183,
       ],
-      Array [
+      [
         -0.306,
         0.183,
       ],
-      Array [
+      [
         -0.412,
         0,
       ],
-      Array [
+      [
         -0.306,
         -0.183,
       ],
-      Array [
+      [
         -0.094,
         -0.183,
       ],
@@ -12819,48 +12819,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-dash-t0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.362,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         -0.085,
       ],
-      Array [
+      [
         -0.362,
         -0.085,
       ],
-      Array [
+      [
         -0.306,
         -0.183,
       ],
-      Array [
+      [
         -0.094,
         -0.183,
       ],
-      Array [
+      [
         0.012,
         0,
       ],
-      Array [
+      [
         -0.094,
         0.183,
       ],
-      Array [
+      [
         -0.306,
         0.183,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.336,
     0.09,
     -0.351,
@@ -13276,41 +13276,41 @@ Object {
     -0.365,
     0.08,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.362,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         -0.085,
       ],
-      Array [
+      [
         -0.362,
         -0.085,
       ],
-      Array [
+      [
         -0.306,
         -0.183,
       ],
-      Array [
+      [
         -0.094,
         -0.183,
       ],
-      Array [
+      [
         0.012,
         0,
       ],
-      Array [
+      [
         -0.094,
         0.183,
       ],
-      Array [
+      [
         -0.306,
         0.183,
       ],
@@ -13320,48 +13320,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-dash-tn 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.362,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         -0.085,
       ],
-      Array [
+      [
         -0.362,
         -0.085,
       ],
-      Array [
+      [
         -0.306,
         -0.183,
       ],
-      Array [
+      [
         -0.094,
         -0.183,
       ],
-      Array [
+      [
         0.012,
         0,
       ],
-      Array [
+      [
         -0.094,
         0.183,
       ],
-      Array [
+      [
         -0.306,
         0.183,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.336,
     0.09,
     -0.351,
@@ -13777,41 +13777,41 @@ Object {
     -0.365,
     0.08,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.362,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         -0.085,
       ],
-      Array [
+      [
         -0.362,
         -0.085,
       ],
-      Array [
+      [
         -0.306,
         -0.183,
       ],
-      Array [
+      [
         -0.094,
         -0.183,
       ],
-      Array [
+      [
         0.012,
         0,
       ],
-      Array [
+      [
         -0.094,
         0.183,
       ],
-      Array [
+      [
         -0.306,
         0.183,
       ],
@@ -13821,48 +13821,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-dash-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.362,
         0.085,
       ],
-      Array [
+      [
         -0.51,
         0.085,
       ],
-      Array [
+      [
         -0.51,
         -0.085,
       ],
-      Array [
+      [
         -0.362,
         -0.085,
       ],
-      Array [
+      [
         -0.306,
         -0.183,
       ],
-      Array [
+      [
         -0.094,
         -0.183,
       ],
-      Array [
+      [
         0.012,
         0,
       ],
-      Array [
+      [
         -0.094,
         0.183,
       ],
-      Array [
+      [
         -0.306,
         0.183,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.336,
     0.09,
     -0.351,
@@ -14350,41 +14350,41 @@ Object {
     -0.365,
     0.08,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.362,
         0.085,
       ],
-      Array [
+      [
         -0.51,
         0.085,
       ],
-      Array [
+      [
         -0.51,
         -0.085,
       ],
-      Array [
+      [
         -0.362,
         -0.085,
       ],
-      Array [
+      [
         -0.306,
         -0.183,
       ],
-      Array [
+      [
         -0.094,
         -0.183,
       ],
-      Array [
+      [
         0.012,
         0,
       ],
-      Array [
+      [
         -0.094,
         0.183,
       ],
-      Array [
+      [
         -0.306,
         0.183,
       ],
@@ -14394,36 +14394,36 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-default 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.1,
         0.173,
       ],
-      Array [
+      [
         -0.3,
         0.173,
       ],
-      Array [
+      [
         -0.4,
         0,
       ],
-      Array [
+      [
         -0.3,
         -0.173,
       ],
-      Array [
+      [
         -0.1,
         -0.173,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0,
     0,
     0,
@@ -14455,29 +14455,29 @@ Object {
     -0.1,
     -0.173,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.1,
         0.173,
       ],
-      Array [
+      [
         -0.3,
         0.173,
       ],
-      Array [
+      [
         -0.4,
         0,
       ],
-      Array [
+      [
         -0.3,
         -0.173,
       ],
-      Array [
+      [
         -0.1,
         -0.173,
       ],
@@ -14487,28 +14487,28 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-define 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.3,
         0.3,
       ],
-      Array [
+      [
         -0.6,
         0,
       ],
-      Array [
+      [
         -0.3,
         -0.3,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0,
     0,
     0,
@@ -14528,21 +14528,21 @@ Object {
     -0.3,
     -0.3,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.3,
         0.3,
       ],
-      Array [
+      [
         -0.6,
         0,
       ],
-      Array [
+      [
         -0.3,
         -0.3,
       ],
@@ -14552,36 +14552,36 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-inside 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.1,
         0.173,
       ],
-      Array [
+      [
         -0.3,
         0.173,
       ],
-      Array [
+      [
         -0.4,
         0,
       ],
-      Array [
+      [
         -0.3,
         -0.173,
       ],
-      Array [
+      [
         -0.1,
         -0.173,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.058,
     0,
     -0.129,
@@ -14655,29 +14655,29 @@ Object {
     0,
     0,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.1,
         0.173,
       ],
-      Array [
+      [
         -0.3,
         0.173,
       ],
-      Array [
+      [
         -0.4,
         0,
       ],
-      Array [
+      [
         -0.3,
         -0.173,
       ],
-      Array [
+      [
         -0.1,
         -0.173,
       ],
@@ -14687,48 +14687,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-inside-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.357,
         0.075,
       ],
-      Array [
+      [
         -0.5,
         0.075,
       ],
-      Array [
+      [
         -0.5,
         -0.075,
       ],
-      Array [
+      [
         -0.357,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.173,
       ],
-      Array [
+      [
         -0.1,
         -0.173,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.1,
         0.173,
       ],
-      Array [
+      [
         -0.3,
         0.173,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.328,
     0.025,
     -0.45,
@@ -14838,41 +14838,41 @@ Object {
     -0.357,
     0.075,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.357,
         0.075,
       ],
-      Array [
+      [
         -0.5,
         0.075,
       ],
-      Array [
+      [
         -0.5,
         -0.075,
       ],
-      Array [
+      [
         -0.357,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.173,
       ],
-      Array [
+      [
         -0.1,
         -0.173,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.1,
         0.173,
       ],
-      Array [
+      [
         -0.3,
         0.173,
       ],
@@ -14882,36 +14882,36 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-line 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.029,
         0,
       ],
-      Array [
+      [
         -0.086,
         0.198,
       ],
-      Array [
+      [
         -0.314,
         0.198,
       ],
-      Array [
+      [
         -0.429,
         0,
       ],
-      Array [
+      [
         -0.314,
         -0.198,
       ],
-      Array [
+      [
         -0.086,
         -0.198,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.029,
     0,
     -0.114,
@@ -14985,29 +14985,29 @@ Object {
     0.029,
     0,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.029,
         0,
       ],
-      Array [
+      [
         -0.086,
         0.198,
       ],
-      Array [
+      [
         -0.314,
         0.198,
       ],
-      Array [
+      [
         -0.429,
         0,
       ],
-      Array [
+      [
         -0.314,
         -0.198,
       ],
-      Array [
+      [
         -0.086,
         -0.198,
       ],
@@ -15017,48 +15017,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-line-t0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.371,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         -0.1,
       ],
-      Array [
+      [
         -0.371,
         -0.1,
       ],
-      Array [
+      [
         -0.314,
         -0.198,
       ],
-      Array [
+      [
         -0.086,
         -0.198,
       ],
-      Array [
+      [
         0.029,
         0,
       ],
-      Array [
+      [
         -0.086,
         0.198,
       ],
-      Array [
+      [
         -0.314,
         0.198,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.342,
     0.05,
     -0.375,
@@ -15168,41 +15168,41 @@ Object {
     -0.371,
     0.1,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.371,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         -0.1,
       ],
-      Array [
+      [
         -0.371,
         -0.1,
       ],
-      Array [
+      [
         -0.314,
         -0.198,
       ],
-      Array [
+      [
         -0.086,
         -0.198,
       ],
-      Array [
+      [
         0.029,
         0,
       ],
-      Array [
+      [
         -0.086,
         0.198,
       ],
-      Array [
+      [
         -0.314,
         0.198,
       ],
@@ -15212,48 +15212,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-line-tn 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.371,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         -0.1,
       ],
-      Array [
+      [
         -0.371,
         -0.1,
       ],
-      Array [
+      [
         -0.314,
         -0.198,
       ],
-      Array [
+      [
         -0.086,
         -0.198,
       ],
-      Array [
+      [
         0.029,
         0,
       ],
-      Array [
+      [
         -0.086,
         0.198,
       ],
-      Array [
+      [
         -0.314,
         0.198,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.342,
     0.05,
     -0.375,
@@ -15363,41 +15363,41 @@ Object {
     -0.371,
     0.1,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.371,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         -0.1,
       ],
-      Array [
+      [
         -0.371,
         -0.1,
       ],
-      Array [
+      [
         -0.314,
         -0.198,
       ],
-      Array [
+      [
         -0.086,
         -0.198,
       ],
-      Array [
+      [
         0.029,
         0,
       ],
-      Array [
+      [
         -0.086,
         0.198,
       ],
-      Array [
+      [
         -0.314,
         0.198,
       ],
@@ -15407,48 +15407,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-line-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.371,
         0.1,
       ],
-      Array [
+      [
         -0.525,
         0.1,
       ],
-      Array [
+      [
         -0.525,
         -0.1,
       ],
-      Array [
+      [
         -0.371,
         -0.1,
       ],
-      Array [
+      [
         -0.314,
         -0.198,
       ],
-      Array [
+      [
         -0.086,
         -0.198,
       ],
-      Array [
+      [
         0.029,
         0,
       ],
-      Array [
+      [
         -0.086,
         0.198,
       ],
-      Array [
+      [
         -0.314,
         0.198,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.342,
     0.05,
     -0.475,
@@ -15558,41 +15558,41 @@ Object {
     -0.371,
     0.1,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.371,
         0.1,
       ],
-      Array [
+      [
         -0.525,
         0.1,
       ],
-      Array [
+      [
         -0.525,
         -0.1,
       ],
-      Array [
+      [
         -0.371,
         -0.1,
       ],
-      Array [
+      [
         -0.314,
         -0.198,
       ],
-      Array [
+      [
         -0.086,
         -0.198,
       ],
-      Array [
+      [
         0.029,
         0,
       ],
-      Array [
+      [
         -0.086,
         0.198,
       ],
-      Array [
+      [
         -0.314,
         0.198,
       ],
@@ -15602,36 +15602,36 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-outside 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.058,
         0,
       ],
-      Array [
+      [
         -0.071,
         0.223,
       ],
-      Array [
+      [
         -0.329,
         0.223,
       ],
-      Array [
+      [
         -0.458,
         0,
       ],
-      Array [
+      [
         -0.329,
         -0.223,
       ],
-      Array [
+      [
         -0.071,
         -0.223,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0,
     0,
     -0.1,
@@ -15705,29 +15705,29 @@ Object {
     0.058,
     0,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.058,
         0,
       ],
-      Array [
+      [
         -0.071,
         0.223,
       ],
-      Array [
+      [
         -0.329,
         0.223,
       ],
-      Array [
+      [
         -0.458,
         0,
       ],
-      Array [
+      [
         -0.329,
         -0.223,
       ],
-      Array [
+      [
         -0.071,
         -0.223,
       ],
@@ -15737,48 +15737,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-outside-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.386,
         0.125,
       ],
-      Array [
+      [
         -0.55,
         0.125,
       ],
-      Array [
+      [
         -0.55,
         -0.125,
       ],
-      Array [
+      [
         -0.386,
         -0.125,
       ],
-      Array [
+      [
         -0.329,
         -0.223,
       ],
-      Array [
+      [
         -0.071,
         -0.223,
       ],
-      Array [
+      [
         0.058,
         0,
       ],
-      Array [
+      [
         -0.071,
         0.223,
       ],
-      Array [
+      [
         -0.329,
         0.223,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.357,
     0.075,
     -0.5,
@@ -15888,41 +15888,41 @@ Object {
     -0.386,
     0.125,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.386,
         0.125,
       ],
-      Array [
+      [
         -0.55,
         0.125,
       ],
-      Array [
+      [
         -0.55,
         -0.125,
       ],
-      Array [
+      [
         -0.386,
         -0.125,
       ],
-      Array [
+      [
         -0.329,
         -0.223,
       ],
-      Array [
+      [
         -0.071,
         -0.223,
       ],
-      Array [
+      [
         0.058,
         0,
       ],
-      Array [
+      [
         -0.071,
         0.223,
       ],
-      Array [
+      [
         -0.329,
         0.223,
       ],
@@ -15932,48 +15932,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-t0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.357,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.357,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.173,
       ],
-      Array [
+      [
         -0.1,
         -0.173,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.1,
         0.173,
       ],
-      Array [
+      [
         -0.3,
         0.173,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.357,
     0.075,
     -0.357,
@@ -16023,41 +16023,41 @@ Object {
     -0.3,
     0.173,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.357,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.357,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.173,
       ],
-      Array [
+      [
         -0.1,
         -0.173,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.1,
         0.173,
       ],
-      Array [
+      [
         -0.3,
         0.173,
       ],
@@ -16067,48 +16067,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-tn 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.357,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.357,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.173,
       ],
-      Array [
+      [
         -0.1,
         -0.173,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.1,
         0.173,
       ],
-      Array [
+      [
         -0.3,
         0.173,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.357,
     0.075,
     -0.357,
@@ -16158,41 +16158,41 @@ Object {
     -0.3,
     0.173,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.357,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.357,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.173,
       ],
-      Array [
+      [
         -0.1,
         -0.173,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.1,
         0.173,
       ],
-      Array [
+      [
         -0.3,
         0.173,
       ],
@@ -16202,48 +16202,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape poly-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.357,
         0.075,
       ],
-      Array [
+      [
         -0.5,
         0.075,
       ],
-      Array [
+      [
         -0.5,
         -0.075,
       ],
-      Array [
+      [
         -0.357,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.173,
       ],
-      Array [
+      [
         -0.1,
         -0.173,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.1,
         0.173,
       ],
-      Array [
+      [
         -0.3,
         0.173,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.357,
     0.075,
     -0.357,
@@ -16293,41 +16293,41 @@ Object {
     -0.3,
     0.173,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.357,
         0.075,
       ],
-      Array [
+      [
         -0.5,
         0.075,
       ],
-      Array [
+      [
         -0.5,
         -0.075,
       ],
-      Array [
+      [
         -0.357,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.173,
       ],
-      Array [
+      [
         -0.1,
         -0.173,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.1,
         0.173,
       ],
-      Array [
+      [
         -0.3,
         0.173,
       ],
@@ -16337,44 +16337,44 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rectangle 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.3,
         -0.075,
       ],
-      Array [
+      [
         -0.2,
         -0.075,
       ],
-      Array [
+      [
         -0.2,
         -0.15,
       ],
-      Array [
+      [
         0,
         -0.15,
       ],
-      Array [
+      [
         0,
         0.15,
       ],
-      Array [
+      [
         -0.2,
         0.15,
       ],
-      Array [
+      [
         -0.2,
         0.075,
       ],
-      Array [
+      [
         -0.3,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.3,
     -0.075,
     -0.2,
@@ -16400,37 +16400,37 @@ Object {
     -0.2,
     0.15,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.3,
         -0.075,
       ],
-      Array [
+      [
         -0.2,
         -0.075,
       ],
-      Array [
+      [
         -0.2,
         -0.15,
       ],
-      Array [
+      [
         0,
         -0.15,
       ],
-      Array [
+      [
         0,
         0.15,
       ],
-      Array [
+      [
         -0.2,
         0.15,
       ],
-      Array [
+      [
         -0.2,
         0.075,
       ],
-      Array [
+      [
         -0.3,
         0.075,
       ],
@@ -16440,48 +16440,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-align-mid 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.2,
         -0.2,
       ],
-      Array [
+      [
         0.2,
         0.2,
       ],
-      Array [
+      [
         -0.05,
         0.075,
       ],
-      Array [
+      [
         -0.15,
         0.075,
       ],
-      Array [
+      [
         -0.15,
         0.025,
       ],
-      Array [
+      [
         -0.2,
         0,
       ],
-      Array [
+      [
         -0.15,
         -0.025,
       ],
-      Array [
+      [
         -0.15,
         -0.075,
       ],
-      Array [
+      [
         -0.05,
         -0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0.2,
     -0.2,
     0.2,
@@ -16513,41 +16513,41 @@ Object {
     -0.2,
     0,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.2,
         -0.2,
       ],
-      Array [
+      [
         0.2,
         0.2,
       ],
-      Array [
+      [
         -0.05,
         0.075,
       ],
-      Array [
+      [
         -0.15,
         0.075,
       ],
-      Array [
+      [
         -0.15,
         0.025,
       ],
-      Array [
+      [
         -0.2,
         0,
       ],
-      Array [
+      [
         -0.15,
         -0.025,
       ],
-      Array [
+      [
         -0.15,
         -0.075,
       ],
-      Array [
+      [
         -0.05,
         -0.075,
       ],
@@ -16557,48 +16557,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-align-start 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.4,
         -0.2,
       ],
-      Array [
+      [
         0.4,
         0.2,
       ],
-      Array [
+      [
         0.15,
         0.075,
       ],
-      Array [
+      [
         0.05,
         0.075,
       ],
-      Array [
+      [
         0.05,
         0.025,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         0.05,
         -0.025,
       ],
-      Array [
+      [
         0.05,
         -0.075,
       ],
-      Array [
+      [
         0.15,
         -0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0.4,
     -0.2,
     0.4,
@@ -16630,41 +16630,41 @@ Object {
     0,
     0,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.4,
         -0.2,
       ],
-      Array [
+      [
         0.4,
         0.2,
       ],
-      Array [
+      [
         0.15,
         0.075,
       ],
-      Array [
+      [
         0.05,
         0.075,
       ],
-      Array [
+      [
         0.05,
         0.025,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         0.05,
         -0.025,
       ],
-      Array [
+      [
         0.05,
         -0.075,
       ],
-      Array [
+      [
         0.15,
         -0.075,
       ],
@@ -16674,48 +16674,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-align-tail 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.35,
         -0.2,
       ],
-      Array [
+      [
         0.35,
         0.2,
       ],
-      Array [
+      [
         0.1,
         0.075,
       ],
-      Array [
+      [
         0,
         0.075,
       ],
-      Array [
+      [
         0,
         0.025,
       ],
-      Array [
+      [
         -0.05,
         0,
       ],
-      Array [
+      [
         0,
         -0.025,
       ],
-      Array [
+      [
         0,
         -0.075,
       ],
-      Array [
+      [
         0.1,
         -0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0.35,
     -0.2,
     0.35,
@@ -16747,41 +16747,41 @@ Object {
     -0.05,
     0,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.35,
         -0.2,
       ],
-      Array [
+      [
         0.35,
         0.2,
       ],
-      Array [
+      [
         0.1,
         0.075,
       ],
-      Array [
+      [
         0,
         0.075,
       ],
-      Array [
+      [
         0,
         0.025,
       ],
-      Array [
+      [
         -0.05,
         0,
       ],
-      Array [
+      [
         0,
         -0.025,
       ],
-      Array [
+      [
         0,
         -0.075,
       ],
-      Array [
+      [
         0.1,
         -0.075,
       ],
@@ -16791,48 +16791,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-align-tip 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.25,
         0.075,
       ],
-      Array [
+      [
         -0.35,
         0.075,
       ],
-      Array [
+      [
         -0.35,
         0.025,
       ],
-      Array [
+      [
         -0.4,
         0,
       ],
-      Array [
+      [
         -0.35,
         -0.025,
       ],
-      Array [
+      [
         -0.35,
         -0.075,
       ],
-      Array [
+      [
         -0.25,
         -0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0,
     -0.2,
     0,
@@ -16864,41 +16864,41 @@ Object {
     -0.4,
     0,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.25,
         0.075,
       ],
-      Array [
+      [
         -0.35,
         0.075,
       ],
-      Array [
+      [
         -0.35,
         0.025,
       ],
-      Array [
+      [
         -0.4,
         0,
       ],
-      Array [
+      [
         -0.35,
         -0.025,
       ],
-      Array [
+      [
         -0.35,
         -0.075,
       ],
-      Array [
+      [
         -0.25,
         -0.075,
       ],
@@ -16908,24 +16908,24 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-dash 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.01,
         -0.216,
       ],
-      Array [
+      [
         0.01,
         0.216,
       ],
-      Array [
+      [
         -0.422,
         0,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.008,
     -0.185,
     0,
@@ -17359,17 +17359,17 @@ Object {
     -0.004,
     -0.209,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.01,
         -0.216,
       ],
-      Array [
+      [
         0.01,
         0.216,
       ],
-      Array [
+      [
         -0.422,
         0,
       ],
@@ -17379,36 +17379,36 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-dash-t0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.01,
         -0.216,
       ],
-      Array [
+      [
         0.01,
         0.216,
       ],
-      Array [
+      [
         -0.252,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         -0.085,
       ],
-      Array [
+      [
         -0.252,
         -0.085,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.004,
     -0.187,
     0,
@@ -17902,29 +17902,29 @@ Object {
     -0.004,
     -0.209,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.01,
         -0.216,
       ],
-      Array [
+      [
         0.01,
         0.216,
       ],
-      Array [
+      [
         -0.252,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         -0.085,
       ],
-      Array [
+      [
         -0.252,
         -0.085,
       ],
@@ -17934,48 +17934,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-dash-tn 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.01,
         -0.216,
       ],
-      Array [
+      [
         0.01,
         0.216,
       ],
-      Array [
+      [
         -0.252,
         0.085,
       ],
-      Array [
+      [
         -0.36,
         0.085,
       ],
-      Array [
+      [
         -0.36,
         0.031,
       ],
-      Array [
+      [
         -0.422,
         0,
       ],
-      Array [
+      [
         -0.36,
         -0.031,
       ],
-      Array [
+      [
         -0.36,
         -0.085,
       ],
-      Array [
+      [
         -0.252,
         -0.085,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.005,
     -0.186,
     0,
@@ -18487,41 +18487,41 @@ Object {
     -0.004,
     -0.209,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.01,
         -0.216,
       ],
-      Array [
+      [
         0.01,
         0.216,
       ],
-      Array [
+      [
         -0.252,
         0.085,
       ],
-      Array [
+      [
         -0.36,
         0.085,
       ],
-      Array [
+      [
         -0.36,
         0.031,
       ],
-      Array [
+      [
         -0.422,
         0,
       ],
-      Array [
+      [
         -0.36,
         -0.031,
       ],
-      Array [
+      [
         -0.36,
         -0.085,
       ],
-      Array [
+      [
         -0.252,
         -0.085,
       ],
@@ -18531,36 +18531,36 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-dash-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.01,
         -0.219,
       ],
-      Array [
+      [
         0.01,
         0.219,
       ],
-      Array [
+      [
         -0.191,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         -0.085,
       ],
-      Array [
+      [
         -0.191,
         -0.085,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.016,
     -0.177,
     -0.01,
@@ -19054,29 +19054,29 @@ Object {
     -0.006,
     -0.208,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.01,
         -0.219,
       ],
-      Array [
+      [
         0.01,
         0.219,
       ],
-      Array [
+      [
         -0.191,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         -0.085,
       ],
-      Array [
+      [
         -0.191,
         -0.085,
       ],
@@ -19086,24 +19086,24 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-default 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.4,
         0,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0,
     -0.2,
     0,
@@ -19111,17 +19111,17 @@ Object {
     -0.4,
     0,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.4,
         0,
       ],
@@ -19131,24 +19131,24 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-inside 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.4,
         0,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.05,
     -0.119,
     -0.05,
@@ -19186,17 +19186,17 @@ Object {
     0,
     -0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.4,
         0,
       ],
@@ -19206,36 +19206,36 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-inside-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.188,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.188,
         -0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.05,
     -0.107,
     -0.05,
@@ -19309,29 +19309,29 @@ Object {
     0,
     -0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.188,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.188,
         -0.075,
       ],
@@ -19341,24 +19341,24 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-line 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.025,
         -0.24,
       ],
-      Array [
+      [
         0.025,
         0.24,
       ],
-      Array [
+      [
         -0.456,
         0,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.025,
     -0.16,
     -0.025,
@@ -19396,17 +19396,17 @@ Object {
     0.025,
     -0.24,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.025,
         -0.24,
       ],
-      Array [
+      [
         0.025,
         0.24,
       ],
-      Array [
+      [
         -0.456,
         0,
       ],
@@ -19416,36 +19416,36 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-line-t0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.025,
         -0.24,
       ],
-      Array [
+      [
         0.025,
         0.24,
       ],
-      Array [
+      [
         -0.256,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         -0.1,
       ],
-      Array [
+      [
         -0.256,
         -0.1,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.025,
     -0.16,
     -0.025,
@@ -19519,29 +19519,29 @@ Object {
     0.025,
     -0.24,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.025,
         -0.24,
       ],
-      Array [
+      [
         0.025,
         0.24,
       ],
-      Array [
+      [
         -0.256,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         -0.1,
       ],
-      Array [
+      [
         -0.256,
         -0.1,
       ],
@@ -19551,48 +19551,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-line-tn 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.025,
         -0.24,
       ],
-      Array [
+      [
         0.025,
         0.24,
       ],
-      Array [
+      [
         -0.256,
         0.1,
       ],
-      Array [
+      [
         -0.375,
         0.1,
       ],
-      Array [
+      [
         -0.375,
         0.04,
       ],
-      Array [
+      [
         -0.456,
         0,
       ],
-      Array [
+      [
         -0.375,
         -0.04,
       ],
-      Array [
+      [
         -0.375,
         -0.1,
       ],
-      Array [
+      [
         -0.256,
         -0.1,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.025,
     -0.16,
     -0.025,
@@ -19702,41 +19702,41 @@ Object {
     0.025,
     -0.24,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.025,
         -0.24,
       ],
-      Array [
+      [
         0.025,
         0.24,
       ],
-      Array [
+      [
         -0.256,
         0.1,
       ],
-      Array [
+      [
         -0.375,
         0.1,
       ],
-      Array [
+      [
         -0.375,
         0.04,
       ],
-      Array [
+      [
         -0.456,
         0,
       ],
-      Array [
+      [
         -0.375,
         -0.04,
       ],
-      Array [
+      [
         -0.375,
         -0.1,
       ],
-      Array [
+      [
         -0.256,
         -0.1,
       ],
@@ -19746,36 +19746,36 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-line-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.025,
         -0.247,
       ],
-      Array [
+      [
         0.025,
         0.247,
       ],
-      Array [
+      [
         -0.195,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         -0.1,
       ],
-      Array [
+      [
         -0.195,
         -0.1,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.025,
     -0.153,
     -0.025,
@@ -19849,29 +19849,29 @@ Object {
     0.025,
     -0.247,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.025,
         -0.247,
       ],
-      Array [
+      [
         0.025,
         0.247,
       ],
-      Array [
+      [
         -0.195,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         -0.1,
       ],
-      Array [
+      [
         -0.195,
         -0.1,
       ],
@@ -19881,24 +19881,24 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-outside 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.05,
         -0.281,
       ],
-      Array [
+      [
         0.05,
         0.281,
       ],
-      Array [
+      [
         -0.512,
         0,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0,
     -0.2,
     0,
@@ -19936,17 +19936,17 @@ Object {
     0.05,
     -0.281,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.05,
         -0.281,
       ],
-      Array [
+      [
         0.05,
         0.281,
       ],
-      Array [
+      [
         -0.512,
         0,
       ],
@@ -19956,36 +19956,36 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-outside-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0.05,
         -0.293,
       ],
-      Array [
+      [
         0.05,
         0.293,
       ],
-      Array [
+      [
         -0.203,
         0.125,
       ],
-      Array [
+      [
         -0.45,
         0.125,
       ],
-      Array [
+      [
         -0.45,
         -0.125,
       ],
-      Array [
+      [
         -0.203,
         -0.125,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0,
     -0.2,
     0,
@@ -20059,29 +20059,29 @@ Object {
     0.05,
     -0.293,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0.05,
         -0.293,
       ],
-      Array [
+      [
         0.05,
         0.293,
       ],
-      Array [
+      [
         -0.203,
         0.125,
       ],
-      Array [
+      [
         -0.45,
         0.125,
       ],
-      Array [
+      [
         -0.45,
         -0.125,
       ],
-      Array [
+      [
         -0.203,
         -0.125,
       ],
@@ -20091,36 +20091,36 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-t0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.25,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.25,
         -0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0,
     -0.2,
     0,
@@ -20146,29 +20146,29 @@ Object {
     -0.4,
     -0.075,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.25,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.25,
         -0.075,
       ],
@@ -20178,48 +20178,48 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-tn 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.25,
         0.075,
       ],
-      Array [
+      [
         -0.35,
         0.075,
       ],
-      Array [
+      [
         -0.35,
         0.025,
       ],
-      Array [
+      [
         -0.4,
         0,
       ],
-      Array [
+      [
         -0.35,
         -0.025,
       ],
-      Array [
+      [
         -0.35,
         -0.075,
       ],
-      Array [
+      [
         -0.25,
         -0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0,
     -0.2,
     0,
@@ -20251,41 +20251,41 @@ Object {
     -0.4,
     0,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.25,
         0.075,
       ],
-      Array [
+      [
         -0.35,
         0.075,
       ],
-      Array [
+      [
         -0.35,
         0.025,
       ],
-      Array [
+      [
         -0.4,
         0,
       ],
-      Array [
+      [
         -0.35,
         -0.025,
       ],
-      Array [
+      [
         -0.35,
         -0.075,
       ],
-      Array [
+      [
         -0.25,
         -0.075,
       ],
@@ -20295,36 +20295,36 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape rev-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.188,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.188,
         -0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0,
     -0.2,
     0,
@@ -20350,29 +20350,29 @@ Object {
     -0.4,
     -0.075,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0,
         -0.2,
       ],
-      Array [
+      [
         0,
         0.2,
       ],
-      Array [
+      [
         -0.188,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.188,
         -0.075,
       ],
@@ -20382,40 +20382,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-align-mid 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.2,
         -0.075,
       ],
-      Array [
+      [
         -0.1,
         -0.075,
       ],
-      Array [
+      [
         -0.1,
         -0.2,
       ],
-      Array [
+      [
         0.2,
         0,
       ],
-      Array [
+      [
         -0.1,
         0.2,
       ],
-      Array [
+      [
         -0.1,
         0.075,
       ],
-      Array [
+      [
         -0.2,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.1,
     0.2,
     -0.1,
@@ -20435,33 +20435,33 @@ Object {
     -0.1,
     0.075,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.2,
         -0.075,
       ],
-      Array [
+      [
         -0.1,
         -0.075,
       ],
-      Array [
+      [
         -0.1,
         -0.2,
       ],
-      Array [
+      [
         0.2,
         0,
       ],
-      Array [
+      [
         -0.1,
         0.2,
       ],
-      Array [
+      [
         -0.1,
         0.075,
       ],
-      Array [
+      [
         -0.2,
         0.075,
       ],
@@ -20471,40 +20471,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-align-start 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0,
         -0.075,
       ],
-      Array [
+      [
         0.1,
         -0.075,
       ],
-      Array [
+      [
         0.1,
         -0.2,
       ],
-      Array [
+      [
         0.4,
         0,
       ],
-      Array [
+      [
         0.1,
         0.2,
       ],
-      Array [
+      [
         0.1,
         0.075,
       ],
-      Array [
+      [
         0,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0.1,
     0.2,
     0.1,
@@ -20524,33 +20524,33 @@ Object {
     0.1,
     0.075,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0,
         -0.075,
       ],
-      Array [
+      [
         0.1,
         -0.075,
       ],
-      Array [
+      [
         0.1,
         -0.2,
       ],
-      Array [
+      [
         0.4,
         0,
       ],
-      Array [
+      [
         0.1,
         0.2,
       ],
-      Array [
+      [
         0.1,
         0.075,
       ],
-      Array [
+      [
         0,
         0.075,
       ],
@@ -20560,40 +20560,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-align-tail 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         0,
         -0.075,
       ],
-      Array [
+      [
         0.1,
         -0.075,
       ],
-      Array [
+      [
         0.1,
         -0.2,
       ],
-      Array [
+      [
         0.4,
         0,
       ],
-      Array [
+      [
         0.1,
         0.2,
       ],
-      Array [
+      [
         0.1,
         0.075,
       ],
-      Array [
+      [
         0,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     0.1,
     0.2,
     0.1,
@@ -20613,33 +20613,33 @@ Object {
     0.1,
     0.075,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         0,
         -0.075,
       ],
-      Array [
+      [
         0.1,
         -0.075,
       ],
-      Array [
+      [
         0.1,
         -0.2,
       ],
-      Array [
+      [
         0.4,
         0,
       ],
-      Array [
+      [
         0.1,
         0.2,
       ],
-      Array [
+      [
         0.1,
         0.075,
       ],
-      Array [
+      [
         0,
         0.075,
       ],
@@ -20649,40 +20649,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-align-tip 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.3,
         0.2,
       ],
-      Array [
+      [
         -0.3,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.3,
     0.2,
     -0.3,
@@ -20702,33 +20702,33 @@ Object {
     -0.3,
     0.075,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.3,
         0.2,
       ],
-      Array [
+      [
         -0.3,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
@@ -20738,24 +20738,24 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-dash 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.41,
         -0.216,
       ],
-      Array [
+      [
         0.022,
         0,
       ],
-      Array [
+      [
         -0.41,
         0.216,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.39,
     -0.186,
     -0.39,
@@ -21207,17 +21207,17 @@ Object {
     -0.41,
     -0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.41,
         -0.216,
       ],
-      Array [
+      [
         0.022,
         0,
       ],
-      Array [
+      [
         -0.41,
         0.216,
       ],
@@ -21227,24 +21227,24 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-dash-tail-0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.41,
         -0.216,
       ],
-      Array [
+      [
         0.022,
         0,
       ],
-      Array [
+      [
         -0.41,
         0.216,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.39,
     -0.186,
     -0.39,
@@ -21696,17 +21696,17 @@ Object {
     -0.41,
     -0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.41,
         -0.216,
       ],
-      Array [
+      [
         0.022,
         0,
       ],
-      Array [
+      [
         -0.41,
         0.216,
       ],
@@ -21716,24 +21716,24 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-dash-tail-neg 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.41,
         -0.216,
       ],
-      Array [
+      [
         0.022,
         0,
       ],
-      Array [
+      [
         -0.41,
         0.216,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.39,
     -0.186,
     -0.39,
@@ -22185,17 +22185,17 @@ Object {
     -0.41,
     -0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.41,
         -0.216,
       ],
-      Array [
+      [
         0.022,
         0,
       ],
-      Array [
+      [
         -0.41,
         0.216,
       ],
@@ -22205,40 +22205,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-dash-tail-pos 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.41,
         -0.085,
       ],
-      Array [
+      [
         -0.31,
         -0.085,
       ],
-      Array [
+      [
         -0.31,
         -0.219,
       ],
-      Array [
+      [
         0.018,
         0,
       ],
-      Array [
+      [
         -0.31,
         0.219,
       ],
-      Array [
+      [
         -0.31,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         0.085,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.39,
     -0.074,
     -0.39,
@@ -22744,33 +22744,33 @@ Object {
     -0.41,
     -0.075,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.41,
         -0.085,
       ],
-      Array [
+      [
         -0.31,
         -0.085,
       ],
-      Array [
+      [
         -0.31,
         -0.219,
       ],
-      Array [
+      [
         0.018,
         0,
       ],
-      Array [
+      [
         -0.31,
         0.219,
       ],
-      Array [
+      [
         -0.31,
         0.085,
       ],
-      Array [
+      [
         -0.41,
         0.085,
       ],
@@ -22780,24 +22780,24 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-default 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.4,
     -0.2,
     0,
@@ -22805,17 +22805,17 @@ Object {
     -0.4,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
@@ -22825,24 +22825,24 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-define 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.6,
         -0.1,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.6,
         0.1,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.6,
     -0.1,
     0,
@@ -22850,17 +22850,17 @@ Object {
     -0.6,
     0.1,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.6,
         -0.1,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.6,
         0.1,
       ],
@@ -22870,24 +22870,24 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-inside-t0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.35,
     -0.119,
     -0.112,
@@ -22925,17 +22925,17 @@ Object {
     -0.4,
     -0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
@@ -22945,24 +22945,24 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-inside-t0d 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.422,
     -0.155,
     -0.396,
@@ -23276,17 +23276,17 @@ Object {
     -0.4,
     -0.186,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
@@ -23296,40 +23296,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-inside-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.3,
         0.2,
       ],
-      Array [
+      [
         -0.3,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.35,
     -0.025,
     -0.25,
@@ -23415,33 +23415,33 @@ Object {
     -0.4,
     -0.075,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.3,
         0.2,
       ],
-      Array [
+      [
         -0.3,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
@@ -23451,40 +23451,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-inside-tpd 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.3,
         0.2,
       ],
-      Array [
+      [
         -0.3,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.35,
     -0.054,
     -0.35,
@@ -23876,33 +23876,33 @@ Object {
     -0.4,
     -0.075,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.3,
         0.2,
       ],
-      Array [
+      [
         -0.3,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
@@ -23912,24 +23912,24 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-line 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.425,
         -0.24,
       ],
-      Array [
+      [
         0.056,
         0,
       ],
-      Array [
+      [
         -0.425,
         0.24,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.375,
     -0.16,
     -0.056,
@@ -23967,17 +23967,17 @@ Object {
     -0.425,
     -0.24,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.425,
         -0.24,
       ],
-      Array [
+      [
         0.056,
         0,
       ],
-      Array [
+      [
         -0.425,
         0.24,
       ],
@@ -23987,24 +23987,24 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-line-tail-0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.425,
         -0.24,
       ],
-      Array [
+      [
         0.056,
         0,
       ],
-      Array [
+      [
         -0.425,
         0.24,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.375,
     -0.16,
     -0.056,
@@ -24042,17 +24042,17 @@ Object {
     -0.425,
     -0.24,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.425,
         -0.24,
       ],
-      Array [
+      [
         0.056,
         0,
       ],
-      Array [
+      [
         -0.425,
         0.24,
       ],
@@ -24062,24 +24062,24 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-line-tail-neg 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.425,
         -0.24,
       ],
-      Array [
+      [
         0.056,
         0,
       ],
-      Array [
+      [
         -0.425,
         0.24,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.375,
     -0.16,
     -0.056,
@@ -24117,17 +24117,17 @@ Object {
     -0.425,
     -0.24,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.425,
         -0.24,
       ],
-      Array [
+      [
         0.056,
         0,
       ],
-      Array [
+      [
         -0.425,
         0.24,
       ],
@@ -24137,40 +24137,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-line-tail-pos 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.425,
         -0.1,
       ],
-      Array [
+      [
         -0.325,
         -0.1,
       ],
-      Array [
+      [
         -0.325,
         -0.247,
       ],
-      Array [
+      [
         0.045,
         0,
       ],
-      Array [
+      [
         -0.325,
         0.247,
       ],
-      Array [
+      [
         -0.325,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         0.1,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.375,
     -0.05,
     -0.275,
@@ -24256,33 +24256,33 @@ Object {
     -0.425,
     -0.1,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.425,
         -0.1,
       ],
-      Array [
+      [
         -0.325,
         -0.1,
       ],
-      Array [
+      [
         -0.325,
         -0.247,
       ],
-      Array [
+      [
         0.045,
         0,
       ],
-      Array [
+      [
         -0.325,
         0.247,
       ],
-      Array [
+      [
         -0.325,
         0.1,
       ],
-      Array [
+      [
         -0.425,
         0.1,
       ],
@@ -24292,24 +24292,24 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-outside-t0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.45,
         -0.281,
       ],
-      Array [
+      [
         0.112,
         0,
       ],
-      Array [
+      [
         -0.45,
         0.281,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.4,
     -0.2,
     0,
@@ -24347,17 +24347,17 @@ Object {
     -0.45,
     -0.281,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.45,
         -0.281,
       ],
-      Array [
+      [
         0.112,
         0,
       ],
-      Array [
+      [
         -0.45,
         0.281,
       ],
@@ -24367,24 +24367,24 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-outside-t0d 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.45,
         -0.281,
       ],
-      Array [
+      [
         0.112,
         0,
       ],
-      Array [
+      [
         -0.45,
         0.281,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.4,
     -0.2,
     -0.373,
@@ -24698,17 +24698,17 @@ Object {
     -0.45,
     -0.186,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.45,
         -0.281,
       ],
-      Array [
+      [
         0.112,
         0,
       ],
-      Array [
+      [
         -0.45,
         0.281,
       ],
@@ -24718,40 +24718,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-outside-tp 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.45,
         -0.125,
       ],
-      Array [
+      [
         -0.35,
         -0.125,
       ],
-      Array [
+      [
         -0.35,
         -0.293,
       ],
-      Array [
+      [
         0.09,
         0,
       ],
-      Array [
+      [
         -0.35,
         0.293,
       ],
-      Array [
+      [
         -0.35,
         0.125,
       ],
-      Array [
+      [
         -0.45,
         0.125,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.4,
     -0.075,
     -0.3,
@@ -24837,33 +24837,33 @@ Object {
     -0.45,
     -0.125,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.45,
         -0.125,
       ],
-      Array [
+      [
         -0.35,
         -0.125,
       ],
-      Array [
+      [
         -0.35,
         -0.293,
       ],
-      Array [
+      [
         0.09,
         0,
       ],
-      Array [
+      [
         -0.35,
         0.293,
       ],
-      Array [
+      [
         -0.35,
         0.125,
       ],
-      Array [
+      [
         -0.45,
         0.125,
       ],
@@ -24873,40 +24873,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-outside-tpd 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.45,
         -0.125,
       ],
-      Array [
+      [
         -0.35,
         -0.125,
       ],
-      Array [
+      [
         -0.35,
         -0.293,
       ],
-      Array [
+      [
         0.09,
         0,
       ],
-      Array [
+      [
         -0.35,
         0.293,
       ],
-      Array [
+      [
         -0.35,
         0.125,
       ],
-      Array [
+      [
         -0.45,
         0.125,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.4,
     -0.054,
     -0.4,
@@ -25286,33 +25286,33 @@ Object {
     -0.45,
     -0.075,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.45,
         -0.125,
       ],
-      Array [
+      [
         -0.35,
         -0.125,
       ],
-      Array [
+      [
         -0.35,
         -0.293,
       ],
-      Array [
+      [
         0.09,
         0,
       ],
-      Array [
+      [
         -0.35,
         0.293,
       ],
-      Array [
+      [
         -0.35,
         0.125,
       ],
-      Array [
+      [
         -0.45,
         0.125,
       ],
@@ -25322,24 +25322,24 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-tail-0 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.4,
     -0.2,
     0,
@@ -25347,17 +25347,17 @@ Object {
     -0.4,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
@@ -25367,24 +25367,24 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-tail-neg 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.4,
     -0.2,
     0,
@@ -25392,17 +25392,17 @@ Object {
     -0.4,
     0.2,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.4,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.4,
         0.2,
       ],
@@ -25412,40 +25412,40 @@ Object {
 `;
 
 exports[`Collection: Arrow - Static Shape tri-tail-pos 1`] = `
-Object {
-  "border": Array [
-    Array [
-      Array [
+{
+  "border": [
+    [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.3,
         0.2,
       ],
-      Array [
+      [
         -0.3,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],
     ],
   ],
-  "points": Array [
+  "points": [
     -0.3,
     0.2,
     -0.3,
@@ -25465,33 +25465,33 @@ Object {
     -0.3,
     0.075,
   ],
-  "touchBorder": Array [
-    Array [
-      Array [
+  "touchBorder": [
+    [
+      [
         -0.4,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.075,
       ],
-      Array [
+      [
         -0.3,
         -0.2,
       ],
-      Array [
+      [
         0,
         0,
       ],
-      Array [
+      [
         -0.3,
         0.2,
       ],
-      Array [
+      [
         -0.3,
         0.075,
       ],
-      Array [
+      [
         -0.4,
         0.075,
       ],

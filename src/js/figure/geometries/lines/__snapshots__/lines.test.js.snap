@@ -1,8 +1,8 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Tools Lines makePolyLine Mid auto 1`] = `
-Array [
-  Array [
+[
+  [
     Point {
       "_type": "point",
       "x": 0.05,
@@ -148,8 +148,8 @@ Array [
       "z": 0,
     },
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": -0.05,
@@ -212,8 +212,8 @@ Array [
       },
     ],
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": -0.05,
@@ -280,8 +280,8 @@ Array [
 `;
 
 exports[`Tools Lines makePolyLine Mid dash 1`] = `
-Array [
-  Array [
+[
+  [
     Point {
       "_type": "point",
       "x": 0.05,
@@ -967,8 +967,8 @@ Array [
       "z": 0,
     },
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": -0.05,
@@ -1031,8 +1031,8 @@ Array [
       },
     ],
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": -0.05,
@@ -1099,8 +1099,8 @@ Array [
 `;
 
 exports[`Tools Lines makePolyLine Mid fill 1`] = `
-Array [
-  Array [
+[
+  [
     Point {
       "_type": "point",
       "x": 0.05,
@@ -1318,8 +1318,8 @@ Array [
       "z": 0,
     },
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": 0,
@@ -1406,8 +1406,8 @@ Array [
       },
     ],
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": 0,
@@ -1498,7 +1498,7 @@ Array [
 `;
 
 exports[`Tools Lines makePolyLine Mid radius 1`] = `
-Array [
+[
   Point {
     "_type": "point",
     "x": 0.05,
@@ -4527,8 +4527,8 @@ Array [
 `;
 
 exports[`Tools Lines makePolyLine Negative auto 1`] = `
-Array [
-  Array [
+[
+  [
     Point {
       "_type": "point",
       "x": 0,
@@ -4674,8 +4674,8 @@ Array [
       "z": 0,
     },
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": -0.1,
@@ -4738,8 +4738,8 @@ Array [
       },
     ],
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": -0.1,
@@ -4806,8 +4806,8 @@ Array [
 `;
 
 exports[`Tools Lines makePolyLine Negative dash 1`] = `
-Array [
-  Array [
+[
+  [
     Point {
       "_type": "point",
       "x": 0,
@@ -5457,8 +5457,8 @@ Array [
       "z": 0,
     },
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": -0.1,
@@ -5521,8 +5521,8 @@ Array [
       },
     ],
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": -0.1,
@@ -5589,8 +5589,8 @@ Array [
 `;
 
 exports[`Tools Lines makePolyLine Negative fill 1`] = `
-Array [
-  Array [
+[
+  [
     Point {
       "_type": "point",
       "x": 0,
@@ -5808,8 +5808,8 @@ Array [
       "z": 0,
     },
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": 0,
@@ -5896,8 +5896,8 @@ Array [
       },
     ],
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": 0,
@@ -5988,8 +5988,8 @@ Array [
 `;
 
 exports[`Tools Lines makePolyLine Negative radius 1`] = `
-Array [
-  Array [
+[
+  [
     Point {
       "_type": "point",
       "x": 0,
@@ -8367,8 +8367,8 @@ Array [
       "z": 0,
     },
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": -0.09969,
@@ -9175,8 +9175,8 @@ Array [
       },
     ],
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": -0.09969,
@@ -9987,8 +9987,8 @@ Array [
 `;
 
 exports[`Tools Lines makePolyLine Positive auto 1`] = `
-Array [
-  Array [
+[
+  [
     Point {
       "_type": "point",
       "x": 0.1,
@@ -10134,8 +10134,8 @@ Array [
       "z": 0,
     },
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": 0,
@@ -10198,8 +10198,8 @@ Array [
       },
     ],
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": 0,
@@ -10266,8 +10266,8 @@ Array [
 `;
 
 exports[`Tools Lines makePolyLine Positive dash 1`] = `
-Array [
-  Array [
+[
+  [
     Point {
       "_type": "point",
       "x": 0.1,
@@ -10971,8 +10971,8 @@ Array [
       "z": 0,
     },
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": 0,
@@ -11035,8 +11035,8 @@ Array [
       },
     ],
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": 0,
@@ -11103,8 +11103,8 @@ Array [
 `;
 
 exports[`Tools Lines makePolyLine Positive fill 1`] = `
-Array [
-  Array [
+[
+  [
     Point {
       "_type": "point",
       "x": 0.1,
@@ -11250,8 +11250,8 @@ Array [
       "z": 0,
     },
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": 0,
@@ -11314,8 +11314,8 @@ Array [
       },
     ],
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": 0,
@@ -11382,8 +11382,8 @@ Array [
 `;
 
 exports[`Tools Lines makePolyLine Positive radius 1`] = `
-Array [
-  Array [
+[
+  [
     Point {
       "_type": "point",
       "x": 0.09969,
@@ -13761,8 +13761,8 @@ Array [
       "z": 0,
     },
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": 0,
@@ -14569,8 +14569,8 @@ Array [
       },
     ],
   ],
-  Array [
-    Array [
+  [
+    [
       Point {
         "_type": "point",
         "x": 0,

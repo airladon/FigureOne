@@ -44,23 +44,22 @@ docker_run() {
       -v $HOST_PATH/src:/opt/app/src \
       -v $HOST_PATH/package:/opt/app/package \
       -v $HOST_PATH/docs:/opt/app/docs \
-      -v $HOST_PATH/containers/figureone/browser.sh:/opt/app/browser.sh \
+      -v $HOST_PATH/browser.sh:/opt/app/browser.sh \
       -v $HOST_PATH/containers:/opt/app/containers \
       -v /var/run/docker.sock:/var/run/docker.sock \
       -v $HOST_PATH/webpack.config.js:/opt/app/webpack.config.js \
       -v $HOST_PATH/containers/figureone/generate_docs.sh:/opt/app/generate_docs.sh \
-      -v $HOST_PATH/.eslintrc.json:/opt/app/.eslintrc.json \
+      -v $HOST_PATH/eslint.config.mjs:/opt/app/eslint.config.mjs \
       -v $HOST_PATH/.dockerignore:/opt/app/.dockerignore \
-      -v $HOST_PATH/.eslintignore:/opt/app/.eslintignore \
       -v $HOST_PATH/tsconfig.json:/opt/app/tsconfig.json \
       -v $HOST_PATH/tsconfig.build.json:/opt/app/tsconfig.build.json \
       -v $HOST_PATH/.babelrc:/opt/app/.babelrc \
       -v $HOST_PATH/documentation.yml:/opt/app/documentation.yml \
       -v $HOST_PATH/jest.config.js:/opt/app/jest.config.js \
+      -v $HOST_PATH/jest.setup.js:/opt/app/jest.setup.js \
       -v $HOST_PATH/docs:/opt/app/docs \
       -v $HOST_PATH/reports:/opt/app/reports \
       -v $HOST_PATH/jsdoc-conf.json:/opt/app/jsdoc-conf.json \
-      -v $HOST_PATH/.eslintignore:/opt/app/.eslintignore \
       -e LOCAL_PROJECT_PATH=$HOST_PATH \
       --name figureone_build \
       --entrypoint $2 \

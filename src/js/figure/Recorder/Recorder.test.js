@@ -28,12 +28,13 @@ describe('Figure Recorder', () => {
   let initialTime;
   let duration;
   let check;
+  let rafSpy;
   afterEach(() => {
-    window.requestAnimationFrame.mockRestore();
+    rafSpy.mockRestore();
   });
   beforeEach(() => {
     jest.useFakeTimers();
-    jest.spyOn(window, 'requestAnimationFrame').mockImplementation(() => {});
+    rafSpy = jest.spyOn(window, 'requestAnimationFrame').mockImplementation(() => {});
     figure = makeFigure();
     figure.scene.setCamera({ position: [0, 0, 2] });
     figure.scene.setProjection({ near: 1, far: 3 });

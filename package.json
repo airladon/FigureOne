@@ -51,29 +51,49 @@
   "homepage": "https://github.com/airladon/figureone#readme",
   "devDependencies": {
     "@babel/core": "^7.26.0",
-    "@babel/polyfill": "^7.10.4",
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-typescript": "^7.27.1",
-    "babel-core": "^7.0.0-bridge.0",
-    "babel-eslint": "^10.1.0",
-    "babel-jest": "^27.2.1",
-    "babel-loader": "^8.2.2",
+    "@eslint/compat": "^1.0.0",
+    "@eslint/eslintrc": "^3.0.0",
+    "@eslint/js": "^10.0.0",
+    "babel-jest": "^30.0.0",
+    "babel-loader": "^10.0.0",
     "clean-webpack-plugin": "^4.0.0",
-    "documentation": "^12.3.0",
-    "eslint": "^7.32.0",
-    "eslint-config-airbnb-base": "^14.2.1",
+    "documentation": "^14.0.0",
+    "eslint": "^10.0.0",
+    "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.24.2",
-    "eslint-plugin-jest": "^24.4.2",
-    "http-server": "^13.0.2",
-    "jest": "^27.2.1",
-    "regenerator-runtime": "^0.13.9",
+    "eslint-plugin-jest": "^29.0.0",
+    "globals": "^16.0.0",
+    "http-server": "^14.0.0",
+    "jest": "^30.0.0",
+    "jest-environment-jsdom": "^30.0.0",
+    "regenerator-runtime": "^0.14.0",
     "typedoc": "^0.28.17",
     "typedoc-plugin-mdn-links": "^5.1.1",
     "webpack": "^5.58.2",
-    "webpack-cli": "^4.8.0",
+    "webpack-cli": "^6.0.0",
     "whatwg-fetch": "^3.6.2",
     "worker-loader": "^3.0.8",
     "typescript": "^5.4.2"
+  },
+  "overrides": {
+    "eslint": "$eslint",
+    "eslint-config-airbnb-base": {
+      "eslint": "$eslint"
+    },
+    "eslint-plugin-import": {
+      "eslint": "$eslint"
+    },
+    "eslint-plugin-jest": {
+      "eslint": "$eslint"
+    },
+    "@eslint/compat": {
+      "eslint": "$eslint"
+    },
+    "@eslint/eslintrc": {
+      "eslint": "$eslint"
+    }
   },
   "devDependenciesComments": {
     "worker-loader": "Do not upgrade to 3.0.0 as the publicPath options seems to be broken. This means instead of workers being searched for at /static/workers, they are searched for at the location of the file calling them"

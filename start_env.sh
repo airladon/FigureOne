@@ -23,14 +23,14 @@ docker run -it --rm \
   -v $PROJECT_PATH/generate_docs.sh:/opt/app/generate_docs.sh \
   -v $PROJECT_PATH/generate_docs_typedoc.sh:/opt/app/generate_docs_typedoc.sh \
   -v $PROJECT_PATH/browser.sh:/opt/app/browser.sh \
-  -v $PROJECT_PATH/.eslintrc.json:/opt/app/.eslintrc.json \
+  -v $PROJECT_PATH/eslint.config.mjs:/opt/app/eslint.config.mjs \
   -v $PROJECT_PATH/.dockerignore:/opt/app/.dockerignore \
-  -v $PROJECT_PATH/.eslintignore:/opt/app/.eslintignore \
   -v $PROJECT_PATH/.babelrc:/opt/app/.babelrc \
   -v $PROJECT_PATH/.git:/opt/app/.git \
   -v $PROJECT_PATH/.gitignore:/opt/app/.gitignore \
   -v $PROJECT_PATH/documentation.yml:/opt/app/documentation.yml \
   -v $PROJECT_PATH/jest.config.js:/opt/app/jest.config.js \
+  -v $PROJECT_PATH/jest.setup.js:/opt/app/jest.setup.js \
   -v $PROJECT_PATH/jest.perf.config.js:/opt/app/jest.perf.config.js \
   -v $PROJECT_PATH/README.md:/opt/app/README.md \
   -v $PROJECT_PATH/global.d.ts:/opt/app/global.d.ts \
@@ -43,7 +43,6 @@ docker run -it --rm \
   -v $PROJECT_PATH/docs:/opt/app/docs \
   -v $PROJECT_PATH/reports:/opt/app/reports \
   -v $PROJECT_PATH/jsdoc-conf.json:/opt/app/jsdoc-conf.json \
-  -v $PROJECT_PATH/.eslintignore:/opt/app/.eslintignore \
   -v $PROJECT_PATH/readme.md:/opt/app/readme.md \
   -v $PROJECT_PATH/scratch:/opt/app/scratch \
   -v $PROJECT_PATH/untracked:/opt/app/untracked \

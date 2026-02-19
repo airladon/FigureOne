@@ -1,7 +1,7 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Equation Functions - Superscript and Subscript Nested SupSub 1`] = `
-Array [
+[
   0.7,
   0,
   0,
@@ -22,7 +22,7 @@ Array [
 `;
 
 exports[`Equation Functions - Superscript and Subscript Nested SupSub 2`] = `
-Array [
+[
   0.35,
   0,
   0,
@@ -43,7 +43,7 @@ Array [
 `;
 
 exports[`Equation Functions - Superscript and Subscript Nested SupSub 3`] = `
-Array [
+[
   0.175,
   0,
   0,
@@ -64,7 +64,7 @@ Array [
 `;
 
 exports[`Equation Functions - Superscript and Subscript Nested SupSub 4`] = `
-Array [
+[
   0.0875,
   0,
   0,
@@ -85,7 +85,7 @@ Array [
 `;
 
 exports[`Equation Functions - Superscript and Subscript Nested SupSub 5`] = `
-Array [
+[
   0.0875,
   0,
   0,
@@ -106,7 +106,7 @@ Array [
 `;
 
 exports[`Equation Functions - Superscript and Subscript Nested SupSub 6`] = `
-Array [
+[
   0.175,
   0,
   0,
@@ -127,7 +127,7 @@ Array [
 `;
 
 exports[`Equation Functions - Superscript and Subscript Nested SupSub 7`] = `
-Array [
+[
   0.35,
   0,
   0,
@@ -148,7 +148,7 @@ Array [
 `;
 
 exports[`Equation Functions - Superscript and Subscript Single SupSub 1`] = `
-Array [
+[
   0.7,
   0,
   0,
@@ -169,7 +169,7 @@ Array [
 `;
 
 exports[`Equation Functions - Superscript and Subscript Single SupSub 2`] = `
-Array [
+[
   0.35,
   0,
   0,
@@ -190,7 +190,7 @@ Array [
 `;
 
 exports[`Equation Functions - Superscript and Subscript Single SupSub 3`] = `
-Array [
+[
   0.35,
   0,
   0,
