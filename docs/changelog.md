@@ -1,5 +1,16 @@
 # Releases
 
+## 1.0.0
+* Migrate codebase from Flow to TypeScript
+* Published TypeScript type declarations for public API
+* No changes to runtime behavior or public API
+
+## 0.15.11
+* Add figure.gesturePreventDefault to customize how touch/mouse events are handled
+* Add onClick event to Figure with bool for if an element is touched or not
+* Add layoutForms notification for equations
+* Limit iOS max canvas size to 16M
+
 ## 0.15.10
 * Add drawNumber to GL object definition
 * Add allowSetColor property to all elements so color can be frozen when needed

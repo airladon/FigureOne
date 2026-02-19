@@ -399,6 +399,7 @@ if (typeof process === 'object') {
         figure[action]([loc.x + p.x, loc.y + p.y]);
       });
     });
+    figure.stop('freeze');
     figure.setFirstTransform();
   };
   startMove();

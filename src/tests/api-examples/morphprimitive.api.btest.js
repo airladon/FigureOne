@@ -2,7 +2,7 @@ const { tester } = require('./tester');
 
 tester(
   'morphprimitive',
-  `${__dirname}/../../js/figure/FigurePrimitives/FigureElementPrimitiveMorph.js`,
+  `${__dirname}/../../js/figure/FigurePrimitives/FigureElementPrimitiveMorph.ts`,
   '',
   0,
   `

@@ -16,7 +16,7 @@ try {
   if (__render != null) {
     _render = __render;
   }
-} catch {
+} catch (e) { // eslint-disable-line no-unused-vars
   _render = '2d';
 }
 

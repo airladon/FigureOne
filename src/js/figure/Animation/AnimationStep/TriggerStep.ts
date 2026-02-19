@@ -1,0 +1,196 @@
+import { joinObjects, duplicateFromTo } from '../../../tools/tools';
+import type {
+  OBJ_AnimationStep,
+} from '../AnimationStep';
+import AnimationStep from '../AnimationStep';
+import type { AnimationStartTime } from '../AnimationManager';
+
+/**
+ * {@link TriggernAnimationStep} options object
+ *
+ * @extends OBJ_AnimationStep
+ *
+ * @property {string | function(any): number | void} callback if desired, return
+ * a number from `callback` to update the duration of the trigger animation
+ * step. Doing so will make any previous calculations of remaining animation
+ * time incorrect. Make sure to initialize this step with a non-zero duration
+ * for this to work.
+ * @property {any} [payload] payload to pass to callback (`null`)
+ * @property {FigureElement} element {@link FigureElement} to associate with
+ * callback - if the `callback` is a string then this element's
+ * {@link FunctionMap} will be searched for the corresponding function
+ *
+ * @interface
+ * @group Misc Animation
+ */
+export type OBJ_TriggerAnimationStep = {
+  callback?: Function;      // default is element transform
+  payload?: any;
+  setToEnd?: string | Function;
+} & OBJ_AnimationStep;
+
+/**
+ * Trigger Animation Step
+ *
+ * ![](./apiassets/trigger_animation.gif)
+ *
+ * A trigger step executes a custom function
+ *
+ * A `delay` will delay the triggering of the custom function
+ * while `duration` will pad time at the end of the trigger before
+ * the animation step finishes.
+ *
+ * @extends AnimationStep
+ * @param {OBJ_TriggerAnimationStep | function(): void} options
+ *
+ * @see To test examples, append them to the
+ * <a href="#animation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Simple trigger
+ * p.animations.new()
+ *   .position({ target: [1, 0], duration: 2 })
+ *   .trigger(() => { console.log('arrived at (1, 0)') })
+ *   .position({ target: [0, 0], duration: 2 })
+ *   .trigger(() => { console.log('arrived at (0, 0)') })
+ *   .start();
+ *
+ * @example
+ * // Trigger with delay, duration and payload
+ * const printPosition = (pos) => {
+ *   console.log(`arrived at ${pos}`);
+ * };
+ *
+ * p.animations.new()
+ *   .position({ target: [1, 0], duration: 2 })
+ *   .trigger({
+ *     delay: 1,
+ *     callback: printPosition,
+ *     payload: '(1, 0)',
+ *     duration: 1,
+ *   })
+ *   .position({ target: [0, 0], duration: 2 })
+ *   .trigger({ callback: printPosition, payload: '(0, 0)' })
+ *   .start();
+ *
+ * @example
+ * // Different ways to create a stand-alone step
+ * const step1 = p.animations.trigger({
+ *   callback: () => { console.log('arrived at (1, 0)') },
+ * });
+ * const step2 = new Fig.Animation.TriggerAnimationStep({
+ *   callback: () => { console.log('arrived at (0, 0)') },
+ * });
+ *
+ * p.animations.new()
+ *   .position({ target: [1, 0], duration: 2 })
+ *   .then(step1)
+ *   .position({ target: [0, 0], duration: 2 })
+ *   .then(step2)
+ *   .start();
+ * @group Animation
+ */
+export class TriggerAnimationStep extends AnimationStep {
+  callback: (string | Function) | null;
+  payload: Record<string, any> | null | undefined;
+  setToEndCallback!: (string | Function) | null;
+  customProperties: Record<string, any>;
+  autoDuration: boolean;
+
+  /**
+   * @hideconstructor
+   */
+  constructor(
+    triggerOrOptionsIn: Function | OBJ_TriggerAnimationStep = {},
+    ...optionsIn: Array<OBJ_TriggerAnimationStep>
+  ) {
+    const defaultOptions = {
+      payload: null,
+      duration: 0,
+      setToEnd: null,
+      autoDuration: true,
+    };
+    let options;
+    if (
+      typeof triggerOrOptionsIn === 'function'
+      || typeof triggerOrOptionsIn === 'string'
+    ) {
+      options = joinObjects<any>({}, defaultOptions, ...optionsIn);
+      options.callback = triggerOrOptionsIn;
+    } else {
+      options = joinObjects<any>({}, defaultOptions, triggerOrOptionsIn, ...optionsIn);
+    }
+    super(options);
+    this.element = options.element;
+    this.callback = options.callback;
+    this.payload = options.payload;
+    this.duration = options.duration;
+    this.autoDuration = options.autoDuration;
+    if (options.setToEnd) {
+      this.setToEndCallback = options.setToEnd;
+    }
+    this.customProperties = options.customProperties;
+  }
+
+  override fnExec(idOrFn: string | Function | null, ...args: any) {
+    if (this.element != null) {
+      return this.fnMap.execOnMaps(
+        idOrFn, [this.element.fnMap.map], ...args,
+      );
+    }
+    return this.fnMap.exec(idOrFn, ...args);
+  }
+
+
+  override _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+      'callback',
+      'payload',
+      'customProperties',
+      'element',
+    ];
+  }
+
+  override _getStateName() {  // eslint-disable-line class-methods-use-this
+    return 'triggerAnimationStep';
+  }
+
+  override setFrame() {
+    const remainingTime = this.fnExec(this.callback, this.payload, this.customProperties);
+    if (remainingTime != null && typeof remainingTime === 'number' && this.autoDuration) {
+      this.duration = remainingTime;
+    }
+    this.callback = null;
+  }
+
+  override start(startTime: AnimationStartTime | null = null) {
+    super.start(startTime);
+    if (startTime === 'now' || startTime === 'prevFrame') {
+      this.setFrame();
+    }
+  }
+
+  override setToEnd() {
+    if (this.setToEndCallback != null) {
+      this.fnExec(this.setToEndCallback, this.payload, this.customProperties);
+    } else {
+      this.fnExec(this.callback, this.payload, this.customProperties);
+    }
+    this.callback = null;
+  }
+
+  override _dup() {
+    const step = new TriggerAnimationStep();
+    duplicateFromTo(this, step, ['element', 'timeKeeper']);
+    step.timeKeeper = this.timeKeeper;
+    step.element = this.element;
+    return step;
+  }
+}
+
+export function trigger(
+  triggerOrOptionsIn: Function | OBJ_TriggerAnimationStep = {},
+  ...optionsIn: Array<OBJ_TriggerAnimationStep>
+) {
+  return new TriggerAnimationStep(triggerOrOptionsIn, ...optionsIn);
+}

@@ -1,10 +1,14 @@
 module.exports = {
   testURL: 'http://localhost',
   testRegex: [
-    '/src/js/.*\\.test\\.js',
-    '/src/tests/.*\\.test\\.js',
-    '/examples/.*\\.test\\.js',
+    '/src/js/.*\\.test\\.[jt]sx?$',
+    '/src/tests/.*\\.test\\.[jt]sx?$',
+    '/examples/.*\\.test\\.[jt]sx?$',
   ],
+  transform: {
+    '^.+\\.[tj]sx?$': 'babel-jest',
+  },
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/src/js/__mocks__/fileMock.js',
     '^.+\\.(css|scss|sass)$': '<rootDir>/src/js/__mocks__/styleMock.js',

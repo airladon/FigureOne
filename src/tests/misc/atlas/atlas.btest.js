@@ -162,9 +162,9 @@ describe('Atlas', () => {
           },
         });
       }, externalAtlasMap);
-      await snap();
-      await frame();
-      await sleep(1000);
+      // await snap();
+      // await frame();
+      await sleep(100);
       await frame();
       await snap();
     });

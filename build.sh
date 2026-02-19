@@ -3,6 +3,7 @@
 # MODE=prod
 HOST_PATH=`pwd`
 TESTING=1
+DEPLOY=0
 
 # Setup colors and text formatting
 red=`tput setaf 1`
@@ -12,20 +13,26 @@ yellow=`tput setaf 3`
 bold=`tput bold`
 reset=`tput sgr0`
 
-if [ $1 ];
-then
-  if [ $1 = "skip-test" ];
-  then
+for arg in "$@"; do
+  if [ "$arg" = "skip-test" ] || [ "$arg" = "skip-tests" ]; then
     TESTING=0
   fi
-  if [ $1 = "skip-tests" ];
-  then
-    TESTING=0
+  if [ "$arg" = "deploy" ]; then
+    DEPLOY=1
   fi
-fi
+done
 
 # First cleanup package folder
 rm -rf package/*
+
+# Helper to run npm inside the build container
+npm_in_container() {
+  docker run -it --rm \
+    --name figureone_npm \
+    --entrypoint npm \
+    figureone_dev \
+    "$@"
+}
 
 # Run a container while binding the appropriate volumes
 docker_run() {
@@ -39,12 +46,13 @@ docker_run() {
       -v $HOST_PATH/containers/figureone/browser.sh:/opt/app/browser.sh \
       -v $HOST_PATH/containers:/opt/app/containers \
       -v /var/run/docker.sock:/var/run/docker.sock \
-      -v $HOST_PATH/containers/figureone/webpack.config.js:/opt/app/webpack.config.js \
+      -v $HOST_PATH/webpack.config.js:/opt/app/webpack.config.js \
       -v $HOST_PATH/containers/figureone/generate_docs.sh:/opt/app/generate_docs.sh \
       -v $HOST_PATH/.eslintrc.json:/opt/app/.eslintrc.json \
       -v $HOST_PATH/.dockerignore:/opt/app/.dockerignore \
       -v $HOST_PATH/.eslintignore:/opt/app/.eslintignore \
-      -v $HOST_PATH/.flowconfig:/opt/app/.flowconfig \
+      -v $HOST_PATH/tsconfig.json:/opt/app/tsconfig.json \
+      -v $HOST_PATH/tsconfig.build.json:/opt/app/tsconfig.build.json \
       -v $HOST_PATH/.babelrc:/opt/app/.babelrc \
       -v $HOST_PATH/documentation.yml:/opt/app/documentation.yml \
       -v $HOST_PATH/jest.config.js:/opt/app/jest.config.js \
@@ -53,7 +61,7 @@ docker_run() {
       -v $HOST_PATH/jsdoc-conf.json:/opt/app/jsdoc-conf.json \
       -v $HOST_PATH/.eslintignore:/opt/app/.eslintignore \
       -e LOCAL_PROJECT_PATH=$HOST_PATH \
-      --name figureone_dev \
+      --name figureone_build \
       --entrypoint $2 \
       figureone_dev \
       $3 $4 $5 $6 $7 $8 $9
@@ -61,9 +69,12 @@ docker_run() {
     docker run -it --rm \
       -v $HOST_PATH/package:/opt/app/package \
       -v $HOST_PATH/src:/opt/app/src \
-      --name figureone_dev \
+      --name figureone_build \
       --entrypoint $2 \
       figureone_dev
+  fi
+  if [ $? -ne 0 ]; then
+    FAIL=1
   fi
 }
 
@@ -79,12 +90,10 @@ check_status() {
   fi
 }
 
-if [ $1 ];
+if [ $DEPLOY = 1 ];
 then
   echo "${bold}${cyan}==================== Version Check =====================${reset}"
-  if [ "$1" = "deploy" ];
-  then
-    DEPLOYED_VERSION=`npm show figureone version`
+    DEPLOYED_VERSION=`npm_in_container show figureone version`
     CURRENT_VERSION=`cat package.json \
       | grep version \
       | head -1 \
@@ -97,8 +106,7 @@ then
       echo
       FAIL=1
     fi
-    check_status "Version Check"
-  fi
+  check_status "Version Check"
 fi
 
 
@@ -117,7 +125,7 @@ then
   # Lint and type check
   echo "${bold}${cyan}============ Linting and Type Checking =============${reset}"
   docker_run "JS Linting" npm run lint
-  docker_run "Flow" npm run flow
+  docker_run "TypeScript" npm run tsc
   check_status "Linting and Type Checking"
 
   # Test
@@ -138,7 +146,7 @@ fi
 # Package
 echo "${bold}${cyan}==================== Packaging =====================${reset}"
 # docker_run "Dev Packaging" npm run webpack
-docker_run "Dev Flow Packaging" npm run flowcopysource
+docker_run "TypeScript Declarations" npm run build:types
 docker_run "Prod Packaging" npm run webpack -- --env mode=prod --env clean=0
 echo "${bold}${cyan}" moving package.json "${reset}"
 cat package.json | \
@@ -148,26 +156,32 @@ cat package.json | \
 check_status "Packaging"
 
 
-if [ $1 ];
+if [ $DEPLOY = 1 ];
 then
   echo "${bold}${cyan}==================== Deploying =====================${reset}"
-  if [ $1 = "deploy" ];
+  DEPLOYED_VERSION=`npm_in_container show figureone version`
+  CURRENT_VERSION=`cat package/package.json \
+    | grep version \
+    | head -1 \
+    | awk -F: '{ print $2 }' \
+    | sed 's/[",]//g'`
+  if [ "$CURRENT_VERSION" != "$DEPLOYED_VERSION" ];
   then
-    DEPLOYED_VERSION=`npm show figureone version`
-    CURRENT_VERSION=`cat package/package.json \
-      | grep version \
-      | head -1 \
-      | awk -F: '{ print $2 }' \
-      | sed 's/[",]//g'`
-    if [ $CURRENT_VERSION != $DEPLOYED_VERSION ];
-    then
-      npm publish package/
-    else
-      echo
-      echo "Version No: " $CURRENT_VERSION " is the same as published version. Change it in containers/build/package.json if you want to deploy."
-      echo
+    docker run -it --rm \
+      -v $HOST_PATH/package:/opt/app/package \
+      -e NPM_TOKEN=$NPM_TOKEN \
+      --name figureone_npm \
+      --entrypoint sh \
+      figureone_dev \
+      -c "echo '//registry.npmjs.org/:_authToken=\${NPM_TOKEN}' > ~/.npmrc && npm publish package/"
+    if [ $? -ne 0 ]; then
       FAIL=1
     fi
-    check_status "Deployment"
+  else
+    echo
+    echo "Version No: " $CURRENT_VERSION " is the same as published version. Change it in package.json if you want to deploy."
+    echo
+    FAIL=1
   fi
+  check_status "Deployment"
 fi

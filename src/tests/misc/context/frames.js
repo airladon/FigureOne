@@ -10,7 +10,7 @@ __frames = [
   [1, 'figure.loseContext()'],
   [1, 'touchDown', [0, 0]],
   [0.5, 'touchUp'],
-  [1, 'figure.restoreContext()'],
+  [1, 'new Promise(resolve => { figure.canvasLow.addEventListener("webglcontextrestored", () => resolve(), { once: true }); figure.restoreContext(); })'],
   [3, 'touchDown', [0, 0]],
   [0.5, 'touchUp'],
 ];

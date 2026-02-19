@@ -1,8 +1,22 @@
 {
   "name": "figureone",
-  "version": "0.15.10",
+  "version": "1.0.0",
   "description": "Draw, animate and interact with shapes, text, plots and equations in Javascript. Create interactive slide shows, and interactive videos.",
   "main": "index.js",
+  "types": "types/index.d.ts",
+  "unpkg": "figureone.min.js",
+  "jsdelivr": "figureone.min.js",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "default": "./index.js"
+    }
+  },
+  "files": [
+    "index.js",
+    "figureone.min.js",
+    "types/"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/airladon/figureone.git"
@@ -10,13 +24,15 @@
   "scripts": {
     "browser": "./browser.sh",
     "webpack": "webpack",
-    "flow": "flow",
+    "build:types": "tsc --project tsconfig.build.json",
+    "build": "webpack && npm run build:types",
+    "tsc": "tsc --noEmit",
     "jest": "jest",
     "jest-perf": "jest --runInBand --config jest.perf.config.js",
     "jest-perf-debug": "node --inspect-brk=0.0.0.0 node_modules/.bin/jest --runInBand --config jest.perf.config.js",
     "lint": "eslint src",
-    "flowcopysource": "flow-copy-source src package",
-    "jest-debug": "node --inspect-brk=0.0.0.0 node_modules/.bin/jest --runInBand"
+    "jest-debug": "node --inspect-brk=0.0.0.0 node_modules/.bin/jest --runInBand",
+    "docs:typedoc": "bash generate_docs_typedoc.sh"
   },
   "keywords": [
     "interactive",
@@ -32,11 +48,10 @@
   },
   "homepage": "https://github.com/airladon/figureone#readme",
   "devDependencies": {
-    "@babel/core": "^7.15.5",
+    "@babel/core": "^7.26.0",
     "@babel/polyfill": "^7.10.4",
-    "@babel/preset-env": "^7.15.6",
-    "@babel/preset-flow": "^7.14.5",
-    "@babel/preset-react": "^7.14.5",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-typescript": "^7.27.1",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^27.2.1",
@@ -45,19 +60,18 @@
     "documentation": "^12.3.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-flowtype": "^6.1.0",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-jest": "^24.4.2",
-    "eslint-plugin-react": "^7.26.0",
-    "flow-bin": "^0.131.0",
-    "flow-copy-source": "^2.0.9",
     "http-server": "^13.0.2",
     "jest": "^27.2.1",
     "regenerator-runtime": "^0.13.9",
+    "typedoc": "^0.28.17",
+    "typedoc-plugin-mdn-links": "^5.1.1",
     "webpack": "^5.58.2",
     "webpack-cli": "^4.8.0",
     "whatwg-fetch": "^3.6.2",
-    "worker-loader": "^3.0.8"
+    "worker-loader": "^3.0.8",
+    "typescript": "^5.4.2"
   },
   "devDependenciesComments": {
     "worker-loader": "Do not upgrade to 3.0.0 as the publicPath options seems to be broken. This means instead of workers being searched for at /static/workers, they are searched for at the location of the file calling them"

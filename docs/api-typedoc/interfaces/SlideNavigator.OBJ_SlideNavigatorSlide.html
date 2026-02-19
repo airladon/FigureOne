@@ -1,0 +1,105 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>OBJ_SlideNavigatorSlide | figureone</title><meta name="description" content="Documentation for figureone"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><link rel="stylesheet" href="../assets/custom.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><a href="../index.html" class="title">figureone</a><div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/><ul role="listbox" id="tsd-search-results"></ul><div id="tsd-search-status" aria-live="polite" aria-atomic="true"><div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb" aria-label="Breadcrumb"><li><a href="../modules/SlideNavigator.html">SlideNavigator</a></li><li><a href="" aria-current="page">OBJ_SlideNavigatorSlide</a></li></ul><h1>Interface OBJ_SlideNavigatorSlide</h1></div><section class="tsd-panel tsd-comment"><div class="tsd-comment tsd-typography"><p>Slide definition options object.</p>
+<p>This object defines the state the figure should be set to when this slide
+is navigated to.</p>
+<p>A slide definition has several callback properties that can be used to set
+figure state including:</p>
+<ul>
+<li>enterState: set an initial state</li>
+<li>transition: define an animation for when moving to this slide</li>
+<li>steadyState: set steady state, then wait for next navigation event</li>
+<li>leaveState: set leave state when moving to another another slide</li>
+</ul>
+<p>It is good practice to try and make each slide's state independant of other
+slides. If a square is shown on slides 4 and 5, then it should be explicitly
+shown on both slides. If it is only shown on slide 4, then it will be fine
+when the user navigates from slide 4 to 5, but will not be shown if the user
+is navigating from slide 6 to 5. Allowing users to go to specific slides out
+of order makes slide dependencies even more difficult.</p>
+<p>Therefore, the enter, steady and leave states above should be used to fully
+define the figure's state on each slide.</p>
+<p>However, while this approach will yield a good user experience, developing
+many slides, complex figures or numerous equation forms can make slide
+definition verbose. Even though each slide is different, many slides may
+share largely the same state, all of which needs to be explicitly defined
+for each slide.</p>
+<p>The SlideNavigator tries to manage this by providing the fundamental state
+callbacks above, as well as properties that can be defined once, and shared
+between slides. Slides with shared, or common properties make copies of all
+the properties so each slide is independant, but require the developer to
+define them just once. If a slide doesn't define a common property, then it
+will use the definition in the last slide that defined it.</p>
+<p>For example, the <code>enterStateCommon</code> property is a common property. If it is
+defined in slides 4 and 7, then slides 0-3 will not have the property, slides
+4-6 will use the slide 4 definition, and slides 7 and after will all use
+slide 7's definition.</p>
+<p>Common state properties include:</p>
+<ul>
+<li>enterStateCommon</li>
+<li>steadyStateCommon</li>
+<li>leaveStateCommon</li>
+</ul>
+<p>The reason some states have both a common and slide specific property
+(such as steadyState and steadyStateCommon) is so the common property can
+be best leveraged. If all properties were common, then they would need to be
+redefined every time a small change was made. Having both common and slide
+specific properties allows a balance of defining some state for a group of
+slides once, while allowing specific changes to that state where needed.</p>
+<p>In addition to the above state properties, there are a number of short-cut
+properties, that make it easy to set state for common figure elements. When
+a SlideNavigator is instantiated, a text figure element, a figure collection
+and one or more equation elements can be associated with it.</p>
+<p>The <code>text</code>, <code>modifier</code> and <code>modifierCommon</code> properties can be used to set
+the text of the text figure element associated with the SlideNavigator.
+<code>text</code> and <code>modifierCommon</code> are common properties.</p>
+<p>The <code>form</code> property is also common and can be used to automatically set the
+form of the associated equation elements. A SlideNavigator can be associated
+with one or more equations. The <code>form</code> property defines the form each of the
+equations should be set to on this slide. If there is just one equation, then
+the form property can be a string that is the form name. For two or more
+equations, the form property should be an array of strings where each element
+is the form name for the corresponding equation. The order of equations
+passed into the SlideNavigator, needs to be the same as the order of strings
+in the <code>form</code> array. To hide an equation, use a <code>null</code> instead of a string.
+If the <code>form</code> property has less forms than equations, then all remaining
+equations will be hidden.</p>
+<p>The <code>form</code> property is a short cut with several consequences:</p>
+<ul>
+<li>All equations with <code>null</code> forms will be hidden prior to <code>enterState</code>.</li>
+<li>If the slide doesn't have a <code>transition</code> defined, and if an equation form
+is changed, then a transition will be added that animates the equation form
+change. If <code>transition</code> is defined, and equation animation is required,
+then it needs to be defined in the <code>transition</code> property explicity.</li>
+<li>Each equation with a defined form will have <code>showForm</code> called on that form
+prior to <code>steadyState</code>.</li>
+</ul>
+<p>The life cycle of a slide change is:</p>
+<ul>
+<li><code>leaveStateCommon</code> (for current slide)</li>
+<li><code>leaveState</code> (for current slide)</li>
+<li>stop all animations</li>
+<li>Update associated text element with <code>text</code> property</li>
+<li>Hide all figure elements in associated collection</li>
+<li><code>showCommon</code></li>
+<li><code>show</code></li>
+<li>show navigator buttons and navigator text element</li>
+<li><code>hideCommon</code></li>
+<li><code>hide</code></li>
+<li>show <code>fromForm</code></li>
+<li>show all elements that dissolveIn or dissolveOut in an auto transition</li>
+<li><code>scenarioCommon</code></li>
+<li><code>scenario</code></li>
+<li><code>enterStateCommon</code> (for new slide)</li>
+<li><code>enterState</code></li>
+<li><code>addReference</code></li>
+<li>show all elements that dissolveOut and hide all elements that dissolveIn
+in an auto transition</li>
+<li>publish <code>beforeTransition</code> notification</li>
+<li>transition</li>
+<li>show <code>form</code></li>
+<li>set targets from auto transition</li>
+<li><code>steadyStateCommon</code></li>
+<li><code>steadyState</code></li>
+<li>update slide navigator buttons</li>
+<li>publish <code>steady</code> notification</li>
+</ul>
+</div></section><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/airladon/figureone/blob/main/src/js/figure/SlideNavigator.ts#L450">src/js/figure/SlideNavigator.ts:450</a></li></ul></aside></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg><h3>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">figureone</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

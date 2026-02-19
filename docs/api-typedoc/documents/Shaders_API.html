@@ -1,0 +1,310 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>Shaders API | figureone</title><meta name="description" content="Documentation for figureone"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><link rel="stylesheet" href="../assets/custom.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><a href="../index.html" class="title">figureone</a><div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/><ul role="listbox" id="tsd-search-results"></ul><div id="tsd-search-status" aria-live="polite" aria-atomic="true"><div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb" aria-label="Breadcrumb"><li><a href="" aria-current="page">Shaders API</a></li></ul></div><div class="tsd-panel tsd-typography"><h1 id="shaders-api-reference" class="tsd-anchor-link">Shaders API Reference<a href="#shaders-api-reference" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1>
+<h2 id="contents" class="tsd-anchor-link">Contents<a href="#contents" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<ul>
+<li><a href="#typeglbuffertype">TypeGLBufferType</a></li>
+<li><a href="#typeglbufferusage">TypeGLBufferUsage</a></li>
+<li><a href="#typegluniform">TypeGLUniform</a></li>
+<li><a href="#typeglprimitive">TypeGLPrimitive</a></li>
+<li><a href="#obj_glattribute">OBJ_GLAttribute</a></li>
+<li><a href="#obj_glvertexbuffer">OBJ_GLVertexBuffer</a></li>
+<li><a href="#obj_gluniform">OBJ_GLUniform</a></li>
+<li><a href="#obj_glcolordata">OBJ_GLColorData</a></li>
+<li><a href="#obj_genericgl">OBJ_GenericGL</a></li>
+<li><a href="#obj_vertexshader">OBJ_VertexShader</a></li>
+<li><a href="#typevertexshader">TypeVertexShader</a></li>
+<li><a href="#obj_fragmentshader">OBJ_FragmentShader</a></li>
+<li><a href="#typefragmentshader">TypeFragmentShader</a></li>
+</ul>
+<hr>
+<h2 id="typeglbuffertype" class="tsd-anchor-link">TypeGLBufferType<a href="#typeglbuffertype" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p><code>'BYTE' | 'UNSIGNED_BYTE' | 'SHORT' | 'UNSIGNED_SHORT' | 'FLOAT'</code></p>
+<hr>
+<h2 id="typeglbufferusage" class="tsd-anchor-link">TypeGLBufferUsage<a href="#typeglbufferusage" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p><code>'STATIC' | 'DYNAMIC'</code></p>
+<hr>
+<h2 id="typegluniform" class="tsd-anchor-link">TypeGLUniform<a href="#typegluniform" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p><code>'FLOAT' | 'FLOAT_VECTOR' | 'INT' | 'INT_VECTOR'</code></p>
+<hr>
+<h2 id="typeglprimitive" class="tsd-anchor-link">TypeGLPrimitive<a href="#typeglprimitive" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>GL primitive type that describes the shapes the vertices are creating.
+Analagous to WebGL <a href="https://webglfundamentals.org/webgl/lessons/webgl-points-lines-triangles.html">drawing primitives</a>
+where the mapping between the two are:</p>
+<ul>
+<li><code>'TRIANGLES'</code>: TRIANGLES</li>
+<li><code>'STRIP'</code>: TRIANGLE_STRIP</li>
+<li><code>'FAN'</code>: TRIANGLE_FAN</li>
+<li><code>'LINES'</code>: LINES</li>
+<li><code>'POINTS'</code>: LINES</li>
+</ul>
+<p><code>'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'</code></p>
+<hr>
+<h2 id="obj_glattribute" class="tsd-anchor-link">OBJ_GLAttribute<a href="#obj_glattribute" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>GL buffer.</p>
+<h3 id="properties" class="tsd-anchor-link">Properties<a href="#properties" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">name</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a></span></span><div class="tsd-comment tsd-typography"><p>name of attribute in shader</p></div></li>
+<li><span><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>></span></span><div class="tsd-comment tsd-typography"><p>array of values</p></div></li>
+<li><span><span class="tsd-kind-parameter">size</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 2</span></span><div class="tsd-comment tsd-typography"><p>number of values per attribute</p></div></li>
+<li><span><span class="tsd-kind-parameter">type</span>: <span class="tsd-signature-type"><a href="../types/DrawingObjects_GLObject_GLObject.TypeGLBufferType.html" class="tsd-signature-type">TypeGLBufferType</a> | undefined</span> <span class="tsd-signature-symbol">= 'FLOAT'</span></span></li>
+<li><span><span class="tsd-kind-parameter">normalize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span></li>
+<li><span><span class="tsd-kind-parameter">stride</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span></li>
+<li><span><span class="tsd-kind-parameter">offset</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span></li>
+<li><span><span class="tsd-kind-parameter">usage</span>: <span class="tsd-signature-type"><a href="../types/DrawingObjects_GLObject_GLObject.TypeGLBufferUsage.html" class="tsd-signature-type">TypeGLBufferUsage</a> | undefined</span> <span class="tsd-signature-symbol">= 'STATIC'</span></span></li>
+</ul>
+<hr>
+<h2 id="obj_glvertexbuffer" class="tsd-anchor-link">OBJ_GLVertexBuffer<a href="#obj_glvertexbuffer" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>GL vertex - associated with attribute 'a_vertex' in shader.</p>
+<p>Assumes buffer parameters of:</p>
+<ul>
+<li>name: 'a_vertex'</li>
+<li>size: 2</li>
+<li>type: 'FLOAT'</li>
+<li>normalize: false</li>
+<li>stride: 0</li>
+<li>offset: 0</li>
+</ul>
+<h3 id="properties-1" class="tsd-anchor-link">Properties<a href="#properties-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>></span></span><div class="tsd-comment tsd-typography"><p>array of values</p></div></li>
+<li><span><span class="tsd-kind-parameter">usage</span>: <span class="tsd-signature-type"><a href="../types/DrawingObjects_GLObject_GLObject.TypeGLBufferUsage.html" class="tsd-signature-type">TypeGLBufferUsage</a> | undefined</span> <span class="tsd-signature-symbol">= 'STATIC'</span></span></li>
+</ul>
+<hr>
+<h2 id="obj_gluniform" class="tsd-anchor-link">OBJ_GLUniform<a href="#obj_gluniform" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>GL Uniform</p>
+<h3 id="properties-2" class="tsd-anchor-link">Properties<a href="#properties-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">name</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a></span></span><div class="tsd-comment tsd-typography"><p>name of uniform in shader</p></div></li>
+<li><span><span class="tsd-kind-parameter">length</span>: <span class="tsd-signature-type">1 | 2 | 3 | 4</span></span></li>
+<li><span><span class="tsd-kind-parameter">type</span>: <span class="tsd-signature-type"><a href="../types/DrawingObjects_GLObject_GLObject.TypeGLUniform.html" class="tsd-signature-type">TypeGLUniform</a></span></span></li>
+</ul>
+<hr>
+<h2 id="obj_glcolordata" class="tsd-anchor-link">OBJ_GLColorData<a href="#obj_glcolordata" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Color definition for a gl primitive.</p>
+<h3 id="properties-3" class="tsd-anchor-link">Properties<a href="#properties-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>></span></span><div class="tsd-comment tsd-typography"><p>color data</p></div></li>
+<li><span><span class="tsd-kind-parameter">normalize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code>, then color data values are between
+0 and 255</p></div></li>
+<li><span><span class="tsd-kind-parameter">size</span>: <span class="tsd-signature-type">3 | 4 | undefined</span></span><div class="tsd-comment tsd-typography"><p>if <code>3</code>, then color data is RGB, if <code>4</code> then color
+data is RGBA</p></div></li>
+</ul>
+<hr>
+<h2 id="obj_genericgl" class="tsd-anchor-link">OBJ_GenericGL<a href="#obj_genericgl" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>DiagramElementPrimitive with low level WegGL drawing object.</p>
+<p>A number of WebGL specific properties can be defined.</p>
+<p>WebGL specific properties are <code>glPrimitive</code>, <code>vertexShader</code>, <code>fragmentShader</code>
+<code>attributes</code>, <code>uniforms</code> and an optional <code>texture</code>. The
+nomencalture for these properties is directly from WebGL.</p>
+<p>Properties <code>vertices</code>, <code>colors</code>, <code>dimension</code>, <code>light</code> and <code>normals</code> provide
+shortcuts for defining the shaders, attributes and uniforms when shaders are
+not customized.</p>
+<p>Shaders are programs that run in the GPU and are written in a C-like
+language. Shaders operate on each vertex of a shape in parallel. The vertex
+shader transforms each vertex to some specific position, and performs color
+and lighting related calculations for scenarios when color and/or lighting
+are vertex specific. The fragment shader computes the final color of each
+pixel (fragment) between the vertices that make up a <code>glPrimitive</code>.</p>
+<p>Data can be passed from the CPU (JavaScript) to the GPU with attributes and
+uniforms.</p>
+<p>Attributes are arrays of numbers that represent data specific for
+each vertex in a shape. At a minimum, an attribute that defines the (x, y)
+or (x, y, z) coordinates of each vertex is needed. Other attributes might be
+color if all verticies do not have the same color, texture coordinates to
+map vertex color to a 2D image texture, and normal vectors for defining how
+light reflects from and thus brightens a surface. Each attribute must define
+data for every vertex in a shape. Attributes are typically defined and loaded
+into GPU buffers once. On each animation frame, the GPU will pass the
+buffered attributes to the shaders. Attributes are only passed to the vertex
+shader.</p>
+<p>Uniforms are small amounts of data (vectors or square matrices with a maximum
+dimension/rank of 4) that are passed from the CPU to the GPU on each frame.
+A uniform value can be passed to both the vertex and fragment shader and is
+thus available to all vertices and fragments. A uniform is like a
+global variable whose value can change on each animation frame. Example
+uniforms are:</p>
+<ul>
+<li>transform matrix that transforms all vertices in space the same way</li>
+<li>color value that colors all vertices the same (instead of having to define
+a color for each vertex)</li>
+<li>light source properties like position, direction, and amplitude</li>
+</ul>
+<p>Data can be passed from the vertex shader to the fragment shader in variables
+called <em>varyings</em>. Example varyings include color attributes (color that is
+defined for each vertex) and lighting information if the lighting is vertex
+dependent.</p>
+<p>Shaders source code can be defined as a string, or composed automatically
+from options including <code>dimension</code>, <code>color</code> and <code>light</code>. Shader source code
+contains attribute and uniform variables, and these attributes and uniforms
+need to be defined with <code>attributes</code> and <code>uniforms</code>.</p>
+<p>If using automated shader composition, then only attributes need to be
+defined. The uniforms will be passed to the shader from the information in
+the <code>color</code> property of the FigureElementPrimitive and the <code>scene</code> used to
+draw the primitive. See  OBJ_VertexShader and
+OBJ_FragmentShader for names of attributes and uniforms used in the
+shaders, and when they are used.</p>
+<h3 id="properties-4" class="tsd-anchor-link">Properties<a href="#properties-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">glPrimitive</span>: <span class="tsd-signature-type"><a href="../types/FigurePrimitives_FigurePrimitiveTypes.TypeGLPrimitive.html" class="tsd-signature-type">TypeGLPrimitive</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">vertexShader</span>: <span class="tsd-signature-type"><a href="../types/webgl_shaders.TypeVertexShader.html" class="tsd-signature-type">TypeVertexShader</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">fragmentShader</span>: <span class="tsd-signature-type"><a href="../types/webgl_shaders.TypeFragmentShader.html" class="tsd-signature-type">TypeFragmentShader</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">attributes</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLAttribute.html" class="tsd-signature-type">OBJ_GLAttribute</a>> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">uniforms</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLUniform.html" class="tsd-signature-type">OBJ_GLUniform</a>> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">texture</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_Texture.html" class="tsd-signature-type">OBJ_Texture</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">dimension</span>: <span class="tsd-signature-type">2 | 3 | undefined</span> <span class="tsd-signature-symbol">= 2</span></span><div class="tsd-comment tsd-typography"><p>default value for `dimension in vertex shader
+if vertex shader is undefined</p></div></li>
+<li><span><span class="tsd-kind-parameter">light</span>: <span class="tsd-signature-type">'point' | 'directional' | null | undefined</span> <span class="tsd-signature-symbol">= null</span></span><div class="tsd-comment tsd-typography"><p>default value for <code>light</code>
+in vertex and fragment shader if shaders are not otherwise defined</p></div></li>
+<li><span><span class="tsd-kind-parameter">colors</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>> | <a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLColorData.html" class="tsd-signature-type">OBJ_GLColorData</a> | undefined</span> <span class="tsd-signature-symbol">= uniform</span></span><div class="tsd-comment tsd-typography"><p>default value for
+<code>light</code> in vertex and fragment shader if shaders are not otherwise defined</p></div></li>
+<li><span><span class="tsd-kind-parameter">vertices</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLVertexBuffer.html" class="tsd-signature-type">OBJ_GLVertexBuffer</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>create a <code>a_vertex</code> attribute for
+vertex coordinates</p></div></li>
+<li><span><span class="tsd-kind-parameter">normals</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLVertexBuffer.html" class="tsd-signature-type">OBJ_GLVertexBuffer</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>create a <code>a_normal</code> attribute</p></div></li>
+</ul>
+<h4 id="default-options-are-2d-uniform-color-triangles" class="tsd-anchor-link">Default options are 2D, uniform color, TRIANGLES.<a href="#default-options-are-2d-uniform-color-triangles" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-10">// Create two red triangles (6 vertices, 12 values)</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;gl&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">vertices:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">],</span><br/><span class="hl-5">  </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">],</span><br/><span class="hl-5">});</span>
+</code><button type="button">Copy</button></pre>
+
+<h4 id="simple-rotatable-element-with-a-custom-position" class="tsd-anchor-link">Simple rotatable element with a custom position<a href="#simple-rotatable-element-with-a-custom-position" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;gl&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">vertices:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">],</span><br/><span class="hl-5">  </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">],</span><br/><span class="hl-5">  </span><span class="hl-8">position:</span><span class="hl-5"> [-</span><span class="hl-12">0.4</span><span class="hl-5">, -</span><span class="hl-12">0.4</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">],</span><br/><span class="hl-5">  </span><span class="hl-8">move:</span><span class="hl-5"> { </span><span class="hl-8">type:</span><span class="hl-5"> </span><span class="hl-11">&#39;rotation&#39;</span><span class="hl-5"> },</span><br/><span class="hl-5">});</span>
+</code><button type="button">Copy</button></pre>
+
+<h4 id="assign-a-color-to-each-vertex" class="tsd-anchor-link">Assign a color to each vertex<a href="#assign-a-color-to-each-vertex" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;gl&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">vertices:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">],</span><br/><span class="hl-5">  </span><span class="hl-8">colors:</span><span class="hl-5"> [</span><br/><span class="hl-5">    </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">,</span><br/><span class="hl-5">  ],</span><br/><span class="hl-5">});</span>
+</code><button type="button">Copy</button></pre>
+
+<h4 id="assign-a-color-to-each-vertex-using-just-3-numbers-per-color-no-alpha" class="tsd-anchor-link">Assign a color to each vertex, using just 3 numbers per color (no alpha)<a href="#assign-a-color-to-each-vertex-using-just-3-numbers-per-color-no-alpha" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;gl&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">vertices:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">],</span><br/><span class="hl-5">  </span><span class="hl-8">colors:</span><span class="hl-5"> {</span><br/><span class="hl-5">    </span><span class="hl-8">data:</span><span class="hl-5"> [</span><br/><span class="hl-5">      </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">,</span><br/><span class="hl-5">      </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">,</span><br/><span class="hl-5">      </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">,</span><br/><span class="hl-5">      </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">,</span><br/><span class="hl-5">      </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">,</span><br/><span class="hl-5">      </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">,</span><br/><span class="hl-5">    ],</span><br/><span class="hl-5">    </span><span class="hl-8">size:</span><span class="hl-5"> </span><span class="hl-12">3</span><span class="hl-5">,</span><br/><span class="hl-5">  },</span><br/><span class="hl-5">});</span>
+</code><button type="button">Copy</button></pre>
+
+<h4 id="texture-filled-square" class="tsd-anchor-link">Texture filled square<a href="#texture-filled-square" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;gl&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">vertices:</span><span class="hl-5"> [-</span><span class="hl-12">0.5</span><span class="hl-5">, -</span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, -</span><span class="hl-12">0.5</span><span class="hl-5">, -</span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, -</span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, -</span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">],</span><br/><span class="hl-5">  </span><span class="hl-8">numVertices:</span><span class="hl-5"> </span><span class="hl-12">6</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">texture:</span><span class="hl-5"> {</span><br/><span class="hl-5">    </span><span class="hl-8">src:</span><span class="hl-5"> </span><span class="hl-11">&#39;./flower.jpeg&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-8">coords:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">],</span><br/><span class="hl-5">    </span><span class="hl-8">loadColor:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">],</span><br/><span class="hl-5">  },</span><br/><span class="hl-5">});</span>
+</code><button type="button">Copy</button></pre>
+
+<h4 id="make-a-3d-cube-using-composed-shaders" class="tsd-anchor-link">Make a 3D cube using composed shaders<a href="#make-a-3d-cube-using-composed-shaders" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-6">const</span><span class="hl-5"> { </span><span class="hl-7">toNumbers</span><span class="hl-5"> } = </span><span class="hl-8">Fig</span><span class="hl-5">;</span><br/><span class="hl-6">const</span><span class="hl-5"> [</span><span class="hl-7">cubeVertices</span><span class="hl-5">, </span><span class="hl-7">cubeNormals</span><span class="hl-5">] = </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">cube</span><span class="hl-5">({ </span><span class="hl-8">side:</span><span class="hl-5"> </span><span class="hl-12">0.5</span><span class="hl-5"> });</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-8">scene</span><span class="hl-5">.</span><span class="hl-9">setProjection</span><span class="hl-5">({ </span><span class="hl-8">style:</span><span class="hl-5"> </span><span class="hl-11">&#39;orthographic&#39;</span><span class="hl-5"> });</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-8">scene</span><span class="hl-5">.</span><span class="hl-9">setCamera</span><span class="hl-5">({ </span><span class="hl-8">position:</span><span class="hl-5"> [</span><span class="hl-12">2</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">2</span><span class="hl-5">] });</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-8">scene</span><span class="hl-5">.</span><span class="hl-9">setLight</span><span class="hl-5">({ </span><span class="hl-8">directional:</span><span class="hl-5"> [</span><span class="hl-12">0.7</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">] });</span><br/><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;gl&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">light:</span><span class="hl-5"> </span><span class="hl-11">&#39;directional&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">dimension:</span><span class="hl-5"> </span><span class="hl-12">3</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">vertices:</span><span class="hl-5"> </span><span class="hl-9">toNumbers</span><span class="hl-5">(</span><span class="hl-8">cubeVertices</span><span class="hl-5">),</span><br/><span class="hl-5">  </span><span class="hl-8">normals:</span><span class="hl-5"> </span><span class="hl-9">toNumbers</span><span class="hl-5">(</span><span class="hl-8">cubeNormals</span><span class="hl-5">),</span><br/><span class="hl-5">  </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">],</span><br/><span class="hl-5">});</span>
+</code><button type="button">Copy</button></pre>
+
+<h4 id="custom-shaders" class="tsd-anchor-link">Custom shaders<a href="#custom-shaders" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
+<pre><code class="js"><span class="hl-10">// Make a shader with a custom attribute aVertex and custom uniform uColor,</span><br/><span class="hl-10">// which are then defined in the options.</span><br/><span class="hl-10">// Note, the `u_worldViewProjectionMatrix` uniform does not need to be defined</span><br/><span class="hl-10">// as this will be passed by FigureOne using the Scene information of the</span><br/><span class="hl-10">// figure (or element if an element has a custom scene attached to it).</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;gl&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">vertexShader:</span><span class="hl-5"> {</span><br/><span class="hl-5">    </span><span class="hl-8">src:</span><span class="hl-5"> </span><span class="hl-11">`</span><br/><span class="hl-11">      uniform mat4 u_worldViewProjectionMatrix;</span><br/><span class="hl-11">      attribute vec4 aVertex;</span><br/><span class="hl-11">      void main() {</span><br/><span class="hl-11">        gl_Position = u_worldViewProjectionMatrix * aVertex;</span><br/><span class="hl-11">      }`</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-8">vars:</span><span class="hl-5"> [</span><span class="hl-11">&#39;aVertex&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;u_worldViewProjectionMatrix&#39;</span><span class="hl-5">],</span><br/><span class="hl-5">  },</span><br/><span class="hl-5">  </span><span class="hl-8">fragmentShader:</span><span class="hl-5"> {</span><br/><span class="hl-5">    </span><span class="hl-8">src:</span><span class="hl-5"> </span><span class="hl-11">`</span><br/><span class="hl-11">    precision mediump float;</span><br/><span class="hl-11">    uniform vec4 uColor;</span><br/><span class="hl-11">    void main() {</span><br/><span class="hl-11">      gl_FragColor = uColor;</span><br/><span class="hl-11">      gl_FragColor.rgb *= gl_FragColor.a;</span><br/><span class="hl-11">    }`</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-8">vars:</span><span class="hl-5"> [</span><span class="hl-11">&#39;uColor&#39;</span><span class="hl-5">],</span><br/><span class="hl-5">  },</span><br/><span class="hl-5">  </span><span class="hl-8">attributes:</span><span class="hl-5"> [</span><br/><span class="hl-5">    {</span><br/><span class="hl-5">      </span><span class="hl-8">name:</span><span class="hl-5"> </span><span class="hl-11">&#39;aVertex&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">      </span><span class="hl-8">size:</span><span class="hl-5"> </span><span class="hl-12">3</span><span class="hl-5">,</span><br/><span class="hl-5">      </span><span class="hl-8">data:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">],</span><br/><span class="hl-5">    },</span><br/><span class="hl-5">  ],</span><br/><span class="hl-5">  </span><span class="hl-8">uniforms:</span><span class="hl-5"> [</span><br/><span class="hl-5">    {</span><br/><span class="hl-5">      </span><span class="hl-8">name:</span><span class="hl-5"> </span><span class="hl-11">&#39;uColor&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">      </span><span class="hl-8">length:</span><span class="hl-5"> </span><span class="hl-12">4</span><span class="hl-5">,</span><br/><span class="hl-5">      </span><span class="hl-8">value:</span><span class="hl-5"> [</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">],</span><br/><span class="hl-5">    },</span><br/><span class="hl-5">  ],</span><br/><span class="hl-5">});</span>
+</code><button type="button">Copy</button></pre>
+
+<hr>
+<h2 id="obj_vertexshader" class="tsd-anchor-link">OBJ_VertexShader<a href="#obj_vertexshader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Options used to compose vertex shader source code.</p>
+<p>Shader source code can be automatically composed for different vertex
+dimension (2D vs 3D), coloring and lighting options.</p>
+<p>Composed source code uses specific attribute, uniform and varying names.
+Attributes will need to be defined by the user in the <code>attributes</code> property
+of  OBJ_GenericGL.</p>
+<p>Attributes:</p>
+<ul>
+<li><code>vec2 a_vertex</code>: used to define vertex positions when <code>dimension = 2</code>.</li>
+<li><code>vec4 a_vertex</code>: used to define vertex positions when <code>dimension = 3</code> -
+Note, for this case an attribute size of only 3 is needed as the fourth
+coordinate (w in the homogenous coordinate system) is automatically filled
+with a 1.</li>
+<li><code>vec4 a_color</code>: used to define the color of a vertex when <code>color = 'vertex'</code></li>
+<li><code>vec2 a_texcoord</code>: used to define the texture coordinates to map the
+vertex to when <code>color = 'texture'</code></li>
+<li><code>vec3 a_normal</code>: used to define the normal vector for a vertex used when
+<code>light = 'point'</code> or <code>light = 'directional'</code></li>
+</ul>
+<p>Uniforms will be defined and updated by FigureOne based on the color and
+transform of the primitive, and the scene being used to draw the primitive.
+Thus, the uniform variables listed below for are for informational purposes
+only.</p>
+<p>Uniforms:</p>
+<ul>
+<li><code>mat4 u_worldViewProjectionMatrix</code>: transfomration matrix that cascades
+projection, camera position, and any additional transformation of the shape</li>
+<li><code>float u_z</code>: define a specific z for all vertices when <code>dimension = 2</code></li>
+<li><code>u_worldInverseTranspose</code>: transpose of inverse world matrix needed for
+to correctly transform normal vectors. Used when <code>light = 'point'</code> or
+<code>light = 'directional'</code></li>
+<li><code>vec3 u_lightWorldPosition</code>: defines the position of a point source light
+used when <code>light = 'point'</code></li>
+<li><code>mat4 u_worldMatrix</code>: defines the world matrix transform that orients the
+point source light relative to the shape used when <code>light = 'point'</code>.</li>
+</ul>
+<p>Varyings are passed from the vertex shader to the fragement shader. They are
+listed here in case the user wants to customize one shader, while relying on
+composition for the other. All varying expected by the composed shader will
+need to be defined in the custom shader.</p>
+<ul>
+<li><code>vec2 v_texcoord</code>: pass texture coordinates to fragment shader used when
+<code>color = 'texture'</code></li>
+<li><code>vec4 v_color</code>: pass vertex specific color to fragment shader used when
+<code>color = 'vertex'</code></li>
+<li><code>vec3 v_normal</code>: pass normals (transformed with <code>u_worldInverseTranspose</code>)
+to fragment shader used when <code>light = 'directional'</code> or <code>light = 'point'</code></li>
+<li><code>vec3 v_vertexToLight</code>: pass vector between point source light and vertex
+to fragment shader used when <code>light = 'point'</code></li>
+</ul>
+<h3 id="properties-5" class="tsd-anchor-link">Properties<a href="#properties-5" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">dimension</span>: <span class="tsd-signature-type">2 | 3 | undefined</span> <span class="tsd-signature-symbol">= 2</span></span></li>
+<li><span><span class="tsd-kind-parameter">color</span>: <span class="tsd-signature-type">'vertex' | 'uniform' | 'texture' | undefined</span> <span class="tsd-signature-symbol">= uniform</span></span></li>
+<li><span><span class="tsd-kind-parameter">light</span>: <span class="tsd-signature-type">'point' | 'directional' | null | undefined</span> <span class="tsd-signature-symbol">= null</span></span></li>
+</ul>
+<hr>
+<h2 id="typevertexshader" class="tsd-anchor-link">TypeVertexShader<a href="#typevertexshader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>A vertex shader can be defined with either:</p>
+<ul>
+<li><code>{ src: string, vars: Array&lt;string&gt; }</code>: a shader source code string and a
+list of attributes and uniforms</li>
+<li><code>string</code>: an identifier to a built-in shader</li>
+<li>OBJ_VertexShader <code>| Array&lt;string | number | boolean&gt;</code>: composing
+options for a composable shader</li>
+</ul>
+<hr>
+<h2 id="obj_fragmentshader" class="tsd-anchor-link">OBJ_FragmentShader<a href="#obj_fragmentshader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Options used to compose fragment shader source code.</p>
+<p>Shader source code can be automatically composed for different coloring and
+lighting options.</p>
+<p>Composed source code uses specific uniform and varying names.</p>
+<p>Uniforms will be defined and updated by FigureOne based on the color and
+transform of the primitive, and the scene being used to draw the primitive.
+Thus, the uniform variables listed below for are for informational purposes
+only.</p>
+<p>Uniforms:</p>
+<ul>
+<li><code>vec4 u_color</code>: global color for all vertices used all times. When
+<code>color = 'texture'</code> or <code>color = 'vertex'</code>, only the alpha channel of
+<code>u_color</code> is used.</li>
+<li><code>sampler2D u_texture</code>: texture used when <code>color = 'texture'</code>.</li>
+<li><code>vec3 u_directionalLight</code>: world space position of directional light
+source used when <code>light = 'directional'</code></li>
+<li><code>float u_ambientLight</code>: ambient light used when <code>light = 'directional'</code> or
+<code>light = 'point'</code>.</li>
+</ul>
+<p>Varyings are passed from the vertex shader to the fragement shader. They are
+listed here in case the user wants to customize one shader, while relying on
+composition for the other.</p>
+<ul>
+<li><code>vec2 v_texcoord</code>: texture coordinates from vertex shader used when
+<code>color = 'texture'</code></li>
+<li><code>vec4 v_color</code>: vertex specific color from vertex shader used when
+<code>color = 'vertex'</code></li>
+<li><code>vec3 v_normal</code>: normals from vertex shader used when
+<code>light = 'directional'</code> or <code>light = 'point'</code></li>
+<li><code>vec3 v_vertexToLight</code>: vector between point source light and vertex
+from vertex shader used when <code>light = 'point'</code></li>
+</ul>
+<h3 id="properties-6" class="tsd-anchor-link">Properties<a href="#properties-6" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">dimension</span>: <span class="tsd-signature-type">2 | 3 | undefined</span> <span class="tsd-signature-symbol">= 2</span></span></li>
+<li><span><span class="tsd-kind-parameter">color</span>: <span class="tsd-signature-type">'vertex' | 'uniform' | 'texture' | undefined</span> <span class="tsd-signature-symbol">= uniform</span></span></li>
+<li><span><span class="tsd-kind-parameter">light</span>: <span class="tsd-signature-type">'point' | 'directional' | null | undefined</span> <span class="tsd-signature-symbol">= null</span></span></li>
+</ul>
+<hr>
+<h2 id="typefragmentshader" class="tsd-anchor-link">TypeFragmentShader<a href="#typefragmentshader" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>A fragment shader can be defined with either:</p>
+<ul>
+<li><code>{ src: string, vars: Array&lt;string&gt; }</code>: a shader source code string and a
+list of attributes and uniforms</li>
+<li><code>string</code>: an identifier to a built-in shader</li>
+<li>OBJ_VertexShader <code>| Array&lt;string | number | boolean&gt;</code>: composing
+options for a composable shader</li>
+</ul>
+<hr>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg><h3>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg><h3>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#shaders-api-reference"><span>Shaders <wbr/>API <wbr/>Reference</span></a><ul><li><a href="#contents"><span>Contents</span></a></li><li><a href="#typeglbuffertype"><span>Type<wbr/>GL<wbr/>Buffer<wbr/>Type</span></a></li><li><a href="#typeglbufferusage"><span>Type<wbr/>GL<wbr/>Buffer<wbr/>Usage</span></a></li><li><a href="#typegluniform"><span>Type<wbr/>GL<wbr/>Uniform</span></a></li><li><a href="#typeglprimitive"><span>Type<wbr/>GL<wbr/>Primitive</span></a></li><li><a href="#obj_glattribute"><span>OBJ_<wbr/>GL<wbr/>Attribute</span></a></li><li><ul><li><a href="#properties"><span>Properties</span></a></li></ul></li><li><a href="#obj_glvertexbuffer"><span>OBJ_<wbr/>GL<wbr/>Vertex<wbr/>Buffer</span></a></li><li><ul><li><a href="#properties-1"><span>Properties</span></a></li></ul></li><li><a href="#obj_gluniform"><span>OBJ_<wbr/>GL<wbr/>Uniform</span></a></li><li><ul><li><a href="#properties-2"><span>Properties</span></a></li></ul></li><li><a href="#obj_glcolordata"><span>OBJ_<wbr/>GL<wbr/>Color<wbr/>Data</span></a></li><li><ul><li><a href="#properties-3"><span>Properties</span></a></li></ul></li><li><a href="#obj_genericgl"><span>OBJ_<wbr/>Generic<wbr/>GL</span></a></li><li><ul><li><a href="#properties-4"><span>Properties</span></a></li><li><ul><li><a href="#default-options-are-2d-uniform-color-triangles"><span>Default options are 2<wbr/>D, uniform color, <wbr/>TRIANGLES.</span></a></li><li><a href="#simple-rotatable-element-with-a-custom-position"><span>Simple rotatable element with a custom position</span></a></li><li><a href="#assign-a-color-to-each-vertex"><span>Assign a color to each vertex</span></a></li><li><a href="#assign-a-color-to-each-vertex-using-just-3-numbers-per-color-no-alpha"><span>Assign a color to each vertex, using just 3 numbers per color (no alpha)</span></a></li><li><a href="#texture-filled-square"><span>Texture filled square</span></a></li><li><a href="#make-a-3d-cube-using-composed-shaders"><span>Make a 3<wbr/>D cube using composed shaders</span></a></li><li><a href="#custom-shaders"><span>Custom shaders</span></a></li></ul></li></ul></li><li><a href="#obj_vertexshader"><span>OBJ_<wbr/>Vertex<wbr/>Shader</span></a></li><li><ul><li><a href="#properties-5"><span>Properties</span></a></li></ul></li><li><a href="#typevertexshader"><span>Type<wbr/>Vertex<wbr/>Shader</span></a></li><li><a href="#obj_fragmentshader"><span>OBJ_<wbr/>Fragment<wbr/>Shader</span></a></li><li><ul><li><a href="#properties-6"><span>Properties</span></a></li></ul></li><li><a href="#typefragmentshader"><span>Type<wbr/>Fragment<wbr/>Shader</span></a></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">figureone</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

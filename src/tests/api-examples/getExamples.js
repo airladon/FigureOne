@@ -13,8 +13,9 @@ function getExamples(path) {
         return;
       }
       if (
-        absolutePath.endsWith('js')
+        (absolutePath.endsWith('.js') || absolutePath.endsWith('.ts'))
         && !absolutePath.endsWith('test.js')
+        && !absolutePath.endsWith('.d.ts')
       ) {
         files.push(absolutePath);
       }
@@ -65,7 +66,10 @@ function getExamples(path) {
         return;
       }
       if (inExample) {
-        currentExample.push(line.slice().replace(/^ *\*/, ''));
+        const content = line.slice().replace(/^ *\*/, '');
+        if (!content.trim().startsWith('@')) {
+          currentExample.push(content);
+        }
       }
       if (readInterfaceName && !line.match(/^ *\/\//) && !line.match(/^ *\/\*/)) {
         let updateName = true;

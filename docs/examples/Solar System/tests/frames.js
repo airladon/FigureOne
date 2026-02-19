@@ -11,6 +11,7 @@ __startSteps = 1000;
 __frames = [
   [0, `
 plot.__gesture.move.freely = false;
+speed.hide();
 `],
   [0.5, 'mouseWheelZoom', [[0, 500], [-2.55, 0]], 'zoomIn'],
   [0.5, 'mouseWheelZoom', [[0, 500], [-2.55, 0]], 'zoomIn'],
