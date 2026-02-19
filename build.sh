@@ -154,6 +154,7 @@ cat package.json | \
   sed 's/readme",/readme"/' | \
   sed '/^  "scripts/,/}/d' > package/package.json
 cp llms.txt package/llms.txt
+cp llms-full.txt package/llms-full.txt
 check_status "Packaging"
 
 

@@ -1,0 +1,2499 @@
+# FigureOne - Complete API Reference
+> For a quick overview, see llms.txt
+
+FigureOne is a JavaScript library for drawing, animating, and interacting with shapes, text, plots, and equations in a browser using WebGL. `Fig` is the global entry point. `new Fig.Figure()` creates a figure attached to `<div id="figureOneContainer">`. Elements are added with `figure.add({ make: 'type', ...options })`.
+
+Colors are `[r, g, b, a]` with values 0-1. Default scene is `[-1, -1, 2, 2]` (x, y, width, height).
+
+---
+
+## 1. Figure Class
+
+### OBJ_Figure
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| htmlId | string | `'figureOneContainer'` | HTML div id to attach figure to |
+| scene | OBJ_Scene \| [x,y,w,h] | `[-1, -1, 2, 2]` | Scene definition (2D rect or full scene object) |
+| color | TypeColor | `[0, 0, 0, 1]` | Default shape color |
+| font | OBJ_Font | `{family:'Times New Roman', size:0.2}` | Default font |
+| lineWidth | number | | Default line width |
+| length | number | | Default primary dimension |
+| backgroundColor | TypeColor | | Background color |
+
+### Key Figure Methods
+
+```js
+const figure = new Fig.Figure({ htmlId: 'myDiv', scene: [-2, -2, 4, 4] });
+
+// Add single element (returns the element)
+const elem = figure.add({ make: 'polygon', sides: 6, radius: 0.5 });
+
+// Add multiple elements (returns array)
+const [a, b] = figure.add([
+  { make: 'polygon', sides: 4, radius: 0.3, name: 'sq' },
+  { make: 'polygon', sides: 100, radius: 0.2, name: 'circ' },
+]);
+
+// Access elements
+figure.elements._sq;
+figure.getElement('sq');
+
+// Control
+figure.stop();            // Stop all animations
+figure.resize();          // Resize after container change
+figure.animateNextFrame(); // Request next animation frame
+figure.isAnimating();     // Check if any animation running
+
+// Coordinate transforms
+figure.transformPoint(point, fromSpace, toSpace);
+figure.spaceTransformMatrix(fromSpace, toSpace);
+
+// SlideNavigator
+const nav = figure.addSlideNavigator({ slides: [...] });
+```
+
+---
+
+## 2. Common Base Types
+
+### TypeColor
+`[r, g, b, a]` — array of 4 numbers, each 0-1. Example: `[1, 0, 0, 1]` = red.
+
+### TypeParsablePoint
+Any of: `[x, y]`, `[x, y, z]`, `new Fig.Point(x, y)`, or a Point instance.
+
+### TypeParsableTransform
+Any of: a Transform instance, or an array of transform components:
+- Translation: `['t', x, y, z]`
+- Rotation 2D: `['r', angle]`
+- Rotation 3D: `['r', angle, axisX, axisY, axisZ]`
+- Scale: `['s', sx, sy, sz]`
+- Direction: `['d', dx, dy, dz]`
+
+Example: `[['t', 0.5, 0], ['r', Math.PI/4], ['s', 2, 2]]`
+
+### TypeElementPath
+Path to figure element(s) within a collection. Supports multiple formats:
+- String dot-path: `'parent.child.grandchild'`
+- Direct reference: a FigureElement instance
+- Object paths: `{ parent: ['child.a', 'child.b'] }`
+- Array of any above: `['elem1', 'elem2', figureElement]`
+
+### OBJ_Font
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| family | string | `'Times New Roman'` | Font family |
+| style | `'normal'` \| `'italic'` | `'normal'` | Font style |
+| weight | string \| number | `'normal'` | Font weight |
+| size | number | `0.2` | Size in draw space units |
+| color | TypeColor \| null | | Font color |
+| underline | boolean \| object | `false` | Underline options |
+| outline | boolean \| object | `false` | Outline options |
+| render | `'gl'` \| `'2d'` \| `'html'` | `'gl'` | Render target |
+
+### OBJ_Texture
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| src | string | | Image URL |
+| coords | number[] | `[]` | Texture coordinates per vertex |
+| mapFrom | [x,y,w,h] | `[0, 0, 1, 1]` | Image space window |
+| mapTo | [x,y,w,h] | `[-1, -1, 2, 2]` | Draw space window |
+| repeat | boolean | `false` | Tile image (power-of-2 only) |
+| loadColor | TypeColor | `[0, 0, 1, 0.5]` | Color while loading |
+| onLoad | () => void | | Callback after load |
+
+### OBJ_FigurePrimitive (base for all primitives)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| name | string | | Element name |
+| position | TypeParsablePoint | | Shorthand for translation |
+| transform | TypeParsableTransform | | Full transform |
+| color | TypeColor | | Element color |
+| touch | boolean \| OBJ_Touch | `false` | Enable touch |
+| move | boolean \| OBJ_ElementMove | `false` | Enable dragging |
+| dimColor | TypeColor | | Color when dimmed |
+| defaultColor | TypeColor | | Color when undimmed |
+| scenarios | OBJ_Scenarios | | Named presets |
+| scene | Scene \| OBJ_Scene | | Custom scene |
+
+### OBJ_Collection
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| transform | TypeParsableTransform | | Collection transform |
+| position | TypeParsablePoint | | Overwrites transform translation |
+| color | TypeColor | | Default color |
+| parent | FigureElement \| null | | Parent element |
+| border | string \| number | `'children'` | Border: `'children'`, `'rect'`, or number buffer |
+| touchBorder | string \| number | `'children'` | Touch border |
+
+---
+
+## 3. 2D Shape Primitives
+
+All 2D primitives extend OBJ_FigurePrimitive. Properties from OBJ_FigurePrimitive (name, position, color, etc.) are always available.
+
+### OBJ_Generic (`make: 'generic'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| points | TypeParsablePoint[] | | Vertex positions |
+| drawType | `'TRIANGLES'` \| `'POINTS'` \| `'FAN'` \| `'STRIP'` \| `'LINES'` | `'TRIANGLES'` | GL primitive type |
+| copy | CPY_Step[] \| CPY_Step | `[]` | Copy/repeat pattern |
+| texture | OBJ_Texture | | Texture fill |
+| drawBorder | TypeParsableBorder | | Shape border points |
+| drawBorderBuffer | TypeParsableBorder | | Buffer border points |
+| border | string \| number | `'draw'` | `'draw'`, `'buffer'`, `'rect'`, or number |
+| touchBorder | string \| number | `'border'` | `'border'`, `'draw'`, `'buffer'`, `'rect'`, or number |
+| pulse | number | | Default pulse scale |
+
+### CPY_Step (copy pattern)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| along | `'x'` \| `'y'` \| `'z'` \| `'rotation'` | | Copy direction |
+| num | number | | Number of copies |
+| step | number | | Step distance or angle |
+| to | TypeParsablePoint \| Transform | | Copy to position/transform |
+| start | number | `0` | Start index |
+| end | number | | End index |
+| original | boolean | `true` | Include original |
+
+### OBJ_Polyline (`make: 'polyline'`)
+Extends OBJ_Generic (without drawType).
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| points | TypeParsablePoint[] | | Corner points |
+| width | number | `0.01` | Line width |
+| close | boolean | `false` | Close polyline |
+| simple | boolean | `false` | Simple mode (fast, fewer features) |
+| widthIs | `'mid'` \| `'outside'` \| `'inside'` \| `'positive'` \| `'negative'` \| number | `'mid'` | Width growth direction |
+| cornerStyle | `'auto'` \| `'none'` \| `'radius'` \| `'fill'` | `'auto'` | Corner rendering |
+| cornerSize | number | `0.01` | Corner radius (when `'radius'`) |
+| cornerSides | number | `10` | Sides in corner curve |
+| cornersOnly | boolean | `false` | Draw only corners |
+| cornerLength | number | `0.1` | Corner length when cornersOnly |
+| minAutoCornerAngle | number | `π/7` | Threshold for auto corners |
+| dash | number[] | | Dash pattern: `[lineLen, gapLen, ...]` |
+| arrow | OBJ_LineArrows \| TypeArrowHead | | Arrow on ends |
+| linePrimitives | boolean | `false` | Use GL line primitives |
+
+### OBJ_Polygon (`make: 'polygon'`)
+Extends OBJ_Generic (without drawType).
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| sides | number | `4` | Number of sides |
+| radius | number | `1` | Radius |
+| rotation | number | `0` | Shape rotation (vertex definition) |
+| offset | TypeParsablePoint | `[0, 0]` | Center offset |
+| sidesToDraw | number | all | Number of sides to draw |
+| angleToDraw | number | `2π` | Angle to draw |
+| direction | `1` \| `-1` | `1` | 1=CCW, -1=CW |
+| line | OBJ_LineStyleSimple | | Line style (outline mode) |
+
+### OBJ_Star (`make: 'star'`)
+Extends OBJ_Generic (without drawType).
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| sides | number | `4` | Number of points |
+| radius | number | `1` | Outer radius |
+| innerRadius | number | `radius/2` | Inner radius |
+| rotation | number | `0` | Shape rotation |
+| offset | TypeParsablePoint | `[0, 0]` | Center offset |
+| line | OBJ_LineStyleSimple | | Line style |
+
+### OBJ_Rectangle (`make: 'rectangle'`)
+Extends OBJ_Generic (without drawType).
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| width | number | `1` | Width |
+| height | number | `1` | Height |
+| xAlign | `'left'` \| `'center'` \| `'right'` \| number | `'center'` | Horizontal alignment |
+| yAlign | `'bottom'` \| `'middle'` \| `'top'` \| number | `'middle'` | Vertical alignment |
+| corner | OBJ_CurvedCorner | | Rounded corners: `{ radius, sides }` |
+| line | OBJ_LineStyleSimple | | Line style |
+| offset | TypeParsablePoint | | Position offset |
+
+### OBJ_Ellipse (`make: 'ellipse'`)
+Extends OBJ_Generic (without drawType).
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| width | number | `1` | Width |
+| height | number | `1` | Height |
+| xAlign | `'left'` \| `'center'` \| `'right'` \| number | `'center'` | Horizontal alignment |
+| yAlign | `'bottom'` \| `'middle'` \| `'top'` \| number | `'middle'` | Vertical alignment |
+| sides | number | `20` | Number of sides |
+| line | OBJ_LineStyleSimple | | Line style |
+
+### OBJ_Arc (`make: 'arc'`)
+Extends OBJ_Generic (without drawType).
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| radius | number | | Radius |
+| sides | number | `20` | Number of sides |
+| startAngle | number | `0` | Start angle (radians) |
+| angle | number | `1` | Arc angle (radians) |
+| line | OBJ_LineStyleSimple | | Line style |
+| fillCenter | boolean | | Fill to center point |
+
+### OBJ_Triangle (`make: 'triangle'`)
+Extends OBJ_Generic (without drawType).
+
+Define by one of (highest precedence first): `points`, `ASA`, `SAS`, `AAS`, `SSS`, or `width`+`height`+`top`.
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| points | Point[] | | Three defining points |
+| width | number | | Base width |
+| height | number | | Height |
+| top | `'left'` \| `'right'` \| `'center'` | `'center'` | Top vertex position |
+| SSS | [s1,s2,s3] | | Side-Side-Side |
+| ASA | [a1,s1,a2] | | Angle-Side-Angle |
+| AAS | [a1,a2,s1] | | Angle-Angle-Side |
+| SAS | [s1,a1,s2] | | Side-Angle-Side |
+| direction | `1` \| `-1` | `1` | Triangle above (1) or below (-1) base |
+| rotation | number \| `'s1'` \| `'s2'` \| `'s3'` | | Rotation angle or relative to side |
+| xAlign | string | `'centroid'` | X alignment: `'left'`, `'center'`, `'right'`, `'centroid'`, `'a1'`..`'a3'`, `'s1'`..`'s3'` |
+| yAlign | string | `'centroid'` | Y alignment: `'bottom'`, `'middle'`, `'top'`, `'centroid'`, `'a1'`..`'a3'`, `'s1'`..`'s3'` |
+| line | OBJ_LineStyleSimple | | Line style |
+
+### OBJ_Line (`make: 'line'`)
+Extends OBJ_Generic (without drawType).
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| p1 | TypeParsablePoint | | Start point |
+| p2 | TypeParsablePoint | | End point |
+| length | number | | Length from p1 (alternative to p2) |
+| angle | number | | Angle from p1 (alternative to p2) |
+| width | number | `0.01` | Line width |
+| widthIs | `'mid'` \| `'positive'` \| `'negative'` \| number | `'mid'` | Width direction |
+| dash | number[] | | Dash pattern |
+| arrow | OBJ_LineArrows \| TypeArrowHead | | Arrows on ends |
+
+### OBJ_Arrow (`make: 'arrow'`)
+Extends OBJ_Generic (without drawType).
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| head | TypeArrowHead | `'triangle'` | `'triangle'`, `'barb'`, `'rectangle'`, `'line'`, `'polygon'`, `'circle'`, `'bar'`, `'reverseTriangle'` |
+| scale | number | | Scale default dimensions |
+| length | number | | Head length along line |
+| width | number | | Head width |
+| rotation | number | | Polygon head rotation |
+| sides | number | | Polygon/circle sides |
+| radius | number | | Polygon/circle radius |
+| barb | number | | Barb length |
+| tailWidth | number | | Tail line width |
+| tail | boolean \| number | `false` | Include tail; number = tail length |
+| align | `'tip'` \| `'start'` \| `'mid'` \| `'tail'` | `'tip'` | Which part at origin |
+| angle | number | `0` | Drawing angle |
+
+### OBJ_LineArrows (arrow config for lines/polylines)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| start | TypeArrowHead \| object | | Start arrow |
+| end | TypeArrowHead \| object | | End arrow |
+| scale | number | | Scale both arrows |
+
+TypeArrowHead: `'triangle'` | `'barb'` | `'rectangle'` | `'line'` | `'polygon'` | `'circle'` | `'bar'` | `'reverseTriangle'`
+
+### OBJ_Grid (`make: 'grid'`)
+Extends OBJ_Generic (without drawType).
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| bounds | [x,y,w,h] | | Grid rectangle |
+| xStep | number | | Vertical line spacing |
+| yStep | number | | Horizontal line spacing |
+| xNum | number | | Number of vertical lines |
+| yNum | number | | Number of horizontal lines |
+| line | OBJ_LineStyleSimple | | Line style |
+
+### OBJ_Text (`make: 'text'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| text | string \| string[] | | Text content |
+| location | TypeParsablePoint \| TypeParsablePoint[] | `[0, 0]` | Position(s) |
+| font | OBJ_Font | | Font (defaults to figure font) |
+| xAlign | `'left'` \| `'center'` \| `'right'` | `'left'` | Horizontal alignment |
+| yAlign | `'top'` \| `'bottom'` \| `'middle'` \| `'alphabetic'` \| `'baseline'` | `'baseline'` | Vertical alignment |
+
+### OBJ_LineStyleSimple (used by polygon, rectangle, etc.)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| width | number | | Line width |
+| widthIs | `'mid'` \| `'outside'` \| `'inside'` \| number | `'mid'` | Width direction |
+| dash | number[] | | Dash pattern |
+| color | TypeColor | | Line color |
+
+### OBJ_GenericGL (`make: 'gl'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| glPrimitive | string | `'TRIANGLES'` | GL primitive type |
+| vertexShader | object | | Custom vertex shader |
+| fragmentShader | object | | Custom fragment shader |
+| attributes | OBJ_GLAttribute[] | | Shader attributes |
+| uniforms | OBJ_GLUniform[] | | Shader uniforms |
+| texture | OBJ_Texture | | Texture |
+| dimension | `2` \| `3` | `2` | Coordinate dimensions |
+| light | `'directional'` \| `'point'` \| null | null | Lighting |
+| vertices | number[] \| object | | Vertex data |
+| colors | number[] \| object | | Per-vertex colors |
+| normals | number[] \| object | | Normal vectors |
+
+### OBJ_Morph (`make: 'morph'`)
+
+Morphable shape with multiple point arrays that can be animated between.
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| name | string | | Element name |
+| pointArrays | number[][] | | Array of flat vertex arrays (each: [x1,y1,x2,y2,...]) |
+| color | TypeColor \| TypeColor[] | | Color(s) per point array |
+| names | string[] | | Name for each point array (usable in morph animation) |
+| glPrimitive | `'TRIANGLES'` \| `'POINTS'` \| `'FAN'` \| `'STRIP'` \| `'LINES'` | `'TRIANGLES'` | GL primitive type |
+
+```js
+// Simple example
+figure.add({
+  make: 'gl',
+  vertices: [0, 0, 0.5, 0, 0, 0.5],
+  color: [1, 0, 0, 1],
+});
+```
+
+---
+
+## 4. 3D Shape Primitives
+
+All 3D primitives extend OBJ_FigurePrimitive and OBJ_Generic3All.
+
+### OBJ_Generic3All (base for all 3D shapes)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| light | `'directional'` \| `'point'` \| `'ambient'` \| null | `'directional'` | Lighting type |
+| copy | CPY_Step[] \| CPY_Step | | Copy pattern |
+| usage | `'STATIC'` \| `'DYNAMIC'` | `'STATIC'` | Buffer usage |
+| touchScale | number \| TypeParsablePoint | | Touch scale |
+
+### OBJ_Sphere (`make: 'sphere'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| sides | number | `10` | Sides around half great circle |
+| radius | number | `1` | Sphere radius |
+| normals | `'curve'` \| `'flat'` | `'flat'` | Shading style |
+| center | TypeParsablePoint | `[0, 0]` | Center position |
+| lines | boolean | `false` | Wire mesh mode |
+
+### OBJ_Cube (`make: 'cube'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| side | number | `1` | Side length |
+| center | TypeParsablePoint | `[0, 0]` | Center position |
+| lines | boolean | `false` | Wire mesh mode |
+
+### OBJ_Cylinder (`make: 'cylinder'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| sides | number | `10` | Number of sides |
+| radius | number | `1` | Radius |
+| normals | `'curve'` \| `'flat'` | `'flat'` | Shading style |
+| line | [p1, p2] | | Position/orient via two points |
+| length | number | `1` | Length (if `line` not defined) |
+| ends | boolean \| `1` \| `2` | `true` | Fill ends: true=both, false=none, 1=first, 2=second |
+| rotation | number | `0` | Base rotation |
+
+### OBJ_Line3 (`make: 'line3'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| sides | number | `10` | Number of sides |
+| p1 | TypeParsablePoint | `[0, 0, 0]` | Start point |
+| p2 | TypeParsablePoint | `p1 + [1, 0, 0]` | End point |
+| width | number | | Line width |
+| arrow | OBJ_Line3Arrow \| boolean | | Arrows on ends |
+| rotation | number | `0` | Rotation around axis |
+| normals | `'curve'` \| `'flat'` | `'curve'` | Shading style |
+
+### OBJ_Cone (`make: 'cone'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| sides | number | `10` | Number of sides |
+| radius | number | | Base radius |
+| normals | `'curve'` \| `'flat'` | `'flat'` | Shading style |
+| line | [base, tip] | | Position/orient via two points |
+| length | number | `1` | Length (if `line` not defined) |
+| rotation | number | `0` | Base rotation |
+| lines | boolean | `false` | Wire mesh mode |
+
+### OBJ_Prism (`make: 'prism'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| base | TypeParsablePoint[] | | Base polygon points (XY plane, CCW) |
+| baseTriangles | TypeParsablePoint[] | | Base triangulation (for non-convex) |
+| length | number | | Prism length (into +z) |
+| lines | boolean | `false` | Wire mesh mode |
+
+### OBJ_Revolve (`make: 'revolve'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| profile | TypeParsablePoint[] | | XY plane profile (y >= 0) |
+| sides | number | | Radial sweep sides |
+| normals | `'flat'` \| `'curveProfile'` \| `'curveRadial'` \| `'curve'` | `'flat'` | Shading style |
+| axis | TypeParsablePoint | | Orient shape axis |
+| rotation | number | | Initial sweep angle |
+| lines | boolean | `false` | Wire mesh mode |
+
+### OBJ_Surface (`make: 'surface'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| points | TypeParsablePoint[][] | | 2D grid of 3D points |
+| normals | `'flat'` \| `'curveColumns'` \| `'curveRows'` \| `'curve'` | `'flat'` | Shading style |
+| closeRows | boolean | `false` | First/last row same (for curved normals) |
+| closeColumns | boolean | `false` | First/last column same |
+| lines | boolean | `false` | Wire mesh mode |
+| invertNormals | boolean | | Invert all normals |
+
+### OBJ_CameraControl (`make: 'cameraControl'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| left | number | `0` | Screen left (0-1) |
+| bottom | number | `0` | Screen bottom (0-1) |
+| width | number | `1` | Width (0-1) |
+| height | number | `1` | Height (0-1) |
+| axis | TypeParsablePoint | `[0, 1, 0]` | Vertical axis |
+| controlScene | Scene \| string | | Scene to control (default: figure scene) |
+| sensitivity | number | `5` | Overall sensitivity |
+| xSensitivity | number | `1` | Horizontal sensitivity (0 = no azimuth) |
+| ySensitivity | number | `1` | Vertical sensitivity (0 = no elevation) |
+| back | boolean | `true` | Priority behind other touchable elements |
+
+```js
+// 3D setup
+const figure = new Fig.Figure({ scene: { style: 'orthographic' } });
+figure.add([
+  { make: 'sphere', radius: 0.3, color: [1, 0, 0, 1], normals: 'curve' },
+  { make: 'cameraControl' },
+]);
+
+// Surface from function
+const points = Fig.surfaceGrid({
+  x: [-0.8, 0.8, 0.02], y: [-0.8, 0.8, 0.02],
+  z: (x, y) => Math.sin(Math.sqrt(x*x + y*y) * 4) * 0.3,
+});
+figure.add({ make: 'surface', points, color: [1, 0, 0, 1], normals: 'curve' });
+```
+
+---
+
+## 5. Collections
+
+Collections are higher-level compound elements. Use `make: 'collections.type'`.
+
+### COL_Plot (`make: 'collections.plot'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| width | number | | Plot area width |
+| height | number | | Plot area height |
+| x | object \| boolean | | X axis config or `false` to hide |
+| y | object \| boolean | | Y axis config or `false` to hide |
+| trace | COL_Trace \| COL_Trace[] \| point[] | | Trace data |
+| legend | COL_PlotLegend | | Legend options |
+| title | string \| object | | Plot title |
+| grid | boolean | | Show grid |
+| cross | TypeParsablePoint \| null | | Where axes cross |
+| frame | boolean \| TypeColor \| object | | Frame around plot |
+| plotArea | TypeColor \| object | | Plot area background |
+| font | OBJ_Font | | Default font |
+| color | TypeColor | | Default color |
+| position | TypeParsablePoint | | Position |
+| zoom | object \| `'x'` \| `'y'` \| `'xy'` | | Zoom options |
+| pan | object \| `'x'` \| `'y'` \| `'xy'` | | Pan options |
+| styleTheme | `'box'` \| `'numberLine'` \| `'positiveNumberLine'` | `'box'` | Theme |
+| colorTheme | `'light'` \| `'dark'` | `'dark'` | Color theme |
+| autoGrid | boolean | `true` | Expand grid across plot |
+
+### COL_Trace (used within COL_Plot)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| points | TypeParsablePoint[] | | Trace data points |
+| x | number[] | | X values (alternative to points) |
+| y | number[] | | Y values (alternative to points) |
+| line | OBJ_LineStyleSimple | | Line style |
+| markers | OBJ_Polygon \| OBJ_Star | | Marker shape |
+| color | TypeColor | | Trace color |
+| name | string | | Name for legend |
+
+### COL_PlotLegend
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| position | TypeParsablePoint | | Legend position |
+| length | number | | Line sample length |
+| space | number | | Space between line and text |
+| offset | TypeParsablePoint | | Offset between traces |
+| font | OBJ_Font | | Legend font |
+| fontColorIsLineColor | boolean | | Match text to line color |
+| frame | object | | Frame around legend |
+
+```js
+// Plot with multiple traces
+figure.add({
+  make: 'collections.plot',
+  width: 1, height: 1, position: [-0.5, -0.5],
+  x: { title: 'time (s)' },
+  y: { start: 0, stop: 100, title: 'distance (m)' },
+  trace: [
+    { points: data1, name: 'Linear' },
+    { points: data2, name: 'Quadratic', markers: { sides: 4, radius: 0.02 } },
+  ],
+  legend: { font: { size: 0.05 } },
+});
+```
+
+### COL_Axis (`make: 'collections.axis'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| axis | `'x'` \| `'y'` | `'x'` | Orientation |
+| length | number | | Axis length |
+| start | number | `0` | Start value |
+| stop | number | `start + 1` | Stop value |
+| step | number | | Tick/label step |
+| line | boolean \| object | | Axis line |
+| ticks | object \| boolean | `false` | Tick marks |
+| labels | object \| boolean \| string | | Axis labels |
+| grid | object \| boolean | `false` | Grid lines |
+| title | string \| object | | Axis title |
+| font | OBJ_Font | | Default font |
+| show | boolean | `true` | Show/hide axis |
+| min | number \| null | `null` | Min value (zoom/pan limit) |
+| max | number \| null | `null` | Max value (zoom/pan limit) |
+| position | TypeParsablePoint | `[0, 0]` | Axis position |
+| values | number[] | | Custom tick/label values |
+| auto | [number, number] | | Auto-select start/stop/step from data range |
+
+#### Axis Ticks Configuration
+When `ticks` is an object:
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| step | number | | Tick step (overrides axis step) |
+| start | number | | Start value for ticks |
+| stop | number | | Stop value for ticks |
+| length | number | `0.1` | Tick length |
+| width | number | | Tick width |
+| offset | number | `0` | Offset from axis |
+| color | TypeColor | | Tick color |
+| values | number[] | | Custom tick positions |
+
+#### Axis Labels Configuration
+When `labels` is an object:
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| step | number | | Label step (overrides axis step) |
+| start | number | | Start value for labels |
+| stop | number | | Stop value for labels |
+| font | OBJ_Font | | Label font |
+| precision | number | | Decimal precision |
+| format | function | | Custom format: `(value) => string` |
+| offset | TypeParsablePoint | | Label offset |
+| rotation | number | | Label rotation |
+| values | number[] | | Custom label positions |
+| hide | number[] | | Values to hide labels for |
+| text | string[] | | Custom text per label position |
+
+#### Axis Grid Configuration
+When `grid` is an object:
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| step | number | | Grid step |
+| length | number | | Grid line length |
+| width | number | | Grid line width |
+| color | TypeColor | | Grid color |
+| dash | number[] | | Dash pattern |
+
+```js
+// Detailed axis example
+figure.add({
+  make: 'collections.axis',
+  axis: 'x', length: 2, start: -5, stop: 5, step: 1,
+  position: [-1, 0],
+  ticks: { length: 0.05, offset: -0.025 },
+  labels: { precision: 0, offset: [0, -0.1], hide: [0] },
+  grid: { length: 2, width: 0.002, dash: [0.01, 0.01], color: [0.5, 0.5, 0.5, 0.3] },
+  title: { text: 'x', offset: [0, -0.2] },
+});
+```
+
+### COL_Axis3 (`make: 'collections.axis3'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| width | number \| [x,y,z] | | Axis width |
+| length | number \| [x,y,z] | | Axis length |
+| start | number \| [x,y,z] | `0` | Start value |
+| sides | number \| [x,y,z] | `10` | Cross-section sides |
+| lines | boolean \| [x,y,z] | `false` | Wire mesh mode |
+| arrow | object \| boolean | | Arrow options |
+| color | TypeColor \| [x,y,z] | red, green, blue | Per-axis colors |
+
+### COL_Line (`make: 'collections.line'` or `'oline'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| p1 | TypeParsablePoint | | Start point |
+| p2 | TypeParsablePoint | | End point |
+| angle | number | | Line angle (alternative to p2) |
+| length | number | | Line length (alternative to p2) |
+| offset | number | | Line offset |
+| align | `'start'` \| `'end'` \| `'center'` \| number | | Rotation center |
+| width | number | | Line width |
+| label | OBJ_LineLabel | | Label annotation |
+| arrow | OBJ_LineArrows \| TypeArrowHead | | Arrows |
+| dash | number[] | | Dash pattern |
+| move | object | | Move options |
+
+### COL_Angle (`make: 'collections.angle'` or `'angle'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| position | Point | | Vertex position |
+| startAngle | number | | Start angle |
+| angle | number | | Angle size |
+| p1 | Point | | Point on first ray (alternative) |
+| p2 | Point | | Vertex point (alternative) |
+| p3 | Point | | Point on second ray (alternative) |
+| direction | `1` \| `-1` | | Annotation side |
+| curve | object | | Curve annotation options |
+| arrow | object | | Arrow annotation options |
+| corner | object | | Corner drawing options |
+| label | object | | Label options |
+
+### COL_Polyline (`make: 'collections.polyline'` or `'opolyline'`)
+Extends OBJ_Polyline properties.
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| showLine | boolean | `true` | Show the line |
+| angle | object \| COL_Angle[] | | Angle annotations |
+| side | object \| COL_Line[] | | Side annotations |
+| pad | object | | Move pad options |
+| makeValid | object \| null | | Shape consistency enforcement |
+| font | OBJ_Font | | Default label font |
+
+### COL_Rectangle (`make: 'collections.rectangle'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| width | number | | Width |
+| height | number | | Height |
+| xAlign | `'left'` \| `'center'` \| `'right'` \| number | | X alignment |
+| yAlign | `'bottom'` \| `'middle'` \| `'top'` \| number | | Y alignment |
+| line | OBJ_LineStyleSimple | | Outline style |
+| fill | TypeColor \| OBJ_Texture | | Fill |
+| corner | OBJ_CurvedCorner | | Rounded corners |
+| label | OBJ_FormattedText | | Label |
+| button | boolean \| TypeColor | `false` | Button behavior |
+
+### COL_Slider (`make: 'collections.slider'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| width | number | | Slider width |
+| height | number | | Slider height |
+| barHeight | number | | Bar height |
+| marker | object \| `'polygon'` \| `'rectangle'` \| `'none'` | `'polygon'` | Marker style |
+| sides | number | `20` | Curve sides |
+| theme | `'dark'` \| `'light'` | `'dark'` | Color theme |
+| colorOff | TypeColor | | Off color |
+| colorOn | TypeColor | `[0, 1, 0, 1]` | On color |
+
+### COL_Toggle (`make: 'collections.toggle'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| width | number | | Toggle width |
+| height | number | | Toggle height |
+| barHeight | number | | Bar height |
+| sides | number | `20` | Curve sides |
+| theme | `'dark'` \| `'light'` | `'dark'` | Color theme |
+| colorOff | TypeColor | | Off color |
+| colorOn | TypeColor | `[0, 1, 0, 1]` | On color |
+| label | object | | Label options |
+
+### COL_Button (`make: 'collections.button'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| width | number | | Button width |
+| height | number | | Button height |
+| corner | OBJ_CurvedCorner | | Corner rounding |
+| line | OBJ_LineStyleSimple \| null | | Outline |
+| label | object | | Label |
+| colorLine | TypeColor | | Line color |
+| colorFill | TypeColor | | Fill color |
+| colorLabel | TypeColor | | Label color |
+| touchDown | object | | Touch-down colors |
+| states | array | | Button state definitions |
+
+### OBJ_FormattedText (`make: 'ftext'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| text | string \| string[] | | Text lines |
+| modifiers | OBJ_TextModifiersDefinition | | Inline formatting modifiers |
+| elements | object | | Equation elements |
+| font | OBJ_Font | | Default font |
+| justify | `'left'` \| `'center'` \| `'right'` | `'left'` | Line justification |
+| lineSpace | number | `font.size * 0.5` | Line spacing |
+| xAlign | `'left'` \| `'center'` \| `'right'` | `'left'` | Horizontal alignment |
+| yAlign | `'bottom'` \| `'baseline'` \| `'middle'` \| `'top'` | `'baseline'` | Vertical alignment |
+| accent | OBJ_Font | italic | Default modifier style |
+
+### OBJ_TextModifierDefinition (inline text modifier)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| text | string | modifierId | Replacement text (default: use the modifier key) |
+| offset | TypeParsablePoint | | Text offset |
+| followOffsetY | boolean | `false` | Subsequent text shares y offset |
+| font | OBJ_Font | | Font changes for modified text |
+| inLine | boolean | `true` | `false` to exclude from line layout |
+| onClick | string \| function | | Click callback |
+| touchBorder | buffer \| Point[] | `0` | Touch border |
+
+```js
+// Formatted text with clickable modifier
+figure.add({
+  make: 'ftext',
+  text: 'Click |here| to start',
+  modifiers: {
+    here: {
+      font: { color: [0, 0, 1, 1] },
+      onClick: () => console.log('clicked'),
+      touchBorder: 0.03,
+    },
+  },
+});
+```
+
+---
+
+## 6. Equation System
+
+Create with `make: 'equation'`. Define `elements` (terms and symbols) and `forms` (layouts).
+
+### EQN_Equation
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| color | TypeColor | | Equation color |
+| dimColor | TypeColor | | Dim color |
+| font | OBJ_Font | | Math font |
+| textFont | OBJ_Font | `font` | Text font |
+| scale | number | `0.7` | Equation scale |
+| elements | object | | Element definitions |
+| forms | object | | Form definitions |
+| formDefaults | object | | Default form options |
+| initialForm | string | | Initial form to show |
+| formSeries | object | | Named series of forms |
+| defaultFormSeries | string | | Default series name |
+| phrases | object | | Reusable sub-expressions |
+| position | TypeParsablePoint | | Position |
+| transform | Transform | | Transform |
+
+### Elements
+
+Elements are defined as an object where keys are element names. String values auto-create text elements. Objects define symbols or styled text.
+
+```js
+elements: {
+  v: { symbol: 'vinculum' },
+  equals: ' = ',
+  times: ' × ',
+  c: { color: [0, 0, 1, 1] },   // colored text 'c'
+}
+```
+
+- Undeclared strings in forms auto-create text elements
+- `'_ + '` prefix creates element with display text ` + ` (underscore is stripped)
+- `'b_1'`, `'b_2'` create copies that display as `b`
+
+### Symbols
+
+Define in elements with `{ symbol: 'type', ...options }`. All symbols accept base properties: `color`, `isTouchable`, `touchBorder`, `onClick`, `mods`.
+
+#### EQN_VinculumSymbol (`symbol: 'vinculum'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| lineWidth | number | `0.01` | Line thickness |
+| draw | `'static'` \| `'dynamic'` | `'dynamic'` | `'dynamic'` updates vertices on resize, `'static'` only changes scale |
+| staticWidth | number \| `'first'` | `'first'` | Width for static draw mode |
+
+#### EQN_BoxSymbol (`symbol: 'box'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| lineWidth | number | `0.01` | Line thickness |
+| fill | boolean | `false` | Fill box instead of outline |
+| width | number | | Force width |
+| height | number | | Force height |
+| draw | `'static'` \| `'dynamic'` | `'dynamic'` | Resize behavior |
+
+#### EQN_BracketSymbol (`symbol: 'bracket'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| side | `'left'` \| `'right'` \| `'top'` \| `'bottom'` | `'left'` | Bracket side |
+| lineWidth | number | `0.01` | Line thickness |
+| sides | number | `10` | Curve segments |
+| tipWidth | number | | Tip thickness (default: 0) |
+| draw | `'static'` \| `'dynamic'` | `'dynamic'` | Resize behavior |
+
+#### EQN_SquareBracketSymbol (`symbol: 'squareBracket'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| side | `'left'` \| `'right'` \| `'top'` \| `'bottom'` | `'left'` | Bracket side |
+| lineWidth | number | `0.01` | Line thickness |
+| tipWidth | number | `0.01` | Tip width |
+| radius | number | `0` | Corner radius |
+| draw | `'static'` \| `'dynamic'` | `'dynamic'` | Resize behavior |
+
+#### EQN_AngleBracketSymbol (`symbol: 'angleBracket'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| side | `'left'` \| `'right'` \| `'top'` \| `'bottom'` | `'left'` | Bracket side |
+| lineWidth | number | `0.01` | Line thickness |
+| width | number | | Bracket width |
+| draw | `'static'` \| `'dynamic'` | `'dynamic'` | Resize behavior |
+
+#### EQN_BraceSymbol (`symbol: 'brace'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| side | `'left'` \| `'right'` \| `'top'` \| `'bottom'` | `'left'` | Brace side |
+| lineWidth | number | `0.01` | Line thickness |
+| sides | number | `10` | Curve segments |
+| width | number | | Brace width |
+| tipWidth | number | | Tip width |
+| draw | `'static'` \| `'dynamic'` | `'dynamic'` | Resize behavior |
+
+#### EQN_BarSymbol (`symbol: 'bar'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| side | `'left'` \| `'right'` \| `'top'` \| `'bottom'` | `'left'` | Bar side |
+| lineWidth | number | `0.01` | Line thickness |
+| draw | `'static'` \| `'dynamic'` | `'dynamic'` | Resize behavior |
+
+#### EQN_RadicalSymbol (`symbol: 'radical'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| lineWidth | number | `0.01` | Line thickness |
+| startWidth | number | `0.5` | Start stroke width ratio |
+| startHeight | number | `0.5` | Start stroke height ratio |
+| proportionalToHeight | boolean | `true` | Scale proportionally |
+| draw | `'static'` \| `'dynamic'` | `'dynamic'` | Resize behavior |
+
+#### EQN_StrikeSymbol (`symbol: 'strike'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| style | `'cross'` \| `'forward'` \| `'back'` \| `'horizontal'` | `'cross'` | Strike pattern |
+| lineWidth | number | `0.015` | Line thickness |
+| draw | `'static'` \| `'dynamic'` | `'dynamic'` | Resize behavior |
+
+#### EQN_IntegralSymbol (`symbol: 'int'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| num | number | `1` | Number of integrals |
+| type | `'generic'` \| `'line'` | `'generic'` | Style |
+| sides | number | `30` | Curve segments |
+| lineWidth | number | `0.01` | Line width |
+| width | number | | Symbol width |
+| serif | boolean | `true` | Show serifs |
+| space | number | | Space between multiple integrals |
+| draw | `'static'` \| `'dynamic'` | `'dynamic'` | Resize behavior |
+
+#### EQN_SumSymbol (`symbol: 'sum'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| lineWidth | number | `0.01` | Line thickness |
+| sides | number | `5` | Serif segments |
+| draw | `'static'` \| `'dynamic'` | `'dynamic'` | Resize behavior |
+
+#### EQN_ProdSymbol (`symbol: 'prod'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| lineWidth | number | `0.01` | Line thickness |
+| sides | number | `5` | Serif segments |
+| draw | `'static'` \| `'dynamic'` | `'dynamic'` | Resize behavior |
+
+#### EQN_ArrowSymbol (`symbol: 'arrow'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| direction | `'right'` \| `'left'` \| `'up'` \| `'down'` | `'right'` | Arrow direction |
+| lineWidth | number | `0.01` | Line width |
+| arrowWidth | number | `0.04` | Arrow head width |
+| arrowLength | number | `0.04` | Arrow head length |
+| draw | `'static'` \| `'dynamic'` | `'dynamic'` | Resize behavior |
+
+#### EQN_LineSymbol (`symbol: 'line'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| width | number | `0.01` | Line width |
+| dash | number[] | | Dash pattern |
+| arrow | OBJ_LineArrows | | Arrow on end(s) |
+
+#### EQN_DivisionSymbol (`symbol: 'division'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| lineWidth | number | `0.01` | Line thickness |
+| radius | number | `0.03` | Dot radius |
+| sides | number | `20` | Dot sides |
+| space | number | `0.04` | Dot-to-line space |
+
+### Layout Functions
+
+Used in form definitions. Array syntax and object syntax are both supported. Below are the full property tables for each layout function's object syntax.
+
+#### EQN_Fraction (`frac`)
+Array: `{ frac: [numerator, symbol, denominator] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| numerator | TypeEquationPhrase | | Numerator content |
+| symbol | string | | Vinculum symbol name |
+| denominator | TypeEquationPhrase | | Denominator content |
+| scale | number | `1` | Content scale |
+| numeratorSpace | number | `0.05` | Space above vinculum |
+| denominatorSpace | number | `0.05` | Space below vinculum |
+| overhang | number | `0.05` | Vinculum extends beyond content |
+| offsetY | number | `0.07` | Vertical offset of fraction |
+| baseline | `'numerator'` \| `'denominator'` \| `'vinculum'` | | Baseline alignment |
+| fullContentBounds | boolean | `false` | Use full bounds |
+
+#### EQN_Superscript (`sup`)
+Array: `{ sup: [content, superscript] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Base content |
+| superscript | TypeEquationPhrase | | Superscript content |
+| scale | number | `0.5` | Superscript scale |
+| offset | TypeParsablePoint | `[0, 0]` | Superscript offset |
+| inSize | boolean | `true` | Include in phrase size |
+
+#### EQN_Subscript (`sub`)
+Array: `{ sub: [content, subscript] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Base content |
+| subscript | TypeEquationPhrase | | Subscript content |
+| scale | number | `0.5` | Subscript scale |
+| offset | TypeParsablePoint | `[0, 0]` | Subscript offset |
+| inSize | boolean | `true` | Include in phrase size |
+
+#### EQN_SuperscriptSubscript (`supSub`)
+Array: `{ supSub: [content, superscript, subscript] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Base content |
+| superscript | TypeEquationPhrase | | Superscript content |
+| subscript | TypeEquationPhrase | | Subscript content |
+| scale | number | `0.5` | Script scale |
+| superscriptOffset | TypeParsablePoint | `[0, 0]` | Superscript offset |
+| subscriptOffset | TypeParsablePoint | `[0, 0]` | Subscript offset |
+| inSize | boolean | `true` | Include in phrase size |
+
+#### EQN_Bracket (`brac`)
+Array: `{ brac: [left_symbol, content, right_symbol] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| left | string | | Left bracket symbol |
+| content | TypeEquationPhrase | | Content |
+| right | string | | Right bracket symbol |
+| inSize | boolean | `true` | Include brackets in size |
+| insideSpace | number | `0.03` | Space between brackets and content |
+| outsideSpace | number | `0.03` | Space between brackets and neighbors |
+| topSpace | number | `0.05` | Bracket extends above content |
+| bottomSpace | number | `0.05` | Bracket extends below content |
+| minContentHeight | number \| null | `null` | Min content height for bracket sizing |
+| minContentDescent | number \| null | `null` | Min content descent |
+| height | number \| null | `null` | Force bracket height |
+| descent | number \| null | `null` | Force bracket descent |
+| fullContentBounds | boolean | `false` | Use full bounds |
+| useFullBounds | boolean | `false` | Resulting phrase uses full bounds |
+
+#### EQN_Root (`root`)
+Array: `{ root: [radical_symbol, content] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| symbol | string | | Radical symbol name |
+| content | TypeEquationPhrase | | Content under radical |
+| inSize | boolean | `true` | Include radical in size |
+| space | number | `0.02` | Default space (all directions) |
+| topSpace | number | `space` | Space above content |
+| rightSpace | number | `space` | Radical overhang right |
+| bottomSpace | number | `space` | Radical descent below content |
+| leftSpace | number | `space` | Space left of content |
+| root | TypeEquationPhrase | | Index content (e.g., '3' for cube root) |
+| rootOffset | TypeParsablePoint | `[0, 0.06]` | Index offset |
+| rootScale | number | `0.6` | Index scale |
+| fullContentBounds | boolean | `false` | Use full bounds |
+| useFullBounds | boolean | `false` | Resulting phrase uses full bounds |
+
+#### EQN_Strike (`strike`)
+Array: `{ strike: [content, strike_symbol] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Content to strike through |
+| symbol | string | | Strike symbol name |
+| inSize | boolean | `false` | Include strike in size |
+| space | number | `0.02` | Overhang (all directions) |
+| topSpace | number | `space` | Top overhang |
+| rightSpace | number | `space` | Right overhang |
+| bottomSpace | number | `space` | Bottom overhang |
+| leftSpace | number | `space` | Left overhang |
+| fullContentBounds | boolean | `false` | Use full bounds |
+| useFullBounds | boolean | `false` | Resulting phrase uses full bounds |
+
+#### EQN_StrikeComment (`topStrike` / `bottomStrike`)
+Array: `{ topStrike: [content, symbol, comment] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Content to strike |
+| symbol | string | | Strike symbol |
+| comment | TypeEquationPhrase | | Comment text |
+| inSize | boolean | `true` | Include in size |
+| space | number | `0.03` | Strike overhang |
+| scale | number | `0.6` | Comment scale |
+| commentSpace | number | `0.03` | Space between strike and comment |
+
+#### EQN_Box (`box`)
+Array: `{ box: [content, symbol, inSize, space] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Content |
+| symbol | string | | Box symbol |
+| inSize | boolean | `false` | Include box in size |
+| space | number | `0` | Space between box and content |
+| topSpace | number | `space` | Top space |
+| rightSpace | number | `space` | Right space |
+| bottomSpace | number | `space` | Bottom space |
+| leftSpace | number | `space` | Left space |
+| fullContentBounds | boolean | `false` | Use full bounds |
+| useFullBounds | boolean | `false` | Resulting phrase uses full bounds |
+
+#### EQN_TouchBox (`tBox`)
+Array: `{ tBox: [content, symbol, space] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Content |
+| symbol | string | | Box symbol |
+| space | number | `0` | Space between box and content |
+| topSpace | number | `space` | Top space |
+| rightSpace | number | `space` | Right space |
+| bottomSpace | number | `space` | Bottom space |
+| leftSpace | number | `space` | Left space |
+
+#### EQN_Bar (`bar` / `topBar` / `bottomBar`)
+Array: `{ bar: [content, symbol, side] }` or `{ topBar: [content, symbol] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Content |
+| symbol | string | | Bar/bracket/brace symbol |
+| inSize | boolean | `true` | Include in size |
+| space | number | `0.03` | Space between symbol and content |
+| overhang | number | `0` | Symbol extends beyond content |
+| length | number | | Total symbol length (overrides overhang) |
+| left | number | | Left extension (top/bottom only) |
+| right | number | | Right extension (top/bottom only) |
+| top | number | | Top extension (left/right only) |
+| bottom | number | | Bottom extension (left/right only) |
+| side | `'left'` \| `'right'` \| `'top'` \| `'bottom'` | `'top'` | Symbol position |
+| minContentHeight | number | | Min content height for sizing |
+| minContentDescent | number | | Min content descent |
+| minContentAscent | number | | Min content ascent |
+| descent | number | | Force descent |
+| fullContentBounds | boolean | `false` | Use full bounds |
+| useFullBounds | boolean | `false` | Resulting phrase uses full bounds |
+
+#### EQN_Comment (`topComment` / `bottomComment`)
+Array: `{ topComment: [content, comment, symbol] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Main content |
+| comment | TypeEquationPhrase | | Comment content |
+| symbol | string | | Symbol between content and comment |
+| contentSpace | number | `0.03` | Space from content to symbol |
+| commentSpace | number | `0.03` | Space from symbol to comment |
+| contentLineSpace | number | `0.03` | Space from line symbol to content |
+| commentLineSpace | number | `0.03` | Space from line symbol to comment |
+| scale | number | `0.6` | Comment scale |
+| inSize | boolean | `true` | Include in size |
+| fullContentBounds | boolean | `false` | Use full bounds |
+| useFullBounds | boolean | `false` | Resulting phrase uses full bounds |
+
+#### EQN_Integral (`int`)
+Array: `{ int: [symbol, content, from, to] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| symbol | string | | Integral symbol |
+| content | TypeEquationPhrase | | Integrand |
+| from | TypeEquationPhrase | | Lower limit |
+| to | TypeEquationPhrase | | Upper limit |
+| inSize | boolean | `true` | Include in size |
+| space | number | `0.05` | Space between symbol and content |
+| topSpace | number | `0.1` | Symbol extends above content |
+| bottomSpace | number | `0.1` | Symbol extends below content |
+| height | number | | Force symbol height |
+| yOffset | number | `0` | Symbol y offset |
+| scale | number | `1` | Content scale |
+| fromScale | number | `0.5` | Lower limit scale |
+| toScale | number | `0.5` | Upper limit scale |
+| fromOffset | TypeParsablePoint | `[0, 0]` | Lower limit offset |
+| toOffset | TypeParsablePoint | `[0, 0]` | Upper limit offset |
+| limitsPosition | `'side'` \| `'topBottom'` \| `'topBottomCenter'` | `'side'` | Limits placement |
+| limitsAroundContent | boolean | | `false` aligns content left of limits |
+
+#### EQN_SumOf (`sumOf`)
+Array: `{ sumOf: [symbol, content, from, to] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| symbol | string | | Sum symbol |
+| content | TypeEquationPhrase | | Content |
+| from | TypeEquationPhrase | | Lower limit |
+| to | TypeEquationPhrase | | Upper limit |
+| inSize | boolean | `true` | Include in size |
+| space | number | `0.1` | Space between symbol and content |
+| topSpace | number | `0.07` | Symbol extends above content |
+| bottomSpace | number | `0.07` | Symbol extends below content |
+| height | number | | Force symbol height |
+| yOffset | number | `0` | Symbol y offset |
+| scale | number | `1` | Content scale |
+| fromScale | number | `0.5` | Lower limit scale |
+| toScale | number | `0.5` | Upper limit scale |
+| fromSpace | number | `0.04` | Space between symbol and from |
+| toSpace | number | `0.04` | Space between symbol and to |
+| fromOffset | TypeParsablePoint | `[0, 0]` | Lower limit offset |
+| toOffset | TypeParsablePoint | `[0, 0]` | Upper limit offset |
+| fullContentBounds | boolean | `false` | Use full bounds |
+
+#### EQN_ProdOf (`prodOf`)
+Same properties as EQN_SumOf. Uses `prod` symbol instead.
+
+#### EQN_Scale (`scale`)
+Array: `{ scale: [content, scale_factor] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Content |
+| scale | number | `1` | Scale factor |
+| fullContentBounds | boolean | `false` | Use full bounds |
+
+#### EQN_Color (`color`)
+Array: `{ color: [content, [r, g, b, a]] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Content |
+| color | TypeColor | | Color to apply |
+| fullContentBounds | boolean | `false` | Use full bounds |
+
+#### EQN_Container (`container`)
+Array: `{ container: [content, width] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Content |
+| width | number \| null | `null` | Fixed width |
+| inSize | boolean | `true` | Include in size |
+| descent | number \| null | `null` | Fixed descent |
+| ascent | number \| null | `null` | Fixed ascent |
+| xAlign | `'left'` \| `'center'` \| `'right'` \| number | `'center'` | Content x alignment |
+| yAlign | `'bottom'` \| `'middle'` \| `'top'` \| `'baseline'` \| number | `'baseline'` | Content y alignment |
+| fit | `'width'` \| `'height'` \| `'contain'` \| null | `null` | Auto-fit mode |
+| scale | number | `1` | Content scale |
+| fullContentBounds | boolean | `false` | Use full bounds |
+| showContent | boolean | `true` | `false` creates invisible container |
+
+#### EQN_Offset (`offset`)
+Array: `{ offset: [content, [x, y]] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Content |
+| offset | TypeParsablePoint | `[0, 0]` | Offset amount |
+| inSize | boolean | `true` | Include in size |
+| fullContentBounds | boolean | `false` | Use full bounds |
+
+#### EQN_Pad (`pad`)
+Array: `{ pad: [content, top, right, bottom, left] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Content |
+| top | number | `0` | Top padding |
+| right | number | `0` | Right padding |
+| bottom | number | `0` | Bottom padding |
+| left | number | `0` | Left padding |
+
+#### EQN_Matrix (`matrix`)
+Array: `{ matrix: [order, left, content, right] }`
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| order | [rows, cols] | `[1, content.length]` | Matrix dimensions |
+| left | string | | Left bracket symbol |
+| content | TypeEquationPhrase[] | | Matrix elements (flat array) |
+| right | string | | Right bracket symbol |
+| scale | number | `0.7` | Element scale |
+| fit | `'max'` \| `'min'` \| TypeParsablePoint | `'min'` | Cell sizing mode |
+| space | TypeParsablePoint | `[0.05, 0.05]` | Cell spacing |
+| yAlign | `'baseline'` \| `'middle'` | `'baseline'` | Row alignment |
+| brac | EQN_Bracket | | Bracket options |
+| fullContentBounds | boolean | `false` | Use full bounds |
+
+#### EQN_Lines (`lines`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | (TypeEquationPhrase \| EQN_Line)[] | | Array of lines |
+| justify | `'left'` \| `'center'` \| `'right'` \| `'element'` | `'left'` | Line alignment |
+| baselineSpace | number \| null | `null` | Space between baselines (overrides space) |
+| space | number | `0` | Space between descent and ascent |
+| yAlign | `'bottom'` \| `'middle'` \| `'top'` \| number | `0` | Vertical alignment (number = line index baseline) |
+| fullContentBounds | boolean | `false` | Use full bounds |
+
+EQN_Line (individual line in `lines`):
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Line content |
+| justify | string | | Element name for `'element'` justify mode |
+| space | number | `0` | Override spacing for this line |
+| baselineSpace | number \| null | `null` | Override baseline space for this line |
+| offset | number | `0` | X offset from justification position |
+
+#### EQN_Annotate (`annotate`)
+Object only (no array syntax).
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Main content |
+| annotation | EQN_Annotation | | Single annotation |
+| annotations | EQN_Annotation[] | | Multiple annotations |
+| glyphs | EQN_Glyphs | | Glyph annotations (encompass, top, bottom, left, right, line) |
+| inSize | boolean | `true` | Include annotations in size |
+| space | number | `0` | Extend size on all sides |
+| topSpace | number | | Top size extension |
+| bottomSpace | number | | Bottom size extension |
+| leftSpace | number | | Left size extension |
+| rightSpace | number | | Right size extension |
+| contentScale | number | `1` | Content scale |
+| fullContentBounds | boolean | `false` | Use full bounds |
+| useFullBounds | boolean | `false` | Resulting phrase uses full bounds |
+
+EQN_Annotation (annotation positioning):
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Annotation content |
+| xPosition | `'left'` \| `'center'` \| `'right'` \| number | `'center'` | Position relative to content |
+| yPosition | `'bottom'` \| `'baseline'` \| `'middle'` \| `'top'` \| number | `'top'` | Position relative to content |
+| xAlign | `'left'` \| `'center'` \| `'right'` \| number | `'center'` | Annotation alignment |
+| yAlign | `'bottom'` \| `'baseline'` \| `'middle'` \| `'top'` \| number | `'bottom'` | Annotation alignment |
+| offset | TypeParsablePoint | `[0, 0]` | Annotation offset |
+| scale | number | `1` | Annotation scale |
+| inSize | boolean | `true` | Include in phrase size |
+| fullContentBounds | boolean | `false` | Use full bounds |
+
+EQN_Glyphs (glyph positions in `annotate`):
+
+| Property | Type | Description |
+|---|---|---|
+| encompass | EQN_EncompassGlyph | Glyph surrounding content |
+| top | EQN_TopBottomGlyph | Glyph above content |
+| bottom | EQN_TopBottomGlyph | Glyph below content |
+| left | EQN_LeftRightGlyph | Glyph left of content |
+| right | EQN_LeftRightGlyph | Glyph right of content |
+| line | EQN_LineGlyph | Line glyph connecting content to annotation |
+
+### Annotate Glyph Sub-types
+
+#### EQN_EncompassGlyph (surrounds content)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| symbol | string | | Glyph symbol name |
+| annotation | EQN_Annotation | | Single annotation |
+| annotations | EQN_Annotation[] | | Multiple annotations |
+| space | number | `0` | Space glyph extends beyond content (all sides) |
+| topSpace | number | | Override top space |
+| rightSpace | number | | Override right space |
+| bottomSpace | number | | Override bottom space |
+| leftSpace | number | | Override left space |
+
+#### EQN_LeftRightGlyph (left or right of content)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| symbol | string | | Glyph symbol name |
+| annotation | EQN_Annotation | | Single annotation |
+| annotations | EQN_Annotation[] | | Multiple annotations |
+| space | number | `0` | Horizontal space between glyph and content |
+| overhang | number | `0` | Glyph extends above/below content |
+| topSpace | number | | Override top overhang |
+| bottomSpace | number | | Override bottom overhang |
+| minContentHeight | number | | Min content height for auto sizing |
+| minContentDescent | number | | Min content descent for auto sizing |
+| minContentAscent | number | | Min content ascent for auto sizing |
+| descent | number | | Force glyph descent |
+| height | number | | Force glyph height |
+| yOffset | number | `0` | Y offset of glyph |
+| annotationsOverContent | boolean | `false` | Only glyph (not annotations) separated by space |
+
+#### EQN_TopBottomGlyph (above or below content)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| symbol | string | | Glyph symbol name |
+| annotation | EQN_Annotation | | Single annotation |
+| annotations | EQN_Annotation[] | | Multiple annotations |
+| space | number | `0` | Vertical space between glyph and content |
+| overhang | number | `0` | Glyph extends left/right of content |
+| width | number | | Force glyph width |
+| leftSpace | number | | Glyph extends beyond content left |
+| rightSpace | number | | Glyph extends beyond content right |
+| xOffset | number | `0` | X offset of glyph |
+| annotationsOverContent | boolean | `false` | Only glyph (not annotations) separated by space |
+
+#### EQN_LineGlyph (line connecting content to annotation)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| symbol | string | | Line symbol name |
+| content | object | | Content endpoint alignment: `{ xAlign, yAlign, space }` |
+| annotation | object | | Annotation endpoint alignment: `{ xAlign, yAlign, space }` |
+| annotationIndex | number | | Which annotation to draw line to |
+
+### Form Object Options
+
+When defining a form as an object (instead of just a content array), additional options control alignment and animation:
+
+```js
+forms: {
+  formName: {
+    content: [...],                  // Equation phrase
+    alignment: {
+      fixTo: 'elementName',          // Fix alignment to this element
+      xAlign: 'center',             // 'left'|'center'|'right'|number
+      yAlign: 'baseline',           // 'bottom'|'baseline'|'middle'|'top'|number
+    },
+    translation: {                   // Per-element animation paths
+      elementName: {
+        style: 'curved',            // 'linear'|'curved'
+        direction: 'up',            // 'up'|'down'|'left'|'right'
+        mag: 0.5,                   // Curve magnitude
+      },
+    },
+    scale: { elementName: 1.5 },     // Per-element target scales during animation
+    fromPrev: { elementName: 'otherElement' }, // Animate from another element's position
+    fromNext: { elementName: 'otherElement' }, // Animate from another element's position (reverse)
+  },
+}
+```
+
+### Forms and Animation
+
+```js
+const eqn = figure.add({
+  make: 'equation',
+  elements: { v: { symbol: 'vinculum' }, equals: ' = ', times: ' × ' },
+  formDefaults: { alignment: { fixTo: 'equals' } },
+  forms: {
+    1: ['a', 'equals', { frac: ['b', 'v', 'c'] }],
+    2: {
+      content: ['c', 'times', 'a', 'equals', 'b'],
+      translation: { c: { style: 'curved', direction: 'down', mag: 0.5 } },
+    },
+  },
+  formSeries: { default: ['1', '2'] },
+});
+
+eqn.showForm('1');
+eqn.goToForm({ form: '2', delay: 1, duration: 1.5, animate: 'move' });
+eqn.nextForm();   // Navigate formSeries
+eqn.prevForm();
+```
+
+### Phrases (reusable sub-expressions)
+```js
+{
+  make: 'equation',
+  phrases: { Csq: { sup: ['C', '2'] } },
+  forms: { 1: ['a', '_ = ', 'Csq'] },
+}
+```
+
+---
+
+## 7. Animation System
+
+Animations use a builder chain on `element.animations`.
+
+### AnimationBuilder Methods
+
+```js
+element.animations.new()
+  .position(target_or_options)
+  .rotation(target_or_options)
+  .scale(target_or_options)
+  .transform(target_or_options)
+  .color(target_or_options)
+  .opacity(target_or_options)
+  .dissolveIn(duration?)
+  .dissolveOut(duration?)
+  .dim(options?)
+  .undim(options?)
+  .pulse(scale_or_options)
+  .scenario(options)
+  .scenarios(options)
+  .delay(duration)
+  .trigger(callback_or_options)
+  .custom(callback_or_options)
+  .inParallel([steps])
+  .whenFinished(callback)
+  .start();
+```
+
+Steps are sequential by default. Use `.inParallel([...])` for simultaneous.
+
+### OBJ_AnimationStep (base)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| duration | number | `0` | Duration in seconds |
+| delay | number | `0` | Delay before start |
+| name | string | random | Animation name |
+| onFinish | function \| null | null | Completion callback |
+| completeOnCancel | boolean \| null | null | Skip to end on cancel |
+| precision | number | `8` | Calculation precision |
+
+### OBJ_ElementAnimationStep (extends OBJ_AnimationStep)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| element | FigureElement | | Target element |
+| progression | string \| function | `'easeinout'` | `'linear'`, `'easeinout'`, `'easein'`, `'easeout'`, or custom function |
+
+### OBJ_PositionAnimationStep
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| start | Point | current | Start position |
+| target | Point | | Target position |
+| delta | Point | | Delta (if no target) |
+| velocity | Point \| null | null | Velocity (overrides duration) |
+| path | OBJ_TranslationPath | `{ style: 'linear' }` | Path style |
+| maxDuration | number \| null | null | Duration cap |
+
+### OBJ_RotationAnimationStep
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| start | number | current | Start angle |
+| target | number | | Target angle |
+| delta | number | | Delta (if no target) |
+| velocity | number \| null | null | Velocity (rad/s) |
+| direction | `0` \| `1` \| `-1` \| `2` | `0` | 0=quickest, 1=CCW, -1=CW, 2=avoid 0 |
+
+### OBJ_ScaleAnimationStep
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| start | Point \| number | current | Start scale |
+| target | Point \| number | | Target scale |
+| delta | Point \| number | | Delta (if no target) |
+
+### OBJ_TransformAnimationStep
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| start | Transform | current | Start transform |
+| target | Transform | | Target transform |
+| path | OBJ_TranslationPath | `{ style: 'linear' }` | Translation path |
+| rotDirection | `0` \| `1` \| `-1` \| `2` | `0` | Rotation direction |
+| clipRotationTo | `'0to360'` \| `'-180to180'` \| null | null | Clip rotation |
+
+### OBJ_ColorAnimationStep
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| start | TypeColor | current | Start color |
+| target | TypeColor \| `'dim'` \| `'undim'` | | Target color |
+| dissolve | `'in'` \| `'out'` \| null | null | Dissolve mode |
+
+### OBJ_OpacityAnimationStep
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| start | number | current | Start opacity |
+| target | number | | Target opacity |
+| dissolve | `'in'` \| `'out'` \| null | null | Dissolve mode |
+
+### OBJ_CustomAnimationStep
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| callback | function | | Called each frame with percent (0-1) |
+| duration | number \| null | | null = infinite |
+| progression | string \| function | `'linear'` | Progression function |
+
+### OBJ_TriggerAnimationStep
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| callback | function | | Function to execute |
+| payload | any | null | Argument to callback |
+
+### OBJ_ScenarioAnimationStep
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| start | string \| OBJ_Scenario | current | Start scenario |
+| target | string \| OBJ_Scenario | | Target scenario |
+| velocity | OBJ_ScenarioVelocity | null | Velocity (overrides duration) |
+| path | OBJ_TranslationPath | `{ style: 'linear' }` | Translation path |
+| rotDirection | `0` \| `1` \| `-1` \| `2` | `0` | Rotation direction |
+
+### OBJ_PulseAnimationStep
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| scale | number | `1.5` | Max pulse scale |
+| frequency | number | `0` | Hz (0 = one cycle) |
+| rotation | number | | Max rotation |
+| centerOn | FigureElement \| Point \| null | element center | Pulse center |
+| xAlign | `'left'` \| `'center'` \| `'right'` \| `'origin'` | `'center'` | X alignment |
+| yAlign | `'bottom'` \| `'middle'` \| `'top'` \| `'origin'` | `'center'` | Y alignment |
+| num | number | `1` | Draw copies |
+
+### OBJ_TranslationPath
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| style | `'linear'` \| `'curve'` | `'linear'` | Path style |
+| magnitude | number | | Curve magnitude |
+| offset | number | | Point on line (0.5=mid) |
+| angle | number | `π/2` | Control point angle |
+| direction | `'positive'` \| `'negative'` \| `'up'` \| `'down'` \| `'left'` \| `'right'` | | Curve side |
+| controlPoint | Point \| null | null | Direct bezier control point |
+
+```js
+// Animation examples
+const sq = figure.add({ make: 'rectangle', width: 0.4, height: 0.4, color: [1, 0, 0, 1] });
+
+// Sequential chain
+sq.animations.new()
+  .position({ target: [0.5, 0], duration: 1 })
+  .rotation({ target: Math.PI / 4, duration: 0.5 })
+  .dissolveOut(0.5)
+  .start();
+
+// Parallel
+sq.animations.new()
+  .inParallel([
+    sq.animations.position({ target: [0.5, 0], duration: 1 }),
+    sq.animations.rotation({ target: Math.PI, duration: 1 }),
+  ])
+  .start();
+
+// Curved path
+sq.animations.new()
+  .position({ target: [0.5, 0.5], duration: 2, path: { style: 'curve', direction: 'up', magnitude: 0.5 } })
+  .start();
+```
+
+---
+
+## 8. Interactivity
+
+### OBJ_Touch
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| enable | boolean | `true` | Enable touch |
+| onClick | function \| string | | Touch callback |
+
+### OBJ_ElementMove
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| type | `'translation'` \| `'rotation'` \| `'position'` \| `'scale'` \| `'scaleX'` \| `'scaleY'` \| `'scaleZ'` | `'translation'` | Move type |
+| bounds | TypeParsableBounds | | Movement bounds rectangle |
+| plane | Plane | | Movement plane (3D) |
+| maxVelocity | number \| TypeParsablePoint | `5` | Maximum velocity |
+| freely | OBJ_ElementMoveFreely \| false | | Free movement with deceleration (false to disable) |
+| element | FigureElement \| string \| null | | Element to move (default: self) |
+
+### OBJ_ElementMoveFreely
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| deceleration | number | | Deceleration (local units/s²) |
+| bounceLoss | number | | Velocity loss on bounce (0.5 = 50% loss) |
+| zeroVelocityThreshold | number | | Threshold to stop movement |
+| callback | function \| string \| null | | Called each frame of free movement |
+
+### OBJ_Pulse
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| scale | number | `1.5` | Max pulse scale |
+| duration | number | `1` | Duration in seconds |
+| frequency | number | `0` | Hz (0 = one cycle) |
+| rotation | number | | Max rotation angle |
+| xAlign | `'left'` \| `'center'` \| `'right'` \| `'origin'` | `'center'` | X alignment |
+| yAlign | `'bottom'` \| `'middle'` \| `'top'` \| `'origin'` | `'middle'` | Y alignment |
+| space | `'figure'` \| `'gl'` \| `'local'` \| `'draw'` | `'figure'` | Coordinate space |
+| num | number | `1` | Number of copies to draw |
+| when | TypeWhen | `'syncNow'` | When to start pulse |
+| done | function \| string \| null | `null` | Completion callback |
+| progression | string \| function | `'sinusoid'` | Progress function |
+
+### Making elements interactive
+
+```js
+// Movable with bounds
+figure.add({
+  make: 'polygon', sides: 100, radius: 0.2,
+  move: {
+    type: 'translation',
+    bounds: { left: -0.8, bottom: -0.8, right: 0.8, top: 0.8 },
+    freely: { deceleration: 0.5 },
+  },
+});
+
+// Rotatable
+figure.add({
+  make: 'polygon', sides: 6, radius: 0.3,
+  move: { type: 'rotation' },
+});
+
+// Touchable with callback
+element.setTouchable();
+element.onClick = () => { /* handle */ };
+
+// Or via mods
+figure.add({
+  make: 'polygon', radius: 0.3, sides: 4,
+  mods: { isTouchable: true, touchBorder: 0.1 },
+});
+```
+
+### Notifications
+
+```js
+element.notifications.add('setTransform', () => {
+  const p = element.getPosition().round(1);
+  text.setText({ text: `(${p.x.toFixed(1)}, ${p.y.toFixed(1)})` });
+});
+element.notifications.add('onClick', () => { /* ... */ });
+// Common: 'setTransform', 'onClick', 'animationsFinished', 'setFigure'
+```
+
+---
+
+## 9. Scenarios
+
+Named presets for position, rotation, scale, and color.
+
+### OBJ_Scenario
+
+| Property | Type | Description |
+|---|---|---|
+| position | TypeParsablePoint | Position |
+| rotation | number | Rotation |
+| scale | TypeParsablePoint \| number | Scale |
+| color | TypeColor | Color |
+| transform | TypeParsableTransform | Full transform |
+| isShown | boolean | Visibility |
+
+```js
+figure.add({
+  name: 'shape', make: 'polygon', sides: 4, radius: 0.3,
+  mods: {
+    scenarios: {
+      center: { position: [0, 0], scale: 1, color: [1, 0, 0, 1] },
+      right: { position: [1, 0], scale: 2, color: [0, 0, 1, 1] },
+    },
+  },
+});
+
+// Set instantly
+figure.elements._shape.setScenario('center');
+
+// Animate to scenario
+figure.elements._shape.animations.new()
+  .scenario({ target: 'right', duration: 1 })
+  .start();
+
+// Set all children
+figure.elements.setScenarios('center');
+```
+
+---
+
+## 10. SlideNavigator
+
+Manages sequential presentation states with animated transitions.
+
+### COL_SlideNavigator (`make: 'collections.slideNavigator'`)
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| collection | Figure \| FigureElementCollection | parent | Collection to manage |
+| slides | OBJ_SlideNavigatorSlide[] | | Slide definitions |
+| prevButton | object \| null | | Previous button |
+| nextButton | object \| null | | Next button |
+| text | OBJ_FormattedText \| null | | Text element |
+| equation | Equation \| string \| string[] | | Equation(s) |
+| equationDefaults | object | | Default equation animation |
+| disableOpacity | number | `0.7` | Disabled button opacity |
+
+### OBJ_SlideNavigatorSlide
+
+| Property | Type | Description |
+|---|---|---|
+| show | TypeElementPath | Elements to show |
+| showCommon | TypeElementPath | Common elements to show (persists to subsequent slides) |
+| hide | TypeElementPath | Elements to hide |
+| hideCommon | TypeElementPath | Common elements to hide |
+| enterStateCommon | function | Common enter state callback |
+| enterState | function | Enter state callback |
+| transition | function \| object \| array | Transition animation (forward only) |
+| steadyStateCommon | function | Common steady state |
+| steadyState | function | Steady state callback |
+| leaveStateCommon | function | Common leave state |
+| leaveState | function | Leave state callback |
+| form | string \| string[] | Equation form(s) |
+| fromForm | string \| string[] | Previous form before transition |
+| text | OBJ_FormattedText | Text content |
+| scenarioCommon | string \| string[] | Common scenario |
+| scenario | string \| string[] | Scenario |
+| animate | `'move'` \| `'dissolve'` \| `'moveFrom'` \| `'pulse'` \| `'dissolveInThenMove'` | Form animation type |
+| clear | boolean | Don't inherit common properties |
+| modifiers | OBJ_TextModifiersDefinition | Text modifiers |
+| modifiersCommon | OBJ_TextModifiersDefinition | Common text modifiers |
+| time | string \| number | Recorder: absolute transition time |
+| delta | number | Recorder: time delta from last slide |
+
+### Slide Lifecycle
+
+`enterState` → `transition(done)` → `steadyState`. Each slide should fully define its state.
+
+The `transition` callback receives `(done, index, from)`. The `done` callback **must** be called to progress to steady state.
+
+### SlideNavigator Methods
+
+```js
+const nav = new Fig.SlideNavigator({ collection: figure.elements, slides });
+// or
+const nav = figure.addSlideNavigator();
+nav.loadSlides(slides);
+
+nav.goToSlide(0);
+nav.nextSlide();
+nav.prevSlide();
+nav.currentSlideIndex;  // Current index
+```
+
+### Verbose Syntax
+```js
+const slides = [
+  {
+    show: [eqn, description],
+    steadyState: () => { eqn.showForm('0'); },
+  },
+  {
+    show: [eqn, description],
+    enterState: () => { eqn.showForm('0'); },
+    transition: (done) => {
+      eqn.animations.new()
+        .goToForm({ target: '1', animate: 'move' })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => { eqn.showForm('1'); },
+  },
+];
+```
+
+### Succinct Equation Syntax
+```js
+const nav = new Fig.SlideNavigator({
+  collection: figure.elements, equation: eqn, text: description,
+  slides: [
+    { form: '0', text: 'Start here' },
+    { text: 'Next step' },
+    { form: '1' },
+  ],
+});
+```
+
+### Shortcut Animation Syntax (OBJ_AnimationDefinition)
+
+```js
+nav.loadSlides([
+  {
+    showCommon: 'sq1',
+    enterStateCommon: () => { sq1.setPosition([-0.5, 0.5]); },
+  },
+  { transition: { in: 'sq2' } },                                    // dissolve in
+  { transition: { position: 'sq2', target: [0.3, 0.5], duration: 1 } },  // move
+  {
+    transition: [                                                    // sequence
+      { position: 'sq1', target: [-0.3, 0.5], duration: 1 },
+      { rotation: 'sq1', target: Math.PI / 4, duration: 1 },
+    ],
+  },
+  {
+    transition: [                                                    // parallel (nested)
+      [
+        { rotation: 'sq1', target: 0, duration: 1 },
+        { rotation: 'sq2', target: 0, duration: 1 },
+      ],
+      { out: ['sq1', 'sq2'] },                                      // dissolve out
+    ],
+  },
+]);
+```
+
+Shortcut animation keys: `in`, `out`, `position`, `rotation`, `scale`, `scenario`, `scenarios`, `dim`, `undim`, `pulse`, `trigger`, `delay`, `goToForm`.
+
+---
+
+## 11. FigureElement Methods
+
+### Transform Methods
+```js
+element.setPosition([x, y])           // or setPosition(x, y)
+element.getPosition()                 // returns Point
+element.getPosition('figure')         // in figure space
+element.setRotation(angle)
+element.getRotation()                 // returns number
+element.setScale(x, y)               // or setScale(uniformScale)
+element.getScale()                    // returns Point
+element.setTransform(transform)
+element.getTransform()                // returns Transform
+```
+
+### Visibility Methods
+```js
+element.show()
+element.hide()
+element.toggleShow()
+element.showAll()                     // Recursive
+element.hideAll()                     // Recursive
+// Collections:
+collection.show(elementPath)          // Show specific children
+collection.hide(elementPath)
+collection.showOnly(elementPath)      // Hide all, show specified
+```
+
+### Color Methods
+```js
+element.setColor([r, g, b, a])
+element.setOpacity(0.5)              // 0-1
+element.dim()                        // Set dimColor
+element.undim()                      // Set defaultColor
+element.setDimColor([r, g, b, a])
+// Collections:
+collection.dim(elementPath)          // Dim specific children
+collection.undim(elementPath)
+collection.highlight(elementPath)    // Undim specified, dim rest
+```
+
+### Scenario Methods
+```js
+element.setScenario('name')
+element.setScenario({ position: [0, 0], rotation: 0, color: [1, 0, 0, 1] })
+element.saveScenario('name')
+element.getCurrentScenario()
+// Collections:
+collection.setScenarios('name')      // All children
+collection.saveScenarios('name', ['position', 'rotation'])
+collection.getAllElementsWithScenario('name')
+```
+
+### Touch/Move Methods
+```js
+element.setTouchable()               // or setTouchable(false)
+element.setMovable()
+element.setMove({ type: 'rotation', bounds: ... })
+element.isMoving()
+element.startMovingFreely()
+element.stopMovingFreely()
+element.click()                      // Programmatic click
+```
+
+### Animation Methods
+```js
+element.pulse({ scale: 1.5, duration: 1 })
+element.animations.new()...start()
+element.isAnimating()
+element.stopAnimating()              // or 'freeze'|'cancel'|'complete'
+element.stopAnimating('complete', 'animName')  // Stop specific animation
+element.getRemainingAnimationTime()
+element.getRemainingAnimationTime('animName')
+```
+
+Stop options: `'freeze'` (stop at current state), `'cancel'` (cancel), `'complete'` (jump to end), `'animateToComplete'` (animate to end), `'dissolveToComplete'` (dissolve to end).
+
+### Text Methods
+```js
+textElement.setText('new text')
+textElement.setText({ text: 'new', font: { size: 0.3 }, xAlign: 'center' })
+```
+
+### Collection Element Access
+```js
+collection.getElement('child')       // By name
+collection.getElement('a.b.c')       // Dot-path access
+collection._childName                // Direct property access
+collection.getChildren()             // All direct children
+collection.getAllElements()           // All recursive
+collection.getAllPrimitives()         // All recursive primitives
+collection.add('name', element)      // Add child
+collection.remove('name')            // Remove child
+collection.toFront('name')           // Change draw order
+collection.toBack('name')
+```
+
+### Boundary Methods
+```js
+element.getBoundingRect('figure')            // In figure space
+element.getRelativeBoundingRect()
+element.getCenterFigurePosition()
+element.getBorder('figure', 'touchBorder')
+```
+
+### Coordinate Space Transform
+```js
+element.transformPoint([0, 0], 'local', 'figure')
+element.pointFromSpaceToSpace(point, 'draw', 'figure')
+// Spaces: 'draw', 'local', 'figure', 'gl', 'pixel'
+element.spaceTransformMatrix('local', 'figure')
+element.pixelToPlane(pixel, 'figure', Plane.xy())
+element.glToPlane(glPoint, 'figure')
+```
+
+### Batch Transform/Color Methods (Collections)
+```js
+collection.getElementTransforms()
+collection.setElementTransforms(transformsObj)
+collection.getElementColors()
+collection.setElementColors(colorsObj)
+collection.animateToTransforms(transformsObj, duration)
+collection.animateToColors(colorsObj, duration)
+```
+
+---
+
+## 12. Geometry Utilities
+
+### Point Class
+```js
+const p = new Fig.Point(1, 2);       // or new Fig.Point(1, 2, 3) for 3D
+p.x; p.y; p.z;
+p.add(other)                         // Returns new Point
+p.sub(other)
+p.scale(scalar)
+p.length()                           // Distance from origin
+p.distance(otherPoint)
+p.normalize()                        // Unit vector
+p.rotate(angle, center?)
+p.round(precision)
+p.isEqualTo(other, precision?)
+p.dotProduct(other)
+p.crossProduct(other)
+p.toPolar()                          // { mag, angle }
+p.transformBy(matrix)
+```
+
+### Transform Class
+```js
+const t = new Fig.Transform()
+  .translate(x, y)
+  .rotate(angle)
+  .scale(sx, sy);
+
+t.t()                                // Get translation as Point
+t.r()                                // Get rotation angle
+t.s()                                // Get scale as Point
+t.matrix()                           // Get 4x4 matrix
+t.updateTranslation(point)
+t.updateRotation(angle)
+t.updateScale(scale)
+t.isEqualTo(other, precision?)
+t._dup()                             // Duplicate
+```
+
+### Line Class
+```js
+const l = new Fig.Line([0, 0], [1, 1]);           // Finite segment
+const l2 = new Fig.Line([0, 0], [1, 1], 0);       // Infinite line
+l.length()
+l.angle()
+l.midPoint()
+l.pointAtPercent(0.5)
+l.hasPointOn(point)
+l.distanceToPoint(point)
+l.intersectsWith(otherLine)          // { intersect, collinear, onLines }
+l.isParallelTo(otherLine)
+l.offset('positive', distance)
+l.reverse()
+```
+
+### Plane Class
+```js
+const pl = new Fig.Plane([0, 0, 0], [0, 0, 1]);   // point + normal
+Plane.xy(); Plane.xz(); Plane.yz();
+pl.hasPointOn(point)
+pl.distanceToPoint(point)
+pl.pointProjection(point)
+pl.intersectsWith(otherPlane)        // Returns Line or null
+pl.lineIntersect(line)               // Returns Point or null
+```
+
+### Rect Class
+```js
+const r = new Fig.Rect(left, bottom, width, height);
+r.left; r.bottom; r.right; r.top; r.width; r.height;
+r.center()
+r.isPointInside(point)
+```
+
+### Utility Functions
+```js
+Fig.range(start, stop, step)         // [start, start+step, ..., stop]
+Fig.round(value, precision)          // Round to N decimal places
+Fig.rand(min, max)                   // Random number
+Fig.randInt(min, max)                // Random integer
+Fig.polarToRect(magnitude, angle)    // Returns Point
+Fig.rectToPolar(x, y)               // Returns { mag, angle }
+Fig.deg(radians)                     // Radians to degrees
+Fig.normAngle(angle)                 // Normalize to 0-2π
+Fig.clipAngle(angle, range)          // Clip to range ('0to360', '-180to180')
+Fig.minAngleDiff(a1, a2)            // Minimum absolute angle difference
+Fig.threePointAngle(p2, p1, p3)     // Angle at p1
+
+// 3D geometry functions
+Fig.surfaceGrid({ x, y, z })         // Generate surface point grid
+// x: [min, max, step], y: [min, max, step], z: (x, y) => number
+
+// Conversion
+Fig.toNumbers(points)                // Point[] → flat number[]
+Fig.toPoints(numbers)                // flat number[] → Point[]
+Fig.numbersToPoints(numbers, dim?)
+Fig.pointsToNumbers(points, dim?)
+
+// 3D shape vertex generators (return [points, normals])
+Fig.cube({ side })
+Fig.sphere({ radius, sides })
+Fig.cylinder({ radius, length, sides })
+Fig.cone({ radius, length, sides })
+Fig.revolve({ profile, sides })
+Fig.polygon({ sides, radius, center, close, direction })
+```
+
+---
+
+## 13. OBJ_Scene
+
+### OBJ_Scene
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| style | `'orthographic'` \| `'perspective'` | | Projection style (set for 3D) |
+| left | number | `-1` | 2D: left boundary |
+| right | number | `1` | 2D: right boundary |
+| bottom | number | `-1` | 2D: bottom boundary |
+| top | number | `1` | 2D: top boundary |
+| near | number | `0.1` | Near clip plane (3D) |
+| far | number | `100` | Far clip plane (3D) |
+| aspectRatio | number | | Aspect ratio override |
+| fieldOfView | number | | Perspective field of view (radians) |
+| light | OBJ_Light | | Lighting configuration |
+| camera | OBJ_Camera | | Camera configuration |
+| zoom | number | | Zoom level |
+| pan | TypeParsablePoint | | Pan offset |
+
+### OBJ_Camera
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| position | TypeParsablePoint | `[0, 0, 2]` | Camera position |
+| lookAt | TypeParsablePoint | `[0, 0, 0]` | Look-at target |
+| up | TypeParsablePoint | `[0, 1, 0]` | Up vector |
+
+### OBJ_Light
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| directional | TypeParsablePoint | `[0.7, 0.5, 1]` | Directional light vector |
+| ambient | number | `0.4` | Ambient light level (0-1) |
+| point | TypeParsablePoint | | Point light position |
+
+### 2D Scene
+```js
+// Simple: scene as [x, y, width, height]
+new Fig.Figure({ scene: [-2, -2, 4, 4] });
+```
+
+### 3D Scene
+```js
+new Fig.Figure({
+  scene: {
+    style: 'orthographic',          // or 'perspective'
+    camera: { position: [2, 1, 2], lookAt: [0, 0, 0], up: [0, 1, 0] },
+    light: { directional: [0.7, 0.5, 1], ambient: 0.4 },
+    near: 0.1,
+    far: 10,
+  },
+});
+```
+
+### Scene Methods
+```js
+figure.scene.setCamera({ position: [1, 1, 2] });
+figure.scene.setLight({ directional: [0.7, 0.5, 1] });
+figure.scene.setProjection({ style: 'orthographic' });
+figure.scene.setPanZoom(pan, zoom);
+figure.scene.figureToGL(point);
+figure.scene.glToFigure(point);
+```
+
+---
+
+## 14. Recorder
+
+FigureOne supports recording and playback of figure interactions.
+
+```js
+const recorder = figure.recorder;
+
+// Record
+recorder.start();
+// ... user interactions ...
+recorder.stop();
+recorder.save('recording.json');
+
+// Playback
+recorder.load('recording.json');
+recorder.play();
+recorder.pause();
+recorder.seek(timeInSeconds);
+```
+
+The recorder captures all element state changes (transforms, colors, visibility) and user interactions. Playback recreates the exact sequence. SlideNavigator slides can include `time` and `delta` properties for automatic recorder timing.
+
+---
+
+## 15. Common Patterns and Tips
+
+### Element Naming and Access
+```js
+// Named elements are accessible as underscore-prefixed properties
+figure.add({ make: 'polygon', name: 'myShape', sides: 6 });
+figure.elements._myShape;
+
+// Or via getElement with dot-path
+figure.getElement('myShape');
+
+// Nested collections
+figure.add({
+  make: 'collection',
+  name: 'group',
+  elements: [
+    { make: 'polygon', name: 'a', sides: 4 },
+    { make: 'polygon', name: 'b', sides: 6 },
+  ],
+});
+figure.getElement('group.a');
+figure.elements._group._a;
+```
+
+### mods Property
+All elements support a `mods` property for setting any FigureElement property after construction:
+
+```js
+figure.add({
+  make: 'polygon', sides: 6, radius: 0.3,
+  mods: {
+    isTouchable: true,
+    touchBorder: 0.1,
+    dimColor: [0.7, 0.7, 0.7, 1],
+    scenarios: {
+      default: { position: [0, 0] },
+      moved: { position: [0.5, 0.5] },
+    },
+  },
+});
+```
+
+### Equation Element Naming Conventions
+- `'elementName'` — text element displaying `elementName`
+- `'_ text'` — text element displaying ` text` (underscore prefix stripped)
+- `'a_1'`, `'a_2'` — copies of `a` (number suffix is index)
+- `{ symbol: 'type' }` — symbol element
+- Undeclared strings in forms are auto-created as text elements
+
+### Inline Symbol Shortcuts
+Symbols can be created inline in forms without pre-declaring in elements:
+```js
+// One-use inline symbol
+{ frac: ['a', 'vinculum', 'b'] }      // Auto-creates vinculum symbol
+
+// Named inline with customization
+{ frac: ['a', { vinculum: { lineWidth: 0.004 } }, 'b'] }
+
+// Multiple uses need unique names (suffix with _name)
+{ frac: ['a', 'v1_vinculum', { frac: ['c', 'v2_vinculum', 'd'] }] }
+```
+
+### Coordinate Spaces
+- `'draw'` — Drawing canvas coordinates (element's own draw space)
+- `'local'` — Element's local space (after element's transform)
+- `'figure'` — Figure root coordinates (what you see on screen)
+- `'gl'` — WebGL clip coordinates (-1 to 1)
+- `'pixel'` — Screen pixel coordinates
+
+### TypeParsableBounds
+Movement bounds can be defined as:
+```js
+// Rectangle bounds
+{ left: -1, bottom: -1, right: 1, top: 1 }
+
+// Or as a Rect
+new Fig.Rect(-1, -1, 2, 2)
+
+// Rotation bounds
+{ min: 0, max: Math.PI }
+```
+
+### FigureElement Notifications
+Common notification events:
+- `'setTransform'` — element transform changed
+- `'onClick'` — element clicked/touched
+- `'animationsFinished'` — all animations completed
+- `'setFigure'` — element added to figure
+- `'beforeDraw'` — before element is drawn
+- `'afterDraw'` — after element is drawn
+- `'setColor'` — color changed
+
+```js
+element.notifications.add('setTransform', (transform) => {
+  console.log('New position:', transform.t());
+});
+element.notifications.remove('setTransform');
+```
+
+### Animation Progression Functions
+Built-in progression functions:
+- `'linear'` — constant speed
+- `'easeinout'` — slow start and end (default for most steps)
+- `'easein'` — slow start
+- `'easeout'` — slow end
+- Custom: `(percent) => mappedPercent` (0-1 input, 0-1 output)
+
+---
+
+## 16. Complete Examples
+
+### Interactive Geometry Figure
+
+```js
+const figure = new Fig.Figure({ scene: [-2, -1.5, 4, 3] });
+
+// Triangle with labeled sides and angles
+const tri = figure.add({
+  make: 'collections.polyline',
+  points: [[-1, -0.5], [1, -0.5], [0, 0.8]],
+  close: true, width: 0.02,
+  color: [0, 0.5, 1, 1],
+  side: {
+    label: { text: null, precision: 1 },
+    offset: 0.15,
+  },
+  angle: {
+    curve: { radius: 0.25, width: 0.01 },
+    label: { text: null, precision: 0 },
+  },
+  pad: {
+    color: [0, 0.5, 1, 0.3],
+    radius: 0.15,
+    isMovable: true,
+    boundary: [-1.8, -1.3, 3.6, 2.6],
+  },
+});
+```
+
+### Equation with Animated Form Transitions
+
+```js
+const eqn = figure.add({
+  make: 'equation',
+  elements: {
+    v: { symbol: 'vinculum' },
+    lb: { symbol: 'bracket', side: 'left' },
+    rb: { symbol: 'bracket', side: 'right' },
+    r: { symbol: 'radical' },
+    equals: ' = ',
+    plus: ' + ',
+    minus: ' \u2212 ',
+    _4: '4',
+  },
+  phrases: {
+    bPlusMinus: ['b', 'plus', { root: ['r', [{ sup: ['b_1', '2_1'] }, 'minus', '_4', 'a', 'c']] }],
+  },
+  formDefaults: { alignment: { fixTo: 'equals' } },
+  forms: {
+    quadratic: ['a', { sup: ['x_1', '2'] }, 'plus', 'b_2', 'x_2', 'plus', 'c_1', 'equals', '0'],
+    solution: ['x', 'equals', { frac: [['minus', 'b', 'plus', { root: ['r', [{ sup: ['b_1', '2_1'] }, 'minus', '_4', 'a', 'c']] }], 'v', ['2', 'a_1']] }],
+  },
+  formSeries: { default: ['quadratic', 'solution'] },
+});
+
+// Animate between forms
+eqn.showForm('quadratic');
+eqn.animations.new()
+  .delay(2)
+  .goToForm({ target: 'solution', animate: 'move', duration: 2 })
+  .start();
+```
+
+### SlideNavigator with Equations and Text
+
+```js
+const figure = new Fig.Figure();
+
+const description = figure.add({
+  make: 'ftext',
+  font: { size: 0.08, family: 'Arial' },
+  xAlign: 'center',
+  position: [0, -0.6],
+});
+
+const eqn = figure.add({
+  make: 'equation',
+  elements: { v: { symbol: 'vinculum' }, equals: ' = ' },
+  forms: {
+    0: ['a', 'equals', { frac: ['b', 'v', 'c'] }],
+    1: ['a', 'equals', { frac: [['b', '_ + ', 'd'], 'v', 'c'] }],
+    2: ['a', 'equals', { frac: [['b', '_ + ', 'd'], 'v', ['c', '_ + ', 'e']] }],
+  },
+  formSeries: { default: ['0', '1', '2'] },
+});
+
+const nav = figure.addSlideNavigator({
+  equation: eqn,
+  text: description,
+  slides: [
+    { form: '0', text: 'Start with a simple fraction' },
+    { form: '1', text: 'Add |d| to the numerator', modifiers: { d: { font: { color: [1, 0, 0, 1] } } } },
+    { form: '2', text: 'Add |e| to the denominator', modifiers: { e: { font: { color: [0, 0, 1, 1] } } } },
+  ],
+});
+nav.goToSlide(0);
+```
+
+### 3D Scene with Multiple Shapes
+
+```js
+const figure = new Fig.Figure({
+  scene: {
+    style: 'orthographic',
+    camera: { position: [2, 1, 2], lookAt: [0, 0, 0] },
+    light: { directional: [0.7, 0.5, 1], ambient: 0.4 },
+  },
+});
+
+figure.add([
+  { make: 'cube', side: 0.3, position: [-0.5, 0, 0], color: [1, 0, 0, 1] },
+  { make: 'sphere', radius: 0.2, sides: 20, normals: 'curve', position: [0, 0, 0], color: [0, 0.7, 0, 1] },
+  { make: 'cylinder', radius: 0.15, length: 0.4, sides: 20, normals: 'curve', position: [0.5, 0, 0], color: [0, 0.3, 1, 1] },
+  { make: 'collections.axis3', length: 0.8, width: 0.01 },
+  { make: 'cameraControl' },
+]);
+```
+
+### Plot with Zoom and Pan
+
+```js
+const x = Fig.range(0, 4 * Math.PI, 0.05);
+const y = x.map(v => Math.sin(v));
+
+figure.add({
+  make: 'collections.plot',
+  width: 1.6, height: 1, position: [-0.8, -0.5],
+  x: { start: 0, stop: 4 * Math.PI, title: 'x', step: Math.PI, labels: { format: v => `${(v / Math.PI).toFixed(0)}π` } },
+  y: { start: -1.2, stop: 1.2, title: 'sin(x)', step: 0.5 },
+  trace: { points: x.map((v, i) => [v, y[i]]), color: [1, 0, 0, 1] },
+  zoom: 'xy',
+  pan: 'xy',
+});
+```
