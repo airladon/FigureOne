@@ -149,10 +149,14 @@ echo "${bold}${cyan}==================== Packaging =====================${reset}
 docker_run "TypeScript Declarations" npm run build:types
 docker_run "Prod Packaging" npm run webpack -- --env mode=prod --env clean=0
 echo "${bold}${cyan}" moving package.json "${reset}"
-cat package.json | \
-  sed '/devDependencies/,/}/d' | \
-  sed 's/readme",/readme"/' | \
-  sed '/^  "scripts/,/}/d' > package/package.json
+python3 -c "
+import json
+with open('package.json') as f:
+    pkg = json.load(f)
+for key in ['scripts', 'devDependencies', 'devDependenciesComments', 'overrides']:
+    pkg.pop(key, None)
+print(json.dumps(pkg, indent=2))
+" > package/package.json
 cp llms.txt package/llms.txt
 cp llms-full.txt package/llms-full.txt
 check_status "Packaging"
