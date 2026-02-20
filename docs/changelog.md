@@ -1,5 +1,9 @@
 # Releases
 
+## 1.0.3
+* Fix crash when adding or drawing elements while WebGL context is lost
+* Publish `contextLost` and `contextRestored` notifications on Figure for context lifecycle events
+
 ## 1.0.2
 * Improve agent support
 

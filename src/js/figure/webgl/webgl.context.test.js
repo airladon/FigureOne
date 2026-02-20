@@ -66,7 +66,7 @@ function createMockGL() {
     getProgramInfoLog: jest.fn(() => ''),
     createProgram: jest.fn(() => ({ id: 'program' })),
     deleteProgram: jest.fn(),
-    createShader: jest.fn((type) => ({ type })),
+    createShader: jest.fn(type => ({ type })),
     shaderSource: jest.fn(),
     compileShader: jest.fn(),
     getShaderParameter: jest.fn(() => true),
@@ -210,7 +210,7 @@ describe('WebGL context loss handling', () => {
       expect(lostIndex).toBe(-1);
 
       // Context restored - re-init clears programs, createShader works again
-      gl.createShader.mockImplementation((type) => ({ type }));
+      gl.createShader.mockImplementation(type => ({ type }));
       webgl.init(gl);
       const index2 = webgl.getProgram('simple', 'simple');
       expect(index2).toBeGreaterThanOrEqual(0);

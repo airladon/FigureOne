@@ -82,7 +82,9 @@ describe('Figure context loss', () => {
     // Restore context: getProgram returns valid index, useProgram returns locations
     figure.webglLow.getProgram = () => 0;
     figure.webglLow.useProgram = () => ({
+      // eslint-disable-next-line camelcase
       a_vertex: '',
+      // eslint-disable-next-line camelcase
       u_worldViewProjectionMatrix: '',
     });
 
