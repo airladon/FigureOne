@@ -132,7 +132,7 @@ The summary should be 1-3 bullet points describing what changed, written from a 
 
 ### Phase 8: Deploy and release
 
-1. Run the deploy build: `./build deploy skip-tests`
+1. Run the deploy build: `./build.sh deploy skip-tests`
 2. Create a GitHub release for the new version:
    ```
    gh release create vX.Y.Z --title "vX.Y.Z" --notes "<changelog entry from Phase 6>"
