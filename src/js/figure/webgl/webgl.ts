@@ -106,7 +106,10 @@ function createProgram(
 
 
 function createShader(gl: WebGLRenderingContext, type: number, source: string) {
-  const shader = gl.createShader(type)!;
+  const shader = gl.createShader(type);
+  if (!shader) {
+    return null;
+  }
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
   const success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
@@ -481,6 +484,10 @@ class WebGLInstance {
       (shaders as any).fragmentSource,
     );
 
+    if (!newProgram) {
+      return -1;
+    }
+
     const programDetails = {
       vertexShader:{
         src: (shaders as any).vertexSource,
@@ -503,6 +510,9 @@ class WebGLInstance {
 
   useProgram(programIndex: number) {
     const program = this.programs[programIndex];
+    if (!program) {
+      return null;
+    }
     if (this.lastUsedProgram !== program.program) {
       this.gl.useProgram(program.program);
       this.lastUsedProgram = program.program;
