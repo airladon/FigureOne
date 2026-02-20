@@ -122,16 +122,22 @@ The summary should be 1-3 bullet points describing what changed, written from a 
 ### Phase 7: Commit, push, and merge
 
 1. Stage the changes: `git add package.json docs/changelog.md`
-2. Commit with message:
-   ```
-   Release vX.Y.Z
-
-   Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
-   ```
+2. Commit with message: `Release vX.Y.Z`
 3. Push: `git push origin <branch>`
 4. Merge the PR: `gh pr merge <number> --merge --delete-branch`
-5. Check out main and pull: `git checkout main && git pull origin main`
+5. Check out main and pull: `git checkout main && git pull origin main && git fetch --prune`
 6. If changes were stashed in Phase 2, notify the user to `git stash pop` on their original branch.
+
+---
+
+### Phase 8: Deploy and release
+
+1. Run the deploy build: `./build deploy skip-tests`
+2. Create a GitHub release for the new version:
+   ```
+   gh release create vX.Y.Z --title "vX.Y.Z" --notes "<changelog entry from Phase 6>"
+   ```
+   Use the same bullet points written for `docs/changelog.md` as the release notes.
 
 ---
 
