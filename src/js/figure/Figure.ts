@@ -2202,6 +2202,9 @@ class Figure {
       }
     }
     e.click(glPoint);
+    if (e.figure == null) {
+      return;
+    }
     this.beingTouchedElement = e;
     if (e.isMovable) {
       this.beingMovedElement = e;
