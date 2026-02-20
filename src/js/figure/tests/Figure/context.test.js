@@ -13,6 +13,11 @@ describe('Figure context loss', () => {
     jest.useFakeTimers();
     rafSpy = jest.spyOn(window, 'requestAnimationFrame').mockImplementation(() => {});
     figure = makeFigure();
+    // Add methods needed by contextLost/contextRestored that the mock doesn't have
+    figure.webglLow.contextLost = figure.webglLow.contextLost || (() => {});
+    figure.webglLow.init = figure.webglLow.init || (() => {});
+    figure.webglLow.recreateAtlases = figure.webglLow.recreateAtlases || (() => {});
+    figure.lostContextMessage = figure.lostContextMessage || { innerHTML: '', style: {} };
   });
   afterEach(() => {
     rafSpy.mockRestore();
@@ -87,6 +92,36 @@ describe('Figure context loss', () => {
     }).not.toThrow();
 
     expect(figure.elements._rect).toBeDefined();
+  });
+
+  test('contextLost notification fires', () => {
+    const callback = jest.fn();
+    figure.notifications.add('contextLost', callback);
+
+    // contextLost expects an event with preventDefault
+    figure.contextLost({ preventDefault: () => {} });
+
+    expect(callback).toHaveBeenCalledTimes(1);
+  });
+
+  test('contextRestored notification fires', () => {
+    const callback = jest.fn();
+    figure.notifications.add('contextRestored', callback);
+
+    figure.contextRestored();
+
+    expect(callback).toHaveBeenCalledTimes(1);
+  });
+
+  test('contextLost fires before contextRestored on full cycle', () => {
+    const order = [];
+    figure.notifications.add('contextLost', () => order.push('lost'));
+    figure.notifications.add('contextRestored', () => order.push('restored'));
+
+    figure.contextLost({ preventDefault: () => {} });
+    figure.contextRestored();
+
+    expect(order).toEqual(['lost', 'restored']);
   });
 
   test('adding multiple element types during context loss does not crash', () => {
