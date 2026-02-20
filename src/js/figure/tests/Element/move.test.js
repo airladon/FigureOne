@@ -244,6 +244,39 @@ describe('Element Move', () => {
     });
   });
 });
+describe('Remove move delegate during click', () => {
+  let figure;
+  let parent;
+  let child;
+  beforeEach(() => {
+    figure = makeFigure();
+    parent = figure.add({
+      name: 'parent',
+      make: 'collection',
+      elements: [
+        {
+          name: 'child',
+          make: 'polygon',
+          radius: 0.5,
+        },
+      ],
+    });
+    child = figure.getElement('parent.child');
+    child.setMovable(true);
+    child.setTouchable();
+    child.move.element = parent;
+    child.notifications.add('onClick', () => {
+      figure.elements.remove('parent');
+    });
+  });
+  test('No crash when move element is removed during click', () => {
+    figure.mock.touchElement(child, [0, 0]);
+    expect(parent.figure).toBe(null);
+    expect(() => figure.mock.touchMove([1, 0])).not.toThrow();
+    expect(figure.beingMovedElement).toBe(null);
+    expect(() => figure.mock.touchUp()).not.toThrow();
+  });
+});
 describe('Element Move with custom Scene', () => {
   let figure;
   let a;

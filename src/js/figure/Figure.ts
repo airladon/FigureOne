@@ -2323,7 +2323,7 @@ class Figure {
       } else {
         elementToMove = this.beingMovedElement.move.element;
       }
-      if (elementToMove != null && elementToMove.state.isBeingMoved) {
+      if (elementToMove != null && elementToMove.figure != null && elementToMove.state.isBeingMoved) {
         elementToMove.stopBeingMoved();
         elementToMove.startMovingFreely();
       }
@@ -2576,6 +2576,10 @@ class Figure {
       elementToMove = this.getElement(element.move.element);
     } else {
       elementToMove = element.move.element;
+    }
+    if (elementToMove == null || elementToMove.figure == null) {
+      this.beingMovedElement = null;
+      return false;
     }
     if (elementToMove.state.isBeingMoved === false) {
       elementToMove.startBeingMoved();
