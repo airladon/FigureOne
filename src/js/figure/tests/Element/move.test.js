@@ -244,6 +244,87 @@ describe('Element Move', () => {
     });
   });
 });
+describe('Remove move delegate during click', () => {
+  let figure;
+  let parent;
+  let child;
+  beforeEach(() => {
+    figure = makeFigure();
+    parent = figure.add({
+      name: 'parent',
+      make: 'collection',
+      elements: [
+        {
+          name: 'child',
+          make: 'polygon',
+          radius: 0.5,
+        },
+      ],
+    });
+    child = figure.getElement('parent.child');
+    child.setMovable(true);
+    child.setTouchable();
+    child.move.element = parent;
+    child.notifications.add('onClick', () => {
+      figure.elements.remove('parent');
+    });
+  });
+  test('No crash when move element is removed during click', () => {
+    figure.mock.touchElement(child, [0, 0]);
+    expect(parent.figure).toBe(null);
+    expect(() => figure.mock.touchMove([1, 0])).not.toThrow();
+    expect(figure.beingMovedElement).toBe(null);
+    expect(() => figure.mock.touchUp()).not.toThrow();
+  });
+});
+describe('Remove element during click', () => {
+  test('No crash when simple element removes itself during click', () => {
+    const figure = makeFigure();
+    const elem = figure.add({
+      name: 'elem',
+      make: 'polygon',
+      radius: 0.5,
+      move: true,
+    });
+    elem.setTouchable();
+    elem.notifications.add('onClick', () => {
+      figure.elements.remove('elem');
+    });
+    figure.mock.touchElement(elem, [0, 0]);
+    expect(elem.figure).toBe(null);
+    expect(figure.elements.elements.elem).toBeUndefined();
+    // beingMovedElement was never set (selectElement bails out after click)
+    expect(figure.beingMovedElement).toBe(null);
+    expect(() => figure.mock.touchMove([1, 0])).not.toThrow();
+    expect(() => figure.mock.touchUp()).not.toThrow();
+  });
+  test('Synchronous trash pattern works without setTimeout', () => {
+    const figure = makeFigure();
+    const parent = figure.add({
+      name: 'parent',
+      make: 'collection',
+      elements: [
+        { name: 'child', make: 'polygon', radius: 0.5 },
+      ],
+    });
+    const child = figure.getElement('parent.child');
+    child.setMovable(true);
+    child.setTouchable();
+    child.move.element = parent;
+    child.notifications.add('onClick', () => {
+      parent.stop();
+      parent.hide();
+      parent.isTouchable = false;
+      figure.elements.remove('parent');
+    });
+    figure.mock.touchElement(child, [0, 0]);
+    expect(parent.figure).toBe(null);
+    expect(figure.elements.elements.parent).toBeUndefined();
+    expect(() => figure.mock.touchMove([1, 0])).not.toThrow();
+    expect(figure.beingMovedElement).toBe(null);
+    expect(() => figure.mock.touchUp()).not.toThrow();
+  });
+});
 describe('Element Move with custom Scene', () => {
   let figure;
   let a;

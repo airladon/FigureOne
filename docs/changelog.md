@@ -1,5 +1,8 @@
 # Releases
 
+## 1.0.4
+* Fix crash when an element is removed during a click or touch handler
+
 ## 1.0.3
 * Fix crash when adding or drawing elements while WebGL context is lost
 * Publish `contextLost` and `contextRestored` notifications on Figure for context lifecycle events
