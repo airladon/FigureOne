@@ -1,31 +1,11 @@
-/* global page figure  */
+/* global figure */
 /* eslint-disable import/prefer-default-export, global-require, no-console */
 /* eslint-disable import/no-dynamic-require, no-eval */
-/* eslint-disable jest/no-export, no-await-in-loop */
+/* eslint-disable no-await-in-loop */
 
-// eslint-disable-next-line import/no-unresolved
-const { toMatchImageSnapshot } = require('jest-image-snapshot');
+const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const Path = require('path');
-
-expect.extend({ toMatchImageSnapshot });
-
-// page.on('console', m => console.log(m.text(), JSON.stringify(m.args())));
-// page.on('console', async (msg) => {
-//   const msgType = msg.type();
-//   const args = await Promise.all(msg.args().map(jsHandle => jsHandle.jsonValue()));
-//   console[msgType](...args);
-// });
-page.on('console', async (msg) => {
-  let msgType = msg.type();
-  if (msgType === 'warning') {
-    msgType = 'warn';
-  }
-  const args = await Promise.all(msg.args().map(jsHandle => jsHandle.jsonValue()));
-  if (args != null && args[0] != null) {
-    console[msgType](...args);
-  }
-});
 
 function zeroPad(num, places) {
   const zero = places - num.toString().length + 1;
@@ -38,32 +18,31 @@ function sleep(ms) {
 
 // We only want to return from this function after the canvas has actually been
 // painted, so we resolve the promise with the 'afterDraw' notification
-async function frame(delta) {
+async function frame(page, delta) {
   await page.evaluate(([d]) => new Promise((resolve) => {
     figure.notifications.add('afterDraw', () => resolve(), 1);
     figure.timeKeeper.frame(d);
     figure.recorder.notifications.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
     figure.animateNextFrame();
-    // resolve();
   }), [delta]);
 }
 
-async function seek(seekTimeIn) {
+async function seek(page, seekTimeIn) {
   await page.evaluate(([seekTime]) => {
     figure.recorder.seek(seekTime);
   }, [seekTimeIn]);
 }
 
-async function getCurrentTime() {
+async function getCurrentTime(page) {
   const currentTime = await page.evaluate(() => Promise.resolve(figure.recorder.getCurrentTime()));
   return currentTime;
 }
 
-async function snap(time, threshold) {
+async function snap(page, time, threshold) {
   const image = await page.screenshot({ timeout: 300000 });
-  return expect(image).toMatchImageSnapshot({
-    customSnapshotIdentifier: `${zeroPad(Math.round(time * 10000), 7)}-snap`,
-    failureThreshold: threshold,
+  return expect(image).toMatchSnapshot({
+    name: `${zeroPad(Math.round(time * 10000), 7)}-snap.png`,
+    maxDiffPixels: threshold,
   });
 }
 
@@ -156,16 +135,25 @@ async function tester(
     });
   });
 
-  // Copy the video track file to the tests folder so loading the
-  // file doesn't cause an error
-  // fs.copyFileSync(videoTrack, `${testPath}/video-track.json`);
+  // eslint-disable-next-line playwright/valid-title
+  test.describe(title, () => {
+    let page;
+    let context;
 
-
-  jest.setTimeout(120000);
-  // eslint-disable-next-line jest/valid-title
-  describe(title, () => {
     // Load page, set manual frames, remove audio, load video data file and play
-    beforeAll(async () => {
+    test.beforeAll(async ({ browser }) => {
+      context = await browser.newContext();
+      page = await context.newPage();
+      page.on('console', async (msg) => {
+        let msgType = msg.type();
+        if (msgType === 'warning') {
+          msgType = 'warn';
+        }
+        const args = await Promise.all(msg.args().map(jsHandle => jsHandle.jsonValue()));
+        if (args != null && args[0] != null) {
+          console[msgType](...args);
+        }
+      });
       await page.setViewportSize({ width, height });
       await page.goto(htmlFile);
       await page.evaluate(() => {
@@ -175,55 +163,64 @@ async function tester(
       });
       await sleep(50);
     });
-    test.each(playbackTests)('Play: %s',
-      async (time) => {
-        const currentTime = await getCurrentTime();
+
+    test.afterAll(async () => {
+      await context.close();
+    });
+
+    for (const [time] of playbackTests) {
+      test(`Play: ${time}`, async () => {
+        const currentTime = await getCurrentTime(page);
         const deltaTime = time - currentTime;
         let d = deltaTime;
         if (intermittentTime > 0 && deltaTime > intermittentTime) {
           for (let i = intermittentTime; i < deltaTime - intermittentTime; i += intermittentTime) {
-            await frame(intermittentTime);
+            await frame(page, intermittentTime);
             d -= intermittentTime;
           }
         }
-        await frame(d);
-        await snap(time, threshold);
+        await frame(page, d);
+        await snap(page, time, threshold);
       });
-    test.each(seekTests)('Seek: %s',
-      async (seekTime) => {
-        await seek(0);
-        await frame(0);
-        await seek(seekTime);
-        await frame(0);
-        const currentTime = await getCurrentTime();
-        await snap(currentTime, threshold);
+    }
+
+    for (const [seekTime] of seekTests) {
+      test(`Seek: ${seekTime}`, async () => {
+        await seek(page, 0);
+        await frame(page, 0);
+        await seek(page, seekTime);
+        await frame(page, 0);
+        const currentTime = await getCurrentTime(page);
+        await snap(page, currentTime, threshold);
       });
-    test.each(fromToTests)('From To: %s %s',
-      async (fromTime, toTime) => {
+    }
+
+    for (const [fromTime, toTime] of fromToTests) {
+      test(`From To: ${fromTime} ${toTime}`, async () => {
         const seekTo = async (seekTimeIn, play) => {
-          await seek(seekTimeIn);
-          await frame(0);
-          const currentTime = await getCurrentTime();
+          await seek(page, seekTimeIn);
+          await frame(page, 0);
+          const currentTime = await getCurrentTime(page);
           let index = 0;
           while (index < stateTimes.length - 1 && stateTimes[index] < currentTime + 0.5) {
             index += 1;
           }
           const nextFrameTime = stateTimes[index][0];
 
-          await snap(currentTime, threshold);
+          await snap(page, currentTime, threshold);
           if (nextFrameTime > currentTime && play) {
             await page.evaluate(() => figure.recorder.resumePlayback());
-            await frame(nextFrameTime - currentTime);
-            await snap(nextFrameTime, threshold);
+            await frame(page, nextFrameTime - currentTime);
+            await snap(page, nextFrameTime, threshold);
           }
         };
         await seekTo(fromTime, false);
         await seekTo(toTime, true);
       });
+    }
   });
 }
 
 module.exports = {
   tester,
 };
-

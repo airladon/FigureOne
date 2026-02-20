@@ -1,38 +1,35 @@
-/* global page figure timeoutId startUpdates */
+/* global figure timeoutId startUpdates */
 /* eslint-disable no-await-in-loop */
-/* eslint-disable jest/no-export */
-// eslint-disable-next-line import/no-unresolved
-const { toMatchImageSnapshot } = require('jest-image-snapshot');
+const path = require('path');
+const { test, expect } = require('@playwright/test');
 
-expect.extend({ toMatchImageSnapshot });
+function kebab(str) {
+  return str
+    .replace(/([a-z\d])([A-Z])/g, '$1-$2')
+    .replace(/([a-zA-Z])(\d)/g, '$1-$2')
+    .replace(/(\d)([a-zA-Z])/g, '$1-$2')
+    .replace(/[^a-zA-Z0-9]/g, '-')
+    .toLowerCase()
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+}
 
 function testBrowserAnimation(title, file, duration, step) {
-  jest.setTimeout(120000);
+  // Capture caller's file from stack trace (called at module level in .btest.js)
+  const callerFile = new Error().stack.split('\n')
+    .map(l => l.match(/\((.+\.btest\.js):\d+:\d+\)/))
+    .filter(Boolean).map(m => m[1])[0];
 
-  // function delay(time) {
-  //   return new Promise(function(resolve) {
-  //       setTimeout(resolve, time)
-  //   });
-  // }
+  // eslint-disable-next-line playwright/valid-title
+  test(title, async ({ page }, testInfo) => {
+    page.on('console', (msg) => {
+      for (let i = 0; i < msg.args().length; i += 1) {
+        const result = `${msg.args()[i]}`;
+        // eslint-disable-next-line no-console
+        console.log(result);
+      }
+    });
 
-  // page.on('console', (msg) => {
-  //   for (let i = 0; i < msg.args().length; i += 1) {
-  //     Fig.tools.misc.Console(`${i}: ${msg.args()[i]}`);
-  //   }
-  // });
-  page.on('console', (msg) => {
-    for (let i = 0; i < msg.args().length; i += 1) {
-      const result = `${msg.args()[i]}`;
-      // if (result.startsWith('JSHandle@fail')) {
-      //   failures.push(result);
-      // }
-      // eslint-disable-next-line no-console
-      console.log(result);
-    }
-  });
-
-  // eslint-disable-next-line jest/valid-title
-  test(title, async () => {
     let image;
     await page.goto(file);
     await page.evaluate(() => {
@@ -42,13 +39,19 @@ function testBrowserAnimation(title, file, duration, step) {
       startUpdates();
     });
 
+    const fileName = kebab(path.basename(callerFile || testInfo.file));
+    const kebabTitle = kebab(title);
+    let counter = 1;
+
     for (let i = 0; i <= duration; i += step) {
       await page.evaluate(
         ([s]) => figure.timeKeeper.frame(s), [i === 0 ? 0 : step],
       );
-      // delay(100);
       image = await page.screenshot({ fullPage: true });
-      expect(image).toMatchImageSnapshot();
+      expect(image).toMatchSnapshot({
+        name: `${fileName}-${kebabTitle}-${counter}-snap.png`,
+      });
+      counter += 1;
     }
   });
 }

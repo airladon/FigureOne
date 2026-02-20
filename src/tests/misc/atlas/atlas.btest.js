@@ -1,25 +1,8 @@
-/* globals page figure */
 /* eslint-disable no-await-in-loop, */
 
-// eslint-disable-next-line import/no-unresolved
-const { toMatchImageSnapshot } = require('jest-image-snapshot');
+const { test, expect } = require('../../legacyFixtures');
 
-expect.extend({ toMatchImageSnapshot });
-jest.setTimeout(120000);
-
-page.on('console', (msg) => {
-  for (let i = 0; i < msg.args().length; i += 1) {
-    // eslint-disable-next-line no-console
-    console.log(`${i}: ${msg.args()[i]}`);
-  }
-});
-
-async function loadPage() {
-  await page.goto(`http://localhost:8080/${__dirname.replace('/home/pwuser', '')}/index.html`);
-}
-
-
-async function loadFontSync(family, style, weight, glyphs) {
+async function loadFontSync(page, family, style, weight, glyphs) {
   return page.evaluate(
     ([f, s, w, g]) => {
       const fd = f.split(' ').join('-');
@@ -33,22 +16,6 @@ async function loadFontSync(family, style, weight, glyphs) {
   );
 }
 
-async function snap(id, threshold = 0) {
-  const image = await page.screenshot({ timeout: 300000 });
-  return expect(image).toMatchImageSnapshot({
-    // customSnapshotIdentifier: `${id}`,
-    failureThreshold: threshold,
-  });
-}
-
-async function frame() {
-  await page.evaluate(() => new Promise((resolve) => {
-    figure.notifications.add('afterDraw', () => resolve(), 1);
-    figure.animateNextFrame();
-  }), []);
-}
-
-// eslint-disable-next-line no-unused-vars
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -86,12 +53,36 @@ const externalAtlasMap = {
 };
 /* eslint-enable max-len, object-curly-newline */
 
-describe('Atlas', () => {
-  beforeEach(async () => {
-    await loadPage();
+test.describe('Atlas', () => {
+  let page;
+  let legacySnap;
+
+  test.beforeEach(async ({ page: p, legacySnap: ls }) => {
+    page = p;
+    legacySnap = ls;
+    page.on('console', (msg) => {
+      for (let i = 0; i < msg.args().length; i += 1) {
+        // eslint-disable-next-line no-console
+        console.log(`${i}: ${msg.args()[i]}`);
+      }
+    });
+    await page.goto(`http://localhost:8080/${__dirname.replace('/home/pwuser', '')}/index.html`);
   });
-  describe('Create', () => {
-    beforeEach(async () => {
+
+  async function snap() {
+    const image = await page.screenshot();
+    legacySnap(image);
+  }
+
+  async function frame() {
+    await page.evaluate(() => new Promise((resolve) => {
+      figure.notifications.add('afterDraw', () => resolve(), 1);
+      figure.animateNextFrame();
+    }), []);
+  }
+
+  test.describe('Create', () => {
+    test.beforeEach(async () => {
       await page.evaluate(() => {
         figure.add({
           name: 'a',
@@ -106,25 +97,25 @@ describe('Atlas', () => {
     });
     test('Simple', async () => {
       await snap();
-      await loadFontSync('montserrat', 'normal', '400', 'latin');
+      await loadFontSync(page, 'montserrat', 'normal', '400', 'latin');
       await sleep(100);
       await snap();
     });
     test('Two weights auto', async () => {
       await snap();
-      await loadFontSync('montserrat', 'normal', '100', 'latin');
+      await loadFontSync(page, 'montserrat', 'normal', '100', 'latin');
       await sleep(100);
       await snap();
-      await loadFontSync('montserrat', 'normal', '400', 'latin');
+      await loadFontSync(page, 'montserrat', 'normal', '400', 'latin');
       await sleep(100);
       await snap();
     });
     test('Two weights force', async () => {
       await snap();
-      await loadFontSync('montserrat', 'normal', '900', 'latin');
+      await loadFontSync(page, 'montserrat', 'normal', '900', 'latin');
       await sleep(100);
       await snap();
-      await loadFontSync('montserrat', 'normal', '400', 'latin');
+      await loadFontSync(page, 'montserrat', 'normal', '400', 'latin');
       await page.evaluate(() => figure.get('a').recreateAtlas());
       await sleep(100);
       await snap();
@@ -138,15 +129,15 @@ describe('Atlas', () => {
           callback: () => figure.get('a').recreateAtlas(),
         },
       ));
-      await loadFontSync('montserrat', 'normal', '900', 'latin');
+      await loadFontSync(page, 'montserrat', 'normal', '900', 'latin');
       await sleep(100);
       await snap();
-      await loadFontSync('montserrat', 'normal', '400', 'latin');
+      await loadFontSync(page, 'montserrat', 'normal', '400', 'latin');
       await sleep(1000);
       await snap();
     });
   });
-  describe('External', () => {
+  test.describe('External', () => {
     test('Simple', async () => {
       page.evaluate((map) => {
         figure.add({
@@ -162,8 +153,6 @@ describe('Atlas', () => {
           },
         });
       }, externalAtlasMap);
-      // await snap();
-      // await frame();
       await sleep(100);
       await frame();
       await snap();
@@ -224,47 +213,9 @@ describe('Atlas', () => {
         });
       }, externalAtlasMap);
       await sleep(1000);
-      // await page.evaluate((map) => {
-      //   figure.add({
-      //     name: 'a',
-      //     make: 'text',
-      //     text: 'hello',
-      //     font: {
-      //       src: window.texture,
-      //       id: 'uniqueTextureID',
-      //       map,
-      //       loadColor: [0, 0, 1, 1],
-      //       atlasColor: true,
-      //     },
-      //   });
-      // }, externalAtlasMap);
       await frame();
       await snap();
       expect(await page.evaluate(() => Object.keys(figure.webglLow.atlases)[0])).toBe('uniqueTextureID');
     });
   });
 });
-
-// texture = new Image();
-// texture.src = 'http://localhost:8080/src/tests/misc/atlas/atlas.png';
-// figure.add({
-//   name: 'm',
-//   make: 'text',
-//   text: 'hello',
-//   font: {
-//     src: texture,
-//     id: 'uniqueTextureID',
-//     map,
-//     loadColor: [0, 0, 1, 1],
-//     atlasColor: true,
-//   },
-// });
-// // const image = await page.screenshot({ fullPage: true });
-// // expect(image).toMatchImageSnapshot();
-
-// f = 'open sans'; g = 'greek'; s = 'normal'; w = '400';
-// fd = f.split(' ').join('-');
-// ff = new FontFace('open sans', `url(http://localhost:8080//src/tests/misc/FontManager/fonts/${f}/${f}-${s}-${w}-${g}.woff2)`, { style: s, weight: w })
-// ff.load().then(function(loaded_face) {
-//   document.fonts.add(loaded_face);
-// });

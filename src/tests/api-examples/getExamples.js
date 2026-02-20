@@ -2,9 +2,8 @@ const Path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 
-const files = [];
-
 function getExamples(path) {
+  const files = [];
   function ThroughDirectory(directory) {
     fs.readdirSync(directory).forEach((file) => {
       const absolutePath = Path.join(directory, file);

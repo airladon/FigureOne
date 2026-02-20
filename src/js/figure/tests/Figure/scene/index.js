@@ -2,7 +2,7 @@
 /* eslint-disable no-global-assign, no-inner-declarations */
 
 
-testCases = {
+const testCases = {
   beforeEach: () => {
     figure.scene = new Fig.Scene({
       style: 'orthographic',

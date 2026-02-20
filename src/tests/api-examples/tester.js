@@ -1,11 +1,9 @@
-/* eslint-disable no-await-in-loop, import/no-unresolved, no-eval, jest/no-export */
+/* eslint-disable no-await-in-loop, no-eval */
 /* eslint no-unused-vars: ["error", { "vars": "local" }] */
-/* global figure page jestPlaywright */
-const { toMatchImageSnapshot } = require('jest-image-snapshot');
+const { test } = require('@playwright/test');
 const fs = require('fs');
 const { getExamples } = require('./getExamples');
-
-expect.extend({ toMatchImageSnapshot });
+const { matchSnapshot } = require('../snapshotHelper');
 
 function zeroPad(num, places) {
   const zero = places - num.toString().length + 1;
@@ -18,7 +16,7 @@ function sleep(ms) {
 
 // We only want to return from this function after the canvas has actually been
 // painted, so we resolve the promise with the 'afterDraw' notification
-async function frame(delta) {
+async function frame(page, delta) {
   await page.evaluate(([d]) => new Promise((resolve) => {
     figure.notifications.add('afterDraw', () => resolve(), 1);
     figure.timeKeeper.frame(d);
@@ -28,7 +26,6 @@ async function frame(delta) {
 
 function tester(snapshots, path, initialization = '', threshold = 0, afterLoad = '') {
   const examples = getExamples(path);
-  // console.log(examples['tools.morph.js.imageToShapes.b35c8733'])
   const start = `
 // Replace Math.random with something deterministic
 // ********************************
@@ -114,17 +111,17 @@ figure.animateNextFrame();
     tests.push([key, value]);
   });
 
-  jest.setTimeout(120000);
   fs.writeFileSync(`${__dirname}/index.js`, `${start}`);
-  test.each(tests)('%s',
-    async (id, code) => {
-      await jestPlaywright.resetBrowser();
+
+  const snapshotDir = `${__dirname}/${snapshots}`;
+  for (const [id, code] of tests) {
+    test(id, async ({ page }, testInfo) => {
       await page.setViewportSize({ width: 500, height: 375 });
       await page.goto(`localhost:8080/${__dirname.replace('/home/pwuser', '')}/index.html`);
       await page.evaluate(() => {
         figure.timeKeeper.setManualFrames();
       });
-      await frame(0);
+      await frame(page, 0);
       await page.evaluate(([c, d]) => {
         eval(c);
         eval(d);
@@ -133,29 +130,26 @@ figure.animateNextFrame();
       if (sleepTime > 0) {
         await sleep(sleepTime);
       }
-      await frame(0);
+      await frame(page, 0);
       const remainingDuration = await page.evaluate(() => figure.getRemainingAnimationTime());
       let image = await page.screenshot();
-      expect(image).toMatchImageSnapshot({
-        customSnapshotIdentifier: `${id}-00000-snap`,
-        failureThreshold: threshold,
-        customSnapshotsDir: `${__dirname}/${snapshots}`,
-      });
+      matchSnapshot(snapshotDir, image, `${id}-00000-snap.png`, testInfo);
       if (remainingDuration > 0) {
         const timeStep = 0.5;
         const steps = Math.ceil(remainingDuration / timeStep) + 2;
         for (let i = 1; i <= steps; i += 1) {
-          await frame(timeStep);
+          await frame(page, timeStep);
           image = await page.screenshot();
-          // eslint-disable-next-line jest/no-conditional-expect
-          expect(image).toMatchImageSnapshot({
-            customSnapshotIdentifier: `${id}-${zeroPad(Math.floor(timeStep * i * 1000), 5)}-snap`,
-            failureThreshold: threshold,
-            customSnapshotsDir: `${__dirname}/${snapshots}`,
-          });
+          matchSnapshot(
+            snapshotDir,
+            image,
+            `${id}-${zeroPad(Math.floor(timeStep * i * 1000), 5)}-snap.png`,
+            testInfo,
+          );
         }
       }
     });
+  }
 }
 
 module.exports = {

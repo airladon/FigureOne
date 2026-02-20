@@ -1,7 +1,7 @@
-/* global page figure timeoutId Fig __steps __title __width __height */
+/* global figure timeoutId Fig */
 /* eslint-disable import/prefer-default-export, global-require */
 /* eslint-disable import/no-dynamic-require, no-eval */
-/* eslint-disable jest/no-export, no-await-in-loop */
+/* eslint-disable no-await-in-loop */
 global.__frames = [];
 global.__title = '';
 global.__steps = [];
@@ -9,54 +9,34 @@ global.__duration = 5;
 global.__timeStep = 0.5;
 global.__width = 500;
 global.__height = 375;
+global.__startSteps = 1000;
 
-// eslint-disable-next-line import/no-unresolved
-const { toMatchImageSnapshot } = require('jest-image-snapshot');
-
-expect.extend({ toMatchImageSnapshot });
-
-page.on('console', async (msg) => {
-  let msgType = msg.type();
-  if (msgType === 'warning') {
-    msgType = 'warn';
-  }
-  const args = await Promise.all(msg.args().map(jsHandle => jsHandle.jsonValue()));
-  if (args != null && args[0] != null) {
-  // console.log(msgType)
-  // eslint-disable-next-line no-console
-    console[msgType](...args);
-  }
-  // console.log(...args);
-});
-
-
-// function sleep(ms) {
-//   return new Promise(resolve => setTimeout(resolve, ms));
-// }
+const path = require('path');
+const { test } = require('@playwright/test');
+const { matchSnapshot } = require('../snapshotHelper');
 
 function zeroPad(num, places) {
   const zero = places - num.toString().length + 1;
   return Array(+(zero > 0 && zero)).join('0') + num;
 }
 
-// We only want to return from this function after the canvas has actually been
-// painted, so we resolve the promise with the 'afterDraw' notification
-async function frame(delta) {
-  await page.evaluate(([d]) => new Promise((resolve) => {
-    figure.notifications.add('afterDraw', () => resolve(), 1);
-    figure.timeKeeper.frame(d);
-    figure.animateNextFrame();
-  }), [delta]);
-}
-
 function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish = 'finish') {
+  // Compute snapshot directory from framesFile (which contains __dirname of consumer)
+  const snapshotDir = framesFile
+    ? path.join(path.dirname(framesFile), '__image_snapshots__')
+    : path.join(path.dirname(htmlFile.replace(/^(file:\/*|http:\/\/[^/]+\/)/, '/')), '__image_snapshots__');
+
+  // Clear require cache so each consumer gets fresh globals
+  delete require.cache[require.resolve('./start')];
   require('./start');
   if (framesFile != null && framesFile !== '') {
+    delete require.cache[require.resolve(framesFile)];
     require(framesFile);
   }
-  const { __finish } = require(`./${finish}.js`);
+  const finishPath = require.resolve(`./${finish}.js`);
+  delete require.cache[finishPath];
+  const { __finish } = require(finishPath);
   __finish();
-  jest.setTimeout(120000);
 
   const tests = [];
   let lastTime = 0;
@@ -75,7 +55,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
       snap = true;
     }
     const delta = Math.round((time - lastTime) * 10) / 10;
-    const test = [
+    const t = [
       time,
       description || '',
       delta,
@@ -84,7 +64,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
       snap,
     ];
     lastTime = time;
-    tests.push(test);
+    tests.push(t);
   });
 
   let file = `file:/${htmlFile}`;
@@ -93,7 +73,17 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
   }
   lastTime = -1;
 
-  async function mouseWheelZoom(deltaIn, positionIn) {
+  // We only want to return from this function after the canvas has actually been
+  // painted, so we resolve the promise with the 'afterDraw' notification
+  async function frame(page, delta) {
+    await page.evaluate(([d]) => new Promise((resolve) => {
+      figure.notifications.add('afterDraw', () => resolve(), 1);
+      figure.timeKeeper.frame(d);
+      figure.animateNextFrame();
+    }), [delta]);
+  }
+
+  async function mouseWheelZoom(page, deltaIn, positionIn) {
     await page.evaluate(([delta, position]) => {
       const figureToPixelMatrix = figure.elements.spaceTransformMatrix('figure', 'pixel');
       const positionPixel = Fig.getPoint(position).transformBy(figureToPixelMatrix);
@@ -112,9 +102,8 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
     }, [deltaIn, positionIn]);
   }
 
-  async function mousePan(startIn, stopIn) {
+  async function mousePan(page, startIn, stopIn) {
     await page.evaluate(([start, stop]) => {
-      // const figureToPixelMatrix = figure.elements.spaceTransformMatrix('figure', 'pixel');
       const figToClient = (p) => {
         const figureToPixelMatrix = figure.elements.spaceTransformMatrix('figure', 'pixel');
         const q = Fig.getPoint(p).transformBy(figureToPixelMatrix);
@@ -140,7 +129,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
     }, [startIn, stopIn]);
   }
 
-  async function mouseClick(posIn) {
+  async function mouseClick(page, posIn) {
     await page.evaluate(([pos]) => {
       const figToClient = (p) => {
         const figureToPixelMatrix = figure.elements.spaceTransformMatrix('figure', 'pixel');
@@ -160,19 +149,41 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
     }, [posIn]);
   }
 
-  // eslint-disable-next-line jest/valid-title
-  describe(__title, () => {
-    beforeAll(async () => {
+  // eslint-disable-next-line playwright/valid-title
+  test.describe(__title, () => {
+    let page;
+    let context;
+
+    test.beforeAll(async ({ browser }) => {
+      context = await browser.newContext();
+      page = await context.newPage();
+      page.on('console', async (msg) => {
+        let msgType = msg.type();
+        if (msgType === 'warning') {
+          msgType = 'warn';
+        }
+        const args = await Promise.all(msg.args().map(jsHandle => jsHandle.jsonValue()));
+        if (args != null && args[0] != null) {
+          // eslint-disable-next-line no-console
+          console[msgType](...args);
+        }
+      });
       await page.setViewportSize({ width: __width || 500, height: __height || 375 });
       await page.goto(file);
       await page.evaluate(() => {
         clearTimeout(timeoutId);
         figure.timeKeeper.setManualFrames();
       });
-      await frame(0);
+      await frame(page, 0);
     });
-    test.each(tests)('%s %s',
-      async (time, description, deltaTime, action, location, snap) => {
+
+    test.afterAll(async () => {
+      await context.close();
+    });
+
+    for (const [time, description, deltaTime, action, location, snap] of tests) {
+      // eslint-disable-next-line no-empty-pattern
+      test(`${time} ${description}`, async ({}, testInfo) => {
         let d = deltaTime;
         if (intermitentTime > 0 && deltaTime >= intermitentTime) {
           for (
@@ -180,12 +191,12 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
             i <= Math.round((deltaTime - intermitentTime) * 100) / 100;
             i = Math.round((i + intermitentTime) * 100) / 100
           ) {
-            await frame(intermitentTime);
+            await frame(page, intermitentTime);
             d = Math.round((d - intermitentTime) * 100) / 100;
           }
         }
         if (action !== 'delay' && action !== 'mouseWheelZoom' && action !== 'mousePan' && action !== 'mouseClick') {
-          await frame(d);
+          await frame(page, d);
           await page.evaluate(async ([t, l]) => {
             if (t != null) {
               if (t.startsWith('touch')) {
@@ -202,38 +213,34 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
               }
             }
           }, [action, location]);
-          await frame(0);
+          await frame(page, 0);
         }
         if (action === 'mouseWheelZoom') {
-          await frame(d);
-          await mouseWheelZoom(location[0], location[1]);
-          await frame(0);
+          await frame(page, d);
+          await mouseWheelZoom(page, location[0], location[1]);
+          await frame(page, 0);
         }
         if (action === 'mousePan') {
-          await frame(d);
-          await mousePan(location[0], location[1]);
-          await frame(0);
+          await frame(page, d);
+          await mousePan(page, location[0], location[1]);
+          await frame(page, 0);
         }
         if (action === 'mouseClick') {
-          await frame(d);
-          await mouseClick(location[0], location[1]);
-          await frame(0);
+          await frame(page, d);
+          await mouseClick(page, location[0], location[1]);
+          await frame(page, 0);
         }
         if (!snap) {
           return;
         }
-        // Sleep for an animation frame to act on the frame above
-        // await sleep(50);
         if (time !== lastTime) {
           const image = await page.screenshot();
-          // eslint-disable-next-line jest/no-conditional-expect
-          expect(image).toMatchImageSnapshot({
-            customSnapshotIdentifier: `${zeroPad(Math.round(time * 1000), 5)}-${description}-snap`,
-            failureThreshold: threshold,
-          });
+          const snapshotName = `${zeroPad(Math.round(time * 1000), 5)}-${description}-snap.png`;
+          matchSnapshot(snapshotDir, image, snapshotName, testInfo);
           lastTime = time;
         }
       });
+    }
   });
 }
 
@@ -241,4 +248,3 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
 module.exports = {
   tester,
 };
-
