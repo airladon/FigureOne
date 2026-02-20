@@ -770,6 +770,9 @@ class GLObject extends DrawingObject {
     } else {
       locations = webglInstance.useProgram(this.programIndex);
     }
+    if (!locations) {
+      return;
+    }
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     // gl.enable(gl.CULL_FACE);
