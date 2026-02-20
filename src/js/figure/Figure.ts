@@ -1462,6 +1462,7 @@ class Figure {
     this.lostContextMessage.style.display = 'table';
     this.elements.contextLost();
     this.webglLow.contextLost();
+    this.notifications.publish('contextLost');
   }
 
   contextRestored() {
@@ -1471,6 +1472,7 @@ class Figure {
     this.webglLow.recreateAtlases();
     this.init(this.webglLow);
     this.lostContextMessage.style.display = 'none';
+    this.notifications.publish('contextRestored');
     Console('FigureOne context restored!');
   }
 
