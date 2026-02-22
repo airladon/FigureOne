@@ -31,6 +31,12 @@
   "exclude": [
     "node_modules",
     "package",
-    "**/*.js"
+    "**/*.js",
+    "**/*.test.ts",
+    "**/*.btest.ts",
+    "**/*.ptest.ts",
+    "src/tests/**/*.ts",
+    "src/js/__mocks__/**/*.ts",
+    "src/js/figure/tests/**/*.ts"
   ]
 }
