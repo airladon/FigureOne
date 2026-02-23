@@ -175,7 +175,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 // Accent a word
 figure.add({

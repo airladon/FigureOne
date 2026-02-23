@@ -33,7 +33,7 @@ const figure = new Fig.Figure({
 });
 ```
 
-For 2D figures, a simple array containing the left, bottom, right and top limits can be used. In three dimensions, the scene also defines from where the visible space is viewed (camera) and lighting (see <a href="##3d-shape-primitives">3D Shape Primitives</a> for a detailed explanation).
+For 2D figures, a simple array containing the left, bottom, right and top limits can be used. In three dimensions, the scene also defines from where the visible space is viewed (camera) and lighting (see [3D Shape Primitives](../shapes3d/shapes3d.md) for a detailed explanation).
 
 
 Now the figure is setup, shapes can be added to it.

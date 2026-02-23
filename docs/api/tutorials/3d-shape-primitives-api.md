@@ -145,7 +145,7 @@ a.animations.new()
 ```
 
 > To test examples, append them to the
-<a href="#shapes3d-boilerplate">boilerplate</a>
+[boilerplate](./shapes3d/shapes3d.md#shapes3d-boilerplate)
 
 
 ---
@@ -225,7 +225,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#shapes3d-boilerplate">boilerplate</a>
+[boilerplate](./shapes3d/shapes3d.md#shapes3d-boilerplate)
 
 
 ---
@@ -289,7 +289,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#shapes3d-boilerplate">boilerplate</a>
+[boilerplate](./shapes3d/shapes3d.md#shapes3d-boilerplate)
 
 
 ---
@@ -394,7 +394,7 @@ figure.add([
 ```
 
 > To test examples, append them to the
-<a href="#shapes3d-boilerplate">boilerplate</a>
+[boilerplate](./shapes3d/shapes3d.md#shapes3d-boilerplate)
 
 
 ---
@@ -487,7 +487,7 @@ figure.add(
 ```
 
 > To test examples, append them to the
-<a href="#shapes3d-boilerplate">boilerplate</a>
+[boilerplate](./shapes3d/shapes3d.md#shapes3d-boilerplate)
 
 
 ---
@@ -564,7 +564,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#shapes3d-boilerplate">boilerplate</a>
+[boilerplate](./shapes3d/shapes3d.md#shapes3d-boilerplate)
 
 
 ---
@@ -642,7 +642,7 @@ figure.add(
 ```
 
 > To test examples, append them to the
-<a href="#shapes3d-boilerplate">boilerplate</a>
+[boilerplate](./shapes3d/shapes3d.md#shapes3d-boilerplate)
 
 
 ---
@@ -808,7 +808,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#shapes3d-boilerplate">boilerplate</a>
+[boilerplate](./shapes3d/shapes3d.md#shapes3d-boilerplate)
 
 
 ---
@@ -1004,7 +1004,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#shapes3d-boilerplate">boilerplate</a>
+[boilerplate](./shapes3d/shapes3d.md#shapes3d-boilerplate)
 
 
 ---

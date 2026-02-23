@@ -12,7 +12,7 @@ Text can either be type-set as:
 * Formatted text - multi-font, multi-line text - {@link OBJ_FormattedText}
 * Equation text - {@link Equation}
 
-This guide will cover plain and formatted text. <a href="#equations"> Thissection</a> is then dedicated to equations.
+This guide will cover plain and formatted text. [this section](../equation/equation.md) is then dedicated to equations.
 
 ### Plain Text
 

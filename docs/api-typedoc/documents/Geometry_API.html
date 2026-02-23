@@ -26,7 +26,7 @@
 <p>Create points a regular polygon.</p>
 <p>Can return either:</p>
 <ul>
-<li>Array&lt; Point&gt; - corners of a polygon</li>
+<li>Array&lt;<a href="../classes/geometry_Point.Point.html" class="tsd-kind-class">Point</a>&gt; - corners of a polygon</li>
 <li>Array&lt;<code>number</code>&gt; - interlaced points of triangles used to a polygon fill</li>
 </ul>
 <h3 id="parameters" class="tsd-anchor-link">Parameters<a href="#parameters" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
@@ -40,7 +40,7 @@
 <p>Create a solid regular polygon line.</p>
 <p>Can return either:</p>
 <ul>
-<li>Array&lt; Point&gt; - [inner corner 0, outer corner 0, inner corner 1,
+<li>Array&lt;<a href="../classes/geometry_Point.Point.html" class="tsd-kind-class">Point</a>&gt; - [inner corner 0, outer corner 0, inner corner 1,
 outer corner 1, inner corner 2...]</li>
 <li>Array&lt;<code>number</code>&gt; - interlaced points of triangles used to draw a polygon line</li>
 </ul>
@@ -166,13 +166,13 @@ the cone.</p>
 for each point will be available.</p>
 <hr>
 <h2 id="typeparsableline" class="tsd-anchor-link">TypeParsableLine<a href="#typeparsableline" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p>A  Line is defined with either:</p>
+<p>A <a href="../classes/FigureCollections_Line.default.html" class="tsd-kind-class">Line</a> is defined with either:</p>
 <ul>
-<li>an instantiated  Line</li>
-<li>two points [ TypeParsablePoint,  TypeParsablePoint]</li>
+<li>an instantiated <a href="../classes/FigureCollections_Line.default.html" class="tsd-kind-class">Line</a></li>
+<li>two points [<a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a>, <a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a>]</li>
 <li>two points and the number of ends
-[ TypeParsablePoint,  TypeParsablePoint, <code>1 | 2 | 0</code>]</li>
-<li>a line definition object  OBJ_LineDefinition</li>
+[<a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a>, <a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a>, <code>1 | 2 | 0</code>]</li>
+<li>a line definition object <a href="../interfaces/geometry_Line.OBJ_LineDefinition.html" class="tsd-kind-interface">OBJ_LineDefinition</a></li>
 <li>A recorder state definition  TypeF1DefLine</li>
 <li>A string representation of all options except the first</li>
 </ul>
@@ -194,14 +194,14 @@ in both directions - <code>ends = 0</code>).</p>
 
 <hr>
 <h2 id="typeparsableplane" class="tsd-anchor-link">TypeParsablePlane<a href="#typeparsableplane" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p>A  Plane is defined with either:</p>
+<p>A <a href="../classes/geometry_Plane.Plane.html" class="tsd-kind-class">Plane</a> is defined with either:</p>
 <ul>
-<li>an instantiated  Plane</li>
+<li>an instantiated <a href="../classes/geometry_Plane.Plane.html" class="tsd-kind-class">Plane</a></li>
 <li>a position and normal vector
-[ TypeParsablePoint,  TypeParsablePoint]</li>
-<li>three points [ TypeParsablePoint,  TypeParsablePoint,
-TypeParsablePoint]</li>
-<li>A recorder state definition  TypeF1DefPlane</li>
+[<a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a>, <a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a>]</li>
+<li>three points [<a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a>, <a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a>,
+<a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a>]</li>
+<li>A recorder state definition <a href="../types/geometry_Plane.TypeF1DefPlane.html" class="tsd-kind-type-alias">TypeF1DefPlane</a></li>
 <li>A string representation of all options except the first</li>
 </ul>
 <p>When defining 3 points p1, p2 and p3, the normal will be in the direction of
@@ -228,9 +228,9 @@ direction of the cross product of vectors P1P2 and P1P3.</p>
 
 <hr>
 <h2 id="typeparsablepoint" class="tsd-anchor-link">TypeParsablePoint<a href="#typeparsablepoint" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p>A  Point can be defined in several ways</p>
+<p>A <a href="../classes/geometry_Point.Point.html" class="tsd-kind-class">Point</a> can be defined in several ways</p>
 <ul>
-<li>As an instantiated  Point</li>
+<li>As an instantiated <a href="../classes/geometry_Point.Point.html" class="tsd-kind-class">Point</a></li>
 <li>As an x, y tuple: [number, number]</li>
 <li>As an x, y, z tuple: [number, number, number]</li>
 <li>As an x, y string: '[number, number]'</li>
@@ -254,7 +254,7 @@ set to 0 automatically.</p>
 </code><button type="button">Copy</button></pre>
 
 <blockquote>
-<p>TypeParsablePoint,  isParsablePoint</p>
+<p><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a>, <a href="../functions/geometry_Point.isParsablePoint.html" class="tsd-kind-function">isParsablePoint</a></p>
 </blockquote>
 <hr>
 <h2 id="rect" class="tsd-anchor-link">Rect<a href="#rect" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
@@ -265,9 +265,9 @@ set to 0 automatically.</p>
 
 <hr>
 <h2 id="typeparsablerect" class="tsd-anchor-link">TypeParsableRect<a href="#typeparsablerect" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p>A  Rect can be defined with either</p>
+<p>A <a href="../classes/geometry_Rect.Rect.html" class="tsd-kind-class">Rect</a> can be defined with either</p>
 <ul>
-<li>an instantiated  Rect</li>
+<li>an instantiated <a href="../classes/geometry_Rect.Rect.html" class="tsd-kind-class">Rect</a></li>
 <li>an array of left, bottom, width, height values
 <code>[number, number, number, number]</code></li>
 <li>a recorder state definition  TypeF1DefRect</li>
@@ -281,10 +281,10 @@ set to 0 automatically.</p>
 <h2 id="typeparsabletransform" class="tsd-anchor-link">TypeParsableTransform<a href="#typeparsabletransform" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>A transform is defined with either:</p>
 <ul>
-<li>an instantiated  Transform</li>
-<li>an array of transform components  TypeTransformUserDefinition</li>
-<li>a single transform component  TypeTransformComponentUserDefinition</li>
-<li>a recorder state definition  TypeF1DefTransform</li>
+<li>an instantiated <a href="../classes/geometry_Transform.Transform.html" class="tsd-kind-class">Transform</a></li>
+<li>an array of transform components <a href="../types/geometry_Transform.TypeTransformUserDefinition.html" class="tsd-kind-type-alias">TypeTransformUserDefinition</a></li>
+<li>a single transform component <a href="../types/geometry_Transform.TypeTransformComponentUserDefinition.html" class="tsd-kind-type-alias">TypeTransformComponentUserDefinition</a></li>
+<li>a recorder state definition <a href="../types/geometry_Transform.TypeF1DefTransform.html" class="tsd-kind-type-alias">TypeF1DefTransform</a></li>
 <li>A string representation of all options except the first</li>
 </ul>
 <h4 id="t1-t2-and-t3-are-all-equal-transforms" class="tsd-anchor-link">t1, t2 and t3 are all equal transforms<a href="#t1-t2-and-t3-are-all-equal-transforms" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
@@ -292,7 +292,7 @@ set to 0 automatically.</p>
 </code><button type="button">Copy</button></pre>
 
 <blockquote>
-<p>See  Transform for a summary of transfom components available.</p>
+<p>See <a href="../classes/geometry_Transform.Transform.html" class="tsd-kind-class">Transform</a> for a summary of transfom components available.</p>
 </blockquote>
 <hr>
 <h2 id="transform" class="tsd-anchor-link">Transform<a href="#transform" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
@@ -327,7 +327,7 @@ components. For example the following two transforms are the same:</p>
 </code><button>Copy</button></pre>
 
 <blockquote>
-<p>See  TypeParsableTransform for the different ways to define a transform.</p>
+<p>See <a href="../types/geometry_Transform.TypeParsableTransform.html" class="tsd-kind-type-alias">TypeParsableTransform</a> for the different ways to define a transform.</p>
 </blockquote>
 <hr>
 </div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg><h3>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg><h3>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#geometry-api-reference"><span>Geometry <wbr/>API <wbr/>Reference</span></a><ul><li><a href="#contents"><span>Contents</span></a></li><li><a href="#polygon"><span>polygon</span></a></li><li><ul><li><a href="#parameters"><span>Parameters</span></a></li><li><a href="#returns"><span>Returns</span></a></li></ul></li><li><a href="#polygonline"><span>polygon<wbr/>Line</span></a></li><li><ul><li><a href="#parameters-1"><span>Parameters</span></a></li><li><a href="#returns-1"><span>Returns</span></a></li></ul></li><li><a href="#cone"><span>cone</span></a></li><li><ul><li><a href="#properties"><span>Properties</span></a></li><li><a href="#parameters-2"><span>Parameters</span></a></li><li><a href="#returns-2"><span>Returns</span></a></li></ul></li><li><a href="#cubeoptionsdefined"><span>Cube<wbr/>Options<wbr/>Defined</span></a></li><li><ul><li><a href="#properties-1"><span>Properties</span></a></li><li><a href="#returns-3"><span>Returns</span></a></li></ul></li><li><a href="#line3optionsdefined"><span>Line3<wbr/>Options<wbr/>Defined</span></a></li><li><ul><li><a href="#properties-2"><span>Properties</span></a></li><li><a href="#returns-4"><span>Returns</span></a></li></ul></li><li><a href="#prism"><span>prism</span></a></li><li><ul><li><a href="#properties-3"><span>Properties</span></a></li><li><a href="#parameters-3"><span>Parameters</span></a></li><li><a href="#returns-5"><span>Returns</span></a></li></ul></li><li><a href="#revolve"><span>revolve</span></a></li><li><ul><li><a href="#parameters-4"><span>Parameters</span></a></li><li><a href="#returns-6"><span>Returns</span></a></li></ul></li><li><a href="#sphereoptionsdefined"><span>Sphere<wbr/>Options<wbr/>Defined</span></a></li><li><ul><li><a href="#properties-4"><span>Properties</span></a></li><li><a href="#returns-7"><span>Returns</span></a></li></ul></li><li><a href="#surfaceoptionsdefined"><span>Surface<wbr/>Options<wbr/>Defined</span></a></li><li><a href="#typeparsableline"><span>Type<wbr/>Parsable<wbr/>Line</span></a></li><li><ul><li><ul><li><a href="#l1-l2-l3-l4-l5-and-l6-are-all-the-same"><span>l1, l2, l3, l4, l5, and l6 are all the same</span></a></li></ul></li></ul></li><li><a href="#line"><span>Line</span></a></li><li><ul><li><ul><li><a href="#get-line-from-fig"><span>get <wbr/>Line from <wbr/>Fig</span></a></li></ul></li></ul></li><li><a href="#typeparsableplane"><span>Type<wbr/>Parsable<wbr/>Plane</span></a></li><li><ul><li><ul><li><a href="#p1-p2-and-p3-are-all-equal-planes"><span>p1, p2, and p3 are all equal planes</span></a></li></ul></li></ul></li><li><a href="#plane"><span>Plane</span></a></li><li><ul><li><ul><li><a href="#define-a-plane-at-the-origin-in-the-xz-plane"><span>define a plane at the origin in the <wbr/>XZ plane</span></a></li></ul></li></ul></li><li><a href="#typeparsablepoint"><span>Type<wbr/>Parsable<wbr/>Point</span></a></li><li><ul><li><ul><li><a href="#p1-p2-p3-and-p4-are-all-the-same-when-parsed-by"><span>p1, p2, p3 and p4 are all the same when parsed by </span></a></li></ul></li></ul></li><li><a href="#point"><span>Point</span></a></li><li><ul><li><ul><li><a href="#get-point-from-fig"><span>get <wbr/>Point from <wbr/>Fig</span></a></li></ul></li></ul></li><li><a href="#rect"><span>Rect</span></a></li><li><ul><li><ul><li><a href="#get-rect-from-fig"><span>get <wbr/>Rect from <wbr/>Fig</span></a></li></ul></li></ul></li><li><a href="#typeparsablerect"><span>Type<wbr/>Parsable<wbr/>Rect</span></a></li><li><ul><li><ul><li><a href="#all-rectangles-are-the-same-when-parsed-by-and-have-a-lower"><span>All rectangles are the same when parsed by  and have a lower</span></a></li></ul></li></ul></li><li><a href="#typeparsabletransform"><span>Type<wbr/>Parsable<wbr/>Transform</span></a></li><li><ul><li><ul><li><a href="#t1-t2-and-t3-are-all-equal-transforms"><span>t1, t2 and t3 are all equal transforms</span></a></li></ul></li></ul></li><li><a href="#transform"><span>Transform</span></a></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">figureone</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

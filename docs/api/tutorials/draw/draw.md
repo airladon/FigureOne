@@ -72,16 +72,16 @@ Also note that for both examples the `name` property was used. It is often not n
 #### Built-in Shapes
 
 There are several built in primitive shape methods that can be used to create complex figures:
-* <a href="#obj_line">line</a>
-* <a href="#obj_polyline">polyline</a>
-* <a href="#obj_arrow">arrow</a>
-* <a href="#obj_triangle">triangle</a>
-* <a href="#obj_rectangle">rectangle</a>
-* <a href="#obj_ellipse">ellipse</a>
-* <a href="#obj_arc">arc</a>
-* <a href="#obj_polygon">polygon</a>
-* <a href="#obj_star">star</a>
-* <a href="#obj_grid">grid</a>
+* {@link OBJ_Line | line}
+* {@link OBJ_Polyline | polyline}
+* {@link OBJ_Arrow | arrow}
+* {@link OBJ_Triangle | triangle}
+* {@link OBJ_Rectangle | rectangle}
+* {@link OBJ_Ellipse | ellipse}
+* {@link OBJ_Arc | arc}
+* {@link OBJ_Polygon | polygon}
+* {@link OBJ_Star | star}
+* {@link OBJ_Grid | grid}
 
 
 #### Drawing a generic shape

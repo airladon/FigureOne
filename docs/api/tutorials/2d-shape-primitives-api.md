@@ -194,7 +194,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -378,7 +378,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -456,7 +456,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -543,7 +543,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -621,7 +621,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -693,7 +693,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -765,7 +765,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -904,7 +904,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -1003,7 +1003,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -1100,7 +1100,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---

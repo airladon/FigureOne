@@ -128,14 +128,14 @@ that animate a change in angle, and animate a pulsing of the angle
 respectively. The animation steps are available in
 the animation manager ({@link FigureElement}.animations),
 and in the animation builder
-(<a href="#animationmanagernew">animations.new</a>
-and <a href="#animationmanagerbuilder">animations.builder</a>).
+({@link AnimationManager.new | animations.new}
+and {@link AnimationManager.builder | animations.builder}).
 
 Some of the useful methods included in an collections angle are:
-- <a href="#collectionsanglepulseangle">pulseAngle</a> - customize pulsing the
+- {@link CollectionsAngle.pulseAngle | pulseAngle} - customize pulsing the
   angle without
-- <a href="#collectionsanglesetmovable">setMovable</a> - overrides
-   <a href="#figureelementsetmovable">FigureElement.setMovable</a> and
+- {@link CollectionsAngle.setMovable | setMovable} - overrides
+   {@link FigureElement.setMovable} and
    allowing for more complex move options.
 
 #### Angle with size label
@@ -286,7 +286,7 @@ See {@link OBJ_PulseAngleAnimationStep} for pulse angle animation step
 options.
 
 To test examples below, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>.
+[boilerplate](./draw/draw.md#drawing-boilerplate).
 
 
 ---
@@ -389,12 +389,12 @@ same space as the `length` of the axis.
 The object contains additional methods that convert between axis values
 and draw space positions, as well as a convenience method to report if a
 value is within an axis.
-- <a href="#collectionsaxisvaluetodraw">valueToDraw</a>
-- <a href="#collectionsaxisdrawtovalue">drawToValue</a>
-- <a href="#collectionsaxisinaxis">inAxis</a>
+- {@link CollectionsAxis.valueToDraw | valueToDraw}
+- {@link CollectionsAxis.drawToValue | drawToValue}
+- {@link CollectionsAxis.inAxis | inAxis}
 
 To test examples below, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>.
+[boilerplate](./draw/draw.md#drawing-boilerplate).
 
 For more examples of axis labels and axis ticks, see {@link OBJ_AxisLabels}
 and {@link OBJ_AxisTicks}.
@@ -533,7 +533,7 @@ publish the following events:
 See {@link COL_Button} for setup options.
 
 To test examples below, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 #### Simple button
 
@@ -663,17 +663,17 @@ animates changing the line length, and `pulseWidth` animates the
 `pulseWidth` method. The animation steps are available in
 the animation manager ({@link FigureElement}.animations),
 and in the animation builder
-(<a href="#animationmanagernew">animations.new</a>
-and <a href="#animationmanagerbuilder">animations.builder</a>).
+({@link AnimationManager.new | animations.new}
+and {@link AnimationManager.builder | animations.builder}).
 
 Some of the useful methods included in an collections line are:
-- <a href="#collectionslinepulsewidth">pulseWidth</a> - pulses the line without
+- {@link CollectionsLine.pulseWidth | pulseWidth} - pulses the line without
   changing its length
-- <a href="#collectionslinegrow">grow</a> - starts and animation that executes
+- {@link CollectionsLine.grow | grow} - starts and animation that executes
   a single `length` animation
    step
-- <a href="#collectionslinesetmovable">grow</a> - overrides
-   <a href="#figureelementsetmovable">FigureElement.setMovable</a> and
+- {@link CollectionsLine.setMovable | setMovable} - overrides
+   {@link FigureElement.setMovable} and
    allowing for more complex move options.
 
 #### Pulse an annotated line
@@ -751,7 +751,7 @@ See {@link OBJ_PulseWidthAnimationStep} for pulse angle animation step
 options.
 
 To test examples below, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>.
+[boilerplate](./draw/draw.md#drawing-boilerplate).
 
 
 
@@ -1040,7 +1040,7 @@ plot.zoomValue([1.8333, 0.06672], 10);
 specific parts of the plot.
 
 To test examples below, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>.
+[boilerplate](./draw/draw.md#drawing-boilerplate).
 
 All examples below also use this power function to generate the traces:
 ```javascript
@@ -1239,7 +1239,7 @@ figure.add({
 ```
 
 > To test examples below, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>.
+[boilerplate](./draw/draw.md#drawing-boilerplate).
 
 
 
@@ -1297,12 +1297,12 @@ This object defines a rectangle
 - button behavior when clicked
 
 Surrounding another element can be executed through either the
-<a href="#collectionsrectanglesurround">surround</a> method
+{@link CollectionsRectangle.surround | surround} method
 or the {@link OBJ_SurroundAnimationStep} found in the in
 the animation manager ({@link FigureElement}.animations),
 and in the animation builder
-(<a href="#animationmanagernew">animations.new</a>
-and <a href="#animationmanagerbuilder">animations.builder</a>).
+({@link AnimationManager.new | animations.new}
+and {@link AnimationManager.builder | animations.builder}).
 
 Button behavior means the button will temporarily change a different color
 when it is clicked. By default, the button will become a little more
@@ -1402,7 +1402,7 @@ See {@link COL_Rectangle} for setup options.
 See {@link OBJ_SurroundAnimationStep} for surround animation step options.
 
 To test examples below, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>.
+[boilerplate](./draw/draw.md#drawing-boilerplate).
 
 
 ---
@@ -1451,7 +1451,7 @@ publish the following events:
 See {@link COL_Slider} for setup options.
 
 To test examples below, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 #### Simple slider with notification causing a console statement
 
@@ -1545,7 +1545,7 @@ publish the following events:
 See {@link COL_Toggle} for setup options.
 
 To test examples below, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 #### Simple toggle switch with notification causing a console statement
 

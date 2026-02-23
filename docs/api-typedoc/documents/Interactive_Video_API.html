@@ -73,13 +73,13 @@ example, '1:23.5' would define 1 minute, 23.5 seconds)</p>
 <hr>
 <h2 id="functionmap" class="tsd-anchor-link">FunctionMap<a href="#functionmap" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>Function Map</p>
-<p>In FigureOne  Recorder, state is saved in stringified javascript
+<p>In FigureOne <a href="../classes/Recorder_Recorder.Recorder.html" class="tsd-kind-class">Recorder</a>, state is saved in stringified javascript
 objects. When the state includes a function (like a trigger method in an
 animation for example) then that function is referenced in the state object
 as a unique string id.</p>
 <p>When a geometry is loaded, functions that will be captured in state objects
-need to be added to a function map. Both <a href="../modules/Figure.html" class="tsd-kind-module"> Figure</a> and
-FigureElement have attached function maps as the property <code>fnMap</code>.
+need to be added to a function map. Both <a href="../classes/Figure.default.html" class="tsd-kind-class">Figure</a> and
+<a href="../classes/Element.FigureElement.html" class="tsd-kind-class">FigureElement</a> have attached function maps as the property <code>fnMap</code>.
 Therefore, the method is added to either the figure or element function map,
 with an associated unique string id, and that string id is used when the
 function is used. For example as defined callbacks, triggerAnimationStep and

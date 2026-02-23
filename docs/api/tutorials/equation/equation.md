@@ -378,7 +378,7 @@ figure.add({
 Here, the touchability of the equation is setup in the `mods` property. The keys in `mods` represent property names of the equation {@link FigureElementCollection}.
 
 The above example also uses a *form series*. A form series allows animation between equation forms using the
-<a href="#equationnextform">equation.nextForm</a> and <a href="#equationprevform">equation.prevForm</a> methods.
+{@link Equation.nextForm | equation.nextForm} and {@link Equation.prevForm | equation.prevForm} methods.
 
 
 ![](./readability.gif)

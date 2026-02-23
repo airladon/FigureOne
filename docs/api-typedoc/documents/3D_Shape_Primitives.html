@@ -4,7 +4,7 @@
 <p>However, there are a number of concepts that are useful to know when dealing with 3D that are not needed for 2D. These concepts are especially useful if customizing shapes, or if creating your own.</p>
 <h4 id="geometry" class="tsd-anchor-link">Geometry<a href="#geometry" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <h5 id="point" class="tsd-anchor-link">Point<a href="#point" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h5>
-<p>In FigureOne, the  Point class is used extensively to define shapes and their properties. Points can be defined by instantiating a  Point or by using array notation. For example, creating two rectangles with different positions in two dimensions could look like:</p>
+<p>In FigureOne, the <a href="../classes/geometry_Point.Point.html" class="tsd-kind-class">Point</a> class is used extensively to define shapes and their properties. Points can be defined by instantiating a <a href="../classes/geometry_Point.Point.html" class="tsd-kind-class">Point</a> or by using array notation. For example, creating two rectangles with different positions in two dimensions could look like:</p>
 <pre><code class="js"><span class="hl-10">// Create two rectangles. One centered at [0.5, 0.5], and the other at</span><br/><span class="hl-10">// [-0.5, -0.5]</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">([</span><br/><span class="hl-5">  { </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;rectangle&#39;</span><span class="hl-5">, </span><span class="hl-8">position:</span><span class="hl-5"> </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">Point</span><span class="hl-5">(</span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">) },</span><br/><span class="hl-5">  { </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;rectangle&#39;</span><span class="hl-5">, </span><span class="hl-8">position:</span><span class="hl-5"> [-</span><span class="hl-12">0.5</span><span class="hl-5">, -</span><span class="hl-12">0.5</span><span class="hl-5">] },</span><br/><span class="hl-5">]);</span>
 </code><button type="button">Copy</button></pre>
 
@@ -13,13 +13,13 @@
 </code><button type="button">Copy</button></pre>
 
 <h5 id="plane" class="tsd-anchor-link">Plane<a href="#plane" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h5>
-<p>While  Point,  Line and  Rect are used to define most geometries in two dimensions, a  Plane is required for some three dimensional definitions.</p>
+<p>While <a href="../classes/geometry_Point.Point.html" class="tsd-kind-class">Point</a>, <a href="../classes/FigureCollections_Line.default.html" class="tsd-kind-class">Line</a> and <a href="../classes/geometry_Rect.Rect.html" class="tsd-kind-class">Rect</a> are used to define most geometries in two dimensions, a <a href="../classes/geometry_Plane.Plane.html" class="tsd-kind-class">Plane</a> is required for some three dimensional definitions.</p>
 <p>A plane is defined as a position and a normal vector to the plane.</p>
 <p><img src="../media/plane.png" alt=""></p>
 <pre><code class="js"><span class="hl-10">// Create an XZ plane at [0, 0, 0] (the normal is thus along the y axis)</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">p</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">Plane</span><span class="hl-5">([</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">], [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">]);</span>
 </code><button type="button">Copy</button></pre>
 
-<p>The  Plane object has a number of useful methods for working with planes and can determine things like:</p>
+<p>The <a href="../classes/geometry_Plane.Plane.html" class="tsd-kind-class">Plane</a> object has a number of useful methods for working with planes and can determine things like:</p>
 <ul>
 <li>if a point is on the plane</li>
 <li>if two planes are equal</li>

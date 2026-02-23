@@ -5,7 +5,7 @@ group: Interactive Video
 # Interactive Video
 With FigureOne, you can create a figure that can be both interactive and animated.
 
-The evolution of this is interactive video, enabled by the <a href="#recorder">Recorder</a> class. For something to be video-like, it needs to have visual content, audio, and the ability to play, pause, stop and seek. The recorder class can:
+The evolution of this is interactive video, enabled by the {@link Recorder} class. For something to be video-like, it needs to have visual content, audio, and the ability to play, pause, stop and seek. The recorder class can:
 
 * record and playback events, such as function calls, mouse movements, mouse clicks and slide navigation - these can either be recorded by a user, or programmed for specific times
 * overlay an audio track on playback
@@ -19,7 +19,7 @@ As such, the animation in FigureOne can be overlaid with audio to create a video
 
 Video seeking and pausing is enabled by recording and setting figure state.
 
-A FigureOne diagram may contain numerous <a href="#figureelement">FigureElement</a>s arranged in a hierarchy of collections that group elements. Each <a href="#figureelement">FigureElement</a> has properties that define how it behaves and is displayed, such as its visibility, color, transform, current or pending animations, and its behavior when touched or moved. These properties change over time, such as with animations and interactive actions from the user. We use the term 'state' to describe a snapshot of these property values at some instant in time. As such, individual FigureElements can have a state, and the state of all elements together is called the Figure state.
+A FigureOne diagram may contain numerous {@link FigureElement}s arranged in a hierarchy of collections that group elements. Each {@link FigureElement} has properties that define how it behaves and is displayed, such as its visibility, color, transform, current or pending animations, and its behavior when touched or moved. These properties change over time, such as with animations and interactive actions from the user. We use the term 'state' to describe a snapshot of these property values at some instant in time. As such, individual FigureElements can have a state, and the state of all elements together is called the Figure state.
 
 Part of creating a FigureOne interactive video, is to record figure state at regular intervals. These states are the seek frames. As a user is scrubbing through a video with the seek bar, the figure will be set into the state closest to the seek time. When play is pressed, the video will resume from this state.
 
@@ -49,9 +49,9 @@ The video track of a FigureOne video contains the recorded event and state infor
 
 However, some state information will refer to functions. For example, a trigger animation step has a callback function it needs to trigger. So how can you convert a function to a string?
 
-FigureOne has a <a href="#functionmap">FunctionMap</a> class which is a map of identifier strings to functions. When the figure is first loaded, functions are defined and stored in the map. When the functions need to be executed, the string is passed to the `FunctionMap` which then executes the associated function. When the function execution is recorded, just the string id and any associated parameters (that are also stringify-able) are recorded.
+FigureOne has a {@link FunctionMap} class which is a map of identifier strings to functions. When the figure is first loaded, functions are defined and stored in the map. When the functions need to be executed, the string is passed to the `FunctionMap` which then executes the associated function. When the function execution is recorded, just the string id and any associated parameters (that are also stringify-able) are recorded.
 
-The <a href="#figure">Figure</a> and each <a href="#figurelement">FigureElement</a> within it has an `fnMap` property which is a local `FunctionMap`. Each `FunctionMap` also have a link to a global map of functions at `fnMap.global`. `FunctionMap` will first try to execute a method from its local map. If it doesn't exist, then it will try the global map.
+The {@link Figure} and each {@link FigureElement} within it has an `fnMap` property which is a local `FunctionMap`. Each `FunctionMap` also have a link to a global map of functions at `fnMap.global`. `FunctionMap` will first try to execute a method from its local map. If it doesn't exist, then it will try the global map.
 
 Functions can be added to `FunctionMaps` with the `add()` method and executed with the `exec()` method.
 

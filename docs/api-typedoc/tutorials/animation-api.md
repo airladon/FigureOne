@@ -48,7 +48,7 @@ p.animations.new()
   .start();
 ```
 
-> <a href="#animationmanagernew">AnimationManager.new</a>
+> {@link AnimationManager.new}
 
 
 ---
@@ -249,7 +249,7 @@ p.animations.new()
 ```
 
 > To test examples, append them to the
-<a href="#animation-boilerplate">boilerplate</a>
+[boilerplate](./intro.md#animation-boilerplate)
 
 
 ---
@@ -344,7 +344,7 @@ p.animations.new()
 ```
 
 > To test examples, append them to the
-<a href="#animation-boilerplate">boilerplate</a>
+[boilerplate](./intro.md#animation-boilerplate)
 
 
 ---
@@ -398,7 +398,7 @@ p.animations.new()
 ```
 
 > To test examples, append them to the
-<a href="#animation-boilerplate">boilerplate</a>
+[boilerplate](./intro.md#animation-boilerplate)
 
 
 ---
@@ -455,7 +455,7 @@ p.animations.new()
 ```
 
 > To test examples, append them to the
-<a href="#animation-boilerplate">boilerplate</a>
+[boilerplate](./intro.md#animation-boilerplate)
 
 
 ---
@@ -549,7 +549,7 @@ p.animations.new()
 ```
 
 > To test examples, append them to the
-<a href="#animation-boilerplate">boilerplate</a>
+[boilerplate](./intro.md#animation-boilerplate)
 
 
 ---
@@ -606,7 +606,7 @@ p.animations.new()
 ```
 
 > To test examples, append them to the
-<a href="#animation-boilerplate">boilerplate</a>
+[boilerplate](./intro.md#animation-boilerplate)
 
 
 ---
@@ -660,7 +660,7 @@ p.animations.new()
 ```
 
 > To test examples, append them to the
-<a href="#animation-boilerplate">boilerplate</a>
+[boilerplate](./intro.md#animation-boilerplate)
 
 
 ---
@@ -742,7 +742,7 @@ p.animations.new()
 ```
 
 > To test examples, append them to the
-<a href="#animation-boilerplate">boilerplate</a>
+[boilerplate](./intro.md#animation-boilerplate)
 
 
 ---
@@ -757,7 +757,7 @@ Pulse animation step
 
 The pulse animation step animates a pulse.
 
-The options are the same as those in the * <a href="#figureelementpulse">pulse</a> method.
+The options are the same as those in the {@link FigureElement.pulse | pulse} method.
 
 ### Parameters
 
@@ -806,7 +806,7 @@ p.animations.new()
 ```
 
 > To test examples, append them to the
-<a href="#animation-boilerplate">boilerplate</a>
+[boilerplate](./intro.md#animation-boilerplate)
 
 
 ---
@@ -865,7 +865,7 @@ p.animations.new()
 ```
 
 > To test examples, append them to the
-<a href="#animation-boilerplate">boilerplate</a>
+[boilerplate](./intro.md#animation-boilerplate)
 
 
 ---
@@ -927,7 +927,7 @@ p.animations.new()
 ```
 
 > To test examples, append them to the
-<a href="#animation-boilerplate">boilerplate</a>
+[boilerplate](./intro.md#animation-boilerplate)
 
 
 ---
@@ -1003,7 +1003,7 @@ p.animations.new()
 ```
 
 > To test examples, append them to the
-<a href="#animation-boilerplate">boilerplate</a>
+[boilerplate](./intro.md#animation-boilerplate)
 
 
 ---
@@ -1103,7 +1103,7 @@ p.animations.new()
 ```
 
 > To test examples, append them to the
-<a href="#animation-boilerplate">boilerplate</a>
+[boilerplate](./intro.md#animation-boilerplate)
 
 
 ---
@@ -1162,7 +1162,7 @@ p.animations.new()
 ```
 
 > To test examples, append them to the
-<a href="#animation-boilerplate">boilerplate</a>
+[boilerplate](./intro.md#animation-boilerplate)
 
 
 ---
@@ -1237,7 +1237,7 @@ p.animations.new()
 ```
 
 > To test examples, append them to the
-<a href="#animation-boilerplate">boilerplate</a>
+[boilerplate](./intro.md#animation-boilerplate)
 
 
 ---

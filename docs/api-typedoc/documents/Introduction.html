@@ -10,8 +10,8 @@
 <p style="text-align: center"><img src="../media/transform.png"></p>
 <p>All transforms in FigureOne create such a matrix, and can be used to transform points.</p>
 <p>Transforms can be chained together, so a <em>rotation transform</em> can be chained with a <em>translation transform</em> to both rotate and translate. Transform chains can be arbitrarily long, and include multiple transforms of the same type.</p>
-<p>In the language of FigureOne, a  Transform is made up of a series of <em>transform components</em> where each component is a single transform step (like a rotation or translation).</p>
-<p>The  Transform class makes creating transforms easy.</p>
+<p>In the language of FigureOne, a <a href="../classes/geometry_Transform.Transform.html" class="tsd-kind-class">Transform</a> is made up of a series of <em>transform components</em> where each component is a single transform step (like a rotation or translation).</p>
+<p>The <a href="../classes/geometry_Transform.Transform.html" class="tsd-kind-class">Transform</a> class makes creating transforms easy.</p>
 <pre><code class="js"><span class="hl-10">// Create a transform</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">transform</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">Transform</span><span class="hl-5">().</span><span class="hl-9">scale</span><span class="hl-5">(</span><span class="hl-12">2</span><span class="hl-5">).</span><span class="hl-9">rotate</span><span class="hl-5">(</span><span class="hl-8">Math</span><span class="hl-5">.</span><span class="hl-7">PI</span><span class="hl-5"> / </span><span class="hl-12">2</span><span class="hl-5">).</span><span class="hl-9">translate</span><span class="hl-5">(</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">);</span><br/><span class="hl-10">// Get the transform matrix</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">matrix</span><span class="hl-5"> = </span><span class="hl-8">transform</span><span class="hl-5">.</span><span class="hl-9">matrix</span><span class="hl-5">();</span><br/><span class="hl-10">// Define a point</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">p</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">Point</span><span class="hl-5">(</span><span class="hl-12">2</span><span class="hl-5">, </span><span class="hl-12">3</span><span class="hl-5">);</span><br/><span class="hl-10">// Transform the point</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">transformedPoint</span><span class="hl-5"> = </span><span class="hl-8">p</span><span class="hl-5">.</span><span class="hl-9">transformBy</span><span class="hl-5">(</span><span class="hl-8">matrix</span><span class="hl-5">);</span>
 </code><button type="button">Copy</button></pre>
 
@@ -26,18 +26,18 @@
 <p>WebGL is very powerful, but can be hard to get started with due to its low-level nature relative to JavaScript. While FigureOne hides the complexity of WebGL from the user, it is still useful to understand the above workflow as FigureOne is organized with this work flow in mind, and the more such a work flow can be followed, then the more performant the end result will be.</p>
 <blockquote>
 <blockquote>
-<p>FigureOne also supports the cases where this work flow is not adequate, for example when vertices of a shape are morphing into a different shape. In such cases care needs to be taken to ensure a good end user experience. See <a href="#morphing">morphing</a> for more information.</p>
+<p>FigureOne also supports the cases where this work flow is not adequate, for example when vertices of a shape are morphing into a different shape. In such cases care needs to be taken to ensure a good end user experience. See <a href="Morphing.html">morphing</a> for more information.</p>
 </blockquote>
 </blockquote>
 <h4 id="figures-primitives-and-collections" class="tsd-anchor-link">Figures, Primitives and Collections<a href="#figures-primitives-and-collections" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <p>A <em>figure</em> is composed of one or more <em>figure elements</em>. A figure element is a shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.</p>
-<p>In the language of <strong>FigureOne</strong>, there are two types of  FigureElement:</p>
+<p>In the language of <strong>FigureOne</strong>, there are two types of <a href="../classes/Element.FigureElement.html" class="tsd-kind-class">FigureElement</a>:</p>
 <ul>
-<li>FigureElementPrimitive - an element that will draw something to the screen, such as a line, shape or text</li>
-<li>FigureElementCollection - collections of elements that will move or be operated on together</li>
+<li><a href="../classes/Element.FigureElementPrimitive.html" class="tsd-kind-class">FigureElementPrimitive</a> - an element that will draw something to the screen, such as a line, shape or text</li>
+<li><a href="../classes/Element.FigureElementCollection.html" class="tsd-kind-class">FigureElementCollection</a> - collections of elements that will move or be operated on together</li>
 </ul>
-<p>Each  FigureElement has a  Transform that transforms an element in space (e.g. rotates, translates, scales etc) when it is time to draw the element. In the case of a  FigureElementPrimitive, the shape or text will be transformed. In the case of a  FigureElementCollection, all the figure elements it contains will have their transforms cascaded with the collection's transform.</p>
-<p>This means there is a heierachy of  FigureElement objects, where the parent transform is combined with  (cascaded with) the child transform. Therefore collections can be thought of as modular building blocks of a more complex figure.</p>
+<p>Each <a href="../classes/Element.FigureElement.html" class="tsd-kind-class">FigureElement</a> has a <a href="../classes/geometry_Transform.Transform.html" class="tsd-kind-class">Transform</a> that transforms an element in space (e.g. rotates, translates, scales etc) when it is time to draw the element. In the case of a <a href="../classes/Element.FigureElementPrimitive.html" class="tsd-kind-class">FigureElementPrimitive</a>, the shape or text will be transformed. In the case of a <a href="../classes/Element.FigureElementCollection.html" class="tsd-kind-class">FigureElementCollection</a>, all the figure elements it contains will have their transforms cascaded with the collection's transform.</p>
+<p>This means there is a heierachy of <a href="../classes/Element.FigureElement.html" class="tsd-kind-class">FigureElement</a> objects, where the parent transform is combined with  (cascaded with) the child transform. Therefore collections can be thought of as modular building blocks of a more complex figure.</p>
 <p style="text-align: center"><img src="../media/transformcascades.png"></p>
 <h5 id="example" class="tsd-anchor-link">Example<a href="#example" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h5>
 <p>As an example, let's say we want to create a labeled line where the line and label both rotate together.</p>
@@ -78,10 +78,10 @@
 <p>If the parent collection's parent is the figure itself, then its transform will move the collection in figure space.</p>
 <p>Converting between spaces is relatively straight forward. Figure elements have methods to find their position or bounds in figure, local or draw space. The figure has transforms that allow conversion between figure, GL and pixel spaces. For example see:</p>
 <ul>
-<li><a href="#figureelementspacetransformmatrix">FigureElement.spaceTransformMatrix()</a></li>
-<li><a href="#figureelementgetposition">FigureElement.getPosition()</a></li>
-<li><a href="#figureelementsetpositiontoelement">FigureElement.setPositionToElement()</a></li>
-<li><a href="#spacetransformmatrix">Figure.spaceTransformMatrix()</a></li>
+<li><a href="../classes/Element.FigureElement.html#spacetransformmatrix" class="tsd-kind-method">FigureElement.spaceTransformMatrix</a></li>
+<li><a href="../classes/Element.FigureElement.html#getposition" class="tsd-kind-method">FigureElement.getPosition</a></li>
+<li><a href="../classes/Element.FigureElement.html#setpositiontoelement" class="tsd-kind-method">FigureElement.setPositionToElement</a></li>
+<li><a href="../classes/Figure.default.html#spacetransformmatrix" class="tsd-kind-method">Figure.spaceTransformMatrix</a></li>
 </ul>
 <p>An example of where this is useful is if two FigureElements have different parents, and you want to move one to be in the same position as the other. To do this you would convert the target FigureElement position to figure space, and then to the local space of the FigureElement to move.</p>
 <h4 id="drawing" class="tsd-anchor-link">Drawing<a href="#drawing" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>
@@ -98,18 +98,18 @@
 <li>Low level GL shapes through which WebGL concepts such as shaders, attributes, uniforms and textures can be defined allowing for complete customization and performance optimization</li>
 </ul>
 <h5 id="built-in-shapes" class="tsd-anchor-link">Built-In Shapes<a href="#built-in-shapes" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h5>
-<p>FigureOne comes with a number of common, customizable shapes. For example, to add a polygon to a figure (see  OBJ_Polygon for all possible polygon options):</p>
+<p>FigureOne comes with a number of common, customizable shapes. For example, to add a polygon to a figure (see <a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes2D.OBJ_Polygon.html" class="tsd-kind-interface">OBJ_Polygon</a> for all possible polygon options):</p>
 <pre><code class="js"><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;polygon&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">sides:</span><span class="hl-5"> </span><span class="hl-12">6</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">radius:</span><span class="hl-5"> </span><span class="hl-12">0.5</span><span class="hl-5">,</span><br/><span class="hl-5">});</span>
 </code><button type="button">Copy</button></pre>
 
 <p>When adding an element to the figure, the most important property (and only one that is required to be defined) is <code>make</code> which tells FigureOne which built-in shape to use. The remaining properties are optional.</p>
 <p>For a complete list of built in shapes see:</p>
 <ul>
-<li><a href="#2d-shape-primitives">2D Shape Primitives</a></li>
-<li><a href="#text">Text</a></li>
-<li><a href="##3d-shape-primitives">3D Shape Primitives</a></li>
-<li><a href="#2d-shape-collections">2D Shape Collections</a></li>
-<li><a href="#equations">Equations</a></li>
+<li><a href="2D_Shape_Primitives.html">2D Shape Primitives</a></li>
+<li><a href="Text.html">Text</a></li>
+<li><a href="3D_Shape_Primitives.html">3D Shape Primitives</a></li>
+<li><a href="2D_Shape_Collections.html">2D Shape Collections</a></li>
+<li><a href="Equations.html">Equations</a></li>
 </ul>
 <h5 id="generic-shapes" class="tsd-anchor-link">Generic Shapes<a href="#generic-shapes" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h5>
 <p>If you need to create a shape that is very different from the built-in shapes then the <code>generic</code> or <code>generic3</code> primitive can be used. Most commonly, the <code>points</code> used to define the shape actually define a series of triangles that create a fill. The example below creates two triangles.</p>
@@ -118,15 +118,15 @@
 
 <p>For more information on drawing generic shapes see:</p>
 <ul>
-<li><a href="#2d-shape-primitives">2D Shape Primitives</a></li>
-<li>OBJ_Generic</li>
-<li>OBJ_Generic3</li>
+<li><a href="2D_Shape_Primitives.html">2D Shape Primitives</a></li>
+<li><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes2D.OBJ_Generic.html" class="tsd-kind-interface">OBJ_Generic</a></li>
+<li><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes3D.OBJ_Generic3.html" class="tsd-kind-interface">OBJ_Generic3</a></li>
 </ul>
 <h5 id="low-level-gl-shapes" class="tsd-anchor-link">Low Level GL Shapes<a href="#low-level-gl-shapes" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h5>
-<p>FigureElements are optimized for both performance and convenience. To fully optimize for performance, a lower level GL primitive can be used (see  OBJ_GenericGL).</p>
+<p>FigureElements are optimized for both performance and convenience. To fully optimize for performance, a lower level GL primitive can be used (see <a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GenericGL.html" class="tsd-kind-interface">OBJ_GenericGL</a>).</p>
 <p>Using this primitive requires some familiarity with the concepts of WebGL. It provides an easy way to create custom <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLShader">shaders</a> with custom <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Data#attributes">attributes</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Data#uniforms">uniforms</a>.</p>
 <p>This primitive still handles all calls to the WebGL API, and so it is a relatively easy way to get started with WebGL shaders.</p>
-<p>The  OBJ_GenericGL has example code on how to use this primitive.</p>
+<p>The <a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GenericGL.html" class="tsd-kind-interface">OBJ_GenericGL</a> has example code on how to use this primitive.</p>
 <p>It is not in the scope of this documentation to explain what WebGL is, and how to use it. There are many good resources on the web that already do this - for example <a href="https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html">WebGLFundamentals</a> gives an excellent introduction to WebGL and this <a href="https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf">quick reference guid</a> is useful to refer to especially when writing shaders.</p>
 <!-- 
 ##### WebGL

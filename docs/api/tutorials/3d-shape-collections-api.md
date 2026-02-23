@@ -55,7 +55,7 @@ The axes can be created uniformly, or customized individually.
 See {@link COL_Axis3} for setup options.
 
 To test examples below, append them to the
-<a href="#shapes3d-boilerplate">boilerplate</a>
+[boilerplate](./shapes3d/shapes3d.md#shapes3d-boilerplate)
 
 #### Create positive x, y, and z axes
 

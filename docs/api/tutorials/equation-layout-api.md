@@ -115,7 +115,7 @@ eqn.showForm('1');
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -158,7 +158,7 @@ figure.add([
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -276,7 +276,7 @@ eqn.showForm('1');
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -343,7 +343,7 @@ eqn.showForm('1');
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -425,7 +425,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -525,7 +525,7 @@ eqn.setTouchable();
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -641,7 +641,7 @@ eqn.showForm('1');
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -741,7 +741,7 @@ eqn.showForm('1');
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -844,7 +844,7 @@ eqn.showForm('1');
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -875,7 +875,7 @@ the left, right, bottom and top sides</p></div></li>
 </ul>
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -995,7 +995,7 @@ eqn.showForm('1');
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -1125,7 +1125,7 @@ eqn.showForm('1');
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -1225,7 +1225,7 @@ eqn.showForm('1');
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -1325,7 +1325,7 @@ eqn.showForm('1');
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -1397,7 +1397,7 @@ eqn.showForm('1');
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -1461,7 +1461,7 @@ eqn.showForm('1');
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -1525,7 +1525,7 @@ eqn.setTouchable();
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -1626,7 +1626,7 @@ eqn.showForm('1');
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -1713,7 +1713,7 @@ eqn.showForm('1');
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -1784,7 +1784,7 @@ eqn.showForm('1');
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -1897,7 +1897,7 @@ eqn.showForm('1');
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -2008,7 +2008,7 @@ figure.getElement('eqn').animations.new()
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -2174,7 +2174,7 @@ eqn.showForm('1');
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---

@@ -209,7 +209,7 @@ figure.getElement('nav').loadSlides([
 See {@link SlideNavigator} for information about what a slide navigator is.
 
 To test examples below, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>.
+[boilerplate](./draw/draw.md#drawing-boilerplate).
 
 
 
@@ -376,7 +376,7 @@ figure.getElement('nav').loadSlides([
 ```
 
 > To test examples, append them to the
-<a href="#animation-boilerplate">boilerplate</a>
+[boilerplate](./intro.md#animation-boilerplate)
 
 
 ---

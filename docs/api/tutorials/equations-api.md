@@ -245,7 +245,7 @@ figure.add([
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -584,7 +584,7 @@ eqn.showForm('1');
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
