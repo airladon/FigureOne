@@ -3,6 +3,7 @@ import * as morph from './morph';
 import getImageData from './getImageData';
 import { round } from './math';
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 import 'regenerator-runtime/runtime';
 // import { round } from './math';
 jest.mock('./getImageData');
