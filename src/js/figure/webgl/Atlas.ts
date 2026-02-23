@@ -5,6 +5,7 @@ import { joinObjects, NotificationManager } from '../../tools/tools';
 import type { TypeColor } from '../../tools/types';
 import type Scene from '../../tools/geometry/scene';
 import type WebGLInstance from './webgl';
+import { figureOneError } from '../../tools/errors';
 
 
 /* eslint-disable max-len */
@@ -149,10 +150,10 @@ export default class Atlas {
 
     // Otherwise generate the atlas automatically
     if (options.font == null) {
-      throw new Error('FigureOne Atlas Error: Either `src` or `font` must be defined to create an atlas');
+      throw figureOneError(1000);
     }
     if (options.scene == null) {
-      throw new Error('FigureOne Atlas Error: Must define a scene to create an atlas from a font');
+      throw figureOneError(1001);
     }
     this.scene = o.scene;
     this.font = new FigureFont(o.font);
@@ -226,11 +227,21 @@ export default class Atlas {
       dimension = Math.floor(Math.ceil(Math.sqrt(glyphs.length) + 2) * fontSizePX * 1.5);
     }
 
-    const canvas = document.createElement('canvas');
-    canvas.width = dimension;
-    canvas.height = dimension;
-
-    const ctx = canvas.getContext('2d')!;
+    let canvas: HTMLCanvasElement;
+    let ctx: CanvasRenderingContext2D | null = null;
+    for (let attempt = 0; attempt < 4; attempt += 1) {
+      canvas = document.createElement('canvas');
+      canvas.width = dimension;
+      canvas.height = dimension;
+      ctx = canvas.getContext('2d');
+      if (ctx != null) break;
+      fontSizePX *= 0.5;
+      this.fontSize = fontSizePX;
+      dimension = Math.floor(Math.ceil(Math.sqrt(glyphs.length) + 2) * fontSizePX * 1.5);
+    }
+    if (ctx == null) {
+      throw figureOneError(1002, `dimension: ${dimension}`);
+    }
     ctx.font = `${font.style} ${font.weight} ${fontSizePX}px ${font.family}`;
 
     let x = fontSizePX;

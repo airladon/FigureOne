@@ -328,7 +328,17 @@ class WebGLInstance {
   }
 
   recreateAtlases() {
-    Object.keys(this.atlases).forEach(textureID => this.atlases[textureID].recreate());
+    const errors: Array<Error> = [];
+    Object.keys(this.atlases).forEach(textureID => {
+      try {
+        this.atlases[textureID].recreate();
+      } catch (e) {
+        errors.push(e instanceof Error ? e : new Error(String(e)));
+      }
+    });
+    if (errors.length > 0) {
+      throw errors[0];
+    }
   }
 
   deleteTexture(id: string) {
