@@ -1,5 +1,10 @@
 # Releases
 
+## 1.0.5
+* Complete JS-to-TS migration for all test files
+* Fix crash when canvas `getContext('2d')` returns null during atlas creation by retrying with smaller dimensions
+* Add central error code registry for structured error messages
+
 ## 1.0.4
 * Fix crash when an element is removed during a click or touch handler
 
