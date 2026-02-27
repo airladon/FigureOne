@@ -16,13 +16,59 @@ exports.load = function(app) {
     }
   });
 
-  // Phase 2: Preserve @property-documented members from excludeNotDocumented.
+  // Phase 2: Render @property tags as a formatted inline list.
   //
-  // Type aliases with @interface and @property JSDoc tags have their properties
-  // created as child reflections without comments. TypeDoc's excludeNotDocumented
-  // then removes them before the @property descriptions are applied (which happens
-  // during resolution). Fix: when a property child is created, check if the parent
-  // has a matching @property tag and set the comment immediately.
+  // Type aliases with @interface use @property JSDoc tags to document their
+  // members. TypeDoc creates child property reflections but excludeNotDocumented
+  // removes them (they have no inline comments). The @property descriptions
+  // would be applied during resolution — too late.
+  //
+  // Instead of fighting the exclusion, we collect property info (name, type,
+  // description) during creation and later render it as a compact list in the
+  // parent's comment summary. This gives a readable format without needing to
+  // click into each property.
+
+  // Store property info: parentId → [{ name, typeStr, typeParts, content }]
+  const propertyInfo = new Map();
+
+  /**
+   * Convert a TypeDoc Type to an array of display parts.
+   * ReferenceTypes become {@link} tags; everything else becomes code.
+   */
+  function typeToParts(type) {
+    if (!type) return [{ kind: 'code', text: '`unknown`' }];
+
+    if (type.constructor.name === 'ReferenceType') {
+      return [{ kind: 'inline-tag', tag: '@link', text: ` ${type.name}` }];
+    }
+
+    if (type.constructor.name === 'UnionType' && type.types) {
+      // Filter out 'undefined' — optional properties imply it via default values
+      const filtered = type.types.filter(
+        t => !(t.constructor.name === 'IntrinsicType' && t.name === 'undefined'),
+      );
+      const members = filtered.length > 0 ? filtered : type.types;
+      if (members.length === 1) return typeToParts(members[0]);
+      const parts = [];
+      for (let i = 0; i < members.length; i++) {
+        if (i > 0) parts.push({ kind: 'text', text: ' \\| ' });
+        parts.push(...typeToParts(members[i]));
+      }
+      return parts;
+    }
+
+    if (type.constructor.name === 'ArrayType' && type.elementType) {
+      return [...typeToParts(type.elementType), { kind: 'text', text: '[]' }];
+    }
+
+    if (type.constructor.name === 'LiteralType') {
+      return [{ kind: 'code', text: `\`${String(type.value)}\`` }];
+    }
+
+    // IntrinsicType and everything else: render as code
+    return [{ kind: 'code', text: `\`${type.toString()}\`` }];
+  }
+
   app.converter.on(td.Converter.EVENT_CREATE_DECLARATION, (_context, reflection) => {
     if (reflection.kind !== td.ReflectionKind.Property) return;
     const parent = reflection.parent;
@@ -30,9 +76,17 @@ exports.load = function(app) {
 
     const propTags = (parent.comment.blockTags || []).filter(t => t.tag === '@property');
     const match = propTags.find(t => t.name === reflection.name);
-    if (match && !reflection.comment) {
-      reflection.comment = new td.Comment(match.content);
+    if (!match) return;
+
+    if (!propertyInfo.has(parent.id)) {
+      propertyInfo.set(parent.id, []);
     }
+
+    propertyInfo.get(parent.id).push({
+      name: reflection.name,
+      typeParts: typeToParts(reflection.type),
+      content: match.content,
+    });
   });
 
   // Phase 3: Before TypeDoc resolves {@link} tags, rewrite simple symbol names
@@ -46,10 +100,15 @@ exports.load = function(app) {
   // This phase builds a lookup from simple names (and ClassName.member paths) to
   // their qualified module paths, then rewrites the {@link} text in all project
   // documents so TypeDoc's built-in resolver can find them.
+  //
+  // It also injects the property lists collected in Phase 2 into parent comments
+  // and removes the @property blockTags (which TypeDoc would otherwise render
+  // separately or ignore).
   app.converter.on(td.Converter.EVENT_RESOLVE_BEGIN, (context) => {
     const project = context.project;
 
-    // Map: simple name → "ModuleName.ExportName" qualified path
+    // --- Build qualified name map for {@link} resolution ---
+    // This must happen first so we can qualify links in injected property lists.
     const qualifiedMap = new Map();
 
     function register(simpleName, qualifiedName) {
@@ -58,12 +117,6 @@ exports.load = function(app) {
       }
     }
 
-    /**
-     * For default exports, TypeDoc may store the name as "default" rather than
-     * the original class name. Try to recover the original name from:
-     * 1. The reflection's escapedName (works when exported via a separate statement)
-     * 2. The source file declaration line (works for inline `export default class X`)
-     */
     function getOriginalClassName(child) {
       if (child.escapedName && child.escapedName !== 'default') {
         return child.escapedName;
@@ -83,7 +136,6 @@ exports.load = function(app) {
       return null;
     }
 
-    // Walk all modules and build the simple-name → qualified-path map
     for (const mod of project.children || []) {
       if (mod.kind !== td.ReflectionKind.Module) continue;
 
@@ -92,17 +144,14 @@ exports.load = function(app) {
           const originalName = getOriginalClassName(child);
           const inferredName = mod.name.split('/').pop();
 
-          // Collect all name aliases for this default export
           const names = new Set();
           if (originalName) names.add(originalName);
           if (inferredName) names.add(inferredName);
 
-          // Register bare class name → module.default
           for (const name of names) {
             register(name, `${mod.name}.default`);
           }
 
-          // Register ClassName.member paths
           for (const member of child.children || []) {
             for (const name of names) {
               register(
@@ -112,10 +161,8 @@ exports.load = function(app) {
             }
           }
         } else {
-          // Named export: register by its declared name
           register(child.name, `${mod.name}.${child.name}`);
 
-          // Register ClassName.member paths
           for (const member of child.children || []) {
             register(
               `${child.name}.${member.name}`,
@@ -126,6 +173,124 @@ exports.load = function(app) {
       }
     }
 
+    /**
+     * Rewrite an {@link} inline tag's text to use a qualified module path
+     * so TypeDoc's resolver can find the target. Returns a new part object
+     * if rewritten, or the original part if no match in qualifiedMap.
+     */
+    function qualifyLinkPart(part) {
+      if (part.kind !== 'inline-tag' || part.tag !== '@link') return part;
+
+      const trimmed = part.text.trim();
+      const pipeIdx = trimmed.indexOf('|');
+      let targetName, displayText;
+      if (pipeIdx !== -1) {
+        targetName = trimmed.substring(0, pipeIdx).trim();
+        displayText = trimmed.substring(pipeIdx + 1).trim();
+      } else {
+        targetName = trimmed;
+        displayText = null;
+      }
+
+      const qualified = qualifiedMap.get(targetName);
+      if (qualified) {
+        const display = displayText || targetName;
+        return { kind: 'inline-tag', tag: '@link', text: ` ${qualified} | ${display}` };
+      }
+      return part;
+    }
+
+    // --- Inject property lists into parent comments ---
+    function injectPropertyLists(reflection) {
+      const props = propertyInfo.get(reflection.id);
+      if (props && reflection.comment) {
+        const listParts = [];
+        listParts.push({ kind: 'text', text: '\n\n' });
+
+        for (const prop of props) {
+          listParts.push({ kind: 'text', text: '- ' });
+          listParts.push({ kind: 'code', text: `\`${prop.name}\`` });
+          listParts.push({ kind: 'text', text: ' ' });
+
+          // Type parts: qualify {@link} tags, fall back to code if not found
+          for (const part of prop.typeParts) {
+            if (part.kind === 'inline-tag' && part.tag === '@link') {
+              const resolved = qualifyLinkPart(part);
+              if (resolved === part) {
+                // No qualified path found — render as code instead
+                const name = part.text.trim();
+                listParts.push({ kind: 'code', text: `\`${name}\`` });
+              } else {
+                listParts.push(resolved);
+              }
+            } else {
+              listParts.push(part);
+            }
+          }
+
+          // Description: qualify {@link} tags in @property content
+          if (prop.content && prop.content.length > 0) {
+            listParts.push({ kind: 'text', text: ' — ' });
+            for (const part of prop.content) {
+              listParts.push(qualifyLinkPart(part));
+            }
+          }
+          listParts.push({ kind: 'text', text: '\n' });
+        }
+
+        reflection.comment.summary.push(...listParts);
+
+        if (reflection.comment.blockTags) {
+          reflection.comment.blockTags = reflection.comment.blockTags.filter(
+            t => t.tag !== '@property',
+          );
+        }
+      }
+
+      for (const child of reflection.children || []) {
+        injectPropertyLists(child);
+      }
+    }
+    injectPropertyLists(project);
+
+    // Rewrite {@link} text in all reflection comments (summary + blockTags)
+    function qualifyPartsArray(parts) {
+      for (let i = 0; i < parts.length; i++) {
+        if (parts[i].kind !== 'inline-tag' || parts[i].tag !== '@link') continue;
+        const rewritten = qualifyLinkPart(parts[i]);
+        if (rewritten !== parts[i]) {
+          parts[i] = rewritten;
+        }
+      }
+    }
+
+    function qualifyComment(comment) {
+      if (!comment) return;
+      if (comment.summary) qualifyPartsArray(comment.summary);
+      if (comment.blockTags) {
+        for (const tag of comment.blockTags) {
+          if (tag.content) qualifyPartsArray(tag.content);
+        }
+      }
+    }
+
+    function qualifyCommentLinks(reflection) {
+      qualifyComment(reflection.comment);
+      // Process method/function signatures
+      if (reflection.signatures) {
+        for (const sig of reflection.signatures) {
+          qualifyComment(sig.comment);
+        }
+      }
+      // Process getter/setter signatures
+      if (reflection.getSignature) qualifyComment(reflection.getSignature.comment);
+      if (reflection.setSignature) qualifyComment(reflection.setSignature.comment);
+      for (const child of reflection.children || []) {
+        qualifyCommentLinks(child);
+      }
+    }
+    qualifyCommentLinks(project);
+
     // Rewrite {@link} text in all document reflections
     const docs = project.getReflectionsByKind(td.ReflectionKind.Document);
     for (const id of Object.keys(docs)) {
@@ -134,24 +299,9 @@ exports.load = function(app) {
 
       for (const part of doc.content) {
         if (part.kind !== 'inline-tag' || part.tag !== '@link') continue;
-
-        // Parse the raw text: " TargetName" or " TargetName | display text"
-        const trimmed = part.text.trim();
-        const pipeIdx = trimmed.indexOf('|');
-        let targetName, displayText;
-        if (pipeIdx !== -1) {
-          targetName = trimmed.substring(0, pipeIdx).trim();
-          displayText = trimmed.substring(pipeIdx + 1).trim();
-        } else {
-          targetName = trimmed;
-          displayText = null;
-        }
-
-        const qualified = qualifiedMap.get(targetName);
-        if (qualified) {
-          // Rewrite to qualified form, preserving or defaulting display text
-          const display = displayText || targetName;
-          part.text = ` ${qualified} | ${display}`;
+        const rewritten = qualifyLinkPart(part);
+        if (rewritten !== part) {
+          part.text = rewritten.text;
         }
       }
     }
