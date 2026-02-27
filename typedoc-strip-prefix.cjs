@@ -16,7 +16,26 @@ exports.load = function(app) {
     }
   });
 
-  // Phase 2: Before TypeDoc resolves {@link} tags, rewrite simple symbol names
+  // Phase 2: Preserve @property-documented members from excludeNotDocumented.
+  //
+  // Type aliases with @interface and @property JSDoc tags have their properties
+  // created as child reflections without comments. TypeDoc's excludeNotDocumented
+  // then removes them before the @property descriptions are applied (which happens
+  // during resolution). Fix: when a property child is created, check if the parent
+  // has a matching @property tag and set the comment immediately.
+  app.converter.on(td.Converter.EVENT_CREATE_DECLARATION, (_context, reflection) => {
+    if (reflection.kind !== td.ReflectionKind.Property) return;
+    const parent = reflection.parent;
+    if (!parent || !parent.comment) return;
+
+    const propTags = (parent.comment.blockTags || []).filter(t => t.tag === '@property');
+    const match = propTags.find(t => t.name === reflection.name);
+    if (match && !reflection.comment) {
+      reflection.comment = new td.Comment(match.content);
+    }
+  });
+
+  // Phase 3: Before TypeDoc resolves {@link} tags, rewrite simple symbol names
   // in project documents to their module-qualified forms so resolution succeeds.
   //
   // Project documents have no module context, so {@link Transform} fails because
