@@ -527,15 +527,20 @@ class WebGLInstance {
     return program.locations;
   }
 
+  atlasScale: number;
+
   constructor(
   canvas: HTMLCanvasElement,
   // vertexSource: string,
   // fragmentSource: string,
   // shaderLocations: Array<string>,
   backgroundColor: Array<number>,
+  antialias: boolean = true,
+  atlasScale: number = 2,
 ) {
+    this.atlasScale = atlasScale;
     let gl: WebGLRenderingContext | null = canvas.getContext('webgl', {
-      antialias: true,
+      antialias,
       // premultipliedAlpha: false,
       // alpha: false
     });

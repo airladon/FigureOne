@@ -204,7 +204,7 @@ export default class Atlas {
     if (font.atlasSize != null) {
       fontSizePX = this.webgl.gl.canvas.height * font.atlasSize;
     } else {
-      fontSizePX = font.size / scene.heightNear * this.webgl.gl.canvas.height * 2;
+      fontSizePX = font.size / scene.heightNear * this.webgl.gl.canvas.height * this.webgl.atlasScale;
     }
 
     this.fontSize = fontSizePX;
@@ -306,5 +306,9 @@ export default class Atlas {
     // const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
     // window.location.href=image;
     this.webgl.addTexture(this.font.getTextureID(), ctx.canvas, [0, 0, 0, 0], false, null, true);
+    // Free the canvas backing store immediately since pixel data has already
+    // been uploaded to the GPU via texImage2D
+    ctx.canvas.width = 0;
+    ctx.canvas.height = 0;
   }
 }
