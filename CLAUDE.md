@@ -74,3 +74,12 @@ docs/
 - Webpack bundles `src/index.ts` into `package/index.js` (dev) and `package/figureone.min.js` (prod)
 - TypeScript declarations generated separately via `tsconfig.build.json` into `package/types/`
 - The `Fig` global is exported as a UMD library
+
+## Communication Rules
+
+- **No silent speculation.** If you are speculating or guessing, explicitly say so (e.g., "I'm speculating here, but…"). Never present speculation as fact.
+- **No false certainty.** Do not state something as definite unless you have confirmed or proved it (e.g., by reading the code, running a test, checking docs). Use hedging language ("I believe", "this likely", "I haven't verified but") when you haven't confirmed.
+- **Transparent conclusions.** When presenting a conclusion, break it down into:
+  - **Known** — what you verified or read directly
+  - **Assumed** — reasonable inferences you're making but haven't proven
+  - **Guessed** — parts you're unsure about and are filling in
