@@ -18,6 +18,7 @@ docker exec figureone_dev <command>
 | Build (webpack + types) | `docker exec figureone_dev npm run webpack` |
 | Build types only | `docker exec figureone_dev npm run build:types` |
 | Lint | `docker exec figureone_dev npm run lint` |
+| Generate API docs | `docker exec figureone_dev bash generate_docs_typedoc.sh` |
 
 ## Project Structure
 

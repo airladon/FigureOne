@@ -8,7 +8,7 @@ group: Interactivity
 
 Figure elements can be made touchable (or clickable with a mouse).
 
-To set an element as touchable, use the `touch` property during its definition or the <a href="#figureelementsettouchable">FigureElement.setTouchable()</a> method on the element after its creation.
+To set an element as touchable, use the `touch` property during its definition or the {@link FigureElement.setTouchable} method on the element after its creation.
 
 The following three examples all set an element to be touchable, and trigger a console statement when touched.
 
@@ -64,9 +64,9 @@ The border and touch borders can be defined with either the `drawBorder` or `dra
 
 The documentation in {@link OBJ_Generic} has the specifics on how to define borders and touch borders for FigureElementPrimitives. Similarly the documentation for @{OBJ_Collection} details the same for FigureElementCollections.
 
-The border for a FigureElement can be retrieved with <a href="#figureelementgetborder">FigureElementPrimitive.getBorder()</a> and <a href="#figureelementcollectiongetborder">FigureElementCollection.getBorder()</a>
+The border for a FigureElement can be retrieved with {@link FigureElementPrimitive.getBorder} and {@link FigureElementCollection.getBorder}
 
-When debugging, the borders and touchBorders of all shapes can be shown with <a href="#showborders">Figure.showBorders()</a> and <a href="#showtouchborders">Figure.showTouchBorders()</a>.
+When debugging, the borders and touchBorders of all shapes can be shown with {@link Figure.showBorders} and {@link Figure.showTouchBorders}.
 
 Borders and touch borders can be created during an object's creation:
 
@@ -106,7 +106,7 @@ This method is commonly used, performant, simple (as complex touch volumes don't
 
 When a larger touch border is required for a 3D element, use the `touchScale` property to scale the element in the temporary texture.
 
-When debugging, the <a href="#showTouchable">Figure.showTouchable()</a> method can be used to render the temporary texture being used to determine what is touched to the screen.
+When debugging, the {@link Figure.showTouchable} method can be used to render the temporary texture being used to determine what is touched to the screen.
 
 ```js
 const figure = new Fig.Figure({ scene: { style: 'orthographic' } });
@@ -126,7 +126,7 @@ figure.showTouchable();
 
 Once an element is touched, it can be moved.
 
-To make an element movable, use the `move` property during its definition or use the <a href="#figureelementsetmove">FigureElement.setMove()</a> on an instantiated element.
+To make an element movable, use the `move` property during its definition or use {@link FigureElement.setMove} on an instantiated element.
 
 ```js
 const figure = new Fig.Figure();
@@ -192,7 +192,7 @@ The default way to do this in FigureOne is to use a movement plane (`element.mov
 
 For example, to create a cube that can be translated in the YZ plane:
 
->> For the following examples, use <a href="#shapes3d-boilerplate">3D boiler plate</a>.
+>> For the following examples, use [3D boiler plate](../shapes3d/shapes3d.md#shapes3d-boilerplate).
 
 
 ```js

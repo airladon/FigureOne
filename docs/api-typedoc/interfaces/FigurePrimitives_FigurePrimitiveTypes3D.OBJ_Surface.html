@@ -23,6 +23,27 @@ and last row of the matrix have different points.</p>
 closed surfaces, use <code>closeRows</code> or <code>closeColumns</code> to ensure normal
 curvature is maintained at the end rows
 and columns.</p>
+<ul>
+<li><code>points</code> <a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a>[][] — A grid of points that
+define a 3D surface</li>
+<li><code>normals</code> <code>flat</code> | <code>curve</code> | <code>curveColumns</code> | <code>curveRows</code> — <code>flat</code> normals will make shading (from a light source) across a face of the
+object a constant color. <code>curveRows</code> will gradiate the shading along the
+rows of the grid. <code>curveColumns</code> will gradiate the shading along the columns
+of the grid. <code>curve</code> will gradiate the shading along both rows and columns.
+Use <code>curve</code>, <code>curveRows</code>, or <code>curveColumns</code> to make a surface
+look more round with fewer number of sides.</li>
+<li><code>closeRows</code> <code>boolean</code> — Set to <code>true</code> if first row and last row are
+the same, and normals is <code>'curveRows'</code> or <code>'curve'</code> to get correct normal
+calculations (<code>false</code>)</li>
+<li><code>closeColumns</code> <code>boolean</code> — Set to <code>true</code> if first row and last
+column are the same, and normals is <code>'curveColumns'</code> or <code>'curve'</code> to get
+correct normal calculations (<code>false</code>)
+shape</li>
+<li><code>lines</code> <code>boolean</code> — if <code>true</code> then points representing
+the edes of the faces will be returned. If <code>false</code>, then points
+representing two triangles per face and an
+associated normal for each point will be returned.</li>
+</ul>
 </div><div class="tsd-comment tsd-typography"><div class="tsd-tag-see"><h4 class="tsd-anchor-link" id="see">See<a href="#see" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>To test examples, append them to the
 <a href="#shapes3d-boilerplate">boilerplate</a></p>
 </div><div class="tsd-tag-example"><h4 class="tsd-anchor-link" id="example">Example<a href="#example" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">points</span><span class="hl-5"> = </span><span class="hl-8">Fig</span><span class="hl-5">.</span><span class="hl-9">surfaceGrid</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">x:</span><span class="hl-5"> [-</span><span class="hl-12">0.8</span><span class="hl-5">, </span><span class="hl-12">0.7</span><span class="hl-5">, </span><span class="hl-12">0.03</span><span class="hl-5">],</span><br/><span class="hl-5">  </span><span class="hl-8">y:</span><span class="hl-5"> [-</span><span class="hl-12">0.8</span><span class="hl-5">, </span><span class="hl-12">0.7</span><span class="hl-5">, </span><span class="hl-12">0.03</span><span class="hl-5">],</span><br/><span class="hl-5">  </span><span class="hl-9">z</span><span class="hl-8">:</span><span class="hl-5"> </span><span class="hl-8">x</span><span class="hl-5"> </span><span class="hl-6">=&gt;</span><span class="hl-5"> </span><span class="hl-12">0.2</span><span class="hl-5"> * </span><span class="hl-8">Math</span><span class="hl-5">.</span><span class="hl-9">cos</span><span class="hl-5">(</span><span class="hl-8">x</span><span class="hl-5"> * </span><span class="hl-12">2</span><span class="hl-5"> * </span><span class="hl-8">Math</span><span class="hl-5">.</span><span class="hl-7">PI</span><span class="hl-5">),</span><br/><span class="hl-5">});</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-8">scene</span><span class="hl-5">.</span><span class="hl-9">setCamera</span><span class="hl-5">({ </span><span class="hl-8">up:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">] });</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;surface&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">points</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">],</span><br/><span class="hl-5">});</span>

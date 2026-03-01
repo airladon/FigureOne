@@ -55,7 +55,7 @@ WebGL leverages GPU hardware to accelerate rendering. As such very complex shape
 
 WebGL is very powerful, but can be hard to get started with due to its low-level nature relative to JavaScript. While FigureOne hides the complexity of WebGL from the user, it is still useful to understand the above workflow as FigureOne is organized with this work flow in mind, and the more such a work flow can be followed, then the more performant the end result will be.
 
->> FigureOne also supports the cases where this work flow is not adequate, for example when vertices of a shape are morphing into a different shape. In such cases care needs to be taken to ensure a good end user experience. See <a href="#morphing">morphing</a> for more information.
+>> FigureOne also supports the cases where this work flow is not adequate, for example when vertices of a shape are morphing into a different shape. In such cases care needs to be taken to ensure a good end user experience. See [morphing](./morph/morph.md) for more information.
 
 
 #### Figures, Primitives and Collections
@@ -185,10 +185,10 @@ If the parent collection's parent is the figure itself, then its transform will 
 
 Converting between spaces is relatively straight forward. Figure elements have methods to find their position or bounds in figure, local or draw space. The figure has transforms that allow conversion between figure, GL and pixel spaces. For example see:
 
-* <a href="#figureelementspacetransformmatrix">FigureElement.spaceTransformMatrix()</a>
-* <a href="#figureelementgetposition">FigureElement.getPosition()</a>
-* <a href="#figureelementsetpositiontoelement">FigureElement.setPositionToElement()</a>
-* <a href="#spacetransformmatrix">Figure.spaceTransformMatrix()</a>
+* {@link FigureElement.spaceTransformMatrix}
+* {@link FigureElement.getPosition}
+* {@link FigureElement.setPositionToElement}
+* {@link Figure.spaceTransformMatrix}
 
 
 An example of where this is useful is if two FigureElements have different parents, and you want to move one to be in the same position as the other. To do this you would convert the target FigureElement position to figure space, and then to the local space of the FigureElement to move.
@@ -230,11 +230,11 @@ figure.add({
 When adding an element to the figure, the most important property (and only one that is required to be defined) is `make` which tells FigureOne which built-in shape to use. The remaining properties are optional.
 
 For a complete list of built in shapes see:
-* <a href="#2d-shape-primitives">2D Shape Primitives</a>
-* <a href="#text">Text</a>
-* <a href="##3d-shape-primitives">3D Shape Primitives</a>
-* <a href="#2d-shape-collections">2D Shape Collections</a>
-* <a href="#equations">Equations</a>
+* [2D Shape Primitives](./draw/draw.md)
+* [Text](./text/text.md)
+* [3D Shape Primitives](./shapes3d/shapes3d.md)
+* [2D Shape Collections](./collections/collections.md)
+* [Equations](./equation/equation.md)
 
 ##### Generic Shapes
 
@@ -251,7 +251,7 @@ figure.add({
 ```
 
 For more information on drawing generic shapes see:
-* <a href="#2d-shape-primitives">2D Shape Primitives</a>
+* [2D Shape Primitives](./draw/draw.md)
 * {@link OBJ_Generic}
 * {@link OBJ_Generic3}
 

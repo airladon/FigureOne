@@ -46,6 +46,50 @@ defined as a custom set of points.</p>
 encompassing rect (<code>'rect'</code>), a custom set of points, or the same as the
 line but with some buffer that effectively increases the width on both sides
 of the line.</p>
+<ul>
+<li><code>points</code> <a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a>[] | <a href="../classes/geometry_Point.Point.html" class="tsd-kind-class">Point</a>[]</li>
+<li><code>width</code> <code>number</code> — (<code>0.01</code>)</li>
+<li><code>close</code> <code>boolean</code> — close the polyline on itself (<code>false</code>)</li>
+<li><code>simple</code> <code>boolean</code> — simple and minimum computation polyline. Good
+for large numbers of points that need to be updated every animation frame.
+<code>widthIs</code>, <code>dash</code>, <code>arrow</code> and all corner and line primitive properties are
+not available when a polyline is simple. (<code>false</code>)</li>
+<li><code>widthIs</code> <code>number</code> | <code>positive</code> | <code>negative</code> | <code>mid</code> | <code>outside</code> | <code>inside</code> — defines how the width is grown from the polyline's points.
+Only <code>&quot;mid&quot;</code> is fully compatible with all options in
+<code>cornerStyle</code> and <code>dash</code>. (<code>&quot;mid&quot;</code>)</li>
+<li><code>drawBorder</code> <code>(&quot;positive&quot; | &quot;negative&quot; | &quot;line&quot; | TypeParsableBorder) &amp; TypeParsableBorder</code> — override OBJ_Generic <code>drawBorder</code> with <code>'line'</code> to make the drawBorder just
+the line itself, <code>'positive'</code> to make the drawBorder the positive side
+of the line, and <code>'negative'</code> to make the drawBorder the negative side
+of the line. Use array definition for custom drawBorder (<code>'line'</code>)</li>
+<li><code>drawBorderBuffer</code> <code>(number | TypeParsableBorder) &amp; TypeParsableBorder</code> — override OBJ_Generic <code>drawBorderBuffer</code> with <code>number</code> to make the
+drawBorderBuffer the same as the line with additional <code>number</code> thickness
+on either side (<code>0</code>)</li>
+<li><code>cornerStyle</code> <code>fill</code> | <code>none</code> | <code>radius</code> | <code>auto</code> — <code>&quot;auto&quot;</code>:
+sharp corners sharp when angle is less than <code>minAutoCornerAngle</code>, <code>&quot;none&quot;</code>: no
+corners, <code>&quot;radius&quot;</code>: curved corners, <code>&quot;fill&quot;</code>: fills the gapes between the line
+ends, (<code>&quot;auto&quot;</code>)</li>
+<li><code>cornerSize</code> <code>number</code> — only used when <code>cornerStyle</code> = <code>radius</code> (<code>0.01</code>)</li>
+<li><code>cornerSides</code> <code>number</code> — number of sides in curve - only used when
+<code>cornerStyle</code> = <code>radius</code> (<code>10</code>)</li>
+<li><code>cornersOnly</code> <code>boolean</code> — draw only the corners with size <code>cornerSize</code> (<code>false</code>)</li>
+<li><code>cornerLength</code> <code>number</code> — use only with <code>cornersOnly</code> = <code>true</code> -
+length of corner to draw (<code>0.1</code>)</li>
+<li><code>minAutoCornerAngle</code> <code>number</code> — see <code>cornerStyle</code> = <code>auto</code> (<code>π/7</code>)</li>
+<li><code>dash</code> <a href="../types/types.TypeDash.html" class="tsd-kind-type-alias">TypeDash</a> — leave empty for solid line - use array of
+numbers for dash line where first number is length of line, second number is
+length of gap and then the pattern repeats - can use more than one dash length
+and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
+short gap, short dash, short gap and then repeats.</li>
+<li><code>arrow</code> <a href="geometries_arrow.OBJ_LineArrows.html" class="tsd-kind-interface">OBJ_LineArrows</a> | <a href="../types/geometries_arrow.TypeArrowHead.html" class="tsd-kind-type-alias">TypeArrowHead</a> — either an object defining custom
+arrows or a string representing the name of an arrow head style can be used.
+If a string is used, then the line will have an arrow at both ends.
+Arrows are only available for <code>close: false</code>,
+<code>widthIs: 'mid'</code> and <code>linePrimitives: false</code></li>
+<li><code>linePrimitives</code> <code>boolean</code> — Use WebGL line primitives instead of
+triangle primitives to draw the line (<code>false</code>)</li>
+<li><code>lineNum</code> <code>number</code> — Number of line primitives to use when
+<code>linePrimitivs</code>: <code>true</code> (<code>2</code>)</li>
+</ul>
 </div><div class="tsd-comment tsd-typography"><div class="tsd-tag-see"><h4 class="tsd-anchor-link" id="see">See<a href="#see" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>To test examples, append them to the
 <a href="#drawing-boilerplate">boilerplate</a></p>
 </div><div class="tsd-tag-example"><h4 class="tsd-anchor-link" id="example">Example<a href="#example" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-10">// Line</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">(</span><br/><span class="hl-5">  {</span><br/><span class="hl-5">    </span><span class="hl-8">name:</span><span class="hl-5"> </span><span class="hl-11">&#39;p&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;polyline&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">    </span><span class="hl-8">points:</span><span class="hl-5"> [[-</span><span class="hl-12">0.5</span><span class="hl-5">, -</span><span class="hl-12">0.5</span><span class="hl-5">], [-</span><span class="hl-12">0.1</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">], [</span><span class="hl-12">0.3</span><span class="hl-5">, -</span><span class="hl-12">0.2</span><span class="hl-5">], [</span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.5</span><span class="hl-5">]],</span><br/><span class="hl-5">    </span><span class="hl-8">width:</span><span class="hl-5"> </span><span class="hl-12">0.05</span><span class="hl-5">,</span><br/><span class="hl-5">  },</span><br/><span class="hl-5">);</span>

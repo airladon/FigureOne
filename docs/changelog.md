@@ -1,5 +1,9 @@
 # Releases
 
+## 1.0.6
+* Fix doc links and improve TypeDoc generation with better @property rendering and {@link} resolution
+* Remove unused canvas and texture data references in WebGL to allow garbage collection of atlas canvases
+
 ## 1.0.5
 * Complete JS-to-TS migration for all test files
 * Fix crash when canvas `getContext('2d')` returns null during atlas creation by retrying with smaller dimensions

@@ -12,7 +12,7 @@ An animation is a number of {@link AnimationStep}s in either series or parallel.
 
 #### Animation Examples
 
-Let's create a simple animation. Start by defining a figure and retrieving the element to animate by creating the boilerplate files [above](#animation-boilerplate).
+Let's create a simple animation. Start by defining a figure and retrieving the element to animate by creating the boilerplate files [above](../intro.md#animation-boilerplate).
 
 A {@link PositionAnimationStep} can be created to translate the shape, and a {@link RotationAnimationStep} to rotate it
 ```javascript
@@ -31,7 +31,7 @@ p.animations.new()
 <p style="text-align: center"><img src="./ex1.gif"></p>
 
 
-A more convenient way to chain animation steps in series is to create them inline. The <a href="#animationmanagernew">animations.new</a> method returns an {@link AnimationBuilder} that allows for inline step creation.
+A more convenient way to chain animation steps in series is to create them inline. The {@link AnimationManager.new | animations.new} method returns an {@link AnimationBuilder} that allows for inline step creation.
 
 ```javascript
 p.animations.new()

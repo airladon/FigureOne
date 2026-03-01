@@ -81,6 +81,40 @@ baseline (but often do a little) like &quot;a&quot; and &quot;b&quot;</li>
 </ul>
 <p>Individual glyphs can also be modified (for atlas based fonts only) using
 the <code>modifiers</code> property.</p>
+<ul>
+<li><code>family</code> <code>string</code> — The font family (<code>'Times New Roman'</code>)</li>
+<li><code>weight</code> <a href="../types/types.TypeFontWeight.html" class="tsd-kind-type-alias">TypeFontWeight</a> — font weight (<code>'normal'</code>)</li>
+<li><code>style</code> <code>normal</code> | <code>italic</code> | <code>oblique</code> — (<code>'normal'</code>)</li>
+<li><code>size</code> <code>number</code> — size of font in draw space (<code>0.2</code>)</li>
+<li><code>underline</code> <code>boolean</code> | <a href="types.OBJ_Underline.html" class="tsd-kind-interface">OBJ_Underline</a> — <code>true</code> to include
+an underline or use object to define its properties (<code>false</code>)</li>
+<li><code>color</code> <a href="../types/types.TypeColor.html" class="tsd-kind-type-alias">TypeColor</a> | <code>null</code> — Font color
+[red, green, blue, alpha] between 0 and 1 - (<code>[1, 0, 0, 1]</code>)</li>
+<li><code>outline</code> <code>boolean</code> | <a href="types.OBJ_Outline.html" class="tsd-kind-interface">OBJ_Outline</a> — options to draw the text in outline
+instead of or in addition to a fill (<code>false</code>)</li>
+<li><code>descent</code> <code>number</code> — (<code>0.8</code>)</li>
+<li><code>maxDescent</code> <code>number</code> — (<code>0.2</code>)</li>
+<li><code>midDescent</code> <code>number</code> — (<code>0.5</code>)</li>
+<li><code>maxAscent</code> <code>number</code> — (<code>0.95</code>)</li>
+<li><code>midAscent</code> <code>number</code> — (<code>1.4</code>)</li>
+<li><code>modifiers</code> <a href="types.OBJ_GlyphModifiers.html" class="tsd-kind-interface">OBJ_GlyphModifiers</a> — individual glyph adjustments for
+texture atlas fonts</li>
+<li><code>src</code> <code>string</code> | <code>HTMLImageElement</code> — source image or url for atlas</li>
+<li><code>map</code> <code>OBJ_AtlasMap</code> — atlas definition needed if using a source
+image or url</li>
+<li><code>glyphs</code> <code>string</code> — glyphs included in the font - an array can be used combining glyphs together</li>
+<li><code>loadColor</code> <a href="../types/types.TypeColor.html" class="tsd-kind-type-alias">TypeColor</a> — color of temporary texture while actual
+texture is loading</li>
+<li><code>atlasColor</code> <code>boolean</code> — <code>true</code> to use the color of the glyphs in
+the atlas. <code>false</code> will just use the opacity and color the glyphs from the
+FigureElement drawing them</li>
+<li><code>atlasSize</code> <code>number</code> | <code>null</code> — font size of atlas as a proportion of
+the WebGL canvas height. If this is null, then the atlas font size is
+calculated from the font size, scene height and number of pixels in the
+canvas height. (<code>null</code>)</li>
+<li><code>render</code> <code>html</code> | <code>gl</code> | <code>2d</code> — render the associated text to
+either the WebGL canvas, the 2D canvas, or the HTML canvas.</li>
+</ul>
 </div><div class="tsd-comment tsd-typography"><div class="tsd-tag-example"><h4 class="tsd-anchor-link" id="example">Example<a href="#example" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-10">// Full font definition</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">font</span><span class="hl-5"> = </span><span class="hl-6">new</span><span class="hl-5"> </span><span class="hl-9">FigureFont</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">family:</span><span class="hl-5"> </span><span class="hl-11">&#39;Helvetica&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">style:</span><span class="hl-5"> </span><span class="hl-11">&#39;italic&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">weight:</span><span class="hl-5"> </span><span class="hl-11">&#39;bold&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">],</span><br/><span class="hl-5">  </span><span class="hl-8">opacity:</span><span class="hl-5"> </span><span class="hl-12">1</span><span class="hl-5">,</span><br/><span class="hl-5">});</span>
 </code><button type="button">Copy</button></pre>
 

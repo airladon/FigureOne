@@ -32,6 +32,25 @@ dimension along the line. It includes both the head and the tail, so an arrow
 with length 1 and tailLength 0.4 will have a head length of 0.6.</p>
 <p>For <code>polygon</code> and <code>circle</code> arrows, only <code>radius</code> and <code>tail</code> are used to
 determine the dimension of the arrow (<code>length</code> and <code>width</code> are ignored).</p>
+<ul>
+<li><code>head</code> <a href="../types/geometries_arrow.TypeArrowHead.html" class="tsd-kind-type-alias">TypeArrowHead</a> — head style (<code>'triangle'</code>)</li>
+<li><code>scale</code> <code>number</code> — scale the default dimensions of the arrow</li>
+<li><code>length</code> <code>number</code> — dimension of the arrow head along the line</li>
+<li><code>width</code> <code>number</code> — dimension of the arrow head along the line width</li>
+<li><code>rotation</code> <code>number</code> — rotation of the polygon when <code>head = 'polygon'</code></li>
+<li><code>sides</code> <code>number</code> — number of sides in polygon or circle arrow head</li>
+<li><code>radius</code> <code>number</code> — radius of polygon or circle arrow head</li>
+<li><code>barb</code> <code>number</code> — barb length (along the length of the line) of the
+barb arrow head</li>
+<li><code>tailWidth</code> <code>number</code> — width of the line that joins the arrow - if
+defined this will create minimum dimensions for the arrow</li>
+<li><code>tail</code> <code>boolean</code> — <code>true</code> includes a tail in the arrow of
+with <code>tailWidth</code>. A <code>number</code> gives the tail a length where 0 will not
+extend the tail beyond the boundaries of the head</li>
+<li><code>align</code> <code>start</code> | <code>mid</code> | <code>tip</code> | <code>tail</code> — define which part of
+the arrow is aligned at (0, 0) in draw space (<code>'tip'</code>)</li>
+<li><code>angle</code> <code>number</code> — angle the arrow is drawn at (<code>0</code>)</li>
+</ul>
 </div><div class="tsd-comment tsd-typography"><div class="tsd-tag-example"><h4 class="tsd-anchor-link" id="example">Example<a href="#example" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-10">// Triangle arrow with tail</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">name:</span><span class="hl-5"> </span><span class="hl-11">&#39;a&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;arrow&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">head:</span><span class="hl-5"> </span><span class="hl-11">&#39;triangle&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">tail:</span><span class="hl-5"> </span><span class="hl-12">0.15</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">length:</span><span class="hl-5"> </span><span class="hl-12">0.5</span><span class="hl-5">,</span><br/><span class="hl-5">});</span>
 </code><button type="button">Copy</button></pre>
 

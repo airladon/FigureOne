@@ -15,6 +15,23 @@ line's baselines.</p>
 <p>Spacing between lines is defined as either the space between the lowest
 point (descent) of one line to the highest point (ascent) of the next,
 or as the space between line baselines.</p>
+<ul>
+<li><code>content</code> <a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-kind-type-alias">TypeEquationPhrase</a> | <a href="Equation_EquationFunctions.EQN_Line.html" class="tsd-kind-interface">EQN_Line</a>[] — Array of equation
+phrases or equation line objects</li>
+<li><code>justify</code> <code>left</code> | <code>right</code> | <code>center</code> | <code>element</code> — how to align
+the lines in x. Use 'element' to align the lines with a specific element
+from each line (that is defined with the <code>justify</code> property in each line)
+(<code>'left'</code>)</li>
+<li><code>baselineSpace</code> <code>number</code> | <code>null</code> — default space between baselines
+of lines. If not <code>null</code> then will override <code>space</code> (<code>null</code>).</li>
+<li><code>space</code> <code>number</code> — default space between descent of one line and
+ascent of the next line (<code>0</code>).</li>
+<li><code>yAlign</code> <code>number</code> | <code>top</code> | <code>bottom</code> | <code>middle</code> — How to align the
+lines in y. <code>number</code> can be any line index, and it will align the baseline
+of that line. So, using <code>0</code> will align the first line's baseline. (<code>0</code>)</li>
+<li><code>fullContentBounds</code> <code>boolean</code> — use full bounds of content,
+overriding any <code>inSize=false</code> properties in the content (<code>false</code>)</li>
+</ul>
 </div><div class="tsd-comment tsd-typography"><div class="tsd-tag-see"><h4 class="tsd-anchor-link" id="see">See<a href="#see" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>To test examples, append them to the
 <a href="#drawing-boilerplate">boilerplate</a></p>
 </div><div class="tsd-tag-example"><h4 class="tsd-anchor-link" id="example">Example<a href="#example" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-10">// Two lines, array definition</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">name:</span><span class="hl-5"> </span><span class="hl-11">&#39;eqn&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;equation&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">forms:</span><span class="hl-5"> {</span><br/><span class="hl-5">    </span><span class="hl-12">0</span><span class="hl-8">:</span><span class="hl-5"> {</span><br/><span class="hl-5">      </span><span class="hl-8">lines:</span><span class="hl-5"> [</span><br/><span class="hl-5">        [</span><br/><span class="hl-5">          [</span><span class="hl-11">&#39;a&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;_ = &#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;b&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;_ + _1&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;c&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;_ - _1&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;d&#39;</span><span class="hl-5">],</span><br/><span class="hl-5">          [</span><span class="hl-11">&#39;_ + _2&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;e&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;_ - _2&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;f&#39;</span><span class="hl-5">],</span><br/><span class="hl-5">        ],</span><br/><span class="hl-5">        </span><span class="hl-11">&#39;right&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">        </span><span class="hl-12">0.2</span><span class="hl-5">,</span><br/><span class="hl-5">      ],</span><br/><span class="hl-5">    },</span><br/><span class="hl-5">  },</span><br/><span class="hl-5">});</span>

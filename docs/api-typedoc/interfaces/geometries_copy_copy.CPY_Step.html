@@ -43,6 +43,26 @@ the angular step in radians.</p>
 <p>Any step can use the <code>original</code> property - but it will only operate on the
 last step that uses it. When <code>original</code> is <code>false</code>, then all points before
 that copy step will not be included in the returned Point array.</p>
+<ul>
+<li><code>to</code> <a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a> | <a href="../types/geometry_Transform.TypeParsableTransform.html" class="tsd-kind-type-alias">TypeParsableTransform</a> | <code>TypeParsablePoint | TypeParsableTransform</code>[] — copy points to
+a location or locations or transform a copy of the points</li>
+<li><code>along</code> <code>number</code> | <a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a> — copy points along a linear path where <code>number</code> is a path at an angle in
+radians in the xy plane, and <code>TypeParsablePoint</code> is a direction vector</li>
+<li><code>axis</code> <a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a> — axis to rotate a 'rotation' copy around
+(default is the z axis so rotation is in xy plane <code>[0, 0, 1]</code>)</li>
+<li><code>num</code> <code>number</code> — the number of copies to make when copying <code>along</code> a
+path</li>
+<li><code>step</code> <code>number</code> — distance between copies if <code>along</code> is <code>'x'</code> or
+<code>'y'</code> or a <code>number</code>, delta angle between copies if <code>along</code> is <code>'rotation'</code></li>
+<li><code>center</code> <a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a> — the center point about which to rotate
+the copies when using <code>along</code> = <code>'rotation'</code></li>
+<li><code>start</code> <code>string</code> | <code>number</code> — copy step index or marker defining the
+start of the points to copy</li>
+<li><code>end</code> <code>string</code> | <code>number</code> — copy step index or marker defining the end
+of the points to copy</li>
+<li><code>original</code> <code>boolean</code> — <code>false</code> excludes all points before this step
+in the final result (<code>true</code>)</li>
+</ul>
 </div><div class="tsd-comment tsd-typography"><div class="tsd-tag-example"><h4 class="tsd-anchor-link" id="example">Example<a href="#example" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-10">// Grid copy</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">name:</span><span class="hl-5"> </span><span class="hl-11">&#39;triGrid&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;polygon&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">radius:</span><span class="hl-5"> </span><span class="hl-12">0.1</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">sides:</span><span class="hl-5"> </span><span class="hl-12">3</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">rotation:</span><span class="hl-5"> -</span><span class="hl-8">Math</span><span class="hl-5">.</span><span class="hl-7">PI</span><span class="hl-5"> / </span><span class="hl-12">6</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">fill:</span><span class="hl-5"> </span><span class="hl-11">&#39;tris&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">copy:</span><span class="hl-5"> [</span><br/><span class="hl-5">    {</span><br/><span class="hl-5">      </span><span class="hl-8">along:</span><span class="hl-5"> </span><span class="hl-11">&#39;x&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">      </span><span class="hl-8">num:</span><span class="hl-5"> </span><span class="hl-12">4</span><span class="hl-5">,</span><br/><span class="hl-5">      </span><span class="hl-8">step:</span><span class="hl-5"> </span><span class="hl-12">0.3</span><span class="hl-5">,</span><br/><span class="hl-5">    },</span><br/><span class="hl-5">    {</span><br/><span class="hl-5">      </span><span class="hl-8">along:</span><span class="hl-5"> </span><span class="hl-11">&#39;y&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">      </span><span class="hl-8">num:</span><span class="hl-5"> </span><span class="hl-12">4</span><span class="hl-5">,</span><br/><span class="hl-5">      </span><span class="hl-8">step:</span><span class="hl-5"> </span><span class="hl-12">0.3</span><span class="hl-5">,</span><br/><span class="hl-5">    },</span><br/><span class="hl-5">  ],</span><br/><span class="hl-5">});</span>
 </code><button type="button">Copy</button></pre>
 

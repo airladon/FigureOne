@@ -22,13 +22,13 @@
 <h2 id="eqn_symbol" class="tsd-anchor-link">EQN_Symbol<a href="#eqn_symbol" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>Base object options for all equation symbols</p>
 <p><code>isTouchable</code>, <code>touchBorder</code>, <code>color</code> and <code>onClick</code> change the corresponding
-properties on the  FigureElementPrimitive, and could therefore also
+properties on the <a href="../classes/Element.FigureElementPrimitive.html" class="tsd-kind-class">FigureElementPrimitive</a>, and could therefore also
 be set in <code>mods</code>. However, as these are commonly used, they are included in
 the root object for convenience.</p>
 <hr>
 <h2 id="eqn_vinculumsymbol" class="tsd-anchor-link">EQN_VinculumSymbol<a href="#eqn_vinculumsymbol" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p><em>Extends  EQN_Symbol</em></p>
-<p>Vinculum symbol used in fractions ( EQN_Fraction equation function).</p>
+<p><em>Extends <a href="../interfaces/Equation_EquationSymbols.EQN_Symbol.html" class="tsd-kind-interface">EQN_Symbol</a></em></p>
+<p>Vinculum symbol used in fractions (<a href="../interfaces/Equation_EquationFunctions.EQN_Fraction.html" class="tsd-kind-interface">EQN_Fraction</a> equation function).</p>
 <p><img src="../media/eqn_symbol_vinculum.png" alt=""></p>
 <pre>
                          width
@@ -43,10 +43,10 @@ the root object for convenience.</p>
 <h3 id="properties" class="tsd-anchor-link">Properties<a href="#properties" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'vinculum'</span></span></li>
-<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
-<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= 'dynamic'</span></span><div class="tsd-comment tsd-typography"><p><code>'dynamic'</code> updates vertices on
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic'</span> <span class="tsd-signature-symbol">= 'dynamic'</span></span><div class="tsd-comment tsd-typography"><p><code>'dynamic'</code> updates vertices on
 resize, <code>'static'</code> only changes scale transform</p></div></li>
-<li><span><span class="tsd-kind-parameter">staticWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
+<li><span><span class="tsd-kind-parameter">staticWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first'</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets width of static symbol - <code>'first'</code> calculates and sets width
 based on first use</p></div></li>
 </ul>
@@ -68,9 +68,9 @@ based on first use</p></div></li>
 
 <hr>
 <h2 id="eqn_boxsymbol" class="tsd-anchor-link">EQN_BoxSymbol<a href="#eqn_boxsymbol" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p><em>Extends  EQN_Symbol</em></p>
-<p>Box equation symbol used in  EQN_Box and as a
-EQN_EncompassGlyph.</p>
+<p><em>Extends <a href="../interfaces/Equation_EquationSymbols.EQN_Symbol.html" class="tsd-kind-interface">EQN_Symbol</a></em></p>
+<p>Box equation symbol used in <a href="../interfaces/Equation_EquationFunctions.EQN_Box.html" class="tsd-kind-interface">EQN_Box</a> and as a
+<a href="../interfaces/Equation_EquationFunctions.EQN_EncompassGlyph.html" class="tsd-kind-interface">EQN_EncompassGlyph</a>.</p>
 <p><img src="../media/eqn_symbol_box.png" alt=""></p>
 <pre>
                                          width
@@ -95,16 +95,16 @@ EQN_EncompassGlyph.</p>
 <h3 id="properties-1" class="tsd-anchor-link">Properties<a href="#properties-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'box'</span></span></li>
-<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
-<li><span><span class="tsd-kind-parameter">fill</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span></li>
-<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>force width instead of auto calculation</p></div></li>
-<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>force height instead of auto calculation</p></div></li>
-<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'dynamic'</code> updates vertices on
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">fill</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span> <span class="tsd-signature-symbol">= false</span></span></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>force width instead of auto calculation</p></div></li>
+<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>force height instead of auto calculation</p></div></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic'</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'dynamic'</code> updates vertices on
 resize, <code>'static'</code> only changes scale transform</p></div></li>
-<li><span><span class="tsd-kind-parameter">staticWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
+<li><span><span class="tsd-kind-parameter">staticWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets width of static symbol - <code>'first'</code> calculates and sets width
 based on first use</p></div></li>
-<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
 based on first use</p></div></li>
 </ul>
@@ -126,18 +126,18 @@ based on first use</p></div></li>
 
 <hr>
 <h2 id="eqn_arrowsymbol" class="tsd-anchor-link">EQN_ArrowSymbol<a href="#eqn_arrowsymbol" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p><em>Extends  EQN_Symbol</em></p>
+<p><em>Extends <a href="../interfaces/Equation_EquationSymbols.EQN_Symbol.html" class="tsd-kind-interface">EQN_Symbol</a></em></p>
 <p>Arrow equation symbol.</p>
 <p>The arrow direction defines where it can be used:</p>
 <ul>
-<li><code>'left'</code>, <code>'right'</code>:  EQN_Bar (top and bottom sides),
-EQN_Comment, and  EQN_LeftRightGlyph</li>
-<li><code>'up'</code>, <code>'down'</code>:  EQN_Bracket,  EQN_Bar (left and right
-sides), and  EQN_TopBottomGlyph</li>
+<li><code>'left'</code>, <code>'right'</code>: <a href="../interfaces/Equation_EquationFunctions.EQN_Bar.html" class="tsd-kind-interface">EQN_Bar</a> (top and bottom sides),
+<a href="../interfaces/Equation_EquationFunctions.EQN_Comment.html" class="tsd-kind-interface">EQN_Comment</a>, and <a href="../interfaces/Equation_EquationFunctions.EQN_LeftRightGlyph.html" class="tsd-kind-interface">EQN_LeftRightGlyph</a></li>
+<li><code>'up'</code>, <code>'down'</code>: <a href="../interfaces/Equation_EquationFunctions.EQN_Bracket.html" class="tsd-kind-interface">EQN_Bracket</a>, <a href="../interfaces/Equation_EquationFunctions.EQN_Bar.html" class="tsd-kind-interface">EQN_Bar</a> (left and right
+sides), and <a href="../interfaces/Equation_EquationFunctions.EQN_TopBottomGlyph.html" class="tsd-kind-interface">EQN_TopBottomGlyph</a></li>
 </ul>
 <p>Note, as the default direciton is <code>'right'</code>, using the inline definition of
-arrow will only work with  EQN_Bar (top and bottom sides),
-EQN_Comment, and  EQN_LeftRightGlyph.</p>
+arrow will only work with <a href="../interfaces/Equation_EquationFunctions.EQN_Bar.html" class="tsd-kind-interface">EQN_Bar</a> (top and bottom sides),
+<a href="../interfaces/Equation_EquationFunctions.EQN_Comment.html" class="tsd-kind-interface">EQN_Comment</a>, and <a href="../interfaces/Equation_EquationFunctions.EQN_LeftRightGlyph.html" class="tsd-kind-interface">EQN_LeftRightGlyph</a>.</p>
 <p><img src="../media/eqn_symbol_arrow.png" alt=""></p>
 <pre>
                             arrowWidth
@@ -174,14 +174,14 @@ EQN_Comment, and  EQN_LeftRightGlyph.</p>
 <h3 id="properties-2" class="tsd-anchor-link">Properties<a href="#properties-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'arrow'</span></span></li>
-<li><span><span class="tsd-kind-parameter">direction</span>: <span class="tsd-signature-type">'up' | 'down' | 'left' | 'right' | undefined</span> <span class="tsd-signature-symbol">= 'right'</span></span></li>
-<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
-<li><span><span class="tsd-kind-parameter">arrowWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
-<li><span><span class="tsd-kind-parameter">arrowHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.04</span></span></li>
-<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
-<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'dynamic'</code> updates vertices on
+<li><span><span class="tsd-kind-parameter">direction</span>: <span class="tsd-signature-type">'up' | 'down' | 'left' | 'right'</span> <span class="tsd-signature-symbol">= 'right'</span></span></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">arrowWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">arrowHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.04</span></span></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic'</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'dynamic'</code> updates vertices on
 resize, <code>'static'</code> only changes scale transform</p></div></li>
-<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first'</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
 based on first use</p></div></li>
 </ul>
@@ -203,8 +203,8 @@ based on first use</p></div></li>
 
 <hr>
 <h2 id="eqn_sumsymbol" class="tsd-anchor-link">EQN_SumSymbol<a href="#eqn_sumsymbol" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p><em>Extends  EQN_Symbol</em></p>
-<p>Sum equation symbol used with the  EQN_SumOf equation function.</p>
+<p><em>Extends <a href="../interfaces/Equation_EquationSymbols.EQN_Symbol.html" class="tsd-kind-interface">EQN_Symbol</a></em></p>
+<p>Sum equation symbol used with the <a href="../interfaces/Equation_EquationFunctions.EQN_SumOf.html" class="tsd-kind-interface">EQN_SumOf</a> equation function.</p>
 <p><img src="../media/eqn_symbol_sum.png" alt=""></p>
 <pre>
          ---------- 00000000000000000000000000000000000
@@ -241,11 +241,11 @@ based on first use</p></div></li>
 <h3 id="properties-3" class="tsd-anchor-link">Properties<a href="#properties-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'sum'</span></span></li>
-<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>(<code>height * 0.88 / (25 * height + 15)</code>)</p></div></li>
-<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 5</span></span><div class="tsd-comment tsd-typography"><p>number of sides that make up serif curve</p></div></li>
-<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>(<code>height * 0.88 / (25 * height + 15)</code>)</p></div></li>
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 5</span></span><div class="tsd-comment tsd-typography"><p>number of sides that make up serif curve</p></div></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic'</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
 resize, <code>'static'</code> only changes scale transform</p></div></li>
-<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first'</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
 based on first use</p></div></li>
 </ul>
@@ -267,8 +267,8 @@ based on first use</p></div></li>
 
 <hr>
 <h2 id="eqn_prodsymbol" class="tsd-anchor-link">EQN_ProdSymbol<a href="#eqn_prodsymbol" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p><em>Extends  EQN_Symbol</em></p>
-<p>Product equation symbol used with the  EQN_ProdOf equation function.</p>
+<p><em>Extends <a href="../interfaces/Equation_EquationSymbols.EQN_Symbol.html" class="tsd-kind-interface">EQN_Symbol</a></em></p>
+<p>Product equation symbol used with the <a href="../interfaces/Equation_EquationFunctions.EQN_ProdOf.html" class="tsd-kind-interface">EQN_ProdOf</a> equation function.</p>
 <p><img src="../media/eqn_symbol_prod.png" alt=""></p>
 <pre>
                                          width
@@ -309,11 +309,11 @@ based on first use</p></div></li>
 <h3 id="properties-4" class="tsd-anchor-link">Properties<a href="#properties-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'prod'</span></span></li>
-<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= related to height</span></span></li>
-<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 5</span></span><div class="tsd-comment tsd-typography"><p>number of sides that make up serif curve</p></div></li>
-<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= related to height</span></span></li>
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 5</span></span><div class="tsd-comment tsd-typography"><p>number of sides that make up serif curve</p></div></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic'</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
 resize, <code>'static'</code> only changes scale transform</p></div></li>
-<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first'</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
 based on first use</p></div></li>
 </ul>
@@ -335,8 +335,8 @@ based on first use</p></div></li>
 
 <hr>
 <h2 id="eqn_integralsymbol" class="tsd-anchor-link">EQN_IntegralSymbol<a href="#eqn_integralsymbol" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p><em>Extends  EQN_Symbol</em></p>
-<p>Integral equation symbol used with the  EQN_Integral equation
+<p><em>Extends <a href="../interfaces/Equation_EquationSymbols.EQN_Symbol.html" class="tsd-kind-interface">EQN_Symbol</a></em></p>
+<p>Integral equation symbol used with the <a href="../interfaces/Equation_EquationFunctions.EQN_Integral.html" class="tsd-kind-interface">EQN_Integral</a> equation
 function.</p>
 <p><img src="../media/eqn_symbol_int1.png" alt=""></p>
 <p><img src="../media/eqn_symbol_int2.png" alt=""></p>
@@ -380,18 +380,18 @@ function.</p>
 <h3 id="properties-5" class="tsd-anchor-link">Properties<a href="#properties-5" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'int'</span></span></li>
-<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= related to height</span></span></li>
-<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 30</span></span><div class="tsd-comment tsd-typography"><p>number of sides that make up s curve</p></div></li>
-<li><span><span class="tsd-kind-parameter">num</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>number of integral symbols</p></div></li>
-<li><span><span class="tsd-kind-parameter">type</span>: <span class="tsd-signature-type">'line' | 'generic' | undefined</span> <span class="tsd-signature-symbol">= generic</span></span><div class="tsd-comment tsd-typography"><p><code>line</code> draws a circle through the
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= related to height</span></span></li>
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 30</span></span><div class="tsd-comment tsd-typography"><p>number of sides that make up s curve</p></div></li>
+<li><span><span class="tsd-kind-parameter">num</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>number of integral symbols</p></div></li>
+<li><span><span class="tsd-kind-parameter">type</span>: <span class="tsd-signature-type">'line' | 'generic'</span> <span class="tsd-signature-symbol">= generic</span></span><div class="tsd-comment tsd-typography"><p><code>line</code> draws a circle through the
  symbols denoting a line integral</p></div></li>
-<li><span><span class="tsd-kind-parameter">tipWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= related to lineWidth</span></span><div class="tsd-comment tsd-typography"><p>width of s curve tip</p></div></li>
-<li><span><span class="tsd-kind-parameter">serif</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>false</code> to remove serifs</p></div></li>
-<li><span><span class="tsd-kind-parameter">serifSides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of sides in serif circles</p></div></li>
-<li><span><span class="tsd-kind-parameter">lineIntegralSides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 20</span></span><div class="tsd-comment tsd-typography"><p>number of sides in line integral circle</p></div></li>
-<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+<li><span><span class="tsd-kind-parameter">tipWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= related to lineWidth</span></span><div class="tsd-comment tsd-typography"><p>width of s curve tip</p></div></li>
+<li><span><span class="tsd-kind-parameter">serif</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>false</code> to remove serifs</p></div></li>
+<li><span><span class="tsd-kind-parameter">serifSides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of sides in serif circles</p></div></li>
+<li><span><span class="tsd-kind-parameter">lineIntegralSides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 20</span></span><div class="tsd-comment tsd-typography"><p>number of sides in line integral circle</p></div></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic'</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
 resize, <code>'static'</code> only changes scale transform</p></div></li>
-<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first'</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
 based on first use</p></div></li>
 </ul>
@@ -421,8 +421,8 @@ based on first use</p></div></li>
 
 <hr>
 <h2 id="eqn_radicalsymbol" class="tsd-anchor-link">EQN_RadicalSymbol<a href="#eqn_radicalsymbol" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p><em>Extends  EQN_Symbol</em></p>
-<p>Radical equation symbol used in  EQN_Root.</p>
+<p><em>Extends <a href="../interfaces/Equation_EquationSymbols.EQN_Symbol.html" class="tsd-kind-interface">EQN_Symbol</a></em></p>
+<p>Radical equation symbol used in <a href="../interfaces/Equation_EquationFunctions.EQN_Root.html" class="tsd-kind-interface">EQN_Root</a>.</p>
 <p>The radical symbol allows customization on how to draw the radical. Mostly
 it will not be needed, but for edge case equation layouts it may be useful.</p>
 <p><img src="../media/eqn_symbol_radical.png" alt=""></p>
@@ -456,26 +456,26 @@ it will not be needed, but for edge case equation layouts it may be useful.</p>
 <h3 id="properties-6" class="tsd-anchor-link">Properties<a href="#properties-6" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'radical'</span></span></li>
-<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
-<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= normally defined by content size</span></span><div class="tsd-comment tsd-typography"><p>force width of content area</p></div></li>
-<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= normally defined by content size</span></span><div class="tsd-comment tsd-typography"><p>force height of content area</p></div></li>
-<li><span><span class="tsd-kind-parameter">startWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.5</span></span></li>
-<li><span><span class="tsd-kind-parameter">startHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.5</span></span></li>
-<li><span><span class="tsd-kind-parameter">maxStartWidth</span>: <span class="tsd-signature-type">?<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.15</span></span></li>
-<li><span><span class="tsd-kind-parameter">maxStartHeight</span>: <span class="tsd-signature-type">?<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.15</span></span></li>
-<li><span><span class="tsd-kind-parameter">tickHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">tickWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">downWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">proportionalToHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>true</code> makes <code>startHeight</code>,
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= normally defined by content size</span></span><div class="tsd-comment tsd-typography"><p>force width of content area</p></div></li>
+<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= normally defined by content size</span></span><div class="tsd-comment tsd-typography"><p>force height of content area</p></div></li>
+<li><span><span class="tsd-kind-parameter">startWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.5</span></span></li>
+<li><span><span class="tsd-kind-parameter">startHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.5</span></span></li>
+<li><span><span class="tsd-kind-parameter">maxStartWidth</span>: <span class="tsd-signature-type">?<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.15</span></span></li>
+<li><span><span class="tsd-kind-parameter">maxStartHeight</span>: <span class="tsd-signature-type">?<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.15</span></span></li>
+<li><span><span class="tsd-kind-parameter">tickHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">tickWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">downWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">proportionalToHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>true</code> makes <code>startHeight</code>,
 <code>startWidth</code>, <code>tickHeight</code>, <code>tickWidth</code>, and <code>downWidth</code> a percentage of
 height instead of absolute</p></div></li>
-<li><span><span class="tsd-kind-parameter">lineWidth2</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 2 x lineWidth</span></span><div class="tsd-comment tsd-typography"><p>lineWidth of down stroke</p></div></li>
-<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+<li><span><span class="tsd-kind-parameter">lineWidth2</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 2 x lineWidth</span></span><div class="tsd-comment tsd-typography"><p>lineWidth of down stroke</p></div></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic'</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
 resize, <code>'static'</code> only changes scale transform</p></div></li>
-<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first'</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
 based on first use</p></div></li>
-<li><span><span class="tsd-kind-parameter">staticWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
+<li><span><span class="tsd-kind-parameter">staticWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first'</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets width of static symbol - <code>'first'</code> calculates and sets width
 based on first use</p></div></li>
 </ul>
@@ -497,8 +497,8 @@ based on first use</p></div></li>
 
 <hr>
 <h2 id="eqn_divisionsymbol" class="tsd-anchor-link">EQN_DivisionSymbol<a href="#eqn_divisionsymbol" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p><em>Extends  EQN_Symbol</em></p>
-<p>Division equation symbol used in  EQN_Root.</p>
+<p><em>Extends <a href="../interfaces/Equation_EquationSymbols.EQN_Symbol.html" class="tsd-kind-interface">EQN_Symbol</a></em></p>
+<p>Division equation symbol used in <a href="../interfaces/Equation_EquationFunctions.EQN_Root.html" class="tsd-kind-interface">EQN_Root</a>.</p>
 <p>The division symbol allows customization on how to draw the long form and
 short form division symbol. Mostly it will not be needed, but for edge case
 equation layouts it may be useful.</p>
@@ -531,17 +531,17 @@ equation layouts it may be useful.</p>
 <h3 id="properties-7" class="tsd-anchor-link">Properties<a href="#properties-7" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'division'</span></span></li>
-<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
-<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= normally defined by content size</span></span><div class="tsd-comment tsd-typography"><p>force width of content area</p></div></li>
-<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= normally defined by content size</span></span><div class="tsd-comment tsd-typography"><p>force height of content area</p></div></li>
-<li><span><span class="tsd-kind-parameter">bendWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span></li>
-<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 10</span></span></li>
-<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= normally defined by content size</span></span><div class="tsd-comment tsd-typography"><p>force width of content area</p></div></li>
+<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= normally defined by content size</span></span><div class="tsd-comment tsd-typography"><p>force height of content area</p></div></li>
+<li><span><span class="tsd-kind-parameter">bendWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0</span></span></li>
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 10</span></span></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic'</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
 resize, <code>'static'</code> only changes scale transform</p></div></li>
-<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first'</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
 based on first use</p></div></li>
-<li><span><span class="tsd-kind-parameter">staticWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
+<li><span><span class="tsd-kind-parameter">staticWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first'</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets width of static symbol - <code>'first'</code> calculates and sets width
 based on first use</p></div></li>
 </ul>
@@ -563,10 +563,10 @@ based on first use</p></div></li>
 
 <hr>
 <h2 id="eqn_strikesymbol" class="tsd-anchor-link">EQN_StrikeSymbol<a href="#eqn_strikesymbol" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p><em>Extends  EQN_Symbol</em></p>
-<p>Strike equation symbol used in  EQN_Strike.</p>
-<p>Integral equation symbol used with the  EQN_Strike and
-EQN_StrikeComment equation functions.</p>
+<p><em>Extends <a href="../interfaces/Equation_EquationSymbols.EQN_Symbol.html" class="tsd-kind-interface">EQN_Symbol</a></em></p>
+<p>Strike equation symbol used in <a href="../interfaces/Equation_EquationFunctions.EQN_Strike.html" class="tsd-kind-interface">EQN_Strike</a>.</p>
+<p>Integral equation symbol used with the <a href="../interfaces/Equation_EquationFunctions.EQN_Strike.html" class="tsd-kind-interface">EQN_Strike</a> and
+<a href="../interfaces/Equation_EquationFunctions.EQN_StrikeComment.html" class="tsd-kind-interface">EQN_StrikeComment</a> equation functions.</p>
 <p><img src="../media/eqn_symbol_strike1.png" alt=""></p>
 <p><img src="../media/eqn_symbol_strike2.png" alt=""></p>
 <p><img src="../media/eqn_symbol_strike3.png" alt=""></p>
@@ -598,18 +598,18 @@ EQN_StrikeComment equation functions.</p>
 <h3 id="properties-8" class="tsd-anchor-link">Properties<a href="#properties-8" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'strike'</span></span></li>
-<li><span><span class="tsd-kind-parameter">style</span>: <span class="tsd-signature-type">'cross' | 'forward' | 'back' | 'horizontal' | undefined</span> <span class="tsd-signature-symbol">= 'cross'</span></span></li>
-<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.015</span></span></li>
-<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= normally defined by
+<li><span><span class="tsd-kind-parameter">style</span>: <span class="tsd-signature-type">'cross' | 'forward' | 'back' | 'horizontal'</span> <span class="tsd-signature-symbol">= 'cross'</span></span></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.015</span></span></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= normally defined by
 content size</span></span><div class="tsd-comment tsd-typography"><p>force width of strike</p></div></li>
-<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= normally defined by
+<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= normally defined by
 content size</span></span><div class="tsd-comment tsd-typography"><p>force height of strike</p></div></li>
-<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic'</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
 resize, <code>'static'</code> only changes scale transform</p></div></li>
-<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first'</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
 based on first use</p></div></li>
-<li><span><span class="tsd-kind-parameter">staticWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
+<li><span><span class="tsd-kind-parameter">staticWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first'</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets width of static symbol - <code>'first'</code> calculates and sets width
 based on first use</p></div></li>
 </ul>
@@ -643,9 +643,9 @@ based on first use</p></div></li>
 
 <hr>
 <h2 id="eqn_bracketsymbol" class="tsd-anchor-link">EQN_BracketSymbol<a href="#eqn_bracketsymbol" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p><em>Extends  EQN_Symbol</em></p>
-<p>Bracket equation symbol used in  EQN_Bracket,  EQN_Bar,
-EQN_Matrix, and  EQN_Comment.</p>
+<p><em>Extends <a href="../interfaces/Equation_EquationSymbols.EQN_Symbol.html" class="tsd-kind-interface">EQN_Symbol</a></em></p>
+<p>Bracket equation symbol used in <a href="../interfaces/Equation_EquationFunctions.EQN_Bracket.html" class="tsd-kind-interface">EQN_Bracket</a>, <a href="../interfaces/Equation_EquationFunctions.EQN_Bar.html" class="tsd-kind-interface">EQN_Bar</a>,
+<a href="../interfaces/Equation_EquationFunctions.EQN_Matrix.html" class="tsd-kind-interface">EQN_Matrix</a>, and <a href="../interfaces/Equation_EquationFunctions.EQN_Comment.html" class="tsd-kind-interface">EQN_Comment</a>.</p>
 <p><img src="../media/eqn_symbol_bracket.png" alt=""></p>
 <pre>
                    tipWidth
@@ -675,15 +675,15 @@ EQN_Matrix, and  EQN_Comment.</p>
 <h3 id="properties-9" class="tsd-anchor-link">Properties<a href="#properties-9" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'bracket'</span></span></li>
-<li><span><span class="tsd-kind-parameter">side</span>: <span class="tsd-signature-type">'left' | 'right' | 'top' | 'bottom' | undefined</span> <span class="tsd-signature-symbol">= 'left'</span></span><div class="tsd-comment tsd-typography"><p>how to orient the
+<li><span><span class="tsd-kind-parameter">side</span>: <span class="tsd-signature-type">'left' | 'right' | 'top' | 'bottom'</span> <span class="tsd-signature-symbol">= 'left'</span></span><div class="tsd-comment tsd-typography"><p>how to orient the
 bracket</p></div></li>
-<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of sides in bracket curve</p></div></li>
-<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= depends on height</span></span></li>
-<li><span><span class="tsd-kind-parameter">tipWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= depends on lineWidth</span></span></li>
-<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= normally depends on height</span></span><div class="tsd-comment tsd-typography"><p>force width bracket</p></div></li>
-<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of sides in bracket curve</p></div></li>
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= depends on height</span></span></li>
+<li><span><span class="tsd-kind-parameter">tipWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= depends on lineWidth</span></span></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= normally depends on height</span></span><div class="tsd-comment tsd-typography"><p>force width bracket</p></div></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic'</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
 resize, <code>'static'</code> only changes scale transform</p></div></li>
-<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first'</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
 based on first use</p></div></li>
 </ul>
@@ -697,9 +697,9 @@ based on first use</p></div></li>
 
 <hr>
 <h2 id="eqn_anglebracketsymbol" class="tsd-anchor-link">EQN_AngleBracketSymbol<a href="#eqn_anglebracketsymbol" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p><em>Extends  EQN_Symbol</em></p>
-<p>Angle bracket equation symbol used in  EQN_Bracket,  EQN_Bar,
-EQN_Matrix, and  EQN_Comment.</p>
+<p><em>Extends <a href="../interfaces/Equation_EquationSymbols.EQN_Symbol.html" class="tsd-kind-interface">EQN_Symbol</a></em></p>
+<p>Angle bracket equation symbol used in <a href="../interfaces/Equation_EquationFunctions.EQN_Bracket.html" class="tsd-kind-interface">EQN_Bracket</a>, <a href="../interfaces/Equation_EquationFunctions.EQN_Bar.html" class="tsd-kind-interface">EQN_Bar</a>,
+<a href="../interfaces/Equation_EquationFunctions.EQN_Matrix.html" class="tsd-kind-interface">EQN_Matrix</a>, and <a href="../interfaces/Equation_EquationFunctions.EQN_Comment.html" class="tsd-kind-interface">EQN_Comment</a>.</p>
 <p><img src="../media/eqn_symbol_angleBracket.png" alt=""></p>
 <pre>
                      width
@@ -724,13 +724,13 @@ EQN_Matrix, and  EQN_Comment.</p>
 <h3 id="properties-10" class="tsd-anchor-link">Properties<a href="#properties-10" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'angleBracket'</span></span></li>
-<li><span><span class="tsd-kind-parameter">side</span>: <span class="tsd-signature-type">'left' | 'right' | 'top' | 'bottom' | undefined</span> <span class="tsd-signature-symbol">= 'left'</span></span><div class="tsd-comment tsd-typography"><p>how to orient the
+<li><span><span class="tsd-kind-parameter">side</span>: <span class="tsd-signature-type">'left' | 'right' | 'top' | 'bottom'</span> <span class="tsd-signature-symbol">= 'left'</span></span><div class="tsd-comment tsd-typography"><p>how to orient the
 angle bracket</p></div></li>
-<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= depends on height</span></span></li>
-<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= normally depends on height</span></span><div class="tsd-comment tsd-typography"><p>force width bracket</p></div></li>
-<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= depends on height</span></span></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= normally depends on height</span></span><div class="tsd-comment tsd-typography"><p>force width bracket</p></div></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic'</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
 resize, <code>'static'</code> only changes scale transform</p></div></li>
-<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first'</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
 based on first use</p></div></li>
 </ul>
@@ -744,9 +744,9 @@ based on first use</p></div></li>
 
 <hr>
 <h2 id="eqn_bracesymbol" class="tsd-anchor-link">EQN_BraceSymbol<a href="#eqn_bracesymbol" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p><em>Extends  EQN_Symbol</em></p>
-<p>Brace equation symbol used in  EQN_Bracket,  EQN_Bar,
-EQN_Matrix, and  EQN_Comment.</p>
+<p><em>Extends <a href="../interfaces/Equation_EquationSymbols.EQN_Symbol.html" class="tsd-kind-interface">EQN_Symbol</a></em></p>
+<p>Brace equation symbol used in <a href="../interfaces/Equation_EquationFunctions.EQN_Bracket.html" class="tsd-kind-interface">EQN_Bracket</a>, <a href="../interfaces/Equation_EquationFunctions.EQN_Bar.html" class="tsd-kind-interface">EQN_Bar</a>,
+<a href="../interfaces/Equation_EquationFunctions.EQN_Matrix.html" class="tsd-kind-interface">EQN_Matrix</a>, and <a href="../interfaces/Equation_EquationFunctions.EQN_Comment.html" class="tsd-kind-interface">EQN_Comment</a>.</p>
 <p><img src="../media/eqn_symbol_brace.png" alt=""></p>
 <pre>
                width
@@ -793,15 +793,15 @@ EQN_Matrix, and  EQN_Comment.</p>
 <h3 id="properties-11" class="tsd-anchor-link">Properties<a href="#properties-11" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'brace'</span></span></li>
-<li><span><span class="tsd-kind-parameter">side</span>: <span class="tsd-signature-type">'left' | 'right' | 'top' | 'bottom' | undefined</span> <span class="tsd-signature-symbol">= 'left'</span></span><div class="tsd-comment tsd-typography"><p>how to orient the
+<li><span><span class="tsd-kind-parameter">side</span>: <span class="tsd-signature-type">'left' | 'right' | 'top' | 'bottom'</span> <span class="tsd-signature-symbol">= 'left'</span></span><div class="tsd-comment tsd-typography"><p>how to orient the
 brace</p></div></li>
-<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= depends on height</span></span></li>
-<li><span><span class="tsd-kind-parameter">tipWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= depends on lineWidth</span></span></li>
-<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= normally depends on height</span></span><div class="tsd-comment tsd-typography"><p>force width bracket</p></div></li>
-<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of sides in curved sections</p></div></li>
-<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= depends on height</span></span></li>
+<li><span><span class="tsd-kind-parameter">tipWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= depends on lineWidth</span></span></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= normally depends on height</span></span><div class="tsd-comment tsd-typography"><p>force width bracket</p></div></li>
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of sides in curved sections</p></div></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic'</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
 resize, <code>'static'</code> only changes scale transform</p></div></li>
-<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first'</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
 based on first use</p></div></li>
 </ul>
@@ -815,18 +815,18 @@ based on first use</p></div></li>
 
 <hr>
 <h2 id="eqn_barsymbol" class="tsd-anchor-link">EQN_BarSymbol<a href="#eqn_barsymbol" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p><em>Extends  EQN_Symbol</em></p>
+<p><em>Extends <a href="../interfaces/Equation_EquationSymbols.EQN_Symbol.html" class="tsd-kind-interface">EQN_Symbol</a></em></p>
 <p>Bar equation symbol.</p>
 <p>The bar side defines where it can be used:</p>
 <ul>
-<li><code>'top'</code>, <code>'bottom'</code>:  EQN_Bar (top and bottom sides),
-EQN_Comment, and  EQN_LeftRightGlyph</li>
-<li><code>'left'</code>, <code>'right'</code>:  EQN_Bracket,  EQN_Bar (left and right
-sides),  EQN_Matrix and  EQN_TopBottomGlyph</li>
+<li><code>'top'</code>, <code>'bottom'</code>: <a href="../interfaces/Equation_EquationFunctions.EQN_Bar.html" class="tsd-kind-interface">EQN_Bar</a> (top and bottom sides),
+<a href="../interfaces/Equation_EquationFunctions.EQN_Comment.html" class="tsd-kind-interface">EQN_Comment</a>, and <a href="../interfaces/Equation_EquationFunctions.EQN_LeftRightGlyph.html" class="tsd-kind-interface">EQN_LeftRightGlyph</a></li>
+<li><code>'left'</code>, <code>'right'</code>: <a href="../interfaces/Equation_EquationFunctions.EQN_Bracket.html" class="tsd-kind-interface">EQN_Bracket</a>, <a href="../interfaces/Equation_EquationFunctions.EQN_Bar.html" class="tsd-kind-interface">EQN_Bar</a> (left and right
+sides), <a href="../interfaces/Equation_EquationFunctions.EQN_Matrix.html" class="tsd-kind-interface">EQN_Matrix</a> and <a href="../interfaces/Equation_EquationFunctions.EQN_TopBottomGlyph.html" class="tsd-kind-interface">EQN_TopBottomGlyph</a></li>
 </ul>
 <p>Note, as the default direciton is <code>'right'</code>, using the inline definition of
-arrow will only work with  EQN_Bar (top and bottom sides),
-EQN_Comment, and  EQN_LeftRightGlyph.</p>
+arrow will only work with <a href="../interfaces/Equation_EquationFunctions.EQN_Bar.html" class="tsd-kind-interface">EQN_Bar</a> (top and bottom sides),
+<a href="../interfaces/Equation_EquationFunctions.EQN_Comment.html" class="tsd-kind-interface">EQN_Comment</a>, and <a href="../interfaces/Equation_EquationFunctions.EQN_LeftRightGlyph.html" class="tsd-kind-interface">EQN_LeftRightGlyph</a>.</p>
 <p><img src="../media/eqn_symbol_bar1.png" alt=""></p>
 <p><img src="../media/eqn_symbol_bar2.png" alt=""></p>
 <pre>
@@ -850,12 +850,12 @@ EQN_Comment, and  EQN_LeftRightGlyph.</p>
 <h3 id="properties-12" class="tsd-anchor-link">Properties<a href="#properties-12" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'bar'</span></span></li>
-<li><span><span class="tsd-kind-parameter">side</span>: <span class="tsd-signature-type">'left' | 'right' | 'top' | 'bottom' | undefined</span> <span class="tsd-signature-symbol">= 'left'</span></span><div class="tsd-comment tsd-typography"><p>how to orient the
+<li><span><span class="tsd-kind-parameter">side</span>: <span class="tsd-signature-type">'left' | 'right' | 'top' | 'bottom'</span> <span class="tsd-signature-symbol">= 'left'</span></span><div class="tsd-comment tsd-typography"><p>how to orient the
 bar</p></div></li>
-<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
-<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic'</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
 resize, <code>'static'</code> only changes scale transform</p></div></li>
-<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first'</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
 based on first use</p></div></li>
 </ul>
@@ -877,9 +877,9 @@ based on first use</p></div></li>
 
 <hr>
 <h2 id="eqn_squarebracketsymbol" class="tsd-anchor-link">EQN_SquareBracketSymbol<a href="#eqn_squarebracketsymbol" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p><em>Extends  EQN_Symbol</em></p>
-<p>Square bracket equation symbol used in  EQN_Bracket,  EQN_Bar,
-EQN_Matrix, and  EQN_Comment.</p>
+<p><em>Extends <a href="../interfaces/Equation_EquationSymbols.EQN_Symbol.html" class="tsd-kind-interface">EQN_Symbol</a></em></p>
+<p>Square bracket equation symbol used in <a href="../interfaces/Equation_EquationFunctions.EQN_Bracket.html" class="tsd-kind-interface">EQN_Bracket</a>, <a href="../interfaces/Equation_EquationFunctions.EQN_Bar.html" class="tsd-kind-interface">EQN_Bar</a>,
+<a href="../interfaces/Equation_EquationFunctions.EQN_Matrix.html" class="tsd-kind-interface">EQN_Matrix</a>, and <a href="../interfaces/Equation_EquationFunctions.EQN_Comment.html" class="tsd-kind-interface">EQN_Comment</a>.</p>
 <p><img src="../media/eqn_symbol_squarebracket.png" alt=""></p>
 <pre>
 
@@ -913,16 +913,16 @@ EQN_Matrix, and  EQN_Comment.</p>
 <h3 id="properties-13" class="tsd-anchor-link">Properties<a href="#properties-13" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">symbol</span>: <span class="tsd-signature-type">'squareBracket'</span></span></li>
-<li><span><span class="tsd-kind-parameter">side</span>: <span class="tsd-signature-type">'left' | 'right' | 'top' | 'bottom' | undefined</span> <span class="tsd-signature-symbol">= 'left'</span></span><div class="tsd-comment tsd-typography"><p>how to orient the
+<li><span><span class="tsd-kind-parameter">side</span>: <span class="tsd-signature-type">'left' | 'right' | 'top' | 'bottom'</span> <span class="tsd-signature-symbol">= 'left'</span></span><div class="tsd-comment tsd-typography"><p>how to orient the
 square bracket</p></div></li>
-<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
-<li><span><span class="tsd-kind-parameter">tipWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
-<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= depends on lineWidth</span></span></li>
-<li><span><span class="tsd-kind-parameter">radius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>optional curved corner radius</p></div></li>
-<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 5</span></span><div class="tsd-comment tsd-typography"><p>number of sides in curve</p></div></li>
-<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic' | undefined</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
+<li><span><span class="tsd-kind-parameter">lineWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">tipWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= depends on lineWidth</span></span></li>
+<li><span><span class="tsd-kind-parameter">radius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>optional curved corner radius</p></div></li>
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 5</span></span><div class="tsd-comment tsd-typography"><p>number of sides in curve</p></div></li>
+<li><span><span class="tsd-kind-parameter">draw</span>: <span class="tsd-signature-type">'static' | 'dynamic'</span> <span class="tsd-signature-symbol">= dynamic</span></span><div class="tsd-comment tsd-typography"><p><code>'static'</code> updates vertices on
 resize, <code>'static'</code> only changes scale transform</p></div></li>
-<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first' | undefined</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
+<li><span><span class="tsd-kind-parameter">staticHeight</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'first'</span> <span class="tsd-signature-symbol">= 'first'</span></span><div class="tsd-comment tsd-typography"><p>used when <code>draw</code>=<code>static</code>.
 <code>number</code> sets height of static symbol - <code>'first'</code> calculates and sets height
 based on first use</p></div></li>
 </ul>
@@ -936,18 +936,18 @@ based on first use</p></div></li>
 
 <hr>
 <h2 id="eqn_linesymbol" class="tsd-anchor-link">EQN_LineSymbol<a href="#eqn_linesymbol" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p><em>Extends  EQN_Symbol</em></p>
-<p>A line symbol to be used in  EQN_Annotate and  EQN_Comment as
-an  EQN_LineGlyph to draw a line between the content and an
+<p><em>Extends <a href="../interfaces/Equation_EquationSymbols.EQN_Symbol.html" class="tsd-kind-interface">EQN_Symbol</a></em></p>
+<p>A line symbol to be used in <a href="../interfaces/Equation_EquationFunctions.EQN_Annotate.html" class="tsd-kind-interface">EQN_Annotate</a> and <a href="../interfaces/Equation_EquationFunctions.EQN_Comment.html" class="tsd-kind-interface">EQN_Comment</a> as
+an <a href="../interfaces/Equation_EquationFunctions.EQN_LineGlyph.html" class="tsd-kind-interface">EQN_LineGlyph</a> to draw a line between the content and an
 annotation.</p>
 <p>The line can be solid or dashed, and have arrows on either or both ends.</p>
 <p><img src="../media/eqn_symbol_line1.png" alt=""></p>
 <p><img src="../media/eqn_symbol_line2.png" alt=""></p>
 <h3 id="properties-14" class="tsd-anchor-link">Properties<a href="#properties-14" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>line width</p></div></li>
-<li><span><span class="tsd-kind-parameter">dash</span>: <span class="tsd-signature-type"><a href="../types/types.TypeDash.html" class="tsd-signature-type">TypeDash</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>dash style of line</p></div></li>
-<li><span><span class="tsd-kind-parameter">arrow</span>: <span class="tsd-signature-type"><a href="../interfaces/geometries_arrow.OBJ_LineArrows.html" class="tsd-signature-type">OBJ_LineArrows</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>arrow styles of line where start is
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>line width</p></div></li>
+<li><span><span class="tsd-kind-parameter">dash</span>: <span class="tsd-signature-type"><a href="../types/types.TypeDash.html" class="tsd-signature-type">TypeDash</a></span></span><div class="tsd-comment tsd-typography"><p>dash style of line</p></div></li>
+<li><span><span class="tsd-kind-parameter">arrow</span>: <span class="tsd-signature-type"><a href="../interfaces/geometries_arrow.OBJ_LineArrows.html" class="tsd-signature-type">OBJ_LineArrows</a></span></span><div class="tsd-comment tsd-typography"><p>arrow styles of line where start is
 toward the content</p></div></li>
 </ul>
 <h4 id="define-in-element-13" class="tsd-anchor-link">Define in element<a href="#define-in-element-13" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4>

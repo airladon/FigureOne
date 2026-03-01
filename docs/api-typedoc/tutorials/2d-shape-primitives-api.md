@@ -31,25 +31,25 @@ These properties are available when defining any FigureElementPrimitive.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">name</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>name of figure element</p></div></li>
-<li><span><span class="tsd-kind-parameter">position</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>position overrides <code>transform</code> translation</p></div></li>
-<li><span><span class="tsd-kind-parameter">transform</span>: <span class="tsd-signature-type"><a href="../types/geometry_Transform.TypeParsableTransform.html" class="tsd-signature-type">TypeParsableTransform</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>transform to apply to element</p></div></li>
-<li><span><span class="tsd-kind-parameter">color</span>: <span class="tsd-signature-type"><a href="../types/types.TypeColor.html" class="tsd-signature-type">TypeColor</a> | undefined</span> <span class="tsd-signature-symbol">= is passed as the
+<li><span><span class="tsd-kind-parameter">name</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a></span></span><div class="tsd-comment tsd-typography"><p>name of figure element</p></div></li>
+<li><span><span class="tsd-kind-parameter">position</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a></span></span><div class="tsd-comment tsd-typography"><p>position overrides <code>transform</code> translation</p></div></li>
+<li><span><span class="tsd-kind-parameter">transform</span>: <span class="tsd-signature-type"><a href="../types/geometry_Transform.TypeParsableTransform.html" class="tsd-signature-type">TypeParsableTransform</a></span></span><div class="tsd-comment tsd-typography"><p>transform to apply to element</p></div></li>
+<li><span><span class="tsd-kind-parameter">color</span>: <span class="tsd-signature-type"><a href="../types/types.TypeColor.html" class="tsd-signature-type">TypeColor</a></span> <span class="tsd-signature-symbol">= is passed as the
 'u_color' uniform to the fragment shader</span></span><div class="tsd-comment tsd-typography"><p>color to apply to element</p></div></li>
-<li><span><span class="tsd-kind-parameter">touch</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | <a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_Touch.html" class="tsd-signature-type">OBJ_Touch</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p><code>true</code>, <code>number</code> or
+<li><span><span class="tsd-kind-parameter">touch</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | <a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_Touch.html" class="tsd-signature-type">OBJ_Touch</a></span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p><code>true</code>, <code>number</code> or
 <code>TypeParsablePoint</code> will set the element as touchable. If <code>number</code>, then
 element touch volume is the scaled actual volume in x, y, and z. For
 example, if <code>2</code>, then the touchable volume is twice the actual volume. If
 <code>TypeParsablePoint</code> then the x, y, and z scales can be set independantly</p></div></li>
-<li><span><span class="tsd-kind-parameter">move</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | <a href="../interfaces/Element.OBJ_ElementMove.html" class="tsd-signature-type">OBJ_ElementMove</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>setting this to anything but
+<li><span><span class="tsd-kind-parameter">move</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | <a href="../interfaces/Element.OBJ_ElementMove.html" class="tsd-signature-type">OBJ_ElementMove</a></span></span><div class="tsd-comment tsd-typography"><p>setting this to anything but
 <code>false</code> will set the element as movable. Use <code>OBJ_ElementMove</code> to customize
 the movement options</p></div></li>
-<li><span><span class="tsd-kind-parameter">dimColor</span>: <span class="tsd-signature-type"><a href="../types/types.TypeColor.html" class="tsd-signature-type">TypeColor</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>RGBA is used when vertex colors are from a
+<li><span><span class="tsd-kind-parameter">dimColor</span>: <span class="tsd-signature-type"><a href="../types/types.TypeColor.html" class="tsd-signature-type">TypeColor</a></span></span><div class="tsd-comment tsd-typography"><p>RGBA is used when vertex colors are from a
 uniform, otherwise just the alpha channel is used.</p></div></li>
-<li><span><span class="tsd-kind-parameter">defaultColor</span>: <span class="tsd-signature-type"><a href="../types/types.TypeColor.html" class="tsd-signature-type">TypeColor</a> | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">scenarios</span>: <span class="tsd-signature-type"><a href="../interfaces/Element.OBJ_Scenarios.html" class="tsd-signature-type">OBJ_Scenarios</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>Define
+<li><span><span class="tsd-kind-parameter">defaultColor</span>: <span class="tsd-signature-type"><a href="../types/types.TypeColor.html" class="tsd-signature-type">TypeColor</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">scenarios</span>: <span class="tsd-signature-type"><a href="../interfaces/Element.OBJ_Scenarios.html" class="tsd-signature-type">OBJ_Scenarios</a></span></span><div class="tsd-comment tsd-typography"><p>Define
 position/transform/rotation/scale/color scenarios tied to the element</p></div></li>
-<li><span><span class="tsd-kind-parameter">scene</span>: <span class="tsd-signature-type">Scene | undefined</span></span><div class="tsd-comment tsd-typography"><p>Give the element a custom scene that is independant
+<li><span><span class="tsd-kind-parameter">scene</span>: <span class="tsd-signature-type">Scene</span></span><div class="tsd-comment tsd-typography"><p>Give the element a custom scene that is independant
 of the figure scene. For example, use this to create a 3D object in a 2D
 figure.</p></div></li>
 </ul>
@@ -120,24 +120,24 @@ property can be:
 
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">points</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a>></span></span></li>
-<li><span><span class="tsd-kind-parameter">drawType</span>: <span class="tsd-signature-type"><a href="../types/FigurePrimitives_FigurePrimitiveTypes.TypeGLPrimitive.html" class="tsd-signature-type">TypeGLPrimitive</a> | undefined</span> <span class="tsd-signature-symbol">= 'TRIANGLES'</span></span></li>
-<li><span><span class="tsd-kind-parameter">copy</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../interfaces/geometries_copy_copy.CPY_Step.html" class="tsd-signature-type">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a>> | <a href="../interfaces/geometries_copy_copy.CPY_Step.html" class="tsd-signature-type">CPY_Step</a> | undefined</span> <span class="tsd-signature-symbol">= []</span></span><div class="tsd-comment tsd-typography"><p>use <code>drawType</code> as
+<li><span><span class="tsd-kind-parameter">drawType</span>: <span class="tsd-signature-type"><a href="../types/FigurePrimitives_FigurePrimitiveTypes.TypeGLPrimitive.html" class="tsd-signature-type">TypeGLPrimitive</a></span> <span class="tsd-signature-symbol">= 'TRIANGLES'</span></span></li>
+<li><span><span class="tsd-kind-parameter">copy</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../interfaces/geometries_copy_copy.CPY_Step.html" class="tsd-signature-type">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a>> | <a href="../interfaces/geometries_copy_copy.CPY_Step.html" class="tsd-signature-type">CPY_Step</a></span> <span class="tsd-signature-symbol">= []</span></span><div class="tsd-comment tsd-typography"><p>use <code>drawType</code> as
 <code>'TRIANGLES'</code> when using copy</p></div></li>
-<li><span><span class="tsd-kind-parameter">texture</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_Texture.html" class="tsd-signature-type">OBJ_Texture</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>override <code>color</code> with a texture if defined</p></div></li>
-<li><span><span class="tsd-kind-parameter">drawBorder</span>: <span class="tsd-signature-type"><a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a> | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">drawBorderBuffer</span>: <span class="tsd-signature-type"><a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a> | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">border</span>: <span class="tsd-signature-type"><a href="../types/g2.TypeParsableBuffer.html" class="tsd-signature-type">TypeParsableBuffer</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a> | 'buffer' | 'draw' | 'rect' | undefined</span> <span class="tsd-signature-symbol">= 'draw'</span></span><div class="tsd-comment tsd-typography"><p>defines border of primitive. Use <code>draw</code> to use the <code>drawBorder</code> of the
+<li><span><span class="tsd-kind-parameter">texture</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_Texture.html" class="tsd-signature-type">OBJ_Texture</a></span></span><div class="tsd-comment tsd-typography"><p>override <code>color</code> with a texture if defined</p></div></li>
+<li><span><span class="tsd-kind-parameter">drawBorder</span>: <span class="tsd-signature-type"><a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">drawBorderBuffer</span>: <span class="tsd-signature-type"><a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">border</span>: <span class="tsd-signature-type"><a href="../types/g2.TypeParsableBuffer.html" class="tsd-signature-type">TypeParsableBuffer</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a> | 'buffer' | 'draw' | 'rect'</span> <span class="tsd-signature-symbol">= 'draw'</span></span><div class="tsd-comment tsd-typography"><p>defines border of primitive. Use <code>draw</code> to use the <code>drawBorder</code> of the
 element. Use 'buffer' to use the <code>drawBorderBuffer</code> property of the element.
 Use <code>'rect'</code> for the bounding rectangle of <code>drawBorder</code>. Use
 <code>TypeParsableBuffer</code> for the bounding rectangle of <code>drawBorder</code>. Use
 <code>TypeParsableBorder</code> for a custom border.</p></div></li>
-<li><span><span class="tsd-kind-parameter">touchBorder</span>: <span class="tsd-signature-type"><a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a> | 'rect' | 'border' | 'buffer' | 'draw' | undefined</span> <span class="tsd-signature-symbol">= 'border'</span></span><div class="tsd-comment tsd-typography"><p>defines touch border of the primitive. Use <code>border</code> to use the same border
+<li><span><span class="tsd-kind-parameter">touchBorder</span>: <span class="tsd-signature-type"><a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a> | 'rect' | 'border' | 'buffer' | 'draw'</span> <span class="tsd-signature-symbol">= 'border'</span></span><div class="tsd-comment tsd-typography"><p>defines touch border of the primitive. Use <code>border</code> to use the same border
 as <code>border</code>. Use <code>draw</code> to use the <code>drawBorder</code> of the element.
 Use 'buffer' to use the <code>drawBorderBuffer</code> property of the element.
 Use <code>'rect'</code> for the bounding rectangle of <code>drawBorderBuffer</code>. Use
 <code>TypeParsableBuffer</code> for the bounding rectangle of <code>drawBorderBuffer</code>. Use
 <code>TypeParsableBorder</code> for a custom border.</p></div></li>
-<li><span><span class="tsd-kind-parameter">pulse</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_PulseScale.html" class="tsd-signature-type">OBJ_PulseScale</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= number</span></span><div class="tsd-comment tsd-typography"><p>set default scale pulse options
+<li><span><span class="tsd-kind-parameter">pulse</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_PulseScale.html" class="tsd-signature-type">OBJ_PulseScale</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= number</span></span><div class="tsd-comment tsd-typography"><p>set default scale pulse options
 (<code>OBJ_PulseScale</code>) or pulse scale directly</p></div></li>
 </ul>
 
@@ -194,7 +194,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -268,46 +268,46 @@ of the line.
 
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">points</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a>></span></span></li>
-<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
-<li><span><span class="tsd-kind-parameter">close</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>close the polyline on itself</p></div></li>
-<li><span><span class="tsd-kind-parameter">simple</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>simple and minimum computation polyline. Good
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">close</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>close the polyline on itself</p></div></li>
+<li><span><span class="tsd-kind-parameter">simple</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>simple and minimum computation polyline. Good
 for large numbers of points that need to be updated every animation frame.
 <code>widthIs</code>, <code>dash</code>, <code>arrow</code> and all corner and line primitive properties are
 not available when a polyline is simple.</p></div></li>
-<li><span><span class="tsd-kind-parameter">widthIs</span>: <span class="tsd-signature-type">'mid' | 'outside' | 'inside' | 'positive' | 'negative' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= "mid"</span></span><div class="tsd-comment tsd-typography"><p>defines how the width is grown from the polyline's points.
+<li><span><span class="tsd-kind-parameter">widthIs</span>: <span class="tsd-signature-type">'mid' | 'outside' | 'inside' | 'positive' | 'negative' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= "mid"</span></span><div class="tsd-comment tsd-typography"><p>defines how the width is grown from the polyline's points.
 Only <code>"mid"</code> is fully compatible with all options in
 <code>cornerStyle</code> and <code>dash</code>.</p></div></li>
-<li><span><span class="tsd-kind-parameter">drawBorder</span>: <span class="tsd-signature-type">'line' | 'positive' | 'negative' | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a> | undefined</span> <span class="tsd-signature-symbol">= 'line'</span></span><div class="tsd-comment tsd-typography"><p>override OBJ_Generic <code>drawBorder</code> with <code>'line'</code> to make the drawBorder just
+<li><span><span class="tsd-kind-parameter">drawBorder</span>: <span class="tsd-signature-type">'line' | 'positive' | 'negative' | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a></span> <span class="tsd-signature-symbol">= 'line'</span></span><div class="tsd-comment tsd-typography"><p>override OBJ_Generic <code>drawBorder</code> with <code>'line'</code> to make the drawBorder just
 the line itself, <code>'positive'</code> to make the drawBorder the positive side
 of the line, and <code>'negative'</code> to make the drawBorder the negative side
 of the line. Use array definition for custom drawBorder</p></div></li>
-<li><span><span class="tsd-kind-parameter">drawBorderBuffer</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>override OBJ_Generic <code>drawBorderBuffer</code> with <code>number</code> to make the
+<li><span><span class="tsd-kind-parameter">drawBorderBuffer</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a></span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>override OBJ_Generic <code>drawBorderBuffer</code> with <code>number</code> to make the
 drawBorderBuffer the same as the line with additional <code>number</code> thickness
 on either side</p></div></li>
-<li><span><span class="tsd-kind-parameter">cornerStyle</span>: <span class="tsd-signature-type">'auto' | 'none' | 'radius' | 'fill' | undefined</span> <span class="tsd-signature-symbol">= "auto"</span></span><div class="tsd-comment tsd-typography"><p>- <code>"auto"</code>:
+<li><span><span class="tsd-kind-parameter">cornerStyle</span>: <span class="tsd-signature-type">'auto' | 'none' | 'radius' | 'fill'</span> <span class="tsd-signature-symbol">= "auto"</span></span><div class="tsd-comment tsd-typography"><p>- <code>"auto"</code>:
 sharp corners sharp when angle is less than <code>minAutoCornerAngle</code>, <code>"none"</code>: no
 corners, <code>"radius"</code>: curved corners, <code>"fill"</code>: fills the gapes between the line
 ends</p></div></li>
-<li><span><span class="tsd-kind-parameter">cornerSize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span><div class="tsd-comment tsd-typography"><p>only used when <code>cornerStyle</code> = <code>radius</code></p></div></li>
-<li><span><span class="tsd-kind-parameter">cornerSides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of sides in curve - only used when
+<li><span><span class="tsd-kind-parameter">cornerSize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.01</span></span><div class="tsd-comment tsd-typography"><p>only used when <code>cornerStyle</code> = <code>radius</code></p></div></li>
+<li><span><span class="tsd-kind-parameter">cornerSides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of sides in curve - only used when
  <code>cornerStyle</code> = <code>radius</code></p></div></li>
-<li><span><span class="tsd-kind-parameter">cornersOnly</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>draw only the corners with size <code>cornerSize</code></p></div></li>
-<li><span><span class="tsd-kind-parameter">cornerLength</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.1</span></span><div class="tsd-comment tsd-typography"><p>use only with <code>cornersOnly</code> = <code>true</code> -
+<li><span><span class="tsd-kind-parameter">cornersOnly</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>draw only the corners with size <code>cornerSize</code></p></div></li>
+<li><span><span class="tsd-kind-parameter">cornerLength</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.1</span></span><div class="tsd-comment tsd-typography"><p>use only with <code>cornersOnly</code> = <code>true</code> -
 length of corner to draw</p></div></li>
-<li><span><span class="tsd-kind-parameter">minAutoCornerAngle</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= π/7</span></span><div class="tsd-comment tsd-typography"><p>see <code>cornerStyle</code> = <code>auto</code></p></div></li>
-<li><span><span class="tsd-kind-parameter">dash</span>: <span class="tsd-signature-type"><a href="../types/types.TypeDash.html" class="tsd-signature-type">TypeDash</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>leave empty for solid line - use array of
+<li><span><span class="tsd-kind-parameter">minAutoCornerAngle</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= π/7</span></span><div class="tsd-comment tsd-typography"><p>see <code>cornerStyle</code> = <code>auto</code></p></div></li>
+<li><span><span class="tsd-kind-parameter">dash</span>: <span class="tsd-signature-type"><a href="../types/types.TypeDash.html" class="tsd-signature-type">TypeDash</a></span></span><div class="tsd-comment tsd-typography"><p>leave empty for solid line - use array of
 numbers for dash line where first number is length of line, second number is
 length of gap and then the pattern repeats - can use more than one dash length
 and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
 short gap, short dash, short gap and then repeats.</p></div></li>
-<li><span><span class="tsd-kind-parameter">arrow</span>: <span class="tsd-signature-type"><a href="../interfaces/geometries_arrow.OBJ_LineArrows.html" class="tsd-signature-type">OBJ_LineArrows</a> | <a href="../types/geometries_arrow.TypeArrowHead.html" class="tsd-signature-type">TypeArrowHead</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>either an object defining custom
+<li><span><span class="tsd-kind-parameter">arrow</span>: <span class="tsd-signature-type"><a href="../interfaces/geometries_arrow.OBJ_LineArrows.html" class="tsd-signature-type">OBJ_LineArrows</a> | <a href="../types/geometries_arrow.TypeArrowHead.html" class="tsd-signature-type">TypeArrowHead</a></span></span><div class="tsd-comment tsd-typography"><p>either an object defining custom
 arrows or a string representing the name of an arrow head style can be used.
 If a string is used, then the line will have an arrow at both ends.
 Arrows are only available for <code>close: false</code>,
 <code>widthIs: 'mid'</code> and <code>linePrimitives: false</code></p></div></li>
-<li><span><span class="tsd-kind-parameter">linePrimitives</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>Use WebGL line primitives instead of
+<li><span><span class="tsd-kind-parameter">linePrimitives</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>Use WebGL line primitives instead of
 triangle primitives to draw the line</p></div></li>
-<li><span><span class="tsd-kind-parameter">lineNum</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 2</span></span><div class="tsd-comment tsd-typography"><p>Number of line primitives to use when
+<li><span><span class="tsd-kind-parameter">lineNum</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 2</span></span><div class="tsd-comment tsd-typography"><p>Number of line primitives to use when
 <code>linePrimitivs</code>: <code>true</code></p></div></li>
 </ul>
 
@@ -378,7 +378,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -395,21 +395,21 @@ Polygon or partial polygon shape options object that extends
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 4</span></span></li>
-<li><span><span class="tsd-kind-parameter">radius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span></li>
-<li><span><span class="tsd-kind-parameter">rotation</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>shape rotation during vertex definition
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 4</span></span></li>
+<li><span><span class="tsd-kind-parameter">radius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 1</span></span></li>
+<li><span><span class="tsd-kind-parameter">rotation</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>shape rotation during vertex definition
 (different to a rotation step in a trasform)</p></div></li>
-<li><span><span class="tsd-kind-parameter">offset</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= [0, 0]</span></span><div class="tsd-comment tsd-typography"><p>shape center offset from origin
+<li><span><span class="tsd-kind-parameter">offset</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a></span> <span class="tsd-signature-symbol">= [0, 0]</span></span><div class="tsd-comment tsd-typography"><p>shape center offset from origin
 during vertex definition (different to a translation step in a transform)</p></div></li>
-<li><span><span class="tsd-kind-parameter">sidesToDraw</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= all sides</span></span><div class="tsd-comment tsd-typography"><p>number of sides to draw</p></div></li>
-<li><span><span class="tsd-kind-parameter">angleToDraw</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 2π</span></span><div class="tsd-comment tsd-typography"><p>same as <code>sidesToDraw</code> but using angle for
+<li><span><span class="tsd-kind-parameter">sidesToDraw</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= all sides</span></span><div class="tsd-comment tsd-typography"><p>number of sides to draw</p></div></li>
+<li><span><span class="tsd-kind-parameter">angleToDraw</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 2π</span></span><div class="tsd-comment tsd-typography"><p>same as <code>sidesToDraw</code> but using angle for
 the definition</p></div></li>
-<li><span><span class="tsd-kind-parameter">direction</span>: <span class="tsd-signature-type">-1 | 1 | undefined</span> <span class="tsd-signature-symbol">= [0, 0]</span></span><div class="tsd-comment tsd-typography"><p>direction to draw polygon where 1 is
+<li><span><span class="tsd-kind-parameter">direction</span>: <span class="tsd-signature-type">-1 | 1</span> <span class="tsd-signature-symbol">= [0, 0]</span></span><div class="tsd-comment tsd-typography"><p>direction to draw polygon where 1 is
 counter clockwise and -1 is clockwise (<code>1</code>)
 center. This is different to position or transform as these translate the
 vertices on each draw.</p></div></li>
-<li><span><span class="tsd-kind-parameter">line</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_LineStyleSimple.html" class="tsd-signature-type">OBJ_LineStyleSimple</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>line style options</p></div></li>
-<li><span><span class="tsd-kind-parameter">drawBorderBuffer</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>override the OBJ_Generic <code>drawBorderBuffer</code> with <code>number</code> to make the
+<li><span><span class="tsd-kind-parameter">line</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_LineStyleSimple.html" class="tsd-signature-type">OBJ_LineStyleSimple</a></span></span><div class="tsd-comment tsd-typography"><p>line style options</p></div></li>
+<li><span><span class="tsd-kind-parameter">drawBorderBuffer</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a></span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>override the OBJ_Generic <code>drawBorderBuffer</code> with <code>number</code> to make the
 drawBorderBuffer a polygon that is wider by <code>number</code></p></div></li>
 </ul>
 
@@ -456,7 +456,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -473,15 +473,15 @@ Star options object that extends {@link OBJ_Generic} (without
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 4</span></span></li>
-<li><span><span class="tsd-kind-parameter">radius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span></li>
-<li><span><span class="tsd-kind-parameter">innerRadius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= radius / 2</span></span></li>
-<li><span><span class="tsd-kind-parameter">rotation</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>shape rotation during vertex definition
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 4</span></span></li>
+<li><span><span class="tsd-kind-parameter">radius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 1</span></span></li>
+<li><span><span class="tsd-kind-parameter">innerRadius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= radius / 2</span></span></li>
+<li><span><span class="tsd-kind-parameter">rotation</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>shape rotation during vertex definition
 (different to a rotation step in a trasform)</p></div></li>
-<li><span><span class="tsd-kind-parameter">offset</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= [0, 0]</span></span><div class="tsd-comment tsd-typography"><p>shape center offset from origin
+<li><span><span class="tsd-kind-parameter">offset</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a></span> <span class="tsd-signature-symbol">= [0, 0]</span></span><div class="tsd-comment tsd-typography"><p>shape center offset from origin
 during vertex definition (different to a translation step in a transform)</p></div></li>
-<li><span><span class="tsd-kind-parameter">line</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_LineStyleSimple.html" class="tsd-signature-type">OBJ_LineStyleSimple</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>line style options</p></div></li>
-<li><span><span class="tsd-kind-parameter">drawBorderBuffer</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>override the OBJ_Generic <code>drawBorderBuffer</code> with <code>number</code> to make the
+<li><span><span class="tsd-kind-parameter">line</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_LineStyleSimple.html" class="tsd-signature-type">OBJ_LineStyleSimple</a></span></span><div class="tsd-comment tsd-typography"><p>line style options</p></div></li>
+<li><span><span class="tsd-kind-parameter">drawBorderBuffer</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a></span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>override the OBJ_Generic <code>drawBorderBuffer</code> with <code>number</code> to make the
 drawBorderBuffer a polygon that is <code>number</code> thicker than the radius</p></div></li>
 </ul>
 
@@ -543,7 +543,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -560,15 +560,15 @@ Rectangle shape options object that extends {@link OBJ_Generic} (without
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span></li>
-<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span></li>
-<li><span><span class="tsd-kind-parameter">yAlign</span>: <span class="tsd-signature-type">'bottom' | 'middle' | 'top' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 'middle'</span></span></li>
-<li><span><span class="tsd-kind-parameter">xAlign</span>: <span class="tsd-signature-type">'left' | 'center' | 'right' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 'center'</span></span></li>
-<li><span><span class="tsd-kind-parameter">corner</span>: <span class="tsd-signature-type"><a href="../interfaces/types.OBJ_CurvedCorner.html" class="tsd-signature-type">OBJ_CurvedCorner</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>define for rounded corners</p></div></li>
-<li><span><span class="tsd-kind-parameter">line</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_LineStyleSimple.html" class="tsd-signature-type">OBJ_LineStyleSimple</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>line style options</p></div></li>
-<li><span><span class="tsd-kind-parameter">drawBorderBuffer</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>override the OBJ_Generic <code>drawBorderBuffer</code> with <code>number</code> to make the
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 1</span></span></li>
+<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 1</span></span></li>
+<li><span><span class="tsd-kind-parameter">yAlign</span>: <span class="tsd-signature-type">'bottom' | 'middle' | 'top' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 'middle'</span></span></li>
+<li><span><span class="tsd-kind-parameter">xAlign</span>: <span class="tsd-signature-type">'left' | 'center' | 'right' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 'center'</span></span></li>
+<li><span><span class="tsd-kind-parameter">corner</span>: <span class="tsd-signature-type"><a href="../interfaces/types.OBJ_CurvedCorner.html" class="tsd-signature-type">OBJ_CurvedCorner</a></span></span><div class="tsd-comment tsd-typography"><p>define for rounded corners</p></div></li>
+<li><span><span class="tsd-kind-parameter">line</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_LineStyleSimple.html" class="tsd-signature-type">OBJ_LineStyleSimple</a></span></span><div class="tsd-comment tsd-typography"><p>line style options</p></div></li>
+<li><span><span class="tsd-kind-parameter">drawBorderBuffer</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a></span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>override the OBJ_Generic <code>drawBorderBuffer</code> with <code>number</code> to make the
 drawBorderBuffer a rectangle that is <code>number</code> wider and higher on each side</p></div></li>
-<li><span><span class="tsd-kind-parameter">offset</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span></span></li>
+<li><span><span class="tsd-kind-parameter">offset</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a></span></span></li>
 </ul>
 
 #### Filled rectangle
@@ -621,7 +621,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -638,13 +638,13 @@ Ellipse shape options object that extends {@link OBJ_Generic} (without
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span></li>
-<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span></li>
-<li><span><span class="tsd-kind-parameter">yAlign</span>: <span class="tsd-signature-type">'bottom' | 'middle' | 'top' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 'middle'</span></span></li>
-<li><span><span class="tsd-kind-parameter">xAlign</span>: <span class="tsd-signature-type">'left' | 'center' | 'right' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 'center'</span></span></li>
-<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 20</span></span><div class="tsd-comment tsd-typography"><p>number of sides to draw ellipse with</p></div></li>
-<li><span><span class="tsd-kind-parameter">line</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_LineStyleSimple.html" class="tsd-signature-type">OBJ_LineStyleSimple</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>line style options</p></div></li>
-<li><span><span class="tsd-kind-parameter">drawBorderBuffer</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>override the OBJ_Generic <code>drawBorderBuffer</code> with <code>number</code> to make the
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 1</span></span></li>
+<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 1</span></span></li>
+<li><span><span class="tsd-kind-parameter">yAlign</span>: <span class="tsd-signature-type">'bottom' | 'middle' | 'top' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 'middle'</span></span></li>
+<li><span><span class="tsd-kind-parameter">xAlign</span>: <span class="tsd-signature-type">'left' | 'center' | 'right' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 'center'</span></span></li>
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 20</span></span><div class="tsd-comment tsd-typography"><p>number of sides to draw ellipse with</p></div></li>
+<li><span><span class="tsd-kind-parameter">line</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_LineStyleSimple.html" class="tsd-signature-type">OBJ_LineStyleSimple</a></span></span><div class="tsd-comment tsd-typography"><p>line style options</p></div></li>
+<li><span><span class="tsd-kind-parameter">drawBorderBuffer</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a></span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>override the OBJ_Generic <code>drawBorderBuffer</code> with <code>number</code> to make the
 drawBorderBuffer a ellipse that is <code>number</code> thicker around its border</p></div></li>
 </ul>
 
@@ -693,7 +693,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -710,12 +710,12 @@ Arc shape options object that extends {@link OBJ_Generic} (without
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">radius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 20</span></span></li>
-<li><span><span class="tsd-kind-parameter">startAngle</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span></li>
-<li><span><span class="tsd-kind-parameter">angle</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span></li>
-<li><span><span class="tsd-kind-parameter">line</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_LineStyleSimple.html" class="tsd-signature-type">OBJ_LineStyleSimple</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>line style options</p></div></li>
-<li><span><span class="tsd-kind-parameter">drawBorderBuffer</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>override the OBJ_Generic <code>drawBorderBuffer</code> with <code>number</code> to make the
+<li><span><span class="tsd-kind-parameter">radius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 20</span></span></li>
+<li><span><span class="tsd-kind-parameter">startAngle</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0</span></span></li>
+<li><span><span class="tsd-kind-parameter">angle</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 1</span></span></li>
+<li><span><span class="tsd-kind-parameter">line</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_LineStyleSimple.html" class="tsd-signature-type">OBJ_LineStyleSimple</a></span></span><div class="tsd-comment tsd-typography"><p>line style options</p></div></li>
+<li><span><span class="tsd-kind-parameter">drawBorderBuffer</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a></span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>override the OBJ_Generic <code>drawBorderBuffer</code> with <code>number</code> to make the
 drawBorderBuffer a ellipse that is <code>number</code> thicker around its border</p></div></li>
 </ul>
 
@@ -765,7 +765,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -844,20 +844,20 @@ is not defined, the triangle will be filled.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">points</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>> | undefined</span></span><div class="tsd-comment tsd-typography"><p>defining points will take precedence over
+<li><span><span class="tsd-kind-parameter">points</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../classes/geometry_Point.Point.html" class="tsd-signature-type">Point</a>></span></span><div class="tsd-comment tsd-typography"><p>defining points will take precedence over
 all other ways to define a triangle.</p></div></li>
-<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">top</span>: <span class="tsd-signature-type">'left' | 'right' | 'center' | undefined</span> <span class="tsd-signature-symbol">= center</span></span></li>
-<li><span><span class="tsd-kind-parameter">SSS</span>: <span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>] | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">ASA</span>: <span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>] | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">AAS</span>: <span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>] | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">SAS</span>: <span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>] | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">direction</span>: <span class="tsd-signature-type">1 | -1 | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">rotation</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 's1' | 's2' | 's3' | <a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes2D.OBJ_TriangleSideRotationAlignment.html" class="tsd-signature-type">OBJ_TriangleSideRotationAlignment</a> | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">xAlign</span>: <span class="tsd-signature-type">'left' | 'center' | 'right' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid' | 'points' | undefined</span> <span class="tsd-signature-symbol">= 'centroid'</span></span></li>
-<li><span><span class="tsd-kind-parameter">yAlign</span>: <span class="tsd-signature-type">'bottom' | 'middle' | 'top' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'a1' | 'a2' | 'a3' | 's1'| 's2' | 's3' | 'centroid' | 'points' | undefined</span> <span class="tsd-signature-symbol">= 'centroid'</span></span></li>
-<li><span><span class="tsd-kind-parameter">line</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_LineStyleSimple.html" class="tsd-signature-type">OBJ_LineStyleSimple</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>line style options - do not use any corner
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">height</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">top</span>: <span class="tsd-signature-type">'left' | 'right' | 'center'</span> <span class="tsd-signature-symbol">= center</span></span></li>
+<li><span><span class="tsd-kind-parameter">SSS</span>: <span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>]</span></span></li>
+<li><span><span class="tsd-kind-parameter">ASA</span>: <span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>]</span></span></li>
+<li><span><span class="tsd-kind-parameter">AAS</span>: <span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>]</span></span></li>
+<li><span><span class="tsd-kind-parameter">SAS</span>: <span class="tsd-signature-type">[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>]</span></span></li>
+<li><span><span class="tsd-kind-parameter">direction</span>: <span class="tsd-signature-type">1 | -1</span></span></li>
+<li><span><span class="tsd-kind-parameter">rotation</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 's1' | 's2' | 's3' | <a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes2D.OBJ_TriangleSideRotationAlignment.html" class="tsd-signature-type">OBJ_TriangleSideRotationAlignment</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">xAlign</span>: <span class="tsd-signature-type">'left' | 'center' | 'right' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid' | 'points'</span> <span class="tsd-signature-symbol">= 'centroid'</span></span></li>
+<li><span><span class="tsd-kind-parameter">yAlign</span>: <span class="tsd-signature-type">'bottom' | 'middle' | 'top' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | 'a1' | 'a2' | 'a3' | 's1'| 's2' | 's3' | 'centroid' | 'points'</span> <span class="tsd-signature-symbol">= 'centroid'</span></span></li>
+<li><span><span class="tsd-kind-parameter">line</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_LineStyleSimple.html" class="tsd-signature-type">OBJ_LineStyleSimple</a></span></span><div class="tsd-comment tsd-typography"><p>line style options - do not use any corner
 options</p></div></li>
 </ul>
 
@@ -904,7 +904,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -934,28 +934,28 @@ The line can have arrows at one or both ends using the `arrow` property.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">p1</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>start point of line</p></div></li>
-<li><span><span class="tsd-kind-parameter">p2</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>end point of line</p></div></li>
-<li><span><span class="tsd-kind-parameter">length</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>length of line from <code>p1</code></p></div></li>
-<li><span><span class="tsd-kind-parameter">angle</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>angle of line from <code>p1</code></p></div></li>
-<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
-<li><span><span class="tsd-kind-parameter">widthIs</span>: <span class="tsd-signature-type">'mid' | 'positive' | 'negative' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= "mid"</span></span><div class="tsd-comment tsd-typography"><p>defines how the width is grown from the polyline's points.
+<li><span><span class="tsd-kind-parameter">p1</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a></span></span><div class="tsd-comment tsd-typography"><p>start point of line</p></div></li>
+<li><span><span class="tsd-kind-parameter">p2</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a></span></span><div class="tsd-comment tsd-typography"><p>end point of line</p></div></li>
+<li><span><span class="tsd-kind-parameter">length</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>length of line from <code>p1</code></p></div></li>
+<li><span><span class="tsd-kind-parameter">angle</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>angle of line from <code>p1</code></p></div></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0.01</span></span></li>
+<li><span><span class="tsd-kind-parameter">widthIs</span>: <span class="tsd-signature-type">'mid' | 'positive' | 'negative' | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= "mid"</span></span><div class="tsd-comment tsd-typography"><p>defines how the width is grown from the polyline's points.
 Only <code>"mid"</code> is fully compatible with all options in
 <code>arrow</code>.</p></div></li>
-<li><span><span class="tsd-kind-parameter">dash</span>: <span class="tsd-signature-type"><a href="../types/types.TypeDash.html" class="tsd-signature-type">TypeDash</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>leave empty for solid line - use array of
+<li><span><span class="tsd-kind-parameter">dash</span>: <span class="tsd-signature-type"><a href="../types/types.TypeDash.html" class="tsd-signature-type">TypeDash</a></span></span><div class="tsd-comment tsd-typography"><p>leave empty for solid line - use array of
 numbers for dash line where first number is length of line, second number is
 length of gap and then the pattern repeats - can use more than one dash length
 and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
 short gap, short dash, short gap and then repeats.</p></div></li>
-<li><span><span class="tsd-kind-parameter">arrow</span>: <span class="tsd-signature-type"><a href="../interfaces/geometries_arrow.OBJ_LineArrows.html" class="tsd-signature-type">OBJ_LineArrows</a> | <a href="../types/geometries_arrow.TypeArrowHead.html" class="tsd-signature-type">TypeArrowHead</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>either an object defining custom
+<li><span><span class="tsd-kind-parameter">arrow</span>: <span class="tsd-signature-type"><a href="../interfaces/geometries_arrow.OBJ_LineArrows.html" class="tsd-signature-type">OBJ_LineArrows</a> | <a href="../types/geometries_arrow.TypeArrowHead.html" class="tsd-signature-type">TypeArrowHead</a></span></span><div class="tsd-comment tsd-typography"><p>either an object defining custom
 arrows or a string representing the name of an arrow head style can be used.
 If a string is used, then the line will have an arrow at both ends.
 Arrows are only available for <code>widthIs: 'mid'</code> and <code>linePrimitives: false</code></p></div></li>
-<li><span><span class="tsd-kind-parameter">linePrimitives</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>Use WebGL line primitives instead of
+<li><span><span class="tsd-kind-parameter">linePrimitives</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>Use WebGL line primitives instead of
 triangle primitives to draw the line</p></div></li>
-<li><span><span class="tsd-kind-parameter">lineNum</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 2</span></span><div class="tsd-comment tsd-typography"><p>Number of line primitives to use when
+<li><span><span class="tsd-kind-parameter">lineNum</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 2</span></span><div class="tsd-comment tsd-typography"><p>Number of line primitives to use when
 <code>linePrimitivs</code>: <code>true</code></p></div></li>
-<li><span><span class="tsd-kind-parameter">drawBorderBuffer</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>override OBJ_Generic <code>drawBorderBuffer</code> with <code>number</code> to make the
+<li><span><span class="tsd-kind-parameter">drawBorderBuffer</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a></span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>override OBJ_Generic <code>drawBorderBuffer</code> with <code>number</code> to make the
 drawBorderBuffer the same as the line with additional <code>number</code> thickness
 on each side and the ends</p></div></li>
 </ul>
@@ -1003,7 +1003,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -1032,20 +1032,20 @@ The line width and style is defined with `line`.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">bounds</span>: <span class="tsd-signature-type"><a href="../types/geometry_Rect.TypeParsableRect.html" class="tsd-signature-type">TypeParsableRect</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>rectangle definition</p></div></li>
-<li><span><span class="tsd-kind-parameter">step</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>distance between grid lines</p></div></li>
-<li><span><span class="tsd-kind-parameter">xStep</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>distance between vertical lines in grid from
+<li><span><span class="tsd-kind-parameter">bounds</span>: <span class="tsd-signature-type"><a href="../types/geometry_Rect.TypeParsableRect.html" class="tsd-signature-type">TypeParsableRect</a></span></span><div class="tsd-comment tsd-typography"><p>rectangle definition</p></div></li>
+<li><span><span class="tsd-kind-parameter">step</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>distance between grid lines</p></div></li>
+<li><span><span class="tsd-kind-parameter">xStep</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>distance between vertical lines in grid from
 left - use this instead of <code>xNum</code>. This will override <code>step</code>.</p></div></li>
-<li><span><span class="tsd-kind-parameter">yStep</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>distance between horizontal lines in grid from
+<li><span><span class="tsd-kind-parameter">yStep</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>distance between horizontal lines in grid from
 bottom - use this instead of <code>yNum</code>. This will override <code>step</code>.</p></div></li>
-<li><span><span class="tsd-kind-parameter">num</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>number of grid lines. This will override <code>step</code>.</p></div></li>
-<li><span><span class="tsd-kind-parameter">xNum</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>number of vertical lines in grid including top and
+<li><span><span class="tsd-kind-parameter">num</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>number of grid lines. This will override <code>step</code>.</p></div></li>
+<li><span><span class="tsd-kind-parameter">xNum</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>number of vertical lines in grid including top and
 bottom lines - overrides <code>num</code> and <code>xStep</code>.</p></div></li>
-<li><span><span class="tsd-kind-parameter">yNum</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>number of horizontal lines in grid including left
+<li><span><span class="tsd-kind-parameter">yNum</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>number of horizontal lines in grid including left
 and right lines - overrides <code>num</code> and <code>yStep</code>.</p></div></li>
-<li><span><span class="tsd-kind-parameter">line</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes2D.OBJ_LineStyle.html" class="tsd-signature-type">OBJ_LineStyle</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>line style options - do not use any corner
+<li><span><span class="tsd-kind-parameter">line</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes2D.OBJ_LineStyle.html" class="tsd-signature-type">OBJ_LineStyle</a></span></span><div class="tsd-comment tsd-typography"><p>line style options - do not use any corner
 options</p></div></li>
-<li><span><span class="tsd-kind-parameter">drawBorderBuffer</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>override OBJ_Generic <code>drawBorderBuffer</code> with <code>number</code> to make the
+<li><span><span class="tsd-kind-parameter">drawBorderBuffer</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-signature-type">TypeParsableBorder</a></span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>override OBJ_Generic <code>drawBorderBuffer</code> with <code>number</code> to make the
 drawBorderBuffer the same as the grid outline with additional <code>number</code>
 buffer each side</p></div></li>
 </ul>
@@ -1100,7 +1100,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>
+[boilerplate](./draw/draw.md#drawing-boilerplate)
 
 
 ---
@@ -1153,23 +1153,23 @@ determine the dimension of the arrow (`length` and `width` are ignored).
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">head</span>: <span class="tsd-signature-type"><a href="../types/geometries_arrow.TypeArrowHead.html" class="tsd-signature-type">TypeArrowHead</a> | undefined</span> <span class="tsd-signature-symbol">= 'triangle'</span></span><div class="tsd-comment tsd-typography"><p>head style</p></div></li>
-<li><span><span class="tsd-kind-parameter">scale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>scale the default dimensions of the arrow</p></div></li>
-<li><span><span class="tsd-kind-parameter">length</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>dimension of the arrow head along the line</p></div></li>
-<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>dimension of the arrow head along the line width</p></div></li>
-<li><span><span class="tsd-kind-parameter">rotation</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>rotation of the polygon when <code>head = 'polygon'</code></p></div></li>
-<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>number of sides in polygon or circle arrow head</p></div></li>
-<li><span><span class="tsd-kind-parameter">radius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>radius of polygon or circle arrow head</p></div></li>
-<li><span><span class="tsd-kind-parameter">barb</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>barb length (along the length of the line) of the
+<li><span><span class="tsd-kind-parameter">head</span>: <span class="tsd-signature-type"><a href="../types/geometries_arrow.TypeArrowHead.html" class="tsd-signature-type">TypeArrowHead</a></span> <span class="tsd-signature-symbol">= 'triangle'</span></span><div class="tsd-comment tsd-typography"><p>head style</p></div></li>
+<li><span><span class="tsd-kind-parameter">scale</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>scale the default dimensions of the arrow</p></div></li>
+<li><span><span class="tsd-kind-parameter">length</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>dimension of the arrow head along the line</p></div></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>dimension of the arrow head along the line width</p></div></li>
+<li><span><span class="tsd-kind-parameter">rotation</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>rotation of the polygon when <code>head = 'polygon'</code></p></div></li>
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>number of sides in polygon or circle arrow head</p></div></li>
+<li><span><span class="tsd-kind-parameter">radius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>radius of polygon or circle arrow head</p></div></li>
+<li><span><span class="tsd-kind-parameter">barb</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>barb length (along the length of the line) of the
 barb arrow head</p></div></li>
-<li><span><span class="tsd-kind-parameter">tailWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>width of the line that joins the arrow - if
+<li><span><span class="tsd-kind-parameter">tailWidth</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>width of the line that joins the arrow - if
 defined this will create minimum dimensions for the arrow</p></div></li>
-<li><span><span class="tsd-kind-parameter">tail</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p><code>true</code> includes a tail in the arrow of
+<li><span><span class="tsd-kind-parameter">tail</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p><code>true</code> includes a tail in the arrow of
 with <code>tailWidth</code>. A <code>number</code> gives the tail a length where 0 will not
 extend the tail beyond the boundaries of the head</p></div></li>
-<li><span><span class="tsd-kind-parameter">align</span>: <span class="tsd-signature-type">'tip' | 'start' | 'mid' | 'tail' | undefined</span> <span class="tsd-signature-symbol">= 'tip'</span></span><div class="tsd-comment tsd-typography"><p>define which part of
+<li><span><span class="tsd-kind-parameter">align</span>: <span class="tsd-signature-type">'tip' | 'start' | 'mid' | 'tail'</span> <span class="tsd-signature-symbol">= 'tip'</span></span><div class="tsd-comment tsd-typography"><p>define which part of
 the arrow is aligned at (0, 0) in draw space</p></div></li>
-<li><span><span class="tsd-kind-parameter">angle</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>angle the arrow is drawn at</p></div></li>
+<li><span><span class="tsd-kind-parameter">angle</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>angle the arrow is drawn at</p></div></li>
 </ul>
 
 #### Triangle arrow with tail

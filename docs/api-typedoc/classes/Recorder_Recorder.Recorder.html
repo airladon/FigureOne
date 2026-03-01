@@ -28,19 +28,64 @@ examples on how this is done.</p>
 <p>Notifications - The notification manager property <code>notifications</code> will
 publish the following events:</p>
 <ul>
-<li><code>timeUpdate</code>: updated at period defined in property <code>timeUpdates</code></li>
-<li><code>durationUpdated</code>: updated whenever audio or video are loaded, or when
-recording goes beyond the current duration</li>
-<li><code>audioLoaded</code></li>
-<li><code>videoLoaded</code></li>
-<li><code>recordingStarted</code></li>
-<li><code>recordingStopped</code></li>
-<li><code>preparingToPlay</code></li>
-<li><code>playbackStarted</code></li>
-<li><code>preparingToPause</code></li>
-<li><code>playbackStopped</code></li>
-<li><code>seek</code></li>
-<li><code>recordingStatesComplete</code> - recording completed and recorded states ready</li>
+<li>
+<p><code>timeUpdate</code>: updated at period defined in property <code>timeUpdates</code></p>
+</li>
+<li>
+<p><code>durationUpdated</code>: updated whenever audio or video are loaded, or when
+recording goes beyond the current duration</p>
+</li>
+<li>
+<p><code>audioLoaded</code></p>
+</li>
+<li>
+<p><code>videoLoaded</code></p>
+</li>
+<li>
+<p><code>recordingStarted</code></p>
+</li>
+<li>
+<p><code>recordingStopped</code></p>
+</li>
+<li>
+<p><code>preparingToPlay</code></p>
+</li>
+<li>
+<p><code>playbackStarted</code></p>
+</li>
+<li>
+<p><code>preparingToPause</code></p>
+</li>
+<li>
+<p><code>playbackStopped</code></p>
+</li>
+<li>
+<p><code>seek</code></p>
+</li>
+<li>
+<p><code>recordingStatesComplete</code> - recording completed and recorded states ready</p>
+</li>
+<li>
+<p><code>notifications</code> <a href="tools.NotificationManager.html" class="tsd-kind-class">NotificationManager</a> — use to subscribe to
+notifications</p>
+</li>
+<li>
+<p><code>state</code> <code>playing</code> | <code>idle</code> | <code>recording</code> | <code>preparingToPause</code> | <code>preparingToPlay</code></p>
+</li>
+<li>
+<p><code>isAudioPlaying</code> <code>boolean</code></p>
+</li>
+<li>
+<p><code>duration</code> <code>number</code> — in seconds</p>
+</li>
+<li>
+<p><code>stateTimeStep</code> <code>number</code> — in seconds - change this to change the
+duration between recorded seek frames</p>
+</li>
+<li>
+<p><code>timeUpdates</code> <code>number</code> — in seconds - how often to publish the
+'timeUpdate' notification</p>
+</li>
 </ul>
 </div></section><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/airladon/figureone/blob/main/src/js/figure/Recorder/Recorder.ts#L233">src/js/figure/Recorder/Recorder.ts:233</a></li></ul></aside><section class="tsd-panel-group tsd-index-group"><section class="tsd-panel tsd-index-panel"><details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg><h5 class="tsd-index-heading uppercase">Index</h5></summary><div class="tsd-accordion-details"><section class="tsd-index-section"><h3 class="tsd-index-heading">Methods</h3><div class="tsd-index-list"><a href="#getcurrenttime" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get<wbr/>Current<wbr/>Time</span></a>
 <a href="#startrecording" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>start<wbr/>Recording</span></a>

@@ -21,6 +21,27 @@ have only one color, then looking inside the shape the surface lighting will
 be opposite to that expected. To create open ended solids with lighting that
 is as expected, create the outside and inside surface with a closed profile.</p>
 <p><img src="./apiassets/revolveexplanation.png" alt=""></p>
+<ul>
+<li><code>sides</code> <code>number</code> — number of sides in the radial sweep</li>
+<li><code>profile</code> <a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a>[] — XY plane profile to be radially
+swept around the x axis</li>
+<li><code>normals</code> <code>flat</code> | <code>curve</code> | <code>curveProfile</code> | <code>curveRadial</code> — <code>flat</code> normals will make shading (from a light source) across a face of the
+object a constant color. <code>curveProfile</code> will gradiate the shading along the
+profile. <code>curveRadial</code> will gradiate the shading around the radial sweep.
+<code>curve</code> will gradiate the shading both around the radial sweep and along the
+profile. Use <code>curve</code>, <code>curveProfile</code>, or <code>curveRadial</code> to make a surface
+look more round with fewer number of sides.</li>
+<li><code>axis</code> <a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a> — orient the draw space vertices of the
+shape so its axis is along this vector</li>
+<li><code>rotation</code> <code>number</code> — by default the profile will start in the XY
+plane and sweep around the x axis following the right hand rule. Use
+<code>rotation</code> to start the sweep at some angle where 0º is in the XY for +y and
+90º is in the XZ plane for +z. initial angle of the revolve rotation</li>
+<li><code>lines</code> <code>boolean</code> — if <code>true</code> then points representing
+the edes of the faces will be returned. If <code>false</code>, then points
+representing two triangles per face and an
+associated normal for each point will be returned.</li>
+</ul>
 </div><div class="tsd-comment tsd-typography"><div class="tsd-tag-see"><h4 class="tsd-anchor-link" id="see">See<a href="#see" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>To test examples, append them to the
 <a href="#shapes3d-boilerplate">boilerplate</a></p>
 </div><div class="tsd-tag-example"><h4 class="tsd-anchor-link" id="example">Example<a href="#example" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;revolve&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">profile:</span><span class="hl-5"> [[</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">], [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0.05</span><span class="hl-5">], [</span><span class="hl-12">0.5</span><span class="hl-5">, </span><span class="hl-12">0.05</span><span class="hl-5">], [</span><span class="hl-12">0.6</span><span class="hl-5">, </span><span class="hl-12">0.1</span><span class="hl-5">], [</span><span class="hl-12">0.7</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">]],</span><br/><span class="hl-5">  </span><span class="hl-8">axis:</span><span class="hl-5"> [</span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">],</span><br/><span class="hl-5">  </span><span class="hl-8">color:</span><span class="hl-5"> [</span><span class="hl-12">1</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">0</span><span class="hl-5">, </span><span class="hl-12">1</span><span class="hl-5">],</span><br/><span class="hl-5">  </span><span class="hl-8">sides:</span><span class="hl-5"> </span><span class="hl-12">20</span><span class="hl-5">,</span><br/><span class="hl-5">});</span>

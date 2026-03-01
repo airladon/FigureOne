@@ -27,13 +27,13 @@ group: 3D Shape Primitives
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">light</span>: <span class="tsd-signature-type">'directional' | 'point' | null | undefined</span> <span class="tsd-signature-symbol">= 'directional'</span></span><div class="tsd-comment tsd-typography"><p>the scene light that will
+<li><span><span class="tsd-kind-parameter">light</span>: <span class="tsd-signature-type">'directional' | 'point' | null</span> <span class="tsd-signature-symbol">= 'directional'</span></span><div class="tsd-comment tsd-typography"><p>the scene light that will
 be cast on the shape. Use <code>null</code> for no lighting - all surfaces will have
 the defined color.</p></div></li>
-<li><span><span class="tsd-kind-parameter">copy</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../interfaces/geometries_copy_copy.CPY_Step.html" class="tsd-signature-type">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a>> | <a href="../interfaces/geometries_copy_copy.CPY_Step.html" class="tsd-signature-type">CPY_Step</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>Create copies the
+<li><span><span class="tsd-kind-parameter">copy</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../interfaces/geometries_copy_copy.CPY_Step.html" class="tsd-signature-type">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a>> | <a href="../interfaces/geometries_copy_copy.CPY_Step.html" class="tsd-signature-type">CPY_Step</a></span></span><div class="tsd-comment tsd-typography"><p>Create copies the
 shapes vertices to replicate the shape in space. Copies of normals, colors
 (if defined) and texture coordinates (if defined) will also be made.</p></div></li>
-<li><span><span class="tsd-kind-parameter">usage</span>: <span class="tsd-signature-type"><a href="../types/DrawingObjects_GLObject_GLObject.TypeGLBufferUsage.html" class="tsd-signature-type">TypeGLBufferUsage</a> | undefined</span> <span class="tsd-signature-symbol">= 'STATIC'</span></span><div class="tsd-comment tsd-typography"><p>use <code>'DYNAMIC'</code> if the shape's vertices
+<li><span><span class="tsd-kind-parameter">usage</span>: <span class="tsd-signature-type"><a href="../types/DrawingObjects_GLObject_GLObject.TypeGLBufferUsage.html" class="tsd-signature-type">TypeGLBufferUsage</a></span> <span class="tsd-signature-symbol">= 'STATIC'</span></span><div class="tsd-comment tsd-typography"><p>use <code>'DYNAMIC'</code> if the shape's vertices
 will be updated very frequently</p></div></li>
 </ul>
 
@@ -59,13 +59,13 @@ don't need shader customization.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">glPrimitive</span>: <span class="tsd-signature-type">'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES' | undefined</span> <span class="tsd-signature-symbol">= 'TRIANGLES'</span></span></li>
-<li><span><span class="tsd-kind-parameter">points</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a>> | undefined</span></span><div class="tsd-comment tsd-typography"><p>positions of vertices of shape</p></div></li>
-<li><span><span class="tsd-kind-parameter">normals</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a>> | undefined</span></span><div class="tsd-comment tsd-typography"><p>normals for each vertex</p></div></li>
-<li><span><span class="tsd-kind-parameter">colors</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../types/types.TypeColor.html" class="tsd-signature-type">TypeColor</a>> | undefined</span></span><div class="tsd-comment tsd-typography"><p>define a color for each vertex if the
+<li><span><span class="tsd-kind-parameter">glPrimitive</span>: <span class="tsd-signature-type">'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'</span> <span class="tsd-signature-symbol">= 'TRIANGLES'</span></span></li>
+<li><span><span class="tsd-kind-parameter">points</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a>></span></span><div class="tsd-comment tsd-typography"><p>positions of vertices of shape</p></div></li>
+<li><span><span class="tsd-kind-parameter">normals</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a>></span></span><div class="tsd-comment tsd-typography"><p>normals for each vertex</p></div></li>
+<li><span><span class="tsd-kind-parameter">colors</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../types/types.TypeColor.html" class="tsd-signature-type">TypeColor</a>></span></span><div class="tsd-comment tsd-typography"><p>define a color for each vertex if the
 shape will be more than just a single color. Otherwise use <code>color</code> if a
 single color.</p></div></li>
-<li><span><span class="tsd-kind-parameter">texture</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_Texture.html" class="tsd-signature-type">OBJ_Texture</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>use to overlay a texture onto the shape's
+<li><span><span class="tsd-kind-parameter">texture</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_Texture.html" class="tsd-signature-type">OBJ_Texture</a></span></span><div class="tsd-comment tsd-typography"><p>use to overlay a texture onto the shape's
 surfaces</p></div></li>
 </ul>
 
@@ -145,7 +145,7 @@ a.animations.new()
 ```
 
 > To test examples, append them to the
-<a href="#shapes3d-boilerplate">boilerplate</a>
+[boilerplate](./shapes3d/shapes3d.md#shapes3d-boilerplate)
 
 
 ---
@@ -162,13 +162,13 @@ By default, a sphere with its center at the origin will be created.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of sides around sphere's half great circle</p></div></li>
-<li><span><span class="tsd-kind-parameter">radius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>radius of sphere</p></div></li>
-<li><span><span class="tsd-kind-parameter">normals</span>: <span class="tsd-signature-type">'curve' | 'flat' | undefined</span> <span class="tsd-signature-symbol">= flat</span></span><div class="tsd-comment tsd-typography"><p><code>flat</code> normals will make light
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of sides around sphere's half great circle</p></div></li>
+<li><span><span class="tsd-kind-parameter">radius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>radius of sphere</p></div></li>
+<li><span><span class="tsd-kind-parameter">normals</span>: <span class="tsd-signature-type">'curve' | 'flat'</span> <span class="tsd-signature-symbol">= flat</span></span><div class="tsd-comment tsd-typography"><p><code>flat</code> normals will make light
 shading across a face cone constant. <code>curve</code> will gradiate the shading. Use
 <code>curve</code> to make a surface look more round with fewer number of sides.</p></div></li>
-<li><span><span class="tsd-kind-parameter">center</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= [0, 0]</span></span><div class="tsd-comment tsd-typography"><p>center position of sphere</p></div></li>
-<li><span><span class="tsd-kind-parameter">lines</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> then points representing
+<li><span><span class="tsd-kind-parameter">center</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a></span> <span class="tsd-signature-symbol">= [0, 0]</span></span><div class="tsd-comment tsd-typography"><p>center position of sphere</p></div></li>
+<li><span><span class="tsd-kind-parameter">lines</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> then points representing
 the edes of the faces will be returned. If <code>false</code>, then points
 representing two triangles per face and an
 associated normal for each point will be returned.</p></div></li>
@@ -225,7 +225,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#shapes3d-boilerplate">boilerplate</a>
+[boilerplate](./shapes3d/shapes3d.md#shapes3d-boilerplate)
 
 
 ---
@@ -243,10 +243,10 @@ being normal to the cube faces.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">side</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>side length</p></div></li>
-<li><span><span class="tsd-kind-parameter">center</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>center point (<code>[0, 0]</code>)
+<li><span><span class="tsd-kind-parameter">side</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>side length</p></div></li>
+<li><span><span class="tsd-kind-parameter">center</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a></span></span><div class="tsd-comment tsd-typography"><p>center point (<code>[0, 0]</code>)
 points of cube</p></div></li>
-<li><span><span class="tsd-kind-parameter">lines</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> then points representing
+<li><span><span class="tsd-kind-parameter">lines</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> then points representing
 the 12 edges of the cube will be returned. If <code>false</code>, then points
 representing two triangles per face (12 triangles, 36 points) and an
 associated normal for each point will be returned.</p></div></li>
@@ -289,7 +289,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#shapes3d-boilerplate">boilerplate</a>
+[boilerplate](./shapes3d/shapes3d.md#shapes3d-boilerplate)
 
 
 ---
@@ -306,24 +306,24 @@ By default, a cylinder along the x axis will be created.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of cylinder sides</p></div></li>
-<li><span><span class="tsd-kind-parameter">radius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>radius of cylinder</p></div></li>
-<li><span><span class="tsd-kind-parameter">normals</span>: <span class="tsd-signature-type">'curve' | 'flat' | undefined</span> <span class="tsd-signature-symbol">= flat</span></span><div class="tsd-comment tsd-typography"><p><code>flat</code> normals will make
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of cylinder sides</p></div></li>
+<li><span><span class="tsd-kind-parameter">radius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>radius of cylinder</p></div></li>
+<li><span><span class="tsd-kind-parameter">normals</span>: <span class="tsd-signature-type">'curve' | 'flat'</span> <span class="tsd-signature-symbol">= flat</span></span><div class="tsd-comment tsd-typography"><p><code>flat</code> normals will make
 shading (from light source) across a face cone constant.
 <code>curve</code> will gradiate the shading. Use <code>curve</code> to make a surface look more
 round with fewer number of sides.</p></div></li>
-<li><span><span class="tsd-kind-parameter">line</span>: <span class="tsd-signature-type"><a href="../types/geometry_Line.TypeParsableLine.html" class="tsd-signature-type">TypeParsableLine</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>line that can position and
+<li><span><span class="tsd-kind-parameter">line</span>: <span class="tsd-signature-type"><a href="../types/geometry_Line.TypeParsableLine.html" class="tsd-signature-type">TypeParsableLine</a></span></span><div class="tsd-comment tsd-typography"><p>line that can position and
 orient the cylinder. First point of line is cylinder base center, and second
 point is the top center.</p></div></li>
-<li><span><span class="tsd-kind-parameter">length</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>length of the cylinder if <code>line</code> isn't
+<li><span><span class="tsd-kind-parameter">length</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>length of the cylinder if <code>line</code> isn't
 defined</p></div></li>
-<li><span><span class="tsd-kind-parameter">ends</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | 1 | 2 | undefined</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>true</code> fills both ends of the cylinder.
+<li><span><span class="tsd-kind-parameter">ends</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | 1 | 2</span> <span class="tsd-signature-symbol">= true</span></span><div class="tsd-comment tsd-typography"><p><code>true</code> fills both ends of the cylinder.
 <code>false</code> does not fill ends. <code>1</code> fills only the first end. <code>2</code> fills only the
 the second end.</p></div></li>
-<li><span><span class="tsd-kind-parameter">rotation</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>rotation of base - this is only noticable for
+<li><span><span class="tsd-kind-parameter">rotation</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>rotation of base - this is only noticable for
 small numbers of sides (<code>0</code>)
 points of cube</p></div></li>
-<li><span><span class="tsd-kind-parameter">lines</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> then points representing
+<li><span><span class="tsd-kind-parameter">lines</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> then points representing
 the edes of the faces will be returned. If <code>false</code>, then points
 representing two triangles per face and an
 associated normal for each point will be returned.</p></div></li>
@@ -394,7 +394,7 @@ figure.add([
 ```
 
 > To test examples, append them to the
-<a href="#shapes3d-boilerplate">boilerplate</a>
+[boilerplate](./shapes3d/shapes3d.md#shapes3d-boilerplate)
 
 
 ---
@@ -412,18 +412,18 @@ the arrow profiles can only be simple triangles.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">p1</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= [0, 0, 0]</span></span></li>
-<li><span><span class="tsd-kind-parameter">p2</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span> <span class="tsd-signature-symbol">= default: p1 + [1, 0, 0]</span></span></li>
-<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>width of line</p></div></li>
-<li><span><span class="tsd-kind-parameter">arrow</span>: <span class="tsd-signature-type"><a href="../interfaces/d3_line3.OBJ_Line3Arrow.html" class="tsd-signature-type">OBJ_Line3Arrow</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>define to use arrows at one or both ends
+<li><span><span class="tsd-kind-parameter">p1</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a></span> <span class="tsd-signature-symbol">= [0, 0, 0]</span></span></li>
+<li><span><span class="tsd-kind-parameter">p2</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a></span> <span class="tsd-signature-symbol">= default: p1 + [1, 0, 0]</span></span></li>
+<li><span><span class="tsd-kind-parameter">width</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>width of line</p></div></li>
+<li><span><span class="tsd-kind-parameter">arrow</span>: <span class="tsd-signature-type"><a href="../interfaces/d3_line3.OBJ_Line3Arrow.html" class="tsd-signature-type">OBJ_Line3Arrow</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span></span><div class="tsd-comment tsd-typography"><p>define to use arrows at one or both ends
 of the line</p></div></li>
-<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of sides</p></div></li>
-<li><span><span class="tsd-kind-parameter">normals</span>: <span class="tsd-signature-type">'curve' | 'flat' | undefined</span> <span class="tsd-signature-symbol">= curve</span></span><div class="tsd-comment tsd-typography"><p><code>flat</code> normals will make light
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of sides</p></div></li>
+<li><span><span class="tsd-kind-parameter">normals</span>: <span class="tsd-signature-type">'curve' | 'flat'</span> <span class="tsd-signature-symbol">= curve</span></span><div class="tsd-comment tsd-typography"><p><code>flat</code> normals will make light
 shading across a line face constant. <code>curve</code> will gradiate the shading. Use
 <code>curve</code> to make a surface look more round with fewer number of sides.</p></div></li>
-<li><span><span class="tsd-kind-parameter">rotation</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>rotation of line around its axis - this is
+<li><span><span class="tsd-kind-parameter">rotation</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0</span></span><div class="tsd-comment tsd-typography"><p>rotation of line around its axis - this is
 only noticable for small numbers of sides</p></div></li>
-<li><span><span class="tsd-kind-parameter">lines</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> then points representing
+<li><span><span class="tsd-kind-parameter">lines</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> then points representing
 the edes of the faces will be returned. If <code>false</code>, then points
 representing two triangles per face and an
 associated normal for each point will be returned.</p></div></li>
@@ -487,7 +487,7 @@ figure.add(
 ```
 
 > To test examples, append them to the
-<a href="#shapes3d-boilerplate">boilerplate</a>
+[boilerplate](./shapes3d/shapes3d.md#shapes3d-boilerplate)
 
 
 ---
@@ -505,20 +505,20 @@ will be created.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of sides</p></div></li>
-<li><span><span class="tsd-kind-parameter">radius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>radius of cube base</p></div></li>
-<li><span><span class="tsd-kind-parameter">normals</span>: <span class="tsd-signature-type">'curve' | 'flat' | undefined</span> <span class="tsd-signature-symbol">= flat</span></span><div class="tsd-comment tsd-typography"><p><code>flat</code> normals will make light
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 10</span></span><div class="tsd-comment tsd-typography"><p>number of sides</p></div></li>
+<li><span><span class="tsd-kind-parameter">radius</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>radius of cube base</p></div></li>
+<li><span><span class="tsd-kind-parameter">normals</span>: <span class="tsd-signature-type">'curve' | 'flat'</span> <span class="tsd-signature-symbol">= flat</span></span><div class="tsd-comment tsd-typography"><p><code>flat</code> normals will make light
 shading across a face cone constant. <code>curve</code> will gradiate the shading. Use
 <code>curve</code> to make a surface look more round with fewer number of sides.</p></div></li>
-<li><span><span class="tsd-kind-parameter">line</span>: <span class="tsd-signature-type"><a href="../types/geometry_Line.TypeParsableLine.html" class="tsd-signature-type">TypeParsableLine</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>line that can position and
+<li><span><span class="tsd-kind-parameter">line</span>: <span class="tsd-signature-type"><a href="../types/geometry_Line.TypeParsableLine.html" class="tsd-signature-type">TypeParsableLine</a></span></span><div class="tsd-comment tsd-typography"><p>line that can position and
 orient the cone. First point of line is cone base center, and second point
 is cone tip.</p></div></li>
-<li><span><span class="tsd-kind-parameter">length</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>length of the cone along the x axis if
+<li><span><span class="tsd-kind-parameter">length</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 1</span></span><div class="tsd-comment tsd-typography"><p>length of the cone along the x axis if
 <code>line</code> isn't defined</p></div></li>
-<li><span><span class="tsd-kind-parameter">rotation</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>rotation of base - this is only noticable for
+<li><span><span class="tsd-kind-parameter">rotation</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>rotation of base - this is only noticable for
 small numbers of sides (<code>0</code>)
 points of cube</p></div></li>
-<li><span><span class="tsd-kind-parameter">lines</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> then points representing
+<li><span><span class="tsd-kind-parameter">lines</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> then points representing
 the edes of the faces will be returned. If <code>false</code>, then points
 representing two triangles per face and an
 associated normal for each point will be returned.</p></div></li>
@@ -564,7 +564,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#shapes3d-boilerplate">boilerplate</a>
+[boilerplate](./shapes3d/shapes3d.md#shapes3d-boilerplate)
 
 
 ---
@@ -585,13 +585,13 @@ is not convex, use `baseTriangles` to define the triangles.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">base</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>base border points defined in the XY plane - the
+<li><span><span class="tsd-kind-parameter">base</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>base border points defined in the XY plane - the
 points should be defined in the counter-clock-wise direction.</p></div></li>
 <li><span><span class="tsd-kind-parameter">baseTriangles</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a>></span></span><div class="tsd-comment tsd-typography"><p>triangles in the XY plane
 that create the base fill. If the base is convex, then the triangles can be
 auto-generated and this property left undefined.</p></div></li>
-<li><span><span class="tsd-kind-parameter">length</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>length of the prism</p></div></li>
-<li><span><span class="tsd-kind-parameter">lines</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> then points representing
+<li><span><span class="tsd-kind-parameter">length</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>length of the prism</p></div></li>
+<li><span><span class="tsd-kind-parameter">lines</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> then points representing
 the edges of the prism will be returned. If <code>false</code>, then points
 representing triangle faces and associated normals will be returned.</p></div></li>
 </ul>
@@ -642,7 +642,7 @@ figure.add(
 ```
 
 > To test examples, append them to the
-<a href="#shapes3d-boilerplate">boilerplate</a>
+[boilerplate](./shapes3d/shapes3d.md#shapes3d-boilerplate)
 
 
 ---
@@ -684,20 +684,20 @@ is as expected, create the outside and inside surface with a closed profile.
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">profile</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a>></span></span><div class="tsd-comment tsd-typography"><p>XY plane profile to be radially
 swept around the x axis</p></div></li>
-<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>number of sides in the radial sweep</p></div></li>
-<li><span><span class="tsd-kind-parameter">normals</span>: <span class="tsd-signature-type">'flat' | 'curveRows' | 'curveRadial' | 'curve' | undefined</span></span><div class="tsd-comment tsd-typography"><p><code>flat</code> normals will make shading (from a light source) across a face of the
+<li><span><span class="tsd-kind-parameter">sides</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>number of sides in the radial sweep</p></div></li>
+<li><span><span class="tsd-kind-parameter">normals</span>: <span class="tsd-signature-type">'flat' | 'curveRows' | 'curveRadial' | 'curve'</span></span><div class="tsd-comment tsd-typography"><p><code>flat</code> normals will make shading (from a light source) across a face of the
 object a constant color. <code>curveProfile</code> will gradiate the shading along the
 profile. <code>curveRadial</code> will gradiate the shading around the radial sweep.
 <code>curve</code> will gradiate the shading both around the radial sweep and along the
 profile. Use <code>curve</code>, <code>curveProfile</code>, or <code>curveRadial</code> to make a surface
 look more round with fewer number of sides.</p></div></li>
-<li><span><span class="tsd-kind-parameter">rotation</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>by default the profile will start in the XY
+<li><span><span class="tsd-kind-parameter">rotation</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span></span><div class="tsd-comment tsd-typography"><p>by default the profile will start in the XY
 plane and sweep around the x axis following the right hand rule. Use
 <code>rotation</code> to start the sweep at some angle where 0º is in the XY for +y and
 90º is in the XZ plane for +z. initial angle of the revolve rotation</p></div></li>
-<li><span><span class="tsd-kind-parameter">axis</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>orient the draw space vertices of the
+<li><span><span class="tsd-kind-parameter">axis</span>: <span class="tsd-signature-type"><a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a></span></span><div class="tsd-comment tsd-typography"><p>orient the draw space vertices of the
 shape so its axis is along this vector</p></div></li>
-<li><span><span class="tsd-kind-parameter">lines</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> then points representing
+<li><span><span class="tsd-kind-parameter">lines</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> then points representing
 the edes of the faces will be returned. If <code>false</code>, then points
 representing two triangles per face and an
 associated normal for each point will be returned.</p></div></li>
@@ -808,7 +808,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#shapes3d-boilerplate">boilerplate</a>
+[boilerplate](./shapes3d/shapes3d.md#shapes3d-boilerplate)
 
 
 ---
@@ -854,26 +854,26 @@ and columns.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">points</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a>>> | undefined</span></span><div class="tsd-comment tsd-typography"><p>A grid of points that
+<li><span><span class="tsd-kind-parameter">points</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-signature-type">TypeParsablePoint</a>>></span></span><div class="tsd-comment tsd-typography"><p>A grid of points that
 define a 3D surface</p></div></li>
-<li><span><span class="tsd-kind-parameter">normals</span>: <span class="tsd-signature-type">'curveColumns' | 'curveRows' | 'curve' | 'flat' | undefined</span></span><div class="tsd-comment tsd-typography"><p><code>flat</code> normals will make shading (from a light source) across a face of the
+<li><span><span class="tsd-kind-parameter">normals</span>: <span class="tsd-signature-type">'curveColumns' | 'curveRows' | 'curve' | 'flat'</span></span><div class="tsd-comment tsd-typography"><p><code>flat</code> normals will make shading (from a light source) across a face of the
 object a constant color. <code>curveRows</code> will gradiate the shading along the
 rows of the grid. <code>curveColumns</code> will gradiate the shading along the columns
 of the grid. <code>curve</code> will gradiate the shading along both rows and columns.
 Use <code>curve</code>, <code>curveRows</code>, or <code>curveColumns</code> to make a surface
 look more round with fewer number of sides.</p></div></li>
-<li><span><span class="tsd-kind-parameter">closeRows</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>Set to <code>true</code> if first row and last row are
+<li><span><span class="tsd-kind-parameter">closeRows</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>Set to <code>true</code> if first row and last row are
 the same, and normals is <code>'curveRows'</code> or <code>'curve'</code> to get correct normal
 calculations</p></div></li>
-<li><span><span class="tsd-kind-parameter">closeColumns</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>Set to <code>true</code> if first row and last
+<li><span><span class="tsd-kind-parameter">closeColumns</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span></span><div class="tsd-comment tsd-typography"><p>Set to <code>true</code> if first row and last
 column are the same, and normals is <code>'curveColumns'</code> or <code>'curve'</code> to get
 correct normal calculations (<code>false</code>)
 shape</p></div></li>
-<li><span><span class="tsd-kind-parameter">lines</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> then points representing
+<li><span><span class="tsd-kind-parameter">lines</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> then points representing
 the edes of the faces will be returned. If <code>false</code>, then points
 representing two triangles per face and an
 associated normal for each point will be returned.</p></div></li>
-<li><span><span class="tsd-kind-parameter">invertNormals</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> then all normals will be
+<li><span><span class="tsd-kind-parameter">invertNormals</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code> then all normals will be
 inverted</p></div></li>
 </ul>
 
@@ -1004,7 +1004,7 @@ figure.add({
 ```
 
 > To test examples, append them to the
-<a href="#shapes3d-boilerplate">boilerplate</a>
+[boilerplate](./shapes3d/shapes3d.md#shapes3d-boilerplate)
 
 
 ---

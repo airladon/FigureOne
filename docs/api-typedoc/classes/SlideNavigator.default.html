@@ -9,17 +9,31 @@ corresponding description giving context, reasoning or next steps.</p>
 is a presentation slide.</p>
 <p>This class is a simple slide navigator, providing a convenient way to define
 slides and step through them.</p>
-<p>CollectionsSlideNavigator creates the navigation buttons, and
+<p><a href="FigureCollections_SlideNavigator.default.html" class="tsd-kind-class">CollectionsSlideNavigator</a> creates the navigation buttons, and
 <code>textElement</code> automatically, and will usually be more convenient than
 manually creating them (unless custom buttons are needed).</p>
 <p>Notifications - The notification manager property <code>notifications</code> will
 publish the following events:</p>
 <ul>
-<li><code>goToSlide</code>: published when slide changes - will pass slide index to
-subscriber</li>
-<li><code>steady</code>: steady state reached (slide transition complete)</li>
+<li>
+<p><code>goToSlide</code>: published when slide changes - will pass slide index to
+subscriber</p>
+</li>
+<li>
+<p><code>steady</code>: steady state reached (slide transition complete)</p>
+</li>
+<li>
+<p><code>currentSlideIndex</code> <code>number</code> — index of slide current shown</p>
+</li>
+<li>
+<p><code>inTransition</code> <code>boolean</code> — <code>true</code> if slide current transitioning</p>
+</li>
+<li>
+<p><code>notifications</code> <a href="tools.NotificationManager.html" class="tsd-kind-class">NotificationManager</a> — notification manager for
+element</p>
+</li>
 </ul>
-</div><div class="tsd-comment tsd-typography"><div class="tsd-tag-see"><h4 class="tsd-anchor-link" id="see">See<a href="#see" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>CollectionsSlideNavigator for examples.</p>
+</div><div class="tsd-comment tsd-typography"><div class="tsd-tag-see"><h4 class="tsd-anchor-link" id="see">See<a href="#see" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="FigureCollections_SlideNavigator.default.html" class="tsd-kind-class">CollectionsSlideNavigator</a> for examples.</p>
 </div></div></section><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/airladon/figureone/blob/main/src/js/figure/SlideNavigator.ts#L571">src/js/figure/SlideNavigator.ts:571</a></li></ul></aside><section class="tsd-panel-group tsd-index-group"><section class="tsd-panel tsd-index-panel"><details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg><h5 class="tsd-index-heading uppercase">Index</h5></summary><div class="tsd-accordion-details"><section class="tsd-index-section"><h3 class="tsd-index-heading">Constructors</h3><div class="tsd-index-list"><a href="#constructor" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Constructor"><use href="../assets/icons.svg#icon-512"></use></svg><span>constructor</span></a>
 </div></section><section class="tsd-index-section"><h3 class="tsd-index-heading">Methods</h3><div class="tsd-index-list"><a href="#load" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>load</span></a>
 <a href="#loadslides" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>load<wbr/>Slides</span></a>

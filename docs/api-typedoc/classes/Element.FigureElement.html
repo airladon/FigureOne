@@ -19,23 +19,116 @@ set directly as it will be overwritten by dissolve animations.</p>
 <p>Notifications - The notification manager property <code>notifications</code> will
 publish the following events:</p>
 <ul>
-<li><code>beforeSetTransform</code>: published just before the <code>transform</code> property is
-changed</li>
-<li><code>setTransform</code>: published whenever the <code>transform</code> property is changed</li>
-<li><code>startBeingMoved</code>: published when the element starts being moved by touch</li>
-<li><code>stopBeingMoved</code>: published when the element stops being moved by touch</li>
-<li><code>startMovingFreely</code></li>
-<li><code>stopMovingFreely</code></li>
-<li><code>show</code>: published when element is shown</li>
-<li><code>hide</code>: published when element is hidden</li>
-<li><code>visibility</code>: published when element element is shown or hidden</li>
-<li><code>onClick</code>: published when element is clicked on</li>
-<li><code>color</code>: published whenever color is set</li>
-<li><code>beforeDraw</code></li>
-<li><code>afterDraw</code></li>
-<li><code>setState</code>: state of element has been set</li>
+<li>
+<p><code>beforeSetTransform</code>: published just before the <code>transform</code> property is
+changed</p>
+</li>
+<li>
+<p><code>setTransform</code>: published whenever the <code>transform</code> property is changed</p>
+</li>
+<li>
+<p><code>startBeingMoved</code>: published when the element starts being moved by touch</p>
+</li>
+<li>
+<p><code>stopBeingMoved</code>: published when the element stops being moved by touch</p>
+</li>
+<li>
+<p><code>startMovingFreely</code></p>
+</li>
+<li>
+<p><code>stopMovingFreely</code></p>
+</li>
+<li>
+<p><code>show</code>: published when element is shown</p>
+</li>
+<li>
+<p><code>hide</code>: published when element is hidden</p>
+</li>
+<li>
+<p><code>visibility</code>: published when element element is shown or hidden</p>
+</li>
+<li>
+<p><code>onClick</code>: published when element is clicked on</p>
+</li>
+<li>
+<p><code>color</code>: published whenever color is set</p>
+</li>
+<li>
+<p><code>beforeDraw</code></p>
+</li>
+<li>
+<p><code>afterDraw</code></p>
+</li>
+<li>
+<p><code>setState</code>: state of element has been set</p>
+</li>
+<li>
+<p><code>transform</code> <a href="geometry_Transform.Transform.html" class="tsd-kind-class">Transform</a> — transform to apply element</p>
+</li>
+<li>
+<p><code>parent</code> <a href="#" class="tsd-kind-class">FigureElement</a> | <code>null</code> — parent figure element - <code>null</code> if
+at top level of figure</p>
+</li>
+<li>
+<p><code>isShown</code> <code>boolean</code> — if <code>false</code> then element will not be processed on
+next draw</p>
+</li>
+<li>
+<p><code>name</code> <code>string</code> — reference name of element</p>
+</li>
+<li>
+<p><code>isMovable</code> <code>boolean</code> — must be <code>true</code> to move</p>
+</li>
+<li>
+<p><code>isTouchable</code> <code>boolean</code> — must be <code>true</code> to move or execute <code>onClick</code></p>
+</li>
+<li>
+<p><code>onClick</code> <code>string</code> | <code>(arg?: any) =&gt; void</code> | <code>null</code> — callback if touched or clicked</p>
+</li>
+<li>
+<p><code>color</code> <a href="../types/types.TypeColor.html" class="tsd-kind-type-alias">TypeColor</a> — element's current
+color defined as red, green, blue, alpha with range 0 to 1</p>
+</li>
+<li>
+<p><code>defaultColor</code> <code>number</code>[] — color to go to
+when undimming element</p>
+</li>
+<li>
+<p><code>dimColor</code> <code>number</code>[] — color to use when
+dimming element</p>
+</li>
+<li>
+<p><code>opacity</code> <code>number</code> — number between 0 and 1 that is multiplied with
+<code>color</code> alpha channel to get final opacity</p>
+</li>
+<li>
+<p><code>move</code> <code>OBJ_ElementMoveFixed</code> — movement parameters</p>
+</li>
+<li>
+<p><code>scenarios</code> <a href="../interfaces/Element.OBJ_Scenarios.html" class="tsd-kind-interface">OBJ_Scenarios</a> — scenario presets</p>
+</li>
+<li>
+<p><code>state</code> <code>ElementState</code> — current state of element</p>
+</li>
+<li>
+<p><code>animations</code> <a href="Animation_AnimationManager.default.html" class="tsd-kind-class">AnimationManager</a> — element animation manager</p>
+</li>
+<li>
+<p><code>customState</code> <code>Record</code> — put any custom state information that needs
+to be captured with recorder here - only stringify-able values can go in this
+object like strings, numbers, booleans and nested arrays or objects
+containing these. Functions should not be put in here - use string
+identifiers to <code>fnMap</code> if functions are needed.</p>
+</li>
+<li>
+<p><code>fnMap</code> <a href="FunctionMap.FunctionMap.html" class="tsd-kind-class">FunctionMap</a> — function map for use with <a href="Recorder_Recorder.Recorder.html" class="tsd-kind-class">Recorder</a></p>
+</li>
+<li>
+<p><code>notifications</code> <a href="tools.NotificationManager.html" class="tsd-kind-class">NotificationManager</a> — notification manager for
+element</p>
+</li>
 </ul>
-</div></section><section class="tsd-panel tsd-hierarchy" data-refl="9472"><h4>Hierarchy (<a href="../hierarchy.html#Element.FigureElement">View Summary</a>)</h4><ul class="tsd-hierarchy"><li class="tsd-hierarchy-item"><span class="tsd-hierarchy-target">FigureElement</span><ul class="tsd-hierarchy"><li class="tsd-hierarchy-item"><a href="Element.FigureElementPrimitive.html" class="tsd-signature-type tsd-kind-class">FigureElementPrimitive</a></li><li class="tsd-hierarchy-item"><a href="Element.FigureElementCollection.html" class="tsd-signature-type tsd-kind-class">FigureElementCollection</a></li></ul></li></ul></section><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/airladon/figureone/blob/main/src/js/figure/Element.ts#L574">src/js/figure/Element.ts:574</a></li></ul></aside><section class="tsd-panel-group tsd-index-group"><section class="tsd-panel tsd-index-panel"><details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg><h5 class="tsd-index-heading uppercase">Index</h5></summary><div class="tsd-accordion-details"><section class="tsd-index-section"><h3 class="tsd-index-heading">Methods</h3><div class="tsd-index-list"><a href="#setscene" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>set<wbr/>Scene</span></a>
+</div></section><section class="tsd-panel tsd-hierarchy" data-refl="9478"><h4>Hierarchy (<a href="../hierarchy.html#Element.FigureElement">View Summary</a>)</h4><ul class="tsd-hierarchy"><li class="tsd-hierarchy-item"><span class="tsd-hierarchy-target">FigureElement</span><ul class="tsd-hierarchy"><li class="tsd-hierarchy-item"><a href="Element.FigureElementPrimitive.html" class="tsd-signature-type tsd-kind-class">FigureElementPrimitive</a></li><li class="tsd-hierarchy-item"><a href="Element.FigureElementCollection.html" class="tsd-signature-type tsd-kind-class">FigureElementCollection</a></li></ul></li></ul></section><aside class="tsd-sources"><ul><li>Defined in <a href="https://github.com/airladon/figureone/blob/main/src/js/figure/Element.ts#L574">src/js/figure/Element.ts:574</a></li></ul></aside><section class="tsd-panel-group tsd-index-group"><section class="tsd-panel tsd-index-panel"><details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg><h5 class="tsd-index-heading uppercase">Index</h5></summary><div class="tsd-accordion-details"><section class="tsd-index-section"><h3 class="tsd-index-heading">Methods</h3><div class="tsd-index-list"><a href="#setscene" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>set<wbr/>Scene</span></a>
 <a href="#setposition" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>set<wbr/>Position</span></a>
 <a href="#setrotation" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>set<wbr/>Rotation</span></a>
 <a href="#setscale" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>set<wbr/>Scale</span></a>

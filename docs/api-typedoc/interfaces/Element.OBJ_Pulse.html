@@ -21,6 +21,32 @@ distributed between the <code>min</code> and maximum pulse values. This is parti
 useful for shapes with outlines that have a regular spacing from a center
 point (such as regular polygons) as it will look like the thickness of the
 outlines are becomming thicker.</p>
+<ul>
+<li><code>duration</code> <code>number</code> — pulse duration in seconds (<code>1</code>)</li>
+<li><code>frequency</code> <code>number</code> — pulse frequency in Hz - a frequency of zero
+will set the frequency so just one cycle will be performed in the duration
+(<code>0</code>)</li>
+<li><code>scale</code> <code>number</code> — maximum scale value to pulse to (<code>1.5</code>)</li>
+<li><code>rotation</code> <code>number</code> — maximum rotation value to pulse to</li>
+<li><code>translation</code> <code>number</code> — maximum translation displacment value to
+pulse to (<code>1.5</code>)</li>
+<li><code>angle</code> <code>number</code> — translation angle (<code>0</code>)</li>
+<li><code>min</code> <code>number</code> — minimum value to pulse to</li>
+<li><code>centerOn</code> <a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a> | <a href="../classes/Element.FigureElement.html" class="tsd-kind-class">FigureElement</a> | <code>null</code> — center
+of scale or rotation pulse. <code>null</code> is point [0, 0], <code>string</code> or
+<code>FigureElement</code> are elements to centerOn, and <code>'this'</code> is the calling
+element (<code>'this'</code>)
+will be the default <code>centerOn</code>.</li>
+<li><code>space</code> <code>figure</code> | <code>gl</code> | <code>local</code> | <code>draw</code> — if <code>centerOn</code> is a point, use this to define the space the point is in
+(<code>'figure'</code>)</li>
+<li><code>num</code> <code>number</code> — the number of draw copies of the pulse to make (<code>1</code>)</li>
+<li><code>when</code> <a href="../types/TimeKeeper.TypeWhen.html" class="tsd-kind-type-alias">TypeWhen</a> — when to start the pulse (<code>'syncNow'</code>)</li>
+<li><code>done</code> <code>string</code> | <code>(args: any[]) =&gt; void</code> | <code>null</code> — callback when pulse is
+finished. If <code>string</code> then the element's <a href="../classes/FunctionMap.FunctionMap.html" class="tsd-kind-class">FunctionMap</a> <code>fnMap</code> will be
+used (<code>null</code>)</li>
+<li><code>progression</code> <code>string</code> | <code>(n: number) =&gt; number</code> — function that defines
+how the scale should progress over time (<code>sinusoid</code>)</li>
+</ul>
 </div><div class="tsd-comment tsd-typography"><div class="tsd-tag-example"><h4 class="tsd-anchor-link" id="example">Example<a href="#example" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-10">// For all examples below, use this to add an element to the figure</span><br/><span class="hl-6">const</span><span class="hl-5"> </span><span class="hl-7">p</span><span class="hl-5"> = </span><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;polygon&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">radius:</span><span class="hl-5"> </span><span class="hl-12">0.3</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">line:</span><span class="hl-5"> { </span><span class="hl-8">width:</span><span class="hl-5"> </span><span class="hl-12">0.05</span><span class="hl-5">, },</span><br/><span class="hl-5">});</span>
 </code><button type="button">Copy</button></pre>
 

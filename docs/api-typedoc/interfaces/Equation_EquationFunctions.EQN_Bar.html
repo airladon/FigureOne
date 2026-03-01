@@ -3,14 +3,17 @@
 <p>Place a bar (or bracket) symbol to the side of an equation phrase.</p>
 <p>Symbols that can be used with bar are:</p>
 <ul>
-<li>EQN_BarSymbol</li>
-<li>EQN_ArrowSymbol</li>
-<li>EQN_BraceSymbol</li>
-<li>EQN_BracketSymbol</li>
-<li>EQN_SquareBracketSymbol</li>
-<li>EQN_AngleBracketSymbol</li>
+<li><a href="Equation_EquationSymbols.EQN_BarSymbol.html" class="tsd-kind-interface">EQN_BarSymbol</a></li>
+<li><a href="Equation_EquationSymbols.EQN_ArrowSymbol.html" class="tsd-kind-interface">EQN_ArrowSymbol</a></li>
+<li><a href="Equation_EquationSymbols.EQN_BraceSymbol.html" class="tsd-kind-interface">EQN_BraceSymbol</a></li>
+<li><a href="Equation_EquationSymbols.EQN_BracketSymbol.html" class="tsd-kind-interface">EQN_BracketSymbol</a></li>
+<li><a href="Equation_EquationSymbols.EQN_SquareBracketSymbol.html" class="tsd-kind-interface">EQN_SquareBracketSymbol</a></li>
+<li><a href="Equation_EquationSymbols.EQN_AngleBracketSymbol.html" class="tsd-kind-interface">EQN_AngleBracketSymbol</a></li>
 </ul>
 <p>Options can be an object, or an array in the property order below</p>
+<ul>
+<li><code>length</code> <code>number</code> — total length of symbol (overrides <code>overhang</code>)</li>
+</ul>
 </div><div class="tsd-comment tsd-typography"><div class="tsd-tag-see"><h4 class="tsd-anchor-link" id="see">See<a href="#see" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>To test examples, append them to the
 <a href="#drawing-boilerplate">boilerplate</a></p>
 </div><div class="tsd-tag-example"><h4 class="tsd-anchor-link" id="example">Example<a href="#example" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-10">// Simple</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-9">add</span><span class="hl-5">({</span><br/><span class="hl-5">  </span><span class="hl-8">name:</span><span class="hl-5"> </span><span class="hl-11">&#39;eqn&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">make:</span><span class="hl-5"> </span><span class="hl-11">&#39;equation&#39;</span><span class="hl-5">,</span><br/><span class="hl-5">  </span><span class="hl-8">elements:</span><span class="hl-5"> {</span><br/><span class="hl-5">    </span><span class="hl-8">bar:</span><span class="hl-5"> { </span><span class="hl-8">symbol:</span><span class="hl-5"> </span><span class="hl-11">&#39;bar&#39;</span><span class="hl-5">, </span><span class="hl-8">side:</span><span class="hl-5"> </span><span class="hl-11">&#39;top&#39;</span><span class="hl-5"> },</span><br/><span class="hl-5">  },</span><br/><span class="hl-5">  </span><span class="hl-8">forms:</span><span class="hl-5"> {</span><br/><span class="hl-5">    </span><span class="hl-12">1</span><span class="hl-8">:</span><span class="hl-5"> { </span><span class="hl-8">bar:</span><span class="hl-5"> [</span><span class="hl-11">&#39;a&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;bar&#39;</span><span class="hl-5">, </span><span class="hl-11">&#39;top&#39;</span><span class="hl-5">] },</span><br/><span class="hl-5">  },</span><br/><span class="hl-5">});</span><br/><span class="hl-8">figure</span><span class="hl-5">.</span><span class="hl-8">elements</span><span class="hl-5">.</span><span class="hl-8">_eqn</span><span class="hl-5">.</span><span class="hl-9">showForm</span><span class="hl-5">(</span><span class="hl-11">&#39;1&#39;</span><span class="hl-5">);</span>

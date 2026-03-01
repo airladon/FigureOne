@@ -1,5 +1,5 @@
 <!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>OBJ_Generic | figureone</title><meta name="description" content="Documentation for figureone"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><link rel="stylesheet" href="../assets/custom.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><a href="../index.html" class="title">figureone</a><div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/><ul role="listbox" id="tsd-search-results"></ul><div id="tsd-search-status" aria-live="polite" aria-atomic="true"><div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb" aria-label="Breadcrumb"><li><a href="../modules/FigurePrimitives_FigurePrimitiveTypes2D.html">FigurePrimitives/FigurePrimitiveTypes2D</a></li><li><a href="" aria-current="page">OBJ_Generic</a></li></ul><h1>Interface OBJ_Generic</h1></div><section class="tsd-panel tsd-comment"><div class="tsd-comment tsd-typography"><p><img src="./apiassets/generic.png" alt=""></p>
-<p>Options object for a FigureElementPrimitive of a generic shape</p>
+<p>Options object for a <a href="../classes/Element.FigureElementPrimitive.html" class="tsd-kind-class">FigureElementPrimitive</a> of a generic shape</p>
 <p><code>points</code> will define either triangles or lines which combine
 to make the shape.</p>
 <p><code>drawType</code> defines what sort of triangles or lines the <code>points</code> make.
@@ -39,15 +39,67 @@ portions</li>
 <p><code>touchBorder</code> is used for checking if a shape is touched. The <code>touchBorder</code>
 property can be:</p>
 <ul>
-<li><code>draw</code>: use <code>drawBorder</code> points</li>
-<li><code>buffer</code>: use <code>drawBorderBuffer</code> points</li>
-<li><code>border</code>: use same as <code>border</code></li>
-<li><code>rect</code>: use a rectangle bounding <code>border</code></li>
-<li><code>number</code>: use a rectangle that is <code>number</code> larger than the rectangle
-bounding <code>border</code></li>
-<li><code>Array&lt;TypeParsablePoint&gt;</code>: a custom contiguous border</li>
-<li><code>Array&lt;Array&lt;TypeParsablePoint&gt;&gt;</code>: a custom border of several contiguous
-portions</li>
+<li>
+<p><code>draw</code>: use <code>drawBorder</code> points</p>
+</li>
+<li>
+<p><code>buffer</code>: use <code>drawBorderBuffer</code> points</p>
+</li>
+<li>
+<p><code>border</code>: use same as <code>border</code></p>
+</li>
+<li>
+<p><code>rect</code>: use a rectangle bounding <code>border</code></p>
+</li>
+<li>
+<p><code>number</code>: use a rectangle that is <code>number</code> larger than the rectangle
+bounding <code>border</code></p>
+</li>
+<li>
+<p><code>Array&lt;TypeParsablePoint&gt;</code>: a custom contiguous border</p>
+</li>
+<li>
+<p><code>Array&lt;Array&lt;TypeParsablePoint&gt;&gt;</code>: a custom border of several contiguous
+portions</p>
+</li>
+<li>
+<p><code>points</code> <a href="../types/geometry_Point.TypeParsablePoint.html" class="tsd-kind-type-alias">TypeParsablePoint</a>[] | <a href="../classes/geometry_Point.Point.html" class="tsd-kind-class">Point</a>[]</p>
+</li>
+<li>
+<p><code>drawType</code> <a href="../types/FigurePrimitives_FigurePrimitiveTypes.TypeGLPrimitive.html" class="tsd-kind-type-alias">TypeGLPrimitive</a> — (<code>'TRIANGLES'</code>)</p>
+</li>
+<li>
+<p><code>copy</code> <a href="geometries_copy_copy.CPY_Step.html" class="tsd-kind-interface">CPY_Step</a> | <code>string</code> | <a href="geometries_copy_copy.CPY_Step.html" class="tsd-kind-interface">CPY_Step</a>[] — use <code>drawType</code> as
+<code>'TRIANGLES'</code> when using copy (<code>[]</code>)</p>
+</li>
+<li>
+<p><code>texture</code> <a href="FigurePrimitives_FigurePrimitiveTypes.OBJ_Texture.html" class="tsd-kind-interface">OBJ_Texture</a> — override <code>color</code> with a texture if defined</p>
+</li>
+<li>
+<p><code>drawBorder</code> <a href="../types/g2.TypeParsableBorder.html" class="tsd-kind-type-alias">TypeParsableBorder</a></p>
+</li>
+<li>
+<p><code>drawBorderBuffer</code> <a href="../types/g2.TypeParsableBorder.html" class="tsd-kind-type-alias">TypeParsableBorder</a></p>
+</li>
+<li>
+<p><code>border</code> <code>rect</code> | <a href="../types/g2.TypeParsableBuffer.html" class="tsd-kind-type-alias">TypeParsableBuffer</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-kind-type-alias">TypeParsableBorder</a> | <code>draw</code> | <code>buffer</code> — defines border of primitive. Use <code>draw</code> to use the <code>drawBorder</code> of the
+element. Use 'buffer' to use the <code>drawBorderBuffer</code> property of the element.
+Use <code>'rect'</code> for the bounding rectangle of <code>drawBorder</code>. Use
+<code>TypeParsableBuffer</code> for the bounding rectangle of <code>drawBorder</code>. Use
+<code>TypeParsableBorder</code> for a custom border. (<code>'draw'</code>)</p>
+</li>
+<li>
+<p><code>touchBorder</code> <code>rect</code> | <a href="../types/g2.TypeParsableBuffer.html" class="tsd-kind-type-alias">TypeParsableBuffer</a> | <a href="../types/g2.TypeParsableBorder.html" class="tsd-kind-type-alias">TypeParsableBorder</a> | <code>draw</code> | <code>buffer</code> | <code>border</code> — defines touch border of the primitive. Use <code>border</code> to use the same border
+as <code>border</code>. Use <code>draw</code> to use the <code>drawBorder</code> of the element.
+Use 'buffer' to use the <code>drawBorderBuffer</code> property of the element.
+Use <code>'rect'</code> for the bounding rectangle of <code>drawBorderBuffer</code>. Use
+<code>TypeParsableBuffer</code> for the bounding rectangle of <code>drawBorderBuffer</code>. Use
+<code>TypeParsableBorder</code> for a custom border. (<code>'border'</code>)</p>
+</li>
+<li>
+<p><code>pulse</code> <code>number</code> — set default scale pulse options
+(<code>OBJ_PulseScale</code>) or pulse scale directly (<code>number</code>)</p>
+</li>
 </ul>
 </div><div class="tsd-comment tsd-typography"><div class="tsd-tag-see"><h4 class="tsd-anchor-link" id="see">See<a href="#see" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>To test examples, append them to the
 <a href="#drawing-boilerplate">boilerplate</a></p>

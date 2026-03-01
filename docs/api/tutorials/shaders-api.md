@@ -65,12 +65,12 @@ GL buffer.
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">name</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String" class="tsd-signature-type">string</a></span></span><div class="tsd-comment tsd-typography"><p>name of attribute in shader</p></div></li>
 <li><span><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>></span></span><div class="tsd-comment tsd-typography"><p>array of values</p></div></li>
-<li><span><span class="tsd-kind-parameter">size</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 2</span></span><div class="tsd-comment tsd-typography"><p>number of values per attribute</p></div></li>
-<li><span><span class="tsd-kind-parameter">type</span>: <span class="tsd-signature-type"><a href="../types/DrawingObjects_GLObject_GLObject.TypeGLBufferType.html" class="tsd-signature-type">TypeGLBufferType</a> | undefined</span> <span class="tsd-signature-symbol">= 'FLOAT'</span></span></li>
-<li><span><span class="tsd-kind-parameter">normalize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span></li>
-<li><span><span class="tsd-kind-parameter">stride</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span></li>
-<li><span><span class="tsd-kind-parameter">offset</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a> | undefined</span> <span class="tsd-signature-symbol">= 0</span></span></li>
-<li><span><span class="tsd-kind-parameter">usage</span>: <span class="tsd-signature-type"><a href="../types/DrawingObjects_GLObject_GLObject.TypeGLBufferUsage.html" class="tsd-signature-type">TypeGLBufferUsage</a> | undefined</span> <span class="tsd-signature-symbol">= 'STATIC'</span></span></li>
+<li><span><span class="tsd-kind-parameter">size</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 2</span></span><div class="tsd-comment tsd-typography"><p>number of values per attribute</p></div></li>
+<li><span><span class="tsd-kind-parameter">type</span>: <span class="tsd-signature-type"><a href="../types/DrawingObjects_GLObject_GLObject.TypeGLBufferType.html" class="tsd-signature-type">TypeGLBufferType</a></span> <span class="tsd-signature-symbol">= 'FLOAT'</span></span></li>
+<li><span><span class="tsd-kind-parameter">normalize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span> <span class="tsd-signature-symbol">= false</span></span></li>
+<li><span><span class="tsd-kind-parameter">stride</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0</span></span></li>
+<li><span><span class="tsd-kind-parameter">offset</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a></span> <span class="tsd-signature-symbol">= 0</span></span></li>
+<li><span><span class="tsd-kind-parameter">usage</span>: <span class="tsd-signature-type"><a href="../types/DrawingObjects_GLObject_GLObject.TypeGLBufferUsage.html" class="tsd-signature-type">TypeGLBufferUsage</a></span> <span class="tsd-signature-symbol">= 'STATIC'</span></span></li>
 </ul>
 
 ---
@@ -91,7 +91,7 @@ Assumes buffer parameters of:
 
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>></span></span><div class="tsd-comment tsd-typography"><p>array of values</p></div></li>
-<li><span><span class="tsd-kind-parameter">usage</span>: <span class="tsd-signature-type"><a href="../types/DrawingObjects_GLObject_GLObject.TypeGLBufferUsage.html" class="tsd-signature-type">TypeGLBufferUsage</a> | undefined</span> <span class="tsd-signature-symbol">= 'STATIC'</span></span></li>
+<li><span><span class="tsd-kind-parameter">usage</span>: <span class="tsd-signature-type"><a href="../types/DrawingObjects_GLObject_GLObject.TypeGLBufferUsage.html" class="tsd-signature-type">TypeGLBufferUsage</a></span> <span class="tsd-signature-symbol">= 'STATIC'</span></span></li>
 </ul>
 
 ---
@@ -118,9 +118,9 @@ Color definition for a gl primitive.
 
 <ul class="tsd-parameter-list">
 <li><span><span class="tsd-kind-parameter">data</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>></span></span><div class="tsd-comment tsd-typography"><p>color data</p></div></li>
-<li><span><span class="tsd-kind-parameter">normalize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a> | undefined</span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code>, then color data values are between
+<li><span><span class="tsd-kind-parameter">normalize</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>if <code>true</code>, then color data values are between
 0 and 255</p></div></li>
-<li><span><span class="tsd-kind-parameter">size</span>: <span class="tsd-signature-type">3 | 4 | undefined</span></span><div class="tsd-comment tsd-typography"><p>if <code>3</code>, then color data is RGB, if <code>4</code> then color
+<li><span><span class="tsd-kind-parameter">size</span>: <span class="tsd-signature-type">3 | 4</span></span><div class="tsd-comment tsd-typography"><p>if <code>3</code>, then color data is RGB, if <code>4</code> then color
 data is RGBA</p></div></li>
 </ul>
 
@@ -192,21 +192,21 @@ shaders, and when they are used.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">glPrimitive</span>: <span class="tsd-signature-type"><a href="../types/FigurePrimitives_FigurePrimitiveTypes.TypeGLPrimitive.html" class="tsd-signature-type">TypeGLPrimitive</a> | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">vertexShader</span>: <span class="tsd-signature-type"><a href="../types/webgl_shaders.TypeVertexShader.html" class="tsd-signature-type">TypeVertexShader</a> | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">fragmentShader</span>: <span class="tsd-signature-type"><a href="../types/webgl_shaders.TypeFragmentShader.html" class="tsd-signature-type">TypeFragmentShader</a> | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">attributes</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLAttribute.html" class="tsd-signature-type">OBJ_GLAttribute</a>> | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">uniforms</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLUniform.html" class="tsd-signature-type">OBJ_GLUniform</a>> | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">texture</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_Texture.html" class="tsd-signature-type">OBJ_Texture</a> | undefined</span></span></li>
-<li><span><span class="tsd-kind-parameter">dimension</span>: <span class="tsd-signature-type">2 | 3 | undefined</span> <span class="tsd-signature-symbol">= 2</span></span><div class="tsd-comment tsd-typography"><p>default value for `dimension in vertex shader
+<li><span><span class="tsd-kind-parameter">glPrimitive</span>: <span class="tsd-signature-type"><a href="../types/FigurePrimitives_FigurePrimitiveTypes.TypeGLPrimitive.html" class="tsd-signature-type">TypeGLPrimitive</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">vertexShader</span>: <span class="tsd-signature-type"><a href="../types/webgl_shaders.TypeVertexShader.html" class="tsd-signature-type">TypeVertexShader</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">fragmentShader</span>: <span class="tsd-signature-type"><a href="../types/webgl_shaders.TypeFragmentShader.html" class="tsd-signature-type">TypeFragmentShader</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">attributes</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLAttribute.html" class="tsd-signature-type">OBJ_GLAttribute</a>></span></span></li>
+<li><span><span class="tsd-kind-parameter">uniforms</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLUniform.html" class="tsd-signature-type">OBJ_GLUniform</a>></span></span></li>
+<li><span><span class="tsd-kind-parameter">texture</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_Texture.html" class="tsd-signature-type">OBJ_Texture</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">dimension</span>: <span class="tsd-signature-type">2 | 3</span> <span class="tsd-signature-symbol">= 2</span></span><div class="tsd-comment tsd-typography"><p>default value for `dimension in vertex shader
 if vertex shader is undefined</p></div></li>
-<li><span><span class="tsd-kind-parameter">light</span>: <span class="tsd-signature-type">'point' | 'directional' | null | undefined</span> <span class="tsd-signature-symbol">= null</span></span><div class="tsd-comment tsd-typography"><p>default value for <code>light</code>
+<li><span><span class="tsd-kind-parameter">light</span>: <span class="tsd-signature-type">'point' | 'directional' | null</span> <span class="tsd-signature-symbol">= null</span></span><div class="tsd-comment tsd-typography"><p>default value for <code>light</code>
 in vertex and fragment shader if shaders are not otherwise defined</p></div></li>
-<li><span><span class="tsd-kind-parameter">colors</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>> | <a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLColorData.html" class="tsd-signature-type">OBJ_GLColorData</a> | undefined</span> <span class="tsd-signature-symbol">= uniform</span></span><div class="tsd-comment tsd-typography"><p>default value for
+<li><span><span class="tsd-kind-parameter">colors</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array" class="tsd-signature-type">Array</a><<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number" class="tsd-signature-type">number</a>> | <a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLColorData.html" class="tsd-signature-type">OBJ_GLColorData</a></span> <span class="tsd-signature-symbol">= uniform</span></span><div class="tsd-comment tsd-typography"><p>default value for
 <code>light</code> in vertex and fragment shader if shaders are not otherwise defined</p></div></li>
-<li><span><span class="tsd-kind-parameter">vertices</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLVertexBuffer.html" class="tsd-signature-type">OBJ_GLVertexBuffer</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>create a <code>a_vertex</code> attribute for
+<li><span><span class="tsd-kind-parameter">vertices</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLVertexBuffer.html" class="tsd-signature-type">OBJ_GLVertexBuffer</a></span></span><div class="tsd-comment tsd-typography"><p>create a <code>a_vertex</code> attribute for
 vertex coordinates</p></div></li>
-<li><span><span class="tsd-kind-parameter">normals</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLVertexBuffer.html" class="tsd-signature-type">OBJ_GLVertexBuffer</a> | undefined</span></span><div class="tsd-comment tsd-typography"><p>create a <code>a_normal</code> attribute</p></div></li>
+<li><span><span class="tsd-kind-parameter">normals</span>: <span class="tsd-signature-type"><a href="../interfaces/FigurePrimitives_FigurePrimitiveTypes.OBJ_GLVertexBuffer.html" class="tsd-signature-type">OBJ_GLVertexBuffer</a></span></span><div class="tsd-comment tsd-typography"><p>create a <code>a_normal</code> attribute</p></div></li>
 </ul>
 
 #### Default options are 2D, uniform color, TRIANGLES.
@@ -409,9 +409,9 @@ need to be defined in the custom shader.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">dimension</span>: <span class="tsd-signature-type">2 | 3 | undefined</span> <span class="tsd-signature-symbol">= 2</span></span></li>
-<li><span><span class="tsd-kind-parameter">color</span>: <span class="tsd-signature-type">'vertex' | 'uniform' | 'texture' | undefined</span> <span class="tsd-signature-symbol">= uniform</span></span></li>
-<li><span><span class="tsd-kind-parameter">light</span>: <span class="tsd-signature-type">'point' | 'directional' | null | undefined</span> <span class="tsd-signature-symbol">= null</span></span></li>
+<li><span><span class="tsd-kind-parameter">dimension</span>: <span class="tsd-signature-type">2 | 3</span> <span class="tsd-signature-symbol">= 2</span></span></li>
+<li><span><span class="tsd-kind-parameter">color</span>: <span class="tsd-signature-type">'vertex' | 'uniform' | 'texture'</span> <span class="tsd-signature-symbol">= uniform</span></span></li>
+<li><span><span class="tsd-kind-parameter">light</span>: <span class="tsd-signature-type">'point' | 'directional' | null</span> <span class="tsd-signature-symbol">= null</span></span></li>
 </ul>
 
 ---
@@ -467,9 +467,9 @@ composition for the other.
 ### Properties
 
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">dimension</span>: <span class="tsd-signature-type">2 | 3 | undefined</span> <span class="tsd-signature-symbol">= 2</span></span></li>
-<li><span><span class="tsd-kind-parameter">color</span>: <span class="tsd-signature-type">'vertex' | 'uniform' | 'texture' | undefined</span> <span class="tsd-signature-symbol">= uniform</span></span></li>
-<li><span><span class="tsd-kind-parameter">light</span>: <span class="tsd-signature-type">'point' | 'directional' | null | undefined</span> <span class="tsd-signature-symbol">= null</span></span></li>
+<li><span><span class="tsd-kind-parameter">dimension</span>: <span class="tsd-signature-type">2 | 3</span> <span class="tsd-signature-symbol">= 2</span></span></li>
+<li><span><span class="tsd-kind-parameter">color</span>: <span class="tsd-signature-type">'vertex' | 'uniform' | 'texture'</span> <span class="tsd-signature-symbol">= uniform</span></span></li>
+<li><span><span class="tsd-kind-parameter">light</span>: <span class="tsd-signature-type">'point' | 'directional' | null</span> <span class="tsd-signature-symbol">= null</span></span></li>
 </ul>
 
 ---
