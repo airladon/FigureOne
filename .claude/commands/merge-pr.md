@@ -6,7 +6,7 @@ Review, test, and merge a pull request into main.
 
 $ARGUMENTS
 
-The user may provide a PR number, a PR URL, or nothing (in which case use the current branch's PR).
+The user may provide a PR number, a PR URL, or nothing (in which case use the current branch's PR). They may also append `--skip-tests` to skip Phase 4 (test execution).
 
 ## Instructions
 
@@ -59,6 +59,8 @@ Follow these phases in order. Stop and report if any phase fails.
 ---
 
 ### Phase 4: Run tests
+
+**If `--skip-tests` was provided in `$ARGUMENTS`, skip this entire phase and note "Tests: SKIPPED (user requested)" in Phase 5.**
 
 Ensure the `figureone_dev` Docker container is running. Check with `docker ps --filter name=figureone_dev --format '{{.Names}}'`. If not running, start it:
 
