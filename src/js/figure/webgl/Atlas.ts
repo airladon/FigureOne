@@ -225,14 +225,17 @@ export default class Atlas {
       dimension = Math.floor(Math.ceil(Math.sqrt(glyphs.length) + 2) * fontSizePX * 1.5);
     }
 
-    let canvas: HTMLCanvasElement;
+    let canvas: HTMLCanvasElement = document.createElement('canvas');
     let ctx: CanvasRenderingContext2D | null = null;
     for (let attempt = 0; attempt < 4; attempt += 1) {
-      canvas = document.createElement('canvas');
       canvas.width = dimension;
       canvas.height = dimension;
       ctx = canvas.getContext('2d');
       if (ctx != null) break;
+      // Free the failed canvas backing store before creating a new one
+      canvas.width = 0;
+      canvas.height = 0;
+      canvas = document.createElement('canvas');
       fontSizePX *= 0.5;
       this.fontSize = fontSizePX;
       dimension = Math.floor(Math.ceil(Math.sqrt(glyphs.length) + 2) * fontSizePX * 1.5);
@@ -293,12 +296,12 @@ export default class Atlas {
     font.setColorInContext(ctx, underlineColor);
     ctx.fillRect(0, dimension - 5, 5, 5);
 
-    // Create a debug rectangle
-    ctx.rect(0, 0, dimension, dimension);
-    ctx.beginPath();
-    ctx.stroke();
+    // // Uncomment this to draw a debug border around the atlas
+    // ctx.beginPath();
+    // ctx.rect(0, 0, dimension, dimension);
+    // ctx.stroke();
 
-    // // Uncommnet this to debug atlas
+    // // Uncomment this to debug atlas
     // document.body.appendChild(canvas);
 
     // // Uncomment this to save atlas as image file
