@@ -280,7 +280,6 @@ class WebGLInstance {
       state: 'loading',
       onLoad: [],
       index,
-      data: null,
     } as any;
     const texture = this.textures[id];
     if (onLoad != null) {
@@ -295,14 +294,12 @@ class WebGLInstance {
       image.src = data;
       // When the image is loaded, set the texture to it
       image.addEventListener('load', () => {
-        (texture as any).data = image;
         this.setTextureData(id, image, repeat);
         this.onLoad(id);
         texture.state = 'loaded';
       });
     } else {
-      (texture as any).data = data;
-      // Otherwise, the data is an image so set it directly
+      // Otherwise, the data is an image/canvas so set it directly
       this.setTextureData(id, data, repeat);
       this.onLoad(id);
       texture.state = 'loaded';

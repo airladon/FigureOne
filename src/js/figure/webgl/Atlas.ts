@@ -109,7 +109,6 @@ export default class Atlas {
   dimension!: number;            // side length of atlas in pixels
   loaded: boolean;              // true once FontManager says font is loaded
   scene!: Scene;
-  canvas!: HTMLCanvasElement;
   fontManager!: FontManager;
   notifications: NotificationManager;
   map!: OBJ_AtlasMap;
@@ -158,7 +157,6 @@ export default class Atlas {
     this.scene = o.scene;
     this.font = new FigureFont(o.font);
     this.fontManager = new FontManager();
-    this.canvas = document.createElement('canvas');
 
     const [fontID, isAvailable] = this.fontManager.watch(this.font, {
       timeout: o.timeout,
@@ -308,6 +306,5 @@ export default class Atlas {
     // const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
     // window.location.href=image;
     this.webgl.addTexture(this.font.getTextureID(), ctx.canvas, [0, 0, 0, 0], false, null, true);
-    // canvas.remove();
   }
 }
