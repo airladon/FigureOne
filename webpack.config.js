@@ -133,6 +133,7 @@ module.exports = (env) => {
       libraryExport: 'default',
       libraryTarget: 'umd',
       umdNamedDefine: true,
+      // compareBeforeEmit: false,
     },
     optimization: {
       minimize,
