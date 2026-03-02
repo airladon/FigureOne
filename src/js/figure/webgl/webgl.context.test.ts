@@ -273,8 +273,12 @@ describe('WebGL context loss handling', () => {
     });
 
     test('shares atlas for fonts with different sizes but same atlasId', () => {
-      const font1 = new FigureFont({ family: 'Helvetica', size: 0.2, glyphs: 'latin', atlasId: 'shared' });
-      const font2 = new FigureFont({ family: 'Helvetica', size: 0.5, glyphs: 'latin', atlasId: 'shared' });
+      const font1 = new FigureFont({
+        family: 'Helvetica', size: 0.2, glyphs: 'latin', atlasId: 'shared',
+      });
+      const font2 = new FigureFont({
+        family: 'Helvetica', size: 0.5, glyphs: 'latin', atlasId: 'shared',
+      });
 
       const atlas1 = webgl.getAtlas({ font: font1, scene });
       const atlas2 = webgl.getAtlas({ font: font2, scene });
@@ -334,11 +338,12 @@ describe('Figure atlas integration', () => {
 
     // Also patch getContext on the existing DOM canvases
     const canvases = document.querySelectorAll('canvas');
-    canvases.forEach((c) => {
-      c.getContext = (type) => {
+    canvases.forEach((canvas) => {
+      // eslint-disable-next-line no-param-reassign
+      canvas.getContext = (type) => {
         if (type === '2d') {
           return {
-            canvas: c,
+            canvas,
             measureText: () => ({ width: 10 }),
             fillText: () => {},
             strokeText: () => {},
