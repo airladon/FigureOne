@@ -1,5 +1,10 @@
 # Releases
 
+## 1.0.7
+* Add configurable `antialias` and `atlasScale` options to Figure for WebGL anti-aliasing and atlas texture resolution control
+* Add `atlasId` font option to share a single atlas texture across text elements with different sizes
+* Fix atlas canvas memory leak by freeing backing store after GPU upload, and remove unintended debug border
+
 ## 1.0.6
 * Fix doc links and improve TypeDoc generation with better @property rendering and {@link} resolution
 * Remove unused canvas and texture data references in WebGL to allow garbage collection of atlas canvases
