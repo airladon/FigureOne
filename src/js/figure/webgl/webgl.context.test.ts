@@ -1,5 +1,15 @@
 import FontManager from '../FontManager';
 import WebGLInstance from './webgl';
+import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
+import Scene from '../../tools/geometry/scene';
+import Figure from '../Figure';
+import * as tools from '../../tools/tools';
+
+jest.mock('../Gesture');
+jest.mock('../DrawContext2D');
+jest.mock('../DrawingObjects/HTMLObject/HTMLObject');
+
+tools.isTouchDevice = jest.fn();
 
 // Create a minimal mock GL context that behaves normally
 function createMockGL() {
@@ -37,9 +47,11 @@ function createMockGL() {
     COLOR_ATTACHMENT0: 0x8CE0,
     DEPTH_ATTACHMENT: 0x8D00,
     DEPTH_COMPONENT16: 0x81A5,
+    MAX_TEXTURE_SIZE: 0x0D33,
     drawingBufferWidth: 100,
     drawingBufferHeight: 100,
     createBuffer: jest.fn(() => ({})),
+    deleteBuffer: jest.fn(),
     bindBuffer: jest.fn(),
     bufferData: jest.fn(),
     enableVertexAttribArray: jest.fn(),
@@ -77,6 +89,10 @@ function createMockGL() {
     deleteShader: jest.fn(),
     useProgram: jest.fn(),
     viewport: jest.fn(),
+    REPEAT: 0x2901,
+    generateMipmap: jest.fn(),
+    deleteTexture: jest.fn(),
+    getParameter: jest.fn(() => 4096),
     getExtension: jest.fn(() => ({ loseContext: jest.fn() })),
     createRenderbuffer: jest.fn(() => ({})),
     bindRenderbuffer: jest.fn(),
@@ -113,9 +129,19 @@ describe('WebGL context loss handling', () => {
         el.getContext = (type) => {
           if (type === '2d') {
             return {
+              canvas: el,
               measureText: () => ({ width: 10 }),
               fillText: () => {},
+              strokeText: () => {},
               clearRect: () => {},
+              fillRect: () => {},
+              beginPath: () => {},
+              rect: () => {},
+              stroke: () => {},
+              fillStyle: '',
+              strokeStyle: '',
+              font: '',
+              lineWidth: 1,
             };
           }
           return gl;
@@ -216,5 +242,169 @@ describe('WebGL context loss handling', () => {
       expect(index2).toBeGreaterThanOrEqual(0);
       expect(webgl.programs[index2].program).toBeDefined();
     });
+  });
+
+  describe('atlas deduplication', () => {
+    let scene;
+
+    beforeEach(() => {
+      scene = new Scene({});
+    });
+
+    test('reuses atlas when two fonts have the same properties', () => {
+      const font1 = new FigureFont({ family: 'Helvetica', size: 0.2, glyphs: 'latin' });
+      const font2 = new FigureFont({ family: 'Helvetica', size: 0.2, glyphs: 'latin' });
+
+      const atlas1 = webgl.getAtlas({ font: font1, scene });
+      const atlas2 = webgl.getAtlas({ font: font2, scene });
+
+      expect(atlas1).toBe(atlas2);
+      expect(Object.keys(webgl.atlases)).toHaveLength(1);
+    });
+
+    test('creates separate atlases for fonts with different families', () => {
+      const font1 = new FigureFont({ family: 'Helvetica', size: 0.2, glyphs: 'latin' });
+      const font2 = new FigureFont({ family: 'Arial', size: 0.2, glyphs: 'latin' });
+
+      webgl.getAtlas({ font: font1, scene });
+      webgl.getAtlas({ font: font2, scene });
+
+      expect(Object.keys(webgl.atlases)).toHaveLength(2);
+    });
+
+    test('shares atlas for fonts with different sizes but same atlasId', () => {
+      const font1 = new FigureFont({
+        family: 'Helvetica', size: 0.2, glyphs: 'latin', atlasId: 'shared',
+      });
+      const font2 = new FigureFont({
+        family: 'Helvetica', size: 0.5, glyphs: 'latin', atlasId: 'shared',
+      });
+
+      const atlas1 = webgl.getAtlas({ font: font1, scene });
+      const atlas2 = webgl.getAtlas({ font: font2, scene });
+
+      expect(atlas1).toBe(atlas2);
+      expect(Object.keys(webgl.atlases)).toHaveLength(1);
+    });
+  });
+});
+
+describe('Figure atlas integration', () => {
+  let origCreateElement;
+  let gl;
+
+  beforeEach(() => {
+    FontManager.instance = undefined;
+
+    document.body.innerHTML =
+      '<div id="c">'
+      + '  <canvas class="figureone__gl" id="id_figureone__gl__low">'
+      + '  </canvas>'
+      + '  <canvas class="figureone__text" id="id_figureone__text__low">'
+      + '  </canvas>'
+      + '  <div class="figureone__html">'
+      + '  </div>'
+      + '</div>';
+
+    gl = createMockGL();
+
+    origCreateElement = document.createElement.bind(document);
+    document.createElement = (name) => {
+      const el = origCreateElement(name);
+      if (name === 'canvas') {
+        el.getContext = (type) => {
+          if (type === '2d') {
+            return {
+              canvas: el,
+              measureText: () => ({ width: 10 }),
+              fillText: () => {},
+              strokeText: () => {},
+              clearRect: () => {},
+              fillRect: () => {},
+              beginPath: () => {},
+              rect: () => {},
+              stroke: () => {},
+              fillStyle: '',
+              strokeStyle: '',
+              font: '',
+              lineWidth: 1,
+            };
+          }
+          return gl;
+        };
+      }
+      return el;
+    };
+
+    // Also patch getContext on the existing DOM canvases
+    const canvases = document.querySelectorAll('canvas');
+    canvases.forEach((canvas) => {
+      // eslint-disable-next-line no-param-reassign
+      canvas.getContext = (type) => {
+        if (type === '2d') {
+          return {
+            canvas,
+            measureText: () => ({ width: 10 }),
+            fillText: () => {},
+            strokeText: () => {},
+            clearRect: () => {},
+            fillRect: () => {},
+            beginPath: () => {},
+            rect: () => {},
+            stroke: () => {},
+            fillStyle: '',
+            strokeStyle: '',
+            font: '',
+            lineWidth: 1,
+          };
+        }
+        return gl;
+      };
+    });
+  });
+
+  afterEach(() => {
+    document.createElement = origCreateElement;
+  });
+
+  test('two gl text elements with different sizes but same atlasId share one atlas', () => {
+    const figure = new Figure({ htmlId: 'c', color: [1, 0, 0, 1] });
+
+    figure.add([
+      {
+        name: 'text1',
+        make: 'text',
+        text: 'hello',
+        font: { size: 0.2, render: 'gl', atlasId: 'shared' },
+      },
+      {
+        name: 'text2',
+        make: 'text',
+        text: 'world',
+        font: { size: 0.5, render: 'gl', atlasId: 'shared' },
+      },
+    ]);
+
+    expect(Object.keys(figure.webglLow.atlases)).toHaveLength(1);
+  });
+  test('two gl text elements with different sizes DO NOT share one atlas', () => {
+    const figure = new Figure({ htmlId: 'c', color: [1, 0, 0, 1] });
+
+    figure.add([
+      {
+        name: 'text1',
+        make: 'text',
+        text: 'hello',
+        font: { size: 0.2, render: 'gl' },
+      },
+      {
+        name: 'text2',
+        make: 'text',
+        text: 'world',
+        font: { size: 0.5, render: 'gl' },
+      },
+    ]);
+
+    expect(Object.keys(figure.webglLow.atlases)).toHaveLength(2);
   });
 });

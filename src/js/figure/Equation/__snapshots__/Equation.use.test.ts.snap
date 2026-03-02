@@ -234,6 +234,7 @@ FigureElementPrimitive2DText {
     },
     "font": FigureFont {
       "atlasColor": false,
+      "atlasId": "",
       "atlasSize": null,
       "color": [
         0.95,

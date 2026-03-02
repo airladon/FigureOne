@@ -104,6 +104,9 @@ export type OBJ_FigureForElement = {
   * @property {number} [length] default shape primary dimension
   * @property {TypeColor} [backgroundColor] background color for the figure.
   * Use [r, g, b, 1] for opaque and [0, 0, 0, 0] for transparent.
+  * @property {boolean} [antialias] enable WebGL anti-aliasing (`true`)
+  * @property {number} [atlasScale] scale factor for GL text atlas texture
+  * resolution relative to 1:1 pixel mapping (`2`)
  * @interface
  * @group Figure
  */
@@ -115,6 +118,8 @@ export type OBJ_Figure = {
   lineWidth?: number;
   length?: number;
   backgroundColor?: number;
+  antialias?: boolean;
+  atlasScale?: number;
 };
 
 
@@ -395,6 +400,8 @@ class Figure {
         render: '2d',
       },
       backgroundColor: [1, 1, 1, 1],
+      antialias: true,
+      atlasScale: 2,
       // scene: {
       //   style: '2D',
       //   left: -1,
@@ -532,6 +539,8 @@ class Figure {
         const webglLow = new WebGLInstance(
           this.canvasLow,
           this.backgroundColor,
+          optionsToUse.antialias,
+          optionsToUse.atlasScale,
         );
         this.webglLow = webglLow;
         this.canvasLow.addEventListener(
@@ -548,6 +557,8 @@ class Figure {
           const webglOffscreen = new WebGLInstance(
             this.canvasOffscreen,
             this.backgroundColor,
+            optionsToUse.antialias,
+            optionsToUse.atlasScale,
           );
           this.webglOffscreen = webglOffscreen;
         }

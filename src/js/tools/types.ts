@@ -302,6 +302,7 @@ export type OBJ_Font = {
   loadColor?: TypeColor;
   atlasColor?: boolean;
   atlasSize?: number | null;
+  atlasId?: string;
 
   timeout?: number;
 

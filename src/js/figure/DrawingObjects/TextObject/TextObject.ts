@@ -55,6 +55,7 @@ class FigureFont {
   map: OBJ_AtlasMap;
   glyphs: string | 'greek' | 'math' | 'mathExt' | 'common' | 'latin' | 'all' | 'numbers' | 'mathlatin' | Array<string>;
   atlasSize: null | number;
+  atlasId: string;
   loadColor: TypeColor;
 
   // Font properties
@@ -111,6 +112,7 @@ class FigureFont {
       this.loadColor = optionsIn.loadColor;
       this.atlasColor = optionsIn.atlasColor;
       this.atlasSize = optionsIn.atlasSize;
+      this.atlasId = optionsIn.atlasId;
       this.letterSpacing = optionsIn.letterSpacing;
       this.render = optionsIn.render;
       this.mods = glyphMeasures(
@@ -145,6 +147,7 @@ class FigureFont {
       loadColor: [0, 0, 0, 0],
       atlasColor: false,
       atlasSize: null,
+      atlasId: '',
       render: '2d',
     };
     const options = joinObjects<any>({}, defaultOptions, optionsIn);
@@ -190,6 +193,7 @@ class FigureFont {
     this.atlasSize = optionsIn.atlasSize || null;
     this.loadColor = options.loadColor;
     this.atlasColor = options.atlasColor;
+    this.atlasId = options.atlasId;
     this.glyphs = options.glyphs;
     this.id = options.id;
     this.timeout = options.timeout;
@@ -245,6 +249,9 @@ class FigureFont {
   }
 
   getTextureID() {
+    if (this.atlasId && this.atlasId !== '') {
+      return this.atlasId;
+    }
     if (this.id && this.id !== '') {
       return this.id;
     }
