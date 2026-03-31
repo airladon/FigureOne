@@ -4596,6 +4596,12 @@ class FigureElementCollection extends FigureElement {
 
   override cleanup() {
     super.cleanup();
+    Object.keys(this.textureAtlases).forEach((id: string) => {
+      const ta = this.textureAtlases[id];
+      if (ta.notif != null && ta.atlas && ta.atlas.notifications) {
+        ta.atlas.notifications.remove('updated2', ta.notif);
+      }
+    });
     this.textureAtlases = {};
     this.cleanupChildren();
   }
@@ -6543,6 +6549,16 @@ class FigureElementCollection extends FigureElement {
       return;
     }
     const element = this.elements[elementName];
+    // Clean up atlas notification subscriptions to prevent leaks
+    if ((element as any).textureAtlases != null) {
+      Object.keys((element as any).textureAtlases).forEach((id: string) => {
+        const ta = (element as any).textureAtlases[id];
+        if (ta.notif != null && ta.atlas && ta.atlas.notifications) {
+          ta.atlas.notifications.remove('updated2', ta.notif);
+        }
+      });
+      (element as any).textureAtlases = {};
+    }
     element.animations.cancelAll('freeze', true);
     element.stop();
     element.parent = null;
