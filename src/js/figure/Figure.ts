@@ -383,6 +383,11 @@ class Figure {
 
   ext: any;
 
+  _boundResize!: EventListener;
+  _boundFocusGained!: EventListener;
+  _boundFocusLost!: EventListener;
+  _boundContextLost!: EventListener;
+  _boundContextRestored!: EventListener;
 
   constructor(options: OBJ_Figure = {}) {
     const defaultOptions = {
@@ -543,13 +548,13 @@ class Figure {
           optionsToUse.atlasScale,
         );
         this.webglLow = webglLow;
+        this._boundContextLost = this.contextLost.bind(this) as EventListener;
+        this._boundContextRestored = this.contextRestored.bind(this) as EventListener;
         this.canvasLow.addEventListener(
-          'webglcontextlost',
-          this.contextLost.bind(this) as EventListener,
-          false,
+          'webglcontextlost', this._boundContextLost, false,
         );
         this.canvasLow.addEventListener(
-          'webglcontextrestored', this.contextRestored.bind(this) as EventListener, false,
+          'webglcontextrestored', this._boundContextRestored, false,
         );
         // TODO in future, if still using canvasOffScreen then need to have it
         // handle context lost and restored events
@@ -764,9 +769,12 @@ class Figure {
     // this.updateFontSize = optionsToUse.updateFontSize;
 
     this.focused = true;
-    window.addEventListener('resize', this.resize.bind(this) as unknown as EventListener);
-    window.addEventListener('focus', this.focusGained.bind(this));
-    window.addEventListener('blur', this.focusLost.bind(this));
+    this._boundResize = this.resize.bind(this) as unknown as EventListener;
+    this._boundFocusGained = this.focusGained.bind(this) as EventListener;
+    this._boundFocusLost = this.focusLost.bind(this) as EventListener;
+    window.addEventListener('resize', this._boundResize);
+    window.addEventListener('focus', this._boundFocusGained);
+    window.addEventListener('blur', this._boundFocusLost);
     // window.addEventListener('resize', this.resize.bind(this));
     this.sizeHtmlText();
     this.isTouchDevice = isTouchDevice();
@@ -1496,7 +1504,33 @@ class Figure {
   }
 
   destroy() {
+    // Remove gesture listeners (canvas + window)
     this.gesture.destroy();
+
+    // Remove window listeners
+    window.removeEventListener('resize', this._boundResize);
+    window.removeEventListener('focus', this._boundFocusGained);
+    window.removeEventListener('blur', this._boundFocusLost);
+
+    // Remove canvas listeners (only set when webgl !== 'manual')
+    if (this.canvasLow && this._boundContextLost) {
+      this.canvasLow.removeEventListener('webglcontextlost', this._boundContextLost, false);
+      this.canvasLow.removeEventListener('webglcontextrestored', this._boundContextRestored, false);
+    }
+
+    // Clean up all elements recursively (notifications, drawing objects, children)
+    this.elements.cleanup();
+    this.elements = null as any;
+
+    // Clean up WebGL resources (programs, textures, atlases, framebuffers)
+    if (this.webglLow) {
+      this.webglLow.cleanup();
+    }
+    if (this.webglOffscreen) {
+      this.webglOffscreen.cleanup();
+    }
+
+    // Release the WebGL context
     this.loseContext();
   }
 
