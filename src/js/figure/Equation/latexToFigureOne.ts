@@ -734,14 +734,12 @@ export interface LatexResult {
  * Convert a LaTeX math expression into a FigureOne equation form.
  *
  * @example
- * ```js
- * const { elements, form } = latexToFigureOne('\\frac{a}{b} = c');
+ * const { elements, form } = Fig.latexToFigureOne('\\frac{a}{b} = c');
  * figure.add({
  *   make: 'equation',
  *   elements,
  *   forms: { base: form },
  * });
- * ```
  */
 export function latexToFigureOne(latex: string): LatexResult {
   const tokens = tokenize(latex);

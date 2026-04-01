@@ -33,6 +33,7 @@ import CollectionsPolyline from './js/figure/FigureCollections/PolyLine';
 import EquationLabel from './js/figure/FigureCollections/EquationLabel';
 import { Equation } from './js/figure/Equation/Equation';
 import EquationForm from './js/figure/Equation/EquationForm';
+import { latexToFigureOne } from './js/figure/Equation/latexToFigureOne';
 import SlideNavigator from './js/figure/SlideNavigator';
 
 import type { TypeRotationDirection, TypeParsablePoint } from './js/tools/g2';
@@ -130,6 +131,7 @@ const Fig = {
   Equation,
   //
   HTMLEquation,
+  latexToFigureOne,
   //
   Animation: anim,
   //
