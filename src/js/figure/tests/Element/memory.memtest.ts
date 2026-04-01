@@ -1,4 +1,6 @@
 import makeFigure from '../../../__mocks__/makeFigure';
+import { Point } from '../../../tools/g2';
+import { range } from '../../../tools/math';
 
 // Force GC and yield to allow WeakRef targets to be cleared.
 // Multiple gc() calls ensure both marking and sweeping complete.
@@ -254,5 +256,106 @@ describe('Element Memory - cleanup', () => {
 
     await forceGC();
     expect(ref.deref()).toBeUndefined();
+  });
+
+  test('sine wave example: all elements GCd after cleanup', async () => {
+    const figure = makeFigure();
+    const r = 0.6;
+    const thetaValues = range(0, Math.PI * 2, 0.01);
+    const getSine = (max: number) => thetaValues
+      .filter((theta: number) => theta < max)
+      .map((theta: number) => new Point(theta, Math.sin(theta)));
+
+    // Unit circle collection with lines, angle, and annotations
+    figure.add([
+      {
+        name: 'unitCircle',
+        make: 'collection',
+        elements: [
+          { name: 'x', make: 'line', options: { length: r * 2, position: [-r, 0], width: 0.005 } },
+          { name: 'y', make: 'line', options: { length: r * 2, position: [0, -r], width: 0.005, angle: Math.PI / 2 } },
+          { name: 'circle', make: 'polygon', options: { radius: r, sides: 200, line: { width: 0.005 } } },
+          {
+            name: 'sine',
+            make: 'collections.line',
+            options: { maxLength: 3, width: 0.003, color: [1, 0, 0, 1] },
+          },
+          {
+            name: 'theta',
+            make: 'collections.angle',
+            options: { color: [0, 0.4, 1, 1], curve: { radius: 0.1, width: 0.005, sides: 200 } },
+          },
+          { name: 'tracer', make: 'collections.line', options: { width: 0.003 } },
+          {
+            name: 'line',
+            make: 'collections.line',
+            options: { length: r, width: 0.015 },
+            mods: { isMovable: true, move: { type: 'rotation' } },
+          },
+        ],
+      },
+    ]);
+
+    // Cartesian plot with sine trace
+    figure.add([
+      {
+        name: 'plot',
+        make: 'collections.plot',
+        options: {
+          position: [-1.6, -r],
+          width: 1.6,
+          height: r * 2,
+          trace: {
+            name: 'sineWave',
+            points: getSine(2 * Math.PI),
+            line: { simple: true, color: [1, 0, 0, 1], width: 0.01 },
+          },
+          x: { start: 0, stop: 7, step: 1 },
+          y: { start: -1, stop: 1, step: [1, 2] },
+        },
+      },
+    ]);
+
+    // Equation
+    figure.add({
+      name: 'eqn',
+      make: 'equation',
+      options: {
+        elements: {
+          sin: { style: 'normal' },
+          lb: { symbol: 'bracket', side: 'left' },
+          rb: { symbol: 'bracket', side: 'right' },
+          theta: '\u03b8',
+        },
+        forms: {
+          0: ['y', '_ = ', 'sin', { brac: ['lb', 'theta', 'rb'] }],
+        },
+        scale: 0.6,
+        position: [-0.4, 0.7],
+      },
+    });
+
+    // Collect WeakRefs to ALL elements in the tree.
+    // Use IIFE so the allElements array doesn't survive as a local strong ref.
+    const refs = (() => {
+      const allElements = figure.elements.getAllElements();
+      // Skip the root collection itself (index 0) — it stays alive via figure.elements
+      return allElements.slice(1).map(
+        (el: any) => ({ name: el.name, ref: new WeakRef(el) }),
+      );
+    })();
+
+    expect(refs.length).toBeGreaterThan(10);
+
+    figure.elements.cleanup();
+
+    await forceGC();
+
+    const retained = refs.filter((r: any) => r.ref.deref() !== undefined);
+    if (retained.length > 0) {
+      // eslint-disable-next-line no-console
+      console.log('retained elements:', retained.map((r: any) => r.name));
+    }
+    expect(retained).toHaveLength(0);
   });
 });
