@@ -4608,7 +4608,9 @@ class FigureElementCollection extends FigureElement {
 
   cleanupChildren() {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
-      this.elements[this.drawOrder[i]].cleanup();
+      const name = this.drawOrder[i];
+      this.elements[name].cleanup();
+      delete (this as any)[`_${name}`];
     }
     this.elements = {};
     this.drawOrder = [];

@@ -30,6 +30,7 @@
     "build": "webpack && npm run build:types",
     "tsc": "tsc --noEmit",
     "jest": "jest",
+    "jest-memtest": "node --expose-gc node_modules/.bin/jest --runInBand --config jest.memtest.config.js",
     "jest-perf": "jest --runInBand --config jest.perf.config.js",
     "jest-perf-debug": "node --inspect-brk=0.0.0.0 node_modules/.bin/jest --runInBand --config jest.perf.config.js",
     "lint": "eslint src",
