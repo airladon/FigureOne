@@ -1,5 +1,13 @@
 # Releases
 
+## 1.0.8
+* Add basic LaTeX-to-FigureOne equation parsing via `latexToFigureOne()`
+* Fix memory leaks when removing elements: `remove()` now calls `cleanup()` to release nested children, notification subscriptions, and WebGL buffers
+* Fix `Gesture.destroy()` so event listeners are actually removed (double `.bind()` and wrong removal target)
+* Add `WebGLInstance.cleanup()`, `TargetTexture.cleanup()`, and complete `Figure.destroy()` for proper resource release
+* Fix `cleanupChildren()` bug that only cleaned up the first child element
+* Fix `TargetTexture` framebuffer never being assigned to instance property
+
 ## 1.0.7
 * Add configurable `antialias` and `atlasScale` options to Figure for WebGL anti-aliasing and atlas texture resolution control
 * Add `atlasId` font option to share a single atlas texture across text elements with different sizes
