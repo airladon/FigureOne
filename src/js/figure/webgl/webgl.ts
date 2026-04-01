@@ -598,6 +598,7 @@ class WebGLInstance {
     this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
     this.gl.enable(this.gl.BLEND);
     this.targetTexture = new TargetTexture(this);
+    this.targetTexture.setFramebufferAttachmentSizes(this.gl.canvas.width, this.gl.canvas.height);
   }
 
   resize() {
