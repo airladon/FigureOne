@@ -135,7 +135,12 @@ function createProgramFromScripts(
 
   // Link the two shaders into a program
   if (vertexShader && fragmentShader) {
-    return createProgram(gl, vertexShader, fragmentShader);
+    const program = createProgram(gl, vertexShader, fragmentShader);
+    // Shaders can be safely deleted after linking — they're flagged for
+    // deletion and freed when the program is deleted
+    gl.deleteShader(vertexShader);
+    gl.deleteShader(fragmentShader);
+    return program;
   }
   return null;
 }
@@ -361,6 +366,30 @@ class WebGLInstance {
     });
   }
 
+  cleanup() {
+    const { gl } = this;
+    // Delete all programs
+    this.programs.forEach((p) => {
+      if (p.program) {
+        gl.deleteProgram(p.program);
+      }
+    });
+    this.programs = [];
+    // Delete all textures
+    Object.keys(this.textures).forEach((id) => {
+      this.deleteTexture(id);
+    });
+    this.textures = {};
+    // Clean up atlases
+    this.atlases = {};
+    // Clean up target texture
+    if (this.targetTexture) {
+      this.targetTexture.cleanup();
+      this.targetTexture = null;
+    }
+    this.lastUsedProgram = null;
+  }
+
 
   setTextureData(
     id: string,
@@ -569,6 +598,7 @@ class WebGLInstance {
     this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
     this.gl.enable(this.gl.BLEND);
     this.targetTexture = new TargetTexture(this);
+    this.targetTexture.setFramebufferAttachmentSizes(this.gl.canvas.width, this.gl.canvas.height);
   }
 
   resize() {

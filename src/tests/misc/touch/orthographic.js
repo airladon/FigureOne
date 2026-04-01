@@ -71,7 +71,7 @@ const move = {
     events: [
       ['touchDown', [0.2, 0]],
       ['touchUp'],
-      ['touchDown', [0.21, 0]],
+      ['touchDown', [0.22, 0]],
       ['touchUp'],
     ],
   },
@@ -80,7 +80,7 @@ const move = {
     events: [
       ['touchDown', [0, 0]],
       ['touchUp'],
-      ['touchDown', [0.21, 0]],
+      ['touchDown', [0.22, 0]],
       ['touchUp'],
       ['touchDown', [0.4, 0]],
       ['touchUp'],

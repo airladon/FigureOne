@@ -22,8 +22,8 @@ export default class TargetTexture {
     gl.bindRenderbuffer(gl.RENDERBUFFER, this.depthBuffer);
 
     // Create and bind the framebuffer
-    const fb = gl.createFramebuffer();
-    gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+    this.fb = gl.createFramebuffer();
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this.fb);
 
     // attach the texture as the first color attachment
     const attachmentPoint = gl.COLOR_ATTACHMENT0;
@@ -56,5 +56,21 @@ export default class TargetTexture {
 
     gl.bindRenderbuffer(gl.RENDERBUFFER, this.depthBuffer);
     gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, width, height);
+  }
+
+  cleanup() {
+    const { gl } = this.webgl;
+    if (this.target) {
+      gl.deleteTexture(this.target);
+      this.target = null;
+    }
+    if (this.depthBuffer) {
+      gl.deleteRenderbuffer(this.depthBuffer);
+      this.depthBuffer = null;
+    }
+    if (this.fb) {
+      gl.deleteFramebuffer(this.fb);
+      this.fb = null;
+    }
   }
 }

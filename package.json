@@ -1,6 +1,6 @@
 {
   "name": "figureone",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Draw, animate and interact with shapes, text, plots and equations in Javascript. Create interactive slide shows, and interactive videos.",
   "main": "index.js",
   "types": "types/index.d.ts",
@@ -30,6 +30,7 @@
     "build": "webpack && npm run build:types",
     "tsc": "tsc --noEmit",
     "jest": "jest",
+    "jest-memtest": "node --expose-gc node_modules/.bin/jest --runInBand --config jest.memtest.config.js",
     "jest-perf": "jest --runInBand --config jest.perf.config.js",
     "jest-perf-debug": "node --inspect-brk=0.0.0.0 node_modules/.bin/jest --runInBand --config jest.perf.config.js",
     "lint": "eslint src",

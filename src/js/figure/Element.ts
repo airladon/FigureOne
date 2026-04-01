@@ -1784,7 +1784,7 @@ class FigureElement {
     this.stop();
     this.notifications.cleanup();
     this.animations.notifications.cleanup();
-    this.figure = {} as any;
+    this.figure = null as any;
     this.parent = null;
     // this.textureAtlases = {};
   }
@@ -4596,17 +4596,24 @@ class FigureElementCollection extends FigureElement {
 
   override cleanup() {
     super.cleanup();
+    Object.keys(this.textureAtlases).forEach((id: string) => {
+      const ta = this.textureAtlases[id];
+      if (ta.notif != null && ta.atlas && ta.atlas.notifications) {
+        ta.atlas.notifications.remove('updated2', ta.notif);
+      }
+    });
     this.textureAtlases = {};
     this.cleanupChildren();
   }
 
   cleanupChildren() {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
-      this.elements[this.drawOrder[i]].cleanup();
-      delete this.elements[this.drawOrder[i]];
-      this.elements = {};
-      this.drawOrder = [];
+      const name = this.drawOrder[i];
+      this.elements[name].cleanup();
+      delete (this as any)[`_${name}`];
     }
+    this.elements = {};
+    this.drawOrder = [];
   }
 
   override init(webgl: WebGLInstance) {
@@ -6543,13 +6550,15 @@ class FigureElementCollection extends FigureElement {
       return;
     }
     const element = this.elements[elementName];
+    // Freeze animations at current values before cleanup
     element.animations.cancelAll('freeze', true);
-    element.stop();
-    element.parent = null;
+    // cleanup() handles: stop, notifications, drawing objects, children, textureAtlases, figure, parent
+    element.cleanup();
+    // Null out remaining references that cleanup() doesn't handle
     (element as any).animations = null;
     element.move.element = null;
     element.recorder = null as any;
-    element.figure = null as any;
+    // Remove from parent's data structures
     delete (this as any)[`_${elementName}`];
     delete this.elements[elementName];
     const index = this.drawOrder.indexOf(elementName);

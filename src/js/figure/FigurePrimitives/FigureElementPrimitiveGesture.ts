@@ -386,7 +386,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
   onlyWhenTouched: boolean;
   relativeScene!: null | Scene;
 
-  notificationIDs: Array<number>;
+  notificationIDs: Array<{event: string; id: number}>;
 
   changeScene!: Scene;
 
@@ -994,18 +994,27 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       this.setMovable();
     }
     this.cleanupIDs();
-    this.notificationIDs.push(this.figure.notifications.add('gestureWheel', this.wheelHandler.bind(this) as any));
-    this.notificationIDs.push(this.figure.notifications.add('mousePosition', this.mousePosition.bind(this) as any));
-    this.notificationIDs.push(this.figure.notifications.add('gestureStartPinch', this.startPinchZoom.bind(this) as any));
-    this.notificationIDs.push(this.figure.notifications.add('gesturePinching', this.pinchZoom.bind(this) as any));
-    this.notificationIDs.push(this.figure.notifications.add('gesturePinchEnd', this.endPinchZoom.bind(this) as any));
+    this.notificationIDs.push({ event: 'gestureWheel', id: this.figure.notifications.add('gestureWheel', this.wheelHandler.bind(this) as any) });
+    this.notificationIDs.push({ event: 'mousePosition', id: this.figure.notifications.add('mousePosition', this.mousePosition.bind(this) as any) });
+    this.notificationIDs.push({ event: 'gestureStartPinch', id: this.figure.notifications.add('gestureStartPinch', this.startPinchZoom.bind(this) as any) });
+    this.notificationIDs.push({ event: 'gesturePinching', id: this.figure.notifications.add('gesturePinching', this.pinchZoom.bind(this) as any) });
+    this.notificationIDs.push({ event: 'gesturePinchEnd', id: this.figure.notifications.add('gesturePinchEnd', this.endPinchZoom.bind(this) as any) });
     this.reset();
     this.notifications.publish('setFigure');
   }
 
   cleanupIDs() {
-    this.notificationIDs.forEach(id => (this.figure.notifications as any).remove(id));
+    if (this.figure && this.figure.notifications) {
+      this.notificationIDs.forEach(({ event, id }) => {
+        this.figure.notifications.remove(event, id);
+      });
+    }
     this.notificationIDs = [];
+  }
+
+  override cleanup() {
+    this.cleanupIDs();
+    super.cleanup();
   }
 }
 

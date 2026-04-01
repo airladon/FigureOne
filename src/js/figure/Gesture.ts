@@ -54,27 +54,19 @@ class Gesture {
   }
 
   addEvent(event: string, method: any, flag: boolean) {
-    this.figure.gestureCanvas.addEventListener(
-      event,
-      method.bind(this),
-      flag,
-    );
+    this.figure.gestureCanvas.addEventListener(event, method, flag);
   }
 
   addWindowEvent(event: string, method: any, flag: boolean) {
-    window.addEventListener(
-      event,
-      method.bind(this),
-      flag,
-    );
+    window.addEventListener(event, method, flag);
   }
 
   removeEvent(event: string, method: any, flag: boolean) {
-    this.figure.gestureCanvas.removeEventListener(
-      event,
-      method.bind(this),
-      flag,
-    );
+    this.figure.gestureCanvas.removeEventListener(event, method, flag);
+  }
+
+  removeWindowEvent(event: string, method: any, flag: boolean) {
+    window.removeEventListener(event, method, flag);
   }
 
   startHandler(point: Point) {
@@ -162,10 +154,10 @@ class Gesture {
 
   destroy() {
     this.removeEvent('mousedown', this.binds.mouseDownHandler, false);
-    this.removeEvent('mouseup', this.binds.mouseUpHandler, false);
+    this.removeWindowEvent('mouseup', this.binds.mouseUpHandler, false);
     this.removeEvent('mousemove', this.binds.mouseMoveHandler, false);
     this.removeEvent('touchstart', this.binds.touchStartHandler, false);
-    this.removeEvent('touchend', this.binds.touchEndHandler, false);
+    this.removeWindowEvent('touchend', this.binds.touchEndHandler, false);
     this.removeEvent('touchmove', this.binds.touchMoveHandler, false);
     this.removeEvent('wheel', this.binds.wheelHandler, false);
   }
