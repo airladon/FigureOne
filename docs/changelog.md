@@ -1,5 +1,9 @@
 # Releases
 
+## 1.1.0
+* Fix WebGL buffer leak in `GLObject.fillBuffer()` — every GL primitive was leaking one GPU buffer per attribute on creation due to double `fillBuffer()` calls
+* Update Playwright to v1.59.1
+
 ## 1.0.8
 * Add basic LaTeX-to-FigureOne equation parsing via `latexToFigureOne()`
 * Fix memory leaks when removing elements: `remove()` now calls `cleanup()` to release nested children, notification subscriptions, and WebGL buffers
