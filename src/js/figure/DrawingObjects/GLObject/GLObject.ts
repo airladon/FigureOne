@@ -552,6 +552,9 @@ class GLObject extends DrawingObject {
     } else if (type === gl.UNSIGNED_SHORT) {
       processedData = new Uint16Array(data);
     }
+    if (this.attributes[name].buffer != null) {
+      gl.deleteBuffer(this.attributes[name].buffer);
+    }
     this.attributes[name].buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.attributes[name].buffer);
     gl.bufferData(gl.ARRAY_BUFFER, processedData!, usage);
