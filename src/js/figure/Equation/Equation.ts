@@ -1671,6 +1671,11 @@ export class Equation extends FigureElementCollection {
     }
     const ending = cleanKey.match(/_[^_]*$/);
     if (ending != null) {
+      // Suffix-matched symbols are stored under the truncated key (e.g.
+      // 'v1_vinculum' is stored as 'v1'). Check for an existing element
+      // under that name first, otherwise a second lookup for the same key
+      // would miss it (getElement('v1_vinculum') fails) and create a
+      // duplicate, orphaning the original element and leaking its GL buffers.
       const truncatedKey = key.replace(/_[^_]*$/, '');
       const existingTruncated = this.getElement(truncatedKey);
       if (existingTruncated != null) {
