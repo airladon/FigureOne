@@ -4029,6 +4029,7 @@ class FigureElementPrimitive extends FigureElement {
 
   override cleanup(deleteTexture: boolean = true) {
     super.cleanup(deleteTexture);
+    this.setPointsFromDefinition = null;
     this.drawingObject.cleanup(deleteTexture);
   }
 
