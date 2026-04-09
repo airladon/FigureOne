@@ -10,7 +10,7 @@ jest.mock('../../DrawContext2D');
 describe('WebGL Resource Tracking', () => {
   let figure;
   let gl;
-  let bufferCount: number;
+  let bufferCount;
 
   beforeEach(() => {
     figure = makeFigure();
@@ -26,7 +26,7 @@ describe('WebGL Resource Tracking', () => {
       nextBufferId += 1;
       return { _id: id };
     };
-    gl.deleteBuffer = (buf: any) => {
+    gl.deleteBuffer = (buf) => {
       if (buf != null) {
         bufferCount -= 1;
       }
