@@ -1784,6 +1784,7 @@ class FigureElement {
     this.stop();
     this.notifications.cleanup();
     this.animations.notifications.cleanup();
+    this.internalSetTransformCallback = null;
     this.figure = null as any;
     this.parent = null;
     // this.textureAtlases = {};
