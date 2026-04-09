@@ -1,5 +1,8 @@
 # Releases
 
+## 1.1.2
+* Fix memory leaks in `Figure.destroy()`: store bound scroll listener so `disableScrolling()` actually removes it, add `Recorder.cleanup()` to detach audio/worker listeners and clear timers, remove HTMLObject DOM elements and free VertexText canvas backing store on cleanup, delegate texture deletion to `webgl.deleteTexture()` for complete GL resource release
+
 ## 1.1.1
 * Fix orphaned WebGL buffers from equation layout's internal text measurement element that was never cleaned up on destroy
 * Plumb `deleteTexture` parameter through the element cleanup chain so shared atlas textures are preserved during partial cleanup
