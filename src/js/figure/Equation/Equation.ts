@@ -1671,6 +1671,11 @@ export class Equation extends FigureElementCollection {
     }
     const ending = cleanKey.match(/_[^_]*$/);
     if (ending != null) {
+      const truncatedKey = key.replace(/_[^_]*$/, '');
+      const existingTruncated = this.getElement(truncatedKey);
+      if (existingTruncated != null) {
+        return existingTruncated;
+      }
       symbol = this.eqn.symbols.get(ending[0].replace(/_/, ''), options as any);
       if (symbol != null) {
         if (symbol.color[3] > 0.01 && options.color == null) {
@@ -1679,7 +1684,7 @@ export class Equation extends FigureElementCollection {
         if (options.mods != null) {
           symbol.setProperties(options.mods);
         }
-        this.add(key.replace(/_[^_]*$/, ''), symbol);
+        this.add(truncatedKey, symbol);
         return symbol;
       }
     }
