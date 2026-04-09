@@ -295,6 +295,8 @@ class Recorder {
   };
 
   worker!: any;
+  _boundParseMessage!: ((event: MessageEvent) => void) | null;
+  _audioHandlers!: { pause: () => void; play: () => void; playing: () => void; ended: () => void } | null;
 
   // static instance: Object;
 
@@ -329,6 +331,44 @@ class Recorder {
     this.queueSeekId = null;
     // this.useAutoEvents = false;
     this.timeUpdates = 100; // ms
+    this._boundParseMessage = null;
+    this._audioHandlers = null;
+  }
+
+  cleanupAudio() {
+    if (this.audio && this._audioHandlers) {
+      this.audio.removeEventListener('pause', this._audioHandlers.pause);
+      this.audio.removeEventListener('play', this._audioHandlers.play);
+      this.audio.removeEventListener('playing', this._audioHandlers.playing, false);
+      this.audio.removeEventListener('ended', this._audioHandlers.ended, false);
+      this.audio.onloadedmetadata = null;
+      this.audio.oncanplaythrough = null;
+    }
+    this._audioHandlers = null;
+  }
+
+  cleanup() {
+    this.cleanupAudio();
+    this.audio = null;
+    if (this.worker && this._boundParseMessage) {
+      this.worker.removeEventListener('message', this._boundParseMessage);
+      this.worker.terminate();
+    }
+    this.worker = null;
+    this._boundParseMessage = null;
+    if (this.timeoutID != null) {
+      this.timeKeeper.clearTimeout(this.timeoutID);
+      this.timeoutID = null;
+    }
+    if (this.timeUpdatesTimeoutID != null) {
+      this.timeKeeper.clearTimeout(this.timeUpdatesTimeoutID);
+      this.timeUpdatesTimeoutID = null;
+    }
+    if (this.queueSeekId != null) {
+      this.timeKeeper.clearTimeout(this.queueSeekId);
+      this.queueSeekId = null;
+    }
+    this.notifications.cleanup();
   }
 
   // ////////////////////////////////////
@@ -439,6 +479,7 @@ class Recorder {
   }
 
   loadAudioTrack(audio: HTMLAudioElement) {
+    this.cleanupAudio();
     this.audio = audio;
     this.audio.onloadedmetadata = () => {
       this.duration = this.calcDuration();
@@ -447,20 +488,26 @@ class Recorder {
     this.audio.oncanplaythrough = () => {
       this.notifications.publish('audioLoaded');
     };
-    this.audio.addEventListener('pause', () => {
-      if (this.state === 'playing') {
-        this.pausePlayback();
-      }
-    });
-    this.audio.addEventListener('play', () => {
-      // This is here to handle audio triggered start/stop (like headphones
-      // being removed or inserted)
-      if (this.state === 'idle' && this.audioStartedCallback == null) {
-        this.resumePlayback();
-      }
-    });
-    audio.addEventListener('playing', () => this.audioStarted(), false);
-    audio.addEventListener('ended', () => this.audioEnded(), false);
+    this._audioHandlers = {
+      pause: () => {
+        if (this.state === 'playing') {
+          this.pausePlayback();
+        }
+      },
+      play: () => {
+        // This is here to handle audio triggered start/stop (like headphones
+        // being removed or inserted)
+        if (this.state === 'idle' && this.audioStartedCallback == null) {
+          this.resumePlayback();
+        }
+      },
+      playing: () => this.audioStarted(),
+      ended: () => this.audioEnded(),
+    };
+    this.audio.addEventListener('pause', this._audioHandlers.pause);
+    this.audio.addEventListener('play', this._audioHandlers.play);
+    this.audio.addEventListener('playing', this._audioHandlers.playing, false);
+    this.audio.addEventListener('ended', this._audioHandlers.ended, false);
   }
 
   loadEvents(
@@ -710,7 +757,8 @@ class Recorder {
   startWorker() {
     if (this.worker == null) {
       this.worker = new Worker();
-      this.worker.addEventListener('message', this.parseMessage.bind(this));
+      this._boundParseMessage = this.parseMessage.bind(this);
+      this.worker.addEventListener('message', this._boundParseMessage);
     }
   }
 

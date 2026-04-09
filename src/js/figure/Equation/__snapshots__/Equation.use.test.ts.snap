@@ -758,6 +758,8 @@ FigureElementPrimitive2DText {
   },
   "pulseTransforms": [],
   "recorder": Recorder {
+    "_audioHandlers": null,
+    "_boundParseMessage": null,
     "audio": null,
     "currentTime": 0,
     "duration": 0,

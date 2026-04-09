@@ -168,6 +168,12 @@ class HTMLObject extends DrawingObject {
     }
   }
 
+  override cleanup() {
+    if (this.element && this.element.parentNode) {
+      this.element.parentNode.removeChild(this.element);
+    }
+  }
+
   override drawWithTransformMatrix(scene: Scene, worldMatrix: Type3DMatrix, color: TypeColor) {
     let isDifferent = false;
     const transformMatrix = m3.mul(scene.viewProjectionMatrix, worldMatrix);

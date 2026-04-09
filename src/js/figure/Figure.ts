@@ -388,6 +388,7 @@ class Figure {
   _boundFocusLost!: EventListener;
   _boundContextLost!: EventListener;
   _boundContextRestored!: EventListener;
+  _boundScrollEvent!: EventListener;
 
   constructor(options: OBJ_Figure = {}) {
     const defaultOptions = {
@@ -772,6 +773,7 @@ class Figure {
     this._boundResize = this.resize.bind(this) as unknown as EventListener;
     this._boundFocusGained = this.focusGained.bind(this) as EventListener;
     this._boundFocusLost = this.focusLost.bind(this) as EventListener;
+    this._boundScrollEvent = this.scrollEvent.bind(this) as EventListener;
     window.addEventListener('resize', this._boundResize);
     window.addEventListener('focus', this._boundFocusGained);
     window.addEventListener('blur', this._boundFocusLost);
@@ -974,7 +976,7 @@ class Figure {
   enableScrolling() {
     document.addEventListener(
       'scroll',
-      this.scrollEvent.bind(this),
+      this._boundScrollEvent,
       false,
     );
   }
@@ -982,7 +984,7 @@ class Figure {
   disableScrolling() {
     document.removeEventListener(
       'scroll',
-      this.scrollEvent.bind(this),
+      this._boundScrollEvent,
       false,
     );
   }
@@ -1507,16 +1509,27 @@ class Figure {
     // Remove gesture listeners (canvas + window)
     this.gesture.destroy();
 
-    // Remove window listeners
+    // Remove window/document listeners
     window.removeEventListener('resize', this._boundResize);
     window.removeEventListener('focus', this._boundFocusGained);
     window.removeEventListener('blur', this._boundFocusLost);
+    this.disableScrolling();
 
     // Remove canvas listeners (only set when webgl !== 'manual')
     if (this.canvasLow && this._boundContextLost) {
       this.canvasLow.removeEventListener('webglcontextlost', this._boundContextLost, false);
       this.canvasLow.removeEventListener('webglcontextrestored', this._boundContextRestored, false);
     }
+
+    // Clear pending timers
+    if (this.scrollTimeoutId) {
+      clearTimeout(this.scrollTimeoutId);
+      this.scrollTimeoutId = null;
+    }
+    this.clearDrawTimeout();
+
+    // Clean up recorder (audio listeners, worker, timeouts)
+    this.recorder.cleanup();
 
     // Clean up all elements recursively (notifications, drawing objects, children)
     this.elements.cleanup();
