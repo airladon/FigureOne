@@ -46,7 +46,7 @@ export default class Symbol extends FigureElementPrimitive {
     }
     this._custom.options = symbolOptions;
     if (this._custom.options.draw === 'dynamic') {
-      this._custom.scale = new Point(1, 1);
+      this._custom.scale = new Point(1, 1, 1);
       this.internalSetTransformCallback = () => {
         const s = this.getScale();
         if (this._custom.scale.isNotEqualTo(s, 8)) {
@@ -109,7 +109,7 @@ export default class Symbol extends FigureElementPrimitive {
           drawType,
         };
         this.updateSymbol(pointsNew, widthNew, heightNew, drawType);
-        this._custom.scale = new Point(widthIn, heightIn);
+        this._custom.scale = new Point(widthIn, heightIn, 1);
         t.updateScale([widthIn, heightIn]);
       }
       t.updateTranslation([location.x, location.y]);
