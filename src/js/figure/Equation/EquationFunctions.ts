@@ -3280,6 +3280,7 @@ export class EquationFunctions {
   };
 
   fullLineHeight: EquationForm | null;
+  fullLineHeightPrimitive: FigureElementPrimitive | null;
   addElementFromKey: (key: string, params: Record<string, any>) => FigureElementPrimitive | null | undefined;
   getExistingOrAddSymbol: (keyOrObj: string | Record<string, any>) => FigureElementPrimitive | null | undefined;
 
@@ -3297,6 +3298,7 @@ export class EquationFunctions {
     this.elements = elements;
     this.phrases = {};
     this.fullLineHeight = null;
+    this.fullLineHeightPrimitive = null;
     this.addElementFromKey = addElementFromKey;
     this.getExistingOrAddSymbol = getExistingOrAddSymbol;
     this.phraseElements = {};

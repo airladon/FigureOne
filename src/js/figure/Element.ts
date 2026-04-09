@@ -1780,7 +1780,7 @@ class FigureElement {
   clear(_canvasIndex?: number) {
   }
 
-  cleanup() {
+  cleanup(deleteTexture: boolean = true) {
     this.stop();
     this.notifications.cleanup();
     this.animations.notifications.cleanup();
@@ -4026,9 +4026,9 @@ class FigureElementPrimitive extends FigureElement {
     this.drawingObject.init(webgl);
   }
 
-  override cleanup() {
-    super.cleanup();
-    this.drawingObject.cleanup();
+  override cleanup(deleteTexture: boolean = true) {
+    super.cleanup(deleteTexture);
+    this.drawingObject.cleanup(deleteTexture);
   }
 
   override _getStateProperties(options: { ignoreShown?: boolean }) {

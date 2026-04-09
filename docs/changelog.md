@@ -1,5 +1,10 @@
 # Releases
 
+## 1.1.1
+* Fix orphaned WebGL buffers from equation layout's internal text measurement element that was never cleaned up on destroy
+* Plumb `deleteTexture` parameter through the element cleanup chain so shared atlas textures are preserved during partial cleanup
+* Reorder GLText cleanup to unsubscribe from atlas notifications before deleting buffers
+
 ## 1.1.0
 * Fix WebGL buffer leak in `GLObject.fillBuffer()` — every GL primitive was leaking one GPU buffer per attribute on creation due to double `fillBuffer()` calls
 * Update Playwright to v1.59.1
