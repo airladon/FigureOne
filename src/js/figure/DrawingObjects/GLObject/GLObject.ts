@@ -569,17 +569,13 @@ class GLObject extends DrawingObject {
   resetTextureBuffer(deleteTexture: boolean = true) {
     const { texture, webgl, gl } = this;
     if (texture) {
-      if (deleteTexture && webgl.textures[texture.id].glTexture != null) {
-        gl.activeTexture(gl.TEXTURE0 + webgl.textures[texture.id].index);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-        // gl.deleteTexture(webgl.textures[texture.id].glTexture);
-        webgl.textures[texture.id].glTexture = null as any;
+      if (deleteTexture && webgl.textures[texture.id] != null) {
+        webgl.deleteTexture(texture.id);
       }
       if (texture.buffer != null) {
         gl.deleteBuffer(texture.buffer);
         texture.buffer = null;
       }
-      // texture.glTexture = null;
     }
   }
 

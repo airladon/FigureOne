@@ -94,6 +94,16 @@ class VertexText extends VertexGeneric {
   }
 
 
+  override cleanup(deleteTexture: boolean = true) {
+    // Free the 2D canvas backing store before parent deletes GL buffers
+    if (this.canvas) {
+      this.canvas.width = 0;
+      this.canvas.height = 0;
+    }
+    this.ctx = null;
+    super.cleanup(deleteTexture);
+  }
+
   // Text is positioned such that the text baseline will be at
   // vertex space y = 0.
   // The border will then cover the ascent and descent of the text.
