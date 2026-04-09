@@ -509,6 +509,9 @@ class GLObject extends DrawingObject {
     } else {
       throw new Error(`GLObject addAttribute usage needs to be FLOAT, BYTE, SHORT, UNSIGNED_BYTE or UNSIGNED_SHORT - received: "${typeIn}"`);
     }
+    if (this.attributes[name] != null && this.attributes[name].buffer != null) {
+      gl.deleteBuffer(this.attributes[name].buffer);
+    }
     this.attributes[name] = {
       // buffer: gl.createBuffer(),
       buffer: null,
