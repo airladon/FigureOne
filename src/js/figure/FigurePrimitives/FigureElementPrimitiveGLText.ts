@@ -455,11 +455,11 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     this.calcBorderAndBounds();
   }
 
-  override cleanup() {
-    super.cleanup();
+  override cleanup(deleteTexture: boolean = true) {
     if (this.atlas != null && this.atlasNotificationsID != null) {
       this.atlas.notifications.remove('updated', this.atlasNotificationsID);
     }
+    super.cleanup(deleteTexture);
   }
 
   calcTouchBorder() {

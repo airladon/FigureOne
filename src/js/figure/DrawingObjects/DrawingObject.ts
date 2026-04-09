@@ -199,7 +199,7 @@ class DrawingObject {
   // }
 
   /* eslint-disable class-methods-use-this */
-  cleanup() {}
+  cleanup(_deleteTexture: boolean = true) {}
 
   /* eslint-disable no-unused-vars, class-methods-use-this */
   change(

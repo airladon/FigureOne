@@ -1802,6 +1802,7 @@ export class Equation extends FigureElementCollection {
       new Point(0, 0),
     );
     this.eqn.functions.fullLineHeight = form;
+    this.eqn.functions.fullLineHeightPrimitive = fullLineHeightPrimitive;
 
     this.setFirstTransform(this.transform);
   }
@@ -2287,6 +2288,14 @@ export class Equation extends FigureElementCollection {
       this.eqn.forms[form].cleanup();
       delete this.eqn.forms[form];
     });
+    if (this.eqn.functions.fullLineHeightPrimitive != null) {
+      this.eqn.functions.fullLineHeightPrimitive.cleanup(false);
+      this.eqn.functions.fullLineHeightPrimitive = null;
+    }
+    if (this.eqn.functions.fullLineHeight != null) {
+      this.eqn.functions.fullLineHeight.cleanup();
+      this.eqn.functions.fullLineHeight = null;
+    }
   }
 
   /**
