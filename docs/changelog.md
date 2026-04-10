@@ -1,5 +1,11 @@
 # Releases
 
+## 1.1.3
+* Fix GL buffer leaks on repeated `addElements()` calls by cleaning up existing buffers before overwriting attribute entries and fullLineHeight primitives
+* Fix equation symbol type mismatch when a key maps to a different symbol type on re-add — properly remove the old element instead of reusing the wrong type
+* Null out `internalSetTransformCallback` and `setPointsFromDefinition` during cleanup to prevent stale closure references
+* Fix dynamic symbol initial scale so the first transform callback always triggers a redraw
+
 ## 1.1.2
 * Fix memory leaks in `Figure.destroy()`: store bound scroll listener so `disableScrolling()` actually removes it, add `Recorder.cleanup()` to detach audio/worker listeners and clear timers, remove HTMLObject DOM elements and free VertexText canvas backing store on cleanup, delegate texture deletion to `webgl.deleteTexture()` for complete GL resource release
 
