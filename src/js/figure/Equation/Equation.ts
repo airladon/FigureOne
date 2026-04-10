@@ -1671,7 +1671,25 @@ export class Equation extends FigureElementCollection {
     }
     const ending = cleanKey.match(/_[^_]*$/);
     if (ending != null) {
-      symbol = this.eqn.symbols.get(ending[0].replace(/_/, ''), options as any);
+      const truncatedKey = key.replace(/_[^_]*$/, '');
+      const symbolName = ending[0].replace(/_/, '');
+      // First check the full key (e.g. 'v1_1')
+      const existingFull = this.getElement(key);
+      if (existingFull != null) {
+        return existingFull;
+      }
+      // Then check the truncated key (e.g. 'v1'), but only return it
+      // if it was created from the same symbol type (same prototype)
+      const existingTruncated = this.getElement(truncatedKey);
+      symbol = this.eqn.symbols.get(symbolName, options as any);
+      if (
+        existingTruncated != null
+        && symbol != null
+        && Object.getPrototypeOf(existingTruncated) === Object.getPrototypeOf(symbol)
+      ) {
+        symbol.cleanup(false);
+        return existingTruncated;
+      }
       if (symbol != null) {
         if (symbol.color[3] > 0.01 && options.color == null) {
           symbol.setColor(this.color);
@@ -1679,7 +1697,12 @@ export class Equation extends FigureElementCollection {
         if (options.mods != null) {
           symbol.setProperties(options.mods);
         }
-        this.add(key.replace(/_[^_]*$/, ''), symbol);
+        // Remove any existing element under the truncated key so its GL
+        // buffers are freed and drawOrder doesn't accumulate duplicates.
+        if (existingTruncated != null) {
+          this.remove(truncatedKey);
+        }
+        this.add(truncatedKey, symbol);
         return symbol;
       }
     }
@@ -1792,6 +1815,17 @@ export class Equation extends FigureElementCollection {
       }
     });
 
+    // Clean up any existing fullLineHeightPrimitive from a prior
+    // addElements() call, otherwise its GL buffers are orphaned when the
+    // reference is overwritten.
+    if (this.eqn.functions.fullLineHeightPrimitive != null) {
+      this.eqn.functions.fullLineHeightPrimitive.cleanup(false);
+      this.eqn.functions.fullLineHeightPrimitive = null;
+    }
+    if (this.eqn.functions.fullLineHeight != null) {
+      this.eqn.functions.fullLineHeight.cleanup();
+      this.eqn.functions.fullLineHeight = null;
+    }
     const fullLineHeightPrimitive = this.makeTextElem({ text: 'gh' });
     const form = this.createForm({ elem: fullLineHeightPrimitive } as any);
     form.content = [this.eqn.functions.contentToElement(fullLineHeightPrimitive)];

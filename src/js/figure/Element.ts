@@ -1784,6 +1784,7 @@ class FigureElement {
     this.stop();
     this.notifications.cleanup();
     this.animations.notifications.cleanup();
+    this.internalSetTransformCallback = null;
     this.figure = null as any;
     this.parent = null;
     // this.textureAtlases = {};
@@ -4028,6 +4029,7 @@ class FigureElementPrimitive extends FigureElement {
 
   override cleanup(deleteTexture: boolean = true) {
     super.cleanup(deleteTexture);
+    this.setPointsFromDefinition = null;
     this.drawingObject.cleanup(deleteTexture);
   }
 

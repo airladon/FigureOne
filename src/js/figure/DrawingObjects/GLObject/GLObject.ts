@@ -509,6 +509,11 @@ class GLObject extends DrawingObject {
     } else {
       throw new Error(`GLObject addAttribute usage needs to be FLOAT, BYTE, SHORT, UNSIGNED_BYTE or UNSIGNED_SHORT - received: "${typeIn}"`);
     }
+    // Delete any existing GL buffer before overwriting the attribute entry,
+    // otherwise the old buffer handle is lost and leaked on the GPU.
+    if (this.attributes[name] != null && this.attributes[name].buffer != null) {
+      gl.deleteBuffer(this.attributes[name].buffer);
+    }
     this.attributes[name] = {
       // buffer: gl.createBuffer(),
       buffer: null,
