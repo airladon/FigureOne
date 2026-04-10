@@ -46,10 +46,10 @@ export default class Symbol extends FigureElementPrimitive {
     }
     this._custom.options = symbolOptions;
     if (this._custom.options.draw === 'dynamic') {
-      this._custom.scale = new Point(1, 1, 1);
+      this._custom.scale = null;
       this.internalSetTransformCallback = () => {
         const s = this.getScale();
-        if (this._custom.scale.isNotEqualTo(s, 8)) {
+        if (this._custom.scale == null || this._custom.scale.isNotEqualTo(s, 8)) {
           const [
             pointsNew, widthNew, heightNew, drawType,
           ] = this.getPoints(this._custom.options, s.x, s.y);
