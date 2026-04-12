@@ -455,6 +455,7 @@ class FigureFont {
       modifiers: this.modifiers,
       underline: this.underline,
       atlasColor: this.atlasColor,
+      atlasId: this.atlasId,
       atlasSize: this.atlasSize,
       render: this.render,
       letterSpacing: this.letterSpacing,
