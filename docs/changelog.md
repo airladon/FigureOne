@@ -1,5 +1,8 @@
 # Releases
 
+## 1.1.4
+* Fix `atlasId` not preserved through `FigureFont.definition()`, causing fonts reconstructed from a definition (e.g. equation text elements) to each create a separate WebGL atlas texture instead of sharing one
+
 ## 1.1.3
 * Fix GL buffer leaks on repeated `addElements()` calls by cleaning up existing buffers before overwriting attribute entries and fullLineHeight primitives
 * Fix equation symbol type mismatch when a key maps to a different symbol type on re-add — properly remove the old element instead of reusing the wrong type
