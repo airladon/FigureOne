@@ -188,6 +188,7 @@ export default class FigurePrimitives {
   defaultColor: Array<number>;
   defaultDimColor: Array<number>;
   defaultFont: OBJ_Font;
+  defaultTextStyle: 'italic' | 'normal';
   defaultLineWidth: number;
   defaultLength: number;
   timeKeeper: TimeKeeper;
@@ -209,6 +210,7 @@ export default class FigurePrimitives {
     defaultColor: Array<number>,
     defaultDimColor: Array<number>,
     defaultFont: OBJ_Font,
+    defaultTextStyle: 'italic' | 'normal',
     defaultLineWidth: number,
     defaultLength: number,
     timeKeeper: TimeKeeper,
@@ -236,6 +238,7 @@ export default class FigurePrimitives {
     this.defaultColor = defaultColor;
     this.defaultDimColor = defaultDimColor;
     this.defaultFont = defaultFont;
+    this.defaultTextStyle = defaultTextStyle;
     this.defaultLineWidth = defaultLineWidth;
     this.defaultLength = defaultLength;
     this.timeKeeper = timeKeeper;

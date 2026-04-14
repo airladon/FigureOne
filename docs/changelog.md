@@ -1,5 +1,8 @@
 # Releases
 
+## 1.1.5
+* Add configurable `textStyle` option to Figure, FigurePrimitives, and Equation, allowing the default equation text style to be set to `'normal'` instead of the default `'italic'`
+
 ## 1.1.4
 * Fix `atlasId` not preserved through `FigureFont.definition()`, causing fonts reconstructed from a definition (e.g. equation text elements) to each create a separate WebGL atlas texture instead of sharing one
 
