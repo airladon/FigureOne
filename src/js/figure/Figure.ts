@@ -115,6 +115,7 @@ export type OBJ_Figure = {
   scene?: OBJ_Scene | TypeParsableRect;
   color?: TypeColor;
   font?: OBJ_Font;
+  textStyle?: 'italic' | 'normal';
   lineWidth?: number;
   length?: number;
   backgroundColor?: number;
@@ -309,6 +310,7 @@ class Figure {
   defaultColor!: Array<number>;
   defaultDimColor!: Array<number>;
   defaultFont!: OBJ_Font;
+  defaultTextStyle!: 'italic' | 'normal';
   defaultLineWidth!: number;
   defaultLength!: number;
 
@@ -448,6 +450,7 @@ class Figure {
     }
     this.defaultDimColor = optionsToUse.dimColor;
     this.defaultFont = optionsToUse.font;
+    this.defaultTextStyle = optionsToUse.textStyle || 'italic';
     this.htmlId = htmlId;
     this.animationFinishedCallback = null;
     if (FIGURE1DEBUG) {
@@ -1420,6 +1423,7 @@ class Figure {
       this.defaultColor,
       this.defaultDimColor,
       this.defaultFont,
+      this.defaultTextStyle,
       this.defaultLineWidth,
       this.defaultLength,
       this.timeKeeper,

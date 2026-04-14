@@ -735,6 +735,7 @@ export type EQN_Equation = {
   dimColor?: TypeColor;
   font?: OBJ_Font;
   textFont?: OBJ_Font;
+  textStyle?: 'italic' | 'normal';
   scale?: number;
   elements?: EQN_EquationElements;
   formDefaults: EQN_FormDefaults;
@@ -1129,15 +1130,16 @@ export class Equation extends FigureElementCollection {
     } else {
       optionsToUse.font = new FigureFont(defaultFont as any);
     }
+    const defaultTextStyle = options.textStyle || shapes.defaultTextStyle || 'italic';
     if (options.textFont instanceof FigureFont) {
       optionsToUse.textFont = options.textFont;
     } else if (options.textFont != null) {
       optionsToUse.textFont = new FigureFont(
-        joinObjects<any>({}, optionsToUse.font, { style: 'italic' }, options.textFont),
+        joinObjects<any>({}, optionsToUse.font, { style: defaultTextStyle }, options.textFont),
       );
     } else {
       optionsToUse.textFont = new FigureFont(
-        joinObjects<any>({}, optionsToUse.font, { style: 'italic' }),
+        joinObjects<any>({}, optionsToUse.font, { style: defaultTextStyle }),
       );
     }
     if (optionsToUse.transform != null) {
