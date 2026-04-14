@@ -148,6 +148,8 @@ Especially in larger, more complicated equations, doing inline form definition o
 
 In the example code then, we have several elements including `f`, `x`, `dx`, `a` and `b` that are defined in the form itself.
 
+> **Note:** Beyond string-based inline definitions, any element type can be created directly in a form using the `make` property — for example `{ make: 'text', name: 'B', text: { text: 'B' }, style: 'normal' }` or `{ make: 'polygon', name: 'p', radius: 0.05, sides: 4 }`. This uses the same `make` values as `figure.add()`. See the [Equations API documentation](https://airladon.github.io/FigureOne/api/#equations) for details.
+
 ### Equation Layout Functions
 
 An equation form is a series of equation elements that are laid out sequentially in an array.

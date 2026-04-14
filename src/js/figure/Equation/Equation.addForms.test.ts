@@ -470,4 +470,32 @@ describe('Figure Equations From Object', () => {
     expect(eqn._a.getPosition().round(3)).toEqual(new Point(-0.18, 0.01));
     expect(eqn._a.getScale().round(3)).toEqual(new Point(1.2, 1.2, 1));
   });
+  test('Inline make element with name', () => {
+    eqn.addForms({
+      0: ['a', { make: 'text', name: 'inlineText', text: { text: 'X' } }, 'b'],
+    });
+    expect(eqn.getElement('inlineText')).not.toBe(null);
+    const { content } = forms['0'].content[0];
+    expect(content[0].content).toBe(eqn._a);
+    expect(content[1].content.getText()).toBe('X');
+    expect(content[2].content).toBe(eqn._b);
+  });
+  test('Inline make element without name', () => {
+    eqn.addForms({
+      0: ['a', { make: 'text', text: { text: 'Y' } }, 'b'],
+    });
+    const { content } = forms['0'].content[0];
+    expect(content[0].content).toBe(eqn._a);
+    expect(content[1].content.getText()).toBe('Y');
+    expect(content[2].content).toBe(eqn._b);
+  });
+  test('Inline make element reuses existing element', () => {
+    eqn.addForms({
+      0: ['a', { make: 'text', name: 'reused', text: { text: 'R' } }],
+      1: ['b', { make: 'text', name: 'reused', text: { text: 'R' } }],
+    });
+    const content0 = forms['0'].content[0].content;
+    const content1 = forms['1'].content[0].content;
+    expect(content0[1].content).toBe(content1[1].content);
+  });
 });

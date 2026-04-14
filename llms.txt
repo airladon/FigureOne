@@ -223,6 +223,13 @@ Elements not defined in `elements` are auto-created from form strings. Use `_` p
 
 Duplicate elements: append `_N` to create copies — `'b_1'`, `'b_2'` display as `b`.
 
+Any element type can be created inline in forms using `make`:
+```js
+{ make: 'text', name: 'B', text: { text: 'B' }, style: 'normal' }
+{ make: 'polygon', name: 'p', radius: 0.05, sides: 4 }
+```
+`name` is optional (auto-generated if omitted). Named elements are reused if already created.
+
 ### Layout Functions
 
 | Function | Syntax | Description |

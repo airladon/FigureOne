@@ -1,7 +1,7 @@
 import {
   Point, Transform, isParsablePoint, getPoint, getTransform,
 } from '../../tools/g2';
-import { joinObjects, joinObjectsWithOptions } from '../../tools/tools';
+import { joinObjects, joinObjectsWithOptions, generateUniqueId } from '../../tools/tools';
 // import { RGBToArray } from '../../tools/color';
 import {
   FigureElementPrimitive, FigureElementCollection, FigureElement,
@@ -1204,6 +1204,7 @@ export class Equation extends FigureElementCollection {
         this.elements as any,
         this.addElementFromKey.bind(this),
         this.getExistingOrAddSymbol.bind(this),
+        this.makeInlineElement.bind(this),
       ),
       symbols: new EquationSymbols(this.shapes as any, this.color),
       font: optionsToUse.font,
@@ -1739,6 +1740,28 @@ export class Equation extends FigureElementCollection {
   //   this.add(key, element);
   //   return element;
   // }
+
+  makeInlineElement(options: Record<string, any>) {
+    const name = options.name || generateUniqueId('eqn_');
+    const existing = this.getElement(name);
+    if (existing != null) {
+      return existing;
+    }
+    const { make } = options;
+    const method = this.shapes[make];
+    if (typeof method !== 'function') {
+      return null;
+    }
+    const element = method.call(this.shapes, options);
+    if (element == null) {
+      return null;
+    }
+    if (options.mods != null) {
+      element.setProperties(options.mods);
+    }
+    this.add(name, element);
+    return element;
+  }
 
   makeSymbolElem(
     options: any,
