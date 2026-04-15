@@ -107,6 +107,12 @@ export function getFigureElement(
  *   },
  * });
  *
+ * figure.getElement('eqn').animations.new()
+ *   .goToForm({ target: 'form2', animate: 'move', delay: 1 })
+ *   .goToForm({ target: 'form3', animate: 'move', delay: 1 })
+ *   .goToForm({ target: 'form4', animate: 'move', delay: 1 })
+ *   .start();
+ *
  * @example
  * // Inline element creation in forms
  * figure.add({
@@ -118,12 +124,6 @@ export function getFigureElement(
  *     form2: ['a', { make: 'polygon', name: 'p', radius: 0.05, sides: 4 }],
  *   },
  * });
- *
- * figure.getElement('eqn').animations.new()
- *   .goToForm({ target: 'form2', animate: 'move', delay: 1 })
- *   .goToForm({ target: 'form3', animate: 'move', delay: 1 })
- *   .goToForm({ target: 'form4', animate: 'move', delay: 1 })
- *   .start();
  * @group Equations
  */
 export type TypeEquationPhrase =
