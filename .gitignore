@@ -16,3 +16,5 @@ src/tests/api-examples/index.js
 scratch/temp
 scratch/temp1
 .DS_Store
+docs/api-typedoc/apiassets/apiassets/
+docs/api-typedoc/tutorials/tutorials/

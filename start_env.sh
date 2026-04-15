@@ -43,6 +43,8 @@ docker run -it --rm \
   -v $PROJECT_PATH/docs:/opt/app/docs \
   -v $PROJECT_PATH/reports:/opt/app/reports \
   -v $PROJECT_PATH/jsdoc-conf.json:/opt/app/jsdoc-conf.json \
+  -v $PROJECT_PATH/typedoc.json:/opt/app/typedoc.json \
+  -v $PROJECT_PATH/typedoc-strip-prefix.cjs:/opt/app/typedoc-strip-prefix.cjs \
   -v $PROJECT_PATH/readme.md:/opt/app/readme.md \
   -v $PROJECT_PATH/scratch:/opt/app/scratch \
   -v $PROJECT_PATH/untracked:/opt/app/untracked \
