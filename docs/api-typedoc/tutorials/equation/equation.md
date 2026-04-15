@@ -318,6 +318,24 @@ eqn.goToForm({
 
 ![](./reuse_symbol.gif)
 
+##### Inline element creation with `make`
+
+In addition to string-based inline definitions, elements of any type can be created directly in a form using the `make` property. This uses the same `make` values as {@link Figure.add}, and the element is created and registered automatically.
+
+```javascript
+figure.add({
+  make: 'equation',
+  forms: {
+    // Create a text element with custom styling inline
+    1: ['a', '_ = ', { make: 'text', name: 'B', text: { text: 'B' }, style: 'normal' }],
+    // Create any element type, such as a polygon
+    2: ['a', '_ = ', { make: 'polygon', name: 'p', radius: 0.05, sides: 4, color: [0, 0, 1, 1] }],
+  },
+});
+```
+
+If `name` is provided, the element can be referenced in other forms by that name. If `name` is omitted, a unique name is auto-generated. If a named element already exists, it is reused rather than recreated.
+
 ##### Function Definitions
 
 Function definitions can either be array definitions (an equation phrase) or object definitions. Array definitions are useful in simple definitions with minimal layout customizations. Object definitions are more readable when many options are required to customize a layout, or the input to the functions are more complicated equation phrases.
