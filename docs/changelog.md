@@ -1,5 +1,9 @@
 # Releases
 
+## 1.1.6
+* Add inline element creation in equation forms using `{ make, name, ... }` syntax, supporting any element type (text, polygon, etc.) directly in form definitions
+* Fix TypeDoc generation in Docker by adding missing `typedoc.json` and `typedoc-strip-prefix.cjs` volume mounts
+
 ## 1.1.5
 * Add configurable `textStyle` option to Figure, FigurePrimitives, and Equation, allowing the default equation text style to be set to `'normal'` instead of the default `'italic'`
 
