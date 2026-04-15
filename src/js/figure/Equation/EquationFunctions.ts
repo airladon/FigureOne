@@ -82,6 +82,9 @@ export function getFigureElement(
  *  - `{ prodOf: `{@link EQN_ProdOf} `}`
  *  - `{ topStrike: `{@link EQN_StrikeComment} `}`
  *  - `{ bottomStrike: `{@link EQN_StrikeComment} `}`
+ *  - `{ make: string, name?: string, ... }` (inline element — creates any
+ *    element type directly in a form using the same `make` values as
+ *    {@link Figure.add}. If `name` is omitted, one is auto-generated.)
  *  - `Array<TypeEquationPhrase>`
  *
  *
@@ -109,6 +112,18 @@ export function getFigureElement(
  *   .goToForm({ target: 'form3', animate: 'move', delay: 1 })
  *   .goToForm({ target: 'form4', animate: 'move', delay: 1 })
  *   .start();
+ *
+ * @example
+ * // Inline element creation in forms
+ * figure.add({
+ *   make: 'equation',
+ *   forms: {
+ *     // Create a text element inline with a name
+ *     form1: ['a', { make: 'text', name: 'B', text: { text: 'B' } }, 'c'],
+ *     // Create any element type inline (e.g., polygon)
+ *     form2: ['a', { make: 'polygon', name: 'p', radius: 0.05, sides: 4 }],
+ *   },
+ * });
  * @group Equations
  */
 export type TypeEquationPhrase =
@@ -140,6 +155,7 @@ export type TypeEquationPhrase =
   | { prodOf: EQN_ProdOf }
   | { topStrike: EQN_StrikeComment }
   | { bottomStrike: EQN_StrikeComment }
+  | { make: string, name?: string, [key: string]: any }
   | Array<TypeEquationPhrase>
   | FigureElementPrimitive
   | FigureElementCollection
@@ -3283,6 +3299,7 @@ export class EquationFunctions {
   fullLineHeightPrimitive: FigureElementPrimitive | null;
   addElementFromKey: (key: string, params: Record<string, any>) => FigureElementPrimitive | null | undefined;
   getExistingOrAddSymbol: (keyOrObj: string | Record<string, any>) => FigureElementPrimitive | null | undefined;
+  makeElement: (options: Record<string, any>) => FigureElementPrimitive | FigureElementCollection | null;
 
   // [methodName: string]: (TypeEquationPhrase) => {};
 
@@ -3294,6 +3311,7 @@ export class EquationFunctions {
     elements: { [name: string]: FigureElementCollection | FigureElementPrimitive },
     addElementFromKey: (key: string) => FigureElementPrimitive | null | undefined,
     getExistingOrAddSymbol: (keyOrObj: string | Record<string, any>) => FigureElementPrimitive | null | undefined,
+    makeElement: (options: Record<string, any>) => FigureElementPrimitive | FigureElementCollection | null,
   ) {
     this.elements = elements;
     this.phrases = {};
@@ -3301,6 +3319,7 @@ export class EquationFunctions {
     this.fullLineHeightPrimitive = null;
     this.addElementFromKey = addElementFromKey;
     this.getExistingOrAddSymbol = getExistingOrAddSymbol;
+    this.makeElement = makeElement;
     this.phraseElements = {};
   }
 
@@ -3377,6 +3396,13 @@ export class EquationFunctions {
       return elementArray;
     }
     // Otherwise its an object
+    // If it has a 'make' property, create the element inline
+    if ((content as any).make != null) {
+      const elem = this.makeElement(content as Record<string, any>);
+      if (elem != null) {
+        return new Element(elem as any);
+      }
+    }
     const [method, params] = Object.entries(content)[0];
     // if (this[method] != null) {
     // return this[method](params);

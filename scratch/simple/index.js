@@ -116,6 +116,7 @@ figure.add({
       'equals', 'x',
     ],
     3: ['5', 'equals', 'x'],
+    4: ['6', {make: 'text', text: 'ABC', name: 'N'}, '7']
   },
   touch: { onClick: e => e.nextForm({ dissolveInTime: 0.5 }) },
 });

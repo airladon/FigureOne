@@ -2315,6 +2315,20 @@ Symbols can be created inline in forms without pre-declaring in elements:
 { frac: ['a', 'v1_vinculum', { frac: ['c', 'v2_vinculum', 'd'] }] }
 ```
 
+### Inline Element Creation with `make`
+Any element type can be created inline in forms using `make` (same values as `figure.add`):
+```js
+forms: {
+  // Text element with custom styling
+  1: ['a', { make: 'text', name: 'B', text: { text: 'B' }, style: 'normal' }],
+  // Any primitive (polygon, line, rectangle, etc.)
+  2: ['a', { make: 'polygon', name: 'p', radius: 0.05, sides: 4 }],
+  // name is optional — auto-generated if omitted
+  3: ['a', { make: 'text', text: { text: 'X' } }],
+}
+```
+Named elements are reused across forms if the same name appears again.
+
 ### Coordinate Spaces
 - `'draw'` — Drawing canvas coordinates (element's own draw space)
 - `'local'` — Element's local space (after element's transform)
