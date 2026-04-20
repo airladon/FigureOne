@@ -1,5 +1,10 @@
 # Releases
 
+## 1.2.0
+* Tolerate WebGL context unavailability: `Figure` construction no longer throws when the browser cannot provide a context, and adding elements / drawing during runtime context loss is safe
+* Add `onWebGLUnavailable` Figure option, fired once during construction if no context is available
+* Add `figure.webglAvailable` getter and document the existing `contextLost` / `contextRestored` notifications for runtime context transitions
+
 ## 1.1.6
 * Add inline element creation in equation forms using `{ make, name, ... }` syntax, supporting any element type (text, polygon, etc.) directly in form definitions
 * Fix TypeDoc generation in Docker by adding missing `typedoc.json` and `typedoc-strip-prefix.cjs` volume mounts
