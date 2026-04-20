@@ -463,16 +463,16 @@ describe('WebGLInstance with null gl (glMock fallback)', () => {
   });
 
   test('constructor does not throw when getContext returns null', () => {
-    expect(() => new WebGLInstance(nullCanvas() as any, [1, 1, 1, 1])).not.toThrow();
+    expect(() => new WebGLInstance(nullCanvas(), [1, 1, 1, 1])).not.toThrow();
   });
 
   test('webglAvailable is false when getContext returns null', () => {
-    const instance = new WebGLInstance(nullCanvas() as any, [1, 1, 1, 1]);
+    const instance = new WebGLInstance(nullCanvas(), [1, 1, 1, 1]);
     expect(instance.webglAvailable).toBe(false);
   });
 
   test('init still creates a targetTexture under the mock', () => {
-    const instance = new WebGLInstance(nullCanvas() as any, [1, 1, 1, 1]);
+    const instance = new WebGLInstance(nullCanvas(), [1, 1, 1, 1]);
     expect(instance.targetTexture).not.toBeNull();
   });
 });
@@ -480,7 +480,7 @@ describe('WebGLInstance with null gl (glMock fallback)', () => {
 describe('Figure onWebGLUnavailable callback', () => {
   let origCreateElement;
 
-  const setupDom = (webglReturns: 'gl' | 'null', gl: any) => {
+  const setupDom = (webglReturns, gl) => {
     document.body.innerHTML =
       '<div id="c">'
       + '  <canvas class="figureone__gl" id="id_figureone__gl__low">'
@@ -491,7 +491,7 @@ describe('Figure onWebGLUnavailable callback', () => {
       + '  </div>'
       + '</div>';
 
-    const make2DStub = (canvas: any) => ({
+    const make2DStub = canvas => ({
       canvas,
       measureText: () => ({ width: 10 }),
       fillText: () => {},
@@ -519,9 +519,9 @@ describe('Figure onWebGLUnavailable callback', () => {
       return el;
     };
 
-    document.querySelectorAll('canvas').forEach((canvas: any) => {
+    document.querySelectorAll('canvas').forEach((canvas) => {
       // eslint-disable-next-line no-param-reassign
-      canvas.getContext = (type: string) => {
+      canvas.getContext = (type) => {
         if (type === '2d') return make2DStub(canvas);
         return webglReturns === 'gl' ? gl : null;
       };
