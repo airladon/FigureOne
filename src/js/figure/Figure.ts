@@ -107,6 +107,11 @@ export type OBJ_FigureForElement = {
   * @property {boolean} [antialias] enable WebGL anti-aliasing (`true`)
   * @property {number} [atlasScale] scale factor for GL text atlas texture
   * resolution relative to 1:1 pixel mapping (`2`)
+ * @property {() => void} [onWebGLUnavailable] callback fired once during
+ * construction if the browser cannot provide a WebGL context (e.g. context
+ * limit reached on resource-constrained hardware). The figure will still be
+ * created but nothing will render. For runtime context loss, subscribe to
+ * the `contextLost` / `contextRestored` notifications instead.
  * @interface
  * @group Figure
  */
@@ -121,6 +126,7 @@ export type OBJ_Figure = {
   backgroundColor?: number;
   antialias?: boolean;
   atlasScale?: number;
+  onWebGLUnavailable?: () => void;
 };
 
 
@@ -194,6 +200,8 @@ export type OBJ_Figure = {
  * - `beforeDraw`: published before a frame is drawn
  * - `afterDraw`: published after a frame is drawn
  * - `resize`: published after a resize event, but before frame drawing
+ * - `contextLost`: published when the browser removes the WebGL context
+ * - `contextRestored`: published when the browser returns the WebGL context
  *
  * @class
  * @param {OBJ_Figure} options
@@ -204,6 +212,10 @@ export type OBJ_Figure = {
  * @property {NotificationManager} notifications notification manager for
  * element
  * @property {FontManager} fonts watches and reports on font availability
+ * @property {boolean} webglAvailable `true` when a live WebGL context is
+ * attached to the figure. `false` if the browser could not provide a
+ * context at construction time or if the context has since been lost (see
+ * the `contextLost` / `contextRestored` notifications)
  *
  * @example
  * // Simple html and javascript example to create a figure, and add a
@@ -374,6 +386,15 @@ class Figure {
 
   scene!: Scene;
   fonts!: FontManager;
+
+  /**
+   * `true` when a live WebGL context is attached to the figure. `false` if
+   * the browser could not provide a context at construction time, or if the
+   * context has since been lost. Transitions back to `true` when the
+   * context is restored. Subscribe to the `contextLost` and
+   * `contextRestored` notifications to react to runtime transitions.
+   */
+  get webglAvailable(): boolean { return this.webglLow.webglAvailable; }
 
   animations!: AnimationManager;
 
@@ -552,6 +573,9 @@ class Figure {
           optionsToUse.atlasScale,
         );
         this.webglLow = webglLow;
+        if (!webglLow.webglAvailable && optionsToUse.onWebGLUnavailable) {
+          optionsToUse.onWebGLUnavailable();
+        }
         this._boundContextLost = this.contextLost.bind(this) as EventListener;
         this._boundContextRestored = this.contextRestored.bind(this) as EventListener;
         this.canvasLow.addEventListener(
@@ -1485,6 +1509,7 @@ class Figure {
     event.preventDefault();
     this.lostContextMessage.innerHTML = '<div class="figureone__lostcontext_message"><p>Browser removed WebGL context from FigureOne and has yet to return it.</p> <p>Reload page to restore.</p></div>';
     this.lostContextMessage.style.display = 'table';
+    this.webglLow.webglAvailable = false;
     this.elements.contextLost();
     this.webglLow.contextLost();
     this.notifications.publish('contextLost');
@@ -1496,6 +1521,7 @@ class Figure {
     this.webglLow.init(this.webglLow.gl);
     this.webglLow.recreateAtlases();
     this.init(this.webglLow);
+    this.webglLow.webglAvailable = true;
     this.lostContextMessage.style.display = 'none';
     this.notifications.publish('contextRestored');
     Console('FigureOne context restored!');

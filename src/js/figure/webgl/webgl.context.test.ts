@@ -166,6 +166,12 @@ describe('WebGL context loss handling', () => {
     document.createElement = origCreateElement;
   });
 
+  describe('webglAvailable flag', () => {
+    test('is true when a real gl context is provided', () => {
+      expect(webgl.webglAvailable).toBe(true);
+    });
+  });
+
   describe('getProgram with working context', () => {
     test('creates a program and returns a valid index', () => {
       const index = webgl.getProgram('simple', 'simple');
@@ -406,5 +412,155 @@ describe('Figure atlas integration', () => {
     ]);
 
     expect(Object.keys(figure.webglLow.atlases)).toHaveLength(2);
+  });
+});
+
+describe('WebGLInstance with null gl (glMock fallback)', () => {
+  let origCreateElement;
+
+  beforeEach(() => {
+    FontManager.instance = undefined;
+    origCreateElement = document.createElement.bind(document);
+    document.createElement = (name) => {
+      const el = origCreateElement(name);
+      if (name === 'canvas') {
+        el.getContext = (type) => {
+          if (type === '2d') {
+            return {
+              canvas: el,
+              measureText: () => ({ width: 10 }),
+              fillText: () => {},
+              strokeText: () => {},
+              clearRect: () => {},
+              fillRect: () => {},
+              beginPath: () => {},
+              rect: () => {},
+              stroke: () => {},
+              fillStyle: '',
+              strokeStyle: '',
+              font: '',
+              lineWidth: 1,
+            };
+          }
+          return null;
+        };
+      }
+      return el;
+    };
+  });
+
+  afterEach(() => {
+    document.createElement = origCreateElement;
+  });
+
+  const nullCanvas = () => ({
+    width: 100,
+    clientWidth: 100,
+    height: 100,
+    clientHeight: 100,
+    style: { top: 0, visibility: 'visible' },
+    getContext: () => null,
+  });
+
+  test('constructor does not throw when getContext returns null', () => {
+    expect(() => new WebGLInstance(nullCanvas() as any, [1, 1, 1, 1])).not.toThrow();
+  });
+
+  test('webglAvailable is false when getContext returns null', () => {
+    const instance = new WebGLInstance(nullCanvas() as any, [1, 1, 1, 1]);
+    expect(instance.webglAvailable).toBe(false);
+  });
+
+  test('init still creates a targetTexture under the mock', () => {
+    const instance = new WebGLInstance(nullCanvas() as any, [1, 1, 1, 1]);
+    expect(instance.targetTexture).not.toBeNull();
+  });
+});
+
+describe('Figure onWebGLUnavailable callback', () => {
+  let origCreateElement;
+
+  const setupDom = (webglReturns: 'gl' | 'null', gl: any) => {
+    document.body.innerHTML =
+      '<div id="c">'
+      + '  <canvas class="figureone__gl" id="id_figureone__gl__low">'
+      + '  </canvas>'
+      + '  <canvas class="figureone__text" id="id_figureone__text__low">'
+      + '  </canvas>'
+      + '  <div class="figureone__html">'
+      + '  </div>'
+      + '</div>';
+
+    const make2DStub = (canvas: any) => ({
+      canvas,
+      measureText: () => ({ width: 10 }),
+      fillText: () => {},
+      strokeText: () => {},
+      clearRect: () => {},
+      fillRect: () => {},
+      beginPath: () => {},
+      rect: () => {},
+      stroke: () => {},
+      fillStyle: '',
+      strokeStyle: '',
+      font: '',
+      lineWidth: 1,
+    });
+
+    origCreateElement = document.createElement.bind(document);
+    document.createElement = (name) => {
+      const el = origCreateElement(name);
+      if (name === 'canvas') {
+        el.getContext = (type) => {
+          if (type === '2d') return make2DStub(el);
+          return webglReturns === 'gl' ? gl : null;
+        };
+      }
+      return el;
+    };
+
+    document.querySelectorAll('canvas').forEach((canvas: any) => {
+      // eslint-disable-next-line no-param-reassign
+      canvas.getContext = (type: string) => {
+        if (type === '2d') return make2DStub(canvas);
+        return webglReturns === 'gl' ? gl : null;
+      };
+    });
+  };
+
+  beforeEach(() => {
+    FontManager.instance = undefined;
+  });
+
+  afterEach(() => {
+    document.createElement = origCreateElement;
+  });
+
+  test('fires once when getContext returns null', () => {
+    setupDom('null', null);
+    const onWebGLUnavailable = jest.fn();
+    // eslint-disable-next-line no-new
+    new Figure({ htmlId: 'c', color: [1, 0, 0, 1], onWebGLUnavailable });
+    expect(onWebGLUnavailable).toHaveBeenCalledTimes(1);
+  });
+
+  test('does not fire when a real gl context is available', () => {
+    setupDom('gl', createMockGL());
+    const onWebGLUnavailable = jest.fn();
+    // eslint-disable-next-line no-new
+    new Figure({ htmlId: 'c', color: [1, 0, 0, 1], onWebGLUnavailable });
+    expect(onWebGLUnavailable).not.toHaveBeenCalled();
+  });
+
+  test('figure.webglAvailable is false when getContext returns null', () => {
+    setupDom('null', null);
+    const figure = new Figure({ htmlId: 'c', color: [1, 0, 0, 1] });
+    expect(figure.webglAvailable).toBe(false);
+  });
+
+  test('figure.webglAvailable is true when gl is available', () => {
+    setupDom('gl', createMockGL());
+    const figure = new Figure({ htmlId: 'c', color: [1, 0, 0, 1] });
+    expect(figure.webglAvailable).toBe(true);
   });
 });

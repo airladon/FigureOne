@@ -11,6 +11,7 @@ import type { TypeColor } from '../../tools/types';
 import type { OBJ_Atlas } from './Atlas';
 
 const glMock = {
+  // Constants
   TRIANGLES: 1,
   TRIANGLE_STRIP: 2,
   TRIANGLE_FAN: 3,
@@ -21,8 +22,10 @@ const glMock = {
   FRAGMENT_SHADER: 1,
   SRC_ALPHA: 1,
   ONE_MINUS_SRC_ALPHA: 1,
+  ONE: 1,
   BLEND: 1,
   COLOR_BUFFER_BIT: 1,
+  DEPTH_TEST: 1,
   TEXTURE_2D: 1,
   RGBA: 1,
   UNSIGNED_BYTE: 1,
@@ -35,6 +38,16 @@ const glMock = {
   STATIC_DRAW: 1,
   FLOAT: 1,
   UNPACK_PREMULTIPLY_ALPHA_WEBGL: 1,
+  UNPACK_FLIP_Y_WEBGL: 1,
+  REPEAT: 1,
+  TEXTURE0: 1,
+  RENDERBUFFER: 1,
+  FRAMEBUFFER: 1,
+  COLOR_ATTACHMENT0: 1,
+  DEPTH_ATTACHMENT: 1,
+  DEPTH_COMPONENT16: 1,
+
+  // Methods
   createBuffer: () => {},
   bindBuffer: () => {},
   bufferData: () => {},
@@ -49,7 +62,7 @@ const glMock = {
   drawArrays: () => {},
   clearColor: () => {},
   clear: () => {},
-  createTexture: () => {},
+  createTexture: () => null,
   activeTexture: () => {},
   bindTexture: () => {},
   pixelStorei: () => {},
@@ -75,6 +88,23 @@ const glMock = {
   deleteShader: () => {},
   useProgram: () => {},
   viewport: () => {},
+  generateMipmap: () => {},
+  deleteTexture: () => {},
+  getProgramInfoLog: () => '',
+
+  // Framebuffer/renderbuffer methods (used by TargetTexture)
+  createRenderbuffer: () => null,
+  bindRenderbuffer: () => {},
+  renderbufferStorage: () => {},
+  createFramebuffer: () => null,
+  bindFramebuffer: () => {},
+  framebufferTexture2D: () => {},
+  framebufferRenderbuffer: () => {},
+  deleteRenderbuffer: () => {},
+  deleteFramebuffer: () => {},
+
+  drawingBufferWidth: 100,
+  drawingBufferHeight: 100,
   canvas: ({
     toDataURL: () => '',
     width: 100,
@@ -557,6 +587,7 @@ class WebGLInstance {
   }
 
   atlasScale: number;
+  webglAvailable: boolean;
 
   constructor(
   canvas: HTMLCanvasElement,
@@ -578,10 +609,11 @@ class WebGLInstance {
     this.atlases = {};
     if (gl == null) {
       gl = glMock as any;
+      this.webglAvailable = false;
+    } else {
+      this.webglAvailable = true;
     }
-    if (gl != null) {
-      this.init(gl);
-    }
+    this.init(gl!);
   }
 
   init(gl: WebGLRenderingContext) {

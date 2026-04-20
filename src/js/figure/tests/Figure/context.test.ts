@@ -126,6 +126,26 @@ describe('Figure context loss', () => {
     expect(order).toEqual(['lost', 'restored']);
   });
 
+  test('figure.webglAvailable reflects webglLow.webglAvailable', () => {
+    figure.webglLow.webglAvailable = true;
+    expect(figure.webglAvailable).toBe(true);
+    figure.webglLow.webglAvailable = false;
+    expect(figure.webglAvailable).toBe(false);
+  });
+
+  test('webglAvailable is false after contextLost', () => {
+    figure.webglLow.webglAvailable = true;
+    figure.contextLost({ preventDefault: () => {} });
+    expect(figure.webglAvailable).toBe(false);
+  });
+
+  test('webglAvailable is true after contextRestored', () => {
+    figure.contextLost({ preventDefault: () => {} });
+    expect(figure.webglAvailable).toBe(false);
+    figure.contextRestored();
+    expect(figure.webglAvailable).toBe(true);
+  });
+
   test('adding multiple element types during context loss does not crash', () => {
     // Simulate context loss
     figure.webglLow.getProgram = () => -1;
