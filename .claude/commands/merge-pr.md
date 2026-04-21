@@ -132,14 +132,14 @@ The summary should be 1-3 bullet points describing what changed, written from a 
 
 ---
 
-### Phase 8: Deploy and release
+### Phase 8: GitHub release
 
-1. Run the deploy build: `./build.sh deploy skip-tests`
-2. Create a GitHub release for the new version:
+1. Create a GitHub release for the new version:
    ```
    gh release create vX.Y.Z --title "vX.Y.Z" --notes "<changelog entry from Phase 6>"
    ```
    Use the same bullet points written for `docs/changelog.md` as the release notes.
+2. **Do not run the deploy build.** After the release is created, tell the user to run `./build.sh deploy skip-tests` themselves to publish the built artifacts.
 
 ---
 
