@@ -222,6 +222,7 @@ export default class Atlas {
     if (dimension ** 2 > 16777216 && isIOS()) {
       const mDim = Math.sqrt(16777216);
       fontSizePX *= mDim / dimension * 0.95;
+      this.fontSize = fontSizePX;
       dimension = Math.floor(Math.ceil(Math.sqrt(glyphs.length) + 2) * fontSizePX * 1.5);
     }
 

@@ -93,34 +93,63 @@ const figure = new Fig.Figure({
 //   touch: { onClick: e => e.nextForm({ dissolveInTime: 1.5 }) },
 // });
 
-// Multi color substitution
-figure.add({
-  scale: 1.5,
-  make: 'equation',
-  elements: {
-    equals: ' = ',
-    plus: ' + ',
-    brace: { symbol: 'brace', side: 'top', color: [0.5, 0.5, 0.5, 1] },
-  },
-  forms: {
-    0: ['2', 'plus', '3', 'equals', 'x'],
-    1: [{ color: [['2', 'plus', '3'], [1, 0, 0, 1]] }, 'equals', 'x'],
-    2: [
-      {
-        topComment: {
-          content: { color: [['2', 'plus', '3'], [1, 0, 0, 1]] },
-          comment: { color: ['5', [0, 0.7, 0, 1]] },
-          symbol: 'brace',
-        },
-      },
-      'equals', 'x',
-    ],
-    3: ['5', 'equals', 'x'],
-    4: ['6', {make: 'text', text: 'ABC', name: 'N'}, '7']
-  },
-  touch: { onClick: e => e.nextForm({ dissolveInTime: 0.5 }) },
-});
+// // Multi color substitution
+// figure.add({
+//   scale: 1.5,
+//   make: 'equation',
+//   elements: {
+//     equals: ' = ',
+//     plus: ' + ',
+//     brace: { symbol: 'brace', side: 'top', color: [0.5, 0.5, 0.5, 1] },
+//   },
+//   forms: {
+//     0: ['2', 'plus', '3', 'equals', 'x'],
+//     1: [{ color: [['2', 'plus', '3'], [1, 0, 0, 1]] }, 'equals', 'x'],
+//     2: [
+//       {
+//         topComment: {
+//           content: { color: [['2', 'plus', '3'], [1, 0, 0, 1]] },
+//           comment: { color: ['5', [0, 0.7, 0, 1]] },
+//           symbol: 'brace',
+//         },
+//       },
+//       'equals', 'x',
+//     ],
+//     3: ['5', 'equals', 'x'],
+//     4: ['6', {make: 'text', text: 'ABC', name: 'N'}, '7']
+//   },
+//   touch: { onClick: e => e.nextForm({ dissolveInTime: 0.5 }) },
+// });
 
+figure.scene.setProjection({ style: 'orthographic' });
+figure.scene.setCamera({ position: [1, 1, 2] });
+figure.scene.setLight({ directional: [0.7, 0.5, 1] });
+
+const [points, normals] = Fig.cube({ side: 0.8 });
+
+figure.add({
+  make: 'generic3',
+  points,
+  normals,
+  texture: {
+    src: './flowers.jpeg',
+    coords: [
+      0, 0, 0.333, 0, 0.333, 0.5,
+      0, 0, 0.333, 0.5, 0, 0.5,
+      0.333, 0, 0.666, 0, 0.666, 0.5,
+      0.333, 0, 0.666, 0.5, 0.333, 0.5,
+      0.666, 0, 1, 0, 1, 0.5,
+      0.666, 0, 1, 0.5, 0.666, 0.5,
+      0, 0.5, 0.333, 1, 0, 1,
+      0, 0.5, 0.333, 0.5, 0.333, 1,
+      0.333, 0.5, 0.666, 1, 0.333, 1,
+      0.333, 0.5, 0.666, 0.5, 0.666, 1,
+      0.666, 0.5, 1, 1, 0.666, 1,
+      0.666, 0.5, 1, 0.5, 1, 1,
+    ],
+    loadColor: [0, 0, 0, 0],
+  },
+});
 
 // t.animations.new()
 //   .goToForm({ target: '1', delay: 3, animate: 'move' })
