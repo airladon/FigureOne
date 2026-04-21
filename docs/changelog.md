@@ -1,5 +1,8 @@
 # Releases
 
+## 1.2.1
+* Fix glyph corruption on iPad at larger font sizes: the iOS 16MB atlas-size clamp reduced the font size used to draw the atlas canvas but left `this.fontSize` at the pre-clamp value, causing stale ascent/descent in the glyph map and UV mismatch when rendering
+
 ## 1.2.0
 * Tolerate WebGL context unavailability: `Figure` construction no longer throws when the browser cannot provide a context, and adding elements / drawing during runtime context loss is safe
 * Add `onWebGLUnavailable` Figure option, fired once during construction if no context is available
