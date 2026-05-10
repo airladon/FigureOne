@@ -441,8 +441,9 @@ export default class EquationForm extends Elements {
 
   getElementsToShowAndHide() {
     const allElements = this.collectionMethods.getAllElements();
-    const elementsShown = allElements.filter(e => e.isShown);
-    const elementsShownTarget = this.getAllElements(false) as Array<FigureElementPrimitive | FigureElementCollection>;
+    const elementsShown = allElements.filter(e => e.isShown && !e.isFormIgnored);
+    const elementsShownTarget = (this.getAllElements(false) as Array<FigureElementPrimitive | FigureElementCollection>)
+      .filter(e => !e.isFormIgnored);
     const elementsToHide: Array<FigureElementPrimitive
                                 | FigureElementCollection> =
        elementsShown.filter(e => elementsShownTarget.indexOf(e) === -1);
@@ -522,8 +523,9 @@ export default class EquationForm extends Elements {
   ) {
     this.collectionMethods.stop();
     const allElements = this.collectionMethods.getAllElements();
-    const elementsShown = allElements.filter(e => e.isShown);
-    const elementsToShow = this.getAllElements(false) as Array<FigureElementPrimitive | FigureElementCollection>;
+    const elementsShown = allElements.filter(e => e.isShown && !e.isFormIgnored);
+    const elementsToShow = (this.getAllElements(false) as Array<FigureElementPrimitive | FigureElementCollection>)
+      .filter(e => !e.isFormIgnored);
     const elementsToDelayShowing = elementsToShow.filter(e => !e.isShown);
     const elementsToShowAfterDissolve = elementsToShow.filter(e => e.isShown);
     let cumTime = delay;
@@ -588,6 +590,9 @@ export default class EquationForm extends Elements {
     const setProps = (elementMods: Record<string, any>) => {
       Object.keys(elementMods).forEach((elementName) => {
         const { element, mods } = elementMods[elementName];
+        if (element != null && element.isFormIgnored) {
+          return;
+        }
         if (element != null && mods != null) {
           element.setProperties(mods);
           if (mods.color != null) {
@@ -622,7 +627,8 @@ export default class EquationForm extends Elements {
   ) {
     const allElements = this.collectionMethods.getAllElements();
     this.collectionMethods.stop();
-    const elementsShownTarget = this.getAllElements(false) as Array<FigureElementPrimitive | FigureElementCollection>;
+    const elementsShownTarget = (this.getAllElements(false) as Array<FigureElementPrimitive | FigureElementCollection>)
+      .filter(e => !e.isFormIgnored);
     elementsShownTarget.forEach((e) => {
       if (e.opacity === 0.001) {
         e.hide();
@@ -632,7 +638,7 @@ export default class EquationForm extends Elements {
       }
     });
 
-    const elementsShown = allElements.filter(e => e.isShown);
+    const elementsShown = allElements.filter(e => e.isShown && !e.isFormIgnored);
     const elementsToHide =
       elementsShown.filter(e => elementsShownTarget.indexOf(e) === -1);
     const elementsToShow =

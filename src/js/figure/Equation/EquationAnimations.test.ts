@@ -300,4 +300,136 @@ describe('Equation Animation', () => {
     expect(b.animations.animations).toHaveLength(0);
     expect(c.animations.animations).toHaveLength(0);
   });
+
+  describe('isFormIgnored', () => {
+    test('showForm does not hide ignored element when not in target form', () => {
+      ways.simple();
+      eqn.showForm('1');         // shows b and c
+      figure.drawNow(0);
+      expect(c.isShown).toBe(true);
+
+      c.isFormIgnored = true;
+      const cColor = [0, 1, 0, 1];
+      const cPosition = new Point(0.5, 0.5);
+      c.setColor(cColor);
+      c.setPosition(cPosition);
+
+      eqn.showForm('2');         // form 2 = ['a', 'b'] — c would normally be hidden
+      figure.drawNow(0);
+
+      expect(a.isShown).toBe(true);
+      expect(b.isShown).toBe(true);
+      expect(c.isShown).toBe(true);
+      expect(c.color).toEqual(cColor);
+      expect(c.getPosition()).toEqual(cPosition);
+    });
+
+    test('showForm does not show or move ignored element when in target form', () => {
+      ways.simple();
+      eqn.showForm('0');         // only b shown
+      figure.drawNow(0);
+      expect(c.isShown).toBe(false);
+
+      c.isFormIgnored = true;
+      const cColor = [0, 1, 0, 1];
+      const cPosition = new Point(0.5, 0.5);
+      c.setColor(cColor);
+      c.setPosition(cPosition);
+
+      eqn.showForm('1');         // form 1 = ['b', 'c'] — c would normally be shown and moved
+      figure.drawNow(0);
+
+      expect(c.isShown).toBe(false);
+      expect(c.color).toEqual(cColor);
+      expect(c.getPosition()).toEqual(cPosition);
+    });
+
+    test('goToForm move animation does not queue animations on ignored element', () => {
+      ways.simple();
+      eqn.showForm('0');         // only b shown
+      figure.drawNow(0);
+
+      c.isFormIgnored = true;
+      const cColor = [0, 1, 0, 1];
+      const cPosition = new Point(0.5, 0.5);
+      c.setColor(cColor);
+      c.setPosition(cPosition);
+
+      // form 1 = ['b', 'c'] — without ignore, c would dissolve in and move
+      eqn.goToForm({ form: '1', animate: 'move', duration: 1 });
+      figure.drawNow(0);
+      figure.drawNow(0.5);
+
+      expect(c.animations.animations).toHaveLength(0);
+      expect(c.color).toEqual(cColor);
+      expect(c.getPosition()).toEqual(cPosition);
+
+      figure.drawNow(2);
+      expect(c.animations.animations).toHaveLength(0);
+      expect(c.color).toEqual(cColor);
+      expect(c.getPosition()).toEqual(cPosition);
+    });
+
+    test('elementMods skipped for ignored element', () => {
+      figure.add([{
+        name: 'eqn',
+        make: 'equation',
+        options: {
+          color: col(1),
+          elements: { a: 'a', b: 'b', c: 'c' },
+          forms: {
+            withMods: {
+              content: ['a', 'b', 'c'],
+              elementMods: {
+                c: { color: [1, 1, 0, 1] },
+              },
+            },
+          },
+        },
+      }]);
+      const e = figure.elements._eqn;
+      const cElem = e._c;
+      const initialColor = [0, 0, 1, 1];
+      cElem.isFormIgnored = true;
+      cElem.setColor(initialColor);
+
+      e.showForm('withMods');
+      figure.drawNow(0);
+
+      expect(cElem.color).toEqual(initialColor);
+    });
+
+    test('ignored element contributes zero size to form layout', () => {
+      ways.simple();
+      eqn.showForm('2');         // ['a', 'b']
+      figure.drawNow(0);
+      const aPosBaseline = a.getPosition()._dup();
+      const bPosBaseline = b.getPosition()._dup();
+
+      // With c flagged and inserted into the form, layout should match baseline.
+      figure.elements._eqn.addForms({
+        formWithIgnored: ['c', 'a', 'b'],
+      });
+      c.isFormIgnored = true;
+      c.setPosition(0.5, 0.5);
+
+      eqn.showForm('formWithIgnored');
+      figure.drawNow(0);
+
+      expect(a.getPosition()).toEqual(aPosBaseline);
+      expect(b.getPosition()).toEqual(bPosBaseline);
+      expect(c.getPosition()).toEqual(new Point(0.5, 0.5));
+    });
+
+    test('isFormIgnored is captured in saved state', () => {
+      ways.simple();
+      c.isFormIgnored = true;
+      const state = c._state({ ignoreShown: true, returnF1Type: false });
+      expect(state.isFormIgnored).toBe(true);
+
+      c.isFormIgnored = false;
+      const state2 = c._state({ ignoreShown: true, returnF1Type: false });
+      expect(state2.isFormIgnored).toBe(false);
+    });
+  });
 });
