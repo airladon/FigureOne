@@ -1,5 +1,10 @@
 # Releases
 
+## 1.3.0
+* Add `isFormIgnored` flag on `FigureElement` to exclude an element from equation form changes — when set, the element is skipped by form layout, show/hide, transform/color sets, and `elementMods`, so its user-applied transform, color, and visibility persist across `showForm` / `goToForm`
+* Form-ignored elements contribute zero size to layout, so they don't shift adjacent elements when included in a form's content
+* Note: form-driven animations still cancel any in-flight animations on ignored elements via `collectionMethods.stop()` — the contract is "no new form-driven changes", not full isolation
+
 ## 1.2.1
 * Fix glyph corruption on iPad at larger font sizes: the iOS 16MB atlas-size clamp reduced the font size used to draw the atlas canvas but left `this.fontSize` at the pre-clamp value, causing stale ascent/descent in the glyph map and UV mismatch when rendering
 

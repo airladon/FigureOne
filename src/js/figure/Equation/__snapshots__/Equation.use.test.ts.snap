@@ -585,6 +585,7 @@ FigureElementPrimitive2DText {
     "z": 0,
   },
   "internalSetTransformCallback": null,
+  "isFormIgnored": false,
   "isInteractive": undefined,
   "isMovable": false,
   "isRenderedAsImage": false,

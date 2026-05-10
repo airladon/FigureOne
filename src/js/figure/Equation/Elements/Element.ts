@@ -130,20 +130,31 @@ class Element implements ElementInterface {
       if ((content as any).measureAndAlignText != null) {
         (content as any).measureAndAlignText();
       }
-      content.transform.updateTranslation([location.x, location.y]);
-      content.transform.updateScale([scale, scale]);
-      if (content.internalSetTransformCallback != null) {
-        this.fnMap.exec(content.internalSetTransformCallback, content.transform);
-      }
+      if (content.isFormIgnored) {
+        // Form-ignored elements contribute zero size to the layout so adjacent
+        // elements aren't sized off whatever transform the user has applied.
+        this.location = location._dup();
+        this.scale = scale;
+        this.ascent = 0;
+        this.descent = 0;
+        this.height = 0;
+        this.width = 0;
+      } else {
+        content.transform.updateTranslation([location.x, location.y]);
+        content.transform.updateScale([scale, scale]);
+        if (content.internalSetTransformCallback != null) {
+          this.fnMap.exec(content.internalSetTransformCallback, content.transform);
+        }
 
-      // Get the boundaries of element
-      const r = (content as any).getRelativeBoundingRect('draw', 'border', null, false);
-      this.location = location._dup();
-      this.scale = scale;
-      this.ascent = r.top * scale;
-      this.descent = -r.bottom * scale;
-      this.height = r.height * scale;
-      this.width = r.width * scale;
+        // Get the boundaries of element
+        const r = (content as any).getRelativeBoundingRect('draw', 'border', null, false);
+        this.location = location._dup();
+        this.scale = scale;
+        this.ascent = r.top * scale;
+        this.descent = -r.bottom * scale;
+        this.height = r.height * scale;
+        this.width = r.width * scale;
+      }
     }
     this.fullSize = {
       leftOffset: 0,
@@ -187,6 +198,9 @@ class Element implements ElementInterface {
     const { content } = this;
     if (content instanceof FigureElementCollection
         || content instanceof FigureElementPrimitive) {
+      if (content.isFormIgnored) {
+        return;
+      }
       content.transform.updateTranslation([this.location.x, this.location.y]);
       content.transform.updateScale([this.scale, this.scale]);
     }
@@ -202,6 +216,9 @@ class Element implements ElementInterface {
     const { content } = this;
     if (content instanceof FigureElementCollection
         || content instanceof FigureElementPrimitive) {
+      if (content.isFormIgnored) {
+        return;
+      }
       content.setColor(color);
     }
   }

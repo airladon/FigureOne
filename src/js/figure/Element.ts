@@ -594,6 +594,12 @@ class FigureElement {
   parent: FigureElement | null;
 
   isShown: boolean;                  // True if should be shown in figure
+  // True if equation forms should not initiate any new state changes on this
+  // element: it is excluded from form layout, show/hide, transform/color sets,
+  // and elementMods. Note: form-driven animations on the equation collection
+  // (collectionMethods.stop()) still cancel any in-flight animations on the
+  // element — the contract is "no new form-driven changes", not full isolation.
+  isFormIgnored: boolean;
   name: string;                   // Used to reference element in a collection
 
   isMovable: boolean;             // Element is able to be moved
@@ -802,6 +808,7 @@ class FigureElement {
     this.uid = (Math.random() * 1e18).toString(36);
     this.uniqueColor = null;
     this.isShown = true;
+    this.isFormIgnored = false;
     this.simple = false;
     this.allowSetColor = 'all';
     this.transform = transform._dup();
@@ -1017,6 +1024,7 @@ class FigureElement {
         'isShown',
         'isMovable',
         'isTouchable',
+        'isFormIgnored',
         'state',
         'pulseSettings',
         'setTransformCallback',
