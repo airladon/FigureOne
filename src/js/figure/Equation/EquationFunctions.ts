@@ -189,7 +189,7 @@ export type TypeEquationPhrase =
  * around the content, but the content will not be shown (`true`)
  * @property {string} [name] - optional identifier (available on every equation
  * function). Has no effect on layout, but allows the function's contents to be
- * looked up later with {@link Equation.getElementsInForm} (`null`)
+ * looked up later with {@link Equation.getFunctionElements} (`null`)
  *
  * @see To test examples, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>
@@ -3467,7 +3467,7 @@ export class EquationFunctions {
     const result = this.dispatchEqnMethod(name, params);
     // Allow any equation function to be tagged with a caller-supplied
     // `name` via its options object. The tag has no layout effect; it's
-    // used by Equation.getElementsInForm to look up the function's sub-tree.
+    // used by Equation.getFunctionElements to look up the function's sub-tree.
     if (
       result != null
       && params != null
