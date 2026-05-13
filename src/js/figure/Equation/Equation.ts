@@ -12,6 +12,7 @@ import {
 import type { ElementInterface } from './Elements/Element';
 import { Elements } from './Elements/Element';
 import BaseAnnotationFunction from './Elements/BaseAnnotationFunction';
+import BaseEquationFunction from './Elements/BaseEquationFunction';
 import EquationForm from './EquationForm';
 import type {
   TypeHAlign, TypeVAlign,
@@ -2032,6 +2033,91 @@ export class Equation extends FigureElementCollection {
       return [];
     }
     return this.eqn.forms[form].content[0].getAllElements(includeHidden);
+  }
+
+  /**
+   * Return all the elements inside the named equation function within a given
+   * form.
+   *
+   * Any equation function (container, fraction, matrix, etc.) can be tagged
+   * with a `name` property in its options — this has no layout effect, but
+   * makes the function's sub-tree addressable here.
+   *
+   * With `mode: 'first'` (default), returns the elements inside the first
+   * matching function found by a depth-first traversal. With `mode: 'all'`,
+   * walks the entire tree, collects every matching function (including those
+   * nested inside other matches), and returns the de-duplicated union of
+   * their elements.
+   *
+   * Returns an empty array if the form does not exist, or no matching
+   * function is found.
+   *
+   * @param {string} formName
+   * @param {string} name
+   * @param {'first' | 'all'} [mode] (`'first'`)
+   * @param {boolean} [includeHidden] (`false`)
+   * @return {Array<FigureElement>}
+   */
+  getElementsInForm(
+    formName: string,
+    name: string,
+    mode: 'first' | 'all' = 'first',
+    includeHidden: boolean = false,
+  ) {
+    const form = this.eqn.forms[formName];
+    if (form == null) {
+      return [];
+    }
+    // Single typed accessor that hides the structural differences between
+    // Elements (.content: ElementInterface[]) and BaseAnnotationFunction
+    // (.content: ElementInterface + .annotations[].content). All `as any`
+    // casts for this walk live here.
+    const childrenOf = (node: ElementInterface): Array<ElementInterface> => {
+      const out: Array<ElementInterface> = [];
+      const c = (node as any).content;
+      if (Array.isArray(c)) {
+        out.push(...c);
+      } else if (c != null) {
+        out.push(c);
+      }
+      const annotations = (node as any).annotations;
+      if (Array.isArray(annotations)) {
+        annotations.forEach((a: any) => {
+          if (a != null && a.content != null) out.push(a.content);
+        });
+      }
+      return out;
+    };
+    const matches: Array<BaseEquationFunction | BaseAnnotationFunction> = [];
+    const walk = (nodes: Array<ElementInterface>): boolean => {
+      for (let i = 0; i < nodes.length; i += 1) {
+        const node = nodes[i];
+        if (
+          (node instanceof BaseEquationFunction || node instanceof BaseAnnotationFunction)
+          && node.functionName === name
+        ) {
+          matches.push(node);
+          if (mode === 'first') return true;
+        }
+        if (walk(childrenOf(node))) return true;
+      }
+      return false;
+    };
+    walk(form.content);
+    if (matches.length === 0) {
+      return [];
+    }
+    const seen = new Set<any>();
+    const out: Array<any> = [];
+    matches.forEach((m) => {
+      m.getAllElements(includeHidden).forEach((el) => {
+        if (!seen.has(el)) {
+          seen.add(el);
+          out.push(el);
+        }
+      });
+    });
+    return out;
   }
 
   /**

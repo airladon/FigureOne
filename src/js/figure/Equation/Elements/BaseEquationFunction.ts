@@ -14,6 +14,10 @@ export default class BaseEquationFunction extends Elements {
   glyphHeights: Array<number>;
   override showContent: boolean;
   options: Record<string, any>;
+  // Optional caller-supplied identifier, assigned post-dispatch by
+  // EquationFunctions.eqnMethod. Has no layout effect; used by
+  // Equation.getElementsInForm to look up the contents of a sub-tree.
+  functionName: string | null;
 
   constructor(
     content: Elements | null | Array<Elements | null>,
@@ -51,6 +55,7 @@ export default class BaseEquationFunction extends Elements {
     this.glyphHeights = glyphElements.map(() => 1);
     this.options = options;
     this.showContent = showContent;
+    this.functionName = null;
   }
 
   override _dup(namedCollection?: Record<string, any>) {

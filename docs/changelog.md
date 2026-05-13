@@ -1,5 +1,9 @@
 # Releases
 
+## 1.4.0
+* Add optional `name` property to every equation function (container, frac, matrix, brac, annotate, etc.) — purely a label with no layout effect
+* Add `Equation.getElementsInForm(formName, name, mode?, includeHidden?)` to look up the `FigureElement`s inside a named function's sub-tree, with `mode: 'first'` returning the first match and `mode: 'all'` returning the de-duplicated union across all matches (including names nested inside annotations)
+
 ## 1.3.0
 * Add `isFormIgnored` flag on `FigureElement` to exclude an element from equation form changes — when set, the element is skipped by form layout, show/hide, transform/color sets, and `elementMods`, so its user-applied transform, color, and visibility persist across `showForm` / `goToForm`
 * Form-ignored elements contribute zero size to layout, so they don't shift adjacent elements when included in a form's content
