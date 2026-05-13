@@ -1,5 +1,9 @@
 # Releases
 
+## 1.4.1
+* **Breaking (relative to 1.4.0):** rename `Equation.getElementsInForm` → `Equation.getFunctionElements`
+* Reorder parameters to `(name, formName? = null, mode = 'all', includeHidden = false)` — `name` is now first, `formName` defaults to the current form, and `mode` defaults to `'all'`
+
 ## 1.4.0
 * Add optional `name` property to every equation function (container, frac, matrix, brac, annotate, etc.) — purely a label with no layout effect
 * Add `Equation.getElementsInForm(formName, name, mode?, includeHidden?)` to look up the `FigureElement`s inside a named function's sub-tree, with `mode: 'first'` returning the first match and `mode: 'all'` returning the de-duplicated union across all matches (including names nested inside annotations)
