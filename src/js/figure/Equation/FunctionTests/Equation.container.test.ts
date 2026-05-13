@@ -421,48 +421,55 @@ describe('Equation Functions - Container', () => {
       );
       expect(namedPositions).toEqual(basePositions);
     });
-    test('getElementsInForm returns elements inside a named container', () => {
+    test('getFunctionElements returns elements inside a named container', () => {
       setup();
-      const found = eqn.getElementsInForm('named', 'inner');
+      const found = eqn.getFunctionElements('inner', 'named');
       expect(found.map(e => e.name)).toEqual(['b', 'c']);
     });
-    test('getElementsInForm works for non-container functions (frac)', () => {
+    test('getFunctionElements works for non-container functions (frac)', () => {
       setup();
-      const found = eqn.getElementsInForm('namedFraction', 'ratio');
+      const found = eqn.getFunctionElements('ratio', 'namedFraction');
       expect(found.map(e => e.name).sort()).toEqual(['b', 'c', 'v']);
     });
-    test('getElementsInForm finds nested named functions', () => {
+    test('getFunctionElements finds nested named functions', () => {
       setup();
-      const outer = eqn.getElementsInForm('nested', 'outer').map(e => e.name);
-      const inner = eqn.getElementsInForm('nested', 'inner').map(e => e.name);
+      const outer = eqn.getFunctionElements('outer', 'nested').map(e => e.name);
+      const inner = eqn.getFunctionElements('inner', 'nested').map(e => e.name);
       expect(outer).toEqual(['a', 'b', 'c']);
       expect(inner).toEqual(['b', 'c']);
     });
-    test('getElementsInForm returns [] when form is missing', () => {
+    test('getFunctionElements defaults formName to the current form', () => {
       setup();
-      expect(eqn.getElementsInForm('missing', 'inner')).toEqual([]);
+      eqn.showForm('named');
+      expect(eqn.getFunctionElements('inner').map(e => e.name)).toEqual(['b', 'c']);
+      eqn.showForm('namedFraction');
+      expect(eqn.getFunctionElements('ratio').map(e => e.name).sort()).toEqual(['b', 'c', 'v']);
     });
-    test('getElementsInForm returns [] when name is not found', () => {
+    test('getFunctionElements returns [] when form is missing', () => {
       setup();
-      expect(eqn.getElementsInForm('named', 'nope')).toEqual([]);
-      expect(eqn.getElementsInForm('plain', 'inner')).toEqual([]);
+      expect(eqn.getFunctionElements('inner', 'missing')).toEqual([]);
+    });
+    test('getFunctionElements returns [] when name is not found', () => {
+      setup();
+      expect(eqn.getFunctionElements('nope', 'named')).toEqual([]);
+      expect(eqn.getFunctionElements('inner', 'plain')).toEqual([]);
     });
     test('mode "first" returns only the first match', () => {
       setup();
-      const found = eqn.getElementsInForm('twoMatches', 'tag', 'first');
+      const found = eqn.getFunctionElements('tag', 'twoMatches', 'first');
       expect(found.map(e => e.name)).toEqual(['a', 'b']);
     });
-    test('mode "all" aggregates and dedupes across matches', () => {
+    test('mode "all" (default) aggregates and dedupes across matches', () => {
       setup();
-      const found = eqn.getElementsInForm('twoMatches', 'tag', 'all');
+      const found = eqn.getFunctionElements('tag', 'twoMatches');
       // First tag has [a, b]; second tag has [b, c, d]. `b` overlaps and
       // must appear only once, in first-seen order.
       expect(found.map(e => e.name)).toEqual(['a', 'b', 'c', 'd']);
     });
     test('mode "all" returns inner-and-outer elements for nested matches', () => {
       setup();
-      const outerNested = eqn.getElementsInForm('nested', 'outer', 'all');
-      const innerNested = eqn.getElementsInForm('nested', 'inner', 'all');
+      const outerNested = eqn.getFunctionElements('outer', 'nested');
+      const innerNested = eqn.getFunctionElements('inner', 'nested');
       expect(outerNested.map(e => e.name)).toEqual(['a', 'b', 'c']);
       expect(innerNested.map(e => e.name)).toEqual(['b', 'c']);
     });
@@ -487,7 +494,7 @@ describe('Equation Functions - Container', () => {
       });
       figure.elements = eqn;
       figure.setFirstTransform();
-      const found = eqn.getElementsInForm('ann', 'insideAnnotation');
+      const found = eqn.getFunctionElements('insideAnnotation', 'ann');
       expect(found.map(e => e.name)).toEqual(['b', 'c']);
     });
   });

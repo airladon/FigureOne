@@ -253,7 +253,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
   options: Record<string, any>;
   // Optional caller-supplied identifier, assigned post-dispatch by
   // EquationFunctions.eqnMethod. Has no layout effect; used by
-  // Equation.getElementsInForm to look up the contents of a sub-tree.
+  // Equation.getFunctionElements to look up the contents of a sub-tree.
   functionName: string | null;
 
   constructor(

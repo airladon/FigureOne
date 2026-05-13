@@ -2036,35 +2036,37 @@ export class Equation extends FigureElementCollection {
   }
 
   /**
-   * Return all the elements inside the named equation function within a given
-   * form.
+   * Return all the elements inside the named equation function within a form.
    *
    * Any equation function (container, fraction, matrix, etc.) can be tagged
    * with a `name` property in its options — this has no layout effect, but
    * makes the function's sub-tree addressable here.
    *
-   * With `mode: 'first'` (default), returns the elements inside the first
-   * matching function found by a depth-first traversal. With `mode: 'all'`,
-   * walks the entire tree, collects every matching function (including those
-   * nested inside other matches), and returns the de-duplicated union of
-   * their elements.
+   * With `mode: 'all'` (default), walks the entire tree, collects every
+   * matching function (including those nested inside other matches), and
+   * returns the de-duplicated union of their elements. With `mode: 'first'`,
+   * returns only the elements inside the first matching function found by a
+   * depth-first traversal.
+   *
+   * If `formName` is `null` (default), the current form is used.
    *
    * Returns an empty array if the form does not exist, or no matching
    * function is found.
    *
-   * @param {string} formName
    * @param {string} name
-   * @param {'first' | 'all'} [mode] (`'first'`)
+   * @param {string | null} [formName] (`null` — uses current form)
+   * @param {'first' | 'all'} [mode] (`'all'`)
    * @param {boolean} [includeHidden] (`false`)
    * @return {Array<FigureElement>}
    */
-  getElementsInForm(
-    formName: string,
+  getFunctionElements(
     name: string,
-    mode: 'first' | 'all' = 'first',
+    formName: string | null = null,
+    mode: 'first' | 'all' = 'all',
     includeHidden: boolean = false,
   ) {
-    const form = this.eqn.forms[formName];
+    const resolvedFormName = formName == null ? this.eqn.currentForm : formName;
+    const form = this.eqn.forms[resolvedFormName];
     if (form == null) {
       return [];
     }
