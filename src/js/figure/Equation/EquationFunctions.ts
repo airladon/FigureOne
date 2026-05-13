@@ -18,6 +18,7 @@ import Lines from './Elements/Lines';
 import Scale from './Elements/Scale';
 import Container from './Elements/Container';
 import BaseAnnotationFunction from './Elements/BaseAnnotationFunction';
+import BaseEquationFunction from './Elements/BaseEquationFunction';
 import EquationLine from './Symbols/Line';
 import Offset from './Elements/Offset';
 import Color from './Elements/Color';
@@ -186,6 +187,9 @@ export type TypeEquationPhrase =
  * @property {boolean} [fullContentBounds] - (`false`)
  * @property {boolean} [showContent] - if `false`, a container will be created
  * around the content, but the content will not be shown (`true`)
+ * @property {string} [name] - optional identifier (available on every equation
+ * function). Has no effect on layout, but allows the function's contents to be
+ * looked up later with {@link Equation.getElementsInForm} (`null`)
  *
  * @see To test examples, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>
@@ -252,6 +256,7 @@ export type EQN_Container = {
   scale?: number,
   fullContentBounds?: boolean,
   showContent?: boolean,
+  name?: string,
 } | [
   TypeEquationPhrase,
   (number | null | undefined),
@@ -305,6 +310,7 @@ export type EQN_Offset = {
   offset?: TypeParsablePoint,
   inSize?: boolean;
   fullContentBounds?: boolean,
+  name?: string,
 } | [
   TypeEquationPhrase,
   (TypeParsablePoint | null | undefined),
@@ -429,6 +435,7 @@ export type EQN_Fraction = {
   offsetY?: number;
   baseline?: 'numerator' | 'denominator' | 'vinculum',
   fullContentBounds?: boolean,
+  name?: string,
 } | [
   TypeEquationPhrase,
   string,
@@ -505,6 +512,7 @@ export type EQN_Scale = {
   content: TypeEquationPhrase,
   scale?: number,
   fullContentBounds?: boolean;
+  name?: string,
 } | [
   TypeEquationPhrase,
   (number | null | undefined),
@@ -584,6 +592,7 @@ export type EQN_Color = {
   content: TypeEquationPhrase,
   color: TypeColor,
   fullContentBounds?: boolean;
+  name?: string,
 } | [
   TypeEquationPhrase,
   TypeColor,
@@ -699,6 +708,7 @@ export type EQN_Bracket = {
   descent?: number;
   fullContentBounds?: boolean;
   useFullBounds?: boolean;
+  name?: string;
 } | [
   string,
   TypeEquationPhrase,
@@ -836,6 +846,7 @@ export type EQN_Root = {
   rootScale?: number,
   fullContentBounds?: boolean,
   useFullBounds?: boolean,
+  name?: string,
 } | [
   string,
   TypeEquationPhrase,
@@ -953,6 +964,7 @@ export type EQN_Strike = {
   leftSpace?: number;
   fullContentBounds?: boolean;
   useFullBounds?: boolean;
+  name?: string;
 } | [
   TypeEquationPhrase,
   string,
@@ -1071,6 +1083,7 @@ export type EQN_Box = {
   leftSpace?: number,
   fullContentBounds?: boolean,
   useFullBounds?: boolean,
+  name?: string,
 } | [
   TypeEquationPhrase,
   string,
@@ -1120,6 +1133,7 @@ export type EQN_TouchBox = {
   rightSpace?: number,
   bottomSpace?: number,
   leftSpace?: number,
+  name?: string,
 } | [
   TypeEquationPhrase,
   string,
@@ -1261,6 +1275,7 @@ export type EQN_Bar = {
   descent?: number,
   fullContentBounds?: boolean,
   useFullBounds?: boolean,
+  name?: string,
 } | [
   TypeEquationPhrase,
   (string | null | undefined),
@@ -1434,6 +1449,7 @@ export type EQN_Integral = {
   toYAlign?: 'bottom' | 'top' | 'middle' | 'baseline' | number,
   fullBoundsContent?: boolean,
   useFullBounds?: boolean,
+  name?: string,
   } | [
   (string | null | undefined),
   (TypeEquationPhrase | null | undefined),
@@ -1575,6 +1591,7 @@ export type EQN_SumOf = {
   toOffset?: TypeParsablePoint,
   fullBoundsContent?: boolean,
   useFullBounds?: boolean,
+  name?: string,
 } | [
   (string | null | undefined),
   TypeEquationPhrase,
@@ -1708,6 +1725,7 @@ export type EQN_ProdOf = {
   toOffset?: TypeParsablePoint,
   fullBoundsContent?: boolean,
   useFullBounds?: boolean,
+  name?: string,
 } | [
   (string | null | undefined),
   TypeEquationPhrase,
@@ -1798,6 +1816,7 @@ export type EQN_Subscript = {
   scale?: number,
   offset?: TypeParsablePoint,
   inSize: boolean,
+  name?: string,
 } | [
   TypeEquationPhrase,
   TypeEquationPhrase,
@@ -1866,6 +1885,7 @@ export type EQN_Superscript = {
   scale?: number,
   offset?: TypeParsablePoint,
   inSize: boolean,
+  name?: string,
 } | [
   TypeEquationPhrase,
   TypeEquationPhrase,
@@ -1936,6 +1956,7 @@ export type EQN_SuperscriptSubscript = {
   superscriptOffset?: TypeParsablePoint;
   subscriptOffset?: TypeParsablePoint;
   inSize?: boolean,
+  name?: string,
 } | [
   TypeEquationPhrase,
   TypeEquationPhrase,
@@ -2049,6 +2070,7 @@ export type EQN_Comment = {
   inSize?: boolean;
   fullContentBounds?: boolean;
   useFullBounds?: boolean;
+  name?: string;
 } | [
   TypeEquationPhrase,
   TypeEquationPhrase,
@@ -2146,6 +2168,7 @@ export type EQN_StrikeComment = {
   space?: number,
   scale?: number,
   commentSpace?: number,
+  name?: string,
 } | [
   (TypeEquationPhrase | null | undefined),
   (string | null | undefined),
@@ -2224,6 +2247,7 @@ export type EQN_Pad = {
   right?: number,
   bottom?: number,
   left?: number,
+  name?: string,
 } | [
   TypeEquationPhrase,
   (number | null | undefined),
@@ -2347,6 +2371,7 @@ export type EQN_Matrix = {
   yAlign?: 'baseline' | 'middle',
   brac?: EQN_Bracket,
   fullContentBounds?: boolean,
+  name?: string,
 } | [
   ([number, number] | null | undefined),
   (string | null | undefined),
@@ -2504,6 +2529,7 @@ export type EQN_Lines = {
   space?: number,
   yAlign?: 'bottom' | 'top' | 'middle' | number,
   fullContentBounds?: boolean,
+  name?: string,
 };
 
 /**
@@ -3267,6 +3293,7 @@ export type EQN_Annotate = {
   leftSpace?: number,
   rightSpace?: number,
   contentScale?: number,
+  name?: string,
 };
 
 // There are lots of FlowFixMes in this file. This is not perfect, but
@@ -3437,6 +3464,24 @@ export class EquationFunctions {
   }
 
   eqnMethod(name: string, params: any) {
+    const result = this.dispatchEqnMethod(name, params);
+    // Allow any equation function to be tagged with a caller-supplied
+    // `name` via its options object. The tag has no layout effect; it's
+    // used by Equation.getElementsInForm to look up the function's sub-tree.
+    if (
+      result != null
+      && params != null
+      && !Array.isArray(params)
+      && typeof params === 'object'
+      && (params as any).name != null
+      && (result instanceof BaseEquationFunction || result instanceof BaseAnnotationFunction)
+    ) {
+      result.functionName = (params as any).name;
+    }
+    return result;
+  }
+
+  dispatchEqnMethod(name: string, params: any) {
     if (name === 'frac') { return this.frac(params); }
     if (name === 'strike') { return this.strike(params); }
     if (name === 'box') { return this.box(params); }

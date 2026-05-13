@@ -348,4 +348,147 @@ describe('Equation Functions - Container', () => {
     expect(round(eqn._b.transform.mat)).toMatchSnapshot();
     expect(round(eqn._c.transform.mat)).toMatchSnapshot();
   });
+  describe('Named equation function', () => {
+    let setup;
+    beforeEach(() => {
+      setup = () => {
+        eqn = new Equation(figure.shapes, { color: color1 });
+        eqn.addElements({
+          a: 'a', b: 'b', c: 'c', d: 'd', v: { symbol: 'vinculum' },
+        });
+        eqn.addForms({
+          named: {
+            content: [
+              'a',
+              { container: { content: ['b', 'c'], name: 'inner' } },
+            ],
+          },
+          baseline: {
+            content: [
+              'a',
+              { container: { content: ['b', 'c'] } },
+            ],
+          },
+          nested: {
+            content: [
+              {
+                container: {
+                  content: [
+                    'a',
+                    { container: { content: ['b', 'c'], name: 'inner' } },
+                  ],
+                  name: 'outer',
+                },
+              },
+            ],
+          },
+          namedFraction: {
+            content: [
+              'a',
+              {
+                frac: {
+                  numerator: 'b', symbol: 'v', denominator: 'c', name: 'ratio',
+                },
+              },
+            ],
+          },
+          twoMatches: {
+            content: [
+              { container: { content: ['a', 'b'], name: 'tag' } },
+              'c',
+              { container: { content: ['b', 'c', 'd'], name: 'tag' } },
+            ],
+          },
+          plain: {
+            content: ['a', 'b', 'c'],
+          },
+        });
+        figure.elements = eqn;
+        figure.setFirstTransform();
+      };
+    });
+    test('name does not affect layout', () => {
+      setup();
+      eqn.showForm('baseline');
+      figure.setFirstTransform();
+      const basePositions = [eqn._a, eqn._b, eqn._c].map(
+        e => round(e.transform.mat).slice(),
+      );
+      eqn.showForm('named');
+      figure.setFirstTransform();
+      const namedPositions = [eqn._a, eqn._b, eqn._c].map(
+        e => round(e.transform.mat).slice(),
+      );
+      expect(namedPositions).toEqual(basePositions);
+    });
+    test('getElementsInForm returns elements inside a named container', () => {
+      setup();
+      const found = eqn.getElementsInForm('named', 'inner');
+      expect(found.map(e => e.name)).toEqual(['b', 'c']);
+    });
+    test('getElementsInForm works for non-container functions (frac)', () => {
+      setup();
+      const found = eqn.getElementsInForm('namedFraction', 'ratio');
+      expect(found.map(e => e.name).sort()).toEqual(['b', 'c', 'v']);
+    });
+    test('getElementsInForm finds nested named functions', () => {
+      setup();
+      const outer = eqn.getElementsInForm('nested', 'outer').map(e => e.name);
+      const inner = eqn.getElementsInForm('nested', 'inner').map(e => e.name);
+      expect(outer).toEqual(['a', 'b', 'c']);
+      expect(inner).toEqual(['b', 'c']);
+    });
+    test('getElementsInForm returns [] when form is missing', () => {
+      setup();
+      expect(eqn.getElementsInForm('missing', 'inner')).toEqual([]);
+    });
+    test('getElementsInForm returns [] when name is not found', () => {
+      setup();
+      expect(eqn.getElementsInForm('named', 'nope')).toEqual([]);
+      expect(eqn.getElementsInForm('plain', 'inner')).toEqual([]);
+    });
+    test('mode "first" returns only the first match', () => {
+      setup();
+      const found = eqn.getElementsInForm('twoMatches', 'tag', 'first');
+      expect(found.map(e => e.name)).toEqual(['a', 'b']);
+    });
+    test('mode "all" aggregates and dedupes across matches', () => {
+      setup();
+      const found = eqn.getElementsInForm('twoMatches', 'tag', 'all');
+      // First tag has [a, b]; second tag has [b, c, d]. `b` overlaps and
+      // must appear only once, in first-seen order.
+      expect(found.map(e => e.name)).toEqual(['a', 'b', 'c', 'd']);
+    });
+    test('mode "all" returns inner-and-outer elements for nested matches', () => {
+      setup();
+      const outerNested = eqn.getElementsInForm('nested', 'outer', 'all');
+      const innerNested = eqn.getElementsInForm('nested', 'inner', 'all');
+      expect(outerNested.map(e => e.name)).toEqual(['a', 'b', 'c']);
+      expect(innerNested.map(e => e.name)).toEqual(['b', 'c']);
+    });
+    test('walker descends into annotate annotations[].content', () => {
+      eqn = new Equation(figure.shapes, { color: color1 });
+      eqn.addElements({
+        a: 'a', b: 'b', c: 'c', d: 'd',
+      });
+      eqn.addForms({
+        ann: {
+          annotate: {
+            content: 'a',
+            annotation: {
+              content: {
+                container: { content: ['b', 'c'], name: 'insideAnnotation' },
+              },
+              yPosition: 'top',
+              yAlign: 'bottom',
+            },
+          },
+        },
+      });
+      figure.elements = eqn;
+      figure.setFirstTransform();
+      const found = eqn.getElementsInForm('ann', 'insideAnnotation');
+      expect(found.map(e => e.name)).toEqual(['b', 'c']);
+    });
+  });
 });

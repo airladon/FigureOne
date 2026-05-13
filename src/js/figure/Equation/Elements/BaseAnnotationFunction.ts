@@ -251,6 +251,10 @@ export default class BaseAnnotationFunction implements ElementInterface {
   annotations: Array<EQN_Annotation>;
   glyphs: EQN_Glyphs;
   options: Record<string, any>;
+  // Optional caller-supplied identifier, assigned post-dispatch by
+  // EquationFunctions.eqnMethod. Has no layout effect; used by
+  // Equation.getElementsInForm to look up the contents of a sub-tree.
+  functionName: string | null;
 
   constructor(
     content: ElementInterface,
@@ -267,6 +271,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     this.showContent = showContent;
     this.scale = 1;
     this.color = null;
+    this.functionName = null;
   }
 
   _dup(namedCollection?: Record<string, any>) {
