@@ -520,7 +520,7 @@ export default class EquationForm extends Elements {
     blankTime: number = 0.5,
     showTime: number = 0.5,
     callback: ((cancelled: boolean) => void) | null = null,
-  ) {
+  ): number {
     this.collectionMethods.stop();
     const allElements = this.collectionMethods.getAllElements();
     const elementsShown = allElements.filter(e => e.isShown && !e.isFormIgnored);
@@ -533,8 +533,8 @@ export default class EquationForm extends Elements {
     if (elementsToShow.length === 0 && elementsShown.length === 0) {
       if (callback != null) {
         callback(false);
-        return;
       }
+      return 0;
     }
 
     let dissolveOutCallback: any = () => {
@@ -584,6 +584,13 @@ export default class EquationForm extends Elements {
         })
         .start();
     });
+    if (elementsToShow.length > 0) {
+      cumTime += blankTime + showTime;
+    }
+    // Upper bound on the total animation time: when elementsToDelayShowing
+    // finish their dissolveIn. elementsToShowAfterDissolve are scheduled with
+    // `delay: blankTime` (not `cumTime + blankTime`) so they may finish earlier.
+    return cumTime;
   }
 
   applyElementMods(fromWhere: null | string = null) {

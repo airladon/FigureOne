@@ -939,6 +939,32 @@ class GoToFormAnimationStep extends TriggerAnimationStep {
  * * {@link GoToFormAnimationStep}
  * * {@link NextFormAnimationStep}
  *
+ * In addition to the notifications published by {@link FigureElement}, an
+ * Equation publishes a `formChanged` notification whenever the displayed form
+ * may have changed. The payload is an object
+ * `{ phase, form, fromForm?, progress? }` where `phase` is one of:
+ * - `'showForm'`: a form was set via `showForm`. Callers can suppress this
+ *   event by passing `notify: false` to `showForm`; internal `showForm`
+ *   calls made by `goToForm` do this so the `goToForm*` event stream is
+ *   not interleaved with stray `showForm` events.
+ * - `'goToFormStart'`: a `goToForm` call has just begun
+ * - `'goToFormStep'`: published on every animation frame during a `goToForm`
+ *   animation; `progress` is the percentage (0-1) through the animation. A
+ *   final `goToFormStep` with `progress: 1` is always published immediately
+ *   before `goToFormEnd`
+ * - `'goToFormEnd'`: a `goToForm` call has finished
+ *
+ *  * `fromForm` is only included on the `goToForm*` phases (it carries the
+ * `fromWhere` option from `goToForm`); it is absent on `showForm`. `progress`
+ * is only included on `goToFormStep`. The event order for a `goToForm` call
+ * is always: `goToFormStart` → zero-or-more `goToFormStep` → `goToFormStep`
+ * with `progress: 1` → `goToFormEnd`.
+ *
+ * A user-initiated `showForm` made while a `goToForm` animation is running
+ * will publish its `showForm` event interleaved with the ongoing
+ * `goToFormStep` stream — listeners that drive UI from "the current
+ * transition" should account for this. Pass `notify: false` to suppress.
+ *
  * @extends FigureElementCollection
  *
  * @see To test examples, append them to the
@@ -2189,6 +2215,7 @@ export class Equation extends FigureElementCollection {
     this.stopAnimating(how, '_Equation', true);
     this.stopAnimating(how, '_EquationColor', true);
     this.stopAnimating(how, '_EquationAnimateColor', true);
+    this.stopAnimating(how, '_EquationFormStep', true);
     this.stopPulsing(how);
   }
 
@@ -2400,14 +2427,27 @@ export class Equation extends FigureElementCollection {
   /**
    * Show equation form
    */
+  /**
+   * Show equation form.
+   *
+   * @param formOrName the form, or its name, to show
+   * @param animationStop if `true`, stops any in-progress element animations
+   * before rendering the form (default `true`)
+   * @param notify if `true`, publish a `formChanged` notification with
+   * `phase: 'showForm'` (default `true`). Pass `false` to suppress the
+   * event — useful for bulk updates or when this `showForm` is part of a
+   * larger transition the caller is broadcasting separately. The internal
+   * `showForm` calls made by `goToForm` use `false` so the `goToForm*`
+   * event stream is not interleaved with stray `showForm` events.
+   */
   showForm(
     formOrName: EquationForm | string = this.eqn.currentForm,
     // subForm: ?string = null,
     animationStop: boolean = true,
     // showCollection: boolean = true,
+    notify: boolean = true,
   ) {
     super.show();
-    // this.custom.settingForm = true;
     let form: EquationForm | string | null = formOrName;
     if (typeof formOrName === 'string') {
       form = this.getForm(formOrName);
@@ -2418,6 +2458,11 @@ export class Equation extends FigureElementCollection {
       this.render(animationStop);
       this.fnMap.exec((form as EquationForm).onTransition);
       this.fnMap.exec((form as EquationForm).onShow);
+      if (notify) {
+        this.notifications.publish('formChanged', {
+          phase: 'showForm', form: form as EquationForm,
+        });
+      }
     }
   }
 
@@ -2487,7 +2532,7 @@ export class Equation extends FigureElementCollection {
         // this.stopEquationAnimating('complete');
         const currentForm = this.getCurrentForm();
         if (currentForm != null) {
-          this.showForm(currentForm);
+          this.showForm(currentForm, true, false);
         }
       } else {
         // this.stopEquationAnimating('cancel');
@@ -2581,18 +2626,49 @@ export class Equation extends FigureElementCollection {
       }
     }
     if (duration === 0) {
-      this.showForm(form);
+      this.notifications.publish('formChanged', {
+        phase: 'goToFormStart', form, fromForm: options.fromWhere,
+      });
+      this.showForm(form, true, false);
       this.fnMap.exec(options.callback);
+      this.notifications.publish('formChanged', {
+        phase: 'goToFormStep', form, fromForm: options.fromWhere, progress: 1,
+      });
+      this.notifications.publish('formChanged', {
+        phase: 'goToFormEnd', form, fromForm: options.fromWhere,
+      });
     } else {
       this.eqn.isAnimating = true;
       this.fnMap.exec(onTransition);
+      // Set the current form before publishing goToFormStart so listeners
+      // that call getCurrentForm() see the target form, matching the payload.
+      this.setCurrentForm(form);
+      this.notifications.publish('formChanged', {
+        phase: 'goToFormStart', form, fromForm: options.fromWhere,
+      });
+      let stepStarted = false;
       const end = () => {
         this.fnMap.exec(form.onShow);
         this.eqn.isAnimating = false;
         this.fnMap.exec(options.callback);
+        // Cancelling the step ticker stops any further frame callbacks
+        // after end(). It cannot retract a step(p:1) the ticker may have
+        // already published earlier in this frame, so the ticker callback
+        // also skips p===1 — the manual publish below is the single
+        // canonical terminal step event.
+        if (stepStarted) {
+          this.stopAnimating('cancel', '_EquationFormStep', true);
+        }
+        this.notifications.publish('formChanged', {
+          phase: 'goToFormStep', form, fromForm: options.fromWhere, progress: 1,
+        });
+        this.notifications.publish('formChanged', {
+          phase: 'goToFormEnd', form, fromForm: options.fromWhere,
+        });
       };
+      let totalTime = 0;
       if (options.animate === 'move') {
-        form.animatePositionsTo(
+        totalTime = form.animatePositionsTo(
           options.delay,
           options.dissolveOutTime,
           duration,
@@ -2602,7 +2678,7 @@ export class Equation extends FigureElementCollection {
           false,
         );
       } else if (options.animate === 'dissolveInThenMove') {
-        form.animatePositionsTo(
+        totalTime = form.animatePositionsTo(
           options.delay,
           options.dissolveOutTime,
           duration,
@@ -2628,7 +2704,7 @@ export class Equation extends FigureElementCollection {
           start = getPoint(this.eqn.formRestart.moveFrom as any);
         }
         const showFormCallback = () => {
-          this.showForm(form.name, false);
+          this.showForm(form.name, false, false);
         };
         this.fnMap.add('_equationShowFormCallback', showFormCallback);
         this.animations.new('_Equation')
@@ -2641,6 +2717,14 @@ export class Equation extends FigureElementCollection {
           .position({ target, duration })
           .whenFinished(end)
           .start();
+        if (duration != null) {
+          totalTime = options.delay + options.dissolveOutTime + 0.01 + duration;
+        } else {
+          // duration is null — the position step computes a velocity-based
+          // move time internally. Read it back from the chain we just
+          // started so the step ticker still covers the full animation.
+          totalTime = this.animations.getRemainingTime('_Equation');
+        }
       } else if (
         options.animate === 'pulse'
         && this.eqn.formRestart != null
@@ -2661,15 +2745,16 @@ export class Equation extends FigureElementCollection {
             (pulse.element as Equation).pulse({ duration: pulse.duration, scale: pulse.scale });
           }
         };
-        form.allHideShow(
+        const hideShowTime = form.allHideShow(
           options.delay,
           options.dissolveOutTime,
           options.blankTime,
           options.dissolveInTime,
           newEnd,
         );
+        totalTime = hideShowTime + (pulse.duration != null ? pulse.duration : 0);
       } else {
-        form.allHideShow(
+        totalTime = form.allHideShow(
           options.delay,
           options.dissolveOutTime,
           options.blankTime,
@@ -2677,7 +2762,27 @@ export class Equation extends FigureElementCollection {
           end,
         );
       }
-      this.setCurrentForm(form);
+      if (totalTime > 0) {
+        this.animations.new('_EquationFormStep')
+          .custom({
+            callback: (p: number) => {
+              // Skip the terminal tick — end() publishes the canonical
+              // step(p:1) so the ticker would otherwise duplicate it (and
+              // CustomAnimationStep can land on p=1 twice via
+              // nextFrame + finish()).
+              if (p >= 1) return;
+              this.notifications.publish('formChanged', {
+                phase: 'goToFormStep',
+                form,
+                fromForm: options.fromWhere,
+                progress: p,
+              });
+            },
+            duration: totalTime,
+          })
+          .start();
+        stepStarted = true;
+      }
     }
   }
 
@@ -2783,7 +2888,7 @@ export class Equation extends FigureElementCollection {
       this.eqn.isAnimating = false;
       const currentForm = this.getCurrentForm();
       if (currentForm != null) {
-        this.showForm(currentForm);
+        this.showForm(currentForm, true, false);
       }
       return;
     }

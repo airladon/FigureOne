@@ -1,5 +1,9 @@
 # Releases
 
+## 1.5.0
+* Add `formChanged` notification on `Equation` with phases `showForm`, `goToFormStart`, `goToFormStep` (with `progress` 0–1), and `goToFormEnd`, so listeners can drive UI from form transitions
+* Add optional `notify` parameter to `Equation.showForm` (defaults to `true`); pass `false` to suppress the `formChanged` event for that call
+
 ## 1.4.1
 * **Breaking (relative to 1.4.0):** rename `Equation.getElementsInForm` → `Equation.getFunctionElements`
 * Reorder parameters to `(name, formName? = null, mode = 'all', includeHidden = false)` — `name` is now first, `formName` defaults to the current form, and `mode` defaults to `'all'`

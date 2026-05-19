@@ -432,4 +432,145 @@ describe('Equation Animation', () => {
       expect(state2.isFormIgnored).toBe(false);
     });
   });
+
+  describe('formChanged notification', () => {
+    test('showForm publishes phase:showForm', () => {
+      ways.simple();
+      const events = [];
+      eqn.notifications.add('formChanged', e => events.push(e));
+
+      eqn.showForm('0');
+      figure.drawNow(0);
+
+      expect(events).toHaveLength(1);
+      expect(events[0].phase).toBe('showForm');
+      expect(events[0].form.name).toBe('0');
+      expect(events[0].fromForm).toBeUndefined();
+    });
+
+    test('getCurrentForm returns target inside goToFormStart listener', () => {
+      ways.simple();
+      eqn.showForm('0');
+      figure.drawNow(0);
+
+      let currentAtStart = null;
+      eqn.notifications.add('formChanged', (e) => {
+        if (e.phase === 'goToFormStart') {
+          currentAtStart = eqn.getCurrentForm().name;
+        }
+      });
+
+      eqn.goToForm({ form: '1', animate: 'dissolve', duration: 1 });
+      expect(currentAtStart).toBe('1');
+    });
+
+    test('goToForm publishes start, multiple steps, final step(p:1), and end', () => {
+      ways.simple();
+      eqn.showForm('0');
+      figure.drawNow(0);
+
+      const events = [];
+      eqn.notifications.add('formChanged', e => events.push({
+        phase: e.phase,
+        formName: e.form && e.form.name,
+        fromForm: e.fromForm,
+        progress: e.progress,
+      }));
+
+      eqn.goToForm({ form: '1', animate: 'dissolve', duration: 1 });
+      // _EquationFormStep covers the full animation; this self-checks the
+      // total against allHideShow's accounting.
+      const total = eqn.animations.getRemainingTime('_EquationFormStep');
+      expect(total).toBeGreaterThan(0);
+
+      figure.drawNow(0);
+      figure.drawNow(total * 0.25);
+      figure.drawNow(total * 0.5);
+      figure.drawNow(total * 0.75);
+      figure.drawNow(total + 0.1);
+
+      expect(events[0].phase).toBe('goToFormStart');
+      expect(events[0].formName).toBe('1');
+
+      const steps = events.filter(e => e.phase === 'goToFormStep');
+      expect(steps.length).toBeGreaterThanOrEqual(2);
+      steps.forEach((s) => {
+        expect(s.progress).toBeGreaterThanOrEqual(0);
+        expect(s.progress).toBeLessThanOrEqual(1);
+      });
+
+      // last step is exactly progress:1 (no duplicates), immediately
+      // followed by goToFormEnd, which is the last event
+      const endIndex = events.findIndex(e => e.phase === 'goToFormEnd');
+      expect(endIndex).toBeGreaterThan(0);
+      expect(events[endIndex - 1].phase).toBe('goToFormStep');
+      expect(events[endIndex - 1].progress).toBe(1);
+      // only one terminal step(p:1)
+      expect(steps.filter(s => s.progress === 1)).toHaveLength(1);
+      expect(endIndex).toBe(events.length - 1);
+    });
+
+    test('animate:move publishes a complete event stream', () => {
+      ways.simple();
+      eqn.showForm('1');           // ['b','c']
+      figure.drawNow(0);
+
+      const events = [];
+      eqn.notifications.add('formChanged', e => events.push({
+        phase: e.phase, progress: e.progress,
+      }));
+
+      // form '2' = ['a','b'] — c dissolves out, a dissolves in, b may move
+      eqn.goToForm({ form: '2', animate: 'move', duration: 1 });
+      const total = eqn.animations.getRemainingTime('_EquationFormStep');
+      expect(total).toBeGreaterThan(0);
+
+      figure.drawNow(0);
+      figure.drawNow(total * 0.5);
+      figure.drawNow(total + 0.1);
+
+      const phases = events.map(e => e.phase);
+      expect(phases[0]).toBe('goToFormStart');
+      expect(phases[phases.length - 1]).toBe('goToFormEnd');
+      const steps = events.filter(e => e.phase === 'goToFormStep');
+      expect(steps.length).toBeGreaterThanOrEqual(1);
+      expect(steps[steps.length - 1].progress).toBe(1);
+    });
+
+    test('duration:0 goToForm publishes only goToForm* phases, no showForm', () => {
+      ways.simple();
+      eqn.showForm('0');
+      figure.drawNow(0);
+
+      const events = [];
+      eqn.notifications.add('formChanged', e => events.push({
+        phase: e.phase, progress: e.progress,
+      }));
+
+      eqn.goToForm({ form: '1', animate: 'dissolve', duration: 0 });
+
+      const phases = events.map(e => e.phase);
+      expect(phases).toEqual(['goToFormStart', 'goToFormStep', 'goToFormEnd']);
+      expect(events[1].progress).toBe(1);
+    });
+
+    test('internal showForm during goToForm interruption does not publish showForm', () => {
+      ways.simple();
+      eqn.showForm('0');
+      figure.drawNow(0);
+
+      // Start an animated goToForm
+      eqn.goToForm({ form: '1', animate: 'dissolve', duration: 1 });
+      figure.drawNow(0);
+      figure.drawNow(0.3);
+
+      const events = [];
+      eqn.notifications.add('formChanged', e => events.push(e.phase));
+
+      // Interrupt with another goToForm — skipToTarget runs an internal
+      // showForm to snap to current, which must not emit 'showForm'.
+      eqn.goToForm({ form: '2', animate: 'dissolve', duration: 1 });
+      expect(events).not.toContain('showForm');
+    });
+  });
 });
