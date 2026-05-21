@@ -1,5 +1,10 @@
 # Releases
 
+## 1.6.0
+* Add `opacity` equation layout function (`EQN_Opacity`) — wraps an equation phrase in an opacity multiplier that cascades multiplicatively through nested wrappers (outer 0.5 × inner 0.5 = 0.25 on inner content)
+* Add `ignoreOpacity` form option (parallel to `ignoreColor`); set `true` to preserve externally-set element opacities and suppress the cascade
+* Add `{ color: EQN_Color }` and `{ opacity: EQN_Opacity }` to the `TypeEquationPhrase` union (the `color` union entry was previously missing) and fix `addFormFullObject` so per-form `ignoreColor` / `ignoreOpacity` are honored instead of silently dropped
+
 ## 1.5.0
 * Add `formChanged` notification on `Equation` with phases `showForm`, `goToFormStart`, `goToFormStep` (with `progress` 0–1), and `goToFormEnd`, so listeners can drive UI from form transitions
 * Add optional `notify` parameter to `Equation.showForm` (defaults to `true`); pass `false` to suppress the `formChanged` event for that call

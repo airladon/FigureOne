@@ -183,6 +183,12 @@ function setColorForAnnotations(annotations: Array<EQN_Annotation>, color: TypeC
   });
 }
 
+function setOpacityForAnnotations(annotations: Array<EQN_Annotation>, opacity: number) {
+  annotations.forEach((annotation) => {
+    annotation.content.setOpacity(opacity);
+  });
+}
+
 
 function setPositionsForGlyphs(glyphs: EQN_Glyphs) {
   Object.keys(glyphs).forEach((key) => {
@@ -217,6 +223,17 @@ function setColorForGlyphs(glyphs: EQN_Glyphs, color: TypeColor | null) {
   });
 }
 
+function setOpacityForGlyphs(glyphs: EQN_Glyphs, opacity: number) {
+  Object.keys(glyphs).forEach((key) => {
+    if ((glyphs as any)[key] == null) {
+      return;
+    }
+    const glyph = (glyphs as any)[key];
+    glyph.glyph.setOpacity(opacity);
+    setOpacityForAnnotations(glyph.annotations, opacity);
+  });
+}
+
 function offsetLocationForGlyphs(glyphs: EQN_Glyphs, offset: Point) {
   Object.keys(glyphs).forEach((key) => {
     if ((glyphs as any)[key] == null) {
@@ -237,6 +254,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
   scale: number;
   showContent: boolean;
   color: TypeColor | null;
+  opacity: number | null;
   fullSize!: {
     leftOffset: number,
     width: number,
@@ -271,6 +289,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     this.showContent = showContent;
     this.scale = 1;
     this.color = null;
+    this.opacity = null;
     this.functionName = null;
   }
 
@@ -319,6 +338,16 @@ export default class BaseAnnotationFunction implements ElementInterface {
     this.content.setColor(color);
     setColorForAnnotations(this.annotations, color);
     setColorForGlyphs(this.glyphs, color);
+  }
+
+  setOpacity(opacityIn: number = 1) {
+    let opacity = opacityIn;
+    if (this.opacity != null) {
+      opacity *= this.opacity;
+    }
+    this.content.setOpacity(opacity);
+    setOpacityForAnnotations(this.annotations, opacity);
+    setOpacityForGlyphs(this.glyphs, opacity);
   }
 
   offsetLocation(offset: Point = new Point(0, 0)) {

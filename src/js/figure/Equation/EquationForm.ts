@@ -138,6 +138,7 @@ export default class EquationForm extends Elements {
   positionsSet: boolean;
   layout: 'always' | 'lazy' | 'init';
   ignoreColor: boolean;
+  ignoreOpacity: boolean;
   // };
 
   fromForm: {
@@ -176,6 +177,7 @@ export default class EquationForm extends Elements {
     this.positionsSet = false;
     this.layout = 'always';
     this.ignoreColor = false;
+    this.ignoreOpacity = false;
     // this.subForm = '';
   }
 
@@ -207,6 +209,9 @@ export default class EquationForm extends Elements {
     super.setPositions();
     if (!this.ignoreColor) {
       super.setColor();
+    }
+    if (!this.ignoreOpacity) {
+      super.setOpacity();
     }
   }
 

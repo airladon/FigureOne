@@ -139,6 +139,23 @@ export default class BaseEquationFunction extends Elements {
     });
   }
 
+  override setOpacity(opacityIn: number = 1) {
+    let opacity = opacityIn;
+    if (this.opacity != null) {
+      opacity *= this.opacity;
+    }
+    this.glyphs.forEach((glyph) => {
+      if (glyph != null) {
+        glyph.setOpacity(opacity);
+      }
+    });
+    this.contents.forEach((content) => {
+      if (content != null) {
+        content.setOpacity(opacity);
+      }
+    });
+  }
+
   override offsetLocation(offset: Point = new Point(0, 0)) {
     this.location = this.location.add(offset);
     this.glyphLocations.forEach((glyphLocation, index) => {
