@@ -491,6 +491,11 @@ export type EQN_FromForms = {
  * automatically in the equation based on EQN_Color equation functions. In such
  * cases, colors that are set external to the equation will be overridden. Use
  * `true` to allow setting of colors externally only. (`false`)
+ * @property {boolean} [ignoreOpacity] when `false`, opacity will be set
+ * automatically in the equation based on EQN_Opacity equation functions
+ * (multiplicative cascade). Element opacities set externally will be
+ * overridden. Use `true` to allow setting of opacities externally only.
+ * (`false`)
  *
  * @example
  * // Simple form definition of two different forms of the same equation and one
@@ -582,6 +587,7 @@ type EQN_FormObjectDefinition = {
   elementMods?: OBJ_ElementMods;
   fromForm: EQN_FromForms;
   ignoreColor?: boolean;
+  ignoreOpacity?: boolean;
 };
 
 
@@ -697,6 +703,7 @@ export type EQN_FormDefaults = {
   onTransition?: null | string | (() => void);
   layout?: 'lazy' | 'init' | 'always';
   ignoreColor?: boolean;
+  ignoreOpacity?: boolean;
 }
 
 /**
@@ -1057,6 +1064,7 @@ export class Equation extends FigureElementCollection {
       onTransition?: null | string | (() => void);
       layout?: 'always' | 'lazy' | 'init';
       ignoreColor?: boolean;
+      ignoreOpacity?: boolean;
     };
 
     isAnimating: boolean;
@@ -1134,6 +1142,7 @@ export class Equation extends FigureElementCollection {
         elementMods: {},
         layout: 'always',
         ignoreColor: false,
+        ignoreOpacity: false,
         // lazyLayout: true,
         // layoutonce: false,
       },
@@ -1226,6 +1235,7 @@ export class Equation extends FigureElementCollection {
         translation: optionsToUse.formDefaults.translation,
         layout: optionsToUse.formDefaults.layout,
         ignoreColor: optionsToUse.formDefaults.ignoreColor,
+        ignoreOpacity: optionsToUse.formDefaults.ignoreOpacity,
       },
       functions: new EquationFunctions(
         this.elements as any,
@@ -1966,6 +1976,7 @@ export class Equation extends FigureElementCollection {
         elementMods, duration, alignment, scale,
         description, modifiers, translation,
         fromForm, onShow, onTransition,
+        ignoreColor, ignoreOpacity,
       } = form as any;
       const options = {
         elementMods,
@@ -1978,6 +1989,8 @@ export class Equation extends FigureElementCollection {
         translation,
         onShow,
         onTransition,
+        ignoreColor,
+        ignoreOpacity,
       };
       try {
         this.addForm(name, formContent, options);
@@ -2274,7 +2287,7 @@ export class Equation extends FigureElementCollection {
     }
     const {
       description, modifiers, fromForm,
-      onShow, onTransition, duration, translation, ignoreColor,
+      onShow, onTransition, duration, translation, ignoreColor, ignoreOpacity,
     } = optionsToUse;
     const form = this.createForm();
     this.eqn.forms[name] = form;
@@ -2287,6 +2300,7 @@ export class Equation extends FigureElementCollection {
     form.onShow = onShow;
     form.onTransition = onTransition;
     form.ignoreColor = ignoreColor;
+    form.ignoreOpacity = ignoreOpacity;
 
     // Populate element mods
     form.elementMods = {};

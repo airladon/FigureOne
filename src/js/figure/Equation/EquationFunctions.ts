@@ -22,6 +22,7 @@ import BaseEquationFunction from './Elements/BaseEquationFunction';
 import EquationLine from './Symbols/Line';
 import Offset from './Elements/Offset';
 import Color from './Elements/Color';
+import Opacity from './Elements/Opacity';
 import type { TypeColor } from '../../tools/types';
 
 // import type {
@@ -83,6 +84,8 @@ export function getFigureElement(
  *  - `{ prodOf: `{@link EQN_ProdOf} `}`
  *  - `{ topStrike: `{@link EQN_StrikeComment} `}`
  *  - `{ bottomStrike: `{@link EQN_StrikeComment} `}`
+ *  - `{ color: `{@link EQN_Color} `}`
+ *  - `{ opacity: `{@link EQN_Opacity} `}`
  *  - `{ make: string, name?: string, ... }` (inline element — creates any
  *    element type directly in a form using the same `make` values as
  *    {@link Figure.add}. If `name` is omitted, one is auto-generated.)
@@ -156,6 +159,8 @@ export type TypeEquationPhrase =
   | { prodOf: EQN_ProdOf }
   | { topStrike: EQN_StrikeComment }
   | { bottomStrike: EQN_StrikeComment }
+  | { color: EQN_Color }
+  | { opacity: EQN_Opacity }
   | { make: string, name?: string, [key: string]: any }
   | Array<TypeEquationPhrase>
   | FigureElementPrimitive
@@ -596,6 +601,68 @@ export type EQN_Color = {
 } | [
   TypeEquationPhrase,
   TypeColor,
+  (boolean | null | undefined),
+];
+
+/**
+ * Equation opacity function
+ *
+ * Set an opacity multiplier on an equation phrase. The opacity cascades
+ * multiplicatively, so nested `opacity` functions multiply together (e.g. an
+ * outer `0.5` around an inner `0.5` yields `0.25` on the inner content).
+ *
+ * Opacity values are expected to be in the range `[0, 1]`. Whenever the form
+ * is shown, the cascaded opacity is assigned to each wrapped element, overriding
+ * any externally-set element `opacity`. Set `ignoreOpacity: true` on the form
+ * to suppress this and preserve externally-set opacities.
+ *
+ * Options can be an object, or an array in the property order below
+ *
+ * @property {TypeEquationPhrase} content
+ * @property {number} opacity opacity multiplier in the range `[0, 1]`
+ * @property {boolean} [fullContentBounds] Use full bounds with content (`false`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Simple Array Definition
+ * figure.add({
+ *   make: 'equation',
+ *   forms: {
+ *     0: ['a', { opacity: ['b', 0.3] }, 'c'],
+ *   },
+ * });
+ *
+ * @example
+ * // Simple Object Definition
+ * figure.add({
+ *   make: 'equation',
+ *   forms: {
+ *     0: [
+ *       'a',
+ *       {
+ *         opacity: {
+ *           content: 'b',
+ *           opacity: 0.3,
+ *         },
+ *       },
+ *       'c',
+ *     ],
+ *   },
+ * });
+ *
+ * @interface
+ * @group Equation Layout
+ */
+export type EQN_Opacity = {
+  content: TypeEquationPhrase,
+  opacity: number,
+  fullContentBounds?: boolean;
+  name?: string,
+} | [
+  TypeEquationPhrase,
+  number,
   (boolean | null | undefined),
 ];
 
@@ -3509,6 +3576,7 @@ export class EquationFunctions {
     if (name === 'container') { return this.container(params); }
     if (name === 'offset') { return this.offset(params); }
     if (name === 'color') { return this.color(params); }
+    if (name === 'opacity') { return this.opacity(params); }
     return null;
   }
 
@@ -4100,6 +4168,45 @@ export class EquationFunctions {
       );
     } catch (e: any) {
       throw new Error(`FigureOne Equation Color Error: ${e.message}`);
+    }
+  }
+
+  /**
+   * Equation opacity function
+   * @see {@link EQN_Opacity} for description and examples
+   */
+  opacity(
+    options: EQN_Opacity,
+  ) {
+    try {
+      let content;
+      let opacity;
+      let fullContentBounds;
+      const defaultOptions = {
+        opacity: null,
+        fullContentBounds: false,
+      };
+      if (Array.isArray(options)) {
+        [
+          content, opacity, fullContentBounds,
+        ] = options;
+      } else {
+        ({
+          content, opacity, fullContentBounds,
+        } = options);
+      }
+      const optionsIn = {
+        opacity,
+        fullContentBounds,
+      };
+      const o = joinObjects<any>(defaultOptions, optionsIn);
+      return new Opacity(
+        [this.contentToElement(content)],
+        [],
+        o,
+      );
+    } catch (e: any) {
+      throw new Error(`FigureOne Equation Opacity Error: ${e.message}`);
     }
   }
 

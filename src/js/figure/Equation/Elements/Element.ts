@@ -34,6 +34,7 @@ export interface ElementInterface {
   getBounds(useFullSize?: boolean): Bounds;
   cleanup(): void;
   setColor(colorIn: TypeColor | null): void;
+  setOpacity(opacityIn: number): void;
 }
 
 // Equation is a class that takes a set of drawing objects (TextObjects,
@@ -71,6 +72,7 @@ class Element implements ElementInterface {
   showContent: boolean;
   color: TypeColor | null;
   defaultColor: TypeColor;
+  opacity: number | null;
   fullSize: {
     leftOffset: number,
     width: number,
@@ -96,6 +98,7 @@ class Element implements ElementInterface {
     };
     this.color = null;
     this.defaultColor = content.color.slice();
+    this.opacity = null;
     this.fnMap = new FunctionMap();
     this.showContent = true;
   }
@@ -223,6 +226,21 @@ class Element implements ElementInterface {
     }
   }
 
+  setOpacity(opacityIn: number = 1) {
+    let opacity = opacityIn;
+    if (this.opacity != null) {
+      opacity *= this.opacity;
+    }
+    const { content } = this;
+    if (content instanceof FigureElementCollection
+        || content instanceof FigureElementPrimitive) {
+      if (content.isFormIgnored) {
+        return;
+      }
+      content.setOpacity(opacity);
+    }
+  }
+
   offsetLocation(offset: Point = new Point(0, 0)) {
     this.location = this.location.add(offset);
   }
@@ -263,6 +281,7 @@ class Elements implements ElementInterface {
   fnMap: FunctionMap;
   showContent: boolean;
   color: TypeColor | null;
+  opacity: number | null;
   fullSize!: {
     leftOffset: number,
     width: number,
@@ -287,6 +306,7 @@ class Elements implements ElementInterface {
     this.fnMap = new FunctionMap();
     this.showContent = true;
     this.color = null;
+    this.opacity = null;
   }
 
   cleanup() {
@@ -370,6 +390,16 @@ class Elements implements ElementInterface {
     }
     this.content.forEach((e) => {
       e.setColor(color);
+    });
+  }
+
+  setOpacity(opacityIn: number = 1) {
+    let opacity = opacityIn;
+    if (this.opacity != null) {
+      opacity *= this.opacity;
+    }
+    this.content.forEach((e) => {
+      e.setOpacity(opacity);
     });
   }
 
