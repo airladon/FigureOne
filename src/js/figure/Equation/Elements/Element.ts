@@ -35,6 +35,7 @@ export interface ElementInterface {
   cleanup(): void;
   setColor(colorIn: TypeColor | null): void;
   setOpacity(opacityIn: number | null): void;
+  collectDrawOrder(ops: Array<any>): void;
 }
 
 // Equation is a class that takes a set of drawing objects (TextObjects,
@@ -244,6 +245,11 @@ class Element implements ElementInterface {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  collectDrawOrder(ops: Array<any>) {
+    // A leaf element holds no draw-order operation.
+  }
+
   offsetLocation(offset: Point = new Point(0, 0)) {
     this.location = this.location.add(offset);
   }
@@ -403,6 +409,12 @@ class Elements implements ElementInterface {
     }
     this.content.forEach((e) => {
       e.setOpacity(opacity);
+    });
+  }
+
+  collectDrawOrder(ops: Array<any>) {
+    this.content.forEach((e) => {
+      e.collectDrawOrder(ops);
     });
   }
 

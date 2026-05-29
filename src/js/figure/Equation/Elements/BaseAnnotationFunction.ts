@@ -352,6 +352,13 @@ export default class BaseAnnotationFunction implements ElementInterface {
     setOpacityForGlyphs(this.glyphs, opacity);
   }
 
+  collectDrawOrder(ops: Array<any>) {
+    this.content.collectDrawOrder(ops);
+    this.annotations.forEach((annotation) => {
+      annotation.content.collectDrawOrder(ops);
+    });
+  }
+
   offsetLocation(offset: Point = new Point(0, 0)) {
     this.location = this.location.add(offset);
     this.content.offsetLocation(offset);

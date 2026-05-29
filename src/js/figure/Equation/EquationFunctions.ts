@@ -23,6 +23,7 @@ import EquationLine from './Symbols/Line';
 import Offset from './Elements/Offset';
 import Color from './Elements/Color';
 import Opacity from './Elements/Opacity';
+import DrawOrder from './Elements/DrawOrder';
 import type { TypeColor } from '../../tools/types';
 
 // import type {
@@ -86,6 +87,8 @@ export function getFigureElement(
  *  - `{ bottomStrike: `{@link EQN_StrikeComment} `}`
  *  - `{ color: `{@link EQN_Color} `}`
  *  - `{ opacity: `{@link EQN_Opacity} `}`
+ *  - `{ back: `{@link EQN_Back} `}`
+ *  - `{ front: `{@link EQN_Front} `}`
  *  - `{ make: string, name?: string, ... }` (inline element — creates any
  *    element type directly in a form using the same `make` values as
  *    {@link Figure.add}. If `name` is omitted, one is auto-generated.)
@@ -161,6 +164,8 @@ export type TypeEquationPhrase =
   | { bottomStrike: EQN_StrikeComment }
   | { color: EQN_Color }
   | { opacity: EQN_Opacity }
+  | { back: EQN_Back }
+  | { front: EQN_Front }
   | { make: string, name?: string, [key: string]: any }
   | Array<TypeEquationPhrase>
   | FigureElementPrimitive
@@ -663,6 +668,168 @@ export type EQN_Opacity = {
 } | [
   TypeEquationPhrase,
   number,
+  (boolean | null | undefined),
+];
+
+/**
+ * Equation back function
+ *
+ * Send an equation phrase's elements back in the equation's draw stack. All
+ * elements within `content` are moved together as a group, keeping their
+ * current relative draw order. Nested `front`/`back` functions are applied
+ * inner-most first, so an inner `front`/`back` reorders the elements and this
+ * (outer) function then moves the reordered group as a unit.
+ *
+ * The group's position is determined by, in order of precedence:
+ * - `before` - position the group just before (behind) the most-back of the
+ *   named anchor element(s). `num` shifts it further back (default `0`).
+ * - `after` - position the group just after (in front of) the most-front of
+ *   the named anchor element(s). `num` shifts it further forward (default `0`).
+ * - `num` - a positive value moves the group that many places back; a negative
+ *   value positions it `|num|` places ahead of the very back.
+ * - otherwise the group is sent completely to the back.
+ *
+ * The reorder is applied whenever the form is shown, relative to the equation's
+ * natural (definition) draw order, so each form deterministically defines its
+ * own stacking.
+ *
+ * Options can be an object, or an array in the property order below
+ *
+ * @property {TypeEquationPhrase} content
+ * @property {number} [num] places to send the group back (positive), or an
+ * absolute position `|num|` places ahead of the full back (negative). When
+ * `before`/`after` is set, `num` is the offset from the anchor (default `0`).
+ * If undefined (and no anchor), the group is sent completely to the back
+ * @property {string | Array<string>} [before] anchor element name(s) - position
+ * the group just before the most-back anchor
+ * @property {string | Array<string>} [after] anchor element name(s) - position
+ * the group just after the most-front anchor
+ * @property {boolean} [fullContentBounds] Use full bounds with content (`false`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Simple Array Definition - send `b` completely to the back
+ * figure.add({
+ *   make: 'equation',
+ *   forms: {
+ *     0: ['a', { back: ['b'] }, 'c'],
+ *   },
+ * });
+ *
+ * @example
+ * // Object Definition - position `c` just before (behind) `a`
+ * figure.add({
+ *   make: 'equation',
+ *   forms: {
+ *     0: [
+ *       'a',
+ *       'b',
+ *       {
+ *         back: {
+ *           content: 'c',
+ *           before: 'a',
+ *         },
+ *       },
+ *     ],
+ *   },
+ * });
+ *
+ * @interface
+ * @group Equation Layout
+ */
+export type EQN_Back = {
+  content: TypeEquationPhrase,
+  num?: number,
+  before?: string | Array<string>,
+  after?: string | Array<string>,
+  fullContentBounds?: boolean;
+  name?: string,
+} | [
+  TypeEquationPhrase,
+  (number | null | undefined),
+  (boolean | null | undefined),
+];
+
+/**
+ * Equation front function
+ *
+ * Bring an equation phrase's elements forward in the equation's draw stack. All
+ * elements within `content` are moved together as a group, keeping their
+ * current relative draw order. Nested `front`/`back` functions are applied
+ * inner-most first, so an inner `front`/`back` reorders the elements and this
+ * (outer) function then moves the reordered group as a unit.
+ *
+ * The group's position is determined by, in order of precedence:
+ * - `before` - position the group just before (behind) the most-back of the
+ *   named anchor element(s). `num` shifts it further back (default `0`).
+ * - `after` - position the group just after (in front of) the most-front of
+ *   the named anchor element(s). `num` shifts it further forward (default `0`).
+ * - `num` - a positive value moves the group that many places forward; a
+ *   negative value positions it `|num|` places behind the very front.
+ * - otherwise the group is brought completely to the front.
+ *
+ * The reorder is applied whenever the form is shown, relative to the equation's
+ * natural (definition) draw order, so each form deterministically defines its
+ * own stacking.
+ *
+ * Options can be an object, or an array in the property order below
+ *
+ * @property {TypeEquationPhrase} content
+ * @property {number} [num] places to bring the group forward (positive), or an
+ * absolute position `|num|` places behind the full front (negative). When
+ * `before`/`after` is set, `num` is the offset from the anchor (default `0`).
+ * If undefined (and no anchor), the group is brought completely to the front
+ * @property {string | Array<string>} [before] anchor element name(s) - position
+ * the group just before the most-back anchor
+ * @property {string | Array<string>} [after] anchor element name(s) - position
+ * the group just after the most-front anchor
+ * @property {boolean} [fullContentBounds] Use full bounds with content (`false`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Simple Array Definition - bring `b` completely to the front
+ * figure.add({
+ *   make: 'equation',
+ *   forms: {
+ *     0: ['a', { front: ['b'] }, 'c'],
+ *   },
+ * });
+ *
+ * @example
+ * // Object Definition - position `a` just after (in front of) `c`
+ * figure.add({
+ *   make: 'equation',
+ *   forms: {
+ *     0: [
+ *       {
+ *         front: {
+ *           content: 'a',
+ *           after: 'c',
+ *         },
+ *       },
+ *       'b',
+ *       'c',
+ *     ],
+ *   },
+ * });
+ *
+ * @interface
+ * @group Equation Layout
+ */
+export type EQN_Front = {
+  content: TypeEquationPhrase,
+  num?: number,
+  before?: string | Array<string>,
+  after?: string | Array<string>,
+  fullContentBounds?: boolean;
+  name?: string,
+} | [
+  TypeEquationPhrase,
+  (number | null | undefined),
   (boolean | null | undefined),
 ];
 
@@ -3577,6 +3744,8 @@ export class EquationFunctions {
     if (name === 'offset') { return this.offset(params); }
     if (name === 'color') { return this.color(params); }
     if (name === 'opacity') { return this.opacity(params); }
+    if (name === 'back') { return this.back(params); }
+    if (name === 'front') { return this.front(params); }
     return null;
   }
 
@@ -4208,6 +4377,74 @@ export class EquationFunctions {
     } catch (e: any) {
       throw new Error(`FigureOne Equation Opacity Error: ${e.message}`);
     }
+  }
+
+  /**
+   * Equation back function
+   * @see {@link EQN_Back} for description and examples
+   */
+  back(
+    options: EQN_Back,
+  ) {
+    try {
+      return this.drawOrder(options, false);
+    } catch (e: any) {
+      throw new Error(`FigureOne Equation Back Error: ${e.message}`);
+    }
+  }
+
+  /**
+   * Equation front function
+   * @see {@link EQN_Front} for description and examples
+   */
+  front(
+    options: EQN_Front,
+  ) {
+    try {
+      return this.drawOrder(options, true);
+    } catch (e: any) {
+      throw new Error(`FigureOne Equation Front Error: ${e.message}`);
+    }
+  }
+
+  // Shared implementation for the `front`/`back` equation functions.
+  drawOrder(
+    options: EQN_Front | EQN_Back,
+    front: boolean,
+  ) {
+    let content;
+    let num;
+    let fullContentBounds;
+    let before;
+    let after;
+    const defaultOptions = {
+      num: null,
+      fullContentBounds: false,
+      before: null,
+      after: null,
+    };
+    if (Array.isArray(options)) {
+      [
+        content, num, fullContentBounds,
+      ] = options;
+    } else {
+      ({
+        content, num, fullContentBounds, before, after,
+      } = options);
+    }
+    const optionsIn = {
+      num,
+      fullContentBounds,
+      front,
+      before,
+      after,
+    };
+    const o = joinObjects<any>(defaultOptions, optionsIn);
+    return new DrawOrder(
+      [this.contentToElement(content)],
+      [],
+      o,
+    );
   }
 
   /**

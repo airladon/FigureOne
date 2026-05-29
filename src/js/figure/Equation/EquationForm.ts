@@ -213,6 +213,151 @@ export default class EquationForm extends Elements {
     if (!this.ignoreOpacity) {
       super.setOpacity();
     }
+    this.setDrawOrder();
+  }
+
+  // Collect the `front`/`back` draw-order operations declared on this form's
+  // `elementMods` (e.g. `elementMods: { a: { back: {} } }`). These are applied
+  // alongside the inline `front`/`back` equation functions, in element-mod key
+  // order, so `{ a: { back: {} }, b: { back: {} } }` sends `a` to the back and
+  // then `b` to the back.
+  collectElementModDrawOrder(ops: Array<any>) {
+    Object.keys(this.elementMods).forEach((name) => {
+      const entry = this.elementMods[name];
+      if (entry == null || entry.element == null || entry.mods == null) {
+        return;
+      }
+      const { element, mods } = entry;
+      if (element.isFormIgnored) {
+        return;
+      }
+      const add = (modOption: any, front: boolean) => {
+        if (modOption === undefined) {
+          return;
+        }
+        const o = modOption == null ? {} : modOption;
+        ops.push({
+          front,
+          num: o.num != null ? o.num : null,
+          before: o.before != null ? o.before : null,
+          after: o.after != null ? o.after : null,
+          elements: [element],
+        });
+      };
+      add(mods.back, false);
+      add(mods.front, true);
+    });
+  }
+
+  // Apply any `front`/`back` draw-order operations - both the inline equation
+  // functions (gathered from the form tree) and those declared on `elementMods`.
+  // Operations are applied relative to a baseline (the natural draw order,
+  // captured before the first reorder) so the result is deterministic no matter
+  // how many times `setPositions` runs. The reorder is performed on the shared
+  // equation collection (the common parent of all wrapped elements).
+  setDrawOrder() {
+    const ops: Array<any> = [];
+    super.collectDrawOrder(ops);
+    this.collectElementModDrawOrder(ops);
+    // Find the equation collection (the common parent of all child elements).
+    const children = this.collectionMethods.getAllElements();
+    const collection: any = (children != null && children.length > 0)
+      ? children[0].parent : null;
+    if (collection == null) {
+      return;
+    }
+    // Draw order is color-like: once the equation has used front/back at least
+    // once (so a baseline has been captured), every form resets to the natural
+    // baseline before applying its ops - so a form with no front/back restores
+    // the natural draw order. Equations that never use front/back are left
+    // untouched (no baseline, no reset).
+    if (ops.length === 0 && collection.equationDrawOrderBaseline == null) {
+      return;
+    }
+    // Lazily capture / extend the baseline draw order on the shared collection
+    // (so every form resets to the same natural order). New element names (added
+    // after the baseline was captured) are appended in their current order.
+    if (collection.equationDrawOrderBaseline == null) {
+      collection.equationDrawOrderBaseline = [];
+    }
+    const baseline: Array<string> = collection.equationDrawOrderBaseline;
+    collection.drawOrder.forEach((name: string) => {
+      if (baseline.indexOf(name) === -1) {
+        baseline.push(name);
+      }
+    });
+    // Reset to baseline (dropping any names no longer present) before applying.
+    collection.drawOrder = baseline.filter(
+      (name: string) => collection.drawOrder.indexOf(name) > -1,
+    );
+    ops.forEach((op: any) => {
+      this.applyDrawOrderOp(collection, op);
+    });
+  }
+
+  // Move a single op's element group within the equation collection's draw
+  // stack. The group is always kept contiguous and in its current relative
+  // order (front/back does not reorder within the group). The target position
+  // is determined by `before`/`after` (anchor relative) or `num` (relative for
+  // positive, absolute-from-the-extreme for negative), else the full extreme.
+  // eslint-disable-next-line class-methods-use-this
+  applyDrawOrderOp(collection: any, op: any) {
+    const order: Array<string> = collection.drawOrder;
+    const inGroup: Record<string, boolean> = {};
+    op.elements.forEach((e: any) => { inGroup[e.name] = true; });
+    // Group names in their current relative draw order, so the move preserves it
+    const group = order.filter(name => inGroup[name]);
+    if (group.length === 0) {
+      return;
+    }
+    const groupSize = group.length;
+    const minIdx = order.indexOf(group[0]);
+    const maxIdx = order.indexOf(group[groupSize - 1]);
+    const rest = order.filter(name => !inGroup[name]);
+    const restLength = rest.length;
+
+    const anchorNames = (anchor: any): Array<string> => {
+      if (anchor == null) {
+        return [];
+      }
+      const arr = Array.isArray(anchor) ? anchor : [anchor];
+      return arr
+        .map((a: any) => ((a != null && a.name != null) ? a.name : a))
+        .filter((n: any) => typeof n === 'string');
+    };
+
+    let target;
+    if (op.before != null) {
+      // Position the group just before the most-back anchor (`num` shifts it
+      // further back; defaults to 0 when an anchor is given).
+      const num = op.num == null ? 0 : op.num;
+      const idxs = anchorNames(op.before)
+        .map(n => rest.indexOf(n)).filter(i => i > -1);
+      const anchorIdx = idxs.length > 0 ? Math.min(...idxs) : 0;
+      target = anchorIdx - num;
+    } else if (op.after != null) {
+      // Position the group just after the most-front anchor (`num` shifts it
+      // further forward; defaults to 0 when an anchor is given).
+      const num = op.num == null ? 0 : op.num;
+      const idxs = anchorNames(op.after)
+        .map(n => rest.indexOf(n)).filter(i => i > -1);
+      const anchorIdx = idxs.length > 0 ? Math.max(...idxs) : restLength - 1;
+      target = anchorIdx + 1 + num;
+    } else if (op.num == null) {
+      target = op.front ? restLength : 0;
+    } else {
+      // Positive `num` moves the group that many places relative to its current
+      // edge; negative `num` positions it absolutely, `|num|` places before the
+      // full extreme.
+      const n = op.num;
+      if (op.front) {
+        target = n >= 0 ? (maxIdx + n - groupSize + 1) : restLength + n;
+      } else {
+        target = n >= 0 ? minIdx - n : -n;
+      }
+    }
+    target = Math.max(0, Math.min(restLength, target));
+    collection.drawOrder = [...rest.slice(0, target), ...group, ...rest.slice(target)];
   }
 
   override _dup(
@@ -606,7 +751,9 @@ export default class EquationForm extends Elements {
           return;
         }
         if (element != null && mods != null) {
-          element.setProperties(mods);
+          // `back`/`front` are draw-order operations handled by setDrawOrder, not
+          // element properties, so don't copy them onto the element.
+          element.setProperties(mods, ['back', 'front']);
           if (mods.color != null) {
             element.setColor(mods.color);
           }

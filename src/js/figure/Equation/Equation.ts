@@ -63,6 +63,16 @@ export type EQN_UpdateElementText = {
  * Object where keys are property names of a {@link FigureElement} and values
  * are the values to set the properties to.
  *
+ * Two keys are treated specially as draw-order operations rather than element
+ * properties: `back` and `front`. Each takes an options object (`{}` for the
+ * full extreme, `{ num }` to move a set number of places, or `{ before }` /
+ * `{ after }` to position relative to an anchor element) and reorders the
+ * element in the equation's draw stack - paralleling the {@link EQN_Back} and
+ * {@link EQN_Front} equation functions. When several elements declare `back` or
+ * `front` mods, they are applied in definition order, so
+ * `{ a: { back: {} }, b: { back: {} } }` sends `a` to the back and then `b` to
+ * the back.
+ *
  * @property {any} [_propertyName]
  * @interface
  * @group Misc Figure Element
