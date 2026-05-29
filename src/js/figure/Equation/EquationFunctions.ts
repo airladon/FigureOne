@@ -595,6 +595,25 @@ export type EQN_Scale = {
  *   },
  *   touch: { onClick: e => e.nextForm() },
  * });
+ * @example
+ * // The `color` function recolours a phrase explicitly. Separately, an element
+ * // can opt out of the equation's default ('form') colour cascade with
+ * // `ignoreSetColor`, while still accepting explicit colour commands. Here both
+ * // squares start blue; recolouring the whole equation to grey greys the left
+ * // (free) square, but the right (locked) square keeps its colour.
+ * const blue = [0, 0, 1, 1];
+ * const locked = figure.primitives.rectangle({ width: 0.5, height: 0.5, color: blue });
+ * locked.ignoreSetColor = 'form'; // ignore the default cascade, keep blue
+ * const eqn = figure.add({
+ *   make: 'equation',
+ *   color: [1, 0, 0, 1],
+ *   elements: {
+ *     free: figure.primitives.rectangle({ width: 0.5, height: 0.5, color: blue }),
+ *     locked,
+ *   },
+ *   forms: { 0: ['free', '  ', 'locked'] },
+ * });
+ * eqn.setColor([0.5, 0.5, 0.5, 1], true, 'form'); // free -> grey, locked stays blue
  * @interface
  * @group Equation Layout
  */
@@ -710,28 +729,42 @@ export type EQN_Opacity = {
  * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
- * // Simple Array Definition - send `b` completely to the back
+ * // Three overlapping squares, offset so the stacking order is visible. Blue
+ * // is defined last so it sits on top by default; `back` sends it behind the
+ * // red and green squares (so green ends up on top).
+ * const sq = color => figure.primitives.rectangle({ width: 0.6, height: 0.6, color });
  * figure.add({
  *   make: 'equation',
+ *   elements: {
+ *     r: sq([1, 0, 0, 1]),
+ *     g: sq([0, 0.8, 0, 1]),
+ *     b: sq([0, 0, 1, 1]),
+ *   },
  *   forms: {
- *     0: ['a', { back: ['b'] }, 'c'],
+ *     0: [
+ *       { offset: ['r', [0, 0]] },
+ *       { offset: ['g', [0.3, -0.25]] },
+ *       { offset: [{ back: ['b'] }, [0.6, -0.5]] },
+ *     ],
  *   },
  * });
  *
  * @example
- * // Object Definition - position `c` just before (behind) `a`
+ * // Object Definition with an anchor - position the blue square just before
+ * // (behind) the red square, so red and green sit on top of it.
+ * const sq = color => figure.primitives.rectangle({ width: 0.6, height: 0.6, color });
  * figure.add({
  *   make: 'equation',
+ *   elements: {
+ *     r: sq([1, 0, 0, 1]),
+ *     g: sq([0, 0.8, 0, 1]),
+ *     b: sq([0, 0, 1, 1]),
+ *   },
  *   forms: {
  *     0: [
- *       'a',
- *       'b',
- *       {
- *         back: {
- *           content: 'c',
- *           before: 'a',
- *         },
- *       },
+ *       { offset: ['r', [0, 0]] },
+ *       { offset: ['g', [0.3, -0.25]] },
+ *       { offset: [{ back: { content: 'b', before: 'r' } }, [0.6, -0.5]] },
  *     ],
  *   },
  * });
@@ -791,28 +824,42 @@ export type EQN_Back = {
  * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
- * // Simple Array Definition - bring `b` completely to the front
+ * // Three overlapping squares, offset so the stacking order is visible. Red is
+ * // defined first so it sits at the back by default; `front` brings it on top
+ * // of the green and blue squares.
+ * const sq = color => figure.primitives.rectangle({ width: 0.6, height: 0.6, color });
  * figure.add({
  *   make: 'equation',
+ *   elements: {
+ *     r: sq([1, 0, 0, 1]),
+ *     g: sq([0, 0.8, 0, 1]),
+ *     b: sq([0, 0, 1, 1]),
+ *   },
  *   forms: {
- *     0: ['a', { front: ['b'] }, 'c'],
+ *     0: [
+ *       { offset: [{ front: ['r'] }, [0, 0]] },
+ *       { offset: ['g', [0.3, -0.25]] },
+ *       { offset: ['b', [0.6, -0.5]] },
+ *     ],
  *   },
  * });
  *
  * @example
- * // Object Definition - position `a` just after (in front of) `c`
+ * // Object Definition with an anchor - position the red square just after (in
+ * // front of) the green square, so it covers green but stays behind blue.
+ * const sq = color => figure.primitives.rectangle({ width: 0.6, height: 0.6, color });
  * figure.add({
  *   make: 'equation',
+ *   elements: {
+ *     r: sq([1, 0, 0, 1]),
+ *     g: sq([0, 0.8, 0, 1]),
+ *     b: sq([0, 0, 1, 1]),
+ *   },
  *   forms: {
  *     0: [
- *       {
- *         front: {
- *           content: 'a',
- *           after: 'c',
- *         },
- *       },
- *       'b',
- *       'c',
+ *       { offset: [{ front: { content: 'r', after: 'g' } }, [0, 0]] },
+ *       { offset: ['g', [0.3, -0.25]] },
+ *       { offset: ['b', [0.6, -0.5]] },
  *     ],
  *   },
  * });
