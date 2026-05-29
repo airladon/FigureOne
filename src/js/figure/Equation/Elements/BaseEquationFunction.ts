@@ -139,13 +139,13 @@ export default class BaseEquationFunction extends Elements {
     });
   }
 
-  override setOpacity(opacityIn: number = 1) {
+  override setOpacity(opacityIn: number | null = null) {
     let opacity = opacityIn;
     if (this.opacity != null) {
-      opacity *= this.opacity;
+      opacity = (opacity == null ? 1 : opacity) * this.opacity;
     }
     this.glyphs.forEach((glyph) => {
-      if (glyph != null) {
+      if (glyph != null && opacity != null) {
         glyph.setOpacity(opacity);
       }
     });

@@ -34,7 +34,7 @@ export interface ElementInterface {
   getBounds(useFullSize?: boolean): Bounds;
   cleanup(): void;
   setColor(colorIn: TypeColor | null): void;
-  setOpacity(opacityIn: number): void;
+  setOpacity(opacityIn: number | null): void;
 }
 
 // Equation is a class that takes a set of drawing objects (TextObjects,
@@ -226,10 +226,13 @@ class Element implements ElementInterface {
     }
   }
 
-  setOpacity(opacityIn: number = 1) {
+  setOpacity(opacityIn: number | null = null) {
     let opacity = opacityIn;
     if (this.opacity != null) {
-      opacity *= this.opacity;
+      opacity = (opacity == null ? 1 : opacity) * this.opacity;
+    }
+    if (opacity == null) {
+      return;
     }
     const { content } = this;
     if (content instanceof FigureElementCollection
@@ -393,10 +396,10 @@ class Elements implements ElementInterface {
     });
   }
 
-  setOpacity(opacityIn: number = 1) {
+  setOpacity(opacityIn: number | null = null) {
     let opacity = opacityIn;
     if (this.opacity != null) {
-      opacity *= this.opacity;
+      opacity = (opacity == null ? 1 : opacity) * this.opacity;
     }
     this.content.forEach((e) => {
       e.setOpacity(opacity);

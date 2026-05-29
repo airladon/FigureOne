@@ -183,7 +183,7 @@ function setColorForAnnotations(annotations: Array<EQN_Annotation>, color: TypeC
   });
 }
 
-function setOpacityForAnnotations(annotations: Array<EQN_Annotation>, opacity: number) {
+function setOpacityForAnnotations(annotations: Array<EQN_Annotation>, opacity: number | null) {
   annotations.forEach((annotation) => {
     annotation.content.setOpacity(opacity);
   });
@@ -223,13 +223,15 @@ function setColorForGlyphs(glyphs: EQN_Glyphs, color: TypeColor | null) {
   });
 }
 
-function setOpacityForGlyphs(glyphs: EQN_Glyphs, opacity: number) {
+function setOpacityForGlyphs(glyphs: EQN_Glyphs, opacity: number | null) {
   Object.keys(glyphs).forEach((key) => {
     if ((glyphs as any)[key] == null) {
       return;
     }
     const glyph = (glyphs as any)[key];
-    glyph.glyph.setOpacity(opacity);
+    if (opacity != null) {
+      glyph.glyph.setOpacity(opacity);
+    }
     setOpacityForAnnotations(glyph.annotations, opacity);
   });
 }
@@ -340,10 +342,10 @@ export default class BaseAnnotationFunction implements ElementInterface {
     setColorForGlyphs(this.glyphs, color);
   }
 
-  setOpacity(opacityIn: number = 1) {
+  setOpacity(opacityIn: number | null = null) {
     let opacity = opacityIn;
     if (this.opacity != null) {
-      opacity *= this.opacity;
+      opacity = (opacity == null ? 1 : opacity) * this.opacity;
     }
     this.content.setOpacity(opacity);
     setOpacityForAnnotations(this.annotations, opacity);
