@@ -56,9 +56,9 @@ export default class DrawOrder extends BaseEquationFunction {
     if (elements.length > 0) {
       ops.push({
         front,
-        num: num == null ? null : num,
-        before: before == null ? null : before,
-        after: after == null ? null : after,
+        num,
+        before,
+        after,
         elements,
       });
     }

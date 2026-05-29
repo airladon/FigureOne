@@ -1217,7 +1217,7 @@ export class Equation extends FigureElementCollection {
     //   this.setTransform(getTransform(optionsToUse.transform));
     // }
     this.shapes = shapes;
-    this.setColor(optionsToUse.color);
+    this.setColor(optionsToUse.color, true, 'form');
     this.dimColor = optionsToUse.dimColor;
     // this.defaultTextType = optionsToUse.type;
     this.textureAtlases = {};
@@ -1711,7 +1711,7 @@ export class Equation extends FigureElementCollection {
     let symbol = this.eqn.symbols.get(cleanKey, options as any);
     if (symbol != null) {
       if (symbol.color[3] > 0.01 && (options as any).color == null) {
-        symbol.setColor(this.color);
+        symbol.setColor(this.color, true, 'form');
       }
       if ((options as any).mods != null) {
         symbol.setProperties((options as any).mods);
@@ -1742,7 +1742,7 @@ export class Equation extends FigureElementCollection {
       }
       if (symbol != null) {
         if (symbol.color[3] > 0.01 && options.color == null) {
-          symbol.setColor(this.color);
+          symbol.setColor(this.color, true, 'form');
         }
         if (options.mods != null) {
           symbol.setProperties(options.mods);
@@ -1820,7 +1820,7 @@ export class Equation extends FigureElementCollection {
       });
     }
     if (options.color == null && symbol!.color[3] > 0.01) {
-      symbol!.setColor(this.color);
+      symbol!.setColor(this.color, true, 'form');
     }
     symbol!.dimColor = this.dimColor.slice();
     if (options.mods != null) {

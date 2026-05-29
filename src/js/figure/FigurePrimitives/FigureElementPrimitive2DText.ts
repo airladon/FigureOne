@@ -709,8 +709,11 @@ export default class FigureElementPrimitive2DText extends FigureElementPrimitive
     return this.drawingObject.font;
   }
 
-  override setColor(color: TypeColor, setDefault: boolean = true) {
-    super.setColor(color, setDefault);
+  override setColor(color: TypeColor, setDefault: boolean = true, from: string | null = null) {
+    if (this.isSetColorIgnored(from)) {
+      return;
+    }
+    super.setColor(color, setDefault, from);
     this.drawingObject.font.color = color.slice() as TypeColor;
   }
 

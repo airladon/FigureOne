@@ -208,7 +208,7 @@ export default class EquationForm extends Elements {
     }
     super.setPositions();
     if (!this.ignoreColor) {
-      super.setColor();
+      super.setColor(null, 'form');
     }
     if (!this.ignoreOpacity) {
       super.setOpacity();
@@ -238,9 +238,9 @@ export default class EquationForm extends Elements {
         const o = modOption == null ? {} : modOption;
         ops.push({
           front,
-          num: o.num != null ? o.num : null,
-          before: o.before != null ? o.before : null,
-          after: o.after != null ? o.after : null,
+          num: o.num,
+          before: o.before,
+          after: o.after,
           elements: [element],
         });
       };
@@ -281,15 +281,16 @@ export default class EquationForm extends Elements {
       collection.equationDrawOrderBaseline = [];
     }
     const baseline: Array<string> = collection.equationDrawOrderBaseline;
+    const baselineSet: Set<string> = new Set(baseline);
     collection.drawOrder.forEach((name: string) => {
-      if (baseline.indexOf(name) === -1) {
+      if (!baselineSet.has(name)) {
         baseline.push(name);
+        baselineSet.add(name);
       }
     });
     // Reset to baseline (dropping any names no longer present) before applying.
-    collection.drawOrder = baseline.filter(
-      (name: string) => collection.drawOrder.indexOf(name) > -1,
-    );
+    const currentSet: Set<string> = new Set(collection.drawOrder);
+    collection.drawOrder = baseline.filter((name: string) => currentSet.has(name));
     ops.forEach((op: any) => {
       this.applyDrawOrderOp(collection, op);
     });
@@ -329,20 +330,28 @@ export default class EquationForm extends Elements {
     let target;
     if (op.before != null) {
       // Position the group just before the most-back anchor (`num` shifts it
-      // further back; defaults to 0 when an anchor is given).
-      const num = op.num == null ? 0 : op.num;
+      // further back; defaults to 0 when an anchor is given). If none of the
+      // named anchors resolve (typo, or the anchor is itself inside the moved
+      // group), leave the group where the baseline placed it rather than
+      // silently sending it to an extreme.
       const idxs = anchorNames(op.before)
         .map(n => rest.indexOf(n)).filter(i => i > -1);
-      const anchorIdx = idxs.length > 0 ? Math.min(...idxs) : 0;
-      target = anchorIdx - num;
+      if (idxs.length === 0) {
+        return;
+      }
+      const num = op.num == null ? 0 : op.num;
+      target = Math.min(...idxs) - num;
     } else if (op.after != null) {
       // Position the group just after the most-front anchor (`num` shifts it
-      // further forward; defaults to 0 when an anchor is given).
-      const num = op.num == null ? 0 : op.num;
+      // further forward; defaults to 0 when an anchor is given). As with
+      // `before`, an unresolved anchor is a no-op.
       const idxs = anchorNames(op.after)
         .map(n => rest.indexOf(n)).filter(i => i > -1);
-      const anchorIdx = idxs.length > 0 ? Math.max(...idxs) : restLength - 1;
-      target = anchorIdx + 1 + num;
+      if (idxs.length === 0) {
+        return;
+      }
+      const num = op.num == null ? 0 : op.num;
+      target = Math.max(...idxs) + 1 + num;
     } else if (op.num == null) {
       target = op.front ? restLength : 0;
     } else {

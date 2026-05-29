@@ -33,7 +33,7 @@ export interface ElementInterface {
   offsetLocation(offset: Point): void;
   getBounds(useFullSize?: boolean): Bounds;
   cleanup(): void;
-  setColor(colorIn: TypeColor | null): void;
+  setColor(colorIn: TypeColor | null, from?: string | null): void;
   setOpacity(opacityIn: number | null): void;
   collectDrawOrder(ops: Array<any>): void;
 }
@@ -210,12 +210,17 @@ class Element implements ElementInterface {
     }
   }
 
-  setColor(colorIn: TypeColor | null = null) {
+  setColor(colorIn: TypeColor | null = null, from: string | null = null) {
     let color = this.defaultColor;
+    // `from` carries the provenance of the cascade down to the FigureElement.
+    // If this wrapper supplies its own explicit color, re-stamp `from` to null
+    // (an explicit command) so a child cannot ignore it as a 'form' default.
+    let nextFrom = from;
     if (colorIn != null) {
       color = colorIn;
     } else if (this.color != null) {
       color = this.color;
+      nextFrom = null;
     }
     const { content } = this;
     if (content instanceof FigureElementCollection
@@ -223,7 +228,7 @@ class Element implements ElementInterface {
       if (content.isFormIgnored) {
         return;
       }
-      content.setColor(color);
+      content.setColor(color, true, nextFrom);
     }
   }
 
@@ -390,15 +395,17 @@ class Elements implements ElementInterface {
     });
   }
 
-  setColor(colorIn: TypeColor | null = null) {
+  setColor(colorIn: TypeColor | null = null, from: string | null = null) {
     let color: TypeColor | null = null;
+    let nextFrom = from;
     if (this.color != null) {
       color = this.color;
+      nextFrom = null;
     } else if (colorIn != null) {
       color = colorIn;
     }
     this.content.forEach((e) => {
-      e.setColor(color);
+      e.setColor(color, nextFrom);
     });
   }
 

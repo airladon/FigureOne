@@ -177,9 +177,11 @@ function offsetLocationForAnnotations(annotations: Array<EQN_Annotation>, offset
   });
 }
 
-function setColorForAnnotations(annotations: Array<EQN_Annotation>, color: TypeColor | null) {
+function setColorForAnnotations(
+  annotations: Array<EQN_Annotation>, color: TypeColor | null, from: string | null = null,
+) {
   annotations.forEach((annotation) => {
-    annotation.content.setColor(color);
+    annotation.content.setColor(color, from);
   });
 }
 
@@ -210,16 +212,16 @@ function setPositionsForGlyphs(glyphs: EQN_Glyphs) {
   });
 }
 
-function setColorForGlyphs(glyphs: EQN_Glyphs, color: TypeColor | null) {
+function setColorForGlyphs(glyphs: EQN_Glyphs, color: TypeColor | null, from: string | null = null) {
   Object.keys(glyphs).forEach((key) => {
     if ((glyphs as any)[key] == null) {
       return;
     }
     const glyph = (glyphs as any)[key];
     if (color != null) {
-      glyph.glyph.setColor(color);
+      glyph.glyph.setColor(color, true, from);
     }
-    setColorForAnnotations(glyph.annotations, color);
+    setColorForAnnotations(glyph.annotations, color, from);
   });
 }
 
@@ -330,16 +332,18 @@ export default class BaseAnnotationFunction implements ElementInterface {
     setPositionsForGlyphs(this.glyphs);
   }
 
-  setColor(colorIn: TypeColor | null = null) {
+  setColor(colorIn: TypeColor | null = null, from: string | null = null) {
     let color: TypeColor | null = null;
+    let nextFrom = from;
     if (this.color != null) {
       color = this.color;
+      nextFrom = null;
     } else if (colorIn != null) {
       color = colorIn;
     }
-    this.content.setColor(color);
-    setColorForAnnotations(this.annotations, color);
-    setColorForGlyphs(this.glyphs, color);
+    this.content.setColor(color, nextFrom);
+    setColorForAnnotations(this.annotations, color, nextFrom);
+    setColorForGlyphs(this.glyphs, color, nextFrom);
   }
 
   setOpacity(opacityIn: number | null = null) {

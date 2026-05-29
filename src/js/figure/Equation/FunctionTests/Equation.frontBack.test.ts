@@ -90,6 +90,10 @@ describe('Equation Functions - Front and Back', () => {
             d: { back: { before: 'b' } },
           },
         },
+        // Anchor is itself inside the moved group — should no-op (natural order)
+        anchorInGroup: [{ back: { content: ['a', 'b'], before: 'a' } }, 'c'],
+        // Misspelled/non-existent anchor — should no-op (natural order)
+        anchorTypo: ['a', 'b', 'c', { back: { content: 'd', before: 'typoName' } }],
       });
       figure.elements = eqn;
     };
@@ -284,5 +288,20 @@ describe('Equation Functions - Front and Back', () => {
     expect(order('d')).toBeLessThan(order('b'));
     expect(order('d')).toBeGreaterThan(order('a'));
     expect(order('b') - order('d')).toBe(1);
+  });
+
+  test('Anchor inside the moved group is a no-op (natural order kept)', () => {
+    show('anchorInGroup');
+    // before: 'a' is unresolvable ('a' is in the group), so the move is skipped
+    expect(order('a')).toBeLessThan(order('b'));
+    expect(order('b')).toBeLessThan(order('c'));
+  });
+
+  test('Unresolved (misspelled) anchor is a no-op (natural order kept)', () => {
+    show('anchorTypo');
+    // before: 'typoName' resolves to nothing, so `d` stays at its natural spot
+    expect(order('c')).toBeLessThan(order('d'));
+    expect(order('a')).toBeLessThan(order('b'));
+    expect(order('b')).toBeLessThan(order('c'));
   });
 });
