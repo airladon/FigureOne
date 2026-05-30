@@ -1,5 +1,9 @@
 # Releases
 
+## 1.7.0
+* Add `front` and `back` equation layout functions (`EQN_Front` / `EQN_Back`) to reorder a phrase's elements within the equation's draw stack per-form, with `num`, `before`, and `after` positioning; the same operations are also available as `front` / `back` element mods
+* Add `ignoreSetColor` on figure elements — list a source label (e.g. the equation's default `'form'` cascade) and the element ignores `setColor` from that source while still honoring explicit colour commands (`color` functions, `dim`/`undim`, direct `setColor`)
+
 ## 1.6.0
 * Add `opacity` equation layout function (`EQN_Opacity`) — wraps an equation phrase in an opacity multiplier that cascades multiplicatively through nested wrappers (outer 0.5 × inner 0.5 = 0.25 on inner content)
 * Add `ignoreOpacity` form option (parallel to `ignoreColor`); set `true` to preserve externally-set element opacities and suppress the cascade
