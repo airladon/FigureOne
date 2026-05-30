@@ -120,32 +120,37 @@ export default class BaseEquationFunction extends Elements {
     });
   }
 
-  override setColor(colorIn: TypeColor | null = null) {
+  override setColor(colorIn: TypeColor | null = null, from: string | null = null) {
     let color: TypeColor | null = null;
+    // An explicit `color` function supplies its own `this.color`; re-stamp the
+    // provenance to null so this color is treated as an explicit command and is
+    // not ignored by a child that ignores the 'form' default cascade.
+    let nextFrom = from;
     if (this.color != null) {
       color = this.color;
+      nextFrom = null;
     } else if (colorIn != null) {
       color = colorIn;
     }
     this.glyphs.forEach((glyph) => {
       if (glyph != null && color != null) {
-        glyph.setColor(color);
+        glyph.setColor(color, true, nextFrom);
       }
     });
     this.contents.forEach((content) => {
       if (content != null) {
-        content.setColor(color);
+        content.setColor(color, nextFrom);
       }
     });
   }
 
-  override setOpacity(opacityIn: number = 1) {
+  override setOpacity(opacityIn: number | null = null) {
     let opacity = opacityIn;
     if (this.opacity != null) {
-      opacity *= this.opacity;
+      opacity = (opacity == null ? 1 : opacity) * this.opacity;
     }
     this.glyphs.forEach((glyph) => {
-      if (glyph != null) {
+      if (glyph != null && opacity != null) {
         glyph.setOpacity(opacity);
       }
     });

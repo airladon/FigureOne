@@ -33,8 +33,9 @@ export interface ElementInterface {
   offsetLocation(offset: Point): void;
   getBounds(useFullSize?: boolean): Bounds;
   cleanup(): void;
-  setColor(colorIn: TypeColor | null): void;
-  setOpacity(opacityIn: number): void;
+  setColor(colorIn: TypeColor | null, from?: string | null): void;
+  setOpacity(opacityIn: number | null): void;
+  collectDrawOrder(ops: Array<any>): void;
 }
 
 // Equation is a class that takes a set of drawing objects (TextObjects,
@@ -209,12 +210,17 @@ class Element implements ElementInterface {
     }
   }
 
-  setColor(colorIn: TypeColor | null = null) {
+  setColor(colorIn: TypeColor | null = null, from: string | null = null) {
     let color = this.defaultColor;
+    // `from` carries the provenance of the cascade down to the FigureElement.
+    // If this wrapper supplies its own explicit color, re-stamp `from` to null
+    // (an explicit command) so a child cannot ignore it as a 'form' default.
+    let nextFrom = from;
     if (colorIn != null) {
       color = colorIn;
     } else if (this.color != null) {
       color = this.color;
+      nextFrom = null;
     }
     const { content } = this;
     if (content instanceof FigureElementCollection
@@ -222,14 +228,17 @@ class Element implements ElementInterface {
       if (content.isFormIgnored) {
         return;
       }
-      content.setColor(color);
+      content.setColor(color, true, nextFrom);
     }
   }
 
-  setOpacity(opacityIn: number = 1) {
+  setOpacity(opacityIn: number | null = null) {
     let opacity = opacityIn;
     if (this.opacity != null) {
-      opacity *= this.opacity;
+      opacity = (opacity == null ? 1 : opacity) * this.opacity;
+    }
+    if (opacity == null) {
+      return;
     }
     const { content } = this;
     if (content instanceof FigureElementCollection
@@ -239,6 +248,11 @@ class Element implements ElementInterface {
       }
       content.setOpacity(opacity);
     }
+  }
+
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  collectDrawOrder(ops: Array<any>) {
+    // A leaf element holds no draw-order operation.
   }
 
   offsetLocation(offset: Point = new Point(0, 0)) {
@@ -381,25 +395,33 @@ class Elements implements ElementInterface {
     });
   }
 
-  setColor(colorIn: TypeColor | null = null) {
+  setColor(colorIn: TypeColor | null = null, from: string | null = null) {
     let color: TypeColor | null = null;
+    let nextFrom = from;
     if (this.color != null) {
       color = this.color;
+      nextFrom = null;
     } else if (colorIn != null) {
       color = colorIn;
     }
     this.content.forEach((e) => {
-      e.setColor(color);
+      e.setColor(color, nextFrom);
     });
   }
 
-  setOpacity(opacityIn: number = 1) {
+  setOpacity(opacityIn: number | null = null) {
     let opacity = opacityIn;
     if (this.opacity != null) {
-      opacity *= this.opacity;
+      opacity = (opacity == null ? 1 : opacity) * this.opacity;
     }
     this.content.forEach((e) => {
       e.setOpacity(opacity);
+    });
+  }
+
+  collectDrawOrder(ops: Array<any>) {
+    this.content.forEach((e) => {
+      e.collectDrawOrder(ops);
     });
   }
 

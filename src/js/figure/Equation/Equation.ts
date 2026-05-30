@@ -63,6 +63,16 @@ export type EQN_UpdateElementText = {
  * Object where keys are property names of a {@link FigureElement} and values
  * are the values to set the properties to.
  *
+ * Two keys are treated specially as draw-order operations rather than element
+ * properties: `back` and `front`. Each takes an options object (`{}` for the
+ * full extreme, `{ num }` to move a set number of places, or `{ before }` /
+ * `{ after }` to position relative to an anchor element) and reorders the
+ * element in the equation's draw stack - paralleling the {@link EQN_Back} and
+ * {@link EQN_Front} equation functions. When several elements declare `back` or
+ * `front` mods, they are applied in definition order, so
+ * `{ a: { back: {} }, b: { back: {} } }` sends `a` to the back and then `b` to
+ * the back.
+ *
  * @property {any} [_propertyName]
  * @interface
  * @group Misc Figure Element
@@ -1207,7 +1217,7 @@ export class Equation extends FigureElementCollection {
     //   this.setTransform(getTransform(optionsToUse.transform));
     // }
     this.shapes = shapes;
-    this.setColor(optionsToUse.color);
+    this.setColor(optionsToUse.color, true, 'form');
     this.dimColor = optionsToUse.dimColor;
     // this.defaultTextType = optionsToUse.type;
     this.textureAtlases = {};
@@ -1701,7 +1711,7 @@ export class Equation extends FigureElementCollection {
     let symbol = this.eqn.symbols.get(cleanKey, options as any);
     if (symbol != null) {
       if (symbol.color[3] > 0.01 && (options as any).color == null) {
-        symbol.setColor(this.color);
+        symbol.setColor(this.color, true, 'form');
       }
       if ((options as any).mods != null) {
         symbol.setProperties((options as any).mods);
@@ -1732,7 +1742,7 @@ export class Equation extends FigureElementCollection {
       }
       if (symbol != null) {
         if (symbol.color[3] > 0.01 && options.color == null) {
-          symbol.setColor(this.color);
+          symbol.setColor(this.color, true, 'form');
         }
         if (options.mods != null) {
           symbol.setProperties(options.mods);
@@ -1810,7 +1820,7 @@ export class Equation extends FigureElementCollection {
       });
     }
     if (options.color == null && symbol!.color[3] > 0.01) {
-      symbol!.setColor(this.color);
+      symbol!.setColor(this.color, true, 'form');
     }
     symbol!.dimColor = this.dimColor.slice();
     if (options.mods != null) {

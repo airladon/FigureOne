@@ -136,6 +136,31 @@ describe('Equation Functions - Opacity', () => {
     });
   });
 
+  test('No opacity wrapper preserves externally-set opacities', () => {
+    functions.inputForms();
+    eqn._a.setOpacity(0.3);
+    eqn._b.setOpacity(0.4);
+    eqn._c.setOpacity(0.5);
+    eqn.showForm('plain');
+    figure.setFirstTransform();
+    expect(round(eqn._a.opacity, 4)).toEqual(0.3);
+    expect(round(eqn._b.opacity, 4)).toEqual(0.4);
+    expect(round(eqn._c.opacity, 4)).toEqual(0.5);
+  });
+
+  test('Partial wrapper preserves opacity on unwrapped siblings', () => {
+    functions.inputForms();
+    eqn._a.setOpacity(0.3);
+    eqn._c.setOpacity(0.5);
+    eqn.showForm('partial');
+    figure.setFirstTransform();
+    // 'b' is inside the opacity wrapper (0.4), so it gets overridden
+    expect(round(eqn._b.opacity, 4)).toEqual(0.4);
+    // 'a' and 'c' are outside, so their externally-set opacities are preserved
+    expect(round(eqn._a.opacity, 4)).toEqual(0.3);
+    expect(round(eqn._c.opacity, 4)).toEqual(0.5);
+  });
+
   test('ignoreOpacity suppresses the cascade even with opacity wrapper', () => {
     functions.inputForms();
     // Externally set opacities first; cascade should not stomp them

@@ -578,6 +578,7 @@ FigureElementPrimitive2DText {
     },
   },
   "frozenPulseTransforms": [],
+  "ignoreSetColor": [],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,

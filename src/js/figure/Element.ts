@@ -770,6 +770,13 @@ class FigureElement {
 
   allowSetColor: string;
 
+  // `setColor` commands can be tagged with a `from` source label (e.g. an
+  // equation tags its default-color cascade with 'form'). An element listed
+  // against a source in `ignoreSetColor` will ignore commands from that source
+  // while still honoring untagged (explicit) commands like `dim`/`undim` or a
+  // direct `setColor`. Accepts a single source string or a list of them.
+  ignoreSetColor: string | Array<string>;
+
   // // TODO
   // move: {
   //   line: Line,
@@ -811,6 +818,7 @@ class FigureElement {
     this.isFormIgnored = false;
     this.simple = false;
     this.allowSetColor = 'all';
+    this.ignoreSetColor = [];
     this.transform = transform._dup();
     this.dependantTransform = false;
     this.fnMap = new FunctionMap();
@@ -1806,11 +1814,31 @@ class FigureElement {
   }
 
   /**
+   * Returns `true` if a `setColor` command tagged with source `from` should be
+   * ignored by this element (per `ignoreSetColor`). Untagged commands
+   * (`from == null`) are never ignored.
+   */
+  isSetColorIgnored(from: string | null = null) {
+    if (from == null) {
+      return false;
+    }
+    if (typeof this.ignoreSetColor === 'string') {
+      return this.ignoreSetColor === from;
+    }
+    return this.ignoreSetColor.indexOf(from) > -1;
+  }
+
+  /**
    Set element color.
    @param {[number, number, number, number]} color RGBA color from 0 to 1
    @param {boolean} [setDefault] also set the default color to this color
+   @param {string | null} [from] source label of this color command; if it
+   matches `ignoreSetColor` the command is ignored
    */
-  setColor(color: TypeColor, setDefault: boolean = true) {
+  setColor(color: TypeColor, setDefault: boolean = true, from: string | null = null) {
+    if (this.isSetColorIgnored(from)) {
+      return;
+    }
     if (this.allowSetColor === 'all') {
       this.color = color != null ? color.slice() : [0, 0, 0, 0];
     } else if (this.allowSetColor === 'opacity') {
@@ -4147,7 +4175,10 @@ class FigureElementPrimitive extends FigureElement {
     // }
   }
 
-  override setColor(color: TypeColor, setDefault: boolean = true) {
+  override setColor(color: TypeColor, setDefault: boolean = true, from: string | null = null) {
+    if (this.isSetColorIgnored(from)) {
+      return;
+    }
     if (this.allowSetColor === 'all') {
       this.color = color != null ? color.slice() : [0, 0, 0, 0];
     } else if (this.allowSetColor === 'opacity') {
@@ -5932,13 +5963,16 @@ class FigureElementCollection extends FigureElement {
     }
   }
 
-  override setColor(color: TypeColor = [0, 0, 0, 1], setDefault: boolean = true) {
+  override setColor(color: TypeColor = [0, 0, 0, 1], setDefault: boolean = true, from: string | null = null) {
+    if (this.isSetColorIgnored(from)) {
+      return;
+    }
     const nonNullColor = color != null ? color : [0, 0, 0, 0];
 
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       if (!this.preserveChildColor) {
-        element.setColor(nonNullColor, setDefault);
+        element.setColor(nonNullColor, setDefault, from);
       }
     }
     if (this.allowSetColor === 'all') {
