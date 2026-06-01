@@ -20,6 +20,10 @@ Colors are `[r, g, b, a]` with values 0-1. Default scene is `[-1, -1, 2, 2]` (x,
 | lineWidth | number | | Default line width |
 | length | number | | Default primary dimension |
 | backgroundColor | TypeColor | | Background color |
+| textStyle | `'italic'` \| `'normal'` | `'italic'` | Default equation text style (also settable on FigurePrimitives and Equation) |
+| antialias | boolean | `true` | Enable WebGL anti-aliasing |
+| atlasScale | number | `2` | GL text atlas texture resolution relative to 1:1 pixel mapping |
+| onWebGLUnavailable | () => void | | Callback fired once during construction if no WebGL context is available (figure is still created but renders nothing) |
 
 ### Key Figure Methods
 
@@ -44,6 +48,11 @@ figure.stop();            // Stop all animations
 figure.resize();          // Resize after container change
 figure.animateNextFrame(); // Request next animation frame
 figure.isAnimating();     // Check if any animation running
+
+// WebGL context state
+figure.webglAvailable;    // false if no live WebGL context (e.g. context lost)
+figure.notifications.add('contextLost', () => { /* context removed by browser */ });
+figure.notifications.add('contextRestored', () => { /* context returned */ });
 
 // Coordinate transforms
 figure.transformPoint(point, fromSpace, toSpace);
@@ -92,6 +101,7 @@ Path to figure element(s) within a collection. Supports multiple formats:
 | underline | boolean \| object | `false` | Underline options |
 | outline | boolean \| object | `false` | Outline options |
 | render | `'gl'` \| `'2d'` \| `'html'` | `'gl'` | Render target |
+| atlasId | string | | Share a single GL atlas texture across text elements with different sizes (elements with the same `atlasId` reuse one atlas) |
 
 ### OBJ_Texture
 
@@ -119,6 +129,11 @@ Path to figure element(s) within a collection. Supports multiple formats:
 | defaultColor | TypeColor | | Color when undimmed |
 | scenarios | OBJ_Scenarios | | Named presets |
 | scene | Scene \| OBJ_Scene | | Custom scene |
+| isFormIgnored | boolean | `false` | Exclude from equation form changes — skipped by form layout, show/hide, transform/color sets, and `elementMods`, so its user-applied transform, color, and visibility persist across `showForm` / `goToForm` (contributes zero size to layout) |
+| allowSetColor | `'all'` \| `'opacity'` \| `'none'` | `'all'` | Freeze color: `'opacity'` allows only the alpha channel to change; `'none'` blocks all `setColor` |
+| ignoreSetColor | string \| string[] | `[]` | Source label(s) whose tagged `setColor` commands are ignored (e.g. the equation's default `'form'` color cascade), while explicit/untagged commands (`dim`/`undim`, direct `setColor`) are still honored |
+
+These element properties are also settable at runtime; `setColor(color, setDefault?, from?)` takes an optional `from` source label that is matched against `ignoreSetColor`.
 
 ### OBJ_Collection
 
@@ -1252,6 +1267,26 @@ Array: `{ color: [content, [r, g, b, a]] }`
 | color | TypeColor | | Color to apply |
 | fullContentBounds | boolean | `false` | Use full bounds |
 
+#### EQN_Opacity (`opacity`)
+Array: `{ opacity: [content, opacity_value] }`. Wraps a phrase in an opacity multiplier that cascades multiplicatively through nested `opacity` wrappers (outer `0.5` × inner `0.5` = `0.25` on inner content). The cascaded opacity is assigned to each wrapped element whenever the form is shown, overriding externally-set element opacity — set `ignoreOpacity: true` on the form to suppress this and preserve external opacities.
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Content |
+| opacity | number | | Opacity multiplier in range `[0, 1]` |
+| fullContentBounds | boolean | `false` | Use full bounds |
+
+#### EQN_Front (`front`) / EQN_Back (`back`)
+Array: `{ front: [content, num] }` / `{ back: [content, num] }`. Reorder a phrase's elements within the equation's draw stack, per-form. All elements in `content` move together as a group, keeping their relative draw order. Applied whenever the form is shown, relative to the equation's natural definition order, so each form deterministically defines its own stacking. The same operations are available as `front` / `back` element mods (e.g. `elementMods: { a: { back: {} } }`).
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Content |
+| num | number | | `front`: places to move forward (positive) or `\|num\|` places behind the front (negative). `back`: places to move back (positive) or `\|num\|` places ahead of the back (negative). With `before`/`after`, it's the offset from the anchor (default `0`). If omitted with no anchor, moves fully to front/back |
+| before | string \| string[] | | Anchor element name(s) — position the group just before (behind) the most-back anchor |
+| after | string \| string[] | | Anchor element name(s) — position the group just after (in front of) the most-front anchor |
+| fullContentBounds | boolean | `false` | Use full bounds |
+
 #### EQN_Container (`container`)
 Array: `{ container: [content, width] }`
 
@@ -1452,9 +1487,16 @@ forms: {
     scale: { elementName: 1.5 },     // Per-element target scales during animation
     fromPrev: { elementName: 'otherElement' }, // Animate from another element's position
     fromNext: { elementName: 'otherElement' }, // Animate from another element's position (reverse)
+    ignoreColor: false,              // true preserves externally-set element colors (suppresses color cascade)
+    ignoreOpacity: false,            // true preserves externally-set element opacities (suppresses opacity cascade)
+    elementMods: {                   // Per-element property mods applied when form shows
+      elementName: { back: {} },     // e.g. front/back reorder mods (see EQN_Front/EQN_Back)
+    },
   },
 }
 ```
+
+Every equation layout function (container, frac, matrix, brac, annotate, color, opacity, front, back, etc.) also accepts an optional `name` property — purely a label with no layout effect, used to address the function's sub-tree via `eqn.getFunctionElements(name)`.
 
 ### Forms and Animation
 
@@ -1474,9 +1516,24 @@ const eqn = figure.add({
 });
 
 eqn.showForm('1');
+eqn.showForm('1', false);            // notify=false suppresses the formChanged event for this call
 eqn.goToForm({ form: '2', delay: 1, duration: 1.5, animate: 'move' });
 eqn.nextForm();   // Navigate formSeries
 eqn.prevForm();
+
+// Element lookup within forms
+eqn.getFormElements(formName, includeHidden?);   // All elements in a form
+eqn.getPhraseElements(phrase);                    // All elements in a phrase
+// Elements inside a named layout function (any function tagged with `name`).
+// (name, formName? = current, mode? = 'all', includeHidden? = false).
+// mode 'first' = first match; 'all' = de-duplicated union across all matches.
+eqn.getFunctionElements('myFrac');
+```
+
+`Equation` publishes a `formChanged` notification whenever the displayed form may have changed, with payload `{ phase, form, fromForm?, progress? }`. `phase` is one of: `'showForm'` (form set via `showForm`; suppress with `notify: false`), `'goToFormStart'`, `'goToFormStep'` (per animation frame, with `progress` 0–1; a final step with `progress: 1` precedes the end), `'goToFormEnd'`. `fromForm` is present only on the `goToForm*` phases.
+
+```js
+eqn.notifications.add('formChanged', ({ phase, form, progress }) => { /* drive UI */ });
 ```
 
 ### Phrases (reusable sub-expressions)
@@ -1486,6 +1543,14 @@ eqn.prevForm();
   phrases: { Csq: { sup: ['C', '2'] } },
   forms: { 1: ['a', '_ = ', 'Csq'] },
 }
+```
+
+### LaTeX Parsing
+`Fig.latexToFigureOne(latex)` converts a LaTeX math expression into `{ elements, form }` for use in an equation definition (basic support).
+
+```js
+const { elements, form } = Fig.latexToFigureOne('\\frac{a}{b} = c');
+figure.add({ make: 'equation', elements, forms: { base: form } });
 ```
 
 ---
