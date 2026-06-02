@@ -1,5 +1,8 @@
 # Releases
 
+## 1.7.1
+* Update the bundled agent docs (`llms.txt` / `llms-full.txt`) to cover the API added since they were last refreshed (v1.1.6): equation `opacity` / `front` / `back` layout functions, layout-function `name` labels, form `ignoreColor` / `ignoreOpacity`, the `formChanged` notification, `Equation.getFunctionElements`, and element `isFormIgnored` / `allowSetColor` / `ignoreSetColor`; plus the earlier `latexToFigureOne`, Figure `textStyle` / `antialias` / `atlasScale` / `onWebGLUnavailable` / `webglAvailable`, the `contextLost` / `contextRestored` notifications, and the `atlasId` font option
+
 ## 1.7.0
 * Add `front` and `back` equation layout functions (`EQN_Front` / `EQN_Back`) to reorder a phrase's elements within the equation's draw stack per-form, with `num`, `before`, and `after` positioning; the same operations are also available as `front` / `back` element mods
 * Add `ignoreSetColor` on figure elements — list a source label (e.g. the equation's default `'form'` cascade) and the element ignores `setColor` from that source while still honoring explicit colour commands (`color` functions, `dim`/`undim`, direct `setColor`)

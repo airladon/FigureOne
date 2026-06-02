@@ -24,6 +24,8 @@ figure.add({ make: 'triangle', width: 0.5, height: 0.5, color: [1, 0, 0, 1] });
 
 Colors are `[r, g, b, a]` with values 0-1. Coordinates default to a scene of `[-1, -1, 2, 2]` (x, y, width, height). Override with `new Fig.Figure({ scene: [-2, -2, 4, 4] })`.
 
+Other `Fig.Figure` options: `textStyle` (`'italic'` default | `'normal'` — default equation text style), `antialias` (default `true`), `atlasScale` (GL text atlas resolution, default `2`), `onWebGLUnavailable` (callback if no WebGL context). Check `figure.webglAvailable` and subscribe to `contextLost` / `contextRestored` notifications for runtime WebGL context transitions.
+
 ## Core Concepts
 
 - **Figure** — top-level container that manages all elements and rendering
@@ -105,6 +107,9 @@ All elements accept these common options alongside shape-specific ones:
 - `color` — `[r, g, b, a]`
 - `position` — `[x, y]` shorthand for translation
 - `rotation` — rotation in radians
+- `isFormIgnored` — exclude from equation form changes (its transform/color/visibility persist across `showForm`/`goToForm`)
+- `allowSetColor` — `'all'` (default), `'opacity'` (alpha only), or `'none'` to freeze color
+- `ignoreSetColor` — source label(s) whose tagged `setColor` is ignored (e.g. the equation's `'form'` color cascade), while explicit commands still apply
 
 When `options` is used, shape-specific properties go inside it:
 
@@ -256,8 +261,13 @@ Any element type can be created inline in forms using `make`:
 | `prodOf` | `{ prodOf: { symbol, content, from, to } }` | Product |
 | `scale` | `{ scale: [content, scale_factor] }` | Scale content |
 | `color` | `{ color: [content, [r,g,b,a]] }` | Color content |
+| `opacity` | `{ opacity: [content, 0.3] }` | Opacity multiplier (cascades multiplicatively through nesting) |
+| `front` | `{ front: [content, num] }` | Bring content forward in draw stack (per-form); supports `before`/`after` anchors |
+| `back` | `{ back: [content, num] }` | Send content back in draw stack (per-form); supports `before`/`after` anchors |
 | `container` | `{ container: { content, width, ... } }` | Fixed-size container |
 | `lines` | `{ lines: { content: [...], justify } }` | Multi-line layout |
+
+Any layout function also accepts a `name` label to address its elements via `eqn.getFunctionElements(name)`. Form objects accept `ignoreColor` / `ignoreOpacity` to preserve externally-set element color/opacity (suppress the cascade).
 
 ### Symbols
 
@@ -302,8 +312,11 @@ const eqn = figure.add({
 });
 
 eqn.showForm('1');
+eqn.showForm('1', false);   // notify=false suppresses the formChanged event
 eqn.goToForm({ form: '2', delay: 1, duration: 1.5, animate: 'move' });
 ```
+
+Equation publishes a `formChanged` notification with payload `{ phase, form, fromForm?, progress? }`, where `phase` is `'showForm'`, `'goToFormStart'`, `'goToFormStep'` (with `progress` 0–1), or `'goToFormEnd'`. Use `eqn.getFunctionElements(name)` to fetch elements inside a named layout function.
 
 Use `formSeries` to define an ordered list of forms, then navigate with `eqn.nextForm()` and `eqn.prevForm()`.
 
@@ -528,6 +541,10 @@ new Fig.Transform()            // Transform builder
   .rotate(angle)
   .scale(sx, sy)
 Fig.round(value, precision)    // Round to N decimal places
+
+// Convert a LaTeX math expression to an equation form (basic support)
+const { elements, form } = Fig.latexToFigureOne('\\frac{a}{b} = c');
+figure.add({ make: 'equation', elements, forms: { base: form } });
 
 // Color format: [r, g, b, a] with values 0 to 1
 // [1, 0, 0, 1] = red, [0, 0, 1, 0.5] = semi-transparent blue
