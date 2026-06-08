@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>gl mask recolor (textureMap)</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    #figureOneContainer { width: 500px; height: 500px; background-color: white; }
+    button { margin: 4px; padding: 6px 10px; }
+  </style>
+</head>
+<body>
+  <h3>gl mask recolor (textureMap)</h3>
+  <p>Left/middle circles are recolored by tints; the right circle, orange bar and
+     frame keep the base image colors.</p>
+  <div id="figureOneContainer"></div>
+  <div>
+    <button onclick="window.setTints('default')">default tints</button>
+    <button onclick="window.setTints('warm')">warm</button>
+    <button onclick="window.setTints('all')">all three</button>
+    <button onclick="window.setTints('none')">none (base only)</button>
+  </div>
+  <!-- Built bundle: run `npm run webpack` (in the container) to produce this. -->
+  <script type="text/javascript" src="../../package/index.js"></script>
+  <script type="text/javascript" src="./index.js"></script>
+</body>
+</html>

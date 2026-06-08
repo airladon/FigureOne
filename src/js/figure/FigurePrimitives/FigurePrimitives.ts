@@ -264,6 +264,13 @@ export default class FigurePrimitives {
   gl(...optionsIn: Array<OBJ_GenericGL>) {
     // Setup the default options
     const oIn = joinObjects<any>({}, ...optionsIn);
+    // The mask recolor (textureMap) path is only used when a mask with a valid
+    // source is supplied. A mask without a source would otherwise select the
+    // textureMap shader but leave u_mask unbound. The same predicate gates
+    // shader selection, mask registration, tint seeding and the tint setters so
+    // they can never disagree.
+    const hasMask = oIn.mask != null && oIn.mask.src != null && oIn.mask.src !== '';
+    const NUM_TINTS = 4;
     const defaultOptions: any = {
       glPrimitive: 'TRIANGLES',
       vertexShader: { dimension: 2 },
@@ -279,6 +286,11 @@ export default class FigurePrimitives {
         coords: [],
         loadColor: [0, 0, 1, 0.5],
       },
+      mask: {
+        src: '',
+        loadColor: [0, 0, 0, 0],
+      },
+      tints: [],
       name: generateUniqueId('primitive_'),
       color: this.defaultColor,
       drawNumber: 0,
@@ -289,6 +301,13 @@ export default class FigurePrimitives {
     if (oIn.texture != null) {
       defaultOptions.vertexShader.color = 'texture';
       defaultOptions.fragmentShader.color = 'texture';
+    }
+    // A mask recolors regions of the base texture, so it uses the textureMap
+    // color mode (which also samples the base texture). It therefore takes
+    // precedence over the plain 'texture' mode set above.
+    if (hasMask) {
+      defaultOptions.vertexShader.color = 'textureMap';
+      defaultOptions.fragmentShader.color = 'textureMap';
     }
     if (oIn.dimension != null) {
       defaultOptions.vertexShader.dimension = oIn.dimension;
@@ -414,6 +433,19 @@ export default class FigurePrimitives {
       });
     }
 
+    // Normalize a tint color to a 4-component [r, g, b, a] array. A missing
+    // tint becomes fully transparent (alpha 0), which leaves the base texture
+    // unchanged. A 3-component color defaults to alpha 1 (fully recolored).
+    const toTint = (c: TypeColor | null | undefined): TypeColor => {
+      if (c == null) {
+        return [0, 0, 0, 0];
+      }
+      if (c.length < 4) {
+        return [c[0] || 0, c[1] || 0, c[2] || 0, 1];
+      }
+      return [c[0], c[1], c[2], c[3]];
+    };
+
     // Add a texture - use mapFrom and mapTo if texture coords is not defined
     if (options.texture.src !== '') {
       const t = options.texture;
@@ -421,7 +453,23 @@ export default class FigurePrimitives {
         t.src, getRect(t.mapFrom), getRect(t.mapTo), t.mapToAttribute,
         t.coords || [], t.repeat, t.onLoad, t.loadColor,
       );
+      // A mask recolors regions of the base texture (textureMap color mode).
+      if (hasMask) {
+        glObject.addMaskTexture(options.mask.src, options.mask.loadColor);
+      }
       glObject.initTexture();
+    }
+
+    // Seed the textureMap tint uniforms (u_tint0..u_tint3). Each corresponds to
+    // a mask channel (r, g, b, a). Any tints beyond the four mask channels are
+    // ignored. The values are mirrored into customState so they survive state
+    // save/restore and recordings.
+    let tintColors: Array<TypeColor> = [];
+    if (hasMask) {
+      tintColors = Array.from({ length: NUM_TINTS }, (_, i) => toTint(options.tints[i]));
+      tintColors.forEach((tint, i) => {
+        glObject.addUniform(`u_tint${i}`, 4, 'FLOAT', tint);
+      });
     }
 
     // Create th figure element primitive with the gl drawing object
@@ -445,6 +493,47 @@ export default class FigurePrimitives {
     element.custom.updateUniform = (element.drawingObject as any).updateUniform.bind(element.drawingObject);
     element.custom.getUniform = (element.drawingObject as any).getUniform.bind(element.drawingObject);
     element.dimColor = this.defaultDimColor.slice();
+
+    // textureMap tints: expose setters and mirror the current values in
+    // customState so they are captured by state save/restore and recordings.
+    if (hasMask) {
+      element.customState.tints = tintColors.map(t => t.slice());
+      // Set a single region's tint. Indices outside the four mask channels are
+      // ignored rather than throwing - an out-of-range index would otherwise
+      // reference a nonexistent u_tint uniform and corrupt customState, which
+      // would then re-throw on every later state restore.
+      element.custom.setTint = (index: number, color: TypeColor | null) => {
+        if (index < 0 || index >= NUM_TINTS) {
+          return;
+        }
+        const tint = toTint(color);
+        element.customState.tints[index] = tint;
+        (element.drawingObject as any).updateUniform(`u_tint${index}`, tint);
+      };
+      // Replace all four region tints. Missing or null entries reset that region
+      // to transparent (no recolor), so setTints always defines the full set.
+      element.custom.setTints = (colors: Array<TypeColor | null>) => {
+        for (let index = 0; index < NUM_TINTS; index += 1) {
+          element.custom.setTint(index, colors[index] == null ? null : colors[index]);
+        }
+      };
+      // Custom uniforms are not part of drawing object state, so after a state
+      // restore (including Recorder playback and seek) the tint values are
+      // merged back into customState but not re-applied to the GPU. Re-push them
+      // to the u_tint uniforms whenever state is set. Only the four valid
+      // channels are applied so a malformed customState can never throw here.
+      element.notifications.add('setState', () => {
+        const { tints } = element.customState;
+        if (tints == null) {
+          return;
+        }
+        for (let index = 0; index < NUM_TINTS; index += 1) {
+          if (tints[index] != null) {
+            (element.drawingObject as any).updateUniform(`u_tint${index}`, tints[index]);
+          }
+        }
+      });
+    }
 
     // Setup move, touch, scenarios, dim and default colors if defined in
     // options

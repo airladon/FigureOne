@@ -60,6 +60,15 @@ class GLObject extends DrawingObject {
     [key: string]: any;
   } | null;
 
+  // Optional second texture used by the `textureMap` color mode. It shares the
+  // base texture's coordinates (`a_texcoord`/`v_texcoord`), so it needs no
+  // buffer or mapping of its own - just an id/src and a load color.
+  maskTexture: {
+    id: string;
+    src: string;
+    loadColor: TypeColor;
+  } | null;
+
   attributes: {
     [attributeName: string]: {
       buffer: WebGLBuffer | null;
@@ -121,6 +130,7 @@ class GLObject extends DrawingObject {
     this.numVertices = 0;
     this.uniforms = {};
     this.texture = null;
+    this.maskTexture = null;
     // this.selectorProgramIndex = this.webgl.getProgram(selectorVertexShader, selectorFragShader);
     this.initProgram();
   }
@@ -318,6 +328,23 @@ class GLObject extends DrawingObject {
     this.onLoad = onLoad;
   }
 
+  /**
+   * Buffer a mask texture for the `textureMap` color mode. The mask shares the
+   * base texture's coordinates, so only a source and load color are needed. The
+   * default load color is fully transparent so that, until the mask loads, no
+   * region is recolored and the base texture shows through unchanged.
+   */
+  addMaskTexture(
+    location: string,
+    loadColor: TypeColor = [0, 0, 0, 0],
+  ) {
+    this.maskTexture = {
+      id: location,
+      src: location,
+      loadColor,
+    };
+  }
+
   updateTexture(data: HTMLImageElement) {
     const { texture } = this;
     if (texture == null) {
@@ -353,6 +380,16 @@ class GLObject extends DrawingObject {
       id, (data || src) as any, loadColor, repeat, this.executeOnLoad.bind(this) as any, force,
     );
     this.state = webgl.textures[texture.id].state;
+
+    // Register the optional mask texture (textureMap color mode). It loads onto
+    // its own texture unit and reuses the base texture's coordinates.
+    const { maskTexture } = this;
+    if (maskTexture != null) {
+      webgl.addTexture(
+        maskTexture.id, maskTexture.src as any, maskTexture.loadColor, false,
+        this.executeOnLoad.bind(this) as any, force,
+      );
+    }
     // if (
     //   !(texture.id in webgl.textures)
     //   || (
@@ -572,7 +609,7 @@ class GLObject extends DrawingObject {
   }
 
   resetTextureBuffer(deleteTexture: boolean = true) {
-    const { texture, webgl, gl } = this;
+    const { texture, maskTexture, webgl, gl } = this;
     if (texture) {
       if (deleteTexture && webgl.textures[texture.id] != null) {
         webgl.deleteTexture(texture.id);
@@ -581,6 +618,9 @@ class GLObject extends DrawingObject {
         gl.deleteBuffer(texture.buffer);
         texture.buffer = null;
       }
+    }
+    if (maskTexture && deleteTexture && webgl.textures[maskTexture.id] != null) {
+      webgl.deleteTexture(maskTexture.id);
     }
   }
 
@@ -896,6 +936,18 @@ class GLObject extends DrawingObject {
       gl.uniform1i(locations.u_use_texture, 1);
       const { index } = webglInstance.textures[texture.id];
       gl.uniform1i(locations.u_texture, index);
+
+      // Bind the mask texture (textureMap color mode) to its own texture unit.
+      // It reuses a_texcoord/v_texcoord bound above, so no extra attribute is
+      // needed.
+      const { maskTexture } = this;
+      if (
+        maskTexture != null
+        && locations.u_mask != null
+        && webglInstance.textures[maskTexture.id] != null
+      ) {
+        gl.uniform1i(locations.u_mask, webglInstance.textures[maskTexture.id].index);
+      }
     } else {
       gl.uniform1i(locations.u_use_texture, 0);
     }

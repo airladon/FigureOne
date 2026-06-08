@@ -236,6 +236,25 @@ export type OBJ_Texture = {
 };
 
 /**
+ * Mask texture used by the `gl` primitive to recolor regions of a base
+ * `texture`. The mask shares the base texture's coordinates, so it must be the
+ * same dimensions and aligned with the base image. Each of the mask's `r`, `g`,
+ * `b` and `a` channels selects a region recolored by the corresponding entry of
+ * the primitive's `tints` option.
+ *
+ * @property {string} [src] url of the mask image
+ * @property {TypeColor} [loadColor] color shown while the mask loads
+ * (`[0, 0, 0, 0]` - fully transparent, so nothing is recolored until the mask
+ * has loaded)
+ * @interface
+ * @group Shaders
+ */
+export type OBJ_TextureMask = {
+  src?: string,
+  loadColor?: TypeColor,
+};
+
+/**
  * Pulse options object
  *
  * @property {number} [scale] scale to pulse
@@ -604,6 +623,27 @@ export type TypeText = 'gl' | '2d';
  *     },
  *   ],
  * });
+ *
+ * @example
+ * // Recolor regions of a texture with a mask. The mask image marks regions to
+ * // recolor in its red, green, blue and alpha channels, which map to tints 0,
+ * // 1, 2 and 3. Unmasked pixels keep the base texture's color.
+ * const p = figure.add({
+ *   make: 'gl',
+ *   vertices: [-0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5],
+ *   numVertices: 6,
+ *   texture: {
+ *     src: './base.png',
+ *     coords: [0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1],
+ *     loadColor: [0, 0, 0, 0],
+ *   },
+ *   mask: { src: './mask.png' },
+ *   tints: [[1, 0, 0, 1], [0, 0, 1, 1]],
+ * });
+ * // Change the first region's color at runtime
+ * p.custom.setTint(0, [0, 1, 0, 1]);
+ *
+ * ![](./apiassets/gl_mask.png)
  * @interface
  * @group Shaders
  */
@@ -614,6 +654,8 @@ export type OBJ_GenericGL = {
   attributes?: Array<OBJ_GLAttribute>,
   uniforms?: Array<OBJ_GLUniform>,
   texture?: OBJ_Texture,
+  mask?: OBJ_TextureMask,
+  tints?: Array<TypeColor | null>,
   // Helpers
   dimension?: 2 | 3,
   light?: 'directional' | 'point' | null,

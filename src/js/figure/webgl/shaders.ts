@@ -55,14 +55,14 @@ import { joinObjects } from '../../tools/tools';
  *    to fragment shader used when `light = 'point'`
  *
  * @property {2 | 3} [dimension] (`2`)
- * @property {'vertex' | 'uniform' | 'texture'} [color] (`uniform`)
+ * @property {'vertex' | 'uniform' | 'texture' | 'textureMap'} [color] (`uniform`)
  * @property {'point' | 'directional' | null} [light] (`null`)
  * @interface
  * @group Shaders
  */
 export type OBJ_VertexShader = {
   light?: 'point' | 'directional' | null;
-  color?: 'vertex' | 'uniform' | 'texture';
+  color?: 'vertex' | 'uniform' | 'texture' | 'textureMap';
   dimension?: 2 | 3;
 };
 
@@ -97,7 +97,14 @@ export type TypeVertexShader = string
  * - `vec4 u_color`: global color for all vertices used all times. When
  *   `color = 'texture'` or `color = 'vertex'`, only the alpha channel of
  *   `u_color` is used.
- * - `sampler2D u_texture`: texture used when `color = 'texture'`.
+ * - `sampler2D u_texture`: texture used when `color = 'texture'`,
+ *   `color = 'textureAlpha'` or `color = 'textureMap'`.
+ * - `sampler2D u_mask`: mask texture used when `color = 'textureMap'`. Its
+ *   `r`, `g`, `b` and `a` channels each select a region of `u_texture` to
+ *   recolor with `u_tint0`, `u_tint1`, `u_tint2` and `u_tint3` respectively.
+ * - `vec4 u_tint0`, `u_tint1`, `u_tint2`, `u_tint3`: region tint colors used
+ *   when `color = 'textureMap'`. The `rgb` channels are the tint color and the
+ *   `a` channel is the tint strength (`0` leaves the base texture unchanged).
  * - `vec3 u_directionalLight`: world space position of directional light
  *   source used when `light = 'directional'`
  * - `float u_ambientLight`: ambient light used when `light = 'directional'` or
@@ -117,14 +124,14 @@ export type TypeVertexShader = string
  *    from vertex shader used when `light = 'point'`
  *
  * @property {2 | 3} [dimension] (`2`)
- * @property {'vertex' | 'uniform' | 'texture'} [color] (`uniform`)
+ * @property {'vertex' | 'uniform' | 'texture' | 'textureMap'} [color] (`uniform`)
  * @property {'point' | 'directional' | null} [light] (`null`)
  * @interface
  * @group Shaders
  */
 export type OBJ_FragmentShader = {
   light?: 'point' | 'directional' | null;
-  color?: 'vertex' | 'uniform' | 'texture';
+  color?: 'vertex' | 'uniform' | 'texture' | 'textureMap';
 };
 
 /**
@@ -144,7 +151,7 @@ export type TypeFragmentShader = string
 function composeVertexShader(
   options: {
     dimension?: 2 | 3;
-    color?: 'vertex' | 'uniform' | 'texture';
+    color?: 'vertex' | 'uniform' | 'texture' | 'textureMap';
     light?: null | 'point ' | 'directional';
   } = {},
 ): [string, string[]] {
@@ -169,7 +176,7 @@ function composeVertexShader(
     vars.push('a_vertex');
   }
 
-  if (color === 'texture') {
+  if (color === 'texture' || color === 'textureMap') {
     src += 'attribute vec2 a_texcoord;\n';
     src += 'varying vec2 v_texcoord;\n';
     vars.push('a_texcoord');
@@ -205,7 +212,7 @@ function composeVertexShader(
     src += '  gl_Position = u_worldViewProjectionMatrix * a_vertex;\n';
   }
 
-  if (color === 'texture') {
+  if (color === 'texture' || color === 'textureMap') {
     src += '  v_texcoord = a_texcoord;\n';
   } else if (color === 'vertex') {
     src += '  v_color = a_color;\n';
@@ -228,7 +235,7 @@ function composeVertexShader(
 function composeFragShader(
   options: {
     light?: null | 'point ' | 'directional';
-    color?: 'vertex' | 'uniform' | 'texture';
+    color?: 'vertex' | 'uniform' | 'texture' | 'textureMap';
   } = {},
 ): [string, string[]] {
   const defaultOptions = {
@@ -250,6 +257,15 @@ function composeFragShader(
     src += 'uniform sampler2D u_texture;\n';
     src += 'varying vec2 v_texcoord;\n';
     vars.push('u_texture');
+  } else if (color === 'textureMap') {
+    src += 'uniform sampler2D u_texture;\n';
+    src += 'uniform sampler2D u_mask;\n';
+    src += 'uniform vec4 u_tint0;\n';
+    src += 'uniform vec4 u_tint1;\n';
+    src += 'uniform vec4 u_tint2;\n';
+    src += 'uniform vec4 u_tint3;\n';
+    src += 'varying vec2 v_texcoord;\n';
+    vars.push('u_texture', 'u_mask', 'u_tint0', 'u_tint1', 'u_tint2', 'u_tint3');
   }
 
   if (light === 'directional') {
@@ -285,6 +301,20 @@ function composeFragShader(
     // src += '  gl_FragColor.a = u_color.a * texture2D(u_texture, v_texcoord).a;\n'
     // src += '  gl_FragColor.rgb *= gl_FragColor.a * texture2D(u_texture, v_texcoord).a;\n';
     // src += '  gl_FragColor = texture2D(u_texture, v_texcoord).a * u_color;\n';
+    src += '  gl_FragColor.rgb *= gl_FragColor.a;\n';
+  } else if (color === 'textureMap') {
+    // Base texture color, with up to four regions retinted by a mask texture.
+    // Each mask channel (r, g, b, a) selects a region, and the matching
+    // u_tint's alpha controls how strongly that region is recolored (0 = leave
+    // the base color unchanged).
+    src += '  vec4 base = texture2D(u_texture, v_texcoord);\n';
+    src += '  vec4 mask = texture2D(u_mask, v_texcoord);\n';
+    src += '  vec3 col = base.rgb;\n';
+    src += '  col = mix(col, u_tint0.rgb, mask.r * u_tint0.a);\n';
+    src += '  col = mix(col, u_tint1.rgb, mask.g * u_tint1.a);\n';
+    src += '  col = mix(col, u_tint2.rgb, mask.b * u_tint2.a);\n';
+    src += '  col = mix(col, u_tint3.rgb, mask.a * u_tint3.a);\n';
+    src += '  gl_FragColor = vec4(col, base.a * u_color.a);\n';
     src += '  gl_FragColor.rgb *= gl_FragColor.a;\n';
   }
 
