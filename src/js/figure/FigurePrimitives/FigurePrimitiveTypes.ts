@@ -236,6 +236,31 @@ export type OBJ_Texture = {
 };
 
 /**
+ * Mask texture used by the `gl` primitive to recolor regions of a base
+ * `texture`. A mask shares the base texture's coordinates, so it must be the
+ * same dimensions and aligned with the base image. Each of a mask's `r`, `g`,
+ * `b` and `a` channels selects a region recolored by an entry of the
+ * primitive's `tints` option.
+ *
+ * Supply a single mask with `mask`, or several with `masks` (an array). Mask `m`
+ * (0-based) uses `tints[4m]`, `tints[4m + 1]`, `tints[4m + 2]` and
+ * `tints[4m + 3]` for its r, g, b and a channels - so each mask adds four
+ * recolorable regions. A single mask costs one extra texture fetch and four
+ * mixes; each additional mask adds one fetch and four mixes.
+ *
+ * @property {string} [src] url of the mask image
+ * @property {TypeColor} [loadColor] color shown while the mask loads
+ * (`[0, 0, 0, 0]` - fully transparent, so nothing is recolored until the mask
+ * has loaded)
+ * @interface
+ * @group Shaders
+ */
+export type OBJ_TextureMask = {
+  src?: string,
+  loadColor?: TypeColor,
+};
+
+/**
  * Pulse options object
  *
  * @property {number} [scale] scale to pulse
@@ -462,6 +487,12 @@ export type TypeText = 'gl' | '2d';
  * {@link OBJ_FragmentShader} for names of attributes and uniforms used in the
  * shaders, and when they are used.
  *
+ * A texture can be recolored by region using one or more masks (see the mask
+ * examples below):
+ *
+ * ![](./apiassets/gl_mask.png)
+ * ![](./apiassets/gl_mask2.png)
+ *
  * @property {TypeGLPrimitive} [glPrimitive]
  * @property {TypeVertexShader} [vertexShader]
  * @property {TypeFragmentShader} [fragmentShader]
@@ -604,6 +635,46 @@ export type TypeText = 'gl' | '2d';
  *     },
  *   ],
  * });
+ *
+ * @example
+ * // Recolor regions of a texture with a mask. The mask image marks regions to
+ * // recolor in its red, green, blue and alpha channels, which map to tints 0,
+ * // 1, 2 and 3. Unmasked pixels keep the base texture's color.
+ * const p = figure.add({
+ *   make: 'gl',
+ *   vertices: [-0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5],
+ *   numVertices: 6,
+ *   texture: {
+ *     src: './base.png',
+ *     coords: [0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1],
+ *     loadColor: [0, 0, 0, 0],
+ *   },
+ *   mask: { src: './mask.png' },
+ *   tints: [[1, 0, 0, 1], [0, 0, 1, 1]],
+ * });
+ * // Change the first region's color at runtime
+ * p.custom.setTint(0, [0, 1, 0, 1]);
+ *
+ * @example
+ * // Recolor with two masks. Each mask adds four regions (its r, g, b, a
+ * // channels), so mask 0 uses tints 0-3 and mask 1 uses tints 4-7. Here mask 0
+ * // recolors three circles (tints 0, 1, 2) and mask 1 recolors a bar (tint 4).
+ * figure.add({
+ *   make: 'gl',
+ *   vertices: [-0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5],
+ *   numVertices: 6,
+ *   texture: {
+ *     src: './base.png',
+ *     coords: [0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1],
+ *     loadColor: [0, 0, 0, 0],
+ *   },
+ *   masks: [{ src: './mask.png' }, { src: './mask1.png' }],
+ *   tints: [
+ *     [1, 0, 0, 1], [0, 0.6, 0, 1], [0, 0, 1, 1], null, // mask 0: circles
+ *     [0.6, 0, 0.8, 1],                                 // mask 1: bar
+ *   ],
+ * });
+ *
  * @interface
  * @group Shaders
  */
@@ -614,6 +685,9 @@ export type OBJ_GenericGL = {
   attributes?: Array<OBJ_GLAttribute>,
   uniforms?: Array<OBJ_GLUniform>,
   texture?: OBJ_Texture,
+  mask?: OBJ_TextureMask,
+  masks?: Array<OBJ_TextureMask>,
+  tints?: Array<TypeColor | null>,
   // Helpers
   dimension?: 2 | 3,
   light?: 'directional' | 'point' | null,

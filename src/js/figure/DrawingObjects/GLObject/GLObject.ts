@@ -60,6 +60,19 @@ class GLObject extends DrawingObject {
     [key: string]: any;
   } | null;
 
+  // Optional mask textures used by the `textureMap` color mode (one or more).
+  // They share the base texture's coordinates (`a_texcoord`/`v_texcoord`), so
+  // each needs no buffer or mapping of its own - just an id/src and a load
+  // color. Mask i is bound to the shader's u_mask{i} sampler (its uniform name
+  // is precomputed so the draw loop allocates nothing). A mask with an empty
+  // src is a transparent placeholder - an index-preserving no-op slot.
+  maskTextures: Array<{
+    id: string;
+    src: string;
+    loadColor: TypeColor;
+    uniformName: string;
+  }>;
+
   attributes: {
     [attributeName: string]: {
       buffer: WebGLBuffer | null;
@@ -121,6 +134,7 @@ class GLObject extends DrawingObject {
     this.numVertices = 0;
     this.uniforms = {};
     this.texture = null;
+    this.maskTextures = [];
     // this.selectorProgramIndex = this.webgl.getProgram(selectorVertexShader, selectorFragShader);
     this.initProgram();
   }
@@ -318,6 +332,30 @@ class GLObject extends DrawingObject {
     this.onLoad = onLoad;
   }
 
+  /**
+   * Buffer a mask texture for the `textureMap` color mode. Each call appends a
+   * mask, bound to the next u_mask{i} sampler. Masks share the base texture's
+   * coordinates, so only a source and load color are needed. The default load
+   * color is fully transparent so that, until the mask loads, no region is
+   * recolored and the base texture shows through unchanged.
+   *
+   * An empty `location` registers a transparent placeholder, which keeps the
+   * u_mask{i} indexing aligned with the tint blocks when a caller supplies an
+   * invalid/missing mask in a positional list (the slot becomes a no-op).
+   */
+  addMaskTexture(
+    location: string = '',
+    loadColor: TypeColor = [0, 0, 0, 0],
+  ) {
+    const isPlaceholder = location == null || location === '';
+    this.maskTextures.push({
+      id: isPlaceholder ? '__figureOneEmptyMask' : location,
+      src: isPlaceholder ? '' : location,
+      loadColor: isPlaceholder ? [0, 0, 0, 0] : loadColor,
+      uniformName: `u_mask${this.maskTextures.length}`,
+    });
+  }
+
   updateTexture(data: HTMLImageElement) {
     const { texture } = this;
     if (texture == null) {
@@ -353,6 +391,18 @@ class GLObject extends DrawingObject {
       id, (data || src) as any, loadColor, repeat, this.executeOnLoad.bind(this) as any, force,
     );
     this.state = webgl.textures[texture.id].state;
+
+    // Register the optional mask textures (textureMap color mode). Each loads
+    // onto its own texture unit and reuses the base texture's coordinates. A
+    // placeholder (empty src) is registered directly from its load color as a
+    // 1x1 transparent texture, with no image to load.
+    this.maskTextures.forEach((maskTexture) => {
+      const data = maskTexture.src !== '' ? maskTexture.src : maskTexture.loadColor;
+      webgl.addTexture(
+        maskTexture.id, data as any, maskTexture.loadColor, false,
+        this.executeOnLoad.bind(this) as any, force,
+      );
+    });
     // if (
     //   !(texture.id in webgl.textures)
     //   || (
@@ -572,7 +622,7 @@ class GLObject extends DrawingObject {
   }
 
   resetTextureBuffer(deleteTexture: boolean = true) {
-    const { texture, webgl, gl } = this;
+    const { texture, maskTextures, webgl, gl } = this;
     if (texture) {
       if (deleteTexture && webgl.textures[texture.id] != null) {
         webgl.deleteTexture(texture.id);
@@ -581,6 +631,13 @@ class GLObject extends DrawingObject {
         gl.deleteBuffer(texture.buffer);
         texture.buffer = null;
       }
+    }
+    if (deleteTexture) {
+      maskTextures.forEach((maskTexture) => {
+        if (webgl.textures[maskTexture.id] != null) {
+          webgl.deleteTexture(maskTexture.id);
+        }
+      });
     }
   }
 
@@ -896,6 +953,20 @@ class GLObject extends DrawingObject {
       gl.uniform1i(locations.u_use_texture, 1);
       const { index } = webglInstance.textures[texture.id];
       gl.uniform1i(locations.u_texture, index);
+
+      // Bind the mask textures (textureMap color mode), each to its own texture
+      // unit and precomputed u_mask{i} sampler. They reuse the a_texcoord /
+      // v_texcoord bound above, so no extra attribute is needed. Uses an indexed
+      // loop with precomputed uniform names to avoid per-frame allocation.
+      const { maskTextures } = this;
+      for (let i = 0; i < maskTextures.length; i += 1) {
+        const maskTexture = maskTextures[i];
+        const maskLocation = locations[maskTexture.uniformName];
+        const maskRegistered = webglInstance.textures[maskTexture.id];
+        if (maskLocation != null && maskRegistered != null) {
+          gl.uniform1i(maskLocation, maskRegistered.index);
+        }
+      }
     } else {
       gl.uniform1i(locations.u_use_texture, 0);
     }

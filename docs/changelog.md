@@ -1,5 +1,9 @@
 # Releases
 
+## 1.8.0
+* Add a `textureMap` color mode to the `gl` primitive that recolors regions of a base texture using mask textures — each mask's red, green, blue and alpha channels select up to four regions, each tinted by an entry of the new `tints` option
+* Support a single mask via `mask` or several via `masks`, where mask `m` uses `tints[4m]` through `tints[4m + 3]`; change region colors at runtime with the `setTint` / `setTints` element methods, with tint values captured in state for save/restore and recordings
+
 ## 1.7.1
 * Update the bundled agent docs (`llms.txt` / `llms-full.txt`) to cover the API added since they were last refreshed (v1.1.6): equation `opacity` / `front` / `back` layout functions, layout-function `name` labels, form `ignoreColor` / `ignoreOpacity`, the `formChanged` notification, `Equation.getFunctionElements`, and element `isFormIgnored` / `allowSetColor` / `ignoreSetColor`; plus the earlier `latexToFigureOne`, Figure `textStyle` / `antialias` / `atlasScale` / `onWebGLUnavailable` / `webglAvailable`, the `contextLost` / `contextRestored` notifications, and the `atlasId` font option
 
