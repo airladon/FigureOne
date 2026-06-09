@@ -278,6 +278,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       -0.025,
@@ -1119,6 +1120,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 30,
     "points": [
       0.025000000000000005,
@@ -2080,6 +2082,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 48,
     "points": [
       0.15000000000000002,
@@ -3713,6 +3716,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 210,
     "points": [
       0.15000000000000002,
@@ -5082,6 +5086,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 60,
     "points": [
       0.15000000000000002,
@@ -6739,6 +6744,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 210,
     "points": [
       0.15000000000000002,
@@ -8036,6 +8042,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 42,
     "points": [
       0.15000000000000002,
@@ -8925,6 +8932,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 24,
     "points": [
       0.15000000000000002,
@@ -9677,6 +9685,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -10433,6 +10442,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -11204,6 +11214,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -11893,6 +11904,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -12582,6 +12594,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -13271,6 +13284,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -14011,6 +14025,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 30,
     "points": [
       1.5308084989341916e-18,
@@ -14799,6 +14814,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 30,
     "points": [
       0,
@@ -15588,6 +15604,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 30,
     "points": [
       1.5308084989341916e-18,
@@ -16376,6 +16393,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 30,
     "points": [
       3.061616997868383e-18,
@@ -17164,6 +17182,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 30,
     "points": [
       2.1431318985078684e-18,
@@ -17901,6 +17920,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -18590,6 +18610,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -19279,6 +19300,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       -0.017677669529663688,
@@ -19985,6 +20007,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -20674,6 +20697,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -21380,6 +21404,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -22069,6 +22094,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -22874,6 +22900,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 28,
     "points": [
       1.5308084989341916e-18,
@@ -23615,6 +23642,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 10,
     "points": [
       1.5308084989341916e-18,
@@ -24312,6 +24340,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -25001,6 +25030,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -25709,6 +25739,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -26460,6 +26491,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -27190,6 +27222,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -27906,6 +27939,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -28622,6 +28656,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -29311,6 +29346,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       1.5308084989341916e-18,
@@ -30000,6 +30036,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       0,
@@ -30689,6 +30726,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       2.1431318985078684e-18,
@@ -31378,6 +31416,7 @@ FigureElementPrimitive {
       "y": 0,
       "z": 0,
     },
+    "maskTextures": [],
     "numVertices": 6,
     "points": [
       3.061616997868383e-18,
