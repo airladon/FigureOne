@@ -18,6 +18,7 @@ import {
   FigureElementPrimitive, FigureElement,
 } from '../Element';
 import WebGLInstance from '../webgl/webgl';
+import { CHANNELS_PER_MASK } from '../webgl/shaders';
 import DrawContext2D from '../DrawContext2D';
 import * as tools from '../../tools/math';
 import { generateUniqueId, joinObjects, joinObjectsWithOptions } from '../../tools/tools';
@@ -264,13 +265,42 @@ export default class FigurePrimitives {
   gl(...optionsIn: Array<OBJ_GenericGL>) {
     // Setup the default options
     const oIn = joinObjects<any>({}, ...optionsIn);
-    // The mask recolor (textureMap) path is only used when a mask with a valid
-    // source is supplied. A mask without a source would otherwise select the
-    // textureMap shader but leave u_mask unbound. The same predicate gates
-    // shader selection, mask registration, tint seeding and the tint setters so
-    // they can never disagree.
-    const hasMask = oIn.mask != null && oIn.mask.src != null && oIn.mask.src !== '';
-    const NUM_TINTS = 4;
+    // The mask recolor (textureMap) path supports one or more mask textures,
+    // supplied as `mask` (single) or `masks` (array). Normalize the input: a
+    // non-array `masks` is coerced to an array, and an empty/absent `masks`
+    // falls back to the singular `mask`. `masks` takes precedence when both are
+    // given and `masks` is non-empty.
+    let rawMasks: Array<any>;
+    if (oIn.masks != null) {
+      rawMasks = Array.isArray(oIn.masks) ? oIn.masks : [oIn.masks];
+    } else {
+      rawMasks = [];
+    }
+    if (rawMasks.length === 0 && oIn.mask != null) {
+      rawMasks = [oIn.mask];
+    }
+    const isValidMask = (m: any) => m != null && m.src != null && m.src !== '';
+    // Masks are positional: each slot owns its own u_mask{i} sampler and tint
+    // block (tints[CHANNELS_PER_MASK * i ...]). Invalid/missing slots are kept
+    // as transparent no-ops rather than dropped, so a conditionally-built list
+    // never shifts later masks onto the wrong tints. The textureMap path is only
+    // selected when at least one slot is a valid mask.
+    const hasMask = rawMasks.some(isValidMask);
+    const maskList = hasMask ? rawMasks : [];
+    const numMasks = maskList.length;
+    const NUM_TINTS = numMasks * CHANNELS_PER_MASK;
+    // Guard the per-element mask count against the device's texture units (one
+    // is reserved for the base texture). This catches an excessive count with a
+    // clear error instead of an opaque GL failure. Note: a figure with many
+    // other textures can still exhaust units - that global limit is pre-existing
+    // and not checked here.
+    if (hasMask) {
+      const { gl } = this.webgl[0];
+      const maxUnits = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
+      if (typeof maxUnits === 'number' && maxUnits > 0 && numMasks + 1 > maxUnits) {
+        throw new Error(`FigureOne gl: ${numMasks} mask textures (plus the base texture) exceed this device's ${maxUnits} texture units. Use fewer masks.`);
+      }
+    }
     const defaultOptions: any = {
       glPrimitive: 'TRIANGLES',
       vertexShader: { dimension: 2 },
@@ -286,10 +316,6 @@ export default class FigurePrimitives {
         coords: [],
         loadColor: [0, 0, 1, 0.5],
       },
-      mask: {
-        src: '',
-        loadColor: [0, 0, 0, 0],
-      },
       tints: [],
       name: generateUniqueId('primitive_'),
       color: this.defaultColor,
@@ -304,10 +330,13 @@ export default class FigurePrimitives {
     }
     // A mask recolors regions of the base texture, so it uses the textureMap
     // color mode (which also samples the base texture). It therefore takes
-    // precedence over the plain 'texture' mode set above.
+    // precedence over the plain 'texture' mode set above. The fragment shader is
+    // composed for the exact number of masks, so a single mask generates the
+    // same shader (and cost) as before.
     if (hasMask) {
       defaultOptions.vertexShader.color = 'textureMap';
       defaultOptions.fragmentShader.color = 'textureMap';
+      defaultOptions.fragmentShader.masks = numMasks;
     }
     if (oIn.dimension != null) {
       defaultOptions.vertexShader.dimension = oIn.dimension;
@@ -454,16 +483,23 @@ export default class FigurePrimitives {
         t.coords || [], t.repeat, t.onLoad, t.loadColor,
       );
       // A mask recolors regions of the base texture (textureMap color mode).
-      if (hasMask) {
-        glObject.addMaskTexture(options.mask.src, options.mask.loadColor);
-      }
+      // Each mask is bound to u_mask{i} and shares the base texture coordinates.
+      // Invalid slots register a transparent placeholder so masks stay
+      // positional (later masks keep their tint block).
+      maskList.forEach((m: any) => {
+        if (isValidMask(m)) {
+          glObject.addMaskTexture(m.src, m.loadColor);
+        } else {
+          glObject.addMaskTexture('');
+        }
+      });
       glObject.initTexture();
     }
 
-    // Seed the textureMap tint uniforms (u_tint0..u_tint3). Each corresponds to
-    // a mask channel (r, g, b, a). Any tints beyond the four mask channels are
-    // ignored. The values are mirrored into customState so they survive state
-    // save/restore and recordings.
+    // Seed the textureMap tint uniforms (u_tint0..u_tint{4*numMasks-1}). Each
+    // corresponds to a mask channel (r, g, b, a). Any tints beyond the available
+    // mask channels are ignored. The values are mirrored into customState so
+    // they survive state save/restore and recordings.
     let tintColors: Array<TypeColor> = [];
     if (hasMask) {
       tintColors = Array.from({ length: NUM_TINTS }, (_, i) => toTint(options.tints[i]));
@@ -498,10 +534,10 @@ export default class FigurePrimitives {
     // customState so they are captured by state save/restore and recordings.
     if (hasMask) {
       element.customState.tints = tintColors.map(t => t.slice());
-      // Set a single region's tint. Indices outside the four mask channels are
-      // ignored rather than throwing - an out-of-range index would otherwise
-      // reference a nonexistent u_tint uniform and corrupt customState, which
-      // would then re-throw on every later state restore.
+      // Set a single region's tint. Indices outside the available tints
+      // (4 * numMasks) are ignored rather than throwing - an out-of-range index
+      // would otherwise reference a nonexistent u_tint uniform and corrupt
+      // customState, which would then re-throw on every later state restore.
       element.custom.setTint = (index: number, color: TypeColor | null) => {
         if (index < 0 || index >= NUM_TINTS) {
           return;
@@ -510,8 +546,8 @@ export default class FigurePrimitives {
         element.customState.tints[index] = tint;
         (element.drawingObject as any).updateUniform(`u_tint${index}`, tint);
       };
-      // Replace all four region tints. Missing or null entries reset that region
-      // to transparent (no recolor), so setTints always defines the full set.
+      // Replace all region tints. Missing or null entries reset that region to
+      // transparent (no recolor), so setTints always defines the full set.
       element.custom.setTints = (colors: Array<TypeColor | null>) => {
         for (let index = 0; index < NUM_TINTS; index += 1) {
           element.custom.setTint(index, colors[index] == null ? null : colors[index]);
@@ -520,8 +556,8 @@ export default class FigurePrimitives {
       // Custom uniforms are not part of drawing object state, so after a state
       // restore (including Recorder playback and seek) the tint values are
       // merged back into customState but not re-applied to the GPU. Re-push them
-      // to the u_tint uniforms whenever state is set. Only the four valid
-      // channels are applied so a malformed customState can never throw here.
+      // to the u_tint uniforms whenever state is set. Only the valid tints are
+      // applied so a malformed customState can never throw here.
       element.notifications.add('setState', () => {
         const { tints } = element.customState;
         if (tints == null) {

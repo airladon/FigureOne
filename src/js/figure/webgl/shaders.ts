@@ -1,6 +1,14 @@
 import { joinObjects } from '../../tools/tools';
 
 /**
+ * Number of recolorable regions a single mask texture provides in the
+ * `textureMap` color mode - one per channel (r, g, b, a). N masks therefore
+ * define `CHANNELS_PER_MASK * N` tints.
+ * @group Shaders
+ */
+export const CHANNELS_PER_MASK = 4;
+
+/**
  * Options used to compose vertex shader source code.
  *
  * Shader source code can be automatically composed for different vertex
@@ -99,12 +107,14 @@ export type TypeVertexShader = string
  *   `u_color` is used.
  * - `sampler2D u_texture`: texture used when `color = 'texture'`,
  *   `color = 'textureAlpha'` or `color = 'textureMap'`.
- * - `sampler2D u_mask`: mask texture used when `color = 'textureMap'`. Its
- *   `r`, `g`, `b` and `a` channels each select a region of `u_texture` to
- *   recolor with `u_tint0`, `u_tint1`, `u_tint2` and `u_tint3` respectively.
- * - `vec4 u_tint0`, `u_tint1`, `u_tint2`, `u_tint3`: region tint colors used
- *   when `color = 'textureMap'`. The `rgb` channels are the tint color and the
- *   `a` channel is the tint strength (`0` leaves the base texture unchanged).
+ * - `sampler2D u_mask0`, `u_mask1`, ...: mask textures used when
+ *   `color = 'textureMap'` (one per mask, set by the `masks` count). Each mask's
+ *   `r`, `g`, `b` and `a` channels select four regions of `u_texture` to
+ *   recolor. Mask `m`'s four channels map to tints `u_tint{4m+0..3}`.
+ * - `vec4 u_tint0`, `u_tint1`, ...: region tint colors used when
+ *   `color = 'textureMap'` (four per mask). The `rgb` channels are the tint
+ *   color and the `a` channel is the tint strength (`0` leaves the base texture
+ *   unchanged).
  * - `vec3 u_directionalLight`: world space position of directional light
  *   source used when `light = 'directional'`
  * - `float u_ambientLight`: ambient light used when `light = 'directional'` or
@@ -132,6 +142,7 @@ export type TypeVertexShader = string
 export type OBJ_FragmentShader = {
   light?: 'point' | 'directional' | null;
   color?: 'vertex' | 'uniform' | 'texture' | 'textureMap';
+  masks?: number;
 };
 
 /**
@@ -236,15 +247,22 @@ function composeFragShader(
   options: {
     light?: null | 'point ' | 'directional';
     color?: 'vertex' | 'uniform' | 'texture' | 'textureMap';
+    masks?: number;
   } = {},
 ): [string, string[]] {
   const defaultOptions = {
     color: 'uniform',
     light: null,
+    masks: 1,
   };
   const {
-    light, color,
+    light, color, masks,
   } = joinObjects<any>(defaultOptions, options);
+  // textureMap recolors the base texture using one or more mask textures. Each
+  // mask contributes CHANNELS_PER_MASK regions (its r, g, b, a channels), so
+  // numMasks masks define CHANNELS_PER_MASK * numMasks tints.
+  const numMasks = color === 'textureMap' ? Math.max(1, masks) : 0;
+  const channels = ['r', 'g', 'b', 'a'];
 
   let src = '\nprecision mediump float;\n';
   src += 'uniform vec4 u_color;\n';
@@ -259,13 +277,16 @@ function composeFragShader(
     vars.push('u_texture');
   } else if (color === 'textureMap') {
     src += 'uniform sampler2D u_texture;\n';
-    src += 'uniform sampler2D u_mask;\n';
-    src += 'uniform vec4 u_tint0;\n';
-    src += 'uniform vec4 u_tint1;\n';
-    src += 'uniform vec4 u_tint2;\n';
-    src += 'uniform vec4 u_tint3;\n';
+    vars.push('u_texture');
+    for (let m = 0; m < numMasks; m += 1) {
+      src += `uniform sampler2D u_mask${m};\n`;
+      vars.push(`u_mask${m}`);
+    }
+    for (let t = 0; t < numMasks * CHANNELS_PER_MASK; t += 1) {
+      src += `uniform vec4 u_tint${t};\n`;
+      vars.push(`u_tint${t}`);
+    }
     src += 'varying vec2 v_texcoord;\n';
-    vars.push('u_texture', 'u_mask', 'u_tint0', 'u_tint1', 'u_tint2', 'u_tint3');
   }
 
   if (light === 'directional') {
@@ -303,17 +324,20 @@ function composeFragShader(
     // src += '  gl_FragColor = texture2D(u_texture, v_texcoord).a * u_color;\n';
     src += '  gl_FragColor.rgb *= gl_FragColor.a;\n';
   } else if (color === 'textureMap') {
-    // Base texture color, with up to four regions retinted by a mask texture.
-    // Each mask channel (r, g, b, a) selects a region, and the matching
-    // u_tint's alpha controls how strongly that region is recolored (0 = leave
-    // the base color unchanged).
+    // Base texture color, with each mask texture retinting up to four regions.
+    // Each mask channel (r, g, b, a) selects a region, and the matching u_tint's
+    // alpha controls how strongly that region is recolored (0 = leave the base
+    // color unchanged). With one mask this is exactly four mixes and one extra
+    // texture fetch; each additional mask adds one fetch and four mixes.
     src += '  vec4 base = texture2D(u_texture, v_texcoord);\n';
-    src += '  vec4 mask = texture2D(u_mask, v_texcoord);\n';
     src += '  vec3 col = base.rgb;\n';
-    src += '  col = mix(col, u_tint0.rgb, mask.r * u_tint0.a);\n';
-    src += '  col = mix(col, u_tint1.rgb, mask.g * u_tint1.a);\n';
-    src += '  col = mix(col, u_tint2.rgb, mask.b * u_tint2.a);\n';
-    src += '  col = mix(col, u_tint3.rgb, mask.a * u_tint3.a);\n';
+    for (let m = 0; m < numMasks; m += 1) {
+      src += `  vec4 mask${m} = texture2D(u_mask${m}, v_texcoord);\n`;
+      for (let c = 0; c < CHANNELS_PER_MASK; c += 1) {
+        const t = m * CHANNELS_PER_MASK + c;
+        src += `  col = mix(col, u_tint${t}.rgb, mask${m}.${channels[c]} * u_tint${t}.a);\n`;
+      }
+    }
     src += '  gl_FragColor = vec4(col, base.a * u_color.a);\n';
     src += '  gl_FragColor.rgb *= gl_FragColor.a;\n';
   }

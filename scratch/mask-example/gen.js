@@ -126,5 +126,13 @@ fillCircle(mask, circles[2].cx, circles[2].cy, circles[2].r, [0, 0, 255, 255]); 
 const maskPath = process.argv[3] || `${__dirname}/mask.png`;
 fs.writeFileSync(maskPath, encodePNG(SIZE, SIZE, mask));
 
+// --- mask1.png (second mask; r channel selects the orange bar region) ---
+// Used by the two-mask example: mask.png recolors the circles (tints 0..3),
+// mask1.png recolors the bar (tint 4).
+const mask1 = newImage([0, 0, 0, 255]);
+fillRect(mask1, 24, 40, SIZE - 48, 36, [255, 0, 0, 255]); // tint4 (mask1 red channel)
+const mask1Path = process.argv[4] || `${__dirname}/mask1.png`;
+fs.writeFileSync(mask1Path, encodePNG(SIZE, SIZE, mask1));
+
 // eslint-disable-next-line no-console
-console.log('wrote', basePath, 'and', maskPath);
+console.log('wrote', basePath, maskPath, 'and', mask1Path);

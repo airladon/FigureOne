@@ -237,10 +237,16 @@ export type OBJ_Texture = {
 
 /**
  * Mask texture used by the `gl` primitive to recolor regions of a base
- * `texture`. The mask shares the base texture's coordinates, so it must be the
- * same dimensions and aligned with the base image. Each of the mask's `r`, `g`,
- * `b` and `a` channels selects a region recolored by the corresponding entry of
- * the primitive's `tints` option.
+ * `texture`. A mask shares the base texture's coordinates, so it must be the
+ * same dimensions and aligned with the base image. Each of a mask's `r`, `g`,
+ * `b` and `a` channels selects a region recolored by an entry of the
+ * primitive's `tints` option.
+ *
+ * Supply a single mask with `mask`, or several with `masks` (an array). Mask `m`
+ * (0-based) uses `tints[4m]`, `tints[4m + 1]`, `tints[4m + 2]` and
+ * `tints[4m + 3]` for its r, g, b and a channels - so each mask adds four
+ * recolorable regions. A single mask costs one extra texture fetch and four
+ * mixes; each additional mask adds one fetch and four mixes.
  *
  * @property {string} [src] url of the mask image
  * @property {TypeColor} [loadColor] color shown while the mask loads
@@ -644,6 +650,28 @@ export type TypeText = 'gl' | '2d';
  * p.custom.setTint(0, [0, 1, 0, 1]);
  *
  * ![](./apiassets/gl_mask.png)
+ *
+ * @example
+ * // Recolor with two masks. Each mask adds four regions (its r, g, b, a
+ * // channels), so mask 0 uses tints 0-3 and mask 1 uses tints 4-7. Here mask 0
+ * // recolors three circles (tints 0, 1, 2) and mask 1 recolors a bar (tint 4).
+ * figure.add({
+ *   make: 'gl',
+ *   vertices: [-0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5],
+ *   numVertices: 6,
+ *   texture: {
+ *     src: './base.png',
+ *     coords: [0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1],
+ *     loadColor: [0, 0, 0, 0],
+ *   },
+ *   masks: [{ src: './mask.png' }, { src: './mask1.png' }],
+ *   tints: [
+ *     [1, 0, 0, 1], [0, 0.6, 0, 1], [0, 0, 1, 1], null, // mask 0: circles
+ *     [0.6, 0, 0.8, 1],                                 // mask 1: bar
+ *   ],
+ * });
+ *
+ * ![](./apiassets/gl_mask2.png)
  * @interface
  * @group Shaders
  */
@@ -655,6 +683,7 @@ export type OBJ_GenericGL = {
   uniforms?: Array<OBJ_GLUniform>,
   texture?: OBJ_Texture,
   mask?: OBJ_TextureMask,
+  masks?: Array<OBJ_TextureMask>,
   tints?: Array<TypeColor | null>,
   // Helpers
   dimension?: 2 | 3,

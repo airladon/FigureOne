@@ -42,6 +42,7 @@ export default function createMockGL() {
     DEPTH_ATTACHMENT: 0x8D00,
     DEPTH_COMPONENT16: 0x81A5,
     MAX_TEXTURE_SIZE: 0x0D33,
+    MAX_TEXTURE_IMAGE_UNITS: 0x8872,
     REPEAT: 0x2901,
     drawingBufferWidth: 100,
     drawingBufferHeight: 100,

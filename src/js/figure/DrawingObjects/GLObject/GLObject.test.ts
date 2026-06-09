@@ -61,12 +61,27 @@ describe('GLObject mask texture (textureMap)', () => {
     document.createElement = origCreateElement;
   });
 
-  test('addMaskTexture defaults to a transparent load color', () => {
-    expect(glObject.maskTexture).toEqual({
+  test('addMaskTexture appends a mask with a transparent default load color', () => {
+    expect(glObject.maskTextures).toEqual([{
       id: 'mask.png',
       src: 'mask.png',
       loadColor: [0, 0, 0, 0],
-    });
+      uniformName: 'u_mask0',
+    }]);
+  });
+
+  test('addMaskTexture appends additional masks in order with indexed uniforms', () => {
+    glObject.addMaskTexture('mask2.png');
+    expect(glObject.maskTextures.map(m => m.id)).toEqual(['mask.png', 'mask2.png']);
+    expect(glObject.maskTextures.map(m => m.uniformName)).toEqual(['u_mask0', 'u_mask1']);
+  });
+
+  test('addMaskTexture with an empty location registers a transparent placeholder', () => {
+    glObject.addMaskTexture('');
+    const placeholder = glObject.maskTextures[1];
+    expect(placeholder.src).toBe('');
+    expect(placeholder.loadColor).toEqual([0, 0, 0, 0]);
+    expect(placeholder.uniformName).toBe('u_mask1');
   });
 
   test('registers base and mask on distinct texture units', () => {

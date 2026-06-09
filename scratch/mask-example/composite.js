@@ -1,12 +1,11 @@
-// Renders the api-doc image for the gl mask-recolor (textureMap) example by
-// replicating the fragment shader on the CPU:
-//   col = mix(base.rgb, tint_i.rgb, mask.channel_i * tint_i.a)  for i in 0..3
+// Renders the api-doc images for the gl mask-recolor (textureMap) examples by
+// replicating the fragment shader on the CPU, for one or more masks:
+//   col = mix(col, tint_t.rgb, mask{m}.channel * tint_t.a)   t = 4*m + channel
 // Bilinear sampling (2x supersample) mimics the GPU's LINEAR texture filtering,
 // so the recolored region edges are anti-aliased like the real render.
 //
-// Tints match the @example's FINAL state: it adds the element with
-// tints [[1,0,0,1],[0,0,1,1]] and then calls setTint(0, [0,1,0,1]), so region 0
-// ends up green, region 1 blue, region 2/3 untouched (base colour shows).
+// Each scenario below mirrors the FINAL tint state of one @example and writes
+// its apiasset (gl_mask.png for one mask, gl_mask2.png for two).
 
 const fs = require('fs');
 const zlib = require('zlib');
@@ -79,39 +78,62 @@ function sample(img, u, v) {
 }
 
 const base = decode(`${__dirname}/base.png`);
-const mask = decode(`${__dirname}/mask.png`);
+const channels = [0, 1, 2, 3]; // mask rgba channel indices
 
-// Final tint state of the example (see header comment).
-const tints = [
-  [0, 1, 0, 1], // region 0 (mask red)   -> green (setTint override)
-  [0, 0, 1, 1], // region 1 (mask green)  -> blue
-  [0, 0, 0, 0], // region 2 (mask blue)   -> none (base shows)
-  [0, 0, 0, 0], // region 3 (mask alpha)  -> none
+// Each scenario mirrors the FINAL tint state of one @example. Tint t applies to
+// mask floor(t/4), channel t%4 - the same mapping as the shader.
+const scenarios = [
+  {
+    // Single mask (gl_mask.png). The example ends with setTint(0, green), so
+    // region 0 is green, region 1 blue, region 2 untouched (base shows).
+    out: 'gl_mask.png',
+    masks: ['mask.png'],
+    tints: [
+      [0, 1, 0, 1], [0, 0, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0],
+    ],
+  },
+  {
+    // Two masks (gl_mask2.png). mask.png recolors the three circles (tints
+    // 0..2), mask1.png recolors the bar (tint 4).
+    out: 'gl_mask2.png',
+    masks: ['mask.png', 'mask1.png'],
+    tints: [
+      [1, 0, 0, 1], [0, 0.6, 0, 1], [0, 0, 1, 1], [0, 0, 0, 0],
+      [0.6, 0, 0.8, 1], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0],
+    ],
+  },
 ];
 
 const SCALE = 2;
 const W = base.width * SCALE;
 const H = base.height * SCALE;
-const out = Buffer.alloc(W * H * 4);
-for (let y = 0; y < H; y += 1) {
-  for (let x = 0; x < W; x += 1) {
-    const u = (x + 0.5) / W;
-    const v = (y + 0.5) / H;
-    const b = sample(base, u, v);
-    const m = sample(mask, u, v);
-    const col = [b[0], b[1], b[2]];
-    for (let i = 0; i < 4; i += 1) {
-      const w = m[i] * tints[i][3];
-      for (let c = 0; c < 3; c += 1) col[c] = col[c] * (1 - w) + tints[i][c] * w;
+
+scenarios.forEach((scenario) => {
+  const masks = scenario.masks.map(name => decode(`${__dirname}/${name}`));
+  const tint = i => scenario.tints[i] || [0, 0, 0, 0];
+  const out = Buffer.alloc(W * H * 4);
+  for (let y = 0; y < H; y += 1) {
+    for (let x = 0; x < W; x += 1) {
+      const u = (x + 0.5) / W;
+      const v = (y + 0.5) / H;
+      const b = sample(base, u, v);
+      const col = [b[0], b[1], b[2]];
+      masks.forEach((maskImg, mi) => {
+        const m = sample(maskImg, u, v);
+        channels.forEach((c) => {
+          const t = tint(mi * 4 + c);
+          const w = m[c] * t[3];
+          for (let k = 0; k < 3; k += 1) col[k] = col[k] * (1 - w) + t[k] * w;
+        });
+      });
+      const o = (y * W + x) * 4;
+      out[o] = Math.round(col[0] * 255);
+      out[o + 1] = Math.round(col[1] * 255);
+      out[o + 2] = Math.round(col[2] * 255);
+      out[o + 3] = 255;
     }
-    const o = (y * W + x) * 4;
-    out[o] = Math.round(col[0] * 255);
-    out[o + 1] = Math.round(col[1] * 255);
-    out[o + 2] = Math.round(col[2] * 255);
-    out[o + 3] = 255;
   }
-}
-const dest = process.argv[2] || `${__dirname}/gl_mask.png`;
-fs.writeFileSync(dest, encodePNG(W, H, out));
-// eslint-disable-next-line no-console
-console.log('wrote', dest, `${W}x${H}`);
+  fs.writeFileSync(`${__dirname}/${scenario.out}`, encodePNG(W, H, out));
+  // eslint-disable-next-line no-console
+  console.log('wrote', scenario.out, `${W}x${H}`);
+});
