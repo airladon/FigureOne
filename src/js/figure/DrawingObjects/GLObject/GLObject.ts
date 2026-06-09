@@ -934,6 +934,9 @@ class GLObject extends DrawingObject {
     );
 
     const { texture } = this;
+    // Set when a textured object's base texture can't be bound, so we skip the
+    // draw rather than sampling a stale/wrong texture (see below).
+    let skipDraw = false;
     if (texture != null && targetTexture === false) {
       // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
       const texSize = 2;          // 2 components per iteration
@@ -950,28 +953,51 @@ class GLObject extends DrawingObject {
         locations.a_texcoord, texSize, texType,
         texNormalize, texStride, texOffset,
       );
-      gl.uniform1i(locations.u_use_texture, 1);
-      const { index } = webglInstance.textures[texture.id];
-      gl.uniform1i(locations.u_texture, index);
+      // Assign content texture units for this draw from the shared pool. Unit 0
+      // is reserved for the target/selector framebuffer texture, so content
+      // starts at unit 1: the base texture, then each mask texture in turn.
+      // bindTextureToUnit only issues a bindTexture when the unit isn't already
+      // pointing at that texture, so runs of draws sharing a texture (e.g. text
+      // sharing a font atlas) issue no bind calls.
+      let textureUnit = 1;
+      if (webglInstance.bindTextureToUnit(texture.id, textureUnit)) {
+        gl.uniform1i(locations.u_use_texture, 1);
+        gl.uniform1i(locations.u_texture, textureUnit);
+        textureUnit += 1;
 
-      // Bind the mask textures (textureMap color mode), each to its own texture
-      // unit and precomputed u_mask{i} sampler. They reuse the a_texcoord /
-      // v_texcoord bound above, so no extra attribute is needed. Uses an indexed
-      // loop with precomputed uniform names to avoid per-frame allocation.
-      const { maskTextures } = this;
-      for (let i = 0; i < maskTextures.length; i += 1) {
-        const maskTexture = maskTextures[i];
-        const maskLocation = locations[maskTexture.uniformName];
-        const maskRegistered = webglInstance.textures[maskTexture.id];
-        if (maskLocation != null && maskRegistered != null) {
-          gl.uniform1i(maskLocation, maskRegistered.index);
+        // Bind the mask textures (textureMap color mode), each to its own
+        // texture unit and precomputed u_mask{i} sampler. They reuse the
+        // a_texcoord / v_texcoord bound above, so no extra attribute is needed.
+        // Only assign the sampler if the bind succeeds — otherwise the uniform
+        // would default to sampler 0 (the reserved target texture) and recolor
+        // with garbage. Uses an indexed loop with precomputed uniform names to
+        // avoid per-frame allocation.
+        const { maskTextures } = this;
+        for (let i = 0; i < maskTextures.length; i += 1) {
+          const maskTexture = maskTextures[i];
+          const maskLocation = locations[maskTexture.uniformName];
+          if (maskLocation != null
+            && webglInstance.bindTextureToUnit(maskTexture.id, textureUnit)) {
+            gl.uniform1i(maskLocation, textureUnit);
+            textureUnit += 1;
+          }
         }
+      } else {
+        // The base texture isn't available (e.g. a shared texture was deleted by
+        // another element's cleanup while this one still references it). The
+        // composed texture shaders sample u_texture unconditionally, so there is
+        // no safe in-shader fallback — skip this object's draw this frame rather
+        // than sampling whatever stale texture occupies the unit.
+        gl.uniform1i(locations.u_use_texture, 0);
+        skipDraw = true;
       }
     } else {
       gl.uniform1i(locations.u_use_texture, 0);
     }
 
-    gl.drawArrays(this.glPrimitive, 0, numDrawVertices);
+    if (!skipDraw) {
+      gl.drawArrays(this.glPrimitive, 0, numDrawVertices);
+    }
 
     if (texture) {
       gl.disableVertexAttribArray(locations.a_texcoord);

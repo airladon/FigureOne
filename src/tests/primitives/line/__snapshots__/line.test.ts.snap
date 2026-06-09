@@ -306,6 +306,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -362,7 +364,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -1196,6 +1198,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -1252,7 +1256,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -2194,6 +2198,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -2250,7 +2256,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -4152,6 +4158,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -4208,7 +4216,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -5222,6 +5230,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -5278,7 +5288,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -7180,6 +7190,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -7236,7 +7248,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -8142,6 +8154,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -8198,7 +8212,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -8996,6 +9010,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -9052,7 +9068,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -9713,6 +9729,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -9769,7 +9787,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -10470,6 +10488,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -10526,7 +10546,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -11242,6 +11262,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -11298,7 +11320,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -11932,6 +11954,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -11988,7 +12012,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -12622,6 +12646,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -12678,7 +12704,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -13312,6 +13338,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -13368,7 +13396,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -14101,6 +14129,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -14157,7 +14187,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -14890,6 +14920,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -14946,7 +14978,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -15680,6 +15712,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -15736,7 +15770,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -16469,6 +16503,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -16525,7 +16561,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -17258,6 +17294,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -17314,7 +17352,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -17948,6 +17986,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -18004,7 +18044,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -18638,6 +18678,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -18694,7 +18736,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -19328,6 +19370,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -19384,7 +19428,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -20035,6 +20079,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -20091,7 +20137,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -20725,6 +20771,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -20781,7 +20829,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -21432,6 +21480,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -21488,7 +21538,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -22122,6 +22172,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -22178,7 +22230,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -22972,6 +23024,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -23028,7 +23082,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -23678,6 +23732,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -23734,7 +23790,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -24368,6 +24424,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -24424,7 +24482,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -25058,6 +25116,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -25114,7 +25174,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -25767,6 +25827,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -25823,7 +25885,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -26519,6 +26581,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -26575,7 +26639,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -27250,6 +27314,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -27306,7 +27372,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -27967,6 +28033,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -28023,7 +28091,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -28684,6 +28752,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -28740,7 +28810,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -29374,6 +29444,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -29430,7 +29502,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -30064,6 +30136,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -30120,7 +30194,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -30754,6 +30828,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -30810,7 +30886,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],
@@ -31444,6 +31520,8 @@ FigureElementPrimitive {
     },
     "webgl": {
       "addTexture": [Function],
+      "bindTextureToUnit": [Function],
+      "boundUnits": [],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -31500,7 +31578,7 @@ FigureElementPrimitive {
       },
       "textures": {
         "1": {
-          "index": 1,
+          "handle": 1,
         },
       },
       "useProgram": [Function],

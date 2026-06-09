@@ -55,9 +55,11 @@ const webgl = {
   lastUsedProgram: null,
   textures: {
     1: {
-      index: 1,
+      handle: 1,
     },
   },
+  boundUnits: [],
+  bindTextureToUnit: () => {},
   addTexture: () => 1,
   getAtlas: () => ({
     font: {
