@@ -487,6 +487,12 @@ export type TypeText = 'gl' | '2d';
  * {@link OBJ_FragmentShader} for names of attributes and uniforms used in the
  * shaders, and when they are used.
  *
+ * A texture can be recolored by region using one or more masks (see the mask
+ * examples below):
+ *
+ * ![](./apiassets/gl_mask.png)
+ * ![](./apiassets/gl_mask2.png)
+ *
  * @property {TypeGLPrimitive} [glPrimitive]
  * @property {TypeVertexShader} [vertexShader]
  * @property {TypeFragmentShader} [fragmentShader]
@@ -649,8 +655,6 @@ export type TypeText = 'gl' | '2d';
  * // Change the first region's color at runtime
  * p.custom.setTint(0, [0, 1, 0, 1]);
  *
- * ![](./apiassets/gl_mask.png)
- *
  * @example
  * // Recolor with two masks. Each mask adds four regions (its r, g, b, a
  * // channels), so mask 0 uses tints 0-3 and mask 1 uses tints 4-7. Here mask 0
@@ -671,7 +675,6 @@ export type TypeText = 'gl' | '2d';
  *   ],
  * });
  *
- * ![](./apiassets/gl_mask2.png)
  * @interface
  * @group Shaders
  */
