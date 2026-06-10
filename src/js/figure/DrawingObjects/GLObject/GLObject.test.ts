@@ -138,6 +138,59 @@ describe('GLObject mask texture (textureMap)', () => {
     expect(gl.drawArrays).not.toHaveBeenCalled();
   });
 
+  test('consecutive draws of the same textures skip rebinding (bind-on-change)', () => {
+    const scene = new Scene();
+    const identity = [
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1,
+    ];
+    // First draw binds base and mask to their units.
+    glObject.drawWithTransformMatrix(scene, identity, [1, 1, 1, 1], 3);
+    gl.bindTexture.mockClear();
+    // Second draw: both textures are already on their units, so no rebinds.
+    glObject.drawWithTransformMatrix(scene, identity, [1, 1, 1, 1], 3);
+    const baseGl = webgl.textures['base.png'].glTexture;
+    const maskGl = webgl.textures['mask.png'].glTexture;
+    expect(gl.bindTexture.mock.calls.some(call => call[1] === baseGl)).toBe(false);
+    expect(gl.bindTexture.mock.calls.some(call => call[1] === maskGl)).toBe(false);
+  });
+
+  test('a draw rebinds the unit when a different texture has taken it', () => {
+    const scene = new Scene();
+    const identity = [
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1,
+    ];
+    glObject.drawWithTransformMatrix(scene, identity, [1, 1, 1, 1], 3);
+    // Something else takes unit 1 (the base texture's unit).
+    webgl.bindTextureToUnit('mask.png', 1);
+    gl.bindTexture.mockClear();
+    glObject.drawWithTransformMatrix(scene, identity, [1, 1, 1, 1], 3);
+    // The base texture must be re-bound since the cached unit no longer holds it.
+    const baseGl = webgl.textures['base.png'].glTexture;
+    expect(gl.bindTexture.mock.calls.some(call => call[1] === baseGl)).toBe(true);
+  });
+
+  test('adopting an unregistered texture id takes no reference and over-releases nothing', () => {
+    // initTexture acquired a reference to the base texture in beforeEach.
+    expect(glObject.acquiredBaseTextureId).toBe('base.png');
+    // Adopt an id that was never registered (simulates an atlas not uploaded yet).
+    glObject.setBaseTextureRef('not-registered');
+    // No reference was taken, so nothing is left dangling to over-release.
+    expect(glObject.acquiredBaseTextureId).toBeNull();
+
+    const deleteSpy = jest.spyOn(webgl, 'deleteTexture');
+    glObject.resetTextureBuffer(true);
+    // resetTextureBuffer releases only what was acquired — never the
+    // unregistered id (which would be an over-release without the hardening).
+    expect(deleteSpy.mock.calls.every(call => call[0] !== 'not-registered')).toBe(true);
+    deleteSpy.mockRestore();
+  });
+
   test('resetTextureBuffer deletes both textures from the registry', () => {
     glObject.resetTextureBuffer(true);
     expect(webgl.textures['base.png']).toBeUndefined();

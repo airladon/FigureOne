@@ -108,6 +108,11 @@ class GLObject extends DrawingObject {
   fragmentShader: TypeFragmentShader;
   selectorVertexShader: TypeVertexShader;
   selectorFragmentShader: TypeFragmentShader;
+  // The webgl texture id this object currently holds a base-texture reference to
+  // (acquired by initTexture, or adopted from a shared atlas via
+  // setBaseTextureRef). resetTextureBuffer releases exactly this id, so the
+  // release can never be unbalanced with the acquire. null = no reference held.
+  acquiredBaseTextureId!: string | null;
 
 
   constructor(
@@ -134,6 +139,7 @@ class GLObject extends DrawingObject {
     this.numVertices = 0;
     this.uniforms = {};
     this.texture = null;
+    this.acquiredBaseTextureId = null;
     this.maskTextures = [];
     // this.selectorProgramIndex = this.webgl.getProgram(selectorVertexShader, selectorFragShader);
     this.initProgram();
@@ -390,6 +396,10 @@ class GLObject extends DrawingObject {
     webgl.addTexture(
       id, (data || src) as any, loadColor, repeat, this.executeOnLoad.bind(this) as any, force,
     );
+    // addTexture took/holds a reference to this id; record it so
+    // resetTextureBuffer releases exactly what was acquired. (For a forced
+    // update the id is unchanged, so this is idempotent.)
+    this.acquiredBaseTextureId = id;
     this.state = webgl.textures[texture.id].state;
 
     // Register the optional mask textures (textureMap color mode). Each loads
@@ -455,6 +465,28 @@ class GLObject extends DrawingObject {
     //     this.state = 'loaded';
     //   }
     // }
+  }
+
+  /**
+   * Adopt a base-texture reference to an already-registered texture (e.g. a
+   * shared font atlas uploaded by the Atlas, whose id this object renders with
+   * but does not upload itself).
+   *
+   * Releases any previously-held base reference first (so a font/atlas change
+   * rebalances correctly) and is idempotent when the id is unchanged. If the
+   * texture isn't registered yet, no reference is taken and acquiredBaseTextureId
+   * is cleared, so the later resetTextureBuffer release stays balanced (it only
+   * releases a reference that was actually acquired).
+   */
+  setBaseTextureRef(id: string) {
+    if (this.acquiredBaseTextureId === id) {
+      return;
+    }
+    const { webgl } = this;
+    if (this.acquiredBaseTextureId != null) {
+      webgl.deleteTexture(this.acquiredBaseTextureId);
+    }
+    this.acquiredBaseTextureId = webgl.acquireTexture(id) ? id : null;
   }
 
   // A texture map is a texture coords point that lines up with the texture
@@ -623,14 +655,15 @@ class GLObject extends DrawingObject {
 
   resetTextureBuffer(deleteTexture: boolean = true) {
     const { texture, maskTextures, webgl, gl } = this;
-    if (texture) {
-      if (deleteTexture && webgl.textures[texture.id] != null) {
-        webgl.deleteTexture(texture.id);
-      }
-      if (texture.buffer != null) {
-        gl.deleteBuffer(texture.buffer);
-        texture.buffer = null;
-      }
+    if (deleteTexture && this.acquiredBaseTextureId != null) {
+      // Release exactly the base reference this object acquired, so a failed
+      // acquire (e.g. an atlas not registered yet) can never over-release.
+      webgl.deleteTexture(this.acquiredBaseTextureId);
+      this.acquiredBaseTextureId = null;
+    }
+    if (texture && texture.buffer != null) {
+      gl.deleteBuffer(texture.buffer);
+      texture.buffer = null;
     }
     if (deleteTexture) {
       maskTextures.forEach((maskTexture) => {

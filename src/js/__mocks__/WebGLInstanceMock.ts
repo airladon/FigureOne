@@ -61,6 +61,8 @@ const webgl = {
   boundUnits: [],
   bindTextureToUnit: () => {},
   addTexture: () => 1,
+  acquireTexture: () => true,
+  deleteTexture: () => {},
   getAtlas: () => ({
     font: {
       getTextureID: () => '1',

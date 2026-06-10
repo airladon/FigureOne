@@ -200,6 +200,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -305,9 +306,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -996,6 +999,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -1197,9 +1201,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -1924,6 +1930,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -2197,9 +2204,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -3236,6 +3245,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -4157,9 +4167,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -4908,6 +4920,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -5229,9 +5242,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -6268,6 +6283,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -7189,9 +7205,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -7904,6 +7922,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -8153,9 +8172,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -8832,6 +8853,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -9009,9 +9031,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -9623,6 +9647,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -9728,9 +9753,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -10382,6 +10409,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -10487,9 +10515,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -11156,6 +11186,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -11261,9 +11292,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -11848,6 +11881,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -11953,9 +11987,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -12540,6 +12576,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -12645,9 +12682,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -13232,6 +13271,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -13337,9 +13377,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -13927,6 +13969,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -14128,9 +14171,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -14718,6 +14763,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -14919,9 +14965,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -15510,6 +15558,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -15711,9 +15760,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -16301,6 +16352,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -16502,9 +16554,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -17092,6 +17146,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -17293,9 +17348,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -17880,6 +17937,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -17985,9 +18043,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -18572,6 +18632,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -18677,9 +18738,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -19264,6 +19327,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -19369,9 +19433,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -19973,6 +20039,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -20078,9 +20145,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -20665,6 +20734,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -20770,9 +20840,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -21374,6 +21446,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -21479,9 +21552,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -22066,6 +22141,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -22171,9 +22247,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -22830,6 +22908,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -23023,9 +23102,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -23610,6 +23691,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -23731,9 +23813,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -24318,6 +24402,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -24423,9 +24508,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -25010,6 +25097,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -25115,9 +25203,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -25721,6 +25811,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -25826,9 +25917,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -26475,6 +26568,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -26580,9 +26674,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -27208,6 +27304,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -27313,9 +27410,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -27927,6 +28026,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -28032,9 +28132,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -28646,6 +28748,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -28751,9 +28854,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -29338,6 +29443,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -29443,9 +29549,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -30030,6 +30138,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -30135,9 +30244,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -30722,6 +30833,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -30827,9 +30939,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {
@@ -31414,6 +31528,7 @@ FigureElementPrimitive {
   "drawPriority": 1,
   "drawTransforms": [],
   "drawingObject": GLObject {
+    "acquiredBaseTextureId": null,
     "attributes": {
       "a_vertex": {
         "buffer": undefined,
@@ -31519,9 +31634,11 @@ FigureElementPrimitive {
       "dimension": 2,
     },
     "webgl": {
+      "acquireTexture": [Function],
       "addTexture": [Function],
       "bindTextureToUnit": [Function],
       "boundUnits": [],
+      "deleteTexture": [Function],
       "getAtlas": [Function],
       "getProgram": [Function],
       "gl": {

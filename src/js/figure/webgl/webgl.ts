@@ -235,6 +235,10 @@ class WebGLInstance {
       // Stable, monotonic id for the texture. NOT a texture unit number — units
       // are assigned per draw from a small shared pool (see bindTextureToUnit).
       handle: number;
+      // Number of live owners referencing this id (e.g. several GLText elements
+      // sharing one font atlas, plus the Atlas itself). The GL texture is freed
+      // only when this reaches zero — see addTexture/deleteTexture.
+      refCount: number;
       state: 'loading' | 'loaded';
       onLoad: Array<((b: boolean, n: number) => void) | string>;
     };
@@ -299,47 +303,53 @@ class WebGLInstance {
     force: boolean = false,
   ) {
     /*
-      If the texture already exits, then return its index. If the texture is
-      still loading, then add the onLoad callback to the list of callbacks to
-      be called once the texture loads.
+      A texture id can be shared by multiple owners (e.g. several GLText elements
+      using the same font atlas, plus the Atlas itself). Each addTexture call
+      that isn't a forced content update acquires one reference; deleteTexture
+      releases one, and the GL texture is freed only when the last owner releases
+      it. This lets one element's cleanup() drop its reference without pulling a
+      still-shared texture out from under the survivors.
+
+      If the texture already exists and is still loading, the onLoad callback is
+      added to the list to be called once the texture loads.
     */
     if (!force && this.textures[id] != null) {
-      if (this.textures[id].state === 'loaded') {
-        if (onLoad != null) {
-          this.textures[id].onLoad.push(onLoad);
-        }
-        this.onLoad(id);
-        return this.textures[id].handle;
+      // Another owner (or the same owner re-acquiring) references an existing
+      // texture: take a reference and (re)register the load callback.
+      const existingTexture = this.textures[id];
+      existingTexture.refCount += 1;
+      if (onLoad != null) {
+        existingTexture.onLoad.push(onLoad);
       }
-      // Otherwise loading
+      if (existingTexture.state === 'loaded') {
+        this.onLoad(id);
+      }
+      return existingTexture.handle;
+    }
+    const { gl } = this;
+    if (this.textures[id] != null) {
+      // Forced content update of an existing texture: keep its identity AND
+      // reference count so other owners survive the update. setTextureData
+      // (below) frees and replaces the old glTexture, so the entry — including
+      // its glTexture pointer — is preserved here rather than recreated.
+      // Append (don't replace) onLoad so pending callbacks other owners
+      // registered while the texture was still loading aren't silently dropped.
+      this.textures[id].state = 'loading';
       if (onLoad != null) {
         this.textures[id].onLoad.push(onLoad);
       }
-      return this.textures[id].handle;;
-    }
-    // Reuse the existing handle when replacing a texture (e.g. force update), so
-    // its identity is stable; otherwise allocate a fresh monotonic handle.
-    let handle;
-    if (this.textures[id] != null) {
-      handle = this.textures[id].handle;
     } else {
-      handle = this.nextTextureHandle;
+      // Brand new texture: the first owner holds the only reference.
+      this.textures[id] = {
+        id,
+        state: 'loading',
+        onLoad: onLoad != null ? [onLoad] : [],
+        handle: this.nextTextureHandle,
+        refCount: 1,
+      } as any;
       this.nextTextureHandle += 1;
     }
-    // If a texture already exists, then unload it
-    this.deleteTexture(id);
-    const { gl } = this;
-
-    this.textures[id] = {
-      id,
-      state: 'loading',
-      onLoad: [],
-      handle,
-    } as any;
     const texture = this.textures[id];
-    if (onLoad != null) {
-      texture.onLoad.push(onLoad);
-    }
     // If the data is a url string, then load the data into an image
     if (typeof data === 'string') {
       this.setTextureData(id, loadColor);
@@ -393,15 +403,45 @@ class WebGLInstance {
     }
   }
 
+  // Take an additional reference to an already-registered texture, without
+  // re-uploading it or touching its load callbacks. Used when an element adopts
+  // a texture another owner created and uploaded (e.g. a GLText element sharing
+  // a font atlas registered by the Atlas). Returns false if the texture isn't
+  // registered yet, in which case no reference was taken. Release with
+  // deleteTexture.
+  acquireTexture(id: string): boolean {
+    const texture = this.textures[id];
+    if (texture == null) {
+      return false;
+    }
+    texture.refCount += 1;
+    return true;
+  }
+
+  // Release one reference to a texture. The GL texture is freed only once the
+  // last owner releases it, so one element's cleanup can't delete a texture
+  // another element still shares (see addTexture for the rationale).
   deleteTexture(id: string) {
     const texture = this.textures[id];
     if (texture == null) {
       return;
     }
-    const { gl } = this;
+    texture.refCount -= 1;
+    if (texture.refCount <= 0) {
+      this.freeTexture(id);
+    }
+  }
 
-    // If texture exists, then delete it. gl.deleteTexture unbinds it from any
-    // unit it was bound to, so we just drop the stale cache entries.
+  // Unconditionally free a texture regardless of reference count. Used for
+  // teardown (cleanup), where every owner is going away at once.
+  freeTexture(id: string) {
+    const texture = this.textures[id];
+    if (texture == null) {
+      return;
+    }
+    const { gl } = this;
+    // gl.deleteTexture unbinds it from any unit it was bound to, so we just drop
+    // the stale cache entries.
     if (texture.glTexture != null) {
       gl.deleteTexture(texture.glTexture);
       this.clearBoundUnits(id);
@@ -473,9 +513,10 @@ class WebGLInstance {
       }
     });
     this.programs = [];
-    // Delete all textures
+    // Free all textures outright, ignoring reference counts — every owner is
+    // going away in this teardown.
     Object.keys(this.textures).forEach((id) => {
-      this.deleteTexture(id);
+      this.freeTexture(id);
     });
     this.textures = {};
     // Clean up atlases

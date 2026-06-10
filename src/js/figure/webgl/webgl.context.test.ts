@@ -292,6 +292,37 @@ describe('WebGL context loss handling', () => {
       expect(atlas1).toBe(atlas2);
       expect(Object.keys(webgl.atlases)).toHaveLength(1);
     });
+
+    test('acquireTexture takes a reference; texture survives until all are released', () => {
+      webgl.addTexture('refs', [0, 0, 0, 0]);
+      expect(webgl.textures.refs.refCount).toBe(1);
+      // Two more owners adopt the already-registered texture.
+      expect(webgl.acquireTexture('refs')).toBe(true);
+      expect(webgl.acquireTexture('refs')).toBe(true);
+      expect(webgl.textures.refs.refCount).toBe(3);
+      // Releasing two of three keeps it alive...
+      webgl.deleteTexture('refs');
+      webgl.deleteTexture('refs');
+      expect(webgl.textures.refs).toBeDefined();
+      // ...releasing the last frees it.
+      webgl.deleteTexture('refs');
+      expect(webgl.textures.refs).toBeUndefined();
+    });
+
+    test('acquireTexture returns false and does nothing for an unregistered id', () => {
+      expect(webgl.acquireTexture('missing')).toBe(false);
+      expect(webgl.textures.missing).toBeUndefined();
+    });
+
+    test('deleteTexture past zero frees once and is a harmless no-op afterwards', () => {
+      webgl.addTexture('once', [0, 0, 0, 0]);
+      expect(webgl.textures.once.refCount).toBe(1);
+      webgl.deleteTexture('once');
+      expect(webgl.textures.once).toBeUndefined();
+      // An extra release must not throw or resurrect a negative count.
+      expect(() => webgl.deleteTexture('once')).not.toThrow();
+      expect(webgl.textures.once).toBeUndefined();
+    });
   });
 });
 
@@ -392,6 +423,135 @@ describe('Figure atlas integration', () => {
     ]);
 
     expect(Object.keys(figure.webglLow.atlases)).toHaveLength(1);
+  });
+  test('removing one of two text elements sharing an atlas keeps the atlas alive', () => {
+    const figure = new Figure({ htmlId: 'c', color: [1, 0, 0, 1] });
+
+    figure.add([
+      {
+        name: 'text1',
+        make: 'text',
+        text: 'hello',
+        font: { size: 0.2, render: 'gl', atlasId: 'shared' },
+      },
+      {
+        name: 'text2',
+        make: 'text',
+        text: 'world',
+        font: { size: 0.5, render: 'gl', atlasId: 'shared' },
+      },
+    ]);
+
+    // The Atlas plus both text elements hold references to the shared texture.
+    expect(figure.webglLow.textures.shared).toBeDefined();
+    expect(figure.webglLow.textures.shared.refCount).toBeGreaterThan(1);
+
+    // Removing one text element releases its reference, but the shared atlas the
+    // other element still uses must NOT be freed (the refcount fix). Before
+    // refcounting, the first cleanup deleted the atlas out from under text2.
+    figure.elements.remove('text1');
+    expect(figure.webglLow.textures.shared).toBeDefined();
+  });
+  test('detach-then-remove workaround (texture=null before remove) stays refcount-balanced', () => {
+    // Replicates a downstream consumer's pre-refcount workaround: before
+    // removing an element it calls resetBuffers(false) and nulls the texture
+    // ref so the old cleanup path could not delete the shared atlas. The release
+    // is now keyed on acquiredBaseTextureId (not texture.id), so nulling texture
+    // must NOT skip the decrement: the count stays balanced (no leak) and the
+    // atlas survives for the sibling element.
+    const figure = new Figure({ htmlId: 'c', color: [1, 0, 0, 1] });
+    figure.add([
+      {
+        name: 'text1',
+        make: 'text',
+        text: 'hello',
+        font: { size: 0.2, render: 'gl', atlasId: 'shared' },
+      },
+      {
+        name: 'text2',
+        make: 'text',
+        text: 'world',
+        font: { size: 0.5, render: 'gl', atlasId: 'shared' },
+      },
+    ]);
+    const refBefore = figure.webglLow.textures.shared.refCount;
+
+    const element = figure.getElement('text1');
+    element.drawingObject.resetBuffers(false);
+    element.drawingObject.texture = null;
+    figure.elements.remove('text1');
+
+    // The decrement still happened (exactly once) despite texture=null, and the
+    // atlas the sibling still uses is alive.
+    expect(figure.webglLow.textures.shared).toBeDefined();
+    expect(figure.webglLow.textures.shared.refCount).toBe(refBefore - 1);
+  });
+  test('removing both shared-atlas text elements leaves the texture held by its Atlas', () => {
+    const figure = new Figure({ htmlId: 'c', color: [1, 0, 0, 1] });
+
+    figure.add([
+      {
+        name: 'text1',
+        make: 'text',
+        text: 'hello',
+        font: { size: 0.2, render: 'gl', atlasId: 'shared' },
+      },
+      {
+        name: 'text2',
+        make: 'text',
+        text: 'world',
+        font: { size: 0.5, render: 'gl', atlasId: 'shared' },
+      },
+    ]);
+
+    const refBefore = figure.webglLow.textures.shared.refCount;
+    figure.elements.remove('text1');
+    figure.elements.remove('text2');
+
+    // Both text references are released (count drops by exactly two), and the
+    // Atlas's own residual reference keeps the texture alive until teardown.
+    expect(figure.webglLow.textures.shared.refCount).toBe(refBefore - 2);
+    expect(figure.webglLow.textures.shared).toBeDefined();
+  });
+  test('changing a text element font moves its atlas reference to the new atlas', () => {
+    const figure = new Figure({ htmlId: 'c', color: [1, 0, 0, 1] });
+    figure.add([{
+      name: 'text1',
+      make: 'text',
+      text: 'hello',
+      font: { size: 0.2, render: 'gl', atlasId: 'a' },
+    }]);
+    const element = figure.getElement('text1');
+
+    expect(figure.webglLow.textures.a).toBeDefined();
+    const aRefBefore = figure.webglLow.textures.a.refCount;
+    expect(aRefBefore).toBeGreaterThan(1); // Atlas + this element
+
+    // Change the font so the element adopts a different atlas.
+    element.setText({ font: { atlasId: 'b' } });
+
+    // The old atlas keeps the Atlas's own reference (not freed), but the
+    // element's reference has moved to the new atlas.
+    expect(figure.webglLow.textures.a).toBeDefined();
+    expect(figure.webglLow.textures.a.refCount).toBe(aRefBefore - 1);
+    expect(figure.webglLow.textures.b).toBeDefined();
+    expect(figure.webglLow.textures.b.refCount).toBeGreaterThan(1);
+  });
+  test('re-adopting the same atlas id does not double-acquire (idempotent)', () => {
+    const figure = new Figure({ htmlId: 'c', color: [1, 0, 0, 1] });
+    figure.add([{
+      name: 'text1',
+      make: 'text',
+      text: 'hello',
+      font: { size: 0.2, render: 'gl', atlasId: 'a' },
+    }]);
+    const element = figure.getElement('text1');
+    const refBefore = figure.webglLow.textures.a.refCount;
+
+    // Re-run createAtlas with the same atlas id (font unchanged in id terms).
+    element.setText({ font: { atlasId: 'a' } });
+
+    expect(figure.webglLow.textures.a.refCount).toBe(refBefore);
   });
   test('two gl text elements with different sizes DO NOT share one atlas', () => {
     const figure = new Figure({ htmlId: 'c', color: [1, 0, 0, 1] });
