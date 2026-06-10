@@ -121,11 +121,20 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       font: this.font,
     });
 
+    const textureID = this.atlas.font.getTextureID();
     if ((this.drawingObject as any).texture == null) {
-      (this.drawingObject as any).addTexture(this.atlas.font.getTextureID());
+      (this.drawingObject as any).addTexture(textureID);
     } else {
-      (this.drawingObject as any).texture.id = this.atlas.font.getTextureID();
+      (this.drawingObject as any).texture.id = textureID;
     }
+    // Take a webgl reference to the shared atlas texture so it survives other
+    // elements' cleanup. The Atlas registers/uploads the texture; this element
+    // only adopts its id (GLObject.addTexture above doesn't touch webgl), so
+    // without this its resetTextureBuffer release would be unbalanced and the
+    // first element's cleanup would free the atlas for the others.
+    // setBaseTextureRef releases any previously-held id (createAtlas re-runs on
+    // font changes) and is idempotent when the id is unchanged.
+    (this.drawingObject as any).setBaseTextureRef(textureID);
     // console.log(this.atlas)
     this.setText(this.text);
 

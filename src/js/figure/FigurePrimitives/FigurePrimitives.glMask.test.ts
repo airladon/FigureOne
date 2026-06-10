@@ -84,7 +84,7 @@ describe('gl primitive mask recolor (textureMap)', () => {
     expect(e.drawingObject.texture.id).toBe('/base.png');
     expect(e.drawingObject.maskTextures.map(m => m.id)).toEqual(['/mask.png']);
     const { textures } = e.drawingObject.webgl;
-    expect(textures['/base.png'].index).not.toEqual(textures['/mask.png'].index);
+    expect(textures['/base.png'].handle).not.toEqual(textures['/mask.png'].handle);
   });
 
   test('seeds u_tint uniforms from the tints option', () => {
@@ -183,7 +183,7 @@ describe('gl primitive mask recolor (textureMap)', () => {
     // Two distinct mask textures registered on distinct units.
     expect(e.drawingObject.maskTextures.map(m => m.id)).toEqual(['/mask0.png', '/mask1.png']);
     const { textures } = e.drawingObject.webgl;
-    expect(textures['/mask0.png'].index).not.toEqual(textures['/mask1.png'].index);
+    expect(textures['/mask0.png'].handle).not.toEqual(textures['/mask1.png'].handle);
     // 8 tint uniforms exist; the 9th does not.
     expect(e.drawingObject.uniforms.u_tint7.value).toEqual([0, 0, 0, 0]); // null -> transparent
     expect(e.drawingObject.uniforms.u_tint4.value).toEqual([1, 0, 1, 1]);
