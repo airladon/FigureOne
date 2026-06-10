@@ -115,6 +115,8 @@ Path to figure element(s) within a collection. Supports multiple formats:
 | loadColor | TypeColor | `[0, 0, 1, 0.5]` | Color while loading |
 | onLoad | () => void | | Callback after load |
 
+A `texture` on the `gl` primitive can be recolored by region with one or more masks — see OBJ_TextureMask under OBJ_GenericGL.
+
 ### OBJ_FigurePrimitive (base for all primitives)
 
 | Property | Type | Default | Description |
@@ -365,11 +367,46 @@ Extends OBJ_Generic (without drawType).
 | attributes | OBJ_GLAttribute[] | | Shader attributes |
 | uniforms | OBJ_GLUniform[] | | Shader uniforms |
 | texture | OBJ_Texture | | Texture |
+| mask | OBJ_TextureMask | | Single mask to recolor regions of `texture` |
+| masks | OBJ_TextureMask[] | | Multiple masks (each adds 4 recolorable regions) |
+| tints | (TypeColor \| null)[] | | Recolor per region; mask `m` uses `tints[4m]`…`tints[4m+3]` for its r,g,b,a channels (`null` = leave region unchanged) |
 | dimension | `2` \| `3` | `2` | Coordinate dimensions |
 | light | `'directional'` \| `'point'` \| null | null | Lighting |
 | vertices | number[] \| object | | Vertex data |
 | colors | number[] \| object | | Per-vertex colors |
 | normals | number[] \| object | | Normal vectors |
+
+A texture can be recolored by region using one or more masks. A mask shares the base texture's coordinates (same dimensions, aligned to the base image); each of its r, g, b, a channels marks a region. Mask `m` is recolored by `tints[4m]` (r), `tints[4m + 1]` (g), `tints[4m + 2]` (b), `tints[4m + 3]` (a); unmasked pixels keep the base texture's color. A single mask costs one extra texture fetch and four mixes; each additional mask adds one fetch and four mixes.
+
+### OBJ_TextureMask
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| src | string | | URL of the mask image |
+| loadColor | TypeColor | `[0, 0, 0, 0]` | Color shown while the mask loads (transparent = nothing recolored until loaded) |
+
+```js
+// Recolor three regions of a texture with one mask. The mask image's red,
+// green and blue channels mark the regions tinted by tints 0, 1 and 2.
+figure.add({
+  make: 'gl',
+  vertices: [-0.8, -0.8, 0.8, -0.8, -0.8, 0.8, 0.8, -0.8, 0.8, 0.8, -0.8, 0.8],
+  texture: { src: './image.png', coords: [0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1] },
+  mask: { src: './mask.png' },
+  tints: [[1, 0, 0, 1], [0, 0.6, 0, 1], [0, 0, 1, 1]],
+});
+
+// Two masks: mask 0 uses tints 0-3, mask 1 uses tints 4-7.
+figure.add({
+  make: 'gl',
+  // ...vertices, texture...
+  masks: [{ src: './mask.png' }, { src: './mask1.png' }],
+  tints: [
+    [1, 0, 0, 1], [0, 0.6, 0, 1], [0, 0, 1, 1], null, // mask 0
+    [0.6, 0, 0.8, 1],                                 // mask 1
+  ],
+});
+```
 
 ### OBJ_Morph (`make: 'morph'`)
 
