@@ -1,5 +1,9 @@
 # Releases
 
+## 1.9.0
+* WebGL textures, including shared font atlases, are now reference-counted, so removing one element that shares a font atlas no longer deletes the atlas out from under other elements still using it
+* Texture units are assigned per draw from a small shared pool instead of one permanent unit per texture, removing a silent cap on the number of distinct textures that could render at once; a missing or not-yet-loaded texture now skips its draw rather than rendering incorrectly
+
 ## 1.8.0
 * Add a `textureMap` color mode to the `gl` primitive that recolors regions of a base texture using mask textures — each mask's red, green, blue and alpha channels select up to four regions, each tinted by an entry of the new `tints` option
 * Support a single mask via `mask` or several via `masks`, where mask `m` uses `tints[4m]` through `tints[4m + 3]`; change region colors at runtime with the `setTint` / `setTints` element methods, with tint values captured in state for save/restore and recordings
