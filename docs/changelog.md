@@ -1,5 +1,8 @@
 # Releases
 
+## 1.9.1
+* Fix the `textureMap` color mode so a mask's alpha channel works as an independent fourth region instead of bleeding its tint across every painted region; paint the fourth region as opaque black (`[0, 0, 0, 1]`), regions 0-2 as red/green/blue, and leave keep-base areas transparent
+
 ## 1.9.0
 * WebGL textures, including shared font atlases, are now reference-counted, so removing one element that shares a font atlas no longer deletes the atlas out from under other elements still using it
 * Texture units are assigned per draw from a small shared pool instead of one permanent unit per texture, removing a silent cap on the number of distinct textures that could render at once; a missing or not-yet-loaded texture now skips its draw rather than rendering incorrectly
