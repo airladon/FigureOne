@@ -119,11 +119,15 @@ Then ask the user:
 
 The summary should be 1-3 bullet points describing what changed, written from a user/consumer perspective (not implementation details).
 
+5. **Update the LLM docs if the PR changes the public API.** Edit the canonical root files `llms.txt` and `llms-full.txt` (NOT the `package/` copies — `build.sh` regenerates those from root via `cp`). They are hand-maintained, so new or changed user-facing API is missing unless updated here. Determine from the Phase 3 diff whether the PR adds, removes, or changes any public surface — e.g. a new primitive/collection, new option-object properties (`OBJ_`/`COL_`/`EQN_` types), new methods, renamed/removed options, or changed defaults.
+   - If **no** public API changed, skip this step and note "LLM docs: no API change" in the Phase 5 summary.
+   - If public API **did** change, update both `llms.txt` (concise overview — add a short example or property only if it belongs at that level) and `llms-full.txt` (comprehensive reference — add/edit the relevant property tables, type sections, and examples). Match each file's existing structure and tone, and mirror the source JSDoc (e.g. `FigurePrimitiveTypes.ts`) so the docs and types agree.
+
 ---
 
 ### Phase 7: Commit, push, and merge
 
-1. Stage the changes: `git add package.json docs/changelog.md`
+1. Stage the changes: `git add package.json docs/changelog.md` (also `git add llms.txt llms-full.txt` if they were updated in Phase 6)
 2. Commit with message: `Release vX.Y.Z`
 3. Push: `git push origin <branch>`
 4. Merge the PR: `gh pr merge <number> --merge --delete-branch`
