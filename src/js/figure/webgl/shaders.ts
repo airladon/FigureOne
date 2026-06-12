@@ -329,13 +329,31 @@ function composeFragShader(
     // alpha controls how strongly that region is recolored (0 = leave the base
     // color unchanged). With one mask this is exactly four mixes and one extra
     // texture fetch; each additional mask adds one fetch and four mixes.
+    //
+    // Masks are uploaded with premultiplied alpha, so a region only carries full
+    // weight where the mask pixel is opaque. Author each mask pixel as one of:
+    //   keep base : [0, 0, 0, 0] (transparent)
+    //   region 0  : [1, 0, 0, 1] -> u_tint0   (r channel)
+    //   region 1  : [0, 1, 0, 1] -> u_tint1   (g channel)
+    //   region 2  : [0, 0, 1, 1] -> u_tint2   (b channel)
+    //   region 3  : [0, 0, 0, 1] -> u_tint3   (a channel, opaque black)
+    // With every painted region opaque, the alpha channel is 1 across all of them,
+    // so it can't act as an independent region on its own. The a-channel mix below
+    // gates on (1 - r - g - b) so region 3 is exactly the opaque-black pixels - the
+    // ones not already claimed by an r/g/b region. Regions 0-2 support partial
+    // weight by lowering their channel value (e.g. [0.5, 0, 0, 1]); region 3 is
+    // full-weight only, with slight antialiasing softness at its borders.
     src += '  vec4 base = texture2D(u_texture, v_texcoord);\n';
     src += '  vec3 col = base.rgb;\n';
     for (let m = 0; m < numMasks; m += 1) {
       src += `  vec4 mask${m} = texture2D(u_mask${m}, v_texcoord);\n`;
       for (let c = 0; c < CHANNELS_PER_MASK; c += 1) {
         const t = m * CHANNELS_PER_MASK + c;
-        src += `  col = mix(col, u_tint${t}.rgb, mask${m}.${channels[c]} * u_tint${t}.a);\n`;
+        if (channels[c] === 'a') {
+          src += `  col = mix(col, u_tint${t}.rgb, mask${m}.a * (1.0 - clamp(mask${m}.r + mask${m}.g + mask${m}.b, 0.0, 1.0)) * u_tint${t}.a);\n`;
+        } else {
+          src += `  col = mix(col, u_tint${t}.rgb, mask${m}.${channels[c]} * u_tint${t}.a);\n`;
+        }
       }
     }
     src += '  gl_FragColor = vec4(col, base.a * u_color.a);\n';
