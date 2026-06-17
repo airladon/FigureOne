@@ -1,5 +1,9 @@
 # Releases
 
+## 1.10.0
+* Add a `rotateControl` primitive that rotates a 3D element with touch/drag gestures — the same on-screen motion as `cameraControl`, but the object turns while the camera and world-fixed lights stay put, so its faces are shaded differently as it rotates
+* Set `controlElement` to the element to rotate (required; it must not be an ancestor of the control)
+
 ## 1.9.1
 * Fix the `textureMap` color mode so a mask's alpha channel works as an independent fourth region instead of bleeding its tint across every painted region; paint the fourth region as opaque black (`[0, 0, 0, 1]`), regions 0-2 as red/green/blue, and leave keep-base areas transparent
 

@@ -63,6 +63,7 @@ Other `Fig.Figure` options: `textStyle` (`'italic'` default | `'normal'` — def
 | `prism` | 3D prism |
 | `revolve` | 3D surface of revolution |
 | `cameraControl` | Enables 3D camera rotation via drag |
+| `rotateControl` | Rotates a 3D element via drag (object turns, camera/light fixed); set `controlElement` |
 
 Shorthand `make: 'polygon'` is equivalent to `make: 'primitives.polygon'`.
 

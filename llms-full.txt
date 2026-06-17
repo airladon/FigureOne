@@ -560,6 +560,39 @@ const points = Fig.surfaceGrid({
 figure.add({ make: 'surface', points, color: [1, 0, 0, 1], normals: 'curve' });
 ```
 
+### OBJ_RotateControl (`make: 'rotateControl'`)
+
+Rotates a 3D element with drag gestures. Produces the same on-screen motion as
+`cameraControl`, but rotates the object instead of orbiting the camera — so the
+world-fixed lights shade the object differently as it turns.
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| left | number | `0` | Screen left (0-1) |
+| bottom | number | `0` | Screen bottom (0-1) |
+| width | number | `1` | Width (0-1) |
+| height | number | `1` | Height (0-1) |
+| axis | TypeParsablePoint | `[0, 1, 0]` | Vertical axis |
+| controlElement | FigureElement \| string | | Element to rotate (required; must not be an ancestor of the control) |
+| sensitivity | number | `5` | Overall sensitivity |
+| xSensitivity | number | `1` | Horizontal sensitivity (0 = no azimuth) |
+| ySensitivity | number | `1` | Vertical sensitivity (0 = no elevation) |
+| back | boolean | `false` | If true, other touchable elements are touched first (object rotates only on empty-space drags) |
+
+```js
+const figure = new Fig.Figure({
+  scene: {
+    style: 'orthographic',
+    near: 0.1,
+    far: 10,
+    camera: { position: [1, 0.6, 1.5], lookAt: [0, 0, 0], up: [0, 1, 0] },
+    light: { directional: [0.7, 0.5, 1], ambient: 0.4 },
+  },
+});
+const cube = figure.add({ make: 'cube', side: 0.6, color: [1, 0, 0, 1], light: 'directional' });
+figure.add({ make: 'rotateControl', controlElement: cube });
+```
+
 ---
 
 ## 5. Collections
