@@ -21,6 +21,7 @@ import WebGLInstance from '../webgl/webgl';
 import { CHANNELS_PER_MASK } from '../webgl/shaders';
 import DrawContext2D from '../DrawContext2D';
 import * as tools from '../../tools/math';
+import * as m3 from '../../tools/m3';
 import { generateUniqueId, joinObjects, joinObjectsWithOptions } from '../../tools/tools';
 // eslint-disable-next-line import/no-cycle
 // eslint-disable-next-line import/no-cycle
@@ -94,6 +95,7 @@ import type {
   OBJ_Surface,
   OBJ_Line3,
   OBJ_CameraControl,
+  OBJ_RotateControl,
   OBJ_Prism,
 } from './FigurePrimitiveTypes3D';
 
@@ -1902,6 +1904,178 @@ export default class FigurePrimitives {
       element.custom.sceneToChange.setCamera({
         position: newPosition,
       });
+      element.transform.updateTranslation(element.custom.position);
+      element.custom.moving = false;
+    });
+    return element;
+  }
+
+  /**
+   * {@link FigureElementPrimitive} that rotates a 3D element with touch and drag
+   * gestures.
+   *
+   * This produces the same on-screen motion as {@link OBJ_CameraControl}, but
+   * rotates the *object* instead of orbiting the camera. As the scene's lights
+   * are fixed in world space, the object's faces are shaded differently as it
+   * turns (with `cameraControl` the shading stays fixed relative to the object).
+   *
+   * @see {@link OBJ_RotateControl} for options and examples.
+   */
+  rotateControl(...options: Array<OBJ_RotateControl>) {
+    const o = joinObjectsWithOptions({ except: 'controlElement' }, {}, {
+      left: 0,
+      bottom: 0,
+      width: 1,
+      height: 1,
+      controlElement: null,
+      color: [0, 0, 0, 0],
+      axis: [0, 1, 0],
+      sensitivity: 5,
+      xSensitivity: 1,
+      ySensitivity: 1,
+      back: false,
+    }, ...options);
+    const element = this.rectangle({
+      width: o.width,
+      height: o.height,
+      position: [o.left, o.bottom],
+      xAlign: 'left',
+      yAlign: 'bottom',
+      move: { freely: false },
+      color: o.color,
+    } as any) as any;
+    // When `back` is false the control captures all drags (so dragging the
+    // object - or anywhere - rotates it). When true, touchable objects (e.g.
+    // movable elements) are touched first and the object only rotates when
+    // dragging empty space.
+    element._custom.cameraControlBack = false;
+    if (o.back) {
+      element._custom.cameraControlBack = true;
+    }
+    for (let i = options.length - 1; i >= 0; i -= 1) {
+      if ((options[i] as any).controlElement != null) {
+        element.custom.elementToRotate = (options[i] as any).controlElement;
+        i = -1;
+      }
+    }
+    element.scene = new Scene({
+      style: '2D',
+      left: 0,
+      right: 1,
+      bottom: 0,
+      top: 1,
+    });
+
+    // Resolve the target element and capture the fixed (P0) camera the first
+    // time the control is used - by then the element is linked to its scene.
+    // A `controlElement` must be supplied: defaulting to the parent is unsafe
+    // because the control is itself a child of that parent, so rotating it would
+    // corrupt the control's own gesture coordinates. With no target the control
+    // is a safe no-op.
+    element.custom.setup = false;
+    const setupState = () => {
+      let target = element.custom.elementToRotate;
+      if (typeof target === 'string') {
+        const rootElement = element.getRootElement();
+        target = rootElement != null ? rootElement.getElement(target) : null;
+      }
+      if (target == null) {
+        return false;
+      }
+      const scene = target.getScene();
+      if (scene == null || scene.camera == null) {
+        return false;
+      }
+      const axis = getPoint(o.axis);
+      element.custom.target = target;
+      element.custom.axis = axis;
+      element.custom.lookAt = getPoint(scene.camera.lookAt);
+      element.custom.up = axis.toArray();
+      element.custom.cameraMatrix0 = m3.lookAt(
+        getPoint(scene.camera.position).toArray() as [number, number, number],
+        element.custom.lookAt.toArray() as [number, number, number],
+        element.custom.up,
+      );
+      element.custom.cameraPosition = getPoint(scene.camera.position);
+      element.custom.targetPosition = target.getPosition();
+      element.custom.setup = true;
+      return true;
+    };
+
+    // Apply the object transform that reproduces the virtual camera's view from
+    // the fixed real camera: M = cameraMatrix(P0) . inverse(view at P).
+    const applyRotation = () => {
+      const matrix = m3.mul(
+        element.custom.cameraMatrix0,
+        m3.inverse(m3.lookAt(
+          element.custom.cameraPosition.toArray() as [number, number, number],
+          element.custom.lookAt.toArray() as [number, number, number],
+          element.custom.up,
+        )),
+      );
+      const p = element.custom.targetPosition;
+      element.custom.target.setTransform(new Transform([
+        ['c', ...matrix],
+        ['t', p.x, p.y, p.z],
+      ] as any));
+    };
+
+    // Fires once per touch-down. Swallow the first move's delta as a baseline so
+    // the grab does not produce a one-frame jump ('flash') at the drag start.
+    element.notifications.add('startBeingMoved', () => {
+      element.custom.skipNext = true;
+    });
+    element.notifications.add('beforeMove', () => {
+      element.custom.position = element.getPosition();
+      element.custom.moving = true;
+    });
+    element.notifications.add('beforeMoveFreely', () => {
+      element.custom.position = element.getPosition();
+      element.custom.moving = true;
+    });
+    element.notifications.add('setTransform', () => {
+      if (element.custom.moving === false) {
+        return;
+      }
+      if (!element.custom.setup && !setupState()) {
+        element.transform.updateTranslation(element.custom.position);
+        element.custom.moving = false;
+        return;
+      }
+      if (element.custom.skipNext) {
+        element.custom.skipNext = false;
+        element.transform.updateTranslation(element.custom.position);
+        element.custom.moving = false;
+        return;
+      }
+      const delta = element.getPosition().sub(element.custom.position);
+      const deltaAz = -delta.x * o.sensitivity * o.xSensitivity;
+      let deltaEl = delta.y * o.sensitivity * o.ySensitivity;
+      const L = element.custom.lookAt;
+      const U = element.custom.axis;
+      const P = element.custom.cameraPosition;
+
+      // cameraControl's exact azimuth/elevation update, applied to the virtual
+      // camera position so the motion matches cameraControl identically.
+      const panAxis = U;
+      const tiltAxis = U.crossProduct(P.sub(L)).normalize();
+      const deltaAngle = 0.001;
+      let angleToLock = Math.abs(Math.acos(
+        P.sub(L).normalize().dotProduct(L.add(U).normalize()),
+      ));
+      if (deltaEl < 0 && angleToLock < Math.PI / 2) {
+        if (deltaEl < -angleToLock + deltaAngle) {
+          deltaEl = -angleToLock + deltaAngle;
+        }
+      }
+      if (deltaEl > 0 && angleToLock > Math.PI / 2) {
+        angleToLock = Math.PI - angleToLock;
+        deltaEl = tools.round(Math.min(angleToLock - deltaAngle, deltaEl), 4);
+      }
+      const t = [['r', deltaEl, ...tiltAxis.toArray()], ['r', deltaAz, ...panAxis.toArray()]];
+      element.custom.cameraPosition = P.transformBy(getTransform(t as any).matrix());
+
+      applyRotation();
       element.transform.updateTranslation(element.custom.position);
       element.custom.moving = false;
     });

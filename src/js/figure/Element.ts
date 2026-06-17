@@ -5072,6 +5072,7 @@ class FigureElementCollection extends FigureElement {
       cube: shapes.cube.bind(shapes),
       prism: shapes.prism.bind(shapes),
       cameraControl: shapes.cameraControl.bind(shapes),
+      rotateControl: shapes.rotateControl.bind(shapes),
       gesture: shapes.gesture.bind(shapes),
       arrow: shapes.arrow.bind(shapes),
       line: shapes.line.bind(shapes),

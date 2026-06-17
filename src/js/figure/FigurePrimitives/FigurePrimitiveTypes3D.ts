@@ -2,6 +2,7 @@ import type { TypeGLBufferUsage } from '../DrawingObjects/GLObject/GLObject';
 import type { CPY_Step } from '../geometries/copy/copy';
 import type { TypeParsablePoint } from '../../tools/geometry/Point';
 import type Scene from '../../tools/geometry/scene';
+import type { FigureElement } from '../Element';
 import type { TypeColor } from '../../tools/types';
 import type { TypeParsableLine } from '../../tools/geometry/Line';
 import type { OBJ_Line3Arrow } from '../../tools/d3/line3';
@@ -1116,6 +1117,100 @@ export type OBJ_CameraControl = {
   height?: number,
   axis?: TypeParsablePoint,
   controlScene?: Scene | string,
+  sensitivity?: number,
+  xSensitivity?: number,
+  ySensitivity?: number,
+  back?: boolean,
+} & OBJ_FigurePrimitive;
+
+/* eslint-disable max-len */
+/**
+ * Rotate control definition object that extends {@link OBJ_FigurePrimitive}.
+ *
+ * A rotate control is a transparent rectangle that uses touch and drag gestures
+ * to rotate a 3D element. It produces the same on-screen motion as
+ * {@link OBJ_CameraControl}, but rotates the *object* rather than orbiting the
+ * camera. Because the scene lights are fixed in world space, the object's faces
+ * are shaded differently as it turns (with `cameraControl` the shading stays
+ * fixed relative to the object).
+ *
+ * Left/right movements rotate the object around the vertical `axis` (azimuth),
+ * while up/down movements change its elevation relative to that axis.
+ *
+ * The transparent rectangle is positioned relative to the 2D HTML canvas. The
+ * `left`, `bottom`, `width` and `height` properties are numbers from 0 to 1
+ * representing a percentage of the screen width and height. For the rectangle to
+ * cover the entire screen use `left: 0`, `bottom: 0`, `width: 1`, `height: 1`
+ * (the defaults).
+ *
+ * Set `controlElement` (by name or reference) to the element to rotate. This is
+ * required - it must not be an ancestor of the control (e.g. its parent
+ * collection), otherwise rotating it would corrupt the control's own gesture
+ * coordinates. With no `controlElement` the control does nothing. The element
+ * should be centered on its scene's camera `lookAt` point so that it spins in
+ * place.
+ *
+ * @property {number} [left] screen left position to place the control rectangle.
+ * 0 is the left edge, while 1 is the right edge (`0`).
+ * @property {number} [bottom] screen bottom position to place the control
+ * rectangle. 0 is the bottom edge, while 1 is the top edge (`0`).
+ * @property {number} [width] width of control rectangle. 1 is the full width of
+ * the drawing canvas (`1`).
+ * @property {number} [height] height of control rectangle. 1 is the full height
+ * of the drawing canvas (`1`).
+ * @property {TypeParsablePoint} [axis] axis to keep vertical as the object is
+ * rotated. The axis vector and scene.camera.up vector should be in the same
+ * plane (`[0, 1, 0]`)
+ * @property {FigureElement | string} [controlElement] element to rotate (by name
+ * or reference). Required; must not be an ancestor of the control. With no value
+ * the control does nothing.
+ * @property {number} [sensitivity] sensitivity of object rotation relative to
+ * user movement where larger numbers result in more rotation for the same
+ * movement (`5`)
+ * @property {number} [xSensitivity] sensitivity to a horizontal user movement.
+ * Setting this to 0 will mean the object does not rotate azimuthally (`1`)
+ * @property {number} [ySensitivity] sensitivity to a vertical user movement.
+ * Setting this to 0 will mean the elevation does not change (`1`)
+ * @property {boolean} [back] if `false` (the default) the control captures all
+ * drags, so dragging the object (or anywhere) rotates it. If `true`, all 2D and
+ * 3D objects that can be touched are touched before the rotate control, so the
+ * object only rotates when dragging empty space - use this when other elements
+ * also need to be interactive (`false`)
+ *
+ * @example
+ * // Cube that can be rotated by dragging anywhere on the figure.
+ * // Set the 3D scene in the constructor so figure.scene and
+ * // figure.elements.scene are wired consistently.
+ * const figure = new Fig.Figure({
+ *   scene: {
+ *     style: 'orthographic',
+ *     near: 0.1,
+ *     far: 10,
+ *     camera: { position: [1, 0.6, 1.5], lookAt: [0, 0, 0], up: [0, 1, 0] },
+ *     light: { directional: [0.7, 0.5, 1], ambient: 0.4 },
+ *   },
+ * });
+ *
+ * const cube = figure.add({
+ *   make: 'cube',
+ *   side: 0.6,
+ *   color: [1, 0, 0, 1],
+ *   light: 'directional',
+ * });
+ *
+ * figure.add({ make: 'rotateControl', controlElement: cube });
+ *
+ * @interface
+ * @group Interactivity
+ */
+/* eslint-enable max-len */
+export type OBJ_RotateControl = {
+  left?: number,
+  bottom?: number,
+  width?: number,
+  height?: number,
+  axis?: TypeParsablePoint,
+  controlElement?: FigureElement | string,
   sensitivity?: number,
   xSensitivity?: number,
   ySensitivity?: number,
