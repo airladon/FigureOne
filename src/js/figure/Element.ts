@@ -3795,7 +3795,8 @@ class FigureElement {
     }
   }
 
-  showAll(): void {
+  // eslint-disable-next-line no-unused-vars
+  showAll(skipFormIgnored: boolean = false): void {
     this.show();
   }
 
@@ -5624,11 +5625,15 @@ class FigureElementCollection extends FigureElement {
     this.show(toShow);
   }
 
-  override showAll(): void {
+  override showAll(skipFormIgnored: boolean = false): void {
     super.show();
     for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.showAll();
+      // When skipFormIgnored is set (form-driven shows), leave form-ignored
+      // descendant subtrees untouched so their visibility persists.
+      if (!(skipFormIgnored && element.isFormIgnored)) {
+        element.showAll(skipFormIgnored);
+      }
     }
   }
 
@@ -5972,7 +5977,11 @@ class FigureElementCollection extends FigureElement {
 
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      if (!this.preserveChildColor) {
+      // A form-ignored child (and its subtree) is excluded from the equation's
+      // default ('form') colour cascade so its colour persists across form
+      // changes, matching the isFormIgnored "no form-driven changes" contract.
+      const formIgnored = from === 'form' && element.isFormIgnored;
+      if (!this.preserveChildColor && !formIgnored) {
         element.setColor(nonNullColor, setDefault, from);
       }
     }
@@ -6063,11 +6072,11 @@ class FigureElementCollection extends FigureElement {
     }
   }
 
-  setElementColors(elementColors: Record<string, any>) {
+  setElementColors(elementColors: Record<string, any>, from: string | null = null) {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       if (element.name in elementColors) {
-        element.setColor(elementColors[element.name]);
+        element.setColor(elementColors[element.name], true, from);
       }
     }
   }
@@ -6138,6 +6147,7 @@ class FigureElementCollection extends FigureElement {
     delay: number = 0,
     callback: (string | ((arg: any | null | undefined) => void)) | null | undefined = null,
     name: string = '',
+    from: string | null = null,
     easeFunction: string | ((n: number) => number) = 'tools.math.linear',
   ) {
     let callbackMethod = callback;
@@ -6154,6 +6164,7 @@ class FigureElementCollection extends FigureElement {
                 duration: time,
                 progression: easeFunction as any,
                 onFinish: callbackMethod as any,
+                setColorFrom: from,
               })
               .start();
             // only want to send callback once
@@ -6161,7 +6172,7 @@ class FigureElementCollection extends FigureElement {
             timeToAnimate = time + delay;
           }
         } else {
-          element.setColor(elementColors[element.name]);
+          element.setColor(elementColors[element.name], true, from);
         }
       }
     }

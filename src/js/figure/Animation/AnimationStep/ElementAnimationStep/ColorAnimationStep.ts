@@ -28,6 +28,7 @@ export type OBJ_ColorAnimationStep = {
   target?: TypeColor | 'dim' | 'undim';     // Either target or delta must be defined
   delta?: TypeColor;      // delta overrides target if both are defined
   dissolve?: 'in' | 'out' | null;
+  setColorFrom?: string | null;  // provenance passed to setColor (e.g. 'form')
 } & OBJ_ElementAnimationStep;
 
 const addColors = (color1: TypeColor, color2: TypeColor) => color1.map((c: number, index: number) => Math.min(c + color2[index], 1));
@@ -105,6 +106,7 @@ export class ColorAnimationStep extends ElementAnimationStep {
     whenComplete: TypeColor;  // Color after dissolving
     dissolve?: 'in' | 'out' | null;
     setDefault?: boolean;
+    setColorFrom?: string | null;
   };
 
   /**
@@ -114,7 +116,7 @@ export class ColorAnimationStep extends ElementAnimationStep {
     const ElementAnimationStepOptionsIn =
       joinObjects<any>({}, ...options, { type: 'color' });
     deleteKeys(ElementAnimationStepOptionsIn, [
-      'start', 'delta', 'target', 'dissolve',
+      'start', 'delta', 'target', 'dissolve', 'setColorFrom',
     ]);
     super(ElementAnimationStepOptionsIn);
     const defaultPositionOptions = {
@@ -122,11 +124,12 @@ export class ColorAnimationStep extends ElementAnimationStep {
       target: null,
       delta: null,
       dissolve: null,
+      setColorFrom: null,
     };
     const optionsToUse = joinObjects<any>({}, defaultPositionOptions, ...options);
     this.color = {} as any;
     copyKeysFromTo(optionsToUse, this.color, [
-      'start', 'delta', 'target', 'dissolve',
+      'start', 'delta', 'target', 'dissolve', 'setColorFrom',
     ]);
     if ((this.color.target as any) === 'dim') {
       if (this.element != null) {
@@ -177,7 +180,7 @@ export class ColorAnimationStep extends ElementAnimationStep {
       }
       if (this.color.dissolve === 'in') {
         this.color.start[3] = 0.001;
-        element.setColor(this.color.start, this.color.setDefault);
+        element.setColor(this.color.start, this.color.setDefault, this.color.setColorFrom);
         element.showAll();
       }
       this.color.delta = subtractColors(this.color.target, this.color.start);
@@ -204,14 +207,14 @@ export class ColorAnimationStep extends ElementAnimationStep {
       return newColor;
     });
     if (this.element != null) {
-      this.element.setColor(next, this.color.setDefault);
+      this.element.setColor(next, this.color.setDefault, this.color.setColorFrom);
     }
   }
 
   override setToEnd() {
     const { element } = this;
     if (element != null) {
-      element.setColor(this.color.whenComplete, this.color.setDefault);
+      element.setColor(this.color.whenComplete, this.color.setDefault, this.color.setColorFrom);
       if (this.color.dissolve === 'out') {
         element.hide();
       }
