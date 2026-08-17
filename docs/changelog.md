@@ -1,5 +1,8 @@
 # Releases
 
+## 1.10.1
+* Fix `isFormIgnored` not protecting an element nested inside a `FigureElementCollection` that is itself a form element. Previously, showing the form revealed every descendant via `showAll` and recolored them via the default colour cascade, overriding the flag. Form-driven shows (immediate and dissolve-in) now skip form-ignored descendant subtrees, and the form colour cascade (immediate, animated `move`, and `setElementColors`) carries `'form'` provenance so it skips form-ignored descendants too — a flagged child keeps its visibility and colour even when its parent collection is shown or recoloured by a form
+
 ## 1.10.0
 * Add a `rotateControl` primitive that rotates a 3D element with touch/drag gestures — the same on-screen motion as `cameraControl`, but the object turns while the camera and world-fixed lights stay put, so its faces are shaded differently as it rotates
 * Set `controlElement` to the element to rotate (required; it must not be an ancestor of the control)

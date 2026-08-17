@@ -77,7 +77,7 @@ export type TypeCollectionMethods = {
   getElementTransforms: () => { [key: string]: Transform },
   getElementColors: (includeHidden: boolean) => { [key: string]: TypeColor },
   setElementTransforms: (transforms: { [key: string]: Transform }) => void,
-  setElementColors: (colors: { [key: string]: TypeColor }) => void,
+  setElementColors: (colors: { [key: string]: TypeColor }, from?: string | null) => void,
   animateToTransforms(
     elementTransforms: Record<string, any>,
     time?: number,
@@ -92,6 +92,7 @@ export type TypeCollectionMethods = {
     delay?: number,
     callback?: string | ((arg?: any) => void) | null,
     name?: string,
+    from?: string | null,
     easeFunction?: string | ((n: number) => number)): number,
 };
 
@@ -592,7 +593,7 @@ export default class EquationForm extends Elements {
     elements.forEach((e) => {
       (e.animations.addTo('_EquationColor') as any)
         .opacity({
-          dissolve, onFinish, duration: time, delay, completeOnCancel: true,
+          dissolve, onFinish, duration: time, delay, completeOnCancel: true, skipFormIgnored: true,
         })
         .start();
     });
@@ -632,7 +633,7 @@ export default class EquationForm extends Elements {
     const { show, hide } = this.getElementsToShowAndHide();
     if (showTime === 0) {
       show.forEach((e) => {
-        e.showAll();
+        e.showAll(true);
       });
     } else {
       this.dissolveElements(show, 'in', 0.01, showTime, null);
@@ -663,7 +664,7 @@ export default class EquationForm extends Elements {
     }
     if (showTime === 0) {
       show.forEach((e) => {
-        e.showAll();
+        e.showAll(true);
       });
       if (callback != null) {
         callback();
@@ -732,14 +733,14 @@ export default class EquationForm extends Elements {
     elementsToDelayShowing.forEach((e) => {
       (e.animations.addTo('_EquationColor') as any)
         .dissolveIn({
-          duration: showTime, onFinish, delay: cumTime + blankTime,
+          duration: showTime, onFinish, delay: cumTime + blankTime, skipFormIgnored: true,
         })
         .start();
     });
     elementsToShowAfterDissolve.forEach((e) => {
       (e.animations.addTo('_EquationColor') as any)
         .dissolveIn({
-          duration: showTime, onFinish, delay: blankTime,
+          duration: showTime, onFinish, delay: blankTime, skipFormIgnored: true,
         })
         .start();
     });
@@ -871,8 +872,8 @@ export default class EquationForm extends Elements {
     }
     this.collectionMethods.setElementTransforms(currentTransforms);
     this.collectionMethods.setElementTransforms(toShowTransforms);
-    this.collectionMethods.setElementColors(currentColors);
-    this.collectionMethods.setElementColors(toShowColors);
+    this.collectionMethods.setElementColors(currentColors, 'form');
+    this.collectionMethods.setElementColors(toShowColors, 'form');
 
     let cumTime = delay;
 
@@ -915,7 +916,7 @@ export default class EquationForm extends Elements {
         && elementsToMove.length === 0
       ) {
         this.collectionMethods.animateToColors(
-          animateToColors, dissolveOutTime, delay, null, '_EquationAnimateColor',
+          animateToColors, dissolveOutTime, delay, null, '_EquationAnimateColor', 'form',
         );
         colorAnimationsStarted = true;
       }
@@ -966,7 +967,7 @@ export default class EquationForm extends Elements {
       if (elementsToShow.length > 0) {
         if (elementsToChangeColor.length > 0) {
           this.collectionMethods.animateToColors(
-            animateToColors, dissolveOutTime, cumTime, null, '_EquationAnimateColor',
+            animateToColors, dissolveOutTime, cumTime, null, '_EquationAnimateColor', 'form',
           );
           colorAnimationsStarted = true;
         }
@@ -981,7 +982,7 @@ export default class EquationForm extends Elements {
       && !colorAnimationsStarted
     ) {
       this.collectionMethods.animateToColors(
-        animateToColors, dissolveOutTime, cumTime, null, '_EquationAnimateColor',
+        animateToColors, dissolveOutTime, cumTime, null, '_EquationAnimateColor', 'form',
       );
       colorAnimationsStarted = true;
     }
@@ -1005,7 +1006,7 @@ export default class EquationForm extends Elements {
       if (elementsToShow.length > 0) {
         if (elementsToChangeColor.length > 0) {
           this.collectionMethods.animateToColors(
-            animateToColors, dissolveInTime, cumTime, null, '_EquationAnimateColor',
+            animateToColors, dissolveInTime, cumTime, null, '_EquationAnimateColor', 'form',
           );
           colorAnimationsStarted = true;
         }
@@ -1028,7 +1029,7 @@ export default class EquationForm extends Elements {
       && !colorAnimationsStarted
     ) {
       cumTime += this.collectionMethods.animateToColors(
-        animateToColors, dissolveInTime, cumTime, colorCallback, '_EquationAnimateColor',
+        animateToColors, dissolveInTime, cumTime, colorCallback, '_EquationAnimateColor', 'form',
       );
       colorAnimationsStarted = true;
     }

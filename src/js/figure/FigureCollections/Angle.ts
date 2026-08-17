@@ -1875,8 +1875,8 @@ class CollectionsAngle extends FigureElementCollection {
     this.animateNextFrame();
   }
 
-  override showAll() {
-    super.showAll();
+  override showAll(skipFormIgnored: boolean = false) {
+    super.showAll(skipFormIgnored);
     this.update();
   }
 

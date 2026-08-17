@@ -431,6 +431,155 @@ describe('Equation Animation', () => {
       const state2 = c._state({ ignoreShown: true, returnF1Type: false });
       expect(state2.isFormIgnored).toBe(false);
     });
+
+    test('showForm does not show ignored child inside a shown collection', () => {
+      figure.add([{
+        name: 'coll',
+        make: 'collection',
+        elements: [
+          { name: 'keep', make: 'polygon' },
+          { name: 'ignore', make: 'polygon' },
+        ],
+      }]);
+      const coll = figure.elements._coll;
+      const keep = coll._keep;
+      const ignore = coll._ignore;
+
+      figure.add([{
+        name: 'eqn2',
+        make: 'equation',
+        options: {
+          elements: { coll },
+          forms: { withColl: ['coll'] },
+        },
+      }]);
+      const e = figure.elements._eqn2;
+
+      // The collection is a form element; flag and hide one child so the form
+      // must leave it untouched even though it shows the parent collection.
+      ignore.isFormIgnored = true;
+      ignore.hide();
+
+      e.showForm('withColl');
+      figure.drawNow(0);
+
+      expect(coll.isShown).toBe(true);
+      expect(keep.isShown).toBe(true);
+      expect(ignore.isShown).toBe(false);
+    });
+
+    test('dissolve-in form change does not show ignored child inside a collection', () => {
+      figure.add([{
+        name: 'coll',
+        make: 'collection',
+        elements: [
+          { name: 'keep', make: 'polygon' },
+          { name: 'ignore', make: 'polygon' },
+        ],
+      }]);
+      const coll = figure.elements._coll;
+      const ignore = coll._ignore;
+
+      figure.add([{
+        name: 'eqn2',
+        make: 'equation',
+        options: {
+          elements: { coll },
+          forms: { empty: [], withColl: ['coll'] },
+        },
+      }]);
+      const e = figure.elements._eqn2;
+
+      e.showForm('empty');
+      figure.drawNow(0);
+
+      ignore.isFormIgnored = true;
+      ignore.hide();
+
+      e.goToForm({ form: 'withColl', animate: 'dissolve', duration: 1 });
+      figure.drawNow(0);
+      figure.drawNow(0.5);
+      figure.drawNow(2);
+
+      expect(coll.isShown).toBe(true);
+      expect(ignore.isShown).toBe(false);
+      expect(ignore.animations.animations).toHaveLength(0);
+    });
+
+    test('showForm does not recolor ignored child inside a collection', () => {
+      figure.add([{
+        name: 'coll',
+        make: 'collection',
+        elements: [
+          { name: 'keep', make: 'polygon' },
+          { name: 'ignore', make: 'polygon' },
+        ],
+      }]);
+      const coll = figure.elements._coll;
+      const keep = coll._keep;
+      const ignore = coll._ignore;
+
+      figure.add([{
+        name: 'eqn2',
+        make: 'equation',
+        options: {
+          color: [1, 0, 0, 1],
+          elements: { coll },
+          forms: { withColl: ['coll'] },
+        },
+      }]);
+      const e = figure.elements._eqn2;
+
+      const ignoreColor = [0, 1, 0, 1];
+      ignore.isFormIgnored = true;
+      ignore.setColor(ignoreColor);
+
+      e.showForm('withColl');
+      figure.drawNow(0);
+
+      // keep inherits the equation's 'form' colour; ignore keeps its own.
+      expect(keep.color).toEqual([1, 0, 0, 1]);
+      expect(ignore.color).toEqual(ignoreColor);
+    });
+
+    test('animated goToForm does not recolor ignored child inside a collection', () => {
+      figure.add([{
+        name: 'coll',
+        make: 'collection',
+        elements: [
+          { name: 'keep', make: 'polygon' },
+          { name: 'ignore', make: 'polygon' },
+        ],
+      }]);
+      const coll = figure.elements._coll;
+      const ignore = coll._ignore;
+
+      figure.add([{
+        name: 'eqn2',
+        make: 'equation',
+        options: {
+          color: [1, 0, 0, 1],
+          elements: { coll },
+          forms: { other: [], withColl: ['coll'] },
+        },
+      }]);
+      const e = figure.elements._eqn2;
+
+      e.showForm('other');
+      figure.drawNow(0);
+
+      const ignoreColor = [0, 1, 0, 1];
+      ignore.isFormIgnored = true;
+      ignore.setColor(ignoreColor);
+
+      e.goToForm({ form: 'withColl', animate: 'move', duration: 1 });
+      figure.drawNow(0);
+      figure.drawNow(0.5);
+      figure.drawNow(2);
+
+      expect(ignore.color).toEqual(ignoreColor);
+      expect(ignore.animations.animations).toHaveLength(0);
+    });
   });
 
   describe('formChanged notification', () => {

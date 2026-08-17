@@ -31,6 +31,7 @@ export type OBJ_OpacityAnimationStep = {
   delta?: number;      // delta overrides target if both are defined
   dissolve?: 'in' | 'out' | null;
   dissolveFromCurrent?: boolean;
+  skipFormIgnored?: boolean;
 } & OBJ_ElementAnimationStep;
 
 /**
@@ -119,6 +120,7 @@ export class OpacityAnimationStep extends ElementAnimationStep {
     whenComplete: number;  // Color after dissolving
     dissolve?: 'in' | 'out' | null;
     dissolveFromCurrent: boolean;
+    skipFormIgnored: boolean;
   };
 
   /**
@@ -128,7 +130,7 @@ export class OpacityAnimationStep extends ElementAnimationStep {
     const ElementAnimationStepOptionsIn =
       joinObjects<any>({}, ...optionsIn, { type: 'opacity' });
     deleteKeys(ElementAnimationStepOptionsIn, [
-      'start', 'delta', 'target', 'dissolve', 'dissolveFromCurrent',
+      'start', 'delta', 'target', 'dissolve', 'dissolveFromCurrent', 'skipFormIgnored',
     ]);
     super(ElementAnimationStepOptionsIn);
     const defaultPositionOptions = {
@@ -137,11 +139,12 @@ export class OpacityAnimationStep extends ElementAnimationStep {
       delta: null,
       dissolve: null,
       dissolveFromCurrent: false,
+      skipFormIgnored: false,
     };
     const options = joinObjects<any>({}, defaultPositionOptions, ...optionsIn);
     this.opacity = {} as any;
     copyKeysFromTo(options, this.opacity, [
-      'start', 'delta', 'target', 'dissolve', 'dissolveFromCurrent',
+      'start', 'delta', 'target', 'dissolve', 'dissolveFromCurrent', 'skipFormIgnored',
     ]);
   }
 
@@ -204,7 +207,7 @@ export class OpacityAnimationStep extends ElementAnimationStep {
         // this.opacity.start = 0.001;
         this.opacity.target = 1;
         this.opacity.whenComplete = 1;
-        element.showAll();
+        element.showAll(this.opacity.skipFormIgnored);
         element.setOpacity(this.opacity.start);
       }
       this.opacity.delta = this.opacity.target - this.opacity.start;
