@@ -2414,6 +2414,22 @@ export class Equation extends FigureElementCollection {
     return this.eqn.forms[this.eqn.currentForm];
   }
 
+  // Content pinned with the `absolute` function and `update: true` tracks the
+  // space it is positioned in, so it is re-resolved every frame. This is done
+  // after `super.setupDraw` so the equation's transform (and its parents')
+  // have already been advanced for this frame.
+  override setupDraw(now: number = 0, canvasIndex: number = 0) {
+    super.setupDraw(now, canvasIndex);
+    if (this.isShown) {
+      const form = this.getCurrentForm();
+      if (form != null) {
+        // Pass `this` so the per-frame path doesn't have to rediscover the
+        // equation collection by walking the form's elements.
+        form.updateAbsolutePositions(this);
+      }
+    }
+  }
+
   render(animationStop: boolean = true) {
     const form = this.getCurrentForm();
     if (form != null) {

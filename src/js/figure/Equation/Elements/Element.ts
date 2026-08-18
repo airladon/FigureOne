@@ -36,6 +36,7 @@ export interface ElementInterface {
   setColor(colorIn: TypeColor | null, from?: string | null): void;
   setOpacity(opacityIn: number | null): void;
   collectDrawOrder(ops: Array<any>): void;
+  collectAbsolutes(absolutes: Array<any>): void;
 }
 
 // Equation is a class that takes a set of drawing objects (TextObjects,
@@ -255,6 +256,11 @@ class Element implements ElementInterface {
     // A leaf element holds no draw-order operation.
   }
 
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  collectAbsolutes(absolutes: Array<any>) {
+    // A leaf element is never absolutely positioned.
+  }
+
   offsetLocation(offset: Point = new Point(0, 0)) {
     this.location = this.location.add(offset);
   }
@@ -422,6 +428,12 @@ class Elements implements ElementInterface {
   collectDrawOrder(ops: Array<any>) {
     this.content.forEach((e) => {
       e.collectDrawOrder(ops);
+    });
+  }
+
+  collectAbsolutes(absolutes: Array<any>) {
+    this.content.forEach((e) => {
+      e.collectAbsolutes(absolutes);
     });
   }
 

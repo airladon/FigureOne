@@ -363,6 +363,13 @@ export default class BaseAnnotationFunction implements ElementInterface {
     });
   }
 
+  collectAbsolutes(absolutes: Array<any>) {
+    this.content.collectAbsolutes(absolutes);
+    this.annotations.forEach((annotation) => {
+      annotation.content.collectAbsolutes(absolutes);
+    });
+  }
+
   offsetLocation(offset: Point = new Point(0, 0)) {
     this.location = this.location.add(offset);
     this.content.offsetLocation(offset);

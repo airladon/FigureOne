@@ -137,6 +137,8 @@ export default class EquationForm extends Elements {
   duration!: number | null | undefined;
   translation!: TypeElementTranslationOptions;
   positionsSet: boolean;
+  // Absolute functions in this form that track their space (`update: true`).
+  absoluteUpdaters: Array<any>;
   layout: 'always' | 'lazy' | 'init';
   ignoreColor: boolean;
   ignoreOpacity: boolean;
@@ -176,6 +178,7 @@ export default class EquationForm extends Elements {
     // this.animation = {};
     this.fromForm = {};
     this.positionsSet = false;
+    this.absoluteUpdaters = [];
     this.layout = 'always';
     this.ignoreColor = false;
     this.ignoreOpacity = false;
@@ -208,6 +211,7 @@ export default class EquationForm extends Elements {
       );
     }
     super.setPositions();
+    this.setAbsolutePositions();
     if (!this.ignoreColor) {
       super.setColor(null, 'form');
     }
@@ -215,6 +219,68 @@ export default class EquationForm extends Elements {
       super.setOpacity();
     }
     this.setDrawOrder();
+  }
+
+  // The equation collection is the common parent of all the form's elements.
+  getEquationCollection(): any {
+    const children = this.collectionMethods.getAllElements();
+    if (children != null && children.length > 0) {
+      return children[0].parent;
+    }
+    return null;
+  }
+
+  // Resolve the positions of any content wrapped in an `absolute` function.
+  //
+  // This runs after the form has been laid out, aligned and had its positions
+  // written to the elements (`arrange` offsets the whole form for
+  // `xAlign`/`yAlign`, and `Absolute` ignores that offset). Resolving last
+  // matters because the figure and element spaces need the equation's place in
+  // the figure, a 'local' percentage needs the form's final bounds, and a
+  // target element inside this same equation needs its final transform - which
+  // `super.setPositions` has only just written. The absolute contents are then
+  // positioned themselves, as `super.setPositions` has already been past them.
+  setAbsolutePositions() {
+    const absolutes: Array<any> = [];
+    super.collectAbsolutes(absolutes);
+    this.absoluteUpdaters = [];
+    if (absolutes.length === 0) {
+      return;
+    }
+    const equation = this.getEquationCollection();
+    const bounds = this.getBounds();
+    absolutes.forEach((a) => {
+      const resolved = a.resolve(equation, bounds);
+      a.setPositions();
+      // Anything that could not resolve yet is retried on later frames - the
+      // target element may simply be added to the figure after this equation.
+      if (a.options.update === true || !resolved) {
+        this.absoluteUpdaters.push(a);
+      }
+    });
+  }
+
+  // Re-resolve and re-apply the positions of tracking (`update: true`) absolute
+  // content. Called by `Equation.setupDraw` on every frame, once the equation's
+  // transform (and its parents') are up to date for that frame. Only the
+  // affected content is touched - the rest of the form is already positioned.
+  updateAbsolutePositions(equationIn: any = null) {
+    if (this.absoluteUpdaters.length === 0) {
+      return;
+    }
+    const equation = equationIn == null ? this.getEquationCollection() : equationIn;
+    const bounds = this.getBounds();
+    const stillTracking: Array<any> = [];
+    this.absoluteUpdaters.forEach((a) => {
+      const resolved = a.resolve(equation, bounds);
+      a.setPositions();
+      // Keep tracking the ones that asked to, and keep retrying the ones that
+      // still cannot resolve. A retry that succeeds drops out of the list.
+      if (a.options.update === true || !resolved) {
+        stillTracking.push(a);
+      }
+    });
+    this.absoluteUpdaters = stillTracking;
   }
 
   // Collect the `front`/`back` draw-order operations declared on this form's
@@ -260,10 +326,7 @@ export default class EquationForm extends Elements {
     const ops: Array<any> = [];
     super.collectDrawOrder(ops);
     this.collectElementModDrawOrder(ops);
-    // Find the equation collection (the common parent of all child elements).
-    const children = this.collectionMethods.getAllElements();
-    const collection: any = (children != null && children.length > 0)
-      ? children[0].parent : null;
+    const collection: any = this.getEquationCollection();
     if (collection == null) {
       return;
     }
@@ -384,7 +447,12 @@ export default class EquationForm extends Elements {
       newContent.push(contentElement._dup(namedElements));
     });
     equationCopy.content = newContent;
-    duplicateFromTo(this, equationCopy, ['content', 'collectionMethods', 'form', 'elements']);
+    // `absoluteUpdaters` holds references into `content`, so it is rebuilt by
+    // the copy's own `setAbsolutePositions` rather than duplicated here.
+    duplicateFromTo(
+      this, equationCopy,
+      ['content', 'collectionMethods', 'form', 'elements', 'absoluteUpdaters'],
+    );
     return equationCopy;
   }
 

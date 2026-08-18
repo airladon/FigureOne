@@ -1384,6 +1384,25 @@ Array: `{ offset: [content, [x, y]] }`
 | inSize | boolean | `true` | Include in size |
 | fullContentBounds | boolean | `false` | Use full bounds |
 
+#### EQN_Absolute (`absolute`)
+Array: `{ absolute: [content, x, y, unit, space, xAlign, yAlign, update, fullContentBounds] }`
+
+Pins content to a fixed position. Absolute content never contributes to the
+equation layout (no width/height/ascent/descent) and is not moved by the form's
+`xAlign`/`yAlign` alignment.
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| content | TypeEquationPhrase | | Content |
+| x | number | `0` | x position in `space` |
+| y | number | `0` | y position in `space` |
+| unit | `'coord'` \| `'percent'` | `'coord'` | `'percent'` makes x/y fractions (0-1) of `space`'s bounding rect |
+| space | `'local'` \| `'figure'` \| string \| FigureElement | `'local'` | `'local'` is the equation's own layout space; a string is an element name or path, positioning in that element's draw space |
+| xAlign | `'left'` \| `'center'` \| `'right'` \| number | `'left'` | Point of content placed at `x` |
+| yAlign | `'bottom'` \| `'middle'` \| `'top'` \| `'baseline'` \| number | `'baseline'` | Point of content placed at `y` |
+| update | boolean | `false` | Re-resolve every frame so the content tracks a moving equation or target element |
+| fullContentBounds | boolean | `false` | Use full bounds |
+
 #### EQN_Pad (`pad`)
 Array: `{ pad: [content, top, right, bottom, left] }`
 
