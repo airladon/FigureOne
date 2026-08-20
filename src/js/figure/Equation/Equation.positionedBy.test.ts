@@ -196,6 +196,68 @@ describe('Equation element positionedBy', () => {
     eqn.showForm('0');
     expect(eqn._a.positionedBy).toEqual({ form: '0', with: 'lines.0' });
   });
+  test('A function called directly records the same lineage as a phrase', () => {
+    const eqn = make({ 0: ['a'] });
+    const fns = eqn.eqn.functions;
+    const frac = fns.frac.bind(fns);
+    eqn.addForms({
+      phrase: { frac: ['a', 'v', 'b'] },
+      direct: frac(['a', 'v', 'b']),
+    });
+    eqn.showForm('phrase');
+    expect(eqn._a.positionedBy).toEqual({ form: 'phrase', with: 'frac.numerator' });
+    eqn.showForm('direct');
+    expect(eqn._a.positionedBy).toEqual({ form: 'direct', with: 'frac.numerator' });
+    expect(eqn._b.positionedBy).toEqual({ form: 'direct', with: 'frac.denominator' });
+  });
+  test('Phrases carry the lineage of the functions inside them', () => {
+    const eqn = make({ 0: ['a'] });
+    const fns = eqn.eqn.functions;
+    const frac = fns.frac.bind(fns);
+    eqn.addPhrases({
+      // A phrase held as an equation phrase is re-parsed into each form...
+      parsed: { frac: ['a', 'v', 'b'] },
+      // ...and one held as an already-built function is duplicated into it,
+      // so the duplicate has to carry the function's name and slot names too.
+      built: frac(['c', 'v', 'd']),
+    });
+    eqn.addForms({ 1: ['parsed', 'built'] });
+    eqn.showForm('1');
+    expect(eqn._a.positionedBy).toEqual({ form: '1', with: 'frac.numerator' });
+    expect(eqn._b.positionedBy).toEqual({ form: '1', with: 'frac.denominator' });
+    expect(eqn._c.positionedBy).toEqual({ form: '1', with: 'frac.numerator' });
+    expect(eqn._d.positionedBy).toEqual({ form: '1', with: 'frac.denominator' });
+  });
+  test('Absolute content keeps its lineage when it is re-positioned', () => {
+    const eqn = make({
+      0: [{
+        absolute: {
+          content: 'a', x: 0.1, y: 0.1, update: true,
+        },
+      }, 'b'],
+    });
+    eqn.showForm('0');
+    expect(eqn._a.positionedBy).toEqual({ form: '0', with: 'absolute' });
+    // Tracking absolute content is re-positioned every frame, outside the
+    // form's own layout - which must not clear what the form recorded.
+    eqn.eqn.forms['0'].updateAbsolutePositions();
+    expect(eqn._a.positionedBy).toEqual({ form: '0', with: 'absolute' });
+  });
+  test('Single content functions add only their own name', () => {
+    const eqn = make({
+      0: [
+        { container: { content: 'a', width: 0.5 } },
+        { color: { content: 'b', color: [1, 0, 0, 1] } },
+        { offset: { content: 'c', offset: [0.1, 0] } },
+        { box: { content: 'd', symbol: 's' } },
+      ],
+    });
+    eqn.showForm('0');
+    expect(eqn._a.positionedBy).toEqual({ form: '0', with: 'container' });
+    expect(eqn._b.positionedBy).toEqual({ form: '0', with: 'color' });
+    expect(eqn._c.positionedBy).toEqual({ form: '0', with: 'offset' });
+    expect(eqn._d.positionedBy).toEqual({ form: '0', with: 'box' });
+  });
   test('Form ignored elements are left alone', () => {
     const eqn = make({
       0: ['a', 'b'],
