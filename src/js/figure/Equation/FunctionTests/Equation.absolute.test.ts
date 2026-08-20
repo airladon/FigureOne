@@ -27,6 +27,7 @@ describe('Equation Functions - Absolute', () => {
         options: {
           elements: {
             a: 'a', b: 'b', c: 'c', d: 'd',
+            n: 'n', m: 'm', v: { symbol: 'vinculum' },
           },
           forms,
           ...options,
@@ -173,6 +174,47 @@ describe('Equation Functions - Absolute', () => {
       figure.setFirstTransform();
       expect(round(eqn._d.getPosition('local').x, 5)).toEqual(0.5);
       expect(round(eqn._d.getPosition('local').y, 5)).toEqual(0.3);
+    });
+
+    test('yAlign baseline places composite content on the equation baseline', () => {
+      // A fraction is composite content whose wrapper origin is its baseline.
+      // Placing it inline in a form puts that baseline at y = 0 (the form's
+      // default 'baseline' alignment); pinning it with yAlign: 'baseline' at
+      // y = 0 must land it in exactly the same place.
+      addEqn({
+        inline: ['a', { frac: ['n', 'v', 'm'] }],
+        pinned: [
+          'a',
+          {
+            absolute: {
+              content: { frac: ['n', 'v', 'm'] },
+              x: 0,
+              y: 0,
+              yAlign: 'baseline',
+            },
+          },
+        ],
+      });
+      eqn.showForm('inline');
+      figure.setFirstTransform();
+      const inlineNum = eqn._n.getPosition('local');
+      const inlineDen = eqn._m.getPosition('local');
+      const inlineVin = eqn._v.getPosition('local');
+
+      eqn.showForm('pinned');
+      figure.setFirstTransform();
+      // Same vertical placement relative to the baseline, for every part
+      expect(round(eqn._n.getPosition('local').y, 5)).toEqual(round(inlineNum.y, 5));
+      expect(round(eqn._m.getPosition('local').y, 5)).toEqual(round(inlineDen.y, 5));
+      expect(round(eqn._v.getPosition('local').y, 5)).toEqual(round(inlineVin.y, 5));
+    });
+
+    test('A space that is neither a name nor a FigureElement is rejected', () => {
+      expect(() => {
+        addEqn({
+          0: ['a', { absolute: { content: 'd', x: 0, y: 0, space: { not: 'an element' } } }],
+        });
+      }).toThrow(/space must be/);
     });
 
     test('Percent of the form bounds', () => {

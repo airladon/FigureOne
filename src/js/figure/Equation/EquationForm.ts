@@ -108,6 +108,12 @@ export type TypeElementTranslationOptions = {
     mag: number,
   },
 };
+// Only a local-space percentage position needs the form's bounds to resolve -
+// figure and element spaces are independent of them.
+function needsFormBounds(absolute: any) {
+  return absolute.options.space === 'local' && absolute.options.unit === 'percent';
+}
+
 export default class EquationForm extends Elements {
   elements: { [key: string]: FigureElementCollection | FigureElementPrimitive };
   collectionMethods: TypeCollectionMethods;
@@ -137,8 +143,15 @@ export default class EquationForm extends Elements {
   duration!: number | null | undefined;
   translation!: TypeElementTranslationOptions;
   positionsSet: boolean;
-  // Absolute functions in this form that track their space (`update: true`).
+  // Absolute functions in this form, collected lazily. The form's content tree
+  // is fixed once the form is built, so this is collected once and reused
+  // rather than re-walked on every layout (`arrange` alone lays out 3 times).
+  absolutes: Array<any> | null;
+  // Absolute functions in this form that track their space (`update: true`),
+  // or that have not resolved yet and are being retried.
   absoluteUpdaters: Array<any>;
+  // Whether any of `absoluteUpdaters` needs the form's bounds to resolve.
+  absoluteUpdatersNeedBounds: boolean;
   layout: 'always' | 'lazy' | 'init';
   ignoreColor: boolean;
   ignoreOpacity: boolean;
@@ -178,7 +191,9 @@ export default class EquationForm extends Elements {
     // this.animation = {};
     this.fromForm = {};
     this.positionsSet = false;
+    this.absolutes = null;
     this.absoluteUpdaters = [];
+    this.absoluteUpdatersNeedBounds = false;
     this.layout = 'always';
     this.ignoreColor = false;
     this.ignoreOpacity = false;
@@ -187,6 +202,8 @@ export default class EquationForm extends Elements {
 
   override cleanup() {
     this.elements = {};
+    this.absolutes = null;
+    this.absoluteUpdaters = [];
     super.cleanup();
   }
 
@@ -241,9 +258,13 @@ export default class EquationForm extends Elements {
   // `super.setPositions` has only just written. The absolute contents are then
   // positioned themselves, as `super.setPositions` has already been past them.
   setAbsolutePositions() {
-    const absolutes: Array<any> = [];
-    super.collectAbsolutes(absolutes);
+    if (this.absolutes == null) {
+      this.absolutes = [];
+      super.collectAbsolutes(this.absolutes);
+    }
+    const absolutes = this.absolutes;
     this.absoluteUpdaters = [];
+    this.absoluteUpdatersNeedBounds = false;
     if (absolutes.length === 0) {
       return;
     }
@@ -256,6 +277,9 @@ export default class EquationForm extends Elements {
       // target element may simply be added to the figure after this equation.
       if (a.options.update === true || !resolved) {
         this.absoluteUpdaters.push(a);
+        if (needsFormBounds(a)) {
+          this.absoluteUpdatersNeedBounds = true;
+        }
       }
     });
   }
@@ -269,8 +293,11 @@ export default class EquationForm extends Elements {
       return;
     }
     const equation = equationIn == null ? this.getEquationCollection() : equationIn;
-    const bounds = this.getBounds();
+    // Only a local-space percentage reads the form bounds, so the common
+    // tracking case (figure or element space) allocates nothing here.
+    const bounds = this.absoluteUpdatersNeedBounds ? this.getBounds() : null;
     const stillTracking: Array<any> = [];
+    let needBounds = false;
     this.absoluteUpdaters.forEach((a) => {
       const resolved = a.resolve(equation, bounds);
       a.setPositions();
@@ -278,9 +305,13 @@ export default class EquationForm extends Elements {
       // still cannot resolve. A retry that succeeds drops out of the list.
       if (a.options.update === true || !resolved) {
         stillTracking.push(a);
+        if (needsFormBounds(a)) {
+          needBounds = true;
+        }
       }
     });
     this.absoluteUpdaters = stillTracking;
+    this.absoluteUpdatersNeedBounds = needBounds;
   }
 
   // Collect the `front`/`back` draw-order operations declared on this form's
@@ -447,12 +478,17 @@ export default class EquationForm extends Elements {
       newContent.push(contentElement._dup(namedElements));
     });
     equationCopy.content = newContent;
-    // `absoluteUpdaters` holds references into `content`, so it is rebuilt by
-    // the copy's own `setAbsolutePositions` rather than duplicated here.
+    // `absolutes` / `absoluteUpdaters` hold references into `content`, so they
+    // are rebuilt by the copy's own `setAbsolutePositions` rather than
+    // duplicated here (which would clone them away from the copied tree).
     duplicateFromTo(
       this, equationCopy,
-      ['content', 'collectionMethods', 'form', 'elements', 'absoluteUpdaters'],
+      [
+        'content', 'collectionMethods', 'form', 'elements',
+        'absolutes', 'absoluteUpdaters',
+      ],
     );
+    equationCopy.absolutes = null;
     return equationCopy;
   }
 
@@ -611,6 +647,10 @@ export default class EquationForm extends Elements {
     const delta = new Point(0, 0).sub(fixPoint);
     if (delta.x !== 0 || delta.y !== 0) {
       this.offsetLocation(delta);
+      // A layout resolves absolute positions more than once (each
+      // `setPositions` above). `Absolute.resolve` recomputes its content's
+      // bounds every call so each pass fully overwrites the last - keep it
+      // that way, or repeated passes would compound the offset.
       this.setPositions(true);
     }
     // this.positionsSet = false;

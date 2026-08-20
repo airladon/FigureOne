@@ -4155,6 +4155,13 @@ export class EquationFunctions {
         }
       });
       const o = joinObjects<any>({}, defaultOptions, optionsIn);
+      // A non-string `space` must be a FigureElement. Catching it here gives a
+      // clear error at definition time rather than a TypeError mid-render, and
+      // keeps `resolve`'s null return meaning "not ready yet" rather than
+      // "malformed".
+      if (typeof o.space !== 'string' && typeof o.space.getScene !== 'function') {
+        throw new Error("space must be 'local', 'figure', an element name or path, or a FigureElement");
+      }
       return new Absolute(
         [this.contentToElement(content)],
         [],
