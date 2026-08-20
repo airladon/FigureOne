@@ -6,6 +6,7 @@ import Bounds from './Bounds';
 import { duplicateFromTo } from '../../../tools/tools';
 
 import type { ElementInterface } from './Element';
+import { lineagePath } from './Element';
 import SymbolNew from '../Symbols/SymbolNew';
 import { FunctionMap } from '../../../tools/FunctionMap';
 import type { TypeColor } from '../../../tools/types';
@@ -21,6 +22,7 @@ export type EQN_Annotation = {
   inSize: boolean,
   fullContentBounds: boolean,
   reference?: string,
+  name?: string,
 };
 
 export type EQN_EncompassGlyph = {
@@ -104,6 +106,7 @@ function copyAnnotation(annotation: EQN_Annotation, namedCollection?: Record<str
     content: annotation.content._dup(namedCollection),
     inSize: annotation.inSize,
     fullContentBounds: annotation.fullContentBounds,
+    name: annotation.name,
   };
 }
 
@@ -165,9 +168,20 @@ function getAllElementsFromGlyphs(glyphs: EQN_Glyphs) {
   return elements;
 }
 
-function setPositionsForAnnotations(annotations: Array<EQN_Annotation>) {
-  annotations.forEach((annotation) => {
-    annotation.content.setPositions();
+// An annotation's slot in the lineage is the name it was created with
+// (`superscript`, `from`, `comment` ...), or its index if it has none.
+function setPositionsForAnnotations(
+  annotations: Array<EQN_Annotation>,
+  form: string | null = null,
+  path: string = '',
+  defaultPrefix: string = '',
+) {
+  annotations.forEach((annotation, index) => {
+    let name = null;
+    if (form != null) {
+      name = annotation.name != null ? annotation.name : `${defaultPrefix}${index}`;
+    }
+    annotation.content.setPositions(form, lineagePath(path, name));
   });
 }
 
@@ -192,7 +206,9 @@ function setOpacityForAnnotations(annotations: Array<EQN_Annotation>, opacity: n
 }
 
 
-function setPositionsForGlyphs(glyphs: EQN_Glyphs) {
+function setPositionsForGlyphs(
+  glyphs: EQN_Glyphs, form: string | null = null, path: string = '',
+) {
   Object.keys(glyphs).forEach((key) => {
     if ((glyphs as any)[key] == null) {
       return;
@@ -208,7 +224,13 @@ function setPositionsForGlyphs(glyphs: EQN_Glyphs) {
       glyph.location == null ? 0 : glyph.location.y,
     ]);
     glyph.glyph.setTransform(t);
-    setPositionsForAnnotations(glyph.annotations);
+    // A glyph's slot in the lineage is the side it is on. Its annotations are
+    // named as if they were attached to the function itself, so a lineage does
+    // not change when a function is used with or without its symbol.
+    if (form != null) {
+      glyph.glyph.positionedBy = { form, with: lineagePath(path, key) };
+    }
+    setPositionsForAnnotations(glyph.annotations, form, path, key);
   });
 }
 
@@ -277,6 +299,11 @@ export default class BaseAnnotationFunction implements ElementInterface {
   // EquationFunctions.eqnMethod. Has no layout effect; used by
   // Equation.getFunctionElements to look up the contents of a sub-tree.
   functionName: string | null;
+  // The name of the equation function that created this node (`brac`, `sup`
+  // ...), assigned by EquationFunctions when the function is created (whether
+  // dispatched from a phrase or called directly). Used to build the lineage of
+  // the elements this function positions.
+  functionType: string | null;
 
   constructor(
     content: ElementInterface,
@@ -295,6 +322,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     this.color = null;
     this.opacity = null;
     this.functionName = null;
+    this.functionType = null;
   }
 
   _dup(namedCollection?: Record<string, any>) {
@@ -326,10 +354,11 @@ export default class BaseAnnotationFunction implements ElementInterface {
     ];
   }
 
-  setPositions() {
-    this.content.setPositions();
-    setPositionsForAnnotations(this.annotations);
-    setPositionsForGlyphs(this.glyphs);
+  setPositions(form: string | null = null, path: string = '') {
+    const base = form == null ? '' : lineagePath(path, this.functionType);
+    this.content.setPositions(form, base);
+    setPositionsForAnnotations(this.annotations, form, base);
+    setPositionsForGlyphs(this.glyphs, form, base);
   }
 
   setColor(colorIn: TypeColor | null = null, from: string | null = null) {

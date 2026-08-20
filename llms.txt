@@ -281,6 +281,8 @@ Any element type can be created inline in forms using `make`:
 
 Any layout function also accepts a `name` label to address its elements via `eqn.getFunctionElements(name)`. Form objects accept `ignoreColor` / `ignoreOpacity` to preserve externally-set element color/opacity (suppress the cascade).
 
+Every element laid out by a form records how it was positioned in `element.positionedBy` — `{ form, with }`, where `with` is the `'.'` separated lineage of the layout functions and their content slots that placed it (e.g. `'scale.frac.numerator'`). It is `null` until a form positions the element, and is overwritten each time a form lays it out. An `annotate` annotation can be given a `name` to set its own slot name in the lineage.
+
 ### Symbols
 
 Define symbols in `elements` with `{ symbol: 'type' }`:

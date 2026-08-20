@@ -723,6 +723,10 @@ FigureElementPrimitive2DText {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": {
+    "form": "0",
+    "with": "",
+  },
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",

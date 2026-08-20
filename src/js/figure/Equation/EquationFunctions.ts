@@ -3062,6 +3062,9 @@ export type EQN_Lines = {
  * suggested position, alignment and offset of an annotation with some name. If
  * this name is defined here, then `xPosition`, `yPosition`, `xAlign`, `yAlign`
  * and `offset` will be overwritten with the glyph's suggestion.
+ * @property {string} [name] name of this annotation's slot in the lineage
+ * recorded on the elements it positions (see
+ * {@link FigureElement}`.positionedBy`) - defaults to the annotation's index
  *
  * @example
  * figure.add({
@@ -3123,6 +3126,7 @@ export type EQN_Annotation = {
   inSize?: boolean,
   fullContentBounds?: boolean,
   reference?: string,
+  name?: string,
 };
 
 /**
@@ -3784,6 +3788,62 @@ export type EQN_Annotate = {
 // are subsets of the other, then when its parameters are extracted, their type
 // is all confused.
 
+// The names of the content slots of the equation functions that have more
+// than one, in the order the function passes them to its element class. Every
+// other function has a single, generic `content` slot (which adds nothing to
+// an element's lineage), or slots that are identified by their index (the
+// cells of a `matrix`, the lines of `lines`).
+const FUNCTION_CONTENT_NAMES: { [name: string]: Array<string> } = {
+  frac: ['numerator', 'denominator'],
+};
+
+// The names of the glyph slots of the equation functions that use the
+// non-annotation glyphs. Annotation function glyphs are named by the side they
+// are on, so they don't need to be listed here.
+const FUNCTION_GLYPH_NAMES: { [name: string]: Array<string> } = {
+  frac: ['symbol'],
+};
+
+// The methods of EquationFunctions that are not equation functions: the
+// plumbing that turns a phrase into a tree. Everything else on the class is
+// wrapped at construction so it tags the node it builds (see `tagFunction`).
+// These are excluded because they sit *outside* the functions and also return
+// nodes - tagging them would overwrite the function's own name with
+// `parseContent`.
+const NOT_EQUATION_FUNCTIONS = [
+  'constructor', 'stringToElement', 'parseContent', 'contentToElement',
+  'eqnMethod', 'dispatchEqnMethod',
+];
+
+// Tag an equation function with the name it was called with, and the names of
+// its content slots, so the elements it lays out can record the lineage of
+// functions that positioned them. A function that named its own slots (a
+// matrix names them by row and column) keeps those names.
+//
+// This is done after the function is built rather than in its constructor
+// because a node cannot know its own name: one class (BaseAnnotationFunction)
+// backs ~20 of the function names, and functions are built out of each other
+// (`sup` from `supSub` from `annotate`, `matrix` from `brac`). Tagging last
+// means the outermost function is the one recorded, with no name threaded
+// through the delegations.
+function tagFunction(result: any, name: string) {
+  if (
+    !(result instanceof BaseEquationFunction)
+    && !(result instanceof BaseAnnotationFunction)
+  ) {
+    return;
+  }
+  result.functionType = name;
+  if (result instanceof BaseEquationFunction) {
+    if (FUNCTION_CONTENT_NAMES[name] != null) {
+      result.contentNames = FUNCTION_CONTENT_NAMES[name];
+    }
+    if (FUNCTION_GLYPH_NAMES[name] != null) {
+      result.glyphNames = FUNCTION_GLYPH_NAMES[name];
+    }
+  }
+}
+
 /**
  * Equation Functions.
  *
@@ -3828,6 +3888,25 @@ export class EquationFunctions {
     this.getExistingOrAddSymbol = getExistingOrAddSymbol;
     this.makeElement = makeElement;
     this.phraseElements = {};
+    // Tag each function with its own name, so a function called directly
+    // (`eqn.functions.frac(...)`) records the same lineage as one dispatched
+    // from a phrase. A function built out of another (`sup` out of `supSub`)
+    // tags last, so the outermost function is the one recorded.
+    const proto = Object.getPrototypeOf(this);
+    Object.getOwnPropertyNames(proto).forEach((methodName) => {
+      if (NOT_EQUATION_FUNCTIONS.indexOf(methodName) > -1) {
+        return;
+      }
+      const method = proto[methodName];
+      if (typeof method !== 'function') {
+        return;
+      }
+      (this as any)[methodName] = (...args: Array<any>) => {
+        const result = method.apply(this, args);
+        tagFunction(result, methodName);
+        return result;
+      };
+    });
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -3945,6 +4024,10 @@ export class EquationFunctions {
 
   eqnMethod(name: string, params: any) {
     const result = this.dispatchEqnMethod(name, params);
+    // The function has already tagged itself with its method name. Re-tag with
+    // the name the phrase used, for the three that differ (`tBox` for
+    // `touchBox`, `sumOf` and `prodOf` for the shared `sumProd`).
+    tagFunction(result, name);
     // Allow any equation function to be tagged with a caller-supplied
     // `name` via its options object. The tag has no layout effect; it's
     // used by Equation.getFunctionElements to look up the function's sub-tree.
@@ -4886,6 +4969,7 @@ export class EquationFunctions {
           offset: options.rootOffset,
           scale: options.rootScale,
           reference: 'root',
+          name: 'root',
         });
       }
       return this.annotate({
@@ -4953,6 +5037,7 @@ export class EquationFunctions {
     if (superscript != null) {
       annotations.push({
         content: o.superscript,
+        name: 'superscript',
         xPosition: 'right',
         yPosition: '0.7a',
         xAlign: 'left',
@@ -4964,6 +5049,7 @@ export class EquationFunctions {
     if (subscript != null) {
       annotations.push({
         content: o.subscript,
+        name: 'subscript',
         xPosition: 'right',
         yPosition: 'baseline',
         xAlign: 'left',
@@ -5320,6 +5406,11 @@ export class EquationFunctions {
         [],
         o,
       );
+      // Name each cell's slot by its row and column, so an element's lineage
+      // says where in the matrix it is (`matrix.1_2`).
+      matrixContent.contentNames = contentArray.map(
+        (c: any, index: number) => `${Math.floor(index / o.order[1])}_${index % o.order[1]}`,
+      );
       if (left != null && right != null) {
         return this.brac(joinObjects<any>({}, o.brac, {
           content: matrixContent,
@@ -5402,6 +5493,9 @@ export class EquationFunctions {
         [],
         o,
       );
+      // Name each line's slot by its index, so a single-line `lines` records
+      // the same shape of lineage (`lines.0`) as a multi-line one.
+      lines.contentNames = contentArray.map((c: any, index: number) => `${index}`);
       return lines;
     } catch (e: any) {
       throw new Error(`FigureOne Equation Lines Error: ${e.message}`);
@@ -5553,6 +5647,7 @@ export class EquationFunctions {
       const annotations = [
         {
           content: to,
+          name: 'to',
           xPosition: o.toXPosition,
           yPosition: o.toYPosition,
           xAlign: o.toXAlign,
@@ -5562,6 +5657,7 @@ export class EquationFunctions {
         },
         {
           content: from,
+          name: 'from',
           xPosition: o.fromXPosition,
           yPosition: o.fromYPosition,
           xAlign: o.fromXAlign,
@@ -5695,6 +5791,7 @@ export class EquationFunctions {
     const annotations = [
       {
         content: to,
+        name: 'to',
         xPosition: 'center',
         yPosition: 'top',
         xAlign: 'center',
@@ -5705,6 +5802,7 @@ export class EquationFunctions {
       },
       {
         content: from,
+        name: 'from',
         xPosition: 'center',
         yPosition: 'bottom',
         xAlign: 'center',
@@ -5807,6 +5905,7 @@ export class EquationFunctions {
       ] = (this.processComment as any)(...args);
       const annotations = [{
         content: comment,
+        name: 'comment',
         xPosition: 'center',
         yPosition: 'top',
         xAlign: 'center',
@@ -5875,6 +5974,7 @@ export class EquationFunctions {
 
       const annotations = [{
         content: comment,
+        name: 'comment',
         xPosition: 'center',
         yPosition: 'bottom',
         xAlign: 'center',
@@ -6057,6 +6157,7 @@ export class EquationFunctions {
       const annotations = [
         {
           content: comment,
+          name: 'comment',
           xPosition: 'center',
           yPosition: 'top',
           xAlign: 'center',
@@ -6095,6 +6196,7 @@ export class EquationFunctions {
       const annotations = [
         {
           content: comment,
+          name: 'comment',
           xPosition: 'center',
           yPosition: 'bottom',
           xAlign: 'center',

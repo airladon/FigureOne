@@ -1617,7 +1617,21 @@ eqn.getPhraseElements(phrase);                    // All elements in a phrase
 // (name, formName? = current, mode? = 'all', includeHidden? = false).
 // mode 'first' = first match; 'all' = de-duplicated union across all matches.
 eqn.getFunctionElements('myFrac');
+
+// How an element was most recently positioned - `null` until a form lays it
+// out, then `{ form, with }` where `with` is the '.' separated lineage of the
+// layout functions and content slots that placed it. Overwritten each time a
+// form positions the element, and not set on `isFormIgnored` elements.
+eqn._a.positionedBy;   // { form: '1', with: 'scale.frac.numerator' }
 ```
+
+Slot names in a lineage: a function's single, generic `content` slot adds
+nothing (`{ scale: { content: ... } }` contributes just `'scale'`); a fraction
+uses `numerator` / `denominator` / `symbol`; an annotation uses its name
+(`superscript`, `subscript`, `root`, `from`, `to`, `comment`, or the `name`
+given to an `annotate` annotation, defaulting to its index); a glyph uses the
+side it is on (`left`, `right`, `top`, `bottom`, `encompass`, `line`); matrix
+cells use `row_column` and `lines` lines use their index.
 
 `Equation` publishes a `formChanged` notification whenever the displayed form may have changed, with payload `{ phase, form, fromForm?, progress? }`. `phase` is one of: `'showForm'` (form set via `showForm`; suppress with `notify: false`), `'goToFormStart'`, `'goToFormStep'` (per animation frame, with `progress` 0–1; a final step with `progress: 1` precedes the end), `'goToFormEnd'`. `fromForm` is present only on the `goToForm*` phases.
 

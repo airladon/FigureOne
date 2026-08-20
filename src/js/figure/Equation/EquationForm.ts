@@ -221,13 +221,21 @@ export default class EquationForm extends Elements {
     );
   }
 
-  override setPositions(noArrange: boolean = false) {
-    if (!noArrange && (this.layout === 'always' || this.positionsSet === false)) {
+  override setPositions() {
+    if (this.layout === 'always' || this.positionsSet === false) {
       this.arrange(
         this.arranged.scale, this.arranged.xAlign, this.arranged.yAlign, this.arranged.fixTo,
       );
     }
-    super.setPositions();
+    this.writePositions();
+  }
+
+  // Write the form's layout out to its elements. Each element also records how
+  // it was positioned - this form's name, and the lineage of the equation
+  // functions within the form that placed it. `arrange` uses this directly, as
+  // it has just laid the form out and must not send it back to be re-arranged.
+  writePositions() {
+    super.setPositions(this.name);
     this.setAbsolutePositions();
     if (!this.ignoreColor) {
       super.setColor(null, 'form');
@@ -586,7 +594,7 @@ export default class EquationForm extends Elements {
 
     this.positionsSet = true;
     super.calcSize(new Point(0, 0), scale);
-    this.setPositions(true);
+    this.writePositions();
 
     let fixPoint = new Point(0, 0);
     if (fixTo instanceof FigureElementPrimitive
@@ -648,10 +656,10 @@ export default class EquationForm extends Elements {
     if (delta.x !== 0 || delta.y !== 0) {
       this.offsetLocation(delta);
       // A layout resolves absolute positions more than once (each
-      // `setPositions` above). `Absolute.resolve` recomputes its content's
+      // `writePositions` above). `Absolute.resolve` recomputes its content's
       // bounds every call so each pass fully overwrites the last - keep it
       // that way, or repeated passes would compound the offset.
-      this.setPositions(true);
+      this.writePositions();
     }
     // this.positionsSet = false;
     // this.collectionMethods.showOnly(elementsCurrentlyShowing);

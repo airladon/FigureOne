@@ -29,7 +29,7 @@ export interface ElementInterface {
   _dup(namedCollection?: Record<string, any>): ElementInterface;
   getAllElements(includeHidden?: boolean): Array<ElementInterface
     | FigureElementPrimitive | FigureElementCollection>;
-  setPositions(): void;
+  setPositions(form?: string | null, path?: string): void;
   offsetLocation(offset: Point): void;
   getBounds(useFullSize?: boolean): Bounds;
   cleanup(): void;
@@ -37,6 +37,16 @@ export interface ElementInterface {
   setOpacity(opacityIn: number | null): void;
   collectDrawOrder(ops: Array<any>): void;
   collectAbsolutes(absolutes: Array<any>): void;
+}
+
+// Append a name to a lineage path. A slot with no name (`null`) adds nothing -
+// deciding which slots are unnamed belongs to the caller, so that a name a user
+// chose is never silently dropped here.
+function lineagePath(path: string, name: string | null | undefined) {
+  if (name == null || name === '') {
+    return path;
+  }
+  return path === '' ? name : `${path}.${name}`;
 }
 
 // Equation is a class that takes a set of drawing objects (TextObjects,
@@ -199,7 +209,10 @@ class Element implements ElementInterface {
     return [this.content];
   }
 
-  setPositions() {
+  // Positioning an element is also where it records how it was positioned: the
+  // form that laid it out, and the lineage of the equation functions within
+  // that form that placed it (`path`).
+  setPositions(form: string | null = null, path: string = '') {
     const { content } = this;
     if (content instanceof FigureElementCollection
         || content instanceof FigureElementPrimitive) {
@@ -208,6 +221,9 @@ class Element implements ElementInterface {
       }
       content.transform.updateTranslation([this.location.x, this.location.y]);
       content.transform.updateScale([this.scale, this.scale]);
+      if (form != null) {
+        content.positionedBy = { form, with: path };
+      }
     }
   }
 
@@ -395,9 +411,9 @@ class Elements implements ElementInterface {
     return elements;
   }
 
-  setPositions() {
+  setPositions(form: string | null = null, path: string = '') {
     this.content.forEach((e) => {
-      e.setPositions();
+      e.setPositions(form, path);
     });
   }
 
@@ -471,4 +487,4 @@ class Elements implements ElementInterface {
   }
 }
 
-export { BlankElement, Element, Elements };
+export { BlankElement, Element, Elements, lineagePath };
