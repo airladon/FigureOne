@@ -1,5 +1,9 @@
 # Releases
 
+## 1.11.0
+* Add an `absolute` equation function that pins a phrase to a fixed position instead of letting the equation layout place it. The position can be given in the equation's local space, figure space, or another element's draw space (by name, path or `FigureElement`), in coordinates or as a percentage of that space's bounds, with `xAlign`/`yAlign` choosing which point of the content lands on it. Absolutely positioned content adds nothing to the layout, and `update: true` re-resolves the position every frame so it can track a moving equation or target element
+* Add `positionedBy` to every `FigureElement`, recording how it was most recently positioned. An equation form stamps `{ form, with }`, where `with` is the lineage of equation functions and content slots that placed the element (e.g. `scale.frac.numerator`)
+
 ## 1.10.1
 * Fix `isFormIgnored` not protecting an element nested inside a `FigureElementCollection` that is itself a form element. Previously, showing the form revealed every descendant via `showAll` and recolored them via the default colour cascade, overriding the flag. Form-driven shows (immediate and dissolve-in) now skip form-ignored descendant subtrees, and the form colour cascade (immediate, animated `move`, and `setElementColors`) carries `'form'` provenance so it skips form-ignored descendants too — a flagged child keeps its visibility and colour even when its parent collection is shown or recoloured by a form
 
