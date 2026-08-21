@@ -276,9 +276,12 @@ Any element type can be created inline in forms using `make`:
 | `front` | `{ front: [content, num] }` | Bring content forward in draw stack (per-form); supports `before`/`after` anchors |
 | `back` | `{ back: [content, num] }` | Send content back in draw stack (per-form); supports `before`/`after` anchors |
 | `container` | `{ container: { content, width, ... } }` | Fixed-size container |
+| `absolute` | `{ absolute: { content, x, y, space, xAlign, yAlign } }` | Pin content to a fixed position in the equation (`space: 'local'`), the figure (`'figure'`) or another element's space; never part of the equation layout |
 | `lines` | `{ lines: { content: [...], justify } }` | Multi-line layout |
 
 Any layout function also accepts a `name` label to address its elements via `eqn.getFunctionElements(name)`. Form objects accept `ignoreColor` / `ignoreOpacity` to preserve externally-set element color/opacity (suppress the cascade).
+
+Every element laid out by a form records how it was positioned in `element.positionedBy` — `{ form, with }`, where `with` is the `'.'` separated lineage of the layout functions and their content slots that placed it (e.g. `'scale.frac.numerator'`). It is `null` until a form positions the element, and is overwritten each time a form lays it out. An `annotate` annotation can be given a `name` to set its own slot name in the lineage.
 
 ### Symbols
 

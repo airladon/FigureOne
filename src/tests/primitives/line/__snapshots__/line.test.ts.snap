@@ -546,6 +546,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -1441,6 +1442,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -2444,6 +2446,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -4407,6 +4410,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -5482,6 +5486,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -7445,6 +7450,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -8412,6 +8418,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -9271,6 +9278,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -9993,6 +10001,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -10755,6 +10764,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -11532,6 +11542,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -12227,6 +12238,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -12922,6 +12934,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -13617,6 +13630,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -14411,6 +14425,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -15205,6 +15220,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -16000,6 +16016,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -16794,6 +16811,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -17588,6 +17606,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -18283,6 +18302,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -18978,6 +18998,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -19673,6 +19694,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -20385,6 +20407,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -21080,6 +21103,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -21792,6 +21816,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -22487,6 +22512,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -23342,6 +23368,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -24053,6 +24080,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -24748,6 +24776,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -25443,6 +25472,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -26157,6 +26187,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -26914,6 +26945,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -27650,6 +27682,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -28372,6 +28405,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -29094,6 +29128,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -29789,6 +29824,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -30484,6 +30520,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -31179,6 +31216,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",
@@ -31874,6 +31912,7 @@ FigureElementPrimitive {
   ],
   "pointsDefinition": {},
   "pointsToDraw": -1,
+  "positionedBy": null,
   "pulseDefault": {
     "angle": 0,
     "centerOn": "this",

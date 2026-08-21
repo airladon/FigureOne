@@ -9,6 +9,7 @@ group: Equation Layout
 
 - [EQN_Container](#eqn_container)
 - [EQN_Offset](#eqn_offset)
+- [EQN_Absolute](#eqn_absolute)
 - [EQN_Fraction](#eqn_fraction)
 - [EQN_Scale](#eqn_scale)
 - [EQN_Color](#eqn_color)
@@ -151,6 +152,194 @@ figure.add([
       0: [
         'a', '_ = ', 'n',
         { offset: ['for a > 0', [0.3, 0]] },
+      ],
+    },
+  },
+]);
+```
+
+> To test examples, append them to the
+[boilerplate](./draw/draw.md#drawing-boilerplate)
+
+
+---
+
+## EQN_Absolute
+
+Equation absolute position options
+
+Pin a phrase to a fixed position instead of letting the equation layout
+place it.
+
+Absolutely positioned content never contributes to the equation layout - it
+has no width, height, ascent or descent, and it is not moved by the form's
+`xAlign`/`yAlign` alignment. Everything else in the equation lays out exactly
+as it would if the phrase were not there.
+
+The position is `x`, `y` in the space defined by `space`:
+
+- `'local'`: the equation's own layout space - the space form elements are
+  positioned in. `[0, 0]` is where the form's `xAlign`/`yAlign` alignment point
+  sits.
+- `'figure'`: figure space
+- an element name, path or `FigureElement`: that element's draw space, so
+  `[0, 0]` is the element's own origin and the position moves, rotates and
+  scales with the element. A name is looked up in the equation first and then
+  from the figure root, so an equation element of the same name takes
+  precedence over one elsewhere in the figure. Note also that the `content` of
+  an `absolute` is an equation element like any other - naming the same element
+  in `content` and `space` would move that one element rather than position a
+  second one against it.
+
+If `unit` is `'percent'` then `x` and `y` are fractions (`0` to `1`) of the
+bounding rectangle of that space - the form's bounds for `'local'`, the scene
+for `'figure'`, and the element's bounding rect for an element. `0` is the
+left/bottom of the rectangle, `1` the right/top.
+
+`xAlign` and `yAlign` define which point of the content is placed at the
+position. A number aligns a fraction of the content's width (from its left) or
+height (from its bottom).
+
+Positions are resolved when the form is rendered. Figure and element spaces
+depend on where the equation sits in the figure, so if the equation (or the
+target element) moves after the form is rendered, use `update: true` to
+re-resolve the position before every frame.
+
+Options can be an object, or an array in the property order below
+
+### Properties
+
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">content</span>: <span class="tsd-signature-type"><a href="../types/Equation_EquationFunctions.TypeEquationPhrase.html" class="tsd-signature-type">TypeEquationPhrase</a></span></span></li>
+<li><span><span class="tsd-kind-parameter">x</span>: <span class="tsd-signature-type">number</span> <span class="tsd-signature-symbol">= 0</span></span></li>
+<li><span><span class="tsd-kind-parameter">y</span>: <span class="tsd-signature-type">number</span> <span class="tsd-signature-symbol">= 0</span></span></li>
+<li><span><span class="tsd-kind-parameter">unit</span>: <span class="tsd-signature-type">"coord" | "percent"</span> <span class="tsd-signature-symbol">= "coord"</span></span></li>
+<li><span><span class="tsd-kind-parameter">space</span>: <span class="tsd-signature-type">"local" | "figure" | string | FigureElement</span> <span class="tsd-signature-symbol">= "local"</span></span></li>
+<li><span><span class="tsd-kind-parameter">xAlign</span>: <span class="tsd-signature-type">"left" | "center" | "right" | number</span> <span class="tsd-signature-symbol">= "left"</span></span></li>
+<li><span><span class="tsd-kind-parameter">yAlign</span>: <span class="tsd-signature-type">"bottom" | "middle" | "top" | "baseline" | number</span> <span class="tsd-signature-symbol">= "baseline"</span></span></li>
+<li><span><span class="tsd-kind-parameter">update</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span> <span class="tsd-signature-symbol">= false</span></span></li>
+<li><span><span class="tsd-kind-parameter">fullContentBounds</span>: <span class="tsd-signature-type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="tsd-signature-type">boolean</a></span> <span class="tsd-signature-symbol">= false</span></span><div class="tsd-comment tsd-typography"><p>-</p></div></li>
+</ul>
+
+#### Example 1 - `space: 'figure'`
+
+Pinned to the top left of the figure window, no matter where the equation is.
+
+```js
+figure.add([
+  {
+    name: 'eqn',
+    make: 'equation',
+    position: [-0.5, -1],
+    forms: {
+      0: [
+        'a', '_ + ', 'b', '_ = ', 'c',
+        {
+          absolute: {
+            content: 'figure',
+            x: 0.02,
+            y: 0.98,
+            unit: 'percent',
+            space: 'figure',
+            xAlign: 'left',
+            yAlign: 'top',
+          },
+        },
+      ],
+    },
+  },
+]);
+```
+
+#### Example 2 - `space: 'local'` (the default)
+
+A fixed point in the equation's own layout space, so it moves with the
+equation.
+
+```js
+figure.add([
+  {
+    name: 'eqn',
+    make: 'equation',
+    position: [-0.5, 0.5],
+    forms: {
+      0: [
+        'a', '_ + ', 'b', '_ = ', 'c',
+        {
+          absolute: {
+            content: 'local',
+            x: 0,
+            y: -0.6,
+            xAlign: 'center',
+          },
+        },
+      ],
+    },
+  },
+]);
+```
+
+#### Example 3 - `space`: an element inside the equation
+
+Pinned above the `b` glyph, and staying above it as the form relays the
+equation out.
+
+```js
+figure.add([
+  {
+    name: 'eqn',
+    make: 'equation',
+    position: [-1, 0],
+    forms: {
+      0: [
+        'a', '_ + ', 'b', '_ = ', 'c',
+        {
+          absolute: {
+            content: 'this one',
+            x: 0,
+            y: 0.4,
+            space: 'b',
+            xAlign: 'center',
+            yAlign: 'bottom',
+          },
+        },
+      ],
+    },
+  },
+]);
+```
+
+#### Example 4 - `space`: an element outside the equation
+
+The label is part of the equation, but positioned relative to the ball.
+
+```js
+figure.add([
+  {
+    name: 'ball',
+    make: 'polygon',
+    radius: 0.4,
+    sides: 30,
+    position: [1.2, -0.8],
+    color: [0, 0.6, 1, 1],
+  },
+  {
+    name: 'eqn',
+    make: 'equation',
+    position: [-2, 1],
+    forms: {
+      0: [
+        'a', '_ + ', 'b',
+        {
+          absolute: {
+            content: 'the ball',
+            x: 0,
+            y: 0.5,
+            space: 'ball',
+            xAlign: 'center',
+            yAlign: 'bottom',
+          },
+        },
       ],
     },
   },

@@ -475,6 +475,36 @@ type ElementPulseState = {
  * Element state
  * @group Misc Figure Element
  */
+/**
+ * How a {@link FigureElement} was most recently positioned.
+ *
+ * `TypePositionedBy = null | string | { form: string, with: string }`
+ *
+ * `null` until something positions the element. A positioner with nothing more
+ * to say than its own name may use a plain `string`.
+ *
+ * An equation form uses `{ form, with }`: the name of the form, and the
+ * lineage of the equation functions within it that laid the element out. The
+ * lineage is a `'.'` separated string of those functions and the content slots
+ * the element sat in - so the `'A'` in the form
+ * `{ scale: { content: { frac: { numerator: 'A', denominator: 'B' } } } }`
+ * is positioned `with` `'scale.frac.numerator'`.
+ *
+ * A function's single, generic `content` slot adds nothing to the lineage
+ * (there is nothing to disambiguate), so `scale` above contributes just
+ * `'scale'`. That applies only to unnamed slots - a name given to an
+ * annotation is always kept, including `'content'`.
+ *
+ * Each layout overwrites it, so it always describes the most recent
+ * positioning. An element excluded from a form (`isFormIgnored`) is not
+ * positioned by it, and keeps whatever it had.
+ * @group Figure Elements
+ */
+export type TypePositionedBy = null | string | {
+  form: string,
+  with: string,
+};
+
 type ElementState = {
   isBeingMoved: boolean,
   isMovingFreely: boolean,
@@ -561,6 +591,8 @@ type ElementState = {
  * @property {OBJ_Scenarios} scenarios scenario presets
  * @property {ElementState} state current state of element
  * @property {AnimationManager} animations element animation manager
+ * @property {TypePositionedBy} positionedBy how the element was most recently
+ * positioned - `null` until something positions it
  * @property {NotificationManager} notifications notification manager for
  * element
  * @property {FunctionMap} fnMap function map for use with {@link Recorder}
@@ -600,6 +632,11 @@ class FigureElement {
   // (collectionMethods.stop()) still cancel any in-flight animations on the
   // element — the contract is "no new form-driven changes", not full isolation.
   isFormIgnored: boolean;
+  // How this element was most recently positioned. `null` until something
+  // positions it. An equation form stamps `{ form, with }` on every element it
+  // lays out, where `with` is the lineage of equation functions that placed it
+  // (see `EquationForm.setLineages`).
+  positionedBy: TypePositionedBy;
   name: string;                   // Used to reference element in a collection
 
   isMovable: boolean;             // Element is able to be moved
@@ -816,6 +853,7 @@ class FigureElement {
     this.uniqueColor = null;
     this.isShown = true;
     this.isFormIgnored = false;
+    this.positionedBy = null;
     this.simple = false;
     this.allowSetColor = 'all';
     this.ignoreSetColor = [];

@@ -21,6 +21,7 @@ import BaseAnnotationFunction from './Elements/BaseAnnotationFunction';
 import BaseEquationFunction from './Elements/BaseEquationFunction';
 import EquationLine from './Symbols/Line';
 import Offset from './Elements/Offset';
+import Absolute from './Elements/Absolute';
 import Color from './Elements/Color';
 import Opacity from './Elements/Opacity';
 import DrawOrder from './Elements/DrawOrder';
@@ -78,6 +79,7 @@ export function getFigureElement(
  *  - `{ scale: `{@link EQN_Scale} `}`
  *  - `{ container: `{@link EQN_Container} `}`
  *  - `{ offset: `{@link EQN_Offset} `}`
+ *  - `{ absolute: `{@link EQN_Absolute} `}`
  *  - `{ matrix: `{@link EQN_Matrix} `}
  *  - `{ lines: `{@link EQN_Lines} `}`
  *  - `{ int: `{@link EQN_Integral} `}`
@@ -155,6 +157,7 @@ export type TypeEquationPhrase =
   | { scale: EQN_Scale }
   | { container: EQN_Container }
   | { offset: EQN_Offset }
+  | { absolute: EQN_Absolute }
   | { matrix: EQN_Matrix }
   | { matrix: EQN_Lines }
   | { int: EQN_Integral }
@@ -324,6 +327,202 @@ export type EQN_Offset = {
 } | [
   TypeEquationPhrase,
   (TypeParsablePoint | null | undefined),
+  (boolean | null | undefined),
+  (boolean | null | undefined),
+];
+
+/**
+ * Equation absolute position options
+ *
+ * Pin a phrase to a fixed position instead of letting the equation layout
+ * place it.
+ *
+ * Absolutely positioned content never contributes to the equation layout - it
+ * has no width, height, ascent or descent, and it is not moved by the form's
+ * `xAlign`/`yAlign` alignment. Everything else in the equation lays out exactly
+ * as it would if the phrase were not there.
+ *
+ * The position is `x`, `y` in the space defined by `space`:
+ * - `'local'`: the equation's own layout space - the space form elements are
+ *   positioned in. `[0, 0]` is where the form's `xAlign`/`yAlign` alignment
+ *   point sits.
+ * - `'figure'`: figure space
+ * - an element name, path or {@link FigureElement}: that element's draw space,
+ *   so `[0, 0]` is the element's own origin and the position moves, rotates
+ *   and scales with the element. A name is looked up in the equation first and
+ *   then from the figure root, so an equation element of the same name takes
+ *   precedence over one elsewhere in the figure. Note also that the `content`
+ *   of an `absolute` is an equation element like any other - naming the same
+ *   element in `content` and `space` would move that one element rather than
+ *   position a second one against it.
+ *
+ * If `unit` is `'percent'` then `x` and `y` are fractions (`0` to `1`) of the
+ * bounding rectangle of that space - the form's bounds for `'local'`, the
+ * scene for `'figure'`, and the element's bounding rect for an element. `0` is
+ * the left/bottom of the rectangle, `1` the right/top.
+ *
+ * `xAlign` and `yAlign` define which point of the content is placed at the
+ * position. A number aligns a fraction of the content's width (from its left)
+ * or height (from its bottom).
+ *
+ * Positions are resolved when the form is rendered. Figure and element spaces
+ * depend on where the equation sits in the figure, so if the equation (or the
+ * target element) moves after the form is rendered, use `update: true` to
+ * re-resolve the position before every frame.
+ *
+ * Options can be an object, or an array in the property order below
+ *
+ * @property {TypeEquationPhrase} content
+ * @property {number} [x] (`0`)
+ * @property {number} [y] (`0`)
+ * @property {'coord' | 'percent'} [unit] `x` and `y` are coordinates in
+ * `space`, or fractions of `space`'s bounding rectangle (`'coord'`)
+ * @property {'local' | 'figure' | string | FigureElement} [space] space the
+ * position is defined in (`'local'`)
+ * @property {'left' | 'center' | 'right' | number} [xAlign] point of the
+ * content to place at `x` (`'left'`)
+ * @property {'bottom' | 'middle' | 'top' | 'baseline' | number} [yAlign] point
+ * of the content to place at `y` (`'baseline'`)
+ * @property {boolean} [update] re-resolve the position before every frame, so
+ * the content tracks a moving equation or target element (`false`)
+ * @property {boolean} [fullContentBounds] - (`false`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // space: 'figure' - pinned to the top left of the figure window, no matter
+ * // where the equation itself is
+ * figure.add([
+ *   {
+ *     name: 'eqn',
+ *     make: 'equation',
+ *     position: [-0.5, -1],
+ *     forms: {
+ *       0: [
+ *         'a', '_ + ', 'b', '_ = ', 'c',
+ *         {
+ *           absolute: {
+ *             content: 'figure',
+ *             x: 0.02,
+ *             y: 0.98,
+ *             unit: 'percent',
+ *             space: 'figure',
+ *             xAlign: 'left',
+ *             yAlign: 'top',
+ *           },
+ *         },
+ *       ],
+ *     },
+ *   },
+ * ]);
+ *
+ * @example
+ * // space: 'local' (the default) - a fixed point in the equation's own layout
+ * // space, so it moves with the equation
+ * figure.add([
+ *   {
+ *     name: 'eqn',
+ *     make: 'equation',
+ *     position: [-0.5, 0.5],
+ *     forms: {
+ *       0: [
+ *         'a', '_ + ', 'b', '_ = ', 'c',
+ *         {
+ *           absolute: {
+ *             content: 'local',
+ *             x: 0,
+ *             y: -0.6,
+ *             xAlign: 'center',
+ *           },
+ *         },
+ *       ],
+ *     },
+ *   },
+ * ]);
+ *
+ * @example
+ * // space: an element inside the equation - pinned above the 'b' glyph, and
+ * // staying above it as the form relays the equation out
+ * figure.add([
+ *   {
+ *     name: 'eqn',
+ *     make: 'equation',
+ *     position: [-1, 0],
+ *     forms: {
+ *       0: [
+ *         'a', '_ + ', 'b', '_ = ', 'c',
+ *         {
+ *           absolute: {
+ *             content: 'this one',
+ *             x: 0,
+ *             y: 0.4,
+ *             space: 'b',
+ *             xAlign: 'center',
+ *             yAlign: 'bottom',
+ *           },
+ *         },
+ *       ],
+ *     },
+ *   },
+ * ]);
+ *
+ * @example
+ * // space: an element outside the equation - the label is part of the
+ * // equation, but positioned relative to the ball
+ * figure.add([
+ *   {
+ *     name: 'ball',
+ *     make: 'polygon',
+ *     radius: 0.4,
+ *     sides: 30,
+ *     position: [1.2, -0.8],
+ *     color: [0, 0.6, 1, 1],
+ *   },
+ *   {
+ *     name: 'eqn',
+ *     make: 'equation',
+ *     position: [-2, 1],
+ *     forms: {
+ *       0: [
+ *         'a', '_ + ', 'b',
+ *         {
+ *           absolute: {
+ *             content: 'the ball',
+ *             x: 0,
+ *             y: 0.5,
+ *             space: 'ball',
+ *             xAlign: 'center',
+ *             yAlign: 'bottom',
+ *           },
+ *         },
+ *       ],
+ *     },
+ *   },
+ * ]);
+ * @interface
+ * @group Equation Layout
+ */
+export type EQN_Absolute = {
+  content: TypeEquationPhrase,
+  x?: number,
+  y?: number,
+  unit?: 'coord' | 'percent',
+  space?: 'local' | 'figure' | string | FigureElementPrimitive | FigureElementCollection,
+  xAlign?: 'left' | 'center' | 'right' | number,
+  yAlign?: 'bottom' | 'middle' | 'top' | 'baseline' | number,
+  update?: boolean,
+  fullContentBounds?: boolean,
+  name?: string,
+} | [
+  TypeEquationPhrase,
+  (number | null | undefined),
+  (number | null | undefined),
+  ('coord' | 'percent' | null | undefined),
+  ('local' | 'figure' | string | FigureElementPrimitive | FigureElementCollection
+    | null | undefined),
+  ('left' | 'center' | 'right' | number | null | undefined),
+  ('bottom' | 'middle' | 'top' | 'baseline' | number | null | undefined),
   (boolean | null | undefined),
   (boolean | null | undefined),
 ];
@@ -2863,6 +3062,9 @@ export type EQN_Lines = {
  * suggested position, alignment and offset of an annotation with some name. If
  * this name is defined here, then `xPosition`, `yPosition`, `xAlign`, `yAlign`
  * and `offset` will be overwritten with the glyph's suggestion.
+ * @property {string} [name] name of this annotation's slot in the lineage
+ * recorded on the elements it positions (see
+ * {@link FigureElement}`.positionedBy`) - defaults to the annotation's index
  *
  * @example
  * figure.add({
@@ -2924,6 +3126,7 @@ export type EQN_Annotation = {
   inSize?: boolean,
   fullContentBounds?: boolean,
   reference?: string,
+  name?: string,
 };
 
 /**
@@ -3585,6 +3788,62 @@ export type EQN_Annotate = {
 // are subsets of the other, then when its parameters are extracted, their type
 // is all confused.
 
+// The names of the content slots of the equation functions that have more
+// than one, in the order the function passes them to its element class. Every
+// other function has a single, generic `content` slot (which adds nothing to
+// an element's lineage), or slots that are identified by their index (the
+// cells of a `matrix`, the lines of `lines`).
+const FUNCTION_CONTENT_NAMES: { [name: string]: Array<string> } = {
+  frac: ['numerator', 'denominator'],
+};
+
+// The names of the glyph slots of the equation functions that use the
+// non-annotation glyphs. Annotation function glyphs are named by the side they
+// are on, so they don't need to be listed here.
+const FUNCTION_GLYPH_NAMES: { [name: string]: Array<string> } = {
+  frac: ['symbol'],
+};
+
+// The methods of EquationFunctions that are not equation functions: the
+// plumbing that turns a phrase into a tree. Everything else on the class is
+// wrapped at construction so it tags the node it builds (see `tagFunction`).
+// These are excluded because they sit *outside* the functions and also return
+// nodes - tagging them would overwrite the function's own name with
+// `parseContent`.
+const NOT_EQUATION_FUNCTIONS = [
+  'constructor', 'stringToElement', 'parseContent', 'contentToElement',
+  'eqnMethod', 'dispatchEqnMethod',
+];
+
+// Tag an equation function with the name it was called with, and the names of
+// its content slots, so the elements it lays out can record the lineage of
+// functions that positioned them. A function that named its own slots (a
+// matrix names them by row and column) keeps those names.
+//
+// This is done after the function is built rather than in its constructor
+// because a node cannot know its own name: one class (BaseAnnotationFunction)
+// backs ~20 of the function names, and functions are built out of each other
+// (`sup` from `supSub` from `annotate`, `matrix` from `brac`). Tagging last
+// means the outermost function is the one recorded, with no name threaded
+// through the delegations.
+function tagFunction(result: any, name: string) {
+  if (
+    !(result instanceof BaseEquationFunction)
+    && !(result instanceof BaseAnnotationFunction)
+  ) {
+    return;
+  }
+  result.functionType = name;
+  if (result instanceof BaseEquationFunction) {
+    if (FUNCTION_CONTENT_NAMES[name] != null) {
+      result.contentNames = FUNCTION_CONTENT_NAMES[name];
+    }
+    if (FUNCTION_GLYPH_NAMES[name] != null) {
+      result.glyphNames = FUNCTION_GLYPH_NAMES[name];
+    }
+  }
+}
+
 /**
  * Equation Functions.
  *
@@ -3629,6 +3888,25 @@ export class EquationFunctions {
     this.getExistingOrAddSymbol = getExistingOrAddSymbol;
     this.makeElement = makeElement;
     this.phraseElements = {};
+    // Tag each function with its own name, so a function called directly
+    // (`eqn.functions.frac(...)`) records the same lineage as one dispatched
+    // from a phrase. A function built out of another (`sup` out of `supSub`)
+    // tags last, so the outermost function is the one recorded.
+    const proto = Object.getPrototypeOf(this);
+    Object.getOwnPropertyNames(proto).forEach((methodName) => {
+      if (NOT_EQUATION_FUNCTIONS.indexOf(methodName) > -1) {
+        return;
+      }
+      const method = proto[methodName];
+      if (typeof method !== 'function') {
+        return;
+      }
+      (this as any)[methodName] = (...args: Array<any>) => {
+        const result = method.apply(this, args);
+        tagFunction(result, methodName);
+        return result;
+      };
+    });
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -3746,6 +4024,10 @@ export class EquationFunctions {
 
   eqnMethod(name: string, params: any) {
     const result = this.dispatchEqnMethod(name, params);
+    // The function has already tagged itself with its method name. Re-tag with
+    // the name the phrase used, for the three that differ (`tBox` for
+    // `touchBox`, `sumOf` and `prodOf` for the shared `sumProd`).
+    tagFunction(result, name);
     // Allow any equation function to be tagged with a caller-supplied
     // `name` via its options object. The tag has no layout effect; it's
     // used by Equation.getFunctionElements to look up the function's sub-tree.
@@ -3789,6 +4071,7 @@ export class EquationFunctions {
     if (name === 'scale') { return this.scale(params); }
     if (name === 'container') { return this.container(params); }
     if (name === 'offset') { return this.offset(params); }
+    if (name === 'absolute') { return this.absolute(params); }
     if (name === 'color') { return this.color(params); }
     if (name === 'opacity') { return this.opacity(params); }
     if (name === 'back') { return this.back(params); }
@@ -3902,6 +4185,73 @@ export class EquationFunctions {
       );
     } catch (e: any) {
       throw new Error(`FigureOne Equation Offset Error: ${e.message}`);
+    }
+  }
+
+  /**
+   * Equation absolute position function
+   * @see {@link EQN_Absolute} for description and examples
+   */
+  absolute(
+    options: EQN_Absolute,
+  ) {
+    try {
+      let content;
+      let x;
+      let y;
+      let unit;
+      let space;
+      let xAlign;
+      let yAlign;
+      let update;
+      let fullContentBounds;
+
+      const defaultOptions = {
+        x: 0,
+        y: 0,
+        unit: 'coord',
+        space: 'local',
+        xAlign: 'left',
+        yAlign: 'baseline',
+        update: false,
+        fullContentBounds: false,
+      };
+      if (Array.isArray(options)) {
+        [
+          content, x, y, unit, space, xAlign, yAlign, update, fullContentBounds,
+        ] = options;
+      } else {
+        ({
+          content, x, y, unit, space, xAlign, yAlign, update, fullContentBounds,
+        } = options);
+      }
+      const optionsIn: Record<string, any> = {
+        x, y, unit, space, xAlign, yAlign, update, fullContentBounds,
+      };
+      // The array form uses `null` as a placeholder for "use the default", but
+      // `joinObjects` only skips `undefined` - a `null` would overwrite the
+      // default (leaving, say, `space` as `null`, which resolves to no space at
+      // all and silently unpins the content).
+      Object.keys(optionsIn).forEach((key) => {
+        if (optionsIn[key] == null) {
+          delete optionsIn[key];
+        }
+      });
+      const o = joinObjects<any>({}, defaultOptions, optionsIn);
+      // A non-string `space` must be a FigureElement. Catching it here gives a
+      // clear error at definition time rather than a TypeError mid-render, and
+      // keeps `resolve`'s null return meaning "not ready yet" rather than
+      // "malformed".
+      if (typeof o.space !== 'string' && typeof o.space.getScene !== 'function') {
+        throw new Error("space must be 'local', 'figure', an element name or path, or a FigureElement");
+      }
+      return new Absolute(
+        [this.contentToElement(content)],
+        [],
+        o,
+      );
+    } catch (e: any) {
+      throw new Error(`FigureOne Equation Absolute Error: ${e.message}`);
     }
   }
 
@@ -4619,6 +4969,7 @@ export class EquationFunctions {
           offset: options.rootOffset,
           scale: options.rootScale,
           reference: 'root',
+          name: 'root',
         });
       }
       return this.annotate({
@@ -4686,6 +5037,7 @@ export class EquationFunctions {
     if (superscript != null) {
       annotations.push({
         content: o.superscript,
+        name: 'superscript',
         xPosition: 'right',
         yPosition: '0.7a',
         xAlign: 'left',
@@ -4697,6 +5049,7 @@ export class EquationFunctions {
     if (subscript != null) {
       annotations.push({
         content: o.subscript,
+        name: 'subscript',
         xPosition: 'right',
         yPosition: 'baseline',
         xAlign: 'left',
@@ -5053,6 +5406,11 @@ export class EquationFunctions {
         [],
         o,
       );
+      // Name each cell's slot by its row and column, so an element's lineage
+      // says where in the matrix it is (`matrix.1_2`).
+      matrixContent.contentNames = contentArray.map(
+        (c: any, index: number) => `${Math.floor(index / o.order[1])}_${index % o.order[1]}`,
+      );
       if (left != null && right != null) {
         return this.brac(joinObjects<any>({}, o.brac, {
           content: matrixContent,
@@ -5135,6 +5493,9 @@ export class EquationFunctions {
         [],
         o,
       );
+      // Name each line's slot by its index, so a single-line `lines` records
+      // the same shape of lineage (`lines.0`) as a multi-line one.
+      lines.contentNames = contentArray.map((c: any, index: number) => `${index}`);
       return lines;
     } catch (e: any) {
       throw new Error(`FigureOne Equation Lines Error: ${e.message}`);
@@ -5286,6 +5647,7 @@ export class EquationFunctions {
       const annotations = [
         {
           content: to,
+          name: 'to',
           xPosition: o.toXPosition,
           yPosition: o.toYPosition,
           xAlign: o.toXAlign,
@@ -5295,6 +5657,7 @@ export class EquationFunctions {
         },
         {
           content: from,
+          name: 'from',
           xPosition: o.fromXPosition,
           yPosition: o.fromYPosition,
           xAlign: o.fromXAlign,
@@ -5428,6 +5791,7 @@ export class EquationFunctions {
     const annotations = [
       {
         content: to,
+        name: 'to',
         xPosition: 'center',
         yPosition: 'top',
         xAlign: 'center',
@@ -5438,6 +5802,7 @@ export class EquationFunctions {
       },
       {
         content: from,
+        name: 'from',
         xPosition: 'center',
         yPosition: 'bottom',
         xAlign: 'center',
@@ -5540,6 +5905,7 @@ export class EquationFunctions {
       ] = (this.processComment as any)(...args);
       const annotations = [{
         content: comment,
+        name: 'comment',
         xPosition: 'center',
         yPosition: 'top',
         xAlign: 'center',
@@ -5608,6 +5974,7 @@ export class EquationFunctions {
 
       const annotations = [{
         content: comment,
+        name: 'comment',
         xPosition: 'center',
         yPosition: 'bottom',
         xAlign: 'center',
@@ -5790,6 +6157,7 @@ export class EquationFunctions {
       const annotations = [
         {
           content: comment,
+          name: 'comment',
           xPosition: 'center',
           yPosition: 'top',
           xAlign: 'center',
@@ -5828,6 +6196,7 @@ export class EquationFunctions {
       const annotations = [
         {
           content: comment,
+          name: 'comment',
           xPosition: 'center',
           yPosition: 'bottom',
           xAlign: 'center',
