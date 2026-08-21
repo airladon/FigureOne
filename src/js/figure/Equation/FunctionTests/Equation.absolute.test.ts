@@ -14,9 +14,9 @@ jest.mock('../../webgl/webgl');
 jest.mock('../../DrawContext2D');
 
 describe('Equation Functions - Absolute', () => {
-  let figure: any;
-  let eqn: any;
-  let addEqn: (forms: Record<string, any>, options?: Record<string, any>) => void;
+  let figure;
+  let eqn;
+  let addEqn;
 
   beforeEach(() => {
     figure = makeFigure();
@@ -26,8 +26,13 @@ describe('Equation Functions - Absolute', () => {
         make: 'equation',
         options: {
           elements: {
-            a: 'a', b: 'b', c: 'c', d: 'd',
-            n: 'n', m: 'm', v: { symbol: 'vinculum' },
+            a: 'a',
+            b: 'b',
+            c: 'c',
+            d: 'd',
+            n: 'n',
+            m: 'm',
+            v: { symbol: 'vinculum' },
           },
           forms,
           ...options,
@@ -212,7 +217,11 @@ describe('Equation Functions - Absolute', () => {
     test('A space that is neither a name nor a FigureElement is rejected', () => {
       expect(() => {
         addEqn({
-          0: ['a', { absolute: { content: 'd', x: 0, y: 0, space: { not: 'an element' } } }],
+          0: ['a', {
+            absolute: {
+              content: 'd', x: 0, y: 0, space: { not: 'an element' },
+            },
+          }],
         });
       }).toThrow(/space must be/);
     });
@@ -242,7 +251,11 @@ describe('Equation Functions - Absolute', () => {
       addEqn({
         0: [
           'a', 'b',
-          { absolute: { content: 'd', x: 0.2, y: -0.1, space: 'figure' } },
+          {
+            absolute: {
+              content: 'd', x: 0.2, y: -0.1, space: 'figure',
+            },
+          },
         ],
       }, { position: [0.7, 0.4] });
       eqn.showForm('0');
@@ -275,7 +288,11 @@ describe('Equation Functions - Absolute', () => {
       addEqn({
         0: [
           'a',
-          { absolute: { content: 'd', x: 0.2, y: -0.1, space: 'figure' } },
+          {
+            absolute: {
+              content: 'd', x: 0.2, y: -0.1, space: 'figure',
+            },
+          },
         ],
       }, { position: [0.7, 0.4], scale: 1 });
       eqn.setScale(2);
@@ -298,7 +315,11 @@ describe('Equation Functions - Absolute', () => {
       addEqn({
         0: [
           'a',
-          { absolute: { content: 'd', x: 0.1, y: 0.05, space: 'ref' } },
+          {
+            absolute: {
+              content: 'd', x: 0.1, y: 0.05, space: 'ref',
+            },
+          },
         ],
       }, { position: [0.7, 0.4] });
       eqn.showForm('0');
@@ -311,7 +332,11 @@ describe('Equation Functions - Absolute', () => {
     test('Target element inside the same equation, with a realigned form', () => {
       addEqn({
         0: {
-          content: ['a', 'b', 'c', { absolute: { content: 'd', x: 0, y: 0, space: 'b' } }],
+          content: ['a', 'b', 'c', {
+            absolute: {
+              content: 'd', x: 0, y: 0, space: 'b',
+            },
+          }],
           alignment: { xAlign: 'center', yAlign: 'middle' },
         },
       });
@@ -326,7 +351,11 @@ describe('Equation Functions - Absolute', () => {
 
     test('Resolves after a direct form.arrange with no outer setPositions', () => {
       addEqn({
-        0: ['a', 'b', 'c', { absolute: { content: 'd', x: 0, y: 0, space: 'b' } }],
+        0: ['a', 'b', 'c', {
+          absolute: {
+            content: 'd', x: 0, y: 0, space: 'b',
+          },
+        }],
       });
       eqn.showForm('0');
       figure.setFirstTransform();
@@ -343,7 +372,11 @@ describe('Equation Functions - Absolute', () => {
       addEqn({
         0: [
           'a',
-          { absolute: { content: 'd', x: 0, y: 0, space: 'ref' } },
+          {
+            absolute: {
+              content: 'd', x: 0, y: 0, space: 'ref',
+            },
+          },
         ],
       });
       eqn.showForm('0');
@@ -415,7 +448,11 @@ describe('Equation Functions - Absolute', () => {
       addEqn({
         0: [
           'a',
-          { absolute: { content: 'd', x: 0.2, y: -0.1, space: 'figure' } },
+          {
+            absolute: {
+              content: 'd', x: 0.2, y: -0.1, space: 'figure',
+            },
+          },
         ],
       }, { position: [0.7, 0.4] });
       eqn.showForm('0');
