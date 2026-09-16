@@ -51,9 +51,6 @@ export default class EquationLine extends Symbol {
   // any arrow heads at any angle.
   // eslint-disable-next-line class-methods-use-this
   override getDrawBorder(pointsIn: Array<Point>): Array<Array<Point>> {
-    if (pointsIn.length === 0) {
-      return [[new Point(0, 0)]];
-    }
     return [getBoundingBorder(pointsIn)];
   }
 }

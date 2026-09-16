@@ -44,8 +44,8 @@ describe('Equation Symbols - Line', () => {
     ${'up'}     | ${Math.PI / 2}
     ${'left'}   | ${Math.PI}
     ${'down'}   | ${-Math.PI / 2}
-    ${'diag'}   | ${Math.PI / 4}
-    ${'-diag'}  | ${-Math.PI / 3}
+    ${'45deg'}  | ${Math.PI / 4}
+    ${'-60deg'} | ${-Math.PI / 3}
   `('$name ($angle rad)', ({ angle }) => {
     test.each(['plain', 'arrow'])('%s border encloses geometry', (name) => {
       const element = eqn[`_${name}`];
