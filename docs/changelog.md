@@ -1,5 +1,8 @@
 # Releases
 
+## 1.11.1
+* Fix equation `line` symbols reporting a bounding rectangle derived from their angle and length rather than their drawn geometry. A vertical line previously reported a border roughly 1.57 units wide (its angle in radians read as a width), so `getBoundingRect` and touch borders could extend far beyond the visible line and trigger false positives in clipped-content checks. Borders now enclose the generated geometry — including line thickness and arrow heads — at any angle
+
 ## 1.11.0
 * Add an `absolute` equation function that pins a phrase to a fixed position instead of letting the equation layout place it. The position can be given in the equation's local space, figure space, or another element's draw space (by name, path or `FigureElement`), in coordinates or as a percentage of that space's bounds, with `xAlign`/`yAlign` choosing which point of the content lands on it. Absolutely positioned content adds nothing to the layout, and `update: true` re-resolves the position every frame so it can track a moving equation or target element
 * Add `positionedBy` to every `FigureElement`, recording how it was most recently positioned. An equation form stamps `{ form, with }`, where `with` is the lineage of equation functions and content slots that placed the element (e.g. `scale.frac.numerator`)
