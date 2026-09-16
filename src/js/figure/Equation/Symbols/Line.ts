@@ -1,5 +1,5 @@
 import {
-  Point, Line,
+  Point, Line, getBoundingBorder,
 } from '../../../tools/g2';
 import { makePolyLine } from '../../geometries/lines/lines';
 import Symbol from './SymbolNew';
@@ -43,5 +43,14 @@ export default class EquationLine extends Symbol {
     );
 
     return [points, angle, length, 'TRIANGLES'];
+  }
+
+  // The line symbol's `getPoints` uses width and height as angle and length,
+  // so the default width x height rectangle does not describe the geometry.
+  // Instead, bound the generated vertices - this includes the line width and
+  // any arrow heads at any angle.
+  // eslint-disable-next-line class-methods-use-this
+  override getDrawBorder(pointsIn: Array<Point>): Array<Array<Point>> {
+    return [getBoundingBorder(pointsIn)];
   }
 }
