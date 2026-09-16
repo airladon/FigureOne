@@ -134,12 +134,7 @@ export default class Symbol extends FigureElementPrimitive {
     drawType: 'STRIP' | 'TRIANGLES' | 'FAN',
   ) {
     this.drawingObject.change({ points: pointsIn, drawType });
-    this.drawBorder = [[
-      new Point(0, 0),
-      new Point(width, 0),
-      new Point(width, height),
-      new Point(0, height),
-    ]];
+    this.drawBorder = this.getDrawBorder(pointsIn, width, height);
     if (
       typeof this._custom.options.drawBorderBuffer === 'number'
       || (
@@ -155,6 +150,24 @@ export default class Symbol extends FigureElementPrimitive {
     } else {
       this.drawBorderBuffer = this.drawBorder;
     }
+  }
+
+  // The border enclosing the symbol's geometry. By default a symbol's
+  // geometry fills a `width` x `height` rectangle anchored at (0, 0). Symbols
+  // whose `getPoints` uses `width` and `height` for something else (like the
+  // line symbol, which uses angle and length) override this.
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  getDrawBorder(
+    pointsIn: Array<Point>,
+    width: number,
+    height: number,
+  ): Array<Array<Point>> {
+    return [[
+      new Point(0, 0),
+      new Point(width, 0),
+      new Point(width, height),
+      new Point(0, height),
+    ]];
   }
 
   override getTransform() {
