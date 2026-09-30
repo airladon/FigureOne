@@ -333,6 +333,83 @@ describe('Decelerate Vector', () => {
         expect(round(velocity.length())).toBe(1);
         expect(position.round()).toEqual(new Point(3, 0));
       });
+      describe('Start on edge, move along it', () => {
+        // Start positions exactly on an edge with velocities parallel to it,
+        // or drifting outward by less than precision, previously threw
+        // 'Error in calculating intersect1'
+        const bounds = new RectBounds({
+          left: -2.6, right: 1.9, bottom: -1.3, top: 1.3,
+        });
+        const expectInBounds = (q) => {
+          expect(q.x).toBeGreaterThanOrEqual(-2.6 - 1e-8);
+          expect(q.x).toBeLessThanOrEqual(1.9 + 1e-8);
+          expect(q.y).toBeGreaterThanOrEqual(-1.3 - 1e-8);
+          expect(q.y).toBeLessThanOrEqual(1.3 + 1e-8);
+        };
+        test.each([
+          ['bottom', [-0.865, -1.3], [-23.2, 0]],
+          ['bottom', [-0.865, -1.3], [-23.2, 1e-11]],
+          ['bottom', [-1.25, -1.3], [-23.2, 0]],
+          ['left', [-2.6, -1.017], [-8.1e-7, 9.7]],
+          ['left', [-2.6, 0.309], [-4.1e-7, 16.9]],
+          ['top', [0.307, 1.3], [1.1, 6.1e-7]],
+        ])('%s edge from %j with velocity %j', (edge, p, v) => {
+          const position = new Point(p[0], p[1]);
+          const velocity = new Point(v[0], v[1]);
+          const step = decelerateVector(
+            position, velocity, 50, 1 / 60, bounds, 0.5, 0.0001,
+          );
+          expectInBounds(step.position);
+          const stop = decelerateVector(
+            position, velocity, 50, null, bounds, 0.5, 0.0001,
+          );
+          expectInBounds(stop.position);
+        });
+        // Starting on the edge should give the same motion as starting away
+        // from it, both frame by frame and when calculating the stop. Bounds
+        // with more decimals than precision are also checked.
+        const thirds = new RectBounds({
+          left: -1 / 3, right: 1.9, bottom: -1.3, top: 1 / 3,
+        });
+        test.each([
+          [[-0.865, -1.3], [-23.2, 1e-11], [-0.865, 0], [-23.2, 0], bounds],
+          [[-2.6, -1.017], [-8.1e-7, 9.7], [0, -1.017], [0, 9.7], bounds],
+          [[-2.6, 0.309], [-4.1e-7, 16.9], [0, 0.309], [0, 16.9], bounds],
+          [[0.307, 1.3], [1.1, 6.1e-7], [0.307, 0], [1.1, 0], bounds],
+          [[-1 / 3, -0.9], [-4.1e-7, 16.9], [0, -0.9], [0, 16.9], thirds],
+          [[-0.2, 1 / 3], [11, 3e-7], [-0.2, 0], [11, 0], thirds],
+        ])('from %j with velocity %j matches interior', (p, v, pc, vc, b) => {
+          const simulate = (p0, v0) => {
+            let position = new Point(p0[0], p0[1]);
+            let velocity = new Point(v0[0], v0[1]);
+            let frames = 0;
+            while (!velocity.isZero() && frames < 1000) {
+              ({ position, velocity } = decelerateVector(
+                position, velocity, 50, 1 / 60, b, 0.5, 0.0001,
+              ));
+              frames += 1;
+            }
+            const stop = decelerateVector(
+              new Point(p0[0], p0[1]), new Point(v0[0], v0[1]),
+              50, null, b, 0.5, 0.0001,
+            );
+            return {
+              frames,
+              position: position.sub(p0[0], p0[1]).round(6),
+              stop: stop.position.sub(p0[0], p0[1]).round(6),
+              duration: round(stop.duration, 6),
+            };
+          };
+          const edge = simulate(p, v);
+          const interior = simulate(pc, vc);
+          expect(edge.position.x).toBeCloseTo(interior.position.x, 6);
+          expect(edge.position.y).toBeCloseTo(interior.position.y, 6);
+          expect(edge.stop.x).toBeCloseTo(interior.stop.x, 6);
+          expect(edge.stop.y).toBeCloseTo(interior.stop.y, 6);
+          expect(edge.frames).toBe(interior.frames);
+          expect(edge.duration).toBe(interior.duration);
+        });
+      });
     });
   });
 });

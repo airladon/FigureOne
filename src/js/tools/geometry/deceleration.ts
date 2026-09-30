@@ -224,7 +224,7 @@ function decelerateVector(
 
   // Get the magnitude and direciton of the velocity
   const mag = velocity.length();
-  const direction = velocity.normalize();
+  let direction = velocity.normalize();
 
   if (mag <= zeroVelocityThreshold) {
     return {
@@ -249,14 +249,40 @@ function decelerateVector(
     mag, deltaTimeIn, deceleration, zeroVelocityThreshold,
   );
 
+  // If starting on a rect edge and moving out of it at a negligible angle,
+  // then the outward component is rounding noise (e.g. from velocities
+  // calculated from positions clipped to the edge). Remove it so the element
+  // slides along the edge (otherwise the intersect below can miss both this
+  // edge and any other edge it later reaches). The angle threshold is used
+  // instead of distance so a single step and many small steps agree.
+  if (bounds instanceof RectBounds) {
+    const posP = position.sub(bounds.plane.p);
+    const axes: Array<[Point, number, number]> = [
+      [bounds.rightDirection, bounds.left, bounds.right],
+      [bounds.topDirection, bounds.bottom, bounds.top],
+    ];
+    axes.forEach(([axis, min, max]) => {
+      const edge = posP.dotProduct(axis);
+      const component = direction.dotProduct(axis);
+      const onMin = Math.abs(edge - min) < 10 ** -precision;
+      const onMax = Math.abs(edge - max) < 10 ** -precision;
+      if (
+        ((onMin && component < 0) || (onMax && component > 0))
+        && Math.abs(component) < 1e-6
+      ) {
+        direction = direction.sub(axis.scale(component)).normalize();
+      }
+    });
+  }
+
   const newPosition = position.add(direction.scale(distanceTravelled));
 
-  // If the new position is within the bounds, then can return the result.
-  if (bounds == null || bounds.contains(newPosition)) {
+  // Result for moving to `endPosition` without a bounce
+  const noBounce = (endPosition: Point) => {
     if (deltaTimeIn == null) {
       return {
         duration: deltaTime,
-        position: newPosition,
+        position: endPosition,
         velocity: new Point(0, 0, 0),
       };
     }
@@ -265,10 +291,15 @@ function decelerateVector(
       v1 = 0;
     }
     return {
-      position: newPosition,
+      position: endPosition,
       velocity: direction.scale(v1),
       duration: deltaTime,
     };
+  };
+
+  // If the new position is within the bounds, then can return the result.
+  if (bounds == null || bounds.contains(newPosition)) {
+    return noBounce(newPosition);
   }
 
   // if we got here, the new position is out of bounds
@@ -276,14 +307,15 @@ function decelerateVector(
   const result = (bounds as RectBounds | LineBounds).intersect(position, direction);
 
   // if newPosition is not contained within bounds, but the intersect distance
-  // is larger than the distance travelled in deltaTime, then there is likely a
-  // rounding error... Or if the intersect is null there is an error (it really
-  // shouldn't be if the containment test is failed)
+  // is larger than the distance travelled in deltaTime, or the intersect is
+  // null, then the containment and intersect tests disagree by a rounding
+  // error. This happens when starting on an edge and moving exactly along it,
+  // so slide along the edge instead.
   if (
     (result.distance !== 0 && result.distance > distanceTravelled)
     || result.intersect == null
   ) {
-    throw new Error('Error in calculating intersect1');
+    return noBounce(bounds.clip(newPosition));
   }
 
   const intersectPoint = result.intersect;
