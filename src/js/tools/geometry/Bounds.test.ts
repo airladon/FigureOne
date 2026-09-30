@@ -265,6 +265,53 @@ describe('Bounds', () => {
           expect(bounds.contains([-0.1, 0, 2.1])).toBe(false);
         });
       });
+      describe('On edge with non-integer bounds', () => {
+        // Projection rounding error previously made some edge points outside
+        beforeEach(() => {
+          bounds = new RectBounds({
+            left: -2.6, right: 1.9, bottom: -1.3, top: 1.3,
+          });
+        });
+        test('Bottom and top edges', () => {
+          for (let x = -2.6; x <= 1.9; x += 0.05) {
+            expect(bounds.contains([x, -1.3])).toBe(true);
+            expect(bounds.contains([x, 1.3])).toBe(true);
+          }
+          expect(bounds.contains([-1.25, -1.3])).toBe(true);
+        });
+        test('Left and right edges', () => {
+          for (let y = -1.3; y <= 1.3; y += 0.05) {
+            expect(bounds.contains([-2.6, y])).toBe(true);
+            expect(bounds.contains([1.9, y])).toBe(true);
+          }
+        });
+        test('Just outside', () => {
+          expect(bounds.contains([-1.25, -1.30000002])).toBe(false);
+          expect(bounds.contains([-1.25, 1.30000002])).toBe(false);
+          expect(bounds.contains([-2.60000002, 0])).toBe(false);
+          expect(bounds.contains([1.90000002, 0])).toBe(false);
+        });
+        test('Rotated rectangle', () => {
+          const r = new RectBounds({
+            rightDirection: [1, 1, 0],
+            topDirection: [-1, 1, 0],
+            left: -0.3,
+            right: 0.7,
+            bottom: -0.3,
+            top: 0.7,
+          });
+          const edge = (s, t) => [
+            (s - t) / Math.sqrt(2), (s + t) / Math.sqrt(2), 0,
+          ];
+          for (let s = -0.3; s <= 0.7; s += 0.05) {
+            expect(r.contains(edge(s, -0.3))).toBe(true);
+            expect(r.contains(edge(s, 0.7))).toBe(true);
+            expect(r.contains(edge(-0.3, s))).toBe(true);
+            expect(r.contains(edge(0.7, s))).toBe(true);
+          }
+          expect(r.contains(edge(0.2, 0.70000002))).toBe(false);
+        });
+      });
     });
     describe('Clip', () => {
       let clip;
