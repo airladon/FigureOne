@@ -1,5 +1,9 @@
 # Releases
 
+## 1.11.2
+* Fix `Error in calculating intersect1` thrown during `move.freely` momentum when an element sits exactly on a `RectBounds` edge and moves along it (common after dragging an element past an edge so it pins there, then flicking along it). The element now slides along the edge, with the same motion as a flick started away from the edges
+* Fix `RectBounds.contains()` reporting some points exactly on an edge as outside due to floating-point error in the projection. Points on an edge (to the bounds precision) are now always inside
+
 ## 1.11.1
 * Fix equation `line` symbols reporting a bounding rectangle derived from their angle and length rather than their drawn geometry. A vertical line previously reported a border roughly 1.57 units wide (its angle in radians read as a width), so `getBoundingRect` and touch borders could extend far beyond the visible line and trigger false positives in clipped-content checks. Borders now enclose the generated geometry — including line thickness and arrow heads — at any angle
 
