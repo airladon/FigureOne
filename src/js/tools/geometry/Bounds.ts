@@ -664,14 +664,22 @@ class RectBounds extends Bounds {
     if (projectToPlane === false && !this.plane.hasPointOn(position)) {
       return false;
     }
-    const p = this.plane.pointProjection(position).round(this.precision);
-    const posP = p.sub(this.plane.p);
-    const rightProjection = posP.projectOn(this.rightDirection);
-    const topProjection = posP.projectOn(this.topDirection);
-    if (topProjection > this.top || topProjection < this.bottom) {
+    const posP = this.plane.pointProjection(position).sub(this.plane.p);
+    // Round the projections (not just the point) so points on an edge are not
+    // made outside by rounding errors in the projection.
+    const { precision, rightDirection: r, topDirection: t } = this;
+    const rightProjection = round(posP.dotProduct(r) / r.length(), precision);
+    const topProjection = round(posP.dotProduct(t) / t.length(), precision);
+    if (
+      topProjection > round(this.top, precision)
+      || topProjection < round(this.bottom, precision)
+    ) {
       return false;
     }
-    if (rightProjection > this.right || rightProjection < this.left) {
+    if (
+      rightProjection > round(this.right, precision)
+      || rightProjection < round(this.left, precision)
+    ) {
       return false;
     }
     return true;
